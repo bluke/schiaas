@@ -1,0 +1,208 @@
+/*!  
+@mainpage SimIaaS Documentation
+
+SimIaaS allows to simulate IaaS with SimGrid.
+
+While SimGrid implements hypervisor level functionalities (e.g. start and stop VMs),
+SimIaaS implements cloud level functionalities (e.g. run and terminate instances).
+
+For now, only the <EM>compute</EM> module is implemented, also called VMM (Virtual Machines Manager) or Cloud Resources Factory.
+
+It supports main VM managing functions:
+- run, terminate, suspend, resume and describe instances;
+- available resources description;
+- automatic VM placement on the clusters (in a round-robin way);
+- boot and other VM life-cycle processes;
+- and usage reporting.
+
+For now, it does not support other cloud functionalities, such as storage management.
+
+
+@section running Running SimIaaS
+
+@subsection running_prerequisite Prerequisite
+
+SimIaaS runs upon <a href="http://simgrid.gforge.inria.fr/">SimGrid</a>.
+Make sure to build the <EM>hypervisor</EM> branch of the git repository,
+which implies to enable Java suppport and disable SMPI.
+
+@subsection running_retrieving Retrieving the latest unstable version
+
+The last version of SimIaaS can be retrieved from the git repository:
+@code
+git clone https://gforge.inria.fr/git/simiaas/simiaas.git
+or
+git clone git://scm.gforge.inria.fr/simiaas/simiaas.git
+@endcode
+
+Afterward, you can build SimIaaS:
+@code
+cd simiaas
+cmake .
+make
+@endcode
+
+If cmake complains about the location simgrid.jar, make sure to set SIMGRID_JAR_PATH:
+@code
+export SIMGRID_JAR_PATH=/path/to/simgrid.jar/
+@endcode
+
+Then you should have simiaas.jar inside the bin directory, which you can use to develop your own application.
+
+
+
+
+
+@section tutorial Tutorial: the master-slave example
+
+This tutorial assume that you have already followed the SimGrid's Java MSG master-slave example. 
+
+Instead of declaring slaves into the deployment file, 
+this tutorial shows how to deploy slaves instances on the fly.
+
+@subsection tutorial_setup Simulation setup
+
+First of all, the platform file does not need to be change.
+
+Second, the deployment file does not need to include slave processes placement anymore, 
+as slaves processes will be binded to instances at runtime.
+
+Last, a new configuration file is introduced to declare cloud configuration, cloud.xml:
+@code
+<?xml version='1.0'?>
+ <!DOCTYPE clouds>
+ <clouds version="1">
+	<cloud id="myCloud" controller="Boivin" standard_power="10e09" cache="PRE" max_vm_per_core="1" inter_boot_delay="20"> 
+		<host id="Jean_Yves" core="1"/>
+		<host id="TeX" core="1"/>
+		[...]  
+	</cloud>
+</clouds> 
+@endcode
+The cloud tag must have the following attributes:
+- id: the id of the cloud or of the region;
+- controller: the host of the cloud controller process (which send commands to VM hosts, transfer images, etc.);
+- standard_power: the power of the standard instance (i.g. Amazon's EC2CU);
+- cache: the image cache strategy, which can be ON (the image is transfered once per host), OFF (the image is transfered at each runinstance), or PRE (the image is considered to be on the VM host already);
+- max_vm_per_core: the maximum amount of VM running on one core, the power of this core being shared by all running VM and other processes;
+- inter_boot_delay: the delay between two consecutive VM boots on one given host.
+
+Inside the cloud element, you must define the VM host, as they appear in the platform file. For each, you must declare the number of core used by instances.
+
+You can declare as many clouds as needed, and clouds can also used to model regions.
+
+
+@subsection tutorial_code Java Code
+
+@subsubsection tutorial_initialization Initialization
+
+In order to initialize SimIaaS, you must use Compute.init, its argument being the cloud configuration file:
+@code
+import org.simgrid.simiaas.compute.Compute;
+[...]
+
+	/* construct the platform and deploy the application */
+	Msg.createEnvironment(args[0]);
+	Msg.deployApplication(args[1]);
+	
+	/* construct the cloud and deploy the associated processes */
+	Compute.init(args[2]); // this is the only modification
+
+	/*  execute the simulation. */
+    	Msg.run();
+@endcode
+
+@subsubsection tutorial_instance Instances management
+
+The main modification concernes Masterslave.java, which must declare an instance image and run one instance per slave:
+@code
+import org.simgrid.simiaas.compute.*;
+[...]
+	Msg.info("Hello! Got "+  slavesCount + " slaves and "+tasksCount+" tasks to process");
+	
+	// Create an image of size 2 GB, 500 GFlo boot process and 10 GFlo shutdown process
+	Image myImage = new Image("monimage",2e9,500e9,10e9);
+
+	// Run one instance per slave on myCloud
+	Instance[] slaveInstances = Compute.runInstances(myImage,"myCloud",slavesCount);
+@endcode
+Afterward, slaveInstances constains SimIaaS Instances, which are SimGrid's VMs and can be used just like any SimGrid host.
+
+Please note that if you ask for more instances than your cloud can provide, runInstances and runInstance will return null. Careful users will check how many instances can be ran:
+@code
+	int maxInstancesCount = Compute.describeAvailability();
+@endcode
+
+Before using theses instances, you must wait for the end of their boot process,
+otherwise, the binding processes will start immediately and concurrently to the boot process, mistaking both your process running date and the boot duration.
+Then, you can bind the slave process to the running instance:
+@code
+	for (int i=0; i<slavesCount; i++) {
+		Msg.info("waiting for boot");
+		slaveInstances[[i%slavesCount].waitForRunning();
+
+		String [] slaveArgs = {""+i};
+		Slave s = new Slave(slaveInstances[i], "slave_"+i,slaveArgs);
+		s.start();
+	}
+@endcode
+
+During the execution, you can suspend and resume instances:
+@code
+	waitFor(150);
+	slaveInstances[0].suspend();
+	waitFor(200);
+	slaveInstances[0].resume();
+@endcode
+
+At any time, you can retrive the list of all instances:
+@code
+	Instance[] instances = Compute.describeInstances();
+@endcode
+
+Finally, you can terminate all the instances at once:
+@code
+	Compute.terminateInstances(instances);
+@endcode
+Alternatively, you can terminate instances one by one:
+@code
+	Compute.terminateInstance(oneInstance);
+or
+	oneInstance.terminate();
+@endcode
+
+Then, you have to terminate SimIaaS to clean-up the simulation:
+@code
+	Compute.terminate();
+@endcode
+Please note that this will also terminate all the instances that are still running.
+
+
+@subsubsection tutorial_reports Reports
+
+And last, you can obtain cloud usage report by modifying Masterslave.java:
+@code
+	/* execute the simulation */
+    Msg.run();
+    
+    /* print cloud reports */
+    Msg.info("Cloud description\n"+Compute.getCloudsDescription());
+    Msg.info("Instances description\n"+Compute.getInstancesDescription());
+    Msg.info("Details\n");
+    for (Instance i : Compute.describeInstances())  {
+    	Msg.info(i.stateLogToString());
+    }
+@endcode
+
+
+@subsubsection tutorial_running Running the cloudmasterslave example
+
+In order to build and run this example, you must add simgrid.jar and simiaas.jar to the jvm classpath:
+@code
+cd simiaas/src/cloudmasterslave
+java -cp /usr/local/java/simgrid.jar:../../bin/simiaas.jar:../../bin/cloudmasterslave.jar cloudmasterslave.Masterslave platform.xml deploy.xml cloud.xml
+@endcode
+
+*/
+
+
