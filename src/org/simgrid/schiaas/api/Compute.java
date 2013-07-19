@@ -7,7 +7,7 @@
  * under the terms of the license (GNU LGPL) which comes with this package. 
  */
 
-package org.simgrid.simiaas.api;
+package org.simgrid.schiaas.api;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;

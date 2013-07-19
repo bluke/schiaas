@@ -1,4 +1,4 @@
-package org.simgrid.simiaas.api;
+package org.simgrid.schiaas.api;
 
 import org.simgrid.msg.Comm;
 import org.simgrid.msg.HostNotFoundException;
@@ -7,7 +7,7 @@ import org.simgrid.msg.MsgException;
 import org.simgrid.msg.Mutex;
 import org.simgrid.msg.Process;
 import org.simgrid.msg.Task;
-import org.simgrid.simiaas.api.Cloud.VMHost;
+import org.simgrid.schiaas.api.Cloud.VMHost;
 
 
 /**

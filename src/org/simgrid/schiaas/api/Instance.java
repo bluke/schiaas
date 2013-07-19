@@ -1,4 +1,4 @@
-package org.simgrid.simiaas.api;
+package org.simgrid.schiaas.api;
 
 import java.text.DecimalFormat;
 import java.util.Vector;

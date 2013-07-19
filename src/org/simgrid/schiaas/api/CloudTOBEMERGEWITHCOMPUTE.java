@@ -1,13 +1,13 @@
-package org.simgrid.simiaas.api;
+package org.simgrid.schiaas.api;
 
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Vector;
 import org.simgrid.msg.Host;
 import org.simgrid.msg.HostNotFoundException;
 import org.simgrid.msg.Msg;
 import org.simgrid.msg.Mutex;
+import org.simgrid.schiaas.engine.ComputeControllerProcess;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -16,7 +16,7 @@ import org.w3c.dom.NodeList;
  * This class represents a cloud in SimIaaS
  * @author julien.gossa@unistra.fr
  */
-public class Cloud
+public class CloudTOBEMERGEWITHCOMPUTE
 {
 	protected static class VMHost {
 		protected Host host;
@@ -76,11 +76,11 @@ public class Cloud
 	protected int interBootDelay;
 		
 	/**
-	 * Constructs a Cloud from a XML DOM node
+	 * Constructs a CloudTOBEMERGEWITHCOMPUTE from a XML DOM node
 	 * @param node The XML DOM node
 	 * @todo Retrieves the number of cores from cloud.xml, while it would be better from platform.xml
 	 */
-	public Cloud(Node node) {
+	public CloudTOBEMERGEWITHCOMPUTE(Node node) {
 		
 		Vector<VMHost> hostsVector = new Vector<VMHost>();
 		
