@@ -7,7 +7,7 @@ import org.simgrid.msg.MsgException;
 import org.simgrid.msg.Mutex;
 import org.simgrid.msg.Process;
 import org.simgrid.msg.Task;
-import org.simgrid.schiaas.api.Cloud.VMHost;
+import org.simgrid.schiaas.api.CloudTOBEMERGEWITHCOMPUTE.VMHost;
 
 
 /**

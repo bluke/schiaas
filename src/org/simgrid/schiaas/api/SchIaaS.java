@@ -1,16 +1,20 @@
 package org.simgrid.schiaas.api;
 
 /**
- * This class aims at encapsulating all services provided by a particular cloud.
- * TODO, please justify the interest of this class !
+ * This class is the equivalent of the MSG class and provides all services to setup the different cloud platforms.
  */
-public class  {
+public class SchIaaS {
 
-    private Compute compute;
-    private Collection<Storage> storages; // S3, EBS, ...
-    private Network network;
+    Static private Collection<Cloud> clouds
 
     static init (String CloudXMLFileName){
-        init(cloudXMLFileName);
+        // TODO
+    }
+
+    static Cloud getCloud(String id){
+        // TODO
+    }
+    static  Collection<Cloud> getClouds(){
+       return clouds;
     }
 }

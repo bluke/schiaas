@@ -1,14 +1,6 @@
 package org.simgrid.schiaas.api;
 
-
-
-adrien lebre
-
-
-
-
-
-
+// TODO AL -> JG / JRC, this file has been backported from SGCB (previously, resourceTemplate in SGCB).
 public class InstanceType implements Serializable {
 /**
 	* 

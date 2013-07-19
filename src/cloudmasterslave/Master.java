@@ -8,8 +8,6 @@
  */
 
 package cloudmasterslave;
-import java.util.Arrays;
-import java.util.Vector;
 
 import org.simgrid.msg.Host;
 import org.simgrid.msg.Msg;
@@ -18,7 +16,7 @@ import org.simgrid.msg.Task;
 import org.simgrid.msg.Process;
 import org.simgrid.msg.VM;
 
-import org.simgrid.simiaas.api.*;
+import org.simgrid.schiaas.api.*;
 
 public class Master extends Process {
 	public Master(Host host, String name, String[]args) {

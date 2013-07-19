@@ -11,8 +11,8 @@ import org.simgrid.msg.HostNotFoundException;
 import org.simgrid.msg.Msg;
 import org.simgrid.msg.NativeException;
 import org.simgrid.msg.Process;
-import org.simgrid.simiaas.api.Compute;
-import org.simgrid.simiaas.api.Instance;
+import org.simgrid.schiaas.api.Compute;
+import org.simgrid.schiaas.api.Instance;
 
 public class Masterslave {
    public static final int TASK_COMP_SIZE = 2000000000;
@@ -42,7 +42,7 @@ public class Masterslave {
         Msg.run();
         
         /* print cloud reports */
-        Msg.info("Cloud description\n"+Compute.getCloudsDescription());
+        Msg.info("CloudTOBEMERGEWITHCOMPUTE description\n"+Compute.getCloudsDescription());
         Msg.info("Instances description\n"+Compute.getInstancesDescription());
         Msg.info("Details\n");
         for (Instance i : Compute.describeInstances())  {

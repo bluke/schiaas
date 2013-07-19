@@ -16,6 +16,8 @@ import java.util.Vector;
 import javax.xml.parsers.*;
 import org.simgrid.msg.*;
 import org.simgrid.msg.Process;
+import org.simgrid.schiaas.engine.simiaas.ComputeControllerProcess;
+import org.simgrid.schiaas.engine.simiaas.ControlTask;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
@@ -29,9 +31,11 @@ import org.w3c.dom.NodeList;
  * 
  */
 public class Compute {
-		
+
+
+
 	/** Contains all the clouds of the simulation. */
-	protected static HashMap<String,Cloud> clouds;
+	protected static HashMap<String,CloudTOBEMERGEWITHCOMPUTE> clouds;
 
 	/** Contains all the instances of the simulation, alive and terminated. */
 	protected static Vector<Instance> instances;
@@ -44,7 +48,7 @@ public class Compute {
 	 */
 	protected static void initClouds(String filename)
 	{
-		clouds = new HashMap<String,Cloud>();
+		clouds = new HashMap<String,CloudTOBEMERGEWITHCOMPUTE>();
 		
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		DocumentBuilder db;
@@ -58,12 +62,12 @@ public class Compute {
 			for (int i=0; i<nodes.getLength(); i++) {
 				if (nodes.item(i).getNodeName().compareTo("cloud") == 0) {
 					String cloudid = nodes.item(i).getAttributes().getNamedItem("id").getNodeValue();
-					clouds.put(cloudid,	new Cloud(nodes.item(i)));
+					clouds.put(cloudid,	new CloudTOBEMERGEWITHCOMPUTE(nodes.item(i)));
 				}
 			}			
 			
 		} catch (IOException e) {
-			Msg.critical("Cloud config file not found");
+			Msg.critical("CloudTOBEMERGEWITHCOMPUTE config file not found");
 			e.printStackTrace();
 			System.exit(0);
 		}  catch (Exception e) {
@@ -120,12 +124,12 @@ public class Compute {
 	 */
 	public static Instance runInstance(Image image, String cloudid)
 	{
-		Cloud c = clouds.get(cloudid);
+		CloudTOBEMERGEWITHCOMPUTE c = clouds.get(cloudid);
 		
 		if ( c.describeAvailability() == 0 ) return null;
 
 		while (c.hosts[nextHost].instancesCount==c.hosts[nextHost].maxInstancesCount) nextHost=(nextHost+1)%c.hosts.length; 
-		Cloud.VMHost h = c.hosts[nextHost];
+		CloudTOBEMERGEWITHCOMPUTE.VMHost h = c.hosts[nextHost];
 		
 		
 		String instanceName =  "id_"+c.name+"_"+h.host.getName()+"_"+c.hosts[nextHost].instanceID++;
@@ -243,10 +247,10 @@ public class Compute {
 	public static String getCloudsDescription()
 	{
 		String res = new String();
-		Collection<Cloud> cc = clouds.values();
-		for (Cloud c : cc) {
+		Collection<CloudTOBEMERGEWITHCOMPUTE> cc = clouds.values();
+		for (CloudTOBEMERGEWITHCOMPUTE c : cc) {
 			res+=c.name+"\n";
-			for (Cloud.VMHost h : c.hosts) {
+			for (CloudTOBEMERGEWITHCOMPUTE.VMHost h : c.hosts) {
 				res+=h.host.getName()+"\n";
 			}
 		}
@@ -283,8 +287,8 @@ public class Compute {
 			}
 		}
 		
-		Msg.verb("Killing Cloud ControlProcesses");
-		for (Cloud cloud : clouds.values()) {
+		Msg.verb("Killing CloudTOBEMERGEWITHCOMPUTE ControlProcesses");
+		for (CloudTOBEMERGEWITHCOMPUTE cloud : clouds.values()) {
 			cloud.computeControllerProcess.enqueueControlTask(new ControlTask(null,ComputeControllerProcess.COMMAND.FINALIZE));
 		}
 		Process.currentProcess().waitFor(10);

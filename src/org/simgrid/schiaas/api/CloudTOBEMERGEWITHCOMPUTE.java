@@ -7,7 +7,7 @@ import org.simgrid.msg.Host;
 import org.simgrid.msg.HostNotFoundException;
 import org.simgrid.msg.Msg;
 import org.simgrid.msg.Mutex;
-import org.simgrid.schiaas.engine.ComputeControllerProcess;
+import org.simgrid.schiaas.engine.simiaas.ComputeControllerProcess;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;

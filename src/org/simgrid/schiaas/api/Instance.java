@@ -9,6 +9,9 @@ import org.simgrid.msg.Msg;
 import org.simgrid.msg.VM;
 import org.simgrid.msg.Mutex;
 import org.simgrid.msg.Process;
+import org.simgrid.schiaas.engine.simiaas.ComputeControllerProcess;
+import org.simgrid.schiaas.engine.simiaas.ComputeNodeProcess;
+import org.simgrid.schiaas.engine.simiaas.ControlTask;
 
 //ajouter dpIntensity / fonction de la netBW pour la migration
 
@@ -36,10 +39,10 @@ public class Instance extends VM {
 	} 
 	
 	/** The cloud of the instance. */
-	protected Cloud cloud;
+	protected CloudTOBEMERGEWITHCOMPUTE cloud;
 	
 	/** The physical host of the instance. */
-	protected Cloud.VMHost vmhost;
+	protected CloudTOBEMERGEWITHCOMPUTE.VMHost vmhost;
 	
 	/** The image of the instance. */
 	protected Image image;
@@ -70,7 +73,7 @@ public class Instance extends VM {
 	 * @param coreAmount The core amount of the instance.
 	 * @throws HostNotFoundException Thrown when the physical host is not found.
 	 */
-	protected Instance(Image image, Cloud cloud, Cloud.VMHost vmhost, String name, int coreAmount, Mutex imageTransferMutex) {
+	protected Instance(Image image, CloudTOBEMERGEWITHCOMPUTE cloud, CloudTOBEMERGEWITHCOMPUTE.VMHost vmhost, String name, int coreAmount, Mutex imageTransferMutex) {
 		this(image, cloud, vmhost, name, coreAmount, imageTransferMutex, 0);
 	}
 	
@@ -86,7 +89,7 @@ public class Instance extends VM {
 	 * @param delay The delay (in s) to wait before starting.
 	 * @throws HostNotFoundException Thrown when the physical host is not found.
 	 */
-	protected Instance(Image image, Cloud cloud, Cloud.VMHost vmhost, String name, int coreAmount, Mutex imageTransferMutex, int delay) {
+	protected Instance(Image image, CloudTOBEMERGEWITHCOMPUTE cloud, CloudTOBEMERGEWITHCOMPUTE.VMHost vmhost, String name, int coreAmount, Mutex imageTransferMutex, int delay) {
 		super(vmhost.host, name);
 		
 		this.cloud  = cloud;
