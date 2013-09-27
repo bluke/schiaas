@@ -1,23 +1,34 @@
 <?xml version='1.0'?>
  <!DOCTYPE clouds>
  <clouds version="1">
-	<cloud  id="myCloud" controller="Boivin" standard_power="1e09" cache="PRE" max_vm_per_core="1" inter_boot_delay="20"> 
-		<host id="Jean_Yves" core="1"/>
-		<host id="TeX" core="1"/>
-		<host id="Geoff" core="1"/>
-		<host id="Disney" core="1"/>
-		<host id="iRMX" core="1"/>
-		<host id="McGee" core="1"/>
-		<host id="Gatien" core="1"/>
-		<host id="Laroche" core="1"/>
-		<host id="Tanguay" core="1"/>
-		<host id="Morin" core="1"/>
-		<host id="Ethernet" core="1"/>
-		<host id="Bellemarre" core="1"/>
-		<host id="Kuenning" core="1"/>
-		<host id="Gaston" core="1"/>
-		<host id="Harry" core="1"/>	   
+	<cloud  id="myCloud">
+		<compute engine="org.simgrid.schiaas.engine.rice.Rice"> 
+		
+			<config controller="Jacquelin"/>
+			
+			<instance_type id="small" core="1" memory="1000" disk="1690"/>
+			<instance_type id="medium" core="2" memory="1000" disk="1690"/>
+			<instance_type id="large" core="4" memory="1000" disk="1690"/>
+			
+			<image id="myImage" size="1073741824"/>
+			
+			<host id="Boivin"/>
+			<host id="Jean_Yves"/>
+			<host id="TeX"/>
+			<host id="Geoff"/>
+			<host id="Disney"/>
+			<host id="iRMX"/>
+			<host id="McGee"/>
+			<host id="Gatien"/>
+			<host id="Laroche"/>
+			<host id="Tanguay"/>
+			<host id="Morin"/>
+			<host id="Ethernet"/>
+			<host id="Bellemarre"/>
+			<host id="Kuenning"/>
+			<host id="Gaston"/>
+			<host id="Harry"/>
+		</compute> 
 	</cloud>
-
 </clouds> 
  

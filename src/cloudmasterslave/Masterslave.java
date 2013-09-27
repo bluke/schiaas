@@ -10,9 +10,9 @@ package cloudmasterslave;
 import org.simgrid.msg.HostNotFoundException;
 import org.simgrid.msg.Msg;
 import org.simgrid.msg.NativeException;
-import org.simgrid.msg.Process;
-import org.simgrid.schiaas.api.Compute;
-import org.simgrid.schiaas.api.Instance;
+import org.simgrid.schiaas.Instance;
+import org.simgrid.schiaas.SchIaaS;
+import org.simgrid.schiaas.Cloud;
 
 public class Masterslave {
    public static final int TASK_COMP_SIZE = 2000000000;
@@ -36,17 +36,20 @@ public class Masterslave {
 		Msg.deployApplication(args[1]);
 		
 		/* construct the cloud and deploy the associated processes */
-		Compute.init(args[2]);
-
+		Msg.info("debut init cloud");
+		SchIaaS.init(args[2]);
+		Msg.info("fin init cloud");
 		/* execute the simulation */
         Msg.run();
         
+        
         /* print cloud reports */
-        Msg.info("CloudTOBEMERGEWITHCOMPUTE description\n"+Compute.getCloudsDescription());
-        Msg.info("Instances description\n"+Compute.getInstancesDescription());
-        Msg.info("Details\n");
-        for (Instance i : Compute.describeInstances())  {
-        	Msg.info(i.stateLogToString());
+        Msg.info("Cloud details\n");
+        for (Cloud cloud : SchIaaS.getClouds())  {
+        	Msg.info("Cloud:"+cloud.getId());
+        	for (Instance instance : cloud.getCompute().describeInstances()) {
+        		Msg.info(" - "+instance);
+        	}
         }
     }
 }
