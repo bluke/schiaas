@@ -37,11 +37,10 @@ public class Masterslave {
 		
 		/* construct the cloud and deploy the associated processes */
 		Msg.info("debut init cloud");
-		SchIaaS.init(args[2]);
+		SchIaaS.init(args[2]);		
 		Msg.info("fin init cloud");
 		/* execute the simulation */
-        Msg.run();
-        
+        Msg.run();        
         
         /* print cloud reports */
         Msg.info("Cloud details\n");

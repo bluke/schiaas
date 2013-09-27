@@ -13,11 +13,12 @@ import org.simgrid.msg.Task;
 import org.simgrid.msg.TaskCancelledException;
 import org.simgrid.msg.TimeoutException;
 import org.simgrid.msg.TransferFailureException;
-import org.simgrid.msg.Process;
+import org.simgrid.schiaas.process.SchIaaSProcess;
 
-public class Slave extends Process {
+public class Slave extends SchIaaSProcess {
+
 	public Slave(Host host, String name, String[]args) {
-		super(host,name,args);
+		super(host,name,args);	
 	}
 	public void main(String[] args) throws TransferFailureException, HostFailureException, TimeoutException {
 		if (args.length < 1) {
@@ -25,14 +26,11 @@ public class Slave extends Process {
 			System.exit(1);
 		}
 
-		int num = Integer.valueOf(args[0]).intValue();
-		Msg.info("Receiving on 'slave_"+num+"'");
-
-
+		Msg.info("Receiving on slave " + this.instanceId);
 		
 		while(true) { 
 			
-			Task task = Task.receive("slave_"+num);
+			Task task = Task.receive(args[0]);			
 			
 			double runDate = Msg.getClock();
 			if (task instanceof FinalizeTask) {

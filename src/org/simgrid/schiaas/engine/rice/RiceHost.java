@@ -13,6 +13,6 @@ public class RiceHost {
 	
 	protected RiceHost(Host host) {
 		this.host = host;
-		coreUsedByVMcount = 0;
+		this.coreUsedByVMcount = 0;
 	}
 }

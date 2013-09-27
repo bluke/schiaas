@@ -1,6 +1,5 @@
 package org.simgrid.schiaas.engine.rice;
 
-import org.simgrid.msg.Host;
 import org.simgrid.schiaas.Image;
 import org.simgrid.schiaas.Instance;
 import org.simgrid.schiaas.InstanceType;
@@ -14,13 +13,21 @@ public class RiceInstance extends Instance {
 
 	protected RiceInstance(String id, Image image, InstanceType instanceType, RiceHost riceHost) {
 		super(id, image, instanceType, riceHost.host);
-		isPending = true;
+		this.isPending = true;
 		riceHost.coreUsedByVMcount+=Double.parseDouble(instanceType.getProperty("core"));
 	}
 	
+	@Override
 	public void start() {
-		isPending = false;
+		this.isPending = false;
+		this.updateStartTime();
 		super.start();
 	}
-
+	
+	@Override
+	public void shutdown() {
+		this.updateShutdownTime();
+		super.shutdown();
+	}
+	
 }

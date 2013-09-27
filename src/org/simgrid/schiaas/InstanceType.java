@@ -4,63 +4,102 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.simgrid.msg.Msg;
+import org.simgrid.schiaas.billing.ComputeBilling;
 import org.w3c.dom.Node;
 
+/**
+ * Represents an instance type, similar to Amazon's small, medium, large, ...
+ * @author julien
+ *
+ */
 public class InstanceType {
 
-	protected Map<String,String> properties;
+	/**
+	 * A list of properties attached to this instance type
+	 */
+	protected Map<String, String> properties;
 	
 	/**
+	 * The billing prices associated to this instance type
+	 */
+	protected ComputeBilling billing;
+
+	/**
 	 * Unique constructor from XML config file, setting default values.
-	 * @param instanceTypeXMLNode A node pointing out one InstanceType tag in the XML config file.
+	 * 
+	 * @param instanceTypeXMLNode
+	 *            A node pointing out one InstanceType tag in the XML config
+	 *            file.
 	 * @author julien.gossa@unistra.fr
-	 */		
+	 */
 	public InstanceType(Node instanceTypeXMLNode) {
 
-		properties = new HashMap<String,String>();
+		this.properties = new HashMap<String, String>();
 
 		// default properties
-		properties.put("core", "1");  
-		properties.put("ramSize", "256"); 
-		properties.put("netCap", "10");		
-		properties.put("diskPath", "/default"); 
-		properties.put("diskSize", "1000");
-		properties.put("migNetSpeed", "10");
-		properties.put("dpIntensity", "1");
+		this.properties.put("core", "1");
+		this.properties.put("ramSize", "256");
+		this.properties.put("netCap", "10");
+		this.properties.put("diskPath", "/default");
+		this.properties.put("diskSize", "1000");
+		this.properties.put("migNetSpeed", "10");
+		this.properties.put("dpIntensity", "1");
 
-		// properties from xml config file
-		for (int i=0; i<instanceTypeXMLNode.getAttributes().getLength(); i++) {
-			Msg.info(instanceTypeXMLNode.getAttributes().item(i).getNodeName()+","+ instanceTypeXMLNode.getAttributes().item(i).getNodeValue() );
-			properties.put(instanceTypeXMLNode.getAttributes().item(i).getNodeName(), instanceTypeXMLNode.getAttributes().item(i).getNodeValue());
-		}		
-	}	
+		// properties from XML config file
+		for (int i = 0; i < instanceTypeXMLNode.getAttributes().getLength(); i++) {
+			Msg.info(instanceTypeXMLNode.getAttributes().item(i).getNodeName()
+					+ ","
+					+ instanceTypeXMLNode.getAttributes().item(i)
+							.getNodeValue());
+			this.properties.put(instanceTypeXMLNode.getAttributes().item(i)
+					.getNodeName(), instanceTypeXMLNode.getAttributes().item(i)
+					.getNodeValue());
+		}
+	}
+
+	/**
+	 * Sets the billing information (prices) for this instance type 
+	 * @param cb
+	 */
+	public void setBillingInfo(ComputeBilling cb) {
+		this.billing = cb;
+	}
+	
+	/**
+	 * @return the billing information (prices) for this instance type
+	 */
+	public ComputeBilling getBillingInfo() {
+		return this.billing;
+	}
 	
 	/**
 	 * for all properties
-	 * @param propId the id of the property, as is the XML config file or default values.
+	 * 
+	 * @param propId
+	 *            the id of the property, as is the XML config file or default
+	 *            values.
 	 * @return the property
 	 */
 	public String getProperty(String propId) {
-		return properties.get(propId);
+		return this.properties.get(propId);
 	}
-	
+
 	/**
 	 * 
 	 * @return The id of this.
 	 */
 	public String getId() {
-		return properties.get("id");
+		return this.properties.get("id");
 	}
 
 	/**
 	 * Of course.
 	 */
 	public String toString() {
-		String res = properties.get("id") +": ";
-		for (Map.Entry<String, String> prop : properties.entrySet()) {
-			res+=prop.getKey() + "=" + prop.getValue()+" ";
+		String res = this.properties.get("id") + ": ";
+		for (Map.Entry<String, String> prop : this.properties.entrySet()) {
+			res += prop.getKey() + "=" + prop.getValue() + " ";
 		}
 		return res;
 	}
 }
-
