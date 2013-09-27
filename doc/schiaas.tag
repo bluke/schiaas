@@ -2,9 +2,9 @@
 <tagfile>
   <compound kind="page">
     <name>index</name>
-    <title>SimIaaS Documentation</title>
+    <title>SCHIaaS Documentation</title>
     <filename>index</filename>
-    <docanchor file="index" title="Running SimIaaS">running</docanchor>
+    <docanchor file="index" title="Running SCHIaaS">running</docanchor>
     <docanchor file="index" title="Prerequisite">running_prerequisite</docanchor>
     <docanchor file="index" title="Retrieving the latest unstable version">running_retrieving</docanchor>
     <docanchor file="index" title="Tutorial: the master-slave example">tutorial</docanchor>

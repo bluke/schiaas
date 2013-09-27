@@ -1,10 +1,10 @@
 /*!  
-@mainpage SimIaaS Documentation
+@mainpage SCHIaaS Documentation
 
-SimIaaS allows to simulate IaaS with SimGrid.
+SCHIaaS allows to simulate IaaS with SimGrid.
 
 While SimGrid implements hypervisor level functionalities (e.g. start and stop VMs),
-SimIaaS implements cloud level functionalities (e.g. run and terminate instances).
+SCHIaaS implements cloud level functionalities (e.g. run and terminate instances).
 
 For now, only the <EM>compute</EM> module is implemented, also called VMM (Virtual Machines Manager) or Cloud Resources Factory.
 
@@ -18,26 +18,26 @@ It supports main VM managing functions:
 For now, it does not support other cloud functionalities, such as storage management.
 
 
-@section running Running SimIaaS
+@section running Running SCHIaaS
 
 @subsection running_prerequisite Prerequisite
 
-SimIaaS runs upon <a href="http://simgrid.gforge.inria.fr/">SimGrid</a>.
+SCHIaaS runs upon <a href="http://simgrid.gforge.inria.fr/">SimGrid</a>.
 Make sure to build the <EM>hypervisor</EM> branch of the git repository,
 which implies to enable Java suppport and disable SMPI.
 
 @subsection running_retrieving Retrieving the latest unstable version
 
-The last version of SimIaaS can be retrieved from the git repository:
+The last version of SCHIaaS can be retrieved from the git repository:
 @code
-git clone https://gforge.inria.fr/git/simiaas/simiaas.git
+git clone https://gforge.inria.fr/git/schiaas/schiaas.git
 or
-git clone git://scm.gforge.inria.fr/simiaas/simiaas.git
+git clone git://scm.gforge.inria.fr/schiaas/schiaas.git
 @endcode
 
-Afterward, you can build SimIaaS:
+Afterward, you can build SCHIaaS:
 @code
-cd simiaas
+cd schiaas
 cmake .
 make
 @endcode
@@ -47,7 +47,7 @@ If cmake complains about the location simgrid.jar, make sure to set SIMGRID_JAR_
 export SIMGRID_JAR_PATH=/path/to/simgrid.jar/
 @endcode
 
-Then you should have simiaas.jar inside the bin directory, which you can use to develop your own application.
+Then you should have schiaas.jar inside the bin directory, which you can use to develop your own application.
 
 
 
@@ -96,9 +96,9 @@ You can declare as many clouds as needed, and clouds can also used to model regi
 
 @subsubsection tutorial_initialization Initialization
 
-In order to initialize SimIaaS, you must use Compute.init, its argument being the cloud configuration file:
+In order to initialize SCHIaaS, you must use Compute.init, its argument being the cloud configuration file:
 @code
-import org.simgrid.simiaas.compute.Compute;
+import org.simgrid.schiaas.compute.Compute;
 [...]
 
 	/* construct the platform and deploy the application */
@@ -116,7 +116,7 @@ import org.simgrid.simiaas.compute.Compute;
 
 The main modification concernes Masterslave.java, which must declare an instance image and run one instance per slave:
 @code
-import org.simgrid.simiaas.compute.*;
+import org.simgrid.schiaas.compute.*;
 [...]
 	Msg.info("Hello! Got "+  slavesCount + " slaves and "+tasksCount+" tasks to process");
 	
@@ -126,7 +126,7 @@ import org.simgrid.simiaas.compute.*;
 	// Run one instance per slave on myCloud
 	Instance[] slaveInstances = Compute.runInstances(myImage,"myCloud",slavesCount);
 @endcode
-Afterward, slaveInstances constains SimIaaS Instances, which are SimGrid's VMs and can be used just like any SimGrid host.
+Afterward, slaveInstances constains SCHIaaS Instances, which are SimGrid's VMs and can be used just like any SimGrid host.
 
 Please note that if you ask for more instances than your cloud can provide, runInstances and runInstance will return null. Careful users will check how many instances can be ran:
 @code
@@ -171,7 +171,7 @@ or
 	oneInstance.terminate();
 @endcode
 
-Then, you have to terminate SimIaaS to clean-up the simulation:
+Then, you have to terminate SCHIaaS to clean-up the simulation:
 @code
 	Compute.terminate();
 @endcode
@@ -197,10 +197,10 @@ And last, you can obtain cloud usage report by modifying Masterslave.java:
 
 @subsubsection tutorial_running Running the cloudmasterslave example
 
-In order to build and run this example, you must add simgrid.jar and simiaas.jar to the jvm classpath:
+In order to build and run this example, you must add simgrid.jar and schiaas.jar to the jvm classpath:
 @code
-cd simiaas/src/cloudmasterslave
-java -cp /usr/local/java/simgrid.jar:../../bin/simiaas.jar:../../bin/cloudmasterslave.jar cloudmasterslave.Masterslave platform.xml deploy.xml cloud.xml
+cd schiaas/src/cloudmasterslave
+java -cp /usr/local/java/simgrid.jar:../../bin/schiaas.jar:../../bin/cloudmasterslave.jar cloudmasterslave.Masterslave platform.xml deploy.xml cloud.xml
 @endcode
 
 */
