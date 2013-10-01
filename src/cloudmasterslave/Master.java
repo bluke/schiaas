@@ -14,6 +14,7 @@ import org.simgrid.msg.Msg;
 import org.simgrid.msg.MsgException;
 import org.simgrid.msg.Task;
 import org.simgrid.msg.Process;
+import org.simgrid.schiaas.Compute;
 import org.simgrid.schiaas.InstanceType;
 import org.simgrid.schiaas.SchIaaS;
 import org.simgrid.schiaas.process.SchIaaSTask;
@@ -38,13 +39,18 @@ public class Master extends Process {
 		Msg.info("Hello! Got " + slavesCount + " slaves and " + tasksCount
 				+ " tasks to process");
 
+		
+		
 		/**
 		 * VM instance management
 		 */
 		
+		// Retrieve the Compute module of MyCloud
+		Compute myCompute = SchIaaS.getCloud("myCloud").getCompute();
+		
+		// Check the availability of resources on MyCloud
 		Msg.info("Instances availability:");
-		for (InstanceType instanceType : SchIaaS.getCloud("myCloud")
-				.getCompute().describeInstanceTypes()) {
+		for (InstanceType instanceType : myCompute.describeInstanceTypes()) {
 			Msg.info(instanceType.getId()
 					+ ": "
 					+ SchIaaS.getCloud("myCloud").getCompute()
@@ -52,27 +58,23 @@ public class Master extends Process {
 		}
 
 		// Run one instance per slave on myCloud
-		String[] slaveInstancesId = SchIaaS.getCloud("myCloud").getCompute()
-				.runInstances("myImage", "small", slavesCount);
+		String[] slaveInstancesId = myCompute.runInstances("myImage", "small", slavesCount);
 
 		// Check how many instances have been actually run
-		slavesCount = SchIaaS.getCloud("myCloud").getCompute()
-				.describeInstances().size();
+		slavesCount = myCompute.describeInstances().size();
 		Msg.info("Actual available instances count: " + slavesCount);
 
 		for (int i = 0; i < slavesCount; i++) {
 
 			// Wait for the instance to boot
-			while (SchIaaS.getCloud("myCloud").getCompute()
-					.describeInstance(slaveInstancesId[i]).isRunning() == 0) {
+			while (myCompute.describeInstance(slaveInstancesId[i]).isRunning() == 0) {
 				waitFor(10);
 			}
 
 			// Start Slave process on each running instances
 			String[] slaveArgs = { slaveInstancesId[i] /*the name of the mailbox*/ };
-			Slave s = new Slave(SchIaaS.getCloud("myCloud").getCompute()
-					.describeInstance(slaveInstancesId[i]),
-					slaveInstancesId[i], slaveArgs);
+			Slave s = new Slave(myCompute.describeInstance(slaveInstancesId[i]),
+								slaveInstancesId[i], slaveArgs);
 			s.start();
 		}
 
@@ -126,8 +128,7 @@ public class Master extends Process {
 		 * more VM instance management
 		 */
 		
-		// Suspend and resume one instance : Not working for unknown reason,
-		// probably at VM level (Marc: worked for me)
+		// Suspend and resume one instance
 		waitFor(150);
 		Msg.info("Suspending " + slaveInstancesId[0]);
 		SchIaaS.getCloud("myCloud").getCompute()
