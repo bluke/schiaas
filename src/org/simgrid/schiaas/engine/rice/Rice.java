@@ -86,7 +86,7 @@ public class Rice extends ComputeEngine {
 		return availability;
 	}
 
-	public void doCustomizedCommand(COMMAND command, Instance instance) {
+	public void doCommand(COMMAND command, Instance instance) {
 		RiceInstance riceInstance = (RiceInstance) instance;
 		switch (command) {
 		case START:

@@ -6,34 +6,28 @@
 		
 			<config controller="Jacquelin"/>
 			
-			<instance_type_list>
-				<instance_type id="small" core="1" memory="1000" disk="1690"/>				
-				<instance_type id="medium" core="2" memory="1000" disk="1690"/>
-				<instance_type id="large" core="4" memory="1000" disk="1690"/>
-			</instance_type_list>
-				
-			<image_list>
-				<image id="myImage" size="1073741824"/>
-			</image_list>
+			<instance_type id="small" core="1" memory="1000" disk="1690"/>				
+			<instance_type id="medium" core="2" memory="1000" disk="1690"/>
+			<instance_type id="large" core="4" memory="1000" disk="1690"/>
 			
-			<host_list>
-				<host id="Boivin"/>
-				<host id="Jean_Yves"/>
-				<host id="TeX"/>
-				<host id="Geoff"/>
-				<host id="Disney"/>
-				<host id="iRMX"/>
-				<host id="McGee"/>
-				<host id="Gatien"/>
-				<host id="Laroche"/>
-				<host id="Tanguay"/>
-				<host id="Morin"/>
-				<host id="Ethernet"/>
-				<host id="Bellemarre"/>
-				<host id="Kuenning"/>
-				<host id="Gaston"/>
-				<host id="Harry"/>
-			</host_list>
+			<image id="myImage" size="1073741824"/>
+		
+			<host id="Boivin"/>
+			<host id="Jean_Yves"/>
+			<host id="TeX"/>
+			<host id="Geoff"/>
+			<host id="Disney"/>
+			<host id="iRMX"/>
+			<host id="McGee"/>
+			<host id="Gatien"/>
+			<host id="Laroche"/>
+			<host id="Tanguay"/>
+			<host id="Morin"/>
+			<host id="Ethernet"/>
+			<host id="Bellemarre"/>
+			<host id="Kuenning"/>
+			<host id="Gaston"/>
+			<host id="Harry"/>
 		</compute>
 
 		<!-- TODO add network and storage here and in the XSD file -->
@@ -41,7 +35,9 @@
 		<network/>
 	
 		<storage_list>
-			<storage id="s3"/>
+			<storage id="myStorage" engine="org.simgrid.schiaas.engine.rise.Rise">
+				<config controller="Jacquelin"/>
+			</storage>
 		</storage_list>
 
 
@@ -53,8 +49,8 @@
 				<unit unit="GIGABYTE" outgoing_price_file="src/cloudmasterslave/network-out.bill" incoming_price_file="src/cloudmasterslave/network-in.bill"/>
 			</network>
 			<storage>
-				<unit ref="s3" unit="GIGABYTE" storage_price_file="src/cloudmasterslave/s3-storage.bill" outgoing_price_file="src/cloudmasterslave/s3-out.bill" incoming_price_file="src/cloudmasterslave/s3-in.bill"/>
-				<unit ref="s3" unit="REQUEST" storage_price_file="" outgoing_price_file="" incoming_price_file="src/cloudmasterslave/s3-request-in.bill"/>				
+				<unit ref="myStorage" unit="GIGABYTE" storage_price_file="src/cloudmasterslave/s3-storage.bill" outgoing_price_file="src/cloudmasterslave/s3-out.bill" incoming_price_file="src/cloudmasterslave/s3-in.bill"/>
+				<unit ref="myStorage" unit="REQUEST" storage_price_file="" outgoing_price_file="" incoming_price_file="src/cloudmasterslave/s3-request-in.bill"/>				
 			</storage>			
 		</billing>
 	</cloud>

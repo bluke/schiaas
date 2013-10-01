@@ -9,16 +9,13 @@ import org.simgrid.msg.VM;
  * Represents an Instance, that is a VM controller by SimIaaS.
  * @author julien.gossa@unistra.fr
  */
-/**
- * @author julien
- * 
- */
 public abstract class Instance extends VM {
 
 	/**
 	 * The last start and shutdown times of this instance
 	 */
 	protected long startTime, shutdownTime;
+	
 	/**
 	 * The total billing time for running this instance.
 	 * If for instance the instance has been saved to an external storage and

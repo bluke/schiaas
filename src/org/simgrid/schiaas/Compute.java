@@ -39,28 +39,22 @@ public class Compute {
 	/** engine of this */
 	protected ComputeEngine computeEngine;
 
-	/**
-	 * Contains all the instances of this compute instance, alive and
-	 * terminated.
-	 */
+	/** Contains all the instances of this compute instance, alive and terminated. */
 	protected Map<String, Instance> instances;
+	
+	/** A counter to set instances' id. */
+	protected int instancesId;
 
-	/**
-	 * Contains all the instanceTypes of this compute instance, alive and
-	 * terminated.
-	 */
+	/** Contains all the instanceTypes of this compute instance. */
 	protected Map<String, InstanceType> instanceTypes;
 
-	/** Contains all the image of this compute instance, alive and terminated. */
+	/** Contains all the image of this compute instance. */
 	protected Map<String, Image> images;
 
-	/**
-	 * Contains all the properties of this compute instance, alive and
-	 * terminated.
-	 */
+	/** Contains all the properties of this compute instance. */
 	protected Map<String, String> properties;
 
-	/** Contains all the hosts of this compute instance, alive and terminated. */
+	/** Contains all the hosts of this compute instance. */
 	protected Collection<Host> hosts;
 
 	/**
@@ -75,10 +69,11 @@ public class Compute {
 	 * @throws ClassNotFoundException
 	 */
 	protected Compute(Cloud cloud, Node computeXMLNode)
-			throws InstantiationException, IllegalAccessException,
-			ClassNotFoundException {
+			throws InstantiationException, IllegalAccessException, ClassNotFoundException {
 
 		this.instances = new HashMap<String, Instance>();
+		this.instancesId = 0;
+		
 		this.properties = new HashMap<String, String>();
 
 		this.instanceTypes = new HashMap<String, InstanceType>();
@@ -245,19 +240,15 @@ public class Compute {
 	 * @return the id of the instance, about to be started
 	 */
 	public String runInstance(String imageId, String instanceTypeId) {
-		Instance instance = this.computeEngine.newInstance(this.getCloud()
-				.getId() + "-" + this.computeEngine.getInstanceNumber(),
+		Instance instance = this.computeEngine.newInstance(
+				this.getCloud().getId() + "-" + instancesId,
 				this.images.get(imageId),
 				this.instanceTypes.get(instanceTypeId));
-
 		this.computeEngine.doCommand(ComputeEngine.COMMAND.START, instance);
 
-		/*
-		 * Instance instance = this.computeEngine.runInstance(
-		 * this.images.get(imageId), this.instanceTypes.get(instanceTypeId));
-		 */
 
 		this.instances.put(instance.id, instance);
+		instancesId++;
 		return instance.id;
 	}
 
@@ -353,6 +344,8 @@ public class Compute {
 				Msg.error("No billing info associated with instance type: " + instance.getId());
 				continue;
 			}
+			
+			// What if another billing method?
 			cost += Math.ceil((float) instance.getBillingTime()
 					/ instance.instanceType().getBillingInfo().getBtu())
 					* instance.instanceType().getBillingInfo().getFixedPrice();

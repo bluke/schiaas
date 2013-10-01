@@ -98,7 +98,7 @@ public class Master extends Process {
 		/**
 		 * storage management (including storage cost)
 		 */
-		
+		/*
 		// Move some data inside the storage device
 		Task data = new SchIaaSTask("Task_data", taskComputeSize,
 				2028 * taskCommunicateSize, SchIaaSTask.TYPE.DATA);
@@ -111,7 +111,7 @@ public class Master extends Process {
 				taskCommunicateSize, SchIaaSTask.TYPE.REQUEST);
 		Msg.info("Performing requests on storage \""
 				+ SchIaaS.getCloud("myCloud").getStorage("s3").getId());
-		SchIaaS.getCloud("myCloud").getStorage("s3").makeRequest(request);
+		SchIaaS.getCloud("myCloud").getStorage("s3").doRequest(request);
 
 		// Check cost for storing the data
 		Msg.info("Current storage cost: "
@@ -121,7 +121,7 @@ public class Master extends Process {
 		Msg.info("Getting data \"" + data.getName() + "\" from storage: "
 				+ SchIaaS.getCloud("myCloud").getStorage("s3").getId());
 		SchIaaS.getCloud("myCloud").getStorage("s3").moveDataOut(data);
-		
+		*/
 		
 
 		/**
