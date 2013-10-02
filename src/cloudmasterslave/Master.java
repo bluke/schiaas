@@ -9,14 +9,18 @@
 
 package cloudmasterslave;
 
+import java.util.Map;
+
 import org.simgrid.msg.Host;
 import org.simgrid.msg.Msg;
 import org.simgrid.msg.MsgException;
 import org.simgrid.msg.Task;
 import org.simgrid.msg.Process;
 import org.simgrid.schiaas.Compute;
+import org.simgrid.schiaas.Data;
 import org.simgrid.schiaas.InstanceType;
 import org.simgrid.schiaas.SchIaaS;
+import org.simgrid.schiaas.Storage;
 import org.simgrid.schiaas.process.SchIaaSTask;
 
 public class Master extends Process {
@@ -56,7 +60,7 @@ public class Master extends Process {
 					+ SchIaaS.getCloud("myCloud").getCompute()
 							.describeAvailability(instanceType.getId()));
 		}
-
+		
 		// Run one instance per slave on myCloud
 		String[] slaveInstancesId = myCompute.runInstances("myImage", "small", slavesCount);
 
@@ -64,20 +68,20 @@ public class Master extends Process {
 		slavesCount = myCompute.describeInstances().size();
 		Msg.info("Actual available instances count: " + slavesCount);
 
-		for (int i = 0; i < slavesCount; i++) {
-
-			// Wait for the instance to boot
+		
+		for (int i=0; i<slavesCount; i++) {
+			Msg.info("waiting for boot");
 			while (myCompute.describeInstance(slaveInstancesId[i]).isRunning() == 0) {
 				waitFor(10);
 			}
 
-			// Start Slave process on each running instances
-			String[] slaveArgs = { slaveInstancesId[i] /*the name of the mailbox*/ };
-			Slave s = new Slave(myCompute.describeInstance(slaveInstancesId[i]),
-								slaveInstancesId[i], slaveArgs);
+			String [] slaveArgs = {""+i};
+			Slave s = new Slave(myCompute.describeInstance(slaveInstancesId[i]), "slave_"+i,slaveArgs);
+			
 			s.start();
 		}
 
+		
 		/**
 		 * message management
 		 */
@@ -89,15 +93,30 @@ public class Master extends Process {
 					taskCommunicateSize, SchIaaSTask.TYPE.JOB);
 			Msg.info("Sending \"" + task.getName() + "\" to "
 					+ slaveInstancesId[i % slavesCount]);
-			// task.send("slave_"+(i%slavesCount));
-			SchIaaS.getCloud("myCloud").getNetwork()
-					.sendTask(task, slaveInstancesId[i % slavesCount]);
+			task.send("slave_"+(i%slavesCount));
+			//SchIaaS.getCloud("myCloud").getNetwork().sendTask(task, slaveInstancesId[i % slavesCount]);
 
 		}
 
 		/**
 		 * storage management (including storage cost)
 		 */
+		Storage myStorage = SchIaaS.getCloud("myCloud").getStorage("myStorage");
+		
+		Data someData = new Data("someData", 1e9);
+
+		myStorage.put(someData);
+
+		waitFor(200);
+		
+		someData = myStorage.get("someData");
+		
+		Map <String, Data> storedData = myStorage.list();
+		myStorage.ls();
+		
+		myStorage.delete("someData");
+		myStorage.ls();
+		
 		/*
 		// Move some data inside the storage device
 		Task data = new SchIaaSTask("Task_data", taskComputeSize,
@@ -142,9 +161,8 @@ public class Master extends Process {
 
 		for (int i = 0; i < slavesCount; i++) {
 			FinalizeTask task = new FinalizeTask();
-			// task.send(slaveInstancesId[i % slavesCount]);
-			SchIaaS.getCloud("myCloud").getNetwork()
-					.sendTask(task, slaveInstancesId[i % slavesCount]);
+			task.send("slave_"+(i%slavesCount));
+			//SchIaaS.getCloud("myCloud").getNetwork().sendTask(task, slaveInstancesId[i % slavesCount]);
 		}
 
 		// Wait an arbitrary time for Slaves to finalize
@@ -165,8 +183,9 @@ public class Master extends Process {
 				+ SchIaaS.getCloud("myCloud").getId() + " : "
 				+ SchIaaS.getCloud("myCloud").getNetwork().getTransferCost());
 
+		/*
 		Msg.info("Total storage transfer cost: "
 				+ SchIaaS.getCloud("myCloud").getStorage("s3").getStorageTransferCost());
-
+		 */
 	}
 }

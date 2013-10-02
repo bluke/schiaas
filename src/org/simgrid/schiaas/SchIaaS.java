@@ -69,22 +69,21 @@ public class SchIaaS {
 			db = dbf.newDocumentBuilder();						
 			
 			doc = db.parse(new File(CloudXMLFileName));
+			// TODO : build a valid xsd
+			/*
 			validator.setErrorHandler(new SimpleXMLErrorHandler());
 			validator.validate(new DOMSource(doc));
-
+			
 			if (!SchIaaS.isXMLValid) {
 				SchIaaS.terminate();
 				System.exit(0);
 			}
-
+			*/
+			
 			NodeList nodes = doc.getLastChild().getChildNodes();
 			for (int i=0; i<nodes.getLength(); i++) {
 				if (nodes.item(i).getNodeName().compareTo("cloud") == 0) {
 					String cloudid = nodes.item(i).getAttributes().getNamedItem("id").getNodeValue();
-					if (SchIaaS.clouds.keySet().contains("myCloud")) {
-						Msg.error("Duplicate cloud ID found: " + cloudid + ". Exiting");
-						System.exit(0);
-					}
 					SchIaaS.clouds.put(cloudid,	new Cloud(nodes.item(i)));
 				}
 			}			

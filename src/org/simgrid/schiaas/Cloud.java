@@ -60,23 +60,24 @@ public class Cloud {
 
 		NodeList nodes = cloudXMLNode.getChildNodes();
 		for (int i = 0; i < nodes.getLength(); i++) {
+			
 			if (nodes.item(i).getNodeName().compareTo("compute") == 0) {
 				this.compute = new Compute(this, nodes.item(i));
 			}
-			if (nodes.item(i).getNodeName().compareTo("storage_list") == 0) {
-				NodeList cnodes = nodes.item(i).getChildNodes();
-				for (int j = 0; j < cnodes.getLength(); j++) {
-					if (cnodes.item(j).getNodeName().compareTo("storage") == 0) {
-						String storageId = cnodes.item(j).getAttributes()
-							.getNamedItem("id").getNodeValue();
-						this.storages.put(storageId, new Storage(this, cnodes.item(j)));
-					}					
-				}
+
+			if (nodes.item(i).getNodeName().compareTo("storage") == 0) {
+				Storage storage = new Storage(this, nodes.item(i));
+				this.storages.put(storage.getId(), storage);
 			}
+			
 			if (nodes.item(i).getNodeName().compareTo("network") == 0) {
 				this.network = new Network(this, nodes.item(i));
 			}
+			
+			
 			// billing section
+			// TODO integrate into the rest
+			/*
 			if (nodes.item(i).getNodeName().compareTo("billing") == 0) {
 				NodeList cnodes = nodes.item(i).getChildNodes();
 				for (int j = 0; j < cnodes.getLength(); j++) {
@@ -126,6 +127,7 @@ public class Cloud {
 							}
 						}
 					}
+					
 					//TODO add storage billing and link it to storage (the ref in storage_billing to id in storage)
 					if (cnodes.item(j).getNodeName().compareTo("storage") == 0) {
 						for (int k = 0; k < unodes.getLength(); k++) {
@@ -151,10 +153,11 @@ public class Cloud {
 						}						
 					}					
 				}
-			}
+			}*/
 		}
 		//System.out.println(this.netBilling.getPolicy(NetworkBilling.NETWORK_UNIT.MEGABIT).getOutgoingPrice(10300));
 		//System.out.println(this.storages.get("s3").getStorageBillingPolicies().getPolicy(StorageBilling.STORAGE_UNIT.GIGABYTE).getIncomingPrice(2000));
+		
 	}
 
 	/**

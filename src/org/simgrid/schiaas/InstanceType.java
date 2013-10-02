@@ -47,10 +47,6 @@ public class InstanceType {
 
 		// properties from XML config file
 		for (int i = 0; i < instanceTypeXMLNode.getAttributes().getLength(); i++) {
-			Msg.info(instanceTypeXMLNode.getAttributes().item(i).getNodeName()
-					+ ","
-					+ instanceTypeXMLNode.getAttributes().item(i)
-							.getNodeValue());
 			this.properties.put(instanceTypeXMLNode.getAttributes().item(i)
 					.getNodeName(), instanceTypeXMLNode.getAttributes().item(i)
 					.getNodeValue());

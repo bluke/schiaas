@@ -52,20 +52,21 @@ public class Storage {
 		this.cloud = cloud;
 		this.id = storageXMLNode.getAttributes().getNamedItem("id").getNodeValue();
 		String engine = storageXMLNode.getAttributes().getNamedItem("engine").getNodeValue();
+		this.storedData = new HashMap<String, Data>();
+		this.properties = new HashMap<String, String>();
 		
 		NodeList nodes = storageXMLNode.getChildNodes();
-		
 		for (int i = 0; i < nodes.getLength(); i++) {
 			if (nodes.item(i).getNodeName().compareTo("config") == 0) {
 				NamedNodeMap configNNM = nodes.item(i).getAttributes();
 				for (int j = 0; j < configNNM.getLength(); j++) {
-					this.properties.put(configNNM.item(j).getNodeName(),
+					
+					this.properties.put(
+							configNNM.item(j).getNodeName(),
 							configNNM.item(j).getNodeValue());
 				}
 			}
 		}
-		
-		this.storedData = new HashMap<String, Data>();
 		
 		try {
 			this.storageEngine = (StorageEngine) Class.forName(engine)
@@ -123,9 +124,10 @@ public class Storage {
 	 * @param data
 	 * 			the data
 	 */
-	public void get(String dataId) {
+	public Data get(String dataId) {
 		Data data = storedData.get(dataId);
 		storageEngine.doRequest(StorageEngine.REQUEST.GET, data);
+		return data;
 	}
 	
 	/**
@@ -141,9 +143,18 @@ public class Storage {
 	/**
 	 * List the stored data.
 	 */
-	public Collection<Data> list() {
+	public Map<String, Data> list() {
 		storageEngine.doRequest(StorageEngine.REQUEST.LIST, null);
-		return storedData.values();
+		return storedData;
 	}
-	
+
+	/**
+	 * Print the list the stored data.
+	 */
+	public void ls() {
+		Msg.info("List of stored data");
+		for(Data data : storedData.values()){
+		    Msg.info(data.getId()+": "+data.getSize());
+		}
+	}
 }

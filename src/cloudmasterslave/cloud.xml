@@ -34,11 +34,9 @@
 	
 		<network/>
 	
-		<storage_list>
-			<storage id="myStorage" engine="org.simgrid.schiaas.engine.rise.Rise">
-				<config controller="Jacquelin"/>
-			</storage>
-		</storage_list>
+		<storage id="myStorage" engine="org.simgrid.schiaas.engine.rise.Rise">
+			<config controller="Jacquelin"/>
+		</storage>
 
 
 		<billing> 

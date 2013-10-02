@@ -4,50 +4,68 @@
 <xs:element name="clouds">
 	<xs:complexType>
 		<xs:sequence>
-			<xs:element name="cloud" minOccurs="1" maxOccurs="unbounded">
+			<xs:element name="cloud">
 				<xs:complexType>
 					<xs:sequence>
 						<xs:element name="compute">
-							<xs:attribute name="engine" type="xs:string" use="required"/>
-						
 							<xs:complexType>
-								<xs:all minOccurs="0" maxOccurs="unbounded">
-
-									<xs:element name="config" minOccurs="1" maxOccurs="unbounded"/>
-
-									<xs:element name="instance_type" minOccurs="1" maxOccurs="unbounded">
+								<xs:sequence>
+									<xs:element name="config">
 										<xs:complexType>
-											<xs:attribute name="id" type="xs:string" use="required"/>
-											<xs:any minOccurs="1" maxOccurs="unbounded"/>
+											<xs:attribute name="controller" type="xs:string"/>
 										</xs:complexType>
 									</xs:element>
-									<xs:unique name="uniqueInstanceID">
-										<xs:selector xpath="instance_type"/>
-										<xs:field xpath="@id"/>
-									</xs:unique>
-
-									<xs:element name="image" minOccurs="1" maxOccurs="unbounded">
+									<xs:element name="instance_type_list">
 										<xs:complexType>
-											<xs:attribute name="id" type="xs:string" use="required"/>
-											<xs:attribute name="size" type="xs:positiveInteger" use="required"/>
+											<xs:sequence>
+												<xs:element name="instance_type" minOccurs="1" maxOccurs="unbounded">
+													<xs:complexType>
+														<xs:attribute name="id" type="xs:string" use="required"/>
+														<xs:attribute name="core" type="xs:positiveInteger" use="required"/>
+														<xs:attribute name="memory" type="xs:positiveInteger" use="required"/>
+														<xs:attribute name="disk" type="xs:positiveInteger" use="required"/>
+													</xs:complexType>
+												</xs:element>		
+											</xs:sequence>
 										</xs:complexType>
-									</xs:element>									
-									<xs:unique name="uniqueImageID">
-										<xs:selector xpath="image"/>
-										<xs:field xpath="@id"/>
-									</xs:unique>										
-
-									<xs:element name="host" minOccurs="1" maxOccurs="unbounded">
+										<xs:unique name="uniqueInstanceID">
+											<xs:selector xpath="instance_type"/>
+											<xs:field xpath="@id"/>
+ 										</xs:unique>
+									</xs:element>
+									<xs:element name="image_list">
 										<xs:complexType>
-											<xs:attribute name="id" type="xs:string" use="required"/>
-										</xs:complexType>													
-									</xs:element>		
-									<xs:unique name="uniqueHostID">
-										<xs:selector xpath="host"/>
-										<xs:field xpath="@id"/>
-									</xs:unique>
-									
+											<xs:sequence>
+												<xs:element name="image" minOccurs="1" maxOccurs="unbounded">
+													<xs:complexType>
+														<xs:attribute name="id" type="xs:string" use="required"/>
+														<xs:attribute name="size" type="xs:positiveInteger" use="required"/>
+													</xs:complexType>
+												</xs:element>
+											</xs:sequence>
+										</xs:complexType>
+										<xs:unique name="uniqueImageID">
+											<xs:selector xpath="image"/>
+											<xs:field xpath="@id"/>
+ 										</xs:unique>										
+									</xs:element>
+									<xs:element name="host_list">
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="host" minOccurs="1" maxOccurs="unbounded">
+													<xs:complexType>
+														<xs:attribute name="id" type="xs:string" use="required"/>
+													</xs:complexType>													
+												</xs:element>		
+											</xs:sequence>
+										</xs:complexType>
+										<xs:unique name="uniqueHostID">
+											<xs:selector xpath="host"/>
+											<xs:field xpath="@id"/>
+ 										</xs:unique>
+									</xs:element>
 								</xs:sequence>
+								<xs:attribute name="engine" type="xs:string" use="required"/>
 							</xs:complexType>
 						</xs:element>
 						<xs:element name="network">
@@ -58,7 +76,6 @@
 									<xs:element name="storage">
 										<xs:complexType>
 											<xs:attribute name="id" type="xs:string" use="required"/>
-											<xs:attribute name="engine" type="xs:string" use="required"/>
 										</xs:complexType>	
 									</xs:element>
 								</xs:sequence>

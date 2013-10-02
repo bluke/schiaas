@@ -13,12 +13,11 @@ import org.simgrid.msg.Task;
 import org.simgrid.msg.TaskCancelledException;
 import org.simgrid.msg.TimeoutException;
 import org.simgrid.msg.TransferFailureException;
-import org.simgrid.schiaas.process.SchIaaSProcess;
+import org.simgrid.msg.Process;
 
-public class Slave extends SchIaaSProcess {
-
+public class Slave extends Process {
 	public Slave(Host host, String name, String[]args) {
-		super(host,name,args);	
+		super(host,name,args);
 	}
 	public void main(String[] args) throws TransferFailureException, HostFailureException, TimeoutException {
 		if (args.length < 1) {
@@ -26,23 +25,26 @@ public class Slave extends SchIaaSProcess {
 			System.exit(1);
 		}
 
-		Msg.info("Receiving on slave " + this.instanceId);
+		int num = Integer.valueOf(args[0]).intValue();
+		Msg.info("Receiving on 'slave_"+num+"'");
+
+
 		
 		while(true) { 
 			
-			Task task = Task.receive(args[0]);			
+			Task task = Task.receive("slave_"+num);
 			
 			double runDate = Msg.getClock();
 			if (task instanceof FinalizeTask) {
 				break;
 			}
-			Msg.info("Received \"" + task.getName() +  "\". Processing it.");
+			//Msg.info("Received \"" + task.getName() +  "\". Processing it.");
 			try {
 				task.execute();
 			} catch (TaskCancelledException e) {
 
 			}
-			Msg.info("\"" + task.getName() + "\" done ");
+			//Msg.info("\"" + task.getName() + "\" done ");
 			
 			Msg.info("RunTime : "+(Msg.getClock()-runDate));
 		}

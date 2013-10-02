@@ -98,43 +98,24 @@ public class Compute {
 				}
 			}
 
-			if (nodes.item(i).getNodeName().compareTo("host_list") == 0) {
-				NodeList cnodes = nodes.item(i).getChildNodes();
-				for (int j = 0; j < cnodes.getLength(); j++) {
-					if (cnodes.item(j).getNodeName().compareTo("host") == 0) {
-						try {
-							hosts.add(Host.getByName(cnodes.item(j)
-									.getAttributes().getNamedItem("id")
-									.getNodeValue()));
-						} catch (HostNotFoundException e) {
-							e.printStackTrace();
-						}
-					}
+			if (nodes.item(i).getNodeName().compareTo("host") == 0) {
+				try {
+					hosts.add(Host.getByName(
+						nodes.item(i).getAttributes().getNamedItem("id").getNodeValue()));
+				} catch (HostNotFoundException e) {
+					e.printStackTrace();
 				}
 			}
 
-			if (nodes.item(i).getNodeName().compareTo("instance_type_list") == 0) {
-				NodeList cnodes = nodes.item(i).getChildNodes();
-				for (int j = 0; j < cnodes.getLength(); j++) {
-					if (cnodes.item(j).getNodeName().compareTo("instance_type") == 0) {
-						InstanceType instancetype = new InstanceType(
-								cnodes.item(j));
-						this.instanceTypes.put(instancetype.getId(),
-								instancetype);
-					}
-				}
+			if (nodes.item(i).getNodeName().compareTo("instance_type") == 0) {
+				InstanceType instancetype = new InstanceType(nodes.item(i));
+				this.instanceTypes.put(instancetype.getId(), instancetype);
 			}
 
-			if (nodes.item(i).getNodeName().compareTo("image_list") == 0) {
-				NodeList cnodes = nodes.item(i).getChildNodes();
-				for (int j = 0; j < cnodes.getLength(); j++) {
-					if (cnodes.item(j).getNodeName().compareTo("image") == 0) {
-						Image image = new Image(cnodes.item(j));
-						this.images.put(image.getId(), image);
-					}
-				}
+			if (nodes.item(i).getNodeName().compareTo("image") == 0) {
+				Image image = new Image(nodes.item(i));
+				this.images.put(image.getId(), image);
 			}
-
 		}
 
 		try {
