@@ -4,12 +4,17 @@ import java.util.Collection;
 import java.util.Vector;
 
 import org.simgrid.msg.Host;
+import org.simgrid.msg.HostFailureException;
 import org.simgrid.msg.HostNotFoundException;
 import org.simgrid.msg.Msg;
+import org.simgrid.msg.TimeoutException;
+import org.simgrid.msg.TransferFailureException;
 import org.simgrid.schiaas.Compute;
+import org.simgrid.schiaas.Data;
 import org.simgrid.schiaas.Image;
 import org.simgrid.schiaas.Instance;
 import org.simgrid.schiaas.InstanceType;
+import org.simgrid.schiaas.Storage;
 import org.simgrid.schiaas.engine.ComputeEngine;
 
 /**
@@ -19,12 +24,30 @@ import org.simgrid.schiaas.engine.ComputeEngine;
  */
 public class Rice extends ComputeEngine {
 
+
 	/** Host of the controller of this. */
 	protected Host controller;
 
 	/** All the host of this. */
 	protected Vector<RiceHost> riceHosts;
 
+	/** Storage used for the images. */
+	protected Storage imgStorage;
+
+	/**
+	 * Enumerates the possible image caching strategies.
+	 * @author julien
+	 */
+	protected static enum IMGCACHING {
+		ON, OFF, PRE
+	};
+
+	/** the caching strategy */
+	protected IMGCACHING imgCaching;
+
+	/** the delay between two consecutive boots */
+	protected double interBootDelay;
+	
 	/**
 	 * Constructor
 	 * 
@@ -35,8 +58,7 @@ public class Rice extends ComputeEngine {
 		super(compute, hosts);
 
 		try {
-			this.controller = Host.getByName((String) compute
-					.getProperty("controller"));
+			this.controller = Host.getByName((String) compute.getConfig("controller"));
 		} catch (HostNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -46,6 +68,21 @@ public class Rice extends ComputeEngine {
 		for (Host host : hosts) {
 			this.riceHosts.add(new RiceHost(host));
 		}
+		
+		Msg.info("storing images");
+		imgStorage = compute.getCloud().getStorage(compute.getConfig("image_storage"));
+		for (Image image : compute.describeImages().values()) {
+			Data imgData = new Data("RICEIMG-"+image.getId(), Double.parseDouble(image.getProperty("size")));
+			try {
+				imgStorage.putInstantaneously(imgData);
+			} catch (Exception e) {
+				Msg.critical("Something bad happens when trying to store the images of RICE");
+				e.printStackTrace();
+			}
+		}
+		
+		imgCaching = IMGCACHING.valueOf(compute.getConfig("image_caching"));
+		interBootDelay = Double.parseDouble(getCompute().getConfig("inter_boot_delay"));
 	}
 
 	/**
@@ -88,25 +125,16 @@ public class Rice extends ComputeEngine {
 
 	public void doCommand(COMMAND command, Instance instance) {
 		RiceInstance riceInstance = (RiceInstance) instance;
-		switch (command) {
-		case START:
-			riceInstance.start();
-			break;
-		case SHUTDOWN:
-			riceInstance.shutdown();
-			riceInstance.destroy();
-			break;
-		case SUSPEND:
-			riceInstance.suspend();
-			break;
-		case RESUME:
-			riceInstance.resume();
-			break;
-		case REBOOT:
-			// TODO: Adrien will rename these VM methods to match their
-			riceInstance.shutdown();		
-			riceInstance.start();
-			break;
+
+		RiceControllerProcess rcp = new RiceControllerProcess(this, command, riceInstance);
+		RiceNodeProcess rnp = new RiceNodeProcess(this, riceInstance.riceHost);
+		
+		try {
+			rcp.start();
+			rnp.start();
+		} catch (HostNotFoundException e) {
+			Msg.critical("Something bad happened in RISE while trying to execute a command");
+			e.printStackTrace();
 		}
 	}
 
@@ -114,8 +142,7 @@ public class Rice extends ComputeEngine {
 	}
 
 	@Override
-	public Instance newInstance(String id, Image image,
-			InstanceType instanceType) {
+	public Instance newInstance(String id, Image image, InstanceType instanceType) {
 		RiceHost riceHost = assignVM(instanceType);
 		if (riceHost == null)
 			return null;

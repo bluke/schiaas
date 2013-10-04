@@ -29,8 +29,8 @@ public class Storage {
 	/** engine of this */
 	protected StorageEngine storageEngine;
 	
-	/** Contains all the properties of this storage instance */
-	protected Map<String, String> properties;
+	/** Contains all the config of this storage instance */
+	protected Map<String, String> config;
 
 	
 	/** collection of stored data */
@@ -56,7 +56,7 @@ public class Storage {
 		this.id = storageXMLNode.getAttributes().getNamedItem("id").getNodeValue();
 		String engine = storageXMLNode.getAttributes().getNamedItem("engine").getNodeValue();
 		this.storedData = new HashMap<String, Data>();
-		this.properties = new HashMap<String, String>();
+		this.config = new HashMap<String, String>();
 		
 		NodeList nodes = storageXMLNode.getChildNodes();
 		for (int i = 0; i < nodes.getLength(); i++) {
@@ -64,7 +64,7 @@ public class Storage {
 				NamedNodeMap configNNM = nodes.item(i).getAttributes();
 				for (int j = 0; j < configNNM.getLength(); j++) {
 					
-					this.properties.put(
+					this.config.put(
 							configNNM.item(j).getNodeName(),
 							configNNM.item(j).getNodeValue());
 				}
@@ -101,14 +101,14 @@ public class Storage {
 	
 	
 	/**
-	 * Getter for all properties.
+	 * Getter for all config properties.
 	 * 
 	 * @param propId
 	 *            the id of the property, as is the XML config file
 	 * @return the property
 	 */
-	public String getProperty(String propId) {
-		return this.properties.get(propId);
+	public String getConfig(String propId) {
+		return this.config.get(propId);
 	}
 	
 	
@@ -136,6 +136,18 @@ public class Storage {
 	public void put(Data data) throws TransferFailureException, HostFailureException, TimeoutException {
 		storedData.put(data.id, data);
 		storageEngine.doRequest(StorageEngine.REQUEST.PUT, data);
+	}
+	
+	/**
+	 * Instantaneously store one data (does not trigger data transfers)
+	 * @param data
+	 * 			the data
+	 * @throws TimeoutException 
+	 * @throws HostFailureException 
+	 * @throws TransferFailureException 
+	 */
+	public void putInstantaneously(Data data) throws TransferFailureException, HostFailureException, TimeoutException {
+		storedData.put(data.id, data);
 	}
 	
 	/**
@@ -198,7 +210,7 @@ public class Storage {
 	public void ls() {
 		Msg.info("/"+cloud.getId()+"/"+id+"/$ ls");
 		for(Data data : storedData.values()){
-		    Msg.info(data.getId()+": "+data.getSize());
+		    Msg.info(data.getId()+" "+data.getSize());
 		}
 	}
 	

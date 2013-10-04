@@ -4,10 +4,10 @@
   <!-- The master process (with some arguments) -->
 
   <process host="Jacquelin" function="cloudmasterslave.Master">
-     <argument value="4"/>       <!-- Number of tasks -->
+     <argument value="10"/>       <!-- Number of tasks -->
      <argument value="5e10"/>  <!-- Computation size of tasks -->
      <argument value="1000000"/>   <!-- Communication size of tasks -->
-     <argument value="4"/>  <!-- Number of masterslave.Slaves -->
+     <argument value="10"/>  <!-- Number of masterslave.Slaves -->
   </process>
 
 </platform>

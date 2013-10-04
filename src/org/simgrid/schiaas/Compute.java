@@ -48,11 +48,11 @@ public class Compute {
 	/** Contains all the instanceTypes of this compute instance. */
 	protected Map<String, InstanceType> instanceTypes;
 
-	/** Contains all the image of this compute instance. */
+	/** Contains all the images of this compute instance. */
 	protected Map<String, Image> images;
 
-	/** Contains all the properties of this compute instance. */
-	protected Map<String, String> properties;
+	/** Contains all the config properties of this compute instance. */
+	protected Map<String, String> config;
 
 	/** Contains all the hosts of this compute instance. */
 	protected Collection<Host> hosts;
@@ -74,7 +74,7 @@ public class Compute {
 		this.instances = new HashMap<String, Instance>();
 		this.instancesId = 0;
 		
-		this.properties = new HashMap<String, String>();
+		this.config = new HashMap<String, String>();
 
 		this.instanceTypes = new HashMap<String, InstanceType>();
 		this.images = new HashMap<String, Image>();
@@ -93,7 +93,7 @@ public class Compute {
 			if (nodes.item(i).getNodeName().compareTo("config") == 0) {
 				NamedNodeMap configNNM = nodes.item(i).getAttributes();
 				for (int j = 0; j < configNNM.getLength(); j++) {
-					this.properties.put(configNNM.item(j).getNodeName(),
+					this.config.put(configNNM.item(j).getNodeName(),
 							configNNM.item(j).getNodeValue());
 				}
 			}
@@ -153,8 +153,8 @@ public class Compute {
 	 *            the id of the property, as is the XML config file
 	 * @return the property
 	 */
-	public String getProperty(String propId) {
-		return this.properties.get(propId);
+	public String getConfig(String propId) {
+		return this.config.get(propId);
 	}
 
 	/**

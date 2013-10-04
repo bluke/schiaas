@@ -11,12 +11,16 @@ import org.simgrid.schiaas.InstanceType;
  */
 public class RiceInstance extends Instance {
 
+	protected RiceHost riceHost;
+	
 	protected RiceInstance(String id, Image image, InstanceType instanceType, RiceHost riceHost) {
 		super(id, image, instanceType, riceHost.host);
+		this.riceHost = riceHost;
 		this.isPending = true;
 		riceHost.coreUsedByVMcount+=Double.parseDouble(instanceType.getProperty("core"));
 	}
 	
+	/*
 	@Override
 	public void start() {
 		this.isPending = false;
@@ -29,5 +33,5 @@ public class RiceInstance extends Instance {
 		this.updateShutdownTime();
 		super.shutdown();
 	}
-	
+	*/
 }
