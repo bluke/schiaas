@@ -5,7 +5,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.simgrid.msg.HostFailureException;
 import org.simgrid.msg.Msg;
+import org.simgrid.msg.TimeoutException;
+import org.simgrid.msg.TransferFailureException;
 import org.simgrid.schiaas.billing.StorageBilling;
 import org.simgrid.schiaas.engine.ComputeEngine;
 import org.simgrid.schiaas.engine.StorageEngine;
@@ -80,12 +83,25 @@ public class Storage {
 		}
 	}
 	
+	/**
+	 * Getter
+	 * @return the ID of this.
+	 */
 	public String getId() {
 		return this.id;
 	}	
 	
 	/**
-	 * for all properties
+	 * Getter
+	 * @return the cloud of this
+	 */
+	public Cloud getCloud() {
+		return this.cloud;
+	}	
+	
+	
+	/**
+	 * Getter for all properties.
 	 * 
 	 * @param propId
 	 *            the id of the property, as is the XML config file
@@ -113,37 +129,65 @@ public class Storage {
 	 * Considers that the data is immediately stored before any actual transfer.
 	 * @param data
 	 * 			the data
+	 * @throws TimeoutException 
+	 * @throws HostFailureException 
+	 * @throws TransferFailureException 
 	 */
-	public void put(Data data) {
+	public void put(Data data) throws TransferFailureException, HostFailureException, TimeoutException {
 		storedData.put(data.id, data);
 		storageEngine.doRequest(StorageEngine.REQUEST.PUT, data);
 	}
 	
 	/**
-	 * Retrieve one data.
-	 * @param data
-	 * 			the data
+	 * Retrieve one data, whether it has been stored beforehand or not.
+	 * If not, instantaneously store the data.
+	 * @param data the data
+	 * @return the very same data
+	 * @throws TimeoutException 
+	 * @throws HostFailureException 
+	 * @throws TransferFailureException 
 	 */
-	public Data get(String dataId) {
+	public Data get(Data data) throws TransferFailureException, HostFailureException, TimeoutException {
+		storedData.put(data.id, data);
+		storageEngine.doRequest(StorageEngine.REQUEST.GET, data);
+		return data;
+	}
+
+	/**
+	 * Retrieve one data from its id.
+	 * @param dataId the data id.
+	 * @return the data;
+	 * @throws TimeoutException 
+	 * @throws HostFailureException 
+	 * @throws TransferFailureException 
+	 */
+	public Data get(String dataId) throws TransferFailureException, HostFailureException, TimeoutException {
 		Data data = storedData.get(dataId);
 		storageEngine.doRequest(StorageEngine.REQUEST.GET, data);
 		return data;
 	}
 	
+	
 	/**
 	 * Delete one data.
 	 * @param data
 	 * 			the data
+	 * @throws TimeoutException 
+	 * @throws HostFailureException 
+	 * @throws TransferFailureException 
 	 */
-	public void delete(String dataId) {
+	public void delete(String dataId) throws TransferFailureException, HostFailureException, TimeoutException {
 		Data data = storedData.remove(dataId);
 		storageEngine.doRequest(StorageEngine.REQUEST.DELETE, data);
 	}
 	
 	/**
 	 * List the stored data.
+	 * @throws TimeoutException 
+	 * @throws HostFailureException 
+	 * @throws TransferFailureException 
 	 */
-	public Map<String, Data> list() {
+	public Map<String, Data> list() throws TransferFailureException, HostFailureException, TimeoutException {
 		storageEngine.doRequest(StorageEngine.REQUEST.LIST, null);
 		return storedData;
 	}
@@ -156,5 +200,14 @@ public class Storage {
 		for(Data data : storedData.values()){
 		    Msg.info(data.getId()+": "+data.getSize());
 		}
+	}
+	
+/**
+ * Check whether the transfer of data is complete
+ * @param dataId the ID of the data.
+ * @return true if the transfer of the data is complete
+ */
+	public boolean isTransferComplete(String dataId) {
+		return storageEngine.isTransferComplete(dataId);
 	}
 }

@@ -42,6 +42,4 @@ public class Data {
 	public double getSize() {
 		return size;
 	}
-
-	
 }

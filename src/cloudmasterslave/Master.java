@@ -105,15 +105,24 @@ public class Master extends Process {
 		
 		Data someData = new Data("someData", 1e9);
 
+		Msg.info("Store some data");
 		myStorage.put(someData);
-
-		waitFor(200);
 		
+		Msg.info("Check whether the data transfer is complete: " +
+				myStorage.isTransferComplete("someData"));
+		
+		Msg.info("Retrieve some stored data");
 		someData = myStorage.get("someData");
+
+		Msg.info("Retrieve some data that has not been stored");
+		Data unstoredData = new Data("unstoredData", 2e9);
+		someData = myStorage.get(unstoredData);
 		
-		Map <String, Data> storedData = myStorage.list();
-		myStorage.ls();
+		Msg.info("List of stored data");
+		Map <String, Data> storedData = myStorage.list(); 	//1st way
+		myStorage.ls();										//2d way
 		
+		Msg.info("Delete some data");
 		myStorage.delete("someData");
 		myStorage.ls();
 		
@@ -175,7 +184,7 @@ public class Master extends Process {
 		/**
 		 * billing management (except storage costs - see above) 
 		 */
-		
+		/*
 		// Billing
 		Msg.info("Total cost for running the VMs: "
 				+ SchIaaS.getCloud("myCloud").getCompute().getCost());
@@ -183,7 +192,7 @@ public class Master extends Process {
 				+ SchIaaS.getCloud("myCloud").getId() + " : "
 				+ SchIaaS.getCloud("myCloud").getNetwork().getTransferCost());
 
-		/*
+		
 		Msg.info("Total storage transfer cost: "
 				+ SchIaaS.getCloud("myCloud").getStorage("s3").getStorageTransferCost());
 		 */

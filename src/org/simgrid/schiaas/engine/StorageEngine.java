@@ -1,5 +1,8 @@
 package org.simgrid.schiaas.engine;
 
+import org.simgrid.msg.HostFailureException;
+import org.simgrid.msg.TimeoutException;
+import org.simgrid.msg.TransferFailureException;
 import org.simgrid.schiaas.Data;
 import org.simgrid.schiaas.Storage;
 
@@ -16,8 +19,7 @@ public abstract class StorageEngine {
 	protected Storage storage;
 
 	/**
-	 * Enumerates the possible request to the storage.
-	 * 
+	 * Enumerates the possible request to the storage. 
 	 * @author julien
 	 */
 	public static enum REQUEST {
@@ -33,8 +35,8 @@ public abstract class StorageEngine {
 	public StorageEngine(Storage storage) {
 		this.storage = storage;
 	}
-	
-	
-	public abstract void doRequest(REQUEST get, Data data);
-	
+		
+	public abstract void doRequest(REQUEST get, Data data) throws TransferFailureException, HostFailureException, TimeoutException;
+
+	public abstract boolean isTransferComplete(String dataId);	
 }
