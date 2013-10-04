@@ -118,7 +118,7 @@ public class Master extends Process {
 		Data unstoredData = new Data("unstoredData", 2e9);
 		someData = myStorage.get(unstoredData);
 		
-		Msg.info("List of stored data");
+		Msg.info("List the stored data");
 		Map <String, Data> storedData = myStorage.list(); 	//1st way
 		myStorage.ls();										//2d way
 		

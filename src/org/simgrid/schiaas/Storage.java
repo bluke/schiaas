@@ -196,7 +196,7 @@ public class Storage {
 	 * Print the list the stored data.
 	 */
 	public void ls() {
-		Msg.info("List of stored data");
+		Msg.info("/"+cloud.getId()+"/"+id+"/$ ls");
 		for(Data data : storedData.values()){
 		    Msg.info(data.getId()+": "+data.getSize());
 		}
