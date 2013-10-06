@@ -23,13 +23,13 @@ public class RiceHost {
 	protected Host host;
 	protected int coreUsedByVMcount;
 	protected double lastBootDate;
-	protected Map<Image,IMGSTATUS> storedImages;
+	protected Map<Image,IMGSTATUS> imagesCache;
 	
 	protected RiceHost(Host host) {
 		this.host = host;
 		this.coreUsedByVMcount = 0;
 		this.lastBootDate = -1e9;
-		this.storedImages = new HashMap<Image,IMGSTATUS>();
+		this.imagesCache = new HashMap<Image,IMGSTATUS>();
 	}
 
 	protected String messageBox() {

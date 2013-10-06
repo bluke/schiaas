@@ -7,6 +7,7 @@
 
 package cloudmasterslave;
 
+import org.simgrid.msg.Host;
 import org.simgrid.msg.HostNotFoundException;
 import org.simgrid.msg.Msg;
 import org.simgrid.msg.NativeException;
@@ -35,10 +36,11 @@ public class Masterslave {
 		Msg.createEnvironment(args[0]);
 		Msg.deployApplication(args[1]);
 		
+		Host[] all = Host.all();
+		
 		/* construct the cloud and deploy the associated processes */
-		Msg.info("debut init cloud");
+		Msg.info("Cloud Initialization");
 		SchIaaS.init(args[2]);		
-		Msg.info("fin init cloud");
 		/* execute the simulation */
         Msg.run();        
         

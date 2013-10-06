@@ -98,6 +98,24 @@ public class Compute {
 				}
 			}
 
+			if (nodes.item(i).getNodeName().compareTo("cluster") == 0) {
+				Msg.info("cluster");
+				String id=nodes.item(i).getAttributes().getNamedItem("id").getNodeValue();
+				String prefix=nodes.item(i).getAttributes().getNamedItem("prefix").getNodeValue();
+				String suffix=nodes.item(i).getAttributes().getNamedItem("suffix").getNodeValue();
+				String[] radical=nodes.item(i).getAttributes().getNamedItem("radical").getNodeValue().split("-");
+				int radStart = Integer.parseInt(radical[0]);
+				int radEnd = Integer.parseInt(radical[1]);
+				for (int radI=radStart; radI<=radEnd; radI++) {
+					String hostId = prefix+radI+suffix;
+					try {
+						hosts.add(Host.getByName(hostId));
+					} catch (HostNotFoundException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+
 			if (nodes.item(i).getNodeName().compareTo("host") == 0) {
 				try {
 					hosts.add(Host.getByName(
