@@ -52,18 +52,18 @@ public class SchIaaS {
 		
 		SchemaFactory schemaFactory = SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
 		Schema schema = null;
-		
+		/*
 		try {
 			schema = schemaFactory.newSchema(new Source[] {new StreamSource("cloud.xsd")});
 		} catch (SAXException e1) {
 			Msg.critical("Error loading the XSD schema for the cloud XML file: " + e1.getMessage());
 			System.exit(0);
 		}
-		
+		*/
 		DocumentBuilder db;
 		Document doc;		
 		
-		Validator validator = schema.newValidator();
+		// Validator validator = schema.newValidator();
 		
 		try {
 			db = dbf.newDocumentBuilder();						
