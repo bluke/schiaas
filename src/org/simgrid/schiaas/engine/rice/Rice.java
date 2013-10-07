@@ -144,9 +144,9 @@ public class Rice extends ComputeEngine {
 	@Override
 	public Instance newInstance(String id, Image image, InstanceType instanceType) {
 		RiceHost riceHost = assignVM(instanceType);
+		//RiceHost riceHost = this.riceHosts.get(0);
 		if (riceHost == null)
 			return null;
-
 		return new RiceInstance(id, image, instanceType, riceHost);
 	}
 }

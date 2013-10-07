@@ -18,6 +18,7 @@ import org.simgrid.schiaas.Cloud;
 public class Masterslave {
    public static final int TASK_COMP_SIZE = 2000000000;
    public static final int TASK_COMM_SIZE = 10000000;
+   
    /* This only contains the launcher. If you do nothing more than than you can run 
     *   java simgrid.msg.Msg
     * which also contains such a launcher
@@ -32,15 +33,15 @@ public class Masterslave {
 			Msg.info("example : Masterslave basic_platform.xml basic_deployment.xml basic_cloud.xml");
 			System.exit(1);	
 		}
+	    	    
 		/* construct the platform and deploy the application */
 		Msg.createEnvironment(args[0]);
 		Msg.deployApplication(args[1]);
 		
-		Host[] all = Host.all();
-		
 		/* construct the cloud and deploy the associated processes */
-		Msg.info("Cloud Initialization");
-		SchIaaS.init(args[2]);		
+			Msg.info("Cloud Initialization");
+			SchIaaS.init(args[2]);
+		
 		/* execute the simulation */
         Msg.run();        
         

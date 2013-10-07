@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.simgrid.msg.Host;
+import org.simgrid.msg.Mutex;
 import org.simgrid.schiaas.Image;
 
 /**
@@ -25,11 +26,15 @@ public class RiceHost {
 	protected double lastBootDate;
 	protected Map<Image,IMGSTATUS> imagesCache;
 	
+	protected Mutex bootMutex;
+	
 	protected RiceHost(Host host) {
 		this.host = host;
 		this.coreUsedByVMcount = 0;
 		this.lastBootDate = -1e9;
 		this.imagesCache = new HashMap<Image,IMGSTATUS>();
+		
+		bootMutex = new Mutex();
 	}
 
 	protected String messageBox() {

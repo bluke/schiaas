@@ -16,6 +16,7 @@ import org.simgrid.msg.Msg;
 import org.simgrid.msg.MsgException;
 import org.simgrid.msg.Task;
 import org.simgrid.msg.Process;
+import org.simgrid.msg.VM;
 import org.simgrid.schiaas.Compute;
 import org.simgrid.schiaas.Data;
 import org.simgrid.schiaas.InstanceType;
@@ -45,10 +46,10 @@ public class Master extends Process {
 
 		
 		
+		
 		/**
 		 * VM instance management
 		 */
-		
 		// Retrieve the Compute module of MyCloud
 		Compute myCompute = SchIaaS.getCloud("myCloud").getCompute();
 		
@@ -61,38 +62,35 @@ public class Master extends Process {
 							.describeAvailability(instanceType.getId()));
 		}
 		
+		
 		// Run one instance per slave on myCloud
 		String[] slaveInstancesId = myCompute.runInstances("myImage", "small", slavesCount);
 
-		// Check how many instances have been actually run
-		slavesCount = myCompute.describeInstances().size();
-		Msg.info("Actual available instances count: " + slavesCount);
-
 		
+
 		for (int i=0; i<slavesCount; i++) {
 			Msg.info("waiting for boot");
 			while (myCompute.describeInstance(slaveInstancesId[i]).isRunning() == 0) {
 				waitFor(10);
 			}
-
-			String [] slaveArgs = {""+i};
-			Slave s = new Slave(myCompute.describeInstance(slaveInstancesId[i]), "slave_"+i,slaveArgs);
 			
+			Msg.info("Starting a slave on "+myCompute.describeInstance(slaveInstancesId[i]).getName());
+			String [] slaveArgs = {""+i};
+			Slave s = new Slave(myCompute.describeInstance(slaveInstancesId[i]),
+								"slave_"+i,slaveArgs);
 			s.start();
 		}
-
 		
 		/**
 		 * message management
 		 */
-		
 		Msg.info("start sending tasks");
 
 		for (int i = 0; i < tasksCount; i++) {
 			Task task = new SchIaaSTask("Task_" + i, taskComputeSize,
 					taskCommunicateSize, SchIaaSTask.TYPE.JOB);
-			Msg.info("Sending \"" + task.getName() + "\" to "
-					+ slaveInstancesId[i % slavesCount]);
+			Msg.info("Sending \"" + task.getName() + "\" to slave_"+(i % slavesCount));
+
 			task.send("slave_"+(i%slavesCount));
 			//SchIaaS.getCloud("myCloud").getNetwork().sendTask(task, slaveInstancesId[i % slavesCount]);
 
@@ -125,38 +123,14 @@ public class Master extends Process {
 		Msg.info("Delete some data");
 		myStorage.delete("someData");
 		myStorage.ls();
-		
-		/*
-		// Move some data inside the storage device
-		Task data = new SchIaaSTask("Task_data", taskComputeSize,
-				2028 * taskCommunicateSize, SchIaaSTask.TYPE.DATA);
-		Msg.info("Storing data \"" + data.getName() + "\" to storage: "
-				+ SchIaaS.getCloud("myCloud").getStorage("s3").getId());
-		SchIaaS.getCloud("myCloud").getStorage("s3").moveDataIn(data);
-
-		// Do some requests on the storage
-		Task request = new SchIaaSTask("Task_data", taskComputeSize,
-				taskCommunicateSize, SchIaaSTask.TYPE.REQUEST);
-		Msg.info("Performing requests on storage \""
-				+ SchIaaS.getCloud("myCloud").getStorage("s3").getId());
-		SchIaaS.getCloud("myCloud").getStorage("s3").doRequest(request);
-
-		// Check cost for storing the data
-		Msg.info("Current storage cost: "
-				+ SchIaaS.getCloud("myCloud").getStorage("s3").getCurrentStoredDataCost());
-		
-		// Move the data out of the storage device
-		Msg.info("Getting data \"" + data.getName() + "\" from storage: "
-				+ SchIaaS.getCloud("myCloud").getStorage("s3").getId());
-		SchIaaS.getCloud("myCloud").getStorage("s3").moveDataOut(data);
-		*/
-		
+	
 
 		/**
 		 * more VM instance management
 		 */
-		
+
 		// Suspend and resume one instance
+
 		waitFor(150);
 		Msg.info("Suspending " + slaveInstancesId[0]);
 		SchIaaS.getCloud("myCloud").getCompute()
@@ -165,6 +139,7 @@ public class Master extends Process {
 		Msg.info("Resuming " + slaveInstancesId[0]);
 		SchIaaS.getCloud("myCloud").getCompute()
 				.resumeInstance(slaveInstancesId[0]);
+
 
 		Msg.info("All tasks have been dispatched. Let's tell everybody the computation is over.");
 
@@ -175,26 +150,12 @@ public class Master extends Process {
 		}
 
 		// Wait an arbitrary time for Slaves to finalize
-		waitFor(3600);
+		waitFor(36000);
+		
 		// Terminating SchIaaS
 		Msg.info("Terminating");
 		SchIaaS.terminate();
+
 		Msg.info("Goodbye now!");
-
-		/**
-		 * billing management (except storage costs - see above) 
-		 */
-		/*
-		// Billing
-		Msg.info("Total cost for running the VMs: "
-				+ SchIaaS.getCloud("myCloud").getCompute().getCost());
-		Msg.info("Total cost for transfering data for cloud: "
-				+ SchIaaS.getCloud("myCloud").getId() + " : "
-				+ SchIaaS.getCloud("myCloud").getNetwork().getTransferCost());
-
-		
-		Msg.info("Total storage transfer cost: "
-				+ SchIaaS.getCloud("myCloud").getStorage("s3").getStorageTransferCost());
-		 */
 	}
 }
