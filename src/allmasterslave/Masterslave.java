@@ -5,7 +5,7 @@
  * under the terms of the license (GNU LGPL) which comes with this package. 
  */
 
-package cloudmasterslave;
+package allmasterslave;
 
 import org.simgrid.msg.Host;
 import org.simgrid.msg.HostNotFoundException;
@@ -20,7 +20,7 @@ public class Masterslave {
    public static final int TASK_COMM_SIZE = 10000000;
    
 	public static enum VERSION {
-		CLOUD, VM, HOST
+		CLOUD, VM, VMHOST, HOST
 	};
    public static VERSION version;
    

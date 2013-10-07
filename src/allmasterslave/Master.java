@@ -7,7 +7,7 @@
  * under the terms of the license (GNU LGPL) which comes with this package. 
  */
 
-package cloudmasterslave;
+package allmasterslave;
 
 import java.util.Map;
 
@@ -52,6 +52,8 @@ public class Master extends Process {
 		 */
 		
 		Host [] hosts = new Host[slavesCount];
+		VM [] vms = new VM[slavesCount];
+		int nHosts = Host.all().length;
 		
 		switch(Masterslave.version) {
 		case CLOUD:
@@ -82,17 +84,8 @@ public class Master extends Process {
 				hosts[i]=myCompute.describeInstance(slaveInstancesId[i]);
 			}
 			break;
-			
-		case HOST:
-			for (int i=0; i<slavesCount; i++) {
-				Msg.info("waiting for boot "+i+" node-"+(i%(Host.all().length-1)+1)+".me");
-	
-				hosts[i]=Host.getByName("node-"+(i%(Host.all().length-1)+1)+".me");
-			}
-			break;
-			
+						
 		case VM:
-			int nHosts = Host.all().length;
 			for (int i=0; i<slavesCount; i++) {
 				Msg.info("waiting for boot "+i+" "+nHosts+" node-"+(i%(nHosts-1)+1)+".me");
 				VM vm = new VM(Host.getByName("node-"+(i%(nHosts-1)+1)+".me"),
@@ -101,6 +94,27 @@ public class Master extends Process {
 				hosts[i]=vm;
 			}
 			break;
+		
+		case VMHOST:	
+			for (int i=0; i<slavesCount; i++) {
+				Msg.info("waiting for boot "+i+" "+nHosts+" node-"+(i%(nHosts-1)+1)+".me");
+				VM vm = new VM(Host.getByName("node-"+(i%(nHosts-1)+1)+".me"),
+						"vm-"+i, 1, 256, 10,"/default", 1000, 10, 1);
+				vm.start();
+				vms[i]=vm;
+				hosts[i]=Host.getByName("node-"+(i%(nHosts-1)+1)+".me");
+			}
+			break;
+			
+		case HOST:
+			for (int i=0; i<slavesCount; i++) {
+				Msg.info("waiting for boot "+i+" node-"+(i%(Host.all().length-1)+1)+".me");
+	
+				hosts[i]=Host.getByName("node-"+(i%(Host.all().length-1)+1)+".me");
+			}
+			break;
+	
+			
 		}
 		
 		for (int i=0; i<slavesCount; i++) {
@@ -126,57 +140,11 @@ public class Master extends Process {
 
 		}
 
-		/**
-		 * storage management (including storage cost)
-		 */
-/***		Storage myStorage = SchIaaS.getCloud("myCloud").getStorage("myStorage");
-		
-		Data someData = new Data("someData", 1e9);
-
-		Msg.info("Store some data");
-		myStorage.put(someData);
-		
-		Msg.info("Check whether the data transfer is complete: " +
-				myStorage.isTransferComplete("someData"));
-		
-		Msg.info("Retrieve some stored data");
-		someData = myStorage.get("someData");
-
-		Msg.info("Retrieve some data that has not been stored");
-		Data unstoredData = new Data("unstoredData", 2e9);
-		someData = myStorage.get(unstoredData);
-		
-		Msg.info("List the stored data");
-		Map <String, Data> storedData = myStorage.list(); 	//1st way
-		myStorage.ls();										//2d way
-		
-		Msg.info("Delete some data");
-		myStorage.delete("someData");
-		myStorage.ls();
-***/		
-
-		/**
-		 * more VM instance management
-		 */
-
-		// Suspend and resume one instance
-/***
-		waitFor(150);
-		Msg.info("Suspending " + slaveInstancesId[0]);
-		SchIaaS.getCloud("myCloud").getCompute()
-				.suspendInstance(slaveInstancesId[0]);
-		waitFor(200);
-		Msg.info("Resuming " + slaveInstancesId[0]);
-		SchIaaS.getCloud("myCloud").getCompute()
-				.resumeInstance(slaveInstancesId[0]);
-***/
-
 		Msg.info("All tasks have been dispatched. Let's tell everybody the computation is over.");
 
 		for (int i = 0; i < slavesCount; i++) {
 			FinalizeTask task = new FinalizeTask();
 			task.send("slave_"+(i%slavesCount));
-			//SchIaaS.getCloud("myCloud").getNetwork().sendTask(task, slaveInstancesId[i % slavesCount]);
 		}
 
 		// Wait an arbitrary time for Slaves to finalize
@@ -191,6 +159,11 @@ public class Master extends Process {
 			for (int i = 0; i < slavesCount; i++) {
 				VM vm = (VM) hosts[i];
 				vm.destroy();
+			}
+			break;			
+		case VMHOST:
+			for (int i = 0; i < slavesCount; i++) {
+				vms[i].destroy();
 			}
 			break;
 		case HOST:
