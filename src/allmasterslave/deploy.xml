@@ -4,7 +4,7 @@
   <!-- The master process (with some arguments) -->
 
   <process host="controller" function="allmasterslave.Master">
-     <argument value="10000"/>       <!-- Number of tasks -->
+     <argument value="100000"/>       <!-- Number of tasks -->
      <argument value="5e10"/>  <!-- Computation size of tasks -->
      <argument value="1e9"/>   <!-- Communication size of tasks -->
      <argument value="1000"/>  <!-- Number of masterslave.Slaves -->

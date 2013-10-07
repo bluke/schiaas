@@ -1,8 +1,8 @@
 #! /bin/bash
 
-nhosts="1 10 100 1000"
-ncores="1 10 100 1000 10000"
-nvms="1 10 100 1000"
+nhosts="1 1000 1 10 100 1000"
+ncores="1 1000 10 100 1000 10000"
+nvms="1000 10 100 1000"
 
 infras="CLOUD VM VMHOST HOST"
 
