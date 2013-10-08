@@ -60,7 +60,7 @@ public class RiceNodeProcess extends Process {
 			
 			// Boot
 			riceHost.lastBootDate=Msg.getClock();
-			Msg.info("boot "+Msg.getClock());
+			Msg.verb(riceInstance.getName()+" is booting");
 			riceInstance.start();
 			
 			waitFor(rice.interBootDelay);

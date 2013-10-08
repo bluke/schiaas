@@ -21,7 +21,7 @@ endif(${SIMGRID_JAR} MATCHES "SIMGRID_JAR-NOTFOUND")
 
 set(CMAKE_JAVA_INCLUDE_PATH ${SIMGRID_JAR})
 
-#set(CMAKE_JAVA_JAR_ENTRY_POINT simschlouder.SimSchlouder)
+set(CMAKE_JAVA_JAR_ENTRY_POINT simschlouder.SimSchlouder)
 
 
 # add a target to generate API documentation with Doxygen
