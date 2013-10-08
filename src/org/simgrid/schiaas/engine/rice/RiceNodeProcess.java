@@ -24,11 +24,10 @@ public class RiceNodeProcess extends Process {
 	} 
 	
 	public void main(String[] args) throws MsgException {
-			
+		
 		RiceTask riceTask = (RiceTask) Task.receive(riceHost.messageBox());
-		
 		RiceInstance riceInstance = riceTask.riceInstance;
-		
+				
 		switch (riceTask.command) {
 		case START:
 			

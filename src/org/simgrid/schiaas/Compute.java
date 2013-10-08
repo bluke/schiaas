@@ -57,6 +57,9 @@ public class Compute {
 	/** Contains all the hosts of this compute instance. */
 	protected Collection<Host> hosts;
 
+	/** Standard power, e.g. EC2CU.*/
+	protected double standardPower;
+	
 	/**
 	 * Unique constructor from XML config file
 	 * 
@@ -94,7 +97,7 @@ public class Compute {
 				NamedNodeMap configNNM = nodes.item(i).getAttributes();
 				for (int j = 0; j < configNNM.getLength(); j++) {
 					this.config.put(configNNM.item(j).getNodeName(),
-							configNNM.item(j).getNodeValue());
+									configNNM.item(j).getNodeValue());
 				}
 			}
 
@@ -118,13 +121,12 @@ public class Compute {
 
 			if (nodes.item(i).getNodeName().compareTo("host") == 0) {
 				try {
-					hosts.add(Host.getByName(
-						nodes.item(i).getAttributes().getNamedItem("id").getNodeValue()));
+					hosts.add(Host.getByName(nodes.item(i).getAttributes().getNamedItem("id").getNodeValue()));
 				} catch (HostNotFoundException e) {
 					e.printStackTrace();
 				}
 			}
-
+			
 			if (nodes.item(i).getNodeName().compareTo("instance_type") == 0) {
 				InstanceType instancetype = new InstanceType(nodes.item(i));
 				this.instanceTypes.put(instancetype.getId(), instancetype);
@@ -277,6 +279,9 @@ public class Compute {
 	 *            The id of the instance to be be terminated.
 	 */
 	public void terminateInstance(String instanceId) {
+		if (this.instances.get(instanceId).isTerminating == true) return;
+		
+		this.instances.get(instanceId).isTerminating = true;
 		this.computeEngine.doCommand(ComputeEngine.COMMAND.SHUTDOWN,
 				this.instances.get(instanceId));
 	}
@@ -324,10 +329,10 @@ public class Compute {
 	public void terminate() throws HostFailureException {
 		Msg.verb("Terminating all remaining instances");
 		for (Instance instance : this.instances.values()) {
-			Msg.verb(instance + " " + instance.isAvail());
-			if (instance.isAvail()) {
-				terminateInstance(instance.id);
-			}
+			//Msg.info("teste "+instance);
+			//Msg.verb(instance + " " + instance.isAvail());
+			//Msg.info("teste");
+			terminateInstance(instance.id);
 		}
 		this.computeEngine.terminate();
 	}

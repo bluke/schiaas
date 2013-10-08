@@ -44,7 +44,9 @@ public abstract class Instance extends VM {
 	// protected STATE state;
 	
 	protected boolean isPending;
+	protected boolean isTerminating;
 
+	
 	/**
 	 * Constructor to deploy and start a new instance.
 	 * 
@@ -74,6 +76,7 @@ public abstract class Instance extends VM {
 		this.host = host;
 		
 		this.isPending = true;
+		this.isTerminating = false;
 	}
 
 	/**

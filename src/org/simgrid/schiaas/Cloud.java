@@ -219,7 +219,7 @@ public class Cloud {
 		Msg.verb("Terminating " + this);
 		if (this.compute != null)
 			this.compute.terminate();
-
+		
 		for (Storage storage : this.storages.values()) {
 			storage.terminate();
 		}
