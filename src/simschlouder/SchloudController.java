@@ -34,7 +34,7 @@ import org.w3c.dom.NodeList;
 import simschlouder.algorithms.AStrategy;
 import simschlouder.util.SimSchloudException;
 
-public class SchloudController extends Process {
+public class SchloudController extends org.simgrid.msg.Process {
 		
 	public static Vector<SchloudNode> nodes;
 	public static Vector<SchloudNode> terminatedNodes;
