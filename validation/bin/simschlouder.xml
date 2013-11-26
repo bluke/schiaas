@@ -1,0 +1,12 @@
+<?xml version='1.0'?>
+ <!DOCTYPE simschlouder>
+ <simschlouder version="1">
+ 	<config platform="platformICPS.xml" deployment="deploymentICPS.xml" cloud="cloudICPS.xml"/>
+	<cloud  id="icps-opst" B0="41.6" B1="6" BTU="3600" shutdownMargin="20"/>
+	<cloud  id="icps-euca" B0="4" B1="53" BTU="3600" shutdownMargin="20"/>
+	<provisioning>
+		<config cloud="icps-opst"/>
+		<image name="opst-image" size="2e9" boottime="41.6" shutdowntime="10"/>
+	</provisioning>
+</simschlouder> 
+ 

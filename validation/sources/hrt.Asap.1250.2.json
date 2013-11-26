@@ -1,0 +1,906 @@
+{
+    "info": {
+        "version": "25fb3bde809ddc8dd1633843b82e9320094d1f83", 
+        "start_date": 1353510726, 
+        "description": ""
+    }, 
+    "nodes": [
+        {
+            "jobs": [
+                {
+                    "submission_date": 1353510754, 
+                    "duration_application": 11, 
+                    "command_line": "/tmp/7sUP_Nlf_B haute /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/1250/X001825CYC+LM_1.mgf", 
+                    "real_duration": 13, 
+                    "id": 10277, 
+                    "duration": 11, 
+                    "duration_management": 1, 
+                    "duration_communication": 1, 
+                    "start_date": 1353510816
+                }, 
+                {
+                    "submission_date": 1353510754, 
+                    "duration_application": 12, 
+                    "command_line": "/tmp/ID5h6hKf2x haute /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/1250/X001826CYC+LM_1.mgf", 
+                    "real_duration": 14, 
+                    "id": 10281, 
+                    "duration": 11, 
+                    "duration_management": 2, 
+                    "duration_communication": 0, 
+                    "start_date": 1353510829
+                }, 
+                {
+                    "submission_date": 1353510754, 
+                    "duration_application": 14, 
+                    "command_line": "/tmp/I1AySvw8Ll haute /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/1250/X001829CYC+LM_1.mgf", 
+                    "real_duration": 15, 
+                    "id": 10289, 
+                    "duration": 11, 
+                    "duration_management": 1, 
+                    "duration_communication": 0, 
+                    "start_date": 1353510843
+                }, 
+                {
+                    "submission_date": 1353510755, 
+                    "duration_application": 5, 
+                    "command_line": "/tmp/I0BSD_tOq1 haute /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/1250/X001832CYC+LM_2.mgf", 
+                    "real_duration": 6, 
+                    "id": 10296, 
+                    "duration": 6, 
+                    "duration_management": 1, 
+                    "duration_communication": 0, 
+                    "start_date": 1353510858
+                }, 
+                {
+                    "submission_date": 1353510756, 
+                    "duration_application": 10, 
+                    "command_line": "/tmp/bDDIdoCoyf haute /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/1250/X001835CYC+LM_1.mgf", 
+                    "real_duration": 11, 
+                    "id": 10305, 
+                    "duration": 11, 
+                    "duration_management": 1, 
+                    "duration_communication": 0, 
+                    "start_date": 1353510864
+                }, 
+                {
+                    "submission_date": 1353510756, 
+                    "duration_application": 9, 
+                    "command_line": "/tmp/nPV0SAHlFn haute /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/1250/X001840CYC+LM_1.mgf", 
+                    "real_duration": 10, 
+                    "id": 10317, 
+                    "duration": 11, 
+                    "duration_management": 1, 
+                    "duration_communication": 0, 
+                    "start_date": 1353510875
+                }, 
+                {
+                    "submission_date": 1353510758, 
+                    "duration_application": 5, 
+                    "command_line": "/tmp/5c8kleYqAP haute /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/1250/X001847CYC+LM_2.mgf", 
+                    "real_duration": 6, 
+                    "id": 10330, 
+                    "duration": 7, 
+                    "duration_management": 1, 
+                    "duration_communication": 0, 
+                    "start_date": 1353510885
+                }, 
+                {
+                    "submission_date": 1353510759, 
+                    "duration_application": 4, 
+                    "command_line": "/tmp/1tlUkxMt3v haute /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/1250/X001852CYC+LM_2.mgf", 
+                    "real_duration": 5, 
+                    "id": 10338, 
+                    "duration": 5, 
+                    "duration_management": 1, 
+                    "duration_communication": 0, 
+                    "start_date": 1353510891
+                }, 
+                {
+                    "submission_date": 1353510759, 
+                    "duration_application": 5, 
+                    "command_line": "/tmp/plBQfCDhSn haute /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/1250/X001857CYC+LM_1.mgf", 
+                    "real_duration": 7, 
+                    "id": 10339, 
+                    "duration": 9, 
+                    "duration_management": 1, 
+                    "duration_communication": 1, 
+                    "start_date": 1353510896
+                }
+            ], 
+            "stop_date": 1353514305, 
+            "predicted_boot_time": 50, 
+            "instance_id": "i-483707CE", 
+            "instance_type": "m1.small", 
+            "host": "icps-vm-13", 
+            "boot_time": 52, 
+            "scheduling_strategy": "Schlouder::Scheduling::Default", 
+            "provisioning_strategy": "Schlouder::Provisioning::Asap", 
+            "start_date": 1353510764, 
+            "user": "emichon"
+        }, 
+        {
+            "jobs": [
+                {
+                    "submission_date": 1353510754, 
+                    "duration_application": 6, 
+                    "command_line": "/tmp/OZM5wrPs6s haute /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/1250/X001825CYC+LM_2.mgf", 
+                    "real_duration": 11, 
+                    "id": 10278, 
+                    "duration": 6, 
+                    "duration_management": 5, 
+                    "duration_communication": 0, 
+                    "start_date": 1353510813
+                }, 
+                {
+                    "submission_date": 1353510754, 
+                    "duration_application": 4, 
+                    "command_line": "/tmp/6Xr8ahb5nI haute /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/1250/X001826CYC+LM_2.mgf", 
+                    "real_duration": 6, 
+                    "id": 10280, 
+                    "duration": 6, 
+                    "duration_management": 2, 
+                    "duration_communication": 0, 
+                    "start_date": 1353510828
+                }, 
+                {
+                    "submission_date": 1353510754, 
+                    "duration_application": 10, 
+                    "command_line": "/tmp/zMInAEV3NM haute /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/1250/X001827CYC+LM_1.mgf", 
+                    "real_duration": 11, 
+                    "id": 10283, 
+                    "duration": 11, 
+                    "duration_management": 0, 
+                    "duration_communication": 1, 
+                    "start_date": 1353510834
+                }, 
+                {
+                    "submission_date": 1353510755, 
+                    "duration_application": 5, 
+                    "command_line": "/tmp/zsoJ7URd9b haute /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/1250/X001829CYC+LM_2.mgf", 
+                    "real_duration": 5, 
+                    "id": 10290, 
+                    "duration": 5, 
+                    "duration_management": 0, 
+                    "duration_communication": 0, 
+                    "start_date": 1353510845
+                }, 
+                {
+                    "submission_date": 1353510755, 
+                    "duration_application": 11, 
+                    "command_line": "/tmp/Ld6LcLusTD haute /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/1250/X001831CYC+LM_1.mgf", 
+                    "real_duration": 11, 
+                    "id": 10293, 
+                    "duration": 11, 
+                    "duration_management": 0, 
+                    "duration_communication": 0, 
+                    "start_date": 1353510850
+                }, 
+                {
+                    "submission_date": 1353510756, 
+                    "duration_application": 6, 
+                    "command_line": "/tmp/V45vY_5dnE haute /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/1250/X001835CYC+LM_2.mgf", 
+                    "real_duration": 8, 
+                    "id": 10300, 
+                    "duration": 8, 
+                    "duration_management": 2, 
+                    "duration_communication": 0, 
+                    "start_date": 1353510861
+                }, 
+                {
+                    "submission_date": 1353510756, 
+                    "duration_application": 10, 
+                    "command_line": "/tmp/4yCRF2ZuXo haute /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/1250/X001838CYC+LM_1.mgf", 
+                    "real_duration": 10, 
+                    "id": 10308, 
+                    "duration": 11, 
+                    "duration_management": 0, 
+                    "duration_communication": 0, 
+                    "start_date": 1353510869
+                }, 
+                {
+                    "submission_date": 1353510757, 
+                    "duration_application": 4, 
+                    "command_line": "/tmp/1Dx5xV1ZPO haute /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/1250/X001843CYC+LM_1.mgf", 
+                    "real_duration": 6, 
+                    "id": 10321, 
+                    "duration": 9, 
+                    "duration_management": 1, 
+                    "duration_communication": 1, 
+                    "start_date": 1353510879
+                }, 
+                {
+                    "submission_date": 1353510759, 
+                    "duration_application": 5, 
+                    "command_line": "/tmp/a0brMgdmY6 haute /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/1250/X001851CYC+LM_2.mgf", 
+                    "real_duration": 5, 
+                    "id": 10331, 
+                    "duration": 5, 
+                    "duration_management": 0, 
+                    "duration_communication": 0, 
+                    "start_date": 1353510885
+                }, 
+                {
+                    "submission_date": 1353510759, 
+                    "duration_application": 8, 
+                    "command_line": "/tmp/5qFzKe62Pz haute /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/1250/X001853CYC+LM_1.mgf", 
+                    "real_duration": 10, 
+                    "id": 10337, 
+                    "duration": 11, 
+                    "duration_management": 1, 
+                    "duration_communication": 1, 
+                    "start_date": 1353510890
+                }
+            ], 
+            "stop_date": 1353514315, 
+            "predicted_boot_time": 50, 
+            "instance_id": "i-43CA0757", 
+            "instance_type": "m1.small", 
+            "host": "icps-vm-9", 
+            "boot_time": 49, 
+            "scheduling_strategy": "Schlouder::Scheduling::Default", 
+            "provisioning_strategy": "Schlouder::Provisioning::Asap", 
+            "start_date": 1353510764, 
+            "user": "emichon"
+        }, 
+        {
+            "jobs": [
+                {
+                    "submission_date": 1353510754, 
+                    "duration_application": 5, 
+                    "command_line": "/tmp/jR8iVoMb19 haute /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/1250/X001827CYC+LM_2.mgf", 
+                    "real_duration": 6, 
+                    "id": 10279, 
+                    "duration": 4, 
+                    "duration_management": 1, 
+                    "duration_communication": 0, 
+                    "start_date": 1353510823
+                }, 
+                {
+                    "submission_date": 1353510754, 
+                    "duration_application": 11, 
+                    "command_line": "/tmp/LRhBlOmQtG haute /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/1250/X001828CYC+LM_1.mgf", 
+                    "real_duration": 13, 
+                    "id": 10282, 
+                    "duration": 11, 
+                    "duration_management": 2, 
+                    "duration_communication": 0, 
+                    "start_date": 1353510829
+                }, 
+                {
+                    "submission_date": 1353510755, 
+                    "duration_application": 4, 
+                    "command_line": "/tmp/ecYSit1YiS haute /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/1250/X001831CYC+LM_2.mgf", 
+                    "real_duration": 5, 
+                    "id": 10287, 
+                    "duration": 6, 
+                    "duration_management": 0, 
+                    "duration_communication": 1, 
+                    "start_date": 1353510842
+                }, 
+                {
+                    "submission_date": 1353510755, 
+                    "duration_application": 11, 
+                    "command_line": "/tmp/WChFi8g6KW haute /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/1250/X001833CYC+LM_1.mgf", 
+                    "real_duration": 11, 
+                    "id": 10291, 
+                    "duration": 11, 
+                    "duration_management": 0, 
+                    "duration_communication": 0, 
+                    "start_date": 1353510847
+                }, 
+                {
+                    "submission_date": 1353510756, 
+                    "duration_application": 5, 
+                    "command_line": "/tmp/rwKbF02xzG haute /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/1250/X001838CYC+LM_2.mgf", 
+                    "real_duration": 6, 
+                    "id": 10297, 
+                    "duration": 7, 
+                    "duration_management": 1, 
+                    "duration_communication": 0, 
+                    "start_date": 1353510858
+                }, 
+                {
+                    "submission_date": 1353510757, 
+                    "duration_application": 6, 
+                    "command_line": "/tmp/7GEvZbPYeC haute /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/1250/X001840CYC+LM_2.mgf", 
+                    "real_duration": 8, 
+                    "id": 10306, 
+                    "duration": 7, 
+                    "duration_management": 2, 
+                    "duration_communication": 0, 
+                    "start_date": 1353510864
+                }, 
+                {
+                    "submission_date": 1353510757, 
+                    "duration_application": 9, 
+                    "command_line": "/tmp/RU536WCL2o haute /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/1250/X001844CYC+LM_1.mgf", 
+                    "real_duration": 10, 
+                    "id": 10312, 
+                    "duration": 11, 
+                    "duration_management": 1, 
+                    "duration_communication": 0, 
+                    "start_date": 1353510872
+                }, 
+                {
+                    "submission_date": 1353510759, 
+                    "duration_application": 3, 
+                    "command_line": "/tmp/xPvq6JTEui haute /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/1250/X001853CYC+LM_2.mgf", 
+                    "real_duration": 5, 
+                    "id": 10326, 
+                    "duration": 5, 
+                    "duration_management": 1, 
+                    "duration_communication": 1, 
+                    "start_date": 1353510882
+                }
+            ], 
+            "stop_date": 1353514316, 
+            "predicted_boot_time": 62, 
+            "instance_id": "i-414007F1", 
+            "instance_type": "m1.small", 
+            "host": "icps-vm-11", 
+            "boot_time": 59, 
+            "scheduling_strategy": "Schlouder::Scheduling::Default", 
+            "provisioning_strategy": "Schlouder::Provisioning::Asap", 
+            "start_date": 1353510764, 
+            "user": "emichon"
+        }, 
+        {
+            "jobs": [
+                {
+                    "submission_date": 1353510754, 
+                    "duration_application": 3, 
+                    "command_line": "/tmp/2DKXP9XZuT haute /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/1250/X001828CYC+LM_2.mgf", 
+                    "real_duration": 7, 
+                    "id": 10284, 
+                    "duration": 4, 
+                    "duration_management": 3, 
+                    "duration_communication": 1, 
+                    "start_date": 1353510833
+                }, 
+                {
+                    "submission_date": 1353510755, 
+                    "duration_application": 19, 
+                    "command_line": "/tmp/PpYqmJk4jL haute /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/1250/X001830CYC+LM_1.mgf", 
+                    "real_duration": 20, 
+                    "id": 10288, 
+                    "duration": 11, 
+                    "duration_management": 1, 
+                    "duration_communication": 0, 
+                    "start_date": 1353510842
+                }, 
+                {
+                    "submission_date": 1353510755, 
+                    "duration_application": 5, 
+                    "command_line": "/tmp/NFX1R2ndrr haute /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/1250/X001833CYC+LM_2.mgf", 
+                    "real_duration": 7, 
+                    "id": 10301, 
+                    "duration": 7, 
+                    "duration_management": 2, 
+                    "duration_communication": 0, 
+                    "start_date": 1353510862
+                }, 
+                {
+                    "submission_date": 1353510756, 
+                    "duration_application": 10, 
+                    "command_line": "/tmp/D66qXNAEpM haute /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/1250/X001836CYC+LM_1.mgf", 
+                    "real_duration": 10, 
+                    "id": 10309, 
+                    "duration": 11, 
+                    "duration_management": 0, 
+                    "duration_communication": 0, 
+                    "start_date": 1353510869
+                }, 
+                {
+                    "submission_date": 1353510757, 
+                    "duration_application": 9, 
+                    "command_line": "/tmp/1LZ4tqdzoZ haute /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/1250/X001841CYC+LM_1.mgf", 
+                    "real_duration": 10, 
+                    "id": 10322, 
+                    "duration": 11, 
+                    "duration_management": 1, 
+                    "duration_communication": 0, 
+                    "start_date": 1353510879
+                }, 
+                {
+                    "submission_date": 1353510758, 
+                    "duration_application": 9, 
+                    "command_line": "/tmp/cNxIB_Y5_w haute /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/1250/X001848CYC+LM_1.mgf", 
+                    "real_duration": 11, 
+                    "id": 10335, 
+                    "duration": 11, 
+                    "duration_management": 1, 
+                    "duration_communication": 1, 
+                    "start_date": 1353510889
+                }, 
+                {
+                    "submission_date": 1353510759, 
+                    "duration_application": 7, 
+                    "command_line": "/tmp/IZt7uO7iHD haute /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/1250/X001854CYC+LM_1.mgf", 
+                    "real_duration": 9, 
+                    "id": 10341, 
+                    "duration": 11, 
+                    "duration_management": 2, 
+                    "duration_communication": 0, 
+                    "start_date": 1353510900
+                }
+            ], 
+            "stop_date": 1353514317, 
+            "predicted_boot_time": 67, 
+            "instance_id": "i-4C12085B", 
+            "instance_type": "m1.small", 
+            "host": "icps-vm-12", 
+            "boot_time": 69, 
+            "scheduling_strategy": "Schlouder::Scheduling::Default", 
+            "provisioning_strategy": "Schlouder::Provisioning::Asap", 
+            "start_date": 1353510764, 
+            "user": "emichon"
+        }, 
+        {
+            "jobs": [
+                {
+                    "submission_date": 1353510755, 
+                    "duration_application": 9, 
+                    "command_line": "/tmp/lua_i07tCu haute /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/1250/X001830CYC+LM_2.mgf", 
+                    "real_duration": 13, 
+                    "id": 10285, 
+                    "duration": 6, 
+                    "duration_management": 4, 
+                    "duration_communication": 0, 
+                    "start_date": 1353510833
+                }, 
+                {
+                    "submission_date": 1353510755, 
+                    "duration_application": 11, 
+                    "command_line": "/tmp/8kqv4Ju9Lo haute /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/1250/X001834CYC+LM_1.mgf", 
+                    "real_duration": 14, 
+                    "id": 10292, 
+                    "duration": 11, 
+                    "duration_management": 1, 
+                    "duration_communication": 2, 
+                    "start_date": 1353510849
+                }, 
+                {
+                    "submission_date": 1353510756, 
+                    "duration_application": 7, 
+                    "command_line": "/tmp/y81vkGjNR3 haute /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/1250/X001836CYC+LM_2.mgf", 
+                    "real_duration": 8, 
+                    "id": 10304, 
+                    "duration": 9, 
+                    "duration_management": 1, 
+                    "duration_communication": 0, 
+                    "start_date": 1353510863
+                }, 
+                {
+                    "submission_date": 1353510757, 
+                    "duration_application": 5, 
+                    "command_line": "/tmp/X2U2ZLmEIN haute /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/1250/X001841CYC+LM_2.mgf", 
+                    "real_duration": 5, 
+                    "id": 10311, 
+                    "duration": 6, 
+                    "duration_management": 0, 
+                    "duration_communication": 0, 
+                    "start_date": 1353510871
+                }, 
+                {
+                    "submission_date": 1353510757, 
+                    "duration_application": 5, 
+                    "command_line": "/tmp/jR7KsQJhIw haute /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/1250/X001844CYC+LM_2.mgf", 
+                    "real_duration": 6, 
+                    "id": 10319, 
+                    "duration": 8, 
+                    "duration_management": 1, 
+                    "duration_communication": 0, 
+                    "start_date": 1353510876
+                }, 
+                {
+                    "submission_date": 1353510758, 
+                    "duration_application": 5, 
+                    "command_line": "/tmp/GWJYrTJZZc haute /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/1250/X001848CYC+LM_2.mgf", 
+                    "real_duration": 6, 
+                    "id": 10327, 
+                    "duration": 7, 
+                    "duration_management": 1, 
+                    "duration_communication": 0, 
+                    "start_date": 1353510882
+                }, 
+                {
+                    "submission_date": 1353510759, 
+                    "duration_application": 3, 
+                    "command_line": "/tmp/HRYW5BP0zA haute /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/1250/X001854CYC+LM_2.mgf", 
+                    "real_duration": 4, 
+                    "id": 10334, 
+                    "duration": 3, 
+                    "duration_management": 1, 
+                    "duration_communication": 0, 
+                    "start_date": 1353510888
+                }
+            ], 
+            "stop_date": 1353514318, 
+            "predicted_boot_time": 73, 
+            "instance_id": "i-3F760900", 
+            "instance_type": "m1.small", 
+            "host": "icps-vm-4", 
+            "boot_time": 69, 
+            "scheduling_strategy": "Schlouder::Scheduling::Default", 
+            "provisioning_strategy": "Schlouder::Provisioning::Asap", 
+            "start_date": 1353510764, 
+            "user": "emichon"
+        }, 
+        {
+            "jobs": [
+                {
+                    "submission_date": 1353510755, 
+                    "duration_application": 20, 
+                    "command_line": "/tmp/21PRjVSOVw haute /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/1250/X001832CYC+LM_1.mgf", 
+                    "real_duration": 22, 
+                    "id": 10286, 
+                    "duration": 11, 
+                    "duration_management": 2, 
+                    "duration_communication": 0, 
+                    "start_date": 1353510836
+                }, 
+                {
+                    "submission_date": 1353510756, 
+                    "duration_application": 14, 
+                    "command_line": "/tmp/cbPrc3wyxE haute /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/1250/X001837CYC+LM_1.mgf", 
+                    "real_duration": 15, 
+                    "id": 10298, 
+                    "duration": 11, 
+                    "duration_management": 1, 
+                    "duration_communication": 0, 
+                    "start_date": 1353510859
+                }, 
+                {
+                    "submission_date": 1353510757, 
+                    "duration_application": 9, 
+                    "command_line": "/tmp/rA2zLefNom haute /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/1250/X001842CYC+LM_1.mgf", 
+                    "real_duration": 10, 
+                    "id": 10315, 
+                    "duration": 11, 
+                    "duration_management": 0, 
+                    "duration_communication": 1, 
+                    "start_date": 1353510874
+                }, 
+                {
+                    "submission_date": 1353510758, 
+                    "duration_application": 9, 
+                    "command_line": "/tmp/8qKa9CnNlM haute /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/1250/X001849CYC+LM_1.mgf", 
+                    "real_duration": 10, 
+                    "id": 10328, 
+                    "duration": 11, 
+                    "duration_management": 1, 
+                    "duration_communication": 0, 
+                    "start_date": 1353510884
+                }
+            ], 
+            "stop_date": 1353514319, 
+            "predicted_boot_time": 78, 
+            "instance_id": "i-4B330941", 
+            "instance_type": "m1.small", 
+            "host": "icps-vm-1", 
+            "boot_time": 72, 
+            "scheduling_strategy": "Schlouder::Scheduling::Default", 
+            "provisioning_strategy": "Schlouder::Provisioning::Asap", 
+            "start_date": 1353510764, 
+            "user": "emichon"
+        }, 
+        {
+            "jobs": [
+                {
+                    "submission_date": 1353510755, 
+                    "duration_application": 6, 
+                    "command_line": "/tmp/agtKb2ZDep haute /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/1250/X001834CYC+LM_2.mgf", 
+                    "real_duration": 8, 
+                    "id": 10294, 
+                    "duration": 8, 
+                    "duration_management": 2, 
+                    "duration_communication": 0, 
+                    "start_date": 1353510852
+                }, 
+                {
+                    "submission_date": 1353510756, 
+                    "duration_application": 9, 
+                    "command_line": "/tmp/JnvpkJ6hhv haute /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/1250/X001839CYC+LM_1.mgf", 
+                    "real_duration": 12, 
+                    "id": 10302, 
+                    "duration": 11, 
+                    "duration_management": 3, 
+                    "duration_communication": 0, 
+                    "start_date": 1353510862
+                }, 
+                {
+                    "submission_date": 1353510757, 
+                    "duration_application": 9, 
+                    "command_line": "/tmp/wkfhHvgLO_ haute /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/1250/X001845CYC+LM_1.mgf", 
+                    "real_duration": 10, 
+                    "id": 10316, 
+                    "duration": 11, 
+                    "duration_management": 1, 
+                    "duration_communication": 0, 
+                    "start_date": 1353510874
+                }, 
+                {
+                    "submission_date": 1353510758, 
+                    "duration_application": 3, 
+                    "command_line": "/tmp/UqVfYKxY7z haute /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/1250/X001849CYC+LM_2.mgf", 
+                    "real_duration": 5, 
+                    "id": 10329, 
+                    "duration": 6, 
+                    "duration_management": 1, 
+                    "duration_communication": 1, 
+                    "start_date": 1353510884
+                }, 
+                {
+                    "submission_date": 1353510759, 
+                    "duration_application": 8, 
+                    "command_line": "/tmp/uBkyMPsIkh haute /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/1250/X001855CYC+LM_1.mgf", 
+                    "real_duration": 9, 
+                    "id": 10336, 
+                    "duration": 11, 
+                    "duration_management": 0, 
+                    "duration_communication": 1, 
+                    "start_date": 1353510889
+                }
+            ], 
+            "stop_date": 1353514320, 
+            "predicted_boot_time": 84, 
+            "instance_id": "i-500E0957", 
+            "instance_type": "m1.small", 
+            "host": "icps-vm-6", 
+            "boot_time": 88, 
+            "scheduling_strategy": "Schlouder::Scheduling::Default", 
+            "provisioning_strategy": "Schlouder::Provisioning::Asap", 
+            "start_date": 1353510764, 
+            "user": "emichon"
+        }, 
+        {
+            "jobs": [
+                {
+                    "submission_date": 1353510756, 
+                    "duration_application": 6, 
+                    "command_line": "/tmp/6WROkVsWDK haute /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/1250/X001837CYC+LM_2.mgf", 
+                    "real_duration": 7, 
+                    "id": 10295, 
+                    "duration": 8, 
+                    "duration_management": 1, 
+                    "duration_communication": 0, 
+                    "start_date": 1353510855
+                }, 
+                {
+                    "submission_date": 1353510757, 
+                    "duration_application": 5, 
+                    "command_line": "/tmp/0d339ou91Z haute /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/1250/X001842CYC+LM_2.mgf", 
+                    "real_duration": 11, 
+                    "id": 10303, 
+                    "duration": 7, 
+                    "duration_management": 6, 
+                    "duration_communication": 0, 
+                    "start_date": 1353510862
+                }, 
+                {
+                    "submission_date": 1353510757, 
+                    "duration_application": 4, 
+                    "command_line": "/tmp/Sx10psdovX haute /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/1250/X001845CYC+LM_2.mgf", 
+                    "real_duration": 6, 
+                    "id": 10313, 
+                    "duration": 7, 
+                    "duration_management": 1, 
+                    "duration_communication": 1, 
+                    "start_date": 1353510873
+                }, 
+                {
+                    "submission_date": 1353510758, 
+                    "duration_application": 9, 
+                    "command_line": "/tmp/ZOT5vQjAkd haute /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/1250/X001850CYC+LM_1.mgf", 
+                    "real_duration": 10, 
+                    "id": 10323, 
+                    "duration": 11, 
+                    "duration_management": 0, 
+                    "duration_communication": 1, 
+                    "start_date": 1353510879
+                }
+            ], 
+            "stop_date": 1353514321, 
+            "predicted_boot_time": 89, 
+            "instance_id": "i-488D08DE", 
+            "instance_type": "m1.small", 
+            "host": "icps-vm-7", 
+            "boot_time": 91, 
+            "scheduling_strategy": "Schlouder::Scheduling::Default", 
+            "provisioning_strategy": "Schlouder::Provisioning::Asap", 
+            "start_date": 1353510764, 
+            "user": "emichon"
+        }, 
+        {
+            "jobs": [
+                {
+                    "submission_date": 1353510756, 
+                    "duration_application": 7, 
+                    "command_line": "/tmp/L6_LyqhBPC haute /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/1250/X001839CYC+LM_2.mgf", 
+                    "real_duration": 10, 
+                    "id": 10299, 
+                    "duration": 8, 
+                    "duration_management": 2, 
+                    "duration_communication": 1, 
+                    "start_date": 1353510859
+                }, 
+                {
+                    "submission_date": 1353510758, 
+                    "duration_application": 9, 
+                    "command_line": "/tmp/x6bDjU14Rf haute /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/1250/X001846CYC+LM_1.mgf", 
+                    "real_duration": 10, 
+                    "id": 10310, 
+                    "duration": 11, 
+                    "duration_management": 1, 
+                    "duration_communication": 0, 
+                    "start_date": 1353510870
+                }, 
+                {
+                    "submission_date": 1353510758, 
+                    "duration_application": 4, 
+                    "command_line": "/tmp/QoHrxpJsXb haute /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/1250/X001850CYC+LM_2.mgf", 
+                    "real_duration": 5, 
+                    "id": 10325, 
+                    "duration": 6, 
+                    "duration_management": 1, 
+                    "duration_communication": 0, 
+                    "start_date": 1353510880
+                }, 
+                {
+                    "submission_date": 1353510759, 
+                    "duration_application": 4, 
+                    "command_line": "/tmp/R4ri7VD35N haute /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/1250/X001855CYC+LM_2.mgf", 
+                    "real_duration": 5, 
+                    "id": 10332, 
+                    "duration": 4, 
+                    "duration_management": 1, 
+                    "duration_communication": 0, 
+                    "start_date": 1353510885
+                }
+            ], 
+            "stop_date": 1353514322, 
+            "predicted_boot_time": 95, 
+            "instance_id": "i-400E07BF", 
+            "instance_type": "m1.small", 
+            "host": "icps-vm-8", 
+            "boot_time": 95, 
+            "scheduling_strategy": "Schlouder::Scheduling::Default", 
+            "provisioning_strategy": "Schlouder::Provisioning::Asap", 
+            "start_date": 1353510764, 
+            "user": "emichon"
+        }, 
+        {
+            "jobs": [
+                {
+                    "submission_date": 1353510757, 
+                    "duration_application": 3, 
+                    "command_line": "/tmp/XW6cOjcScy haute /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/1250/X001843CYC_1964+LM_1.mgf", 
+                    "real_duration": 9, 
+                    "id": 10307, 
+                    "duration": 6, 
+                    "duration_management": 5, 
+                    "duration_communication": 1, 
+                    "start_date": 1353510861
+                }, 
+                {
+                    "submission_date": 1353510758, 
+                    "duration_application": 4, 
+                    "command_line": "/tmp/hi2d17DI4I haute /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/1250/X001846CYC+LM_2.mgf", 
+                    "real_duration": 6, 
+                    "id": 10314, 
+                    "duration": 7, 
+                    "duration_management": 1, 
+                    "duration_communication": 1, 
+                    "start_date": 1353510873
+                }, 
+                {
+                    "submission_date": 1353510758, 
+                    "duration_application": 9, 
+                    "command_line": "/tmp/ov9koX0NCD haute /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/1250/X001851CYC+LM_1.mgf", 
+                    "real_duration": 10, 
+                    "id": 10324, 
+                    "duration": 11, 
+                    "duration_management": 0, 
+                    "duration_communication": 1, 
+                    "start_date": 1353510879
+                }
+            ], 
+            "stop_date": 1353514323, 
+            "predicted_boot_time": 100, 
+            "instance_id": "i-472307D5", 
+            "instance_type": "m1.small", 
+            "host": "icps-vm-10", 
+            "boot_time": 97, 
+            "scheduling_strategy": "Schlouder::Scheduling::Default", 
+            "provisioning_strategy": "Schlouder::Provisioning::Asap", 
+            "start_date": 1353510764, 
+            "user": "emichon"
+        }, 
+        {
+            "jobs": [
+                {
+                    "submission_date": 1353510758, 
+                    "duration_application": 9, 
+                    "command_line": "/tmp/N65qrLqb7P haute /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/1250/X001847CYC+LM_1.mgf", 
+                    "real_duration": 10, 
+                    "id": 10318, 
+                    "duration": 11, 
+                    "duration_management": 0, 
+                    "duration_communication": 1, 
+                    "start_date": 1353510875
+                }, 
+                {
+                    "submission_date": 1353510759, 
+                    "duration_application": 9, 
+                    "command_line": "/tmp/w2U6reajeP haute /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/1250/X001856CYC+LM_1.mgf", 
+                    "real_duration": 9, 
+                    "id": 10333, 
+                    "duration": 11, 
+                    "duration_management": 0, 
+                    "duration_communication": 0, 
+                    "start_date": 1353510885
+                }
+            ], 
+            "stop_date": 1353514324, 
+            "predicted_boot_time": 106, 
+            "instance_id": "i-4D830894", 
+            "instance_type": "m1.small", 
+            "host": "icps-vm-2", 
+            "boot_time": 111, 
+            "scheduling_strategy": "Schlouder::Scheduling::Default", 
+            "provisioning_strategy": "Schlouder::Provisioning::Asap", 
+            "start_date": 1353510764, 
+            "user": "emichon"
+        }, 
+        {
+            "jobs": [
+                {
+                    "submission_date": 1353510759, 
+                    "duration_application": 9, 
+                    "command_line": "/tmp/DoVMQD8bgf haute /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/1250/X001852CYC+LM_1.mgf", 
+                    "real_duration": 12, 
+                    "id": 10320, 
+                    "duration": 11, 
+                    "duration_management": 3, 
+                    "duration_communication": 0, 
+                    "start_date": 1353510876
+                }
+            ], 
+            "stop_date": 1353514325, 
+            "predicted_boot_time": 112, 
+            "instance_id": "i-454B08F6", 
+            "instance_type": "m1.small", 
+            "host": "icps-vm-3", 
+            "boot_time": 112, 
+            "scheduling_strategy": "Schlouder::Scheduling::Default", 
+            "provisioning_strategy": "Schlouder::Provisioning::Asap", 
+            "start_date": 1353510764, 
+            "user": "emichon"
+        }, 
+        {
+            "jobs": [
+                {
+                    "submission_date": 1353510759, 
+                    "duration_application": 4, 
+                    "command_line": "/tmp/gVsTfG6P12 haute /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/1250/X001856CYC+LM_2.mgf", 
+                    "real_duration": 5, 
+                    "id": 10340, 
+                    "duration": 4, 
+                    "duration_management": 1, 
+                    "duration_communication": 0, 
+                    "start_date": 1353510895
+                }
+            ], 
+            "stop_date": 1353514327, 
+            "predicted_boot_time": 117, 
+            "instance_id": "i-4E820837", 
+            "instance_type": "m1.small", 
+            "host": "icps-vm-5", 
+            "boot_time": 131, 
+            "scheduling_strategy": "Schlouder::Scheduling::Default", 
+            "provisioning_strategy": "Schlouder::Provisioning::Asap", 
+            "start_date": 1353510764, 
+            "user": "emichon"
+        }
+    ]
+}

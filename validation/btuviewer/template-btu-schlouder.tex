@@ -1,0 +1,74 @@
+\nonstopmode
+%\documentclass[landscape]{article}
+\documentclass[16pt]{article}
+%\usepackage{standalone}
+\usepackage{tikz}
+%\pgfkeys{/pgf/fpu=true}
+\usepackage{fullpage}
+
+\newlength{\btutikzwidth}
+\newlength{\btutikzheight}
+
+\begin{document}
+
+\title{\input{data/source.filename}}
+\date{\today}
+ 
+\maketitle
+\thispagestyle{plain}
+
+Description: \input{data/schlouder.info}
+
+\vspace{3cm}
+\begin{center}
+\begin{tabular}{l|rrr}
+
+				& VM count & BTU count & makespan \\
+				 \hline
+ Schlouder 			& \input{data/schlouder.stats} \\
+ SimSchlouder real duration 	& \input{data/simschlouder-realduration.stats} \\
+ SimSchlouder prediction only	& \input{data/simschlouder-predictiononly.stats} \\
+ \hline
+\end{tabular}
+\end{center}
+
+\vspace{3cm}
+
+\includegraphics[angle=-90,width=\textwidth]{data/diameter.pdf}
+
+\newpage 
+
+\input{data/schlouder.latexdim}
+\setlength{\pdfpagewidth}{\btutikzwidth}
+\setlength{\pdfpageheight}{\btutikzheight}
+\vspace*{-2.5cm}
+\hspace*{-3cm}
+\begin{tikzpicture}[scale=0.9]
+\input{data/schlouder.tikz}
+\end{tikzpicture}
+ 
+
+\newpage
+
+\input{data/simschlouder-realduration.latexdim}
+\setlength{\pdfpagewidth}{\btutikzwidth}
+\setlength{\pdfpageheight}{\btutikzheight}
+\vspace*{-2.5cm}
+\hspace*{-3cm}
+\begin{tikzpicture}[scale=0.9]
+\input{data/simschlouder-realduration.tikz}
+\end{tikzpicture}
+
+\newpage
+
+\input{data/simschlouder-predictiononly.latexdim}
+\setlength{\pdfpagewidth}{\btutikzwidth}
+\setlength{\pdfpageheight}{\btutikzheight}
+\vspace*{-2.5cm}
+\hspace*{-3cm}
+\begin{tikzpicture}[scale=0.9]
+\input{data/simschlouder-predictiononly.tikz}
+\end{tikzpicture}
+
+
+\end{document} 
