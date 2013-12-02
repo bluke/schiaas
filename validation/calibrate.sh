@@ -12,7 +12,7 @@ RRESFILE=/tmp/r.res
 echo -e "boots \t time" > $DATAFILE
 for file in $*
 do
-	cat $file | grep \"boot_time | cut -f2 -d":" | sed 's/,//' | sort -n | nl >> $DATAFILE
+	cat $file | grep '"boot_time"' | cut -f2 -d":" | sed 's/,//' | sort -n | nl >> $DATAFILE
 done
 
 echo 'btdat <- read.csv(file="/tmp/boottimes.dat",head=TRUE,sep="\t") ; res <- lm(btdat$time ~ btdat$boots) ;  res$coefficients[1];  res$coefficients[2] ; res$coefficients[1]+res$coefficients[2] ' | R --no-save --silent > $RRESFILE
