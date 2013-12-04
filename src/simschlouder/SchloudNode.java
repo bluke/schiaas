@@ -18,7 +18,6 @@ import org.simgrid.msg.TaskCancelledException;
 import org.simgrid.msg.TimeoutException;
 import org.simgrid.msg.TransferFailureException;
 import org.simgrid.msg.Process;
-import org.simgrid.schiaas.Instance;
 
 
 public class SchloudNode extends Process {

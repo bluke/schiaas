@@ -56,6 +56,11 @@ if __name__ == '__main__':
 	intervalsVMs = []
 	for vm in results:
 		(start_date, boot_time, stop_date) = (int(vm['start_date']), int(vm['boot_time']), int(vm['stop_date']))
+	
+		# If the stop date is not correct (dos not work if BTU>1)
+		if stop_date == 0:
+			stop_date=start_date+3600
+
 		intervalsVMs.append(Interval(start_date+boot_time, stop_date))
 		jobs += vm['jobs']
 	jobs.sort(key=lambda j: j['submission_date'])
