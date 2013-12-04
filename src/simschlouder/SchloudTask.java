@@ -131,8 +131,8 @@ public class SchloudTask {
 		out.write("\t\t\t\t\"id\": \""+name+"\",\n");
 		out.write("\t\t\t\t\"submission_date\": "+getDateOfFirst(STATE.PENDING)+",\n");
 		out.write("\t\t\t\t\"start_date\": "+getDateOfFirst(STATE.RUNNING)+",\n");
-		out.write("\t\t\t\t\"real_duration\": "+getRuntime()+",\n"); // TERMINATED AND NOT SHUTINGDOWN
-		out.write("\t\t\t\t\"duration\": "+predictedRuntime+"\n");
+		out.write("\t\t\t\t\"walltime\": "+getRuntime()+",\n"); // TERMINATED AND NOT SHUTINGDOWN
+		out.write("\t\t\t\t\"walltime_prediction\": "+predictedRuntime+"\n");
 	}
 	
 	/**

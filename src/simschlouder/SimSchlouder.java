@@ -50,7 +50,7 @@ public class SimSchlouder {
 				double submissionDate = sc.nextDouble();
 				
 				if (submissionDate != oldSubmissionDate) {
-					Msg.verb("Wait for next bag of tasks");
+					Msg.verb("Waiting for next bag of tasks");
 					waitFor(submissionDate-oldSubmissionDate);
 				}
 				
@@ -146,7 +146,7 @@ public class SimSchlouder {
     		System.exit(1);
     	} 
 		catch (Exception e) {
-			Msg.error("Unexpected exception when instantieting strategy");
+			Msg.error("Unexpected exception when instanciating strategy");
 			System.exit(1);
 		}
 		return null;
