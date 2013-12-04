@@ -13,10 +13,15 @@ It supports main VM managing functions:
 - available resources description;
 - automatic VM placement on the clusters (in a round-robin way);
 - boot and other VM life-cycle processes;
-- and usage reporting.
+- cloud storage management;
 
-For now, it does not support other cloud functionalities, such as storage management.
+For now, it does not support other cloud functionalities, such as network management.
 
+SchIaaS is an improved interface: every operation is actually handle by an engine. Ths allows SchIaaS applications to be compatible with any cloud internals, or even use different internals together in a multi-cloud context.
+
+For now, two engines are available and fully functional:
+- RICE: Reduced Impl:ementation of Compute Engine
+- RISE: Reduced Impl:ementation of Storage Engine
 
 @section running Running SCHIaaS
 
@@ -72,33 +77,83 @@ Last, a new configuration file is introduced to declare cloud configuration, clo
 <?xml version='1.0'?>
  <!DOCTYPE clouds>
  <clouds version="1">
-	<cloud id="myCloud" controller="Boivin" standard_power="10e09" cache="PRE" max_vm_per_core="1" inter_boot_delay="20"> 
-		<host id="Jean_Yves" core="1"/>
-		<host id="TeX" core="1"/>
-		[...]  
+	<cloud  id="myCloud">
+		
+		<storage id="myStorage" engine="org.simgrid.schiaas.engine.rise.Rise">
+			<config controller="Jacquelin"/>
+		</storage>
+
+		<compute engine="org.simgrid.schiaas.engine.rice.Rice"> 
+		
+			<config controller="Jacquelin" 
+					image_storage="myStorage" image_caching="PRE"
+					inter_boot_delay="10"/>
+			
+			<instance_type id="small" core="1" memory="1000" disk="1690"/>				
+			<instance_type id="medium" core="2" memory="1000" disk="1690"/>
+			<instance_type id="large" core="4" memory="1000" disk="1690"/>
+			
+			<image id="myImage" size="1073741824"/>
+		
+			<host id="Boivin"/>
+			<host id="Jean_Yves"/>
+			<host id="TeX"/>
+			...
+		</compute>
+
 	</cloud>
 </clouds> 
 @endcode
+
+@subsubsection cloud_tag Cloud tag
+
 The cloud tag must have the following attributes:
 - id: the id of the cloud or of the region;
-- controller: the host of the cloud controller process (which send commands to VM hosts, transfer images, etc.);
-- standard_power: the power of the standard instance (i.g. Amazon's EC2CU);
-- cache: the image cache strategy, which can be ON (the image is transfered once per host), OFF (the image is transfered at each runinstance), or PRE (the image is considered to be on the VM host already);
-- max_vm_per_core: the maximum amount of VM running on one core, the power of this core being shared by all running VM and other processes;
-- inter_boot_delay: the delay between two consecutive VM boots on one given host.
-
-Inside the cloud element, you must define the VM host, as they appear in the platform file. For each, you must declare the number of core used by instances.
 
 You can declare as many clouds as needed, and clouds can also used to model regions.
+
+Inside the cloud element, you must define storage and compute.
+
+
+@subsubsection storage_tag Storage tag
+
+The storage tag must have the following attributes:
+- id: the id of the storage;
+- engine: the engine of the storage;
+
+It also must include one config tag, giving any information needed by this engine. For instance, RICE only needs one controller, which will store and distribute the data.
+
+As many storages as needed can be declared, but the ones used by the compute engine must be declared before the compute tag. 
+
+
+@subsubsection compute_tag Compute tag
+
+The compute tag must have the following attributes:
+- engine: the engine of the compute;
+
+It must also include the following tags:
+
+- config: any information needed by this engine. For instance, RISE needs: 
+  - one controller, which will distribute the commands; 
+  - an image_storage; an image_caching strategy, that can be ON, OFF, or PRE; 
+  - an inter_boot_delay, that is the delay between two consecutive VM boots on one given host.
+
+- instance_type, having some attributes discribing the type of instance;
+
+- image, having two attributes:
+  - id;
+  - size;
+
+- host or cluster, to declare the hosts usable to run instance.
 
 
 @subsection tutorial_code Java Code
 
 @subsubsection tutorial_initialization Initialization
 
-In order to initialize SCHIaaS, you must use Compute.init, its argument being the cloud configuration file:
+In order to initialize SCHIaaS, you must use SchIaaS.init(), its argument being the cloud configuration file. This is typically done in Masterslave.java:
 @code
-import org.simgrid.schiaas.compute.Compute;
+import org.simgrid.schiaas.SchIaaS;
 [...]
 
 	/* construct the platform and deploy the application */
@@ -106,92 +161,120 @@ import org.simgrid.schiaas.compute.Compute;
 	Msg.deployApplication(args[1]);
 	
 	/* construct the cloud and deploy the associated processes */
-	Compute.init(args[2]); // this is the only modification
+	SchIaaS.init(args[2]);
 
 	/*  execute the simulation. */
-    	Msg.run();
+    Msg.run();
 @endcode
+
 
 @subsubsection tutorial_instance Instances management
 
-The main modification concernes Masterslave.java, which must declare an instance image and run one instance per slave:
+The main modification concernes Master.java, which must declare an instance image and run one instance per slave:
 @code
-import org.simgrid.schiaas.compute.*;
+import org.simgrid.schiaas.*;
 [...]
 	Msg.info("Hello! Got "+  slavesCount + " slaves and "+tasksCount+" tasks to process");
+	// Retrieve the Compute module of MyCloud
+	Compute myCompute = SchIaaS.getCloud("myCloud").getCompute();
 	
-	// Create an image of size 2 GB, 500 GFlo boot process and 10 GFlo shutdown process
-	Image myImage = new Image("monimage",2e9,500e9,10e9);
-
 	// Run one instance per slave on myCloud
-	Instance[] slaveInstances = Compute.runInstances(myImage,"myCloud",slavesCount);
+	String[] slaveInstancesId = myCompute.runInstances("myImage", "small", slavesCount);
 @endcode
-Afterward, slaveInstances constains SCHIaaS Instances, which are SimGrid's VMs and can be used just like any SimGrid host.
+Afterward, slaveInstancesId constains instances' id, which are the name of SimGrid's VMs and can be used just like any SimGrid host.
 
 Please note that if you ask for more instances than your cloud can provide, runInstances and runInstance will return null. Careful users will check how many instances can be ran:
 @code
-	int maxInstancesCount = Compute.describeAvailability();
+for (InstanceType instanceType : myCompute.describeInstanceTypes()) {
+			Msg.info(instanceType.getId()+ ": "
+					+ myCompute.describeAvailability(instanceType.getId()));
+		}
 @endcode
 
 Before using theses instances, you must wait for the end of their boot process,
-otherwise, the binding processes will start immediately and concurrently to the boot process, mistaking both your process running date and the boot duration.
+otherwise, the binded processes will start immediately and concurrently to the boot process, mistaking both your process running date and the boot duration.
 Then, you can bind the slave process to the running instance:
 @code
-	for (int i=0; i<slavesCount; i++) {
-		Msg.info("waiting for boot");
-		slaveInstances[[i%slavesCount].waitForRunning();
-
-		String [] slaveArgs = {""+i};
-		Slave s = new Slave(slaveInstances[i], "slave_"+i,slaveArgs);
-		s.start();
+for (int i=0; i<slavesCount; i++) {
+	Msg.info("waiting for boot");
+	while (myCompute.describeInstance(slaveInstancesId[i]).isRunning() == 0) {
+		waitFor(10);
 	}
+	
+	Msg.info("Starting a slave on "+myCompute.describeInstance(slaveInstancesId[i]).getName());
+	String [] slaveArgs = {""+i};
+	Slave s = new Slave(myCompute.describeInstance(slaveInstancesId[i]),
+						"slave_"+i,slaveArgs);
+	s.start();
+}
 @endcode
 
 During the execution, you can suspend and resume instances:
 @code
-	waitFor(150);
-	slaveInstances[0].suspend();
-	waitFor(200);
-	slaveInstances[0].resume();
+waitFor(150);
+Msg.info("Suspending " + slaveInstancesId[0]);
+myCompute.suspendInstance(slaveInstancesId[0]);
+waitFor(200);
+Msg.info("Resuming " + slaveInstancesId[0]);
+myCompute.resumeInstance(slaveInstancesId[0]);
 @endcode
 
-At any time, you can retrive the list of all instances:
+Finally, you can terminate instances one by one:
 @code
-	Instance[] instances = Compute.describeInstances();
+myCompute.terminateInstance(oneInstanceId);
 @endcode
 
-Finally, you can terminate all the instances at once:
+Then, you have to terminate SchIaaS to clean-up the simulation:
 @code
-	Compute.terminateInstances(instances);
-@endcode
-Alternatively, you can terminate instances one by one:
-@code
-	Compute.terminateInstance(oneInstance);
-or
-	oneInstance.terminate();
-@endcode
-
-Then, you have to terminate SCHIaaS to clean-up the simulation:
-@code
-	Compute.terminate();
+SchIaaS.terminate();
 @endcode
 Please note that this will also terminate all the instances that are still running.
 
+@subsubsection tutorial_data Data management
+
+You can also manipulate some data:
+@code
+Storage myStorage = SchIaaS.getCloud("myCloud").getStorage("myStorage");
+
+Data someData = new Data("someData", 1e9);
+
+Msg.info("Store some data");
+myStorage.put(someData);
+
+Msg.info("Check whether the data transfer is complete: " +
+		myStorage.isTransferComplete("someData"));
+
+Msg.info("Retrieve some stored data");
+someData = myStorage.get("someData");
+
+Msg.info("Retrieve some data that has not been stored");
+Data unstoredData = new Data("unstoredData", 2e9);
+someData = myStorage.get(unstoredData);
+
+Msg.info("List the stored data");
+Map <String, Data> storedData = myStorage.list(); 	//1st way
+myStorage.ls();										//2d way
+
+Msg.info("Delete some data");
+myStorage.delete("someData");
+@endcode
+
 
 @subsubsection tutorial_reports Reports
-
+s
 And last, you can obtain cloud usage report by modifying Masterslave.java:
 @code
-	/* execute the simulation */
-    Msg.run();
-    
-    /* print cloud reports */
-    Msg.info("Cloud description\n"+Compute.getCloudsDescription());
-    Msg.info("Instances description\n"+Compute.getInstancesDescription());
-    Msg.info("Details\n");
-    for (Instance i : Compute.describeInstances())  {
-    	Msg.info(i.stateLogToString());
-    }
+/* execute the simulation */
+Msg.run();        
+
+/* print cloud reports */
+Msg.info("Cloud details\n");
+for (Cloud cloud : SchIaaS.getClouds())  {
+	Msg.info("Cloud:"+cloud.getId());
+	for (Instance instance : cloud.getCompute().describeInstances()) {
+		Msg.info(" - "+instance);
+	}
+}s
 @endcode
 
 

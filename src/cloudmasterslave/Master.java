@@ -56,10 +56,8 @@ public class Master extends Process {
 		// Check the availability of resources on MyCloud
 		Msg.info("Instances availability:");
 		for (InstanceType instanceType : myCompute.describeInstanceTypes()) {
-			Msg.info(instanceType.getId()
-					+ ": "
-					+ SchIaaS.getCloud("myCloud").getCompute()
-							.describeAvailability(instanceType.getId()));
+			Msg.info(instanceType.getId()+ ": "
+					+ myCompute.describeAvailability(instanceType.getId()));
 		}
 		
 		
@@ -133,12 +131,10 @@ public class Master extends Process {
 
 		waitFor(150);
 		Msg.info("Suspending " + slaveInstancesId[0]);
-		SchIaaS.getCloud("myCloud").getCompute()
-				.suspendInstance(slaveInstancesId[0]);
+		myCompute.suspendInstance(slaveInstancesId[0]);
 		waitFor(200);
 		Msg.info("Resuming " + slaveInstancesId[0]);
-		SchIaaS.getCloud("myCloud").getCompute()
-				.resumeInstance(slaveInstancesId[0]);
+		myCompute.resumeInstance(slaveInstancesId[0]);
 
 
 		Msg.info("All tasks have been dispatched. Let's tell everybody the computation is over.");
@@ -151,6 +147,8 @@ public class Master extends Process {
 
 		// Wait an arbitrary time for Slaves to finalize
 		waitFor(36000);
+		
+		myCompute.terminateInstance( slaveInstancesId[0]);
 		
 		// Terminating SchIaaS
 		Msg.info("Terminating");

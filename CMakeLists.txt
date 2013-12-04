@@ -21,22 +21,48 @@ endif(${SIMGRID_JAR} MATCHES "SIMGRID_JAR-NOTFOUND")
 
 set(CMAKE_JAVA_INCLUDE_PATH ${SIMGRID_JAR})
 
-#set(CMAKE_JAVA_JAR_ENTRY_POINT simschlouder.SimSchlouder)
+set(CMAKE_JAVA_JAR_ENTRY_POINT simschlouder.SimSchlouder)
 
 
 # add a target to generate API documentation with Doxygen
+set(MAKE_DOXYGEN comment("Doxygen not found"))
 find_package(Doxygen)
 if(DOXYGEN_FOUND)
 
 configure_file(${PROJECT_SOURCE_DIR}/doc/Doxyfile.in ${PROJECT_SOURCE_DIR}/doc/Doxyfile @ONLY)
 
-add_custom_target(doc ALL
+set(MAKE_DOXYGEN
 ${DOXYGEN_EXECUTABLE} ${PROJECT_SOURCE_DIR}/doc/Doxyfile
 WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/doc/
 COMMENT "Generating API documentation with Doxygen" VERBATIM
 )
-
 endif(DOXYGEN_FOUND)
 
+set(MSG_JAVADOC_URL "http://simgrid.gforge.inria.fr/simgrid-java/3.9.0/doc/javadoc/")
+
+set(DOC_INSTALL_PATH "${PROJECT_SOURCE_DIR}/doc/html/javadoc")
+
+add_custom_target(documentation
+COMMAND ${MAKE_DOXYGEN}
+COMMAND ${Java_JAVADOC_EXECUTABLE} 
+-sourcepath ${PROJECT_SOURCE_DIR}/src
+-d ${DOC_INSTALL_PATH}/schiaas
+-subpackages org
+-link ${MSG_JAVADOC_URL}
+-doctitle "<h1>SchIaaS</h1>"
+-windowtitle "SchIaaS"
+-use
+-quiet
+COMMAND ${Java_JAVADOC_EXECUTABLE} 
+-sourcepath ${PROJECT_SOURCE_DIR}/src
+-d ${DOC_INSTALL_PATH}/simschlouder
+-subpackages simschlouder
+-link ../schiaas 
+-doctitle "<h1>SimSchlouder</h1>"
+-windowtitle "SimSchlouder"
+-use
+-quiet
+COMMENT "${MSG_JAVADOC} Generating API documentation" VERBATIM
+)
 
 add_subdirectory(src)

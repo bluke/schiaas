@@ -3,7 +3,7 @@
 <platform version="3">
   <!-- The master process (with some arguments) -->
 
-  <process host="controller" function="cloudmasterslave.Master">
+  <process host="controller" function="allmasterslave.Master">
      <argument value="100000"/>       <!-- Number of tasks -->
      <argument value="5e10"/>  <!-- Computation size of tasks -->
      <argument value="1e9"/>   <!-- Communication size of tasks -->

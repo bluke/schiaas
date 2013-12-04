@@ -1,10 +1,12 @@
 #! /bin/bash
 
-nhosts="1 10 100 1000"
-ncores="1 10 100 1000 10000"
-nvms="1 10 100 1000"
+nhosts="1 1000 1 10 100 1000"
+ncores="1 1000 10 100 1000 10000"
+nvms="1000 10 100 1000"
 
-echo -e "nhosts \tncores \tntotalcores \tnvms \tcloud \tvm \thost"
+infras="CLOUD VM VMHOST HOST"
+
+echo -e "nhosts \tncores \ttcores \tnvms \tcloud \tvm \tvmhost \thost"
 
 for nhost in $nhosts; do
 	for ncore in $ncores; do
@@ -23,25 +25,19 @@ cat template-${file}.xml \
 	| sed "s/%NVM/$nvm/g" > ${file}.xml
 done
 
+echo -en "$nhost \t$ncore \t$ntotalcore \t$nvm "
 
-exectimeC=`( command time -f '%e' java -cp /usr/local/java/simgrid.jar:../bin/schiaas.jar:../bin/cloudmasterslave.jar \
-		cloudmasterslave.Masterslave \
-		platform.xml deploy.xml cloud.xml CLOUD \
-		--log=root.thres:critical \
-		3>&1 1>&2- 2>&3- ) | tail -1 ` 
+for infra in $infras; do
+	exectime=`( command time -f '%e' java -cp /usr/local/java/simgrid.jar:../../bin/schiaas.jar:../../bin/allmasterslave.jar \
+			allmasterslave.Masterslave \
+			platform.xml deploy.xml cloud.xml $infra \
+			--log=root.thres:critical \
+			3>&1 1>&2- 2>&3- ) | tail -1 ` 
 	
-exectimeV=`( command time -f '%e' java -cp /usr/local/java/simgrid.jar:../bin/schiaas.jar:../bin/cloudmasterslave.jar \
-		cloudmasterslave.Masterslave \
-		platform.xml deploy.xml cloud.xml VM \
-		--log=root.thres:critical \
-		3>&1 1>&2- 2>&3- ) | tail -1 ` 
+	echo -en "\t$exectime "
+done
 
-exectimeH=`( command time -f '%e' java -cp /usr/local/java/simgrid.jar:../bin/schiaas.jar:../bin/cloudmasterslave.jar \
-		cloudmasterslave.Masterslave \
-		platform.xml deploy.xml cloud.xml HOST \
-		--log=root.thres:critical \
-		3>&1 1>&2- 2>&3- ) | tail -1 ` 
-echo -e "$nhost \t$ncore \t$ntotalcore \t$nvm \t$exectimeC \t$exectimeV \t$exectimeH"
+echo
 
 		done
 	done
