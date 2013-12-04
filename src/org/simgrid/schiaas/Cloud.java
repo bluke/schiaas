@@ -6,12 +6,9 @@ import java.util.Map;
 
 import org.simgrid.msg.HostFailureException;
 import org.simgrid.msg.Msg;
-import org.simgrid.schiaas.billing.ComputeBilling;
-import org.simgrid.schiaas.billing.NetworkBilling;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.simgrid.schiaas.billing.StorageBilling;
 
 /**
  * This class encapsulates all services provided by a particular instance of a
@@ -31,10 +28,6 @@ public class Cloud {
 	/** Network As a Service */
 	protected Network network;
 
-	/** stores the policies for the billing of network traffic on this cloud */
-	protected NetworkBilling netBilling = new NetworkBilling();
-
-
 	
 	/**
 	 * Unique constructor from an XML node
@@ -53,8 +46,6 @@ public class Cloud {
 
 		this.id = cloudXMLNode.getAttributes().getNamedItem("id")
 				.getNodeValue();
-
-		this.netBilling = new NetworkBilling();		
 
 		Msg.debug("Cloud initialization: " + id);
 
@@ -201,15 +192,7 @@ public class Cloud {
 	public Network getNetwork() {
 		return this.network;
 	}
-	
-	/**
-	 * 
-	 * @return a list of policies for the network traffic billing
-	 */
-	public NetworkBilling getNetworkBillingPolicies() {
-		return this.netBilling;
-	}
-	
+		
 	/**
 	 * Terminate the cloud, by terminating all of its components
 	 * 

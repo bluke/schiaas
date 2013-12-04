@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.simgrid.msg.Msg;
-import org.simgrid.schiaas.billing.ComputeBilling;
 import org.w3c.dom.Node;
 
 /**
@@ -19,11 +18,6 @@ public class InstanceType {
 	 */
 	protected Map<String, String> properties;
 	
-	/**
-	 * The billing prices associated to this instance type
-	 */
-	protected ComputeBilling billing;
-
 	/**
 	 * Unique constructor from XML config file, setting default values.
 	 * 
@@ -51,21 +45,6 @@ public class InstanceType {
 					.getNodeName(), instanceTypeXMLNode.getAttributes().item(i)
 					.getNodeValue());
 		}
-	}
-
-	/**
-	 * Sets the billing information (prices) for this instance type 
-	 * @param cb
-	 */
-	public void setBillingInfo(ComputeBilling cb) {
-		this.billing = cb;
-	}
-	
-	/**
-	 * @return the billing information (prices) for this instance type
-	 */
-	public ComputeBilling getBillingInfo() {
-		return this.billing;
 	}
 	
 	/**
