@@ -1,7 +1,6 @@
 package org.simgrid.schiaas;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,7 +8,6 @@ import org.simgrid.msg.HostFailureException;
 import org.simgrid.msg.Msg;
 import org.simgrid.msg.TimeoutException;
 import org.simgrid.msg.TransferFailureException;
-import org.simgrid.schiaas.engine.ComputeEngine;
 import org.simgrid.schiaas.engine.StorageEngine;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;

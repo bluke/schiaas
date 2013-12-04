@@ -3,7 +3,6 @@ package org.simgrid.schiaas;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.simgrid.msg.Msg;
 import org.w3c.dom.Node;
 
 /**

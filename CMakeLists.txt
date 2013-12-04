@@ -38,7 +38,7 @@ COMMENT "Generating API documentation with Doxygen" VERBATIM
 )
 endif(DOXYGEN_FOUND)
 
-set(MSG_JAVADOC_URL "http://simgrid.gforge.inria.fr/simgrid-java/3.9.0/doc/javadoc/")
+set(MSG_JAVADOC_URL "http://simgrid.gforge.inria.fr/simgrid/3.11/doc/javadoc/index.html")
 
 set(DOC_INSTALL_PATH "${PROJECT_SOURCE_DIR}/doc/html/javadoc")
 
@@ -48,7 +48,7 @@ COMMAND ${Java_JAVADOC_EXECUTABLE}
 -sourcepath ${PROJECT_SOURCE_DIR}/src
 -d ${DOC_INSTALL_PATH}/schiaas
 -subpackages org
--link ${MSG_JAVADOC_URL}
+-link http://simgrid.gforge.inria.fr/simgrid/3.11/doc/javadoc/
 -doctitle "<h1>SchIaaS</h1>"
 -windowtitle "SchIaaS"
 -use

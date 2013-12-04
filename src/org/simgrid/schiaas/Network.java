@@ -1,9 +1,6 @@
 package org.simgrid.schiaas;
 
-import org.simgrid.msg.HostFailureException;
-import org.simgrid.msg.Task;
-import org.simgrid.msg.TimeoutException;
-import org.simgrid.msg.TransferFailureException;
+
 import org.w3c.dom.Node;
 
 //TODO implement functionality and add XML structure in cloud file

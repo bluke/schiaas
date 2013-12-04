@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.simgrid.msg.HostFailureException;
+
 import org.simgrid.msg.Msg;
-import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
