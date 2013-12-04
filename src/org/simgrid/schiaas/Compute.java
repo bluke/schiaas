@@ -30,9 +30,6 @@ import org.w3c.dom.NodeList;
  */
 public class Compute {
 
-	/** ID of this */
-	protected String id;
-
 	/** cloud using this */
 	protected Cloud cloud;
 
@@ -155,7 +152,7 @@ public class Compute {
 	 * @return the id of this
 	 */
 	public String getId() {
-		return this.id;
+		return this.cloud.id+"-ComputeEngine";
 	}
 
 	/**

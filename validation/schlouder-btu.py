@@ -82,7 +82,7 @@ if __name__ == '__main__':
 
 		iv = 0
 		for vm in results:
-			(start_date, predicted_boot_time, boot_time, stop_date) = (d2p(int(vm['start_date'])), t2p(int(vm['predicted_boot_time'])), t2p(int(vm['boot_time'])), d2p(int(vm['stop_date'])))
+			(start_date, boot_time_prediction, boot_time, stop_date) = (d2p(int(vm['start_date'])), t2p(int(vm['boot_time_prediction'])), t2p(int(vm['boot_time'])), d2p(int(vm['stop_date'])))
 
 			#Not accurate
 			if (stop_date == d2p(0)):
@@ -112,22 +112,22 @@ if __name__ == '__main__':
 			for job in jobs:
 
 				#stat
-				if (makespan<job['start_date']+job['real_duration']) :
-					makespan=job['start_date']+job['real_duration']
+				if (makespan<job['start_date']+job['walltime']) :
+					makespan=job['start_date']+job['walltime']
 
 				#conversion to points
-				(jreal_duration,jduration,jstart_date,jid,jsubmission_date) = (t2p(job['real_duration']), t2p(job['duration']), d2p(job['start_date']), job['id'], d2p(job['submission_date']))
+				(jwalltime,jwalltime_prediction,jstart_date,jid,jsubmission_date) = (t2p(job['walltime']), t2p(job['walltime_prediction']), d2p(job['start_date']), job['id'], d2p(job['submission_date']))
 				fp.write("%%%% JOB {0}\n".format(jid))
 
 
 				# real job
 				fp.write("\\filldraw[draw=black,fill=cyan, very thin] ({0},{1}) rectangle ({2},{3});\n"
-				.format(jstart_date,dY+jobM,jstart_date+jreal_duration,dY+btuH-jobM))
+				.format(jstart_date,dY+jobM,jstart_date+jwalltime,dY+btuH-jobM))
 
 
 
 			for job in jobs:
-				(jreal_duration,jduration,jstart_date,jid,jsubmission_date) = (t2p(job['real_duration']), t2p(job['duration']), d2p(job['start_date']), job['id'], d2p(job['submission_date']))
+				(jwalltime,jwalltime_prediction,jstart_date,jid,jsubmission_date) = (t2p(job['walltime']), t2p(job['walltime_prediction']), d2p(job['start_date']), job['id'], d2p(job['submission_date']))
 
 				# sub date
 				# nicer, but more limited 
@@ -137,15 +137,15 @@ if __name__ == '__main__':
 
 
 			for job in jobs:
-				(jreal_duration,jduration,jstart_date,jid,jsubmission_date) = (t2p(job['real_duration']), t2p(job['duration']), d2p(job['start_date']), job['id'], d2p(job['submission_date']))				
+				(jwalltime,jwalltime_prediction,jstart_date,jid,jsubmission_date) = (t2p(job['walltime']), t2p(job['walltime_prediction']), d2p(job['start_date']), job['id'], d2p(job['submission_date']))				
 
-				# forecasted duration
+				# forecasted walltime_prediction
 				fp.write("\\filldraw[draw=black,fill=green,very thin] ({0},{1}) rectangle ({2},{3});\n"
-				.format(jstart_date+jreal_duration,dY+jobM,jstart_date+jduration,dY+btuH/2.0))
+				.format(jstart_date+jwalltime,dY+jobM,jstart_date+jwalltime_prediction,dY+btuH/2.0))
 			iv+=1
 
 			fp.write("\\filldraw[draw=black,fill=yellow,very thin] ({0},{1}) rectangle ({2},{3});\n"
-			.format(start_date+predicted_boot_time,dY,start_date+boot_time,dY+btuH/2))
+			.format(start_date+boot_time_prediction,dY,start_date+boot_time,dY+btuH/2))
 		#fp.write("\\end{tikzpicture}")
 
 		

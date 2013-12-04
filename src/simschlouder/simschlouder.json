@@ -10,7 +10,7 @@
 		"start_date": 0.0,
 		"stop_date": 3580.0,
 		"boot_time": 20.0,
-		"predicted_boot_time": 20.0,
+		"boot_time_prediction": 20.0,
 		"instance_type": "standard",
 		"scheduling_strategy": "ASAP",
 		"jobs": [
@@ -18,15 +18,15 @@
 				"id": "9105",
 				"submission_date": 0.0,
 				"start_date": 20.003921041237113,
-				"real_duration": 98.80391202061855,
-				"duration": 104.0
+				"walltime": 98.80391202061855,
+				"walltime_prediction": 104.0
 			},
 			{
 				"id": "9123",
 				"submission_date": 0.0,
 				"start_date": 118.81174508247423,
-				"real_duration": 185.25391202061863,
-				"duration": 195.0
+				"walltime": 185.25391202061863,
+				"walltime_prediction": 195.0
 			}
 		]
 		},
@@ -36,7 +36,7 @@
 		"start_date": 0.0,
 		"stop_date": 3580.0,
 		"boot_time": 10.0,
-		"predicted_boot_time": 10.0,
+		"boot_time_prediction": 10.0,
 		"instance_type": "standard",
 		"scheduling_strategy": "ASAP",
 		"jobs": [
@@ -44,15 +44,15 @@
 				"id": "9106",
 				"submission_date": 0.0,
 				"start_date": 10.003921041237113,
-				"real_duration": 185.25391202061863,
-				"duration": 195.0
+				"walltime": 185.25391202061863,
+				"walltime_prediction": 195.0
 			},
 			{
 				"id": "9147",
 				"submission_date": 0.0,
 				"start_date": 195.2617450824743,
-				"real_duration": 95.95391202061847,
-				"duration": 101.0
+				"walltime": 95.95391202061847,
+				"walltime_prediction": 101.0
 			}
 		]
 		},
@@ -62,7 +62,7 @@
 		"start_date": 0.0,
 		"stop_date": 3580.0,
 		"boot_time": 240.0,
-		"predicted_boot_time": 240.0,
+		"boot_time_prediction": 240.0,
 		"instance_type": "standard",
 		"scheduling_strategy": "ASAP",
 		"jobs": [
@@ -70,22 +70,22 @@
 				"id": "9107",
 				"submission_date": 0.0,
 				"start_date": 240.00391202061857,
-				"real_duration": 91.2039120206185,
-				"duration": 96.0
+				"walltime": 91.2039120206185,
+				"walltime_prediction": 96.0
 			},
 			{
 				"id": "9124",
 				"submission_date": 0.0,
 				"start_date": 331.2117360618556,
-				"real_duration": 127.30391202061867,
-				"duration": 134.0
+				"walltime": 127.30391202061867,
+				"walltime_prediction": 134.0
 			},
 			{
 				"id": "9160",
 				"submission_date": 0.0,
 				"start_date": 458.51956010309283,
-				"real_duration": 64.60391202061857,
-				"duration": 68.0
+				"walltime": 64.60391202061857,
+				"walltime_prediction": 68.0
 			}
 		]
 		},
@@ -95,7 +95,7 @@
 		"start_date": 0.0,
 		"stop_date": 3580.0,
 		"boot_time": 230.0,
-		"predicted_boot_time": 230.0,
+		"boot_time_prediction": 230.0,
 		"instance_type": "standard",
 		"scheduling_strategy": "ASAP",
 		"jobs": [
@@ -103,15 +103,15 @@
 				"id": "9108",
 				"submission_date": 0.0,
 				"start_date": 230.00391202061857,
-				"real_duration": 185.25391202061874,
-				"duration": 195.0
+				"walltime": 185.25391202061874,
+				"walltime_prediction": 195.0
 			},
 			{
 				"id": "9150",
 				"submission_date": 0.0,
 				"start_date": 415.26173606185586,
-				"real_duration": 88.35391202061857,
-				"duration": 93.0
+				"walltime": 88.35391202061857,
+				"walltime_prediction": 93.0
 			}
 		]
 		},
@@ -121,7 +121,7 @@
 		"start_date": 0.0,
 		"stop_date": 3580.0,
 		"boot_time": 220.0,
-		"predicted_boot_time": 220.0,
+		"boot_time_prediction": 220.0,
 		"instance_type": "standard",
 		"scheduling_strategy": "ASAP",
 		"jobs": [
@@ -129,15 +129,15 @@
 				"id": "9109",
 				"submission_date": 0.0,
 				"start_date": 220.00392104123713,
-				"real_duration": 185.25392104123736,
-				"duration": 195.0
+				"walltime": 185.25392104123736,
+				"walltime_prediction": 195.0
 			},
 			{
 				"id": "9152",
 				"submission_date": 0.0,
 				"start_date": 405.26175410309304,
-				"real_duration": 185.2539120206187,
-				"duration": 195.0
+				"walltime": 185.2539120206187,
+				"walltime_prediction": 195.0
 			}
 		]
 		},
@@ -147,7 +147,7 @@
 		"start_date": 0.0,
 		"stop_date": 3580.0,
 		"boot_time": 210.0,
-		"predicted_boot_time": 210.0,
+		"boot_time_prediction": 210.0,
 		"instance_type": "standard",
 		"scheduling_strategy": "ASAP",
 		"jobs": [
@@ -155,15 +155,15 @@
 				"id": "9110",
 				"submission_date": 0.0,
 				"start_date": 210.00392104123713,
-				"real_duration": 185.2539120206189,
-				"duration": 195.0
+				"walltime": 185.2539120206189,
+				"walltime_prediction": 195.0
 			},
 			{
 				"id": "9154",
 				"submission_date": 0.0,
 				"start_date": 395.2617450824746,
-				"real_duration": 185.2539120206187,
-				"duration": 195.0
+				"walltime": 185.2539120206187,
+				"walltime_prediction": 195.0
 			}
 		]
 		},
@@ -173,7 +173,7 @@
 		"start_date": 0.0,
 		"stop_date": 3580.0,
 		"boot_time": 200.0,
-		"predicted_boot_time": 200.0,
+		"boot_time_prediction": 200.0,
 		"instance_type": "standard",
 		"scheduling_strategy": "ASAP",
 		"jobs": [
@@ -181,15 +181,15 @@
 				"id": "9111",
 				"submission_date": 0.0,
 				"start_date": 200.00392104123713,
-				"real_duration": 185.25391202061897,
-				"duration": 195.0
+				"walltime": 185.25391202061897,
+				"walltime_prediction": 195.0
 			},
 			{
 				"id": "9156",
 				"submission_date": 0.0,
 				"start_date": 385.26174508247465,
-				"real_duration": 78.85391202061857,
-				"duration": 83.0
+				"walltime": 78.85391202061857,
+				"walltime_prediction": 83.0
 			}
 		]
 		},
@@ -199,7 +199,7 @@
 		"start_date": 0.0,
 		"stop_date": 3580.0,
 		"boot_time": 190.0,
-		"predicted_boot_time": 190.0,
+		"boot_time_prediction": 190.0,
 		"instance_type": "standard",
 		"scheduling_strategy": "ASAP",
 		"jobs": [
@@ -207,15 +207,15 @@
 				"id": "9112",
 				"submission_date": 0.0,
 				"start_date": 190.00392104123713,
-				"real_duration": 98.80391202061853,
-				"duration": 104.0
+				"walltime": 98.80391202061853,
+				"walltime_prediction": 104.0
 			},
 			{
 				"id": "9134",
 				"submission_date": 0.0,
 				"start_date": 288.8117450824742,
-				"real_duration": 147.25391202061866,
-				"duration": 155.0
+				"walltime": 147.25391202061866,
+				"walltime_prediction": 155.0
 			}
 		]
 		},
@@ -225,7 +225,7 @@
 		"start_date": 0.0,
 		"stop_date": 3580.0,
 		"boot_time": 180.0,
-		"predicted_boot_time": 180.0,
+		"boot_time_prediction": 180.0,
 		"instance_type": "standard",
 		"scheduling_strategy": "ASAP",
 		"jobs": [
@@ -233,15 +233,15 @@
 				"id": "9113",
 				"submission_date": 0.0,
 				"start_date": 180.00392104123713,
-				"real_duration": 62.70391202061859,
-				"duration": 66.0
+				"walltime": 62.70391202061859,
+				"walltime_prediction": 66.0
 			},
 			{
 				"id": "9126",
 				"submission_date": 0.0,
 				"start_date": 242.7117450824743,
-				"real_duration": 185.2539120206187,
-				"duration": 195.0
+				"walltime": 185.2539120206187,
+				"walltime_prediction": 195.0
 			}
 		]
 		},
@@ -251,7 +251,7 @@
 		"start_date": 0.0,
 		"stop_date": 3580.0,
 		"boot_time": 170.0,
-		"predicted_boot_time": 170.0,
+		"boot_time_prediction": 170.0,
 		"instance_type": "standard",
 		"scheduling_strategy": "ASAP",
 		"jobs": [
@@ -259,15 +259,15 @@
 				"id": "9114",
 				"submission_date": 0.0,
 				"start_date": 170.00392104123713,
-				"real_duration": 185.25392104123753,
-				"duration": 195.0
+				"walltime": 185.25392104123753,
+				"walltime_prediction": 195.0
 			},
 			{
 				"id": "9163",
 				"submission_date": 0.0,
 				"start_date": 355.2617541030932,
-				"real_duration": 98.80391202061855,
-				"duration": 104.0
+				"walltime": 98.80391202061855,
+				"walltime_prediction": 104.0
 			}
 		]
 		},
@@ -277,7 +277,7 @@
 		"start_date": 0.0,
 		"stop_date": 3580.0,
 		"boot_time": 160.0,
-		"predicted_boot_time": 160.0,
+		"boot_time_prediction": 160.0,
 		"instance_type": "standard",
 		"scheduling_strategy": "ASAP",
 		"jobs": [
@@ -285,15 +285,15 @@
 				"id": "9115",
 				"submission_date": 0.0,
 				"start_date": 160.00392104123713,
-				"real_duration": 185.25392104123753,
-				"duration": 195.0
+				"walltime": 185.25392104123753,
+				"walltime_prediction": 195.0
 			},
 			{
 				"id": "9165",
 				"submission_date": 0.0,
 				"start_date": 345.2617541030932,
-				"real_duration": 185.25391202061877,
-				"duration": 195.0
+				"walltime": 185.25391202061877,
+				"walltime_prediction": 195.0
 			}
 		]
 		},
@@ -303,7 +303,7 @@
 		"start_date": 0.0,
 		"stop_date": 3580.0,
 		"boot_time": 150.0,
-		"predicted_boot_time": 150.0,
+		"boot_time_prediction": 150.0,
 		"instance_type": "standard",
 		"scheduling_strategy": "ASAP",
 		"jobs": [
@@ -311,15 +311,15 @@
 				"id": "9116",
 				"submission_date": 0.0,
 				"start_date": 150.00392104123713,
-				"real_duration": 65.55391202061861,
-				"duration": 69.0
+				"walltime": 65.55391202061861,
+				"walltime_prediction": 69.0
 			},
 			{
 				"id": "9131",
 				"submission_date": 0.0,
 				"start_date": 215.56174508247432,
-				"real_duration": 138.70391202061876,
-				"duration": 146.0
+				"walltime": 138.70391202061876,
+				"walltime_prediction": 146.0
 			}
 		]
 		},
@@ -329,7 +329,7 @@
 		"start_date": 0.0,
 		"stop_date": 3580.0,
 		"boot_time": 140.0,
-		"predicted_boot_time": 140.0,
+		"boot_time_prediction": 140.0,
 		"instance_type": "standard",
 		"scheduling_strategy": "ASAP",
 		"jobs": [
@@ -337,15 +337,15 @@
 				"id": "9117",
 				"submission_date": 0.0,
 				"start_date": 140.00392104123713,
-				"real_duration": 82.65391202061855,
-				"duration": 87.0
+				"walltime": 82.65391202061855,
+				"walltime_prediction": 87.0
 			},
 			{
 				"id": "9137",
 				"submission_date": 0.0,
 				"start_date": 222.66174508247425,
-				"real_duration": 136.8039120206187,
-				"duration": 144.0
+				"walltime": 136.8039120206187,
+				"walltime_prediction": 144.0
 			}
 		]
 		},
@@ -355,7 +355,7 @@
 		"start_date": 0.0,
 		"stop_date": 3580.0,
 		"boot_time": 130.0,
-		"predicted_boot_time": 130.0,
+		"boot_time_prediction": 130.0,
 		"instance_type": "standard",
 		"scheduling_strategy": "ASAP",
 		"jobs": [
@@ -363,15 +363,15 @@
 				"id": "9118",
 				"submission_date": 0.0,
 				"start_date": 130.00392104123713,
-				"real_duration": 96.90391202061858,
-				"duration": 102.0
+				"walltime": 96.90391202061858,
+				"walltime_prediction": 102.0
 			},
 			{
 				"id": "9141",
 				"submission_date": 0.0,
 				"start_date": 226.91174508247428,
-				"real_duration": 126.35391202061868,
-				"duration": 133.0
+				"walltime": 126.35391202061868,
+				"walltime_prediction": 133.0
 			}
 		]
 		},
@@ -381,7 +381,7 @@
 		"start_date": 0.0,
 		"stop_date": 3580.0,
 		"boot_time": 120.0,
-		"predicted_boot_time": 120.0,
+		"boot_time_prediction": 120.0,
 		"instance_type": "standard",
 		"scheduling_strategy": "ASAP",
 		"jobs": [
@@ -389,15 +389,15 @@
 				"id": "9119",
 				"submission_date": 0.0,
 				"start_date": 120.0039210412371,
-				"real_duration": 93.10391202061865,
-				"duration": 98.0
+				"walltime": 93.10391202061865,
+				"walltime_prediction": 98.0
 			},
 			{
 				"id": "9143",
 				"submission_date": 0.0,
 				"start_date": 213.11174508247433,
-				"real_duration": 96.90391202061846,
-				"duration": 102.0
+				"walltime": 96.90391202061846,
+				"walltime_prediction": 102.0
 			}
 		]
 		},
@@ -407,7 +407,7 @@
 		"start_date": 0.0,
 		"stop_date": 3580.0,
 		"boot_time": 110.0,
-		"predicted_boot_time": 110.0,
+		"boot_time_prediction": 110.0,
 		"instance_type": "standard",
 		"scheduling_strategy": "ASAP",
 		"jobs": [
@@ -415,8 +415,8 @@
 				"id": "9120",
 				"submission_date": 0.0,
 				"start_date": 110.0039210412371,
-				"real_duration": 185.25392104123722,
-				"duration": 195.0
+				"walltime": 185.25392104123722,
+				"walltime_prediction": 195.0
 			}
 		]
 		},
@@ -426,7 +426,7 @@
 		"start_date": 0.0,
 		"stop_date": 3580.0,
 		"boot_time": 100.0,
-		"predicted_boot_time": 100.0,
+		"boot_time_prediction": 100.0,
 		"instance_type": "standard",
 		"scheduling_strategy": "ASAP",
 		"jobs": [
@@ -434,8 +434,8 @@
 				"id": "9121",
 				"submission_date": 0.0,
 				"start_date": 100.0039210412371,
-				"real_duration": 185.25391202061866,
-				"duration": 195.0
+				"walltime": 185.25391202061866,
+				"walltime_prediction": 195.0
 			}
 		]
 		},
@@ -445,7 +445,7 @@
 		"start_date": 0.0,
 		"stop_date": 3580.0,
 		"boot_time": 90.0,
-		"predicted_boot_time": 90.0,
+		"boot_time_prediction": 90.0,
 		"instance_type": "standard",
 		"scheduling_strategy": "ASAP",
 		"jobs": [
@@ -453,8 +453,8 @@
 				"id": "9122",
 				"submission_date": 0.0,
 				"start_date": 90.0039210412371,
-				"real_duration": 185.25391202061866,
-				"duration": 195.0
+				"walltime": 185.25391202061866,
+				"walltime_prediction": 195.0
 			}
 		]
 		},
@@ -464,7 +464,7 @@
 		"start_date": 0.0,
 		"stop_date": 3580.0,
 		"boot_time": 80.0,
-		"predicted_boot_time": 80.0,
+		"boot_time_prediction": 80.0,
 		"instance_type": "standard",
 		"scheduling_strategy": "ASAP",
 		"jobs": [
@@ -472,15 +472,15 @@
 				"id": "9125",
 				"submission_date": 0.0,
 				"start_date": 80.0039210412371,
-				"real_duration": 137.75391202061866,
-				"duration": 145.0
+				"walltime": 137.75391202061866,
+				"walltime_prediction": 145.0
 			},
 			{
 				"id": "9166",
 				"submission_date": 0.0,
 				"start_date": 217.76174508247433,
-				"real_duration": 185.2539120206188,
-				"duration": 195.0
+				"walltime": 185.2539120206188,
+				"walltime_prediction": 195.0
 			}
 		]
 		},
@@ -490,7 +490,7 @@
 		"start_date": 0.0,
 		"stop_date": 3580.0,
 		"boot_time": 70.0,
-		"predicted_boot_time": 70.0,
+		"boot_time_prediction": 70.0,
 		"instance_type": "standard",
 		"scheduling_strategy": "ASAP",
 		"jobs": [
@@ -498,8 +498,8 @@
 				"id": "9127",
 				"submission_date": 0.0,
 				"start_date": 70.0039210412371,
-				"real_duration": 185.25391202061866,
-				"duration": 195.0
+				"walltime": 185.25391202061866,
+				"walltime_prediction": 195.0
 			}
 		]
 		},
@@ -509,7 +509,7 @@
 		"start_date": 0.0,
 		"stop_date": 3580.0,
 		"boot_time": 60.0,
-		"predicted_boot_time": 60.0,
+		"boot_time_prediction": 60.0,
 		"instance_type": "standard",
 		"scheduling_strategy": "ASAP",
 		"jobs": [
@@ -517,15 +517,15 @@
 				"id": "9128",
 				"submission_date": 0.0,
 				"start_date": 60.00392104123711,
-				"real_duration": 114.00391202061857,
-				"duration": 120.0
+				"walltime": 114.00391202061857,
+				"walltime_prediction": 120.0
 			},
 			{
 				"id": "9158",
 				"submission_date": 0.0,
 				"start_date": 174.01174508247425,
-				"real_duration": 185.25391202061894,
-				"duration": 195.0
+				"walltime": 185.25391202061894,
+				"walltime_prediction": 195.0
 			}
 		]
 		},
@@ -535,7 +535,7 @@
 		"start_date": 0.0,
 		"stop_date": 3580.0,
 		"boot_time": 50.0,
-		"predicted_boot_time": 50.0,
+		"boot_time_prediction": 50.0,
 		"instance_type": "standard",
 		"scheduling_strategy": "ASAP",
 		"jobs": [
@@ -543,15 +543,15 @@
 				"id": "9129",
 				"submission_date": 0.0,
 				"start_date": 50.00392104123711,
-				"real_duration": 113.05391202061861,
-				"duration": 119.0
+				"walltime": 113.05391202061861,
+				"walltime_prediction": 119.0
 			},
 			{
 				"id": "9161",
 				"submission_date": 0.0,
 				"start_date": 163.0617450824743,
-				"real_duration": 185.25391202061897,
-				"duration": 195.0
+				"walltime": 185.25391202061897,
+				"walltime_prediction": 195.0
 			}
 		]
 		},
@@ -561,7 +561,7 @@
 		"start_date": 0.0,
 		"stop_date": 3580.0,
 		"boot_time": 40.0,
-		"predicted_boot_time": 40.0,
+		"boot_time_prediction": 40.0,
 		"instance_type": "standard",
 		"scheduling_strategy": "ASAP",
 		"jobs": [
@@ -569,8 +569,8 @@
 				"id": "9130",
 				"submission_date": 0.0,
 				"start_date": 40.00392104123711,
-				"real_duration": 185.25392104123716,
-				"duration": 195.0
+				"walltime": 185.25392104123716,
+				"walltime_prediction": 195.0
 			}
 		]
 		},
@@ -580,7 +580,7 @@
 		"start_date": 0.0,
 		"stop_date": 3580.0,
 		"boot_time": 30.0,
-		"predicted_boot_time": 30.0,
+		"boot_time_prediction": 30.0,
 		"instance_type": "standard",
 		"scheduling_strategy": "ASAP",
 		"jobs": [
@@ -588,8 +588,8 @@
 				"id": "9132",
 				"submission_date": 0.0,
 				"start_date": 30.003921041237113,
-				"real_duration": 185.2539210412372,
-				"duration": 195.0
+				"walltime": 185.2539210412372,
+				"walltime_prediction": 195.0
 			}
 		]
 		},
@@ -599,7 +599,7 @@
 		"start_date": 0.0,
 		"stop_date": 3580.0,
 		"boot_time": 220.0,
-		"predicted_boot_time": 220.0,
+		"boot_time_prediction": 220.0,
 		"instance_type": "standard",
 		"scheduling_strategy": "ASAP",
 		"jobs": [
@@ -607,8 +607,8 @@
 				"id": "9133",
 				"submission_date": 0.0,
 				"start_date": 220.00392104123713,
-				"real_duration": 185.25392104123736,
-				"duration": 195.0
+				"walltime": 185.25392104123736,
+				"walltime_prediction": 195.0
 			}
 		]
 		},
@@ -618,7 +618,7 @@
 		"start_date": 0.0,
 		"stop_date": 3580.0,
 		"boot_time": 210.0,
-		"predicted_boot_time": 210.0,
+		"boot_time_prediction": 210.0,
 		"instance_type": "standard",
 		"scheduling_strategy": "ASAP",
 		"jobs": [
@@ -626,8 +626,8 @@
 				"id": "9135",
 				"submission_date": 0.0,
 				"start_date": 210.00392104123713,
-				"real_duration": 124.45391202061867,
-				"duration": 131.0
+				"walltime": 124.45391202061867,
+				"walltime_prediction": 131.0
 			}
 		]
 		},
@@ -637,7 +637,7 @@
 		"start_date": 0.0,
 		"stop_date": 3580.0,
 		"boot_time": 200.0,
-		"predicted_boot_time": 200.0,
+		"boot_time_prediction": 200.0,
 		"instance_type": "standard",
 		"scheduling_strategy": "ASAP",
 		"jobs": [
@@ -645,8 +645,8 @@
 				"id": "9136",
 				"submission_date": 0.0,
 				"start_date": 200.00392104123713,
-				"real_duration": 111.15391202061849,
-				"duration": 117.0
+				"walltime": 111.15391202061849,
+				"walltime_prediction": 117.0
 			}
 		]
 		},
@@ -656,7 +656,7 @@
 		"start_date": 0.0,
 		"stop_date": 3580.0,
 		"boot_time": 190.0,
-		"predicted_boot_time": 190.0,
+		"boot_time_prediction": 190.0,
 		"instance_type": "standard",
 		"scheduling_strategy": "ASAP",
 		"jobs": [
@@ -664,8 +664,8 @@
 				"id": "9138",
 				"submission_date": 0.0,
 				"start_date": 190.00392104123713,
-				"real_duration": 185.25391202061903,
-				"duration": 195.0
+				"walltime": 185.25391202061903,
+				"walltime_prediction": 195.0
 			}
 		]
 		},
@@ -675,7 +675,7 @@
 		"start_date": 0.0,
 		"stop_date": 3580.0,
 		"boot_time": 180.0,
-		"predicted_boot_time": 180.0,
+		"boot_time_prediction": 180.0,
 		"instance_type": "standard",
 		"scheduling_strategy": "ASAP",
 		"jobs": [
@@ -683,8 +683,8 @@
 				"id": "9139",
 				"submission_date": 0.0,
 				"start_date": 180.00392104123713,
-				"real_duration": 146.3039120206187,
-				"duration": 154.0
+				"walltime": 146.3039120206187,
+				"walltime_prediction": 154.0
 			}
 		]
 		},
@@ -694,7 +694,7 @@
 		"start_date": 0.0,
 		"stop_date": 3580.0,
 		"boot_time": 170.0,
-		"predicted_boot_time": 170.0,
+		"boot_time_prediction": 170.0,
 		"instance_type": "standard",
 		"scheduling_strategy": "ASAP",
 		"jobs": [
@@ -702,8 +702,8 @@
 				"id": "9140",
 				"submission_date": 0.0,
 				"start_date": 170.00392104123713,
-				"real_duration": 185.25392104123753,
-				"duration": 195.0
+				"walltime": 185.25392104123753,
+				"walltime_prediction": 195.0
 			}
 		]
 		},
@@ -713,7 +713,7 @@
 		"start_date": 0.0,
 		"stop_date": 3580.0,
 		"boot_time": 160.0,
-		"predicted_boot_time": 160.0,
+		"boot_time_prediction": 160.0,
 		"instance_type": "standard",
 		"scheduling_strategy": "ASAP",
 		"jobs": [
@@ -721,8 +721,8 @@
 				"id": "9142",
 				"submission_date": 0.0,
 				"start_date": 160.00392104123713,
-				"real_duration": 185.25392104123753,
-				"duration": 195.0
+				"walltime": 185.25392104123753,
+				"walltime_prediction": 195.0
 			}
 		]
 		},
@@ -732,7 +732,7 @@
 		"start_date": 0.0,
 		"stop_date": 3580.0,
 		"boot_time": 150.0,
-		"predicted_boot_time": 150.0,
+		"boot_time_prediction": 150.0,
 		"instance_type": "standard",
 		"scheduling_strategy": "ASAP",
 		"jobs": [
@@ -740,8 +740,8 @@
 				"id": "9144",
 				"submission_date": 0.0,
 				"start_date": 150.00392104123713,
-				"real_duration": 185.2539120206189,
-				"duration": 195.0
+				"walltime": 185.2539120206189,
+				"walltime_prediction": 195.0
 			}
 		]
 		},
@@ -751,7 +751,7 @@
 		"start_date": 0.0,
 		"stop_date": 3580.0,
 		"boot_time": 140.0,
-		"predicted_boot_time": 140.0,
+		"boot_time_prediction": 140.0,
 		"instance_type": "standard",
 		"scheduling_strategy": "ASAP",
 		"jobs": [
@@ -759,8 +759,8 @@
 				"id": "9145",
 				"submission_date": 0.0,
 				"start_date": 140.00392104123713,
-				"real_duration": 116.8539120206186,
-				"duration": 123.0
+				"walltime": 116.8539120206186,
+				"walltime_prediction": 123.0
 			}
 		]
 		},
@@ -770,7 +770,7 @@
 		"start_date": 0.0,
 		"stop_date": 3580.0,
 		"boot_time": 130.0,
-		"predicted_boot_time": 130.0,
+		"boot_time_prediction": 130.0,
 		"instance_type": "standard",
 		"scheduling_strategy": "ASAP",
 		"jobs": [
@@ -778,8 +778,8 @@
 				"id": "9146",
 				"submission_date": 0.0,
 				"start_date": 130.00392104123713,
-				"real_duration": 185.25391202061869,
-				"duration": 195.0
+				"walltime": 185.25391202061869,
+				"walltime_prediction": 195.0
 			}
 		]
 		},
@@ -789,7 +789,7 @@
 		"start_date": 0.0,
 		"stop_date": 3580.0,
 		"boot_time": 120.0,
-		"predicted_boot_time": 120.0,
+		"boot_time_prediction": 120.0,
 		"instance_type": "standard",
 		"scheduling_strategy": "ASAP",
 		"jobs": [
@@ -797,8 +797,8 @@
 				"id": "9148",
 				"submission_date": 0.0,
 				"start_date": 120.0039210412371,
-				"real_duration": 114.00391202061857,
-				"duration": 120.0
+				"walltime": 114.00391202061857,
+				"walltime_prediction": 120.0
 			}
 		]
 		},
@@ -808,7 +808,7 @@
 		"start_date": 0.0,
 		"stop_date": 3580.0,
 		"boot_time": 110.0,
-		"predicted_boot_time": 110.0,
+		"boot_time_prediction": 110.0,
 		"instance_type": "standard",
 		"scheduling_strategy": "ASAP",
 		"jobs": [
@@ -816,8 +816,8 @@
 				"id": "9149",
 				"submission_date": 0.0,
 				"start_date": 110.0039210412371,
-				"real_duration": 185.25392104123722,
-				"duration": 195.0
+				"walltime": 185.25392104123722,
+				"walltime_prediction": 195.0
 			}
 		]
 		},
@@ -827,7 +827,7 @@
 		"start_date": 0.0,
 		"stop_date": 3580.0,
 		"boot_time": 100.0,
-		"predicted_boot_time": 100.0,
+		"boot_time_prediction": 100.0,
 		"instance_type": "standard",
 		"scheduling_strategy": "ASAP",
 		"jobs": [
@@ -835,8 +835,8 @@
 				"id": "9151",
 				"submission_date": 0.0,
 				"start_date": 100.0039210412371,
-				"real_duration": 109.25391202061863,
-				"duration": 115.0
+				"walltime": 109.25391202061863,
+				"walltime_prediction": 115.0
 			}
 		]
 		},
@@ -846,7 +846,7 @@
 		"start_date": 0.0,
 		"stop_date": 3580.0,
 		"boot_time": 90.0,
-		"predicted_boot_time": 90.0,
+		"boot_time_prediction": 90.0,
 		"instance_type": "standard",
 		"scheduling_strategy": "ASAP",
 		"jobs": [
@@ -854,8 +854,8 @@
 				"id": "9153",
 				"submission_date": 0.0,
 				"start_date": 90.0039210412371,
-				"real_duration": 109.2539120206186,
-				"duration": 115.0
+				"walltime": 109.2539120206186,
+				"walltime_prediction": 115.0
 			}
 		]
 		},
@@ -865,7 +865,7 @@
 		"start_date": 0.0,
 		"stop_date": 3580.0,
 		"boot_time": 80.0,
-		"predicted_boot_time": 80.0,
+		"boot_time_prediction": 80.0,
 		"instance_type": "standard",
 		"scheduling_strategy": "ASAP",
 		"jobs": [
@@ -873,8 +873,8 @@
 				"id": "9155",
 				"submission_date": 0.0,
 				"start_date": 80.0039210412371,
-				"real_duration": 83.6039120206186,
-				"duration": 88.0
+				"walltime": 83.6039120206186,
+				"walltime_prediction": 88.0
 			}
 		]
 		},
@@ -884,7 +884,7 @@
 		"start_date": 0.0,
 		"stop_date": 3580.0,
 		"boot_time": 70.0,
-		"predicted_boot_time": 70.0,
+		"boot_time_prediction": 70.0,
 		"instance_type": "standard",
 		"scheduling_strategy": "ASAP",
 		"jobs": [
@@ -892,8 +892,8 @@
 				"id": "9157",
 				"submission_date": 0.0,
 				"start_date": 70.0039210412371,
-				"real_duration": 94.05391202061861,
-				"duration": 99.0
+				"walltime": 94.05391202061861,
+				"walltime_prediction": 99.0
 			}
 		]
 		},
@@ -903,7 +903,7 @@
 		"start_date": 0.0,
 		"stop_date": 3580.0,
 		"boot_time": 60.0,
-		"predicted_boot_time": 60.0,
+		"boot_time_prediction": 60.0,
 		"instance_type": "standard",
 		"scheduling_strategy": "ASAP",
 		"jobs": [
@@ -911,8 +911,8 @@
 				"id": "9159",
 				"submission_date": 0.0,
 				"start_date": 60.00392104123711,
-				"real_duration": 55.10391202061857,
-				"duration": 58.0
+				"walltime": 55.10391202061857,
+				"walltime_prediction": 58.0
 			}
 		]
 		},
@@ -922,7 +922,7 @@
 		"start_date": 0.0,
 		"stop_date": 3580.0,
 		"boot_time": 50.0,
-		"predicted_boot_time": 50.0,
+		"boot_time_prediction": 50.0,
 		"instance_type": "standard",
 		"scheduling_strategy": "ASAP",
 		"jobs": [
@@ -930,8 +930,8 @@
 				"id": "9162",
 				"submission_date": 0.0,
 				"start_date": 50.00392104123711,
-				"real_duration": 49.40391202061857,
-				"duration": 52.0
+				"walltime": 49.40391202061857,
+				"walltime_prediction": 52.0
 			}
 		]
 		},
@@ -941,7 +941,7 @@
 		"start_date": 0.0,
 		"stop_date": 3580.0,
 		"boot_time": 40.0,
-		"predicted_boot_time": 40.0,
+		"boot_time_prediction": 40.0,
 		"instance_type": "standard",
 		"scheduling_strategy": "ASAP",
 		"jobs": [
@@ -949,8 +949,8 @@
 				"id": "9164",
 				"submission_date": 0.0,
 				"start_date": 40.00392104123711,
-				"real_duration": 185.25392104123716,
-				"duration": 195.0
+				"walltime": 185.25392104123716,
+				"walltime_prediction": 195.0
 			}
 		]
 		},
@@ -960,7 +960,7 @@
 		"start_date": 0.0,
 		"stop_date": 3580.0,
 		"boot_time": 30.0,
-		"predicted_boot_time": 30.0,
+		"boot_time_prediction": 30.0,
 		"instance_type": "standard",
 		"scheduling_strategy": "ASAP",
 		"jobs": [
@@ -968,8 +968,8 @@
 				"id": "9167",
 				"submission_date": 0.0,
 				"start_date": 30.003921041237113,
-				"real_duration": 185.2539210412372,
-				"duration": 195.0
+				"walltime": 185.2539210412372,
+				"walltime_prediction": 195.0
 			}
 		]
 		},
@@ -979,7 +979,7 @@
 		"start_date": 0.0,
 		"stop_date": 3580.0,
 		"boot_time": 20.0,
-		"predicted_boot_time": 20.0,
+		"boot_time_prediction": 20.0,
 		"instance_type": "standard",
 		"scheduling_strategy": "ASAP",
 		"jobs": [
@@ -987,8 +987,8 @@
 				"id": "9168",
 				"submission_date": 0.0,
 				"start_date": 20.003921041237113,
-				"real_duration": 185.25391202061863,
-				"duration": 195.0
+				"walltime": 185.25391202061863,
+				"walltime_prediction": 195.0
 			}
 		]
 		},
@@ -998,7 +998,7 @@
 		"start_date": 0.0,
 		"stop_date": 3580.0,
 		"boot_time": 10.0,
-		"predicted_boot_time": 10.0,
+		"boot_time_prediction": 10.0,
 		"instance_type": "standard",
 		"scheduling_strategy": "ASAP",
 		"jobs": [
@@ -1006,8 +1006,8 @@
 				"id": "9169",
 				"submission_date": 0.0,
 				"start_date": 10.003921041237113,
-				"real_duration": 155.8039120206186,
-				"duration": 164.0
+				"walltime": 155.8039120206186,
+				"walltime_prediction": 164.0
 			}
 		]
 		}

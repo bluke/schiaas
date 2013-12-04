@@ -67,7 +67,7 @@ if __name__ == '__main__':
 
 	intervalsJobs = []
 	for job in jobs:
-		(start_date, runtime) = (int(job['start_date']), int(job['real_duration']))
+		(start_date, runtime) = (int(job['start_date']), int(job['walltime']))
 		intervalsJobs.append(Interval(start_date, start_date + runtime ))
 	
 	diametersJobs = diameter(IntervalTree(intervalsJobs))

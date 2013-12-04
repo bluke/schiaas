@@ -17,7 +17,7 @@ do
 	echo "processing $source"
 	./schlouder2simtasks.py $source $TASK_FILE 
 	
-	if [ `echo $source | grep "Asap" -c` -eq 1 ] 
+	if [ `cat $source | grep "Asap" -c` -ne 0 ] 
 	then 
 		STRATEGY="ASAP"
 	else 
@@ -25,7 +25,8 @@ do
 	fi
 	
 
-	echo "simschlouder"	
+	echo "simschlouder with $STRATEGY"	
+
 	cd simschlouder 
 	rm *.json
 	java -classpath "/usr/local/java/simgrid.jar:../../bin/simschlouder.jar" simschlouder.SimSchlouder simschlouder.xml $TASK_FILE $STRATEGY
