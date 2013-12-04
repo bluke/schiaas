@@ -46,9 +46,9 @@ public class SchIaaS {
 		dbf.setValidating(false);
 		dbf.setNamespaceAware(true);
 		
+		/*
 		SchemaFactory schemaFactory = SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
 		Schema schema = null;
-		/*
 		try {
 			schema = schemaFactory.newSchema(new Source[] {new StreamSource("cloud.xsd")});
 		} catch (SAXException e1) {
