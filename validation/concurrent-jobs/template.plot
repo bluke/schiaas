@@ -2,7 +2,7 @@
 # Plot the number of concurrent job
 #
 set terminal postscript enhanced colour size 13,6.5
-set size 1.02,1
+set size 0.8,1
 #set output '| ps2pdf - diameter.pdf'
 set output 'diameter.eps'
 set autoscale
