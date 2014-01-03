@@ -100,11 +100,11 @@ public class Rice extends ComputeEngine {
 		int i = 0;
 		double core = Double.parseDouble(instanceType.getProperty("core"));
 		while (i < this.riceHosts.size()
-				&& (this.riceHosts.get(i).host.getCore() - this.riceHosts
+				&& (this.riceHosts.get(i).host.getCoreNumber() - this.riceHosts
 						.get(i).coreUsedByVMcount) < core) {
 			Msg.info("assign " + i + "/" + this.riceHosts.size() + " : " + core
 					+ "-" + this.riceHosts.get(i).coreUsedByVMcount + "/"
-					+ this.riceHosts.get(i).host.getCore());
+					+ this.riceHosts.get(i).host.getCoreNumber());
 			i++;
 		}
 
@@ -117,7 +117,7 @@ public class Rice extends ComputeEngine {
 		double core = Double.parseDouble(instanceType.getProperty("core"));
 		int availability = 0;
 		for (int i = 0; i < this.riceHosts.size(); i++)
-			availability += (this.riceHosts.get(i).host.getCore() - this.riceHosts
+			availability += (this.riceHosts.get(i).host.getCoreNumber() - this.riceHosts
 					.get(i).coreUsedByVMcount) / core;
 
 		return availability;
