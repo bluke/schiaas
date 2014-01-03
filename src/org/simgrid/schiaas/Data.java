@@ -1,7 +1,5 @@
 package org.simgrid.schiaas;
 
-import org.simgrid.msg.Host;
-
 /**
  * Represents an Instance, that is a VM controller by SimIaaS.
  * @author julien.gossa@unistra.fr

@@ -8,12 +8,8 @@ import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.Source;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
-import javax.xml.validation.Validator;
 
 import org.simgrid.msg.HostFailureException;
 import org.simgrid.msg.Msg;
@@ -50,9 +46,9 @@ public class SchIaaS {
 		dbf.setValidating(false);
 		dbf.setNamespaceAware(true);
 		
+		/*
 		SchemaFactory schemaFactory = SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
 		Schema schema = null;
-		/*
 		try {
 			schema = schemaFactory.newSchema(new Source[] {new StreamSource("cloud.xsd")});
 		} catch (SAXException e1) {

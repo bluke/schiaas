@@ -1,7 +1,6 @@
 package org.simgrid.schiaas;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,8 +8,6 @@ import org.simgrid.msg.HostFailureException;
 import org.simgrid.msg.Msg;
 import org.simgrid.msg.TimeoutException;
 import org.simgrid.msg.TransferFailureException;
-import org.simgrid.schiaas.billing.StorageBilling;
-import org.simgrid.schiaas.engine.ComputeEngine;
 import org.simgrid.schiaas.engine.StorageEngine;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -36,10 +33,6 @@ public class Storage {
 	/** collection of stored data */
 	protected Map<String, Data> storedData;
 	
-	
-	/** stores the policies for the billing of storage operations on this cloud */
-	protected StorageBilling storageBilling = new StorageBilling();
-
 	
 	/**
 	 * Unique constructor from XML config file.
@@ -111,14 +104,6 @@ public class Storage {
 		return this.config.get(propId);
 	}
 	
-	
-	/**
-      * @return a list of policies for the storage billing
-      */
-   public StorageBilling getStorageBillingPolicies() {
-           return this.storageBilling;
-   }
-
 	
 	public void terminate() {
 		// TODO Auto-generated method stub

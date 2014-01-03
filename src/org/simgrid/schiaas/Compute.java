@@ -333,24 +333,4 @@ public class Compute {
 		}
 		this.computeEngine.terminate();
 	}
-
-	/**
-	 * Computes the cost for all instances associated with this TODO For the
-	 * moment only the fixed price is used
-	 */
-	public double getCost() {
-		double cost = 0;
-		for (Instance instance : this.describeInstances()) {
-			if (instance.instanceType().getBillingInfo() == null) {
-				Msg.error("No billing info associated with instance type: " + instance.getId());
-				continue;
-			}
-			
-			// What if another billing method?
-			cost += Math.ceil((float) instance.getBillingTime()
-					/ instance.instanceType().getBillingInfo().getBtu())
-					* instance.instanceType().getBillingInfo().getFixedPrice();
-		}
-		return cost;
-	}
 }

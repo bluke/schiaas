@@ -25,20 +25,6 @@
 		<!-- TODO add network and storage here and in the XSD file -->
 	
 		<network/>
-
-
-		<billing> 
-			<compute>
-				<unit ref="small" fixed_price="0.2" fixed_btu="3600" dynamic_price_file=""/>
-			</compute>
-			<network>
-				<unit unit="GIGABYTE" outgoing_price_file="src/cloudmasterslave/network-out.bill" incoming_price_file="src/cloudmasterslave/network-in.bill"/>
-			</network>
-			<storage>
-				<unit ref="myStorage" unit="GIGABYTE" storage_price_file="src/cloudmasterslave/s3-storage.bill" outgoing_price_file="src/cloudmasterslave/s3-out.bill" incoming_price_file="src/cloudmasterslave/s3-in.bill"/>
-				<unit ref="myStorage" unit="REQUEST" storage_price_file="" outgoing_price_file="" incoming_price_file="src/cloudmasterslave/s3-request-in.bill"/>				
-			</storage>			
-		</billing>
 	</cloud>
 </clouds> 
  

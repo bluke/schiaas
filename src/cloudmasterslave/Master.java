@@ -22,7 +22,6 @@ import org.simgrid.schiaas.Data;
 import org.simgrid.schiaas.InstanceType;
 import org.simgrid.schiaas.SchIaaS;
 import org.simgrid.schiaas.Storage;
-import org.simgrid.schiaas.process.SchIaaSTask;
 
 public class Master extends Process {
 	public Master(Host host, String name, String[] args) {
@@ -85,8 +84,7 @@ public class Master extends Process {
 		Msg.info("start sending tasks");
 
 		for (int i = 0; i < tasksCount; i++) {
-			Task task = new SchIaaSTask("Task_" + i, taskComputeSize,
-					taskCommunicateSize, SchIaaSTask.TYPE.JOB);
+			Task task = new Task("Task_" + i, taskComputeSize, taskCommunicateSize);
 			Msg.info("Sending \"" + task.getName() + "\" to slave_"+(i % slavesCount));
 
 			task.send("slave_"+(i%slavesCount));

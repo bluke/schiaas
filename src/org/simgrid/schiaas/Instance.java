@@ -1,7 +1,6 @@
 package org.simgrid.schiaas;
 
 import org.simgrid.msg.Host;
-import org.simgrid.msg.VM;
 
 //ajouter dpIntensity / fonction de la netBW pour la migration
 
@@ -9,7 +8,7 @@ import org.simgrid.msg.VM;
  * Represents an Instance, that is a VM controller by SimIaaS.
  * @author julien.gossa@unistra.fr
  */
-public abstract class Instance extends VM {
+public abstract class Instance extends org.simgrid.msg.VM {
 
 	/**
 	 * The last start and shutdown times of this instance
