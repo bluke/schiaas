@@ -1,0 +1,18 @@
+<cloud id="bonefire-fr-inria">
+	<storage id="be-bbt" engine="<!---->">
+			<config controller="bonefire-nfs"/>
+	</storage>
+	<storage id="bonefire-fr-inria-image_repo" engine="">
+			<config controler="bonefire-fr-inria-image_repo" />
+	</storage>
+	<compute engine="">
+		<config controler="<!---->"
+			image_storage="bonefire-fr-inria-image_repo"
+			image_caching="PRE"
+			inter_boot_delay="<!---->"
+			standard_power="880869"/>
+		<image <!----> />
+		<instance_type <!----> />
+		<cluster id="bonefire-project" suffix=".eu" prefix="bonefire-blade-" radical="1-4" />
+	</compute>
+</cloud>

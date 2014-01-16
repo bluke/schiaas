@@ -1,0 +1,17 @@
+<AS id="Bonfire">
+	<AS id="fr-inria" routing="full">
+		<cluster id="bonfire-project" suffixe=".eu" prefixe="bonfire-blade-" radical="1-4" core="24" power="927114" bw="2e9" lat="1e-3" />
+
+	</AS>
+	<AS id="uk-epcc" routing="full">
+		<cluster id="bonefire-project" suffixe=".eu" prefix="vmhost" radical="0-1" core="48" power="1557145" bw="1e9" lat="1e-3"/>
+		<cluster id="bonefire-project" suffixe=".eu" prefixe="vmhost" radical="2-6" core="16" power="1557145" bw="1e9" lat="1e-3" />
+		<router id="uk-epcc_router.bonfire-project.eu" />
+		<link id="router2cluster1" <!----> />
+	</AS>
+	<link id="fr-inria2uk-epcc" bandwidth="1e9" latency="1e-3" />
+	<ASroute src="fr-inria" dst="uk-epcc" gw_src="bonefire-blade-bonefire-project_router.eu" gw_dst="uk-epcc_router.bonfire-project.eu" symmetrical="YES">
+	</ASroute>
+</AS>
+<AS id="AS-client" />
+
