@@ -59,15 +59,5 @@ if __name__ == '__main__':
 		os.unlink(output)
 	with open(output, 'w') as fp:
 		for job in jobs:
-			fp.write("{0} 0 {1} ~ {2}\n".format(job['id'], job['walltime'], job['walltime_prediction'], job['submission_date']))
-
-
-
-
-
-
-
-
-
-
+			fp.write("{0} 0 {1} {2} {3} ~ {4}\n".format(job['id'], job['walltime'], job['input_size'], job['output_size'], job['walltime_prediction'], ))
 
