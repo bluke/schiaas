@@ -8,4 +8,5 @@ then
 fi
 
 java -cp /usr/local/java/simgrid.jar:simschlouder.jar simschlouder.SimSchlouder \
-	simschlouder.xml $1 $2 --log="root.thres:info" 2> /dev/null | grep -v "#"
+	simschlouder.xml $1 $2 --log="root.thres:info" | grep -v "#"
+
