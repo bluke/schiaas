@@ -1,18 +1,71 @@
-<cloud id="bonefire-fr-inria">
-	<storage id="be-bbt" engine="<!---->">
-			<config controller="bonefire-nfs"/>
+<?xml version='1.0'?>
+<!DOCTYPE clouds>
+<clouds version="1">
+
+<cloud id="bonfire-fr-inria">
+	<storage id="be-ibbt" engine="org.simgrid.schiaas.engine.rise.Rise">
+			<config controller="bonfire-project-nfs.eu"/>
 	</storage>
-	<storage id="bonefire-fr-inria-image_repo" engine="">
-			<config controler="bonefire-fr-inria-image_repo" />
+	<storage id="bonfire-fr-inria-image_repo" engine="org.simgrid.schiaas.engine.rise.Rise">
+			<config controler="bonfire-blade-fr-inria-bonfire-project_controller.eu" />
 	</storage>
-	<compute engine="">
-		<config controler="<!---->"
-			image_storage="bonefire-fr-inria-image_repo"
+	<compute engine="org.simgrid.schiaas.engine.rice.Rice">
+		<config controler="bonfire-blade-fr-inria-bonfire-project_controller.eu"
+			image_storage="bonfire-fr-inria-image_repo"
 			image_caching="PRE"
-			inter_boot_delay="<!---->"
-			standard_power="880869"/>
-		<image <!----> />
-		<instance_type <!----> />
-		<cluster id="bonefire-project" suffix=".eu" prefix="bonefire-blade-" radical="1-4" />
+			inter_boot_delay=""
+			standard_power="880869"/><!-- TODO inter_boot_delay -->
+		<instance_type id="small" core="1" memory="1024" disk="0" />
+		<image id="schlouder_image" size="10e9"/>
+		
+		<cluster id="bonfire-project-fr-inria" suffix=".eu" prefix="bonfire-blade-" radical="1-4" />
 	</compute>
 </cloud>
+
+<cloud id="bonfire-uk-epcc">
+	<storage id="be-ibbt" engine="org.simgrid.schiaas.engine.rise.Rise">
+			<config controller="bonfire-nfs"/>
+	</storage>
+	<storage id="bonfire-uk-epcc-image_repo" engine="org.simgrid.schiaas.engine.rise.Rise">
+			<config controler="bonfire-blade-uk-epcc-bonfire-project_controller.eu" /><!-- TODO Créer le controller dans le platform.xml -->
+	</storage>
+	<compute engine="org.simgrid.schiaas.engine.rice.Rice">
+		<config controler="bonfire-blade-uk-epcc-bonfire-project_controller.eu"
+			image_storage="bonfire-uk-epcc-image_repo"
+			image_caching="PRE"
+			inter_boot_delay=""
+			standard_power="1479473"/><!-- TODO inter_boot_delay -->
+			<!-- Question : quel standard_power lorsque ça correspond àdifférente machine physique ? -->
+		<instance_type id="small" core="1" memory="1024" disk="0" />
+		<image id="schlouder_image" size="10e9"/>
+		
+		<cluster id="bonfire-project-uk-epcc-1" suffix=".eu" prefix="vmhost" radical="0-1" />
+		<cluster id="bonfire-project-uk-epcc-2" suffix=".eu" prefix="vmhost" radical="2-6" />
+	</compute>
+</cloud>
+
+<cloud id="bonfire-de-hlrs">
+	<storage id="be-ibbt" engine="org.simgrid.schiaas.engine.rise.Rise">
+			<config controller="bonfire-nfs"/>
+	</storage>
+	<storage id="bonfire-de-hlrs-image_repo" engine="org.simgrid.schiaas.engine.rise.Rise">
+			<config controler="bonfire-blade-de-hlrs-bonfire-project_controller.eu" /><!-- TODO Créer le controller dans le platform.xml -->
+	</storage>
+	<compute engine="org.simgrid.schiaas.engine.rice.Rice">
+		<config controler="bonfire-blade-de-hlrs-bonfire-project_controller.eu"
+			image_storage="bonfire-de-hlrs-image_repo"
+			image_caching="PRE"
+			inter_boot_delay=""
+			standard_power="1686891"/><!-- TODO inter_boot_delay -->
+			<!-- Question : quel standard_power lorsque ça correspond àdifférente machine physique ? -->
+		<instance_type id="small" core="1" memory="1024" disk="0" />
+		<image id="schlouder_image" size="10e9"/>
+		
+		<cluster id="bonfire-project-de-hlrs-1" suffix=".eu" prefix="node1" radical="01-14" />
+		<cluster id="bonfire-project-de-hlrs-2" suffix=".eu" prefix="node2" radical="01-14" />
+		<cluster id="bonfire-project-de-hlrs-3" suffix=".eu" prefix="floccus0" radical="1-6" />
+		<cluster id="bonfire-project-de-hlrs-4" suffix=".eu" prefix="floccus1" radical="5-6" />
+	</compute>
+</cloud>
+
+</clouds>
