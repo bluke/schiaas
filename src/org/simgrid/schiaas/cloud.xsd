@@ -1,0 +1,117 @@
+<?xml version="1.0"?>
+
+<xs:schema
+xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+<!--		Attributes		-->
+	<xs:attribute name="id" type="xs:string" />
+	<xs:attribute name="engine" type="xs:string"/>
+
+
+<!--		Elements		-->
+
+
+<!-- <config [*=]> 
+-->
+	<xs:complexType name="EngineConfig">
+		<xs:anyAttribute processContents="lax" />
+	</xs:complexType>
+
+
+<!-- <instance_type id=  core=  memory=  disk= />
+-->
+	<xs:complexType name="Instance">
+		<xs:attribute ref="id" use="required" />
+		<xs:attribute name="core" type="xs:nonNegativeInteger" use="required" />
+		<xs:attribute name="memory" type="xs:nonNegativeInteger" use="required" />
+		<xs:attribute name="disk" type="xs:nonNegativeInteger" use="required" />
+	</xs:complexType>
+
+
+<!-- <image id=  size= />
+-->
+	<xs:complexType name="Image" >
+		<xs:attribute ref="id" use="required" />
+		<xs:attribute name="size" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+
+
+<!-- <cluster id=  prefix=  suffix=  radical=  />
+-->
+	<xs:complexType name="Cluster">
+		<xs:attribute ref="id" use="required" />
+		<xs:attribute name="prefix" type="xs:string" use="required" />
+		<xs:attribute name="suffix" type="xs:string" use="required" />
+		<xs:attribute name="radical" type="xs:string" use="required" />
+	</xs:complexType>
+
+
+<!-- <host id=  />
+-->
+	<xs:complexType name="Host">
+		<xs:attribute ref="id" use="required" />
+	</xs:complexType>
+
+
+<!-- <compute engine=  >
+		<config ...>
+		<instance_type ...>*
+		<image ...>
+		<cluster>|<route> *
+	</compute> 
+-->
+	<xs:complexType name="Compute">
+		<xs:sequence>
+			<xs:element name="config" type="EngineConfig"/>
+			<xs:element name="instance_type" type="Instance" maxOccurs="unbounded" />
+			<xs:element name="image" type="Image" />
+			<xs:choice maxOccurs="unbounded">
+				<xs:element name="cluster" type="Cluster" />
+				<xs:element name="host" type="Host" />
+			</xs:choice>
+		</xs:sequence>
+		<xs:attribute ref="engine" use="required"/>
+	</xs:complexType>
+
+
+<!-- <storage id=  engine=  >
+		<config ...>
+	</storage>
+-->
+	<xs:complexType name="Storage">
+		<xs:sequence>
+			<xs:element name="config" type="EngineConfig"/>
+		</xs:sequence>
+		<xs:attribute ref="id" use="required"/>
+		<xs:attribute ref="engine" use="required"/>
+	</xs:complexType>
+
+
+<!-- <cloud id=  >
+		<storage ...>*
+		<compute ...>
+	</cloud> 
+-->
+	<xs:complexType name="Cloud">
+		<xs:sequence>
+			<xs:element name="storage" type="Storage" minOccurs="1" maxOccurs="unbounded" />
+			<xs:element name="compute" type="Compute" />
+		</xs:sequence>
+		<xs:attribute ref="id" use="required" />
+	</xs:complexType>
+
+
+<!-- <clouds version= >
+		<cloud ...>* 
+	</clouds>
+-->
+	<xs:element name="clouds" >
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="cloud" type="Cloud" minOccurs="1" maxOccurs="unbounded"/>
+			</xs:sequence>
+			<xs:attribute name="version" type="xs:integer" use="required"/>
+		</xs:complexType>
+	</xs:element>
+
+</xs:schema>

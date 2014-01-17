@@ -6,10 +6,12 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.*;
 
 import org.simgrid.msg.HostFailureException;
 import org.simgrid.msg.Msg;
@@ -46,27 +48,26 @@ public class SchIaaS {
 		dbf.setValidating(false);
 		dbf.setNamespaceAware(true);
 		
-		/*
+		
 		SchemaFactory schemaFactory = SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
 		Schema schema = null;
 		try {
-			schema = schemaFactory.newSchema(new Source[] {new StreamSource("cloud.xsd")});
+			schema = schemaFactory.newSchema(new StreamSource(SchIaaS.class.getResourceAsStream("/org/simgrid/schiaas/cloud.xsd")));
 		} catch (SAXException e1) {
 			Msg.critical("Error loading the XSD schema for the cloud XML file: " + e1.getMessage());
 			System.exit(0);
 		}
-		*/
+		
 		DocumentBuilder db;
 		Document doc;		
 		
-		// Validator validator = schema.newValidator();
+		 Validator validator = schema.newValidator();
 		
 		try {
 			db = dbf.newDocumentBuilder();						
 			
 			doc = db.parse(new File(CloudXMLFileName));
-			// TODO : build a valid xsd
-			/*
+			
 			validator.setErrorHandler(new SimpleXMLErrorHandler());
 			validator.validate(new DOMSource(doc));
 			
@@ -74,7 +75,7 @@ public class SchIaaS {
 				SchIaaS.terminate();
 				System.exit(0);
 			}
-			*/
+			
 			
 			NodeList nodes = doc.getLastChild().getChildNodes();
 			for (int i=0; i<nodes.getLength(); i++) {
