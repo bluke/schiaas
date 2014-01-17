@@ -1,17 +1,217 @@
-<AS id="Bonfire">
-	<AS id="fr-inria" routing="full">
-		<cluster id="bonfire-project" suffixe=".eu" prefixe="bonfire-blade-" radical="1-4" core="24" power="927114" bw="2e9" lat="1e-3" />
+<?xml version='1.0'?>
+<!DOCTYPE platform SYSTEM "http://simgrid.gforge.inria.fr/simgrid.dtd">
+<platform version="3">
+<AS id="BonFIRE">
+	<AS id="fr-inria" routing="Full">
+		<cluster id="bonfire-project-fr-inria" suffix=".eu" prefix="bonfire-blade-" radical="1-4" core="24" power="927114" bw="2e9" lat="1e-3" /><!-- Réseau à voir pour tous les cluster -->
+		<link id="link_bonfire-project-fr-inria" bandwidth="1.25GBps" latency="500us" /> <!-- Quelle bandwidth et latency ? -->
 
+		<AS id="bonfire-project-fr-inria-controller" routing="Full">
+			<host id="bonfire-blade-bonfire-project-fr-inria_controller.eu" power="1e9" core="2" /><!-- Quelle puissance ? -->
+		</AS>
+		<link id="link_bonfire-project-fr-inria-controller" bandwidth="1e9" latency="5E-5"/> <!-- Quelle bandwidth et latency ? -->
+
+		<!-- Entrance router to access the site -->
+		<AS id="bonfire-project-fr-inria-entrance" routing="Full">
+			<router id="bonfire-project-fr-inria-entrance_router.eu" />
+		</AS>
+
+		<!-- Routes from hosts to router -->
+		<ASroute src="bonfire-project-fr-inria-controller" dst="bonfire-project-fr-inria-entrance" 
+		         gw_src="bonfire-blade-bonfire-project-fr-inria_controller.eu" gw_dst="bonfire-project-fr-inria-entrance_router.eu" symmetrical="YES">
+			<link_ctn id="link_bonfire-project-fr-inria-controller" />
+		</ASroute>
+		<ASroute src="bonfire-project-fr-inria" dst="bonfire-project-fr-inria-entrance" 
+		         gw_src="bonfire-blade-bonfire-project-fr-inria_router.eu" gw_dst="bonfire-project-fr-inria-entrance_router.eu" symmetrical="YES">
+			<link_ctn id="link_bonfire-project-fr-inria" />
+		</ASroute>
+
+		<!-- Route from the host to the cluster -->
+		<ASroute src="bonfire-project-fr-inria-controller" dst="bonfire-project-fr-inria" 
+		         gw_src="bonfire-blade-bonfire-project-fr-inria_controller.eu" gw_dst="bonfire-blade-bonfire-project-fr-inria_router.eu" symmetrical="YES">
+			<link_ctn id="link_bonfire-project-fr-inria-controller" />
+			<link_ctn id="link_bonfire-project-fr-inria" />
+		</ASroute>
 	</AS>
-	<AS id="uk-epcc" routing="full">
-		<cluster id="bonefire-project" suffixe=".eu" prefix="vmhost" radical="0-1" core="48" power="1557145" bw="1e9" lat="1e-3"/>
-		<cluster id="bonefire-project" suffixe=".eu" prefixe="vmhost" radical="2-6" core="16" power="1557145" bw="1e9" lat="1e-3" />
-		<router id="uk-epcc_router.bonfire-project.eu" />
-		<link id="router2cluster1" <!----> />
+
+	<AS id="uk-epcc" routing="Full">
+		<!-- le lien entre les deux clusters devraient fonctionner comme ça d'après le fichier clusters_routing_full.xml du dépôt simgrid -->
+		<cluster id="bonfire-project-uk-epcc-1" suffix=".eu" prefix="vmhost" radical="0-1" core="48" power="1557145" bw="1e9" lat="1e-3" /><!-- Power entre les deux clusters n'est pas le même. Voir comment avoir cette info -->
+		<link id="link_bonfire-project-uk-epcc-1" bandwidth="1e9" latency="5E-5"/> <!-- Quelle bandwidth et latency ? -->
+
+		<cluster id="bonfire-project-uk-epcc-2" suffix=".eu" prefix="vmhost" radical="2-6" core="16" power="1557145" bw="1e9" lat="1e-3" />
+		<link id="bonfire-project-uk-epcc-2" bandwidth="1.25GBps" latency="500us" /> <!-- Quelle bandwidth et latency ? -->
+
+		<AS id="bonfire-project-uk-epcc-controller" routing="Full">
+			<host id="vmhostbonfire-project-uk-epcc_controller.eu" power="1e9" core="2" /><!-- Quelle puissance ? -->
+		</AS>
+		<link id="link_bonfire-project-uk-epcc-controller" bandwidth="1e9" latency="5E-5"/> <!-- Quelle bandwidth et latency ? -->
+
+		<!-- Entrance router to access the site -->
+		<AS id="bonfire-project-uk-epcc-entrance" routing="Full">
+			<router id="bonfire-project-uk-epcc-entrance_router.eu" />
+		</AS>
+
+		<!-- Routes from hosts to router -->
+		<ASroute src="bonfire-project-uk-epcc-1" dst="bonfire-project-uk-epcc-entrance" 
+		         gw_src="vmhostbonfire-project-uk-epcc-1_router.eu" gw_dst="bonfire-project-uk-epcc-entrance_router.eu">
+			<link_ctn id="link_bonfire-project-uk-epcc-1" />
+		</ASroute>
+		<ASroute src="bonfire-project-uk-epcc-2" dst="bonfire-project-uk-epcc-entrance" 
+		         gw_src="vmhostbonfire-project-uk-epcc-2_router.eu" gw_dst="bonfire-project-uk-epcc-entrance_router.eu">
+			<link_ctn id="link_bonfire-project-uk-epcc-2" />
+		</ASroute>
+		<ASroute src="bonfire-project-uk-epcc-controller" dst="bonfire-project-uk-epcc-entrance" 
+		         gw_src="vmhostbonfire-project-uk-epcc_controller.eu" gw_dst="bonfire-project-uk-epcc-entrance_router.eu">
+			<link_ctn id="link_bonfire-project-uk-epcc-controller" />
+		</ASroute>
+
+
+		<!-- Routes between hosts -->
+		<ASroute src="bonfire-project-uk-epcc-1" dst="bonfire-project-uk-epcc-2" gw_src="vmhostbonfire-project-uk-epcc-1_router.eu" gw_dst="vmhostbonfire-project-uk-epcc-2_router.eu">
+			<link_ctn id="link_bonfire-project-uk-epcc-1" />
+			<link_ctn id="link_bonfire-project-uk-epcc-2" />
+		</ASroute>
+		<ASroute src="bonfire-project-uk-epcc-1" dst="bonfire-project-uk-epcc-controller" gw_src="vmhostbonfire-project-uk-epcc-1_router.eu" gw_dst="vmhostbonfire-project-uk-epcc_controller.eu">
+			<link_ctn id="link_bonfire-project-uk-epcc-1" />
+			<link_ctn id="link_bonfire-project-uk-epcc-controller" />
+		</ASroute>
+		<ASroute src="bonfire-project-uk-epcc-2" dst="bonfire-project-uk-epcc-controller" gw_src="vmhostbonfire-project-uk-epcc-2_router.eu" gw_dst="vmhostbonfire-project-uk-epcc_controller.eu">
+			<link_ctn id="link_bonfire-project-uk-epcc-2" />
+			<link_ctn id="link_bonfire-project-uk-epcc-controller" />
+		</ASroute>
 	</AS>
-	<link id="fr-inria2uk-epcc" bandwidth="1e9" latency="1e-3" />
-	<ASroute src="fr-inria" dst="uk-epcc" gw_src="bonefire-blade-bonefire-project_router.eu" gw_dst="uk-epcc_router.bonfire-project.eu" symmetrical="YES">
+
+	<AS id="de-hlrs" routing="Full">
+		<cluster id="bonfire-project-de-hlrs-1" suffix=".eu" prefix="node1" radical="01-14" />
+		<link id="link_bonfire-project-de-hlrs-1" bandwidth="1.25GBps" latency="500us" /> <!-- Quelle bandwidth et latency ? -->
+
+		<cluster id="bonfire-project-de-hlrs-2" suffix=".eu" prefix="node2" radical="01-14" />
+		<link id="link_bonfire-project-de-hlrs-2" bandwidth="1.25GBps" latency="500us" /> <!-- Quelle bandwidth et latency ? -->
+
+		<cluster id="bonfire-project-de-hlrs-3" suffix=".eu" prefix="floccus0" radical="1-6" />
+		<link id="link_bonfire-project-de-hlrs-3" bandwidth="1.25GBps" latency="500us" /> <!-- Quelle bandwidth et latency ? -->
+
+		<cluster id="bonfire-project-de-hlrs-4" suffix=".eu" prefix="floccus1" radical="5-6" />
+		<link id="link_bonfire-project-de-hlrs-4" bandwidth="1.25GBps" latency="500us" /> <!-- Quelle bandwidth et latency ? -->
+
+		<AS id="bonfire-project-de-hlrs-controller" routing="Full">
+			<host id="bonfire-project-de-hlrs_controller.eu" power="1e9" core="2" /><!-- Quelle puissance ? -->
+		</AS>
+		<link id="link_bonfire-project-de-hlrs-controller" bandwidth="1e9" latency="5E-5"/> <!-- Quelle bandwidth et latency ? -->
+
+		<!-- Entrance router to access the site -->
+		<AS id="bonfire-project-de-hlrs-entrance" routing="Full">
+			<router id="bonfire-project-de-hlrs-entrance_router.eu" />
+		</AS>
+
+		<!-- Routes from hosts to router -->
+		<ASroute src="bonfire-project-de-hlrs-1" dst="bonfire-project-de-hlrs-entrance" 
+		         gw_src="vmhostbonfire-project-de-hlrs-1_router.eu" gw_dst="bonfire-project-de-hlrs-entrance_router.eu">
+			<link_ctn id="link_bonfire-project-de-hlrs-1" />
+		</ASroute>
+		<ASroute src="bonfire-project-de-hlrs-2" dst="bonfire-project-de-hlrs-entrance" 
+		         gw_src="vmhostbonfire-project-de-hlrs-2_router.eu" gw_dst="bonfire-project-de-hlrs-entrance_router.eu">
+			<link_ctn id="link_bonfire-project-de-hlrs-2" />
+		</ASroute>
+		<ASroute src="bonfire-project-de-hlrs-3" dst="bonfire-project-de-hlrs-entrance" 
+		         gw_src="vmhostbonfire-project-de-hlrs-3_router.eu" gw_dst="bonfire-project-de-hlrs-entrance_router.eu">
+			<link_ctn id="link_bonfire-project-de-hlrs-3" />
+		</ASroute>
+		<ASroute src="bonfire-project-de-hlrs-4" dst="bonfire-project-de-hlrs-entrance" 
+		         gw_src="vmhostbonfire-project-de-hlrs-4_router.eu" gw_dst="bonfire-project-de-hlrs-entrance_router.eu">
+			<link_ctn id="link_bonfire-project-de-hlrs-4" />
+		</ASroute>
+		<ASroute src="bonfire-project-de-hlrs-controller" dst="bonfire-project-de-hlrs-entrance" 
+		         gw_src="bonfire-project-de-hlrs_controller.eu" gw_dst="bonfire-project-de-hlrs-entrance_router.eu">
+			<link_ctn id="link_bonfire-project-de-hlrs-controller" />
+		</ASroute>
+
+		<!-- Routes between hosts -->
+		<ASroute src="bonfire-project-de-hlrs-1" dst="bonfire-project-de-hlrs-2" gw_src="node1bonfire-project-de-hlrs-1_router.eu" gw_dst="node2bonfire-project-de-hlrs-2_router.eu" symmetrical="YES">
+			<link_ctn id="link_bonfire-project-de-hlrs-1" />
+			<link_ctn id="link_bonfire-project-de-hlrs-2" />
+		</ASroute>
+		<ASroute src="bonfire-project-de-hlrs-1" dst="bonfire-project-de-hlrs-3" gw_src="node1bonfire-project-de-hlrs-1_router.eu" gw_dst="floccus0bonfire-project-de-hlrs-3_router.eu" symmetrical="YES">
+			<link_ctn id="link_bonfire-project-de-hlrs-1" />
+			<link_ctn id="link_bonfire-project-de-hlrs-3" />
+		</ASroute>
+		<ASroute src="bonfire-project-de-hlrs-1" dst="bonfire-project-de-hlrs-4" gw_src="node1bonfire-project-de-hlrs-1_router.eu" gw_dst="floccus1bonfire-project-de-hlrs-4_router.eu" symmetrical="YES">
+			<link_ctn id="link_bonfire-project-de-hlrs-1" />
+			<link_ctn id="link_bonfire-project-de-hlrs-4" />
+		</ASroute>
+		<ASroute src="bonfire-project-de-hlrs-1" dst="bonfire-project-de-hlrs-controller" gw_src="node1bonfire-project-de-hlrs-1_router.eu" gw_dst="bonfire-project-de-hlrs_controller.eu" symmetrical="YES">
+			<link_ctn id="link_bonfire-project-de-hlrs-1" />
+			<link_ctn id="link_bonfire-project-de-hlrs-controller" />
+		</ASroute>
+		<ASroute src="bonfire-project-de-hlrs-2" dst="bonfire-project-de-hlrs-3" gw_src="node2bonfire-project-de-hlrs-2_router.eu" gw_dst="floccus0bonfire-project-de-hlrs-3_router.eu" symmetrical="YES">
+			<link_ctn id="link_bonfire-project-de-hlrs-2" />
+			<link_ctn id="link_bonfire-project-de-hlrs-3" />
+		</ASroute>
+		<ASroute src="bonfire-project-de-hlrs-2" dst="bonfire-project-de-hlrs-4" gw_src="node2bonfire-project-de-hlrs-2_router.eu" gw_dst="floccus1bonfire-project-de-hlrs-4_router.eu" symmetrical="YES">
+			<link_ctn id="link_bonfire-project-de-hlrs-2" />
+			<link_ctn id="link_bonfire-project-de-hlrs-4" />
+		</ASroute>
+		<ASroute src="bonfire-project-de-hlrs-2" dst="bonfire-project-de-hlrs-controller" gw_src="node1bonfire-project-de-hlrs-2_router.eu" gw_dst="bonfire-project-de-hlrs_controller.eu" symmetrical="YES">
+			<link_ctn id="link_bonfire-project-de-hlrs-2" />
+			<link_ctn id="link_bonfire-project-de-hlrs-controller" />
+		</ASroute>
+		<ASroute src="bonfire-project-de-hlrs-3" dst="bonfire-project-de-hlrs-4" gw_src="floccus0bonfire-project-de-hlrs-3_router.eu" gw_dst="floccus1bonfire-project-de-hlrs-4_router.eu" symmetrical="YES">
+			<link_ctn id="link_bonfire-project-de-hlrs-3" />
+			<link_ctn id="link_bonfire-project-de-hlrs-4" />
+		</ASroute>
+		<ASroute src="bonfire-project-de-hlrs-3" dst="bonfire-project-de-hlrs-controller" gw_src="floccus0bonfire-project-de-hlrs-3_router.eu" gw_dst="bonfire-project-de-hlrs_controller.eu" symmetrical="YES">
+			<link_ctn id="link_bonfire-project-de-hlrs-3" />
+			<link_ctn id="link_bonfire-project-de-hlrs-controller" />
+		</ASroute>
+		<ASroute src="bonfire-project-de-hlrs-4" dst="bonfire-project-de-hlrs-controller" gw_src="floccus1bonfire-project-de-hlrs-4_router.eu" gw_dst="bonfire-project-de-hlrs_controller.eu" symmetrical="YES">
+			<link_ctn id="link_bonfire-project-de-hlrs-4" />
+			<link_ctn id="link_bonfire-project-de-hlrs-controller" />
+		</ASroute>
+	</AS>
+
+	<AS id="be-ibbt" routing="Full">
+		<host id="bonfire-project-nfs.eu" power="1e9" core="2" /> <!-- TODO Quelle puissance ? -->
+		<link id="link_bonfire-project-nfs" bandwidth="1.25GBps" latency="500us" /> <!-- Quelle bandwidth et latency ? -->
+
+		<!-- Entrance router to access the site -->
+		<router id="bonfire-project-be-ibbt-entrance_router.eu" />
+
+		<!-- Routes from hosts to router -->
+		<route src="bonfire-project-nfs.eu" dst="bonfire-project-be-ibbt-entrance_router.eu">
+			<link_ctn id="link_bonfire-project-nfs" />
+		</route>
+	</AS>
+
+	<!-- TODO: Les différents sites sont séparé par Internet. Pas de réseau particulier. Comment on décrit ça ? -->
+	<link id="backbone" bandwidth="1.25GBps" latency="500us" />
+	<ASroute src="fr-inria" dst="uk-epcc" gw_src="bonfire-project-fr-inria-entrance_router.eu" gw_dst="bonfire-project-uk-epcc-entrance_router.eu" symmetrical="YES">
+		<link_ctn id="backbone" />
+	</ASroute>
+	<ASroute src="fr-inria" dst="de-hlrs" gw_src="bonfire-project-fr-inria-entrance_router.eu" gw_dst="bonfire-project-de-hlrs-entrance_router.eu" symmetrical="YES">
+		<link_ctn id="backbone" />
+	</ASroute>
+	<ASroute src="fr-inria" dst="be-ibbt" gw_src="bonfire-project-fr-inria-entrance_router.eu" gw_dst="bonfire-project-be-ibbt-entrance_router.eu" symmetrical="YES">
+		<link_ctn id="backbone" />
+	</ASroute>
+	<ASroute src="uk-epcc" dst="de-hlrs" gw_src="bonfire-project-uk-epcc-entrance_router.eu" gw_dst="bonfire-project-de-hlrs-entrance_router.eu" symmetrical="YES">
+		<link_ctn id="backbone" />
+	</ASroute>
+	<ASroute src="uk-epcc" dst="be-ibbt" gw_src="bonfire-project-uk-epcc-entrance_router.eu" gw_dst="bonfire-project-be-ibbt-entrance_router.eu" symmetrical="YES">
+		<link_ctn id="backbone" />
+	</ASroute>
+	<ASroute src="de-hlrs" dst="be-ibbt" gw_src="bonfire-project-de-hlrs-entrance_router.eu" gw_dst="bonfire-project-be-ibbt-entrance_router.eu" symmetrical="YES">
+		<link_ctn id="backbone" />
 	</ASroute>
 </AS>
-<AS id="AS-client" />
 
+<AS id="Client">
+	<host id="lemans.u-strasbg.fr" power="1e9" core="2" /> <!-- TODO Quelle puissance ? --><!-- on which Schlouder is installed -->
+</AS>
+
+<!-- TODO: Idem. Client et BonFIRE sont séparé par Internet. Pas de réseau particulier. Comment on décrit ça ? -->
+<link id="internet" bandwidth="1.25GBps" latency="500us" />
+<ASroute src="BonFIRE" dst="Client" gw_src="" gw_dst="">
+	<link_ctn id="internet" />
+</ASroute>
+</platform>
