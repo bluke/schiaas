@@ -23,8 +23,8 @@ xmlns:xs="http://www.w3.org/2001/XMLSchema">
 	<xs:complexType name="Instance">
 		<xs:attribute ref="id" use="required" />
 		<xs:attribute name="core" type="xs:nonNegativeInteger" use="required" />
-		<xs:attribute name="memory" type="xs:nonNegativeInteger" use="required" />
-		<xs:attribute name="disk" type="xs:nonNegativeInteger" use="required" />
+		<xs:attribute name="memory" type="xs:string" use="required" />
+		<xs:attribute name="disk" type="xs:string" use="required" />
 	</xs:complexType>
 
 
@@ -32,7 +32,7 @@ xmlns:xs="http://www.w3.org/2001/XMLSchema">
 -->
 	<xs:complexType name="Image" >
 		<xs:attribute ref="id" use="required" />
-		<xs:attribute name="size" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="size" type="xs:string" use="required"/>
 	</xs:complexType>
 
 
