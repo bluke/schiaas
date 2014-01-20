@@ -30,7 +30,10 @@ public class Rise extends StorageEngine {
 		
 		try {
 			controller = Host.getByName(storage.getConfig("controller"));
-		} catch (HostNotFoundException | NullPointerException e) {
+		} catch (HostNotFoundException e) {
+			Msg.critical("RISE controller host "+storage.getConfig("controller")+" not found.");
+			e.printStackTrace();
+		} catch (NullPointerException e) {
 			Msg.critical("RISE controller host "+storage.getConfig("controller")+" not found.");
 			e.printStackTrace();
 		}

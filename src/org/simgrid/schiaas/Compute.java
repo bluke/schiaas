@@ -139,12 +139,24 @@ public class Compute {
 			this.computeEngine = (ComputeEngine) Class.forName(engine)
 					.getConstructor(Compute.class, Collection.class)
 					.newInstance(this, hosts);
-		} catch (IllegalArgumentException | InvocationTargetException
-				| NoSuchMethodException | SecurityException e) {
+		} catch (IllegalArgumentException e) {
+			Msg.critical("Something wrong happened while loading the cloud engine "
+					+ engine);
+			e.printStackTrace();
+		} catch (InvocationTargetException e){
+			Msg.critical("Something wrong happened while loading the cloud engine "
+					+ engine);
+			e.printStackTrace();
+		} catch (NoSuchMethodException e){
+			Msg.critical("Something wrong happened while loading the cloud engine "
+					+ engine);
+			e.printStackTrace();
+		} catch (SecurityException e){
 			Msg.critical("Something wrong happened while loading the cloud engine "
 					+ engine);
 			e.printStackTrace();
 		}
+		
 	}
 
 	/**

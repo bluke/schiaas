@@ -68,8 +68,19 @@ public class Storage {
 			this.storageEngine = (StorageEngine) Class.forName(engine)
 					.getConstructor(Storage.class)
 					.newInstance(this);
-		} catch (IllegalArgumentException | InvocationTargetException
-				| NoSuchMethodException | SecurityException e) {
+		} catch (IllegalArgumentException e) {
+			Msg.critical("Something wrong happened while loading the storage engine "
+					+ engine);
+			e.printStackTrace();
+		} catch(InvocationTargetException e) {
+			Msg.critical("Something wrong happened while loading the storage engine "
+					+ engine);
+			e.printStackTrace();
+		} catch(NoSuchMethodException e) {
+			Msg.critical("Something wrong happened while loading the storage engine "
+					+ engine);
+			e.printStackTrace();
+		} catch(SecurityException e) {
 			Msg.critical("Something wrong happened while loading the storage engine "
 					+ engine);
 			e.printStackTrace();
