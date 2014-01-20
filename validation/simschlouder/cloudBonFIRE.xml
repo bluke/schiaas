@@ -14,7 +14,7 @@
 			image_storage="bonfire-fr-inria-image_repo"
 			image_caching="PRE"
 			inter_boot_delay=""
-			standard_power="880869"/><!-- TODO inter_boot_delay -->
+			standard_power="8.80869e8"/><!-- TODO inter_boot_delay -->
 		<instance_type id="small" core="1" memory="1024" disk="0" />
 		<image id="schlouder_image" size="10e9"/>
 		
@@ -34,7 +34,7 @@
 			image_storage="bonfire-uk-epcc-image_repo"
 			image_caching="PRE"
 			inter_boot_delay=""
-			standard_power="1479473"/><!-- TODO inter_boot_delay -->
+			standard_power="1.228312e9"/><!-- TODO inter_boot_delay -->
 			<!-- Question : quel standard_power lorsque ça correspond àdifférente machine physique ? -->
 		<instance_type id="small" core="1" memory="1024" disk="0" />
 		<image id="schlouder_image" size="10e9"/>
@@ -56,7 +56,7 @@
 			image_storage="bonfire-de-hlrs-image_repo"
 			image_caching="PRE"
 			inter_boot_delay=""
-			standard_power="1686891"/><!-- TODO inter_boot_delay -->
+			standard_power="1.675440e9"/><!-- TODO inter_boot_delay -->
 			<!-- Question : quel standard_power lorsque ça correspond àdifférente machine physique ? -->
 		<instance_type id="small" core="1" memory="1024" disk="0" />
 		<image id="schlouder_image" size="10e9"/>
