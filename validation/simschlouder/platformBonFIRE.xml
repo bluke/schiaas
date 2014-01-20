@@ -7,7 +7,7 @@
 		<link id="link_bonfire-project-fr-inria" bandwidth="938e6" latency="270us" />
 
 		<AS id="bonfire-project-fr-inria-controller" routing="Full">
-			<host id="bonfire-blade-bonfire-project-fr-inria_controller.eu" power="1e9" core="2" /><!-- Quelle puissance pour les controlleurs ? -->
+			<host id="bonfire-blade-bonfire-project-fr-inria_controller.eu" power="1e9" core="2" /><!-- TODO Quelle puissance pour les controlleurs ? -->
 		</AS>
 		<link id="link_bonfire-project-fr-inria-controller" bandwidth="938e6" latency="270us"/>
 
@@ -42,7 +42,7 @@
 		<link id="bonfire-project-uk-epcc-2" bandwidth="942e6" latency="267us" />
 
 		<AS id="bonfire-project-uk-epcc-controller" routing="Full">
-			<host id="vmhostbonfire-project-uk-epcc_controller.eu" power="1e9" core="2" /><!-- Quelle puissance pour les controlleurs ? -->
+			<host id="vmhostbonfire-project-uk-epcc_controller.eu" power="1e9" core="2" /><!-- TODO Quelle puissance pour les controlleurs ? -->
 		</AS>
 		<link id="link_bonfire-project-uk-epcc-controller" bandwidth="942e6" latency="267us"/>
 
@@ -95,7 +95,7 @@
 		<link id="link_bonfire-project-de-hlrs-4" bandwidth="940e6" latency="170us" />
 
 		<AS id="bonfire-project-de-hlrs-controller" routing="Full">
-			<host id="bonfire-project-de-hlrs_controller.eu" power="1e9" core="2" /><!-- Quelle puissance pour les controlleurs ? -->
+			<host id="bonfire-project-de-hlrs_controller.eu" power="1e9" core="2" /><!-- TODO Quelle puissance pour les controlleurs ? -->
 		</AS>
 		<link id="link_bonfire-project-de-hlrs-controller" bandwidth="940e6" latency="170us"/>
 
@@ -182,8 +182,7 @@
 		</route>
 	</AS>
 
-	<!-- TODO: Les différents sites sont séparé par Internet. Pas de réseau particulier. Comment on décrit ça ? -->
-	<!-- TODO: Les liens entre les AS avec ces caractéristiques -->
+	<!-- TODO: Les liens entre les AS avec ces caractéristiques ou Internet ? -->
 	<!-- Inria <-> EPCC: lat=80ms. bw=11Mbits/sec -->
 	<!-- Inria <-> HLRS: lat=40ms. bw=32Mbits/sec -->
 	<!-- EPCC <-> HLRS: lat=50ms. bw=15Mbits/sec -->
