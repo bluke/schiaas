@@ -9,6 +9,8 @@ file(GLOB_RECURSE allmasterslave_src allmasterslave/*.java)
 
 add_jar(schiaas ${schiaas_src})
 
+add_custom_command( TARGET schiaas POST_BUILD COMMAND jar ARGS uf ${PROJECT_BINARY_DIR}/bin/schiaas.jar -C ${PROJECT_BINARY_DIR}/src org/simgrid/schiaas/cloud.xsd)
+
 add_jar(simschlouder ${schiaas_src} ${simschlouder_src})
 
 add_jar(cloudmasterslave ${schiaas_src} ${cloudmasterslave_src})
