@@ -61,8 +61,23 @@ public class SchloudNode extends Process {
 		String instanceId = cloud.compute.runInstance(SchloudController.imageId, SchloudController.instanceTypeId);
 		if (instanceId==null) return null;
 		
+		
 		SchloudNode node = new SchloudNode(instanceId,cloud);
 		
+		try {
+			// Patch dégueu pour attendre que la VM soit lancée : 
+			// le soucis est qu'on ne peut lancer plusieurs VM en même temps.
+			while(cloud.compute.describeInstance(instanceId).isRunning() == 0)
+			{
+				Msg.info("wait");
+				Process.currentProcess().waitFor(10);
+			}
+		} catch (HostFailureException e) {
+			Msg.critical("Something bad happened is SimSchlouder: The host of "+instanceId+" was not found.");
+			e.printStackTrace();
+		}
+
+			
 		try {
 			node.start();
 		} catch (HostNotFoundException e) {
