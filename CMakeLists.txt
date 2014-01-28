@@ -4,16 +4,14 @@ include(UseJava)
 
 find_package(Doxygen)
 
-project (SimSchlouder Java)
-
-set(CMAKE_JAVA_TARGET_OUTPUT_DIR ${PROJECT_BINARY_DIR}/bin)
+project (SCHIaaS Java)
 
 # Looking for simgrid.jar
 find_file( SIMGRID_JAR "simgrid.jar" 
 	"/usr/local/java/" 
 	$ENV{SIMGRID_JAR_PATH})
 
-message(STATUS ${SIMGRID_JAR} )
+#message(STATUS ${SIMGRID_JAR} )
 
 if(${SIMGRID_JAR} MATCHES "SIMGRID_JAR-NOTFOUND")
 	message(FATAL_ERROR "simgrid.jar not found. Please set the env variable SIMGRID_JAR_PATH.")
@@ -21,7 +19,10 @@ endif(${SIMGRID_JAR} MATCHES "SIMGRID_JAR-NOTFOUND")
 
 set(CMAKE_JAVA_INCLUDE_PATH ${SIMGRID_JAR})
 
-set(CMAKE_JAVA_JAR_ENTRY_POINT simschlouder.SimSchlouder)
+set(PROJECT_ROOT_DIR ${PROJECT_BINARY_DIR})
+set(PROJECT_SOURCE_DIR ${PROJECT_ROOT_DIR}/src)
+set(PROJECT_BINARY_DIR ${PROJECT_ROOT_DIR}/bin)
+set(PROJECT_DOC_DIR ${PROJECT_ROOT_DIR}/doc)
 
 
 # add a target to generate API documentation with Doxygen
@@ -29,11 +30,11 @@ set(MAKE_DOXYGEN comment("Doxygen not found"))
 find_package(Doxygen)
 if(DOXYGEN_FOUND)
 
-configure_file(${PROJECT_SOURCE_DIR}/doc/Doxyfile.in ${PROJECT_SOURCE_DIR}/doc/Doxyfile @ONLY)
+configure_file(${PROJECT_DOC_DIR}/Doxyfile.in ${PROJECT_DOC_DIR}/Doxyfile @ONLY)
 
 set(MAKE_DOXYGEN
-${DOXYGEN_EXECUTABLE} ${PROJECT_SOURCE_DIR}/doc/Doxyfile
-WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/doc/
+${DOXYGEN_EXECUTABLE} ${PROJECT_DOC_DIR}/Doxyfile
+WORKING_DIRECTORY ${PROJECT_DOC_DIR}
 COMMENT "Generating API documentation with Doxygen" VERBATIM
 )
 endif(DOXYGEN_FOUND)
