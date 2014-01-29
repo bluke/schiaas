@@ -14,12 +14,11 @@
 					inter_boot_delay="10"
 					standard_power="9.5e9"/>
 			
-			<instance_type id="small" core="1" memory="1000" disk="1690"/>				
+			<instance_type id="small" core="1" memory="1000" disk="1690"/>		
 			<instance_type id="medium" core="2" memory="1000" disk="1690"/>
 			<instance_type id="large" core="4" memory="1000" disk="1690"/>
 			
 			<image id="opst-image" size="2e9"/>
-			<image id="euca-image" size="2e9"/>
 		
 			<host id="icps-gc-1"/>
 			<host id="icps-gc-2"/>
