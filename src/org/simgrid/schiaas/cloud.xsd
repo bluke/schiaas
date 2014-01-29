@@ -64,7 +64,7 @@ xmlns:xs="http://www.w3.org/2001/XMLSchema">
 		<xs:sequence>
 			<xs:element name="config" type="EngineConfig"/>
 			<xs:element name="instance_type" type="Instance" maxOccurs="unbounded" />
-			<xs:element name="image" type="Image" />
+			<xs:element name="image" type="Image" maxOccurs="unbounded" />
 			<xs:choice maxOccurs="unbounded">
 				<xs:element name="cluster" type="Cluster" />
 				<xs:element name="host" type="Host" />
