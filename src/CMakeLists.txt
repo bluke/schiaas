@@ -34,5 +34,3 @@ add_jar(allmasterslave ${allmasterslave_src} OUTPUT_DIR ${PROJECT_BINARY_DIR}/al
 add_custom_command( TARGET allmasterslave POST_BUILD COMMAND cp ${PROJECT_SOURCE_DIR}/allmasterslave/companionFiles/* ${PROJECT_BINARY_DIR}/allmasterslave)
 
 add_custom_command( TARGET allmasterslave POST_BUILD COMMAND jar ARGS uf ${PROJECT_BINARY_DIR}/allmasterslave/allmasterslave.jar -C ${PROJECT_SOURCE_DIR} org/simgrid/schiaas/cloud.xsd)
-
-set (CMAKE_CURRENT_BINARY_DIR ${PROJECT_BINARY_DIR}/doc/html)
