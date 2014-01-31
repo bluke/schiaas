@@ -41,12 +41,12 @@ endif(DOXYGEN_FOUND)
 
 set(MSG_JAVADOC_URL "http://simgrid.gforge.inria.fr/simgrid/3.11/doc/javadoc/index.html")
 
-set(DOC_INSTALL_PATH "${PROJECT_SOURCE_DIR}/doc/html/javadoc")
+set(DOC_INSTALL_PATH "${PROJECT_ROOT_DIR}/doc/html/javadoc")
 
 add_custom_target(documentation
 COMMAND ${MAKE_DOXYGEN}
 COMMAND ${Java_JAVADOC_EXECUTABLE} 
--sourcepath ${PROJECT_SOURCE_DIR}/src
+-sourcepath ${PROJECT_SOURCE_DIR}
 -d ${DOC_INSTALL_PATH}/schiaas
 -subpackages org
 -link http://simgrid.gforge.inria.fr/simgrid/3.11/doc/javadoc/
@@ -55,7 +55,7 @@ COMMAND ${Java_JAVADOC_EXECUTABLE}
 -use
 -quiet
 COMMAND ${Java_JAVADOC_EXECUTABLE} 
--sourcepath ${PROJECT_SOURCE_DIR}/src
+-sourcepath ${PROJECT_SOURCE_DIR}
 -d ${DOC_INSTALL_PATH}/simschlouder
 -subpackages simschlouder
 -link ../schiaas 
