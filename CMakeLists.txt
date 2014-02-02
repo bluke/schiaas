@@ -17,10 +17,9 @@ if(${SIMGRID_JAR} MATCHES "SIMGRID_JAR-NOTFOUND")
 	message(FATAL_ERROR "simgrid.jar not found. Please set the env variable SIMGRID_JAR_PATH.")
 endif(${SIMGRID_JAR} MATCHES "SIMGRID_JAR-NOTFOUND")
 
-set(CMAKE_JAVA_INCLUDE_PATH ${SIMGRID_JAR})
-
 set(PROJECT_ROOT_DIR ${PROJECT_BINARY_DIR})
 set(PROJECT_SOURCE_DIR ${PROJECT_ROOT_DIR}/src)
+set(PROJECT_EXAMPLES_DIR ${PROJECT_ROOT_DIR}/examples)
 set(PROJECT_BINARY_DIR ${PROJECT_ROOT_DIR}/bin)
 set(PROJECT_DOC_DIR ${PROJECT_ROOT_DIR}/doc)
 
@@ -67,3 +66,4 @@ COMMENT "${MSG_JAVADOC} Generating API documentation" VERBATIM
 )
 
 add_subdirectory(src)
+add_subdirectory(examples)
