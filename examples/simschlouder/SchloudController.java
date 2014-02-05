@@ -272,9 +272,13 @@ public class SchloudController extends org.simgrid.msg.Process {
 		
 		out.write("{\n");
 		out.write("\t\"info\": {\n");
-		//out.write("\t\t\"version\": \"SimSchlouder\",\n");
+		out.write("\t\t\"version\": \"SimSchlouder\",\n");
+		out.write("\t\t\"storage\": {\n");
+		out.write("\t\t\t\"type\": \"n/a\",\n");
+		out.write("\t\t\t\"location\": \"n/a\",\n");
+		out.write("\t\t},\n");
 		out.write("\t\t\"start_date\": 0,\n");
-		out.write("\t\t\"version\": \""+description+"\"\n");
+		out.write("\t\t\"description\": \""+description+"\"\n");
 		out.write("\t},\n");
 		out.write("\t\"nodes\": [\n");
 		for (int i=0; i<SchloudController.terminatedNodes.size(); i++) {

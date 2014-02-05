@@ -20,16 +20,22 @@ For now, it does not support other cloud functionalities, such as network manage
 SchIaaS is an improved interface: every operation is actually handle by an engine. Ths allows SchIaaS applications to be compatible with any cloud internals, or even use different internals together in a multi-cloud context.
 
 For now, two engines are available and fully functional:
-- RICE: Reduced Impl:ementation of Compute Engine
-- RISE: Reduced Impl:ementation of Storage Engine
+- RICE: Reduced Implementation of Compute Engine
+- RISE: Reduced Implementation of Storage Engine
 
 @section running Running SCHIaaS
 
 @subsection running_prerequisite Prerequisite
 
 SCHIaaS runs upon <a href="http://simgrid.gforge.inria.fr/">SimGrid</a>.
-Make sure to build the <EM>hypervisor</EM> branch of the git repository,
-which implies to enable Java suppport and disable SMPI.
+Make sure to enable Java support:
+@code
+git clone git://scm.gforge.inria.fr/simgrid/simgrid.git
+cd simgrid
+cmake -Denable_java=on .
+make
+sudo make install
+@endcode
 
 @subsection running_retrieving Retrieving the latest unstable version
 
@@ -50,6 +56,10 @@ make
 If cmake complains about the location simgrid.jar, make sure to set SIMGRID_JAR_PATH:
 @code
 export SIMGRID_JAR_PATH=/path/to/simgrid.jar/
+@endcode
+For instance:
+@code
+export SIMGRID_JAR_PATH=/usr/local/java/
 @endcode
 
 Then you should have schiaas.jar inside the bin directory, which you can use to develop your own application.
@@ -261,7 +271,7 @@ myStorage.delete("someData");
 
 
 @subsubsection tutorial_reports Reports
-s
+
 And last, you can obtain cloud usage report by modifying Masterslave.java:
 @code
 /* execute the simulation */
@@ -282,10 +292,8 @@ for (Cloud cloud : SchIaaS.getClouds())  {
 
 In order to build and run this example, you must add simgrid.jar and schiaas.jar to the jvm classpath:
 @code
-cd schiaas/src/cloudmasterslave
-java -cp /usr/local/java/simgrid.jar:../../bin/schiaas.jar:../../bin/cloudmasterslave.jar cloudmasterslave.Masterslave platform.xml deploy.xml cloud.xml
+cd schiaas/bin/cloudmasterslave
+java -cp /usr/local/java/simgrid.jar:../schiaas.jar:cloudmasterslave.jar cloudmasterslave.Masterslave platform.xml deploy.xml cloud.xml
 @endcode
 
 */
-
-

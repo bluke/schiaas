@@ -31,12 +31,12 @@ public class SchloudTask {
 
 	
 	protected String name;
-	protected double input;
-	protected double output;
-	protected double computeDuration;
-	protected double walltimeDuration;
+	protected double dataIn;
+	protected double dataOut;
+	protected double duration;
 	
-	protected double predictedRuntime = 0;
+	protected double runtimePrediction = 0;
+	protected double walltimePrediction = 0;
 	
 	protected STATE state;
 	
@@ -49,15 +49,13 @@ public class SchloudTask {
 	
 	protected static final double defaultDataSize = 1000;
 	
-	public SchloudTask(String name, double givenDuration, double input,  double output) {
+	public SchloudTask(String name, double runtimePrediction, double dataIn,  double dataOut) {
 		this.name = name;
-		this.input = input;
-		this.walltimeDuration = givenDuration;
-		this.computeDuration = SimSchlouder.time2flops(givenDuration);
-		this.output = output;
+		this.dataIn = dataIn;
+		this.duration = SimSchlouder.time2flops(runtimePrediction);
+		this.dataOut = dataOut;
 		
-		predictedRuntime=givenDuration;
-		//predictedRuntime+=0.6; // Add the latency, only for icps
+		runtimePrediction=runtimePrediction;
 		
 		dependencies = new Vector<SchloudTask>();
 		
@@ -110,11 +108,11 @@ public class SchloudTask {
 	}
 	
 	public Task getInputTask() {
-		return new Task(name+"_input", computeDuration, input);
+		return new Task(name+"_input", duration, dataIn);
 	}
 	
 	public Task getOutputTask() {
-		return new Task(name+"_output", 0, output);
+		return new Task(name+"_output", 0, dataOut);
 	}
 
 	public String toString() {
@@ -126,13 +124,25 @@ public class SchloudTask {
 	}
 
 	
-	
+	// TODO: add scheduling_strategy
+	// TODO: check walltime/runtime
 	public void writeJSON(BufferedWriter out) throws IOException {
 		out.write("\t\t\t\t\"id\": \""+name+"\",\n");
 		out.write("\t\t\t\t\"submission_date\": "+getDateOfFirst(STATE.PENDING)+",\n");
 		out.write("\t\t\t\t\"start_date\": "+getDateOfFirst(STATE.RUNNING)+",\n");
 		out.write("\t\t\t\t\"walltime\": "+getRuntime()+",\n"); // TERMINATED AND NOT SHUTINGDOWN
-		out.write("\t\t\t\t\"walltime_prediction\": "+predictedRuntime+"\n");
+		out.write("\t\t\t\t\"walltime_prediction\": "+runtimePrediction+"\n");
+		out.write("\t\t\t\t\"provisioning_strategy\": \""+SchloudController.strategy.getName()+"\",\n"); // NOT THE PREDICTION USED ACTUALLY
+		out.write("\t\t\t\t\"dependencies\": [\n");
+		for (SchloudTask schloudTask : dependencies) {
+			out.write("\t\t\t\t\t\""+schloudTask.name+"\",\n");
+		}
+		out.write("\t\t\t\t],\n");
+		out.write("\t\t\t\t\"PSM_data\": {\n");
+		out.write("\t\t\t\t\t\"runtime_prediction\": \""+runtimePrediction+"\",\n");
+		out.write("\t\t\t\t\t\"data_in\": \""+dataIn+"\",\n");
+		out.write("\t\t\t\t\t\"data_out\": \""+dataOut+"\",\n");
+		out.write("\t\t\t\t},\n");
 	}
 	
 	/**
@@ -160,24 +170,24 @@ public class SchloudTask {
 	}
 	
 	public double getInputSize() {
-		return this.input;
+		return this.dataIn;
 	}
 	
 	public double getOutputSize() {
-		return this.output;
+		return this.dataOut;
 	}
 	
 	public double getDuration() {
-		return this.computeDuration;
+		return this.duration;
 	}
 	
 	public double getPredictedDuration() {
-		return this.predictedRuntime;
+		return this.runtimePrediction;
 	}
 	
 	// Does not take into consideration transfer times
 	protected double getRuntimePredictionOn(SchloudNode node) {
 		//predictedRuntime = computeDuration / node.instance.getSpeed();
-		return computeDuration / node.getSpeed();
+		return duration / node.getSpeed();
 	}
 }

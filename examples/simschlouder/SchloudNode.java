@@ -128,7 +128,7 @@ public class SchloudNode extends Process {
 	
 	public void enqueue(SchloudTask task) {
 		queue.add(task);
-		idleDate+=task.predictedRuntime;
+		idleDate+=task.runtimePrediction;
 		if ( state == STATE.IDLE ) {
 			setState(STATE.CLAIMED);
 		}
@@ -138,7 +138,7 @@ public class SchloudNode extends Process {
 		if (task.state!=SchloudTask.STATE.COMPLETE) return false;
 		
 		queue.remove(task);
-		idleDate-=task.predictedRuntime;
+		idleDate-=task.runtimePrediction;
 		
 		return true;
 	}
@@ -215,7 +215,7 @@ public class SchloudNode extends Process {
 		out.write("\t\t\"boot_time\": "+(bootDate-pendingDate)+",\n");
 		out.write("\t\t\"boot_time_prediction\": "+(bootDate-pendingDate)+",\n"); // NOT THE PREDICTION USED ACTUALLY
 		out.write("\t\t\"instance_type\": \"standard\",\n"); // NOT THE PREDICTION USED ACTUALLY
-		out.write("\t\t\"scheduling_strategy\": \""+SchloudController.strategy.getName()+"\",\n"); // NOT THE PREDICTION USED ACTUALLY
+		out.write("\t\t\"cloud\": \""+SchloudController.cloud.name+"\",\n");
 		out.write("\t\t\"jobs\": [\n");
 		for (int i=0; i<completedQueue.size(); i++) {
 			out.write("\t\t\t{\n");

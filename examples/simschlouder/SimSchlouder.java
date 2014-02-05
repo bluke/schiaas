@@ -59,17 +59,17 @@ public class SimSchlouder {
 				taskMap.put(task.name, task);
 				if (sc.hasNext("~")) {
 					sc.next("~");
-					task.predictedRuntime=sc.nextDouble();
+					task.runtimePrediction=sc.nextDouble();
 				}
 				if (sc.hasNextDouble()) {
-					task.input = sc.nextDouble();
+					task.dataIn = sc.nextDouble();
 				}
 				if (sc.hasNextDouble()) {
-					task.output = sc.nextDouble();
+					task.dataOut = sc.nextDouble();
 				}
 				if (sc.hasNext("~")) {
 					sc.next("~");
-					task.predictedRuntime=sc.nextDouble();
+					task.runtimePrediction=sc.nextDouble();
 				}			
 				
 				if (sc.hasNext("\\-\\>")) {
@@ -79,7 +79,7 @@ public class SimSchlouder {
 					}
 				}
 
-				Msg.verb("Enqueuing task " + task.name + " : " + task.computeDuration/standardPower + " ~ " + task.predictedRuntime + " -> " + task.dependencies.size());
+				Msg.verb("Enqueuing task " + task.name + " : " + task.duration/standardPower + " ~ " + task.runtimePrediction + " -> " + task.dependencies.size());
 				SchloudController.enqueueTask(task);
 				sc.close();
 				
