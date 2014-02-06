@@ -1,6 +1,18 @@
 <?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
 <tagfile>
   <compound kind="page">
+    <name>simschlouder</name>
+    <title>SimSchlouder Documentation</title>
+    <filename>simschlouder</filename>
+    <docanchor file="simschlouder" title="SimSchlouder">Running</docanchor>
+    <docanchor file="index" title="Prerequisite">running_prerequisite</docanchor>
+    <docanchor file="simschlouder" title="Command Line">command_line</docanchor>
+    <docanchor file="simschlouder" title="Output">output</docanchor>
+    <docanchor file="simschlouder" title="Configuration file">config_file</docanchor>
+    <docanchor file="simschlouder" title="Input file format">input-file</docanchor>
+    <docanchor file="simschlouder" title="Strategy">strategy</docanchor>
+  </compound>
+  <compound kind="page">
     <name>index</name>
     <title>SCHIaaS Documentation</title>
     <filename>index</filename>

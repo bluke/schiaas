@@ -54,7 +54,7 @@ COMMAND ${Java_JAVADOC_EXECUTABLE}
 -use
 -quiet
 COMMAND ${Java_JAVADOC_EXECUTABLE} 
--sourcepath ${PROJECT_SOURCE_DIR}
+-sourcepath ${PROJECT_EXAMPLES_DIR}
 -d ${DOC_INSTALL_PATH}/simschlouder
 -subpackages simschlouder
 -link ../schiaas 

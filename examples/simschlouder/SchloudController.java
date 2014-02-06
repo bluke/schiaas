@@ -230,7 +230,7 @@ public class SchloudController extends org.simgrid.msg.Process {
 					double B0 = Double.parseDouble(nodes.item(i).getAttributes().getNamedItem("B0").getNodeValue());
 					double B1 = Double.parseDouble(nodes.item(i).getAttributes().getNamedItem("B1").getNodeValue());
 					double BTU = Double.parseDouble(nodes.item(i).getAttributes().getNamedItem("BTU").getNodeValue());
-					double shutdownMargin = Double.parseDouble(nodes.item(i).getAttributes().getNamedItem("shutdownMargin").getNodeValue());
+					double shutdownMargin = Double.parseDouble(nodes.item(i).getAttributes().getNamedItem("shutdown_margin").getNodeValue());
 					clouds.put(name, new simschlouder.Cloud(name,B0,B1,BTU, shutdownMargin));
 				}
 				else if (nodes.item(i).getNodeName().compareTo("provisioning") == 0) {
