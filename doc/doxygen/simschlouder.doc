@@ -1,0 +1,102 @@
+/*!  
+@page simschlouder SimSchlouder Documentation
+
+SimSchlouder allows to simulate <a href="http://schlouder.gforge.inria.fr/">Schlouder</a> with SCHIaaS.
+
+It supports main cloud broker management functions for scientific computation:
+- Bag-of-Tasks and workflows execution;
+- Extensible provisioning and pcheduling policices.
+
+@section Running SimSchlouder
+
+@subsection running_prerequisite Prerequisite
+
+SimSchlouder is packaged with SCHIaaS. After building it, you should have simschlouder.jar inside the bin/simschlouder directory, which you can use directly.
+
+@subsection command_line Command Line
+
+@code
+java -cp /usr/local/java/simgrid.jar:../schiaas.jar:cloudmasterslave.jar cloudmasterslave.Masterslave <config file> <input file> <strategy> 
+@endcode
+Where:
+- <config file> is a configuration file (see @ref config_file)
+- <input file> is the file describing the workload to execute (see @ref input_file)
+- <strategy> is the provisioning/strategy to use (see @ref strategy)
+
+For instance:
+@code
+java -cp /usr/local/java/simgrid.jar:../schiaas.jar:cloudmasterslave.jar cloudmasterslave.Masterslave simschlouder.xml sample.tasks ASAP 
+@endcode
+
+
+@subsection output Output
+
+After the execution, a file named simschlouder.json should be output.
+Its format is similar to the <a href="http://schlouder.gforge.inria.fr/index.html#output"> json output from Schlouder</a>.
+
+This output can be visualized using the script schlouder-btu.py.
+
+
+@section config_file Configuration file
+
+@code
+<?xml version='1.0'?>
+ <!DOCTYPE simschlouder>
+ <simschlouder version="1">
+ 	<config platform="platform.xml" deployment="deployment.xml" cloud="cloud.xml" standard_power="9.5e9" />
+	<cloud  id="icps-opst" B0="41.6" B1="6" BTU="3600" shutdown_margin="20"/>
+	<provisioning>
+		<config cloud="icps-opst" image="opst-image" instance_type="small" boottime="41.6" shutdowntime="10"/>
+	</provisioning>
+</simschlouder> 
+@endcode
+
+Where:
+The cconfig tag must have the following attributes:
+  - platform and deployment and cloud: the Simgrid/SCHIaaS configuration files
+  - standard_power: the base unit of CPU power (i.e. the EC2CU)
+
+The cloud tag must have the following attributes:
+  - id: the id of the cloud or of the region to use (as in the cloud configuration file)
+  - B0: the time to boot a first instance
+  - B1: the delay between two consecutive boots
+  - BTU: the Billing Time Unit (e.g. 1 hour for amazon EC2)
+  - shutdown_margin: the delay before the end of one BTU when an instance shloud be stopped
+
+The provisioning tag must have the information needed specifically by the strategy.
+
+
+
+@section input-file Input file format
+
+The input of SimSchlouder is the workload to execute.
+It is described in a file, which lines are as follows:
+@code
+<task id> <submit date> <runtime> <input data size> <output data size> [-> <task id> ...]
+@endcode
+
+For instance, the following line:
+@code
+0_4 10 3394 38650000 178090000 -> 0_1 0_2
+@endcode
+describes a task:
+- named "0_4"
+- submitted at t=10s
+- which runtime is 3394s on a host showing a CPU of standard_power 
+- receiving 38650000 bytes as input
+- outputting 178090000 bytes of data
+- being dependent of the tasks "0_1" and "0_2"
+
+Such input files can be produced using the scripts generateTasks.sh and generateConstantTasks.sh.
+
+
+
+@section strategy Strategy
+ 
+The strategy define the policy to provision instances and schedule tasks over them.
+It is the name of a java class, as can be found the the simschlouder.algorithms package.
+
+For instance ASAP try to execute the tasks As Soon As Possible, while AFAP try to use the rented BTU As Full As Possible.
+
+See the javadoc for more information.
+*/
