@@ -55,7 +55,8 @@ public class SchloudTask {
 		this.duration = SimSchlouder.time2flops(runtimePrediction);
 		this.dataOut = dataOut;
 		
-		runtimePrediction=runtimePrediction;
+		this.runtimePrediction=runtimePrediction;
+		this.walltimePrediction=runtimePrediction;
 		
 		dependencies = new Vector<SchloudTask>();
 		
