@@ -17,11 +17,11 @@ public class AFAP extends AStrategy {
 	}
 
 	@Override
-	protected SchloudNode applyStrategy(SchloudTask task) {
+	protected SchloudNode applyStrategy(SchloudTask schloudTask) {
 		SchloudNode candidate = null;
 		for (SchloudNode node : SchloudController.nodes) {
 			//Msg.info("AFAP : "+(Msg.getClock()+cloud.getBootTimePrediction())+"("+cloud.getBootTimePrediction()+") - "+ node.getIdleDate());
-			if (SchloudController.time2BTU(node.getUpTimeToIdle()) == SchloudController.time2BTU(node.getUpTimeToIdle()+task.getPredictedDuration()+SchloudController.cloud.getShutdownMargin())) {
+			if (SchloudController.time2BTU(node.getUpTimeToIdle()) == SchloudController.time2BTU(node.getUpTimeToIdle()+node.getRuntimePrediction(schloudTask)+SchloudController.schloudCloud.getShutdownMargin())) {
 				candidate = node;
 				break;
 			} 

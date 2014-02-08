@@ -36,7 +36,7 @@ public abstract class AStrategy {
 	 * @throws SimSchloudException
 	 */
 	public void execute() throws SimSchloudException {		
-		SchloudController.cloud.resetBootCount();
+		SchloudController.schloudCloud.resetBootCount();
 		
 		TreeMap<Integer, LinkedList<SchloudTask>> tasks = null;
 		DAGutils dag = DAGutils.getDAG(SchloudController.mainQueue);
@@ -65,7 +65,7 @@ public abstract class AStrategy {
 			int iTask = 0;
 			while (iTask<tasks.get(l).size() && 
 					( SchloudController.idleNodesCount!=0 
-					|| SchloudController.cloud.compute.describeAvailability(SchloudController.instanceTypeId)>0) ) {
+					|| SchloudController.schloudCloud.compute.describeAvailability(SchloudController.instanceTypeId)>0) ) {
 				SchloudTask task = tasks.get(l).get(iTask);
 				SchloudNode node = null;
 				if (task.hasPendingDependencies()) {

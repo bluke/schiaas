@@ -23,7 +23,7 @@ public class ASAP extends AStrategy {
 		SchloudNode candidate = null;
 		for (SchloudNode node : SchloudController.nodes) {
 			//Msg.info("ASAP : "+(Msg.getClock()+cloud.getBootTimePrediction())+"("+cloud.getBootTimePrediction()+ " " + cloud.bootCount + ") - "+ node.getIdleDate());
-			if (node.isIdle() || (Msg.getClock()+SchloudController.cloud.getBootTimePrediction()>=node.getIdleDate())) {
+			if (node.isIdle() || (Msg.getClock()+SchloudController.schloudCloud.getBootTimePrediction()>=node.getIdleDate())) {
 				candidate = node;
 				break;
 			} 

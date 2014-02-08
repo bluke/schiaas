@@ -7,11 +7,12 @@ import java.util.Vector;
 
 import org.simgrid.msg.Msg;
 import org.simgrid.msg.Task;
+import org.simgrid.schiaas.Data;
 
 
 public class SchloudTask {
 	
-	public enum STATE {PENDING,SUBMITTED,RUNNING,FINISHED,COMPLETE};
+	public enum STATE {PENDING,SUBMITTED,INPUTTING,RUNNING,OUTPUTTING,FINISHED,COMPLETE};
 	
 	/**
 	 * Represents an event for the instance: a date and the state of the instance since this date.
@@ -31,11 +32,13 @@ public class SchloudTask {
 
 	
 	protected String name;
-	protected double dataIn;
-	protected double dataOut;
 	protected double duration;
+	protected double inputSize;
+	protected double outputSize;
 	
-	protected double runtime = 0;
+	protected double PSMRuntime;
+	protected double PSMDataIn;
+	protected double PSMDataOut;
 	
 	protected STATE state;
 	
@@ -46,28 +49,37 @@ public class SchloudTask {
 	
 	protected Vector<SchloudTask> dependencies;
 	
-	protected static final double defaultDataSize = 1000;
+	protected static final double commandDataSize = 1000;
+	protected static final double commandDuration = 1000;
 	
-	public SchloudTask(String name, double runtime, double dataIn,  double dataOut) {
+	public SchloudTask(String name, double runtime, double dataIn,  double dataOut, Vector<SchloudTask> dependencies) {
 		this.name = name;
-		this.dataIn = dataIn;
+		
 		this.duration = SimSchlouder.time2flops(runtime);
-		this.dataOut = dataOut;
+		this.inputSize = dataIn;
+		this.outputSize = dataOut;
 		
-		this.runtime=runtime;
+		this.PSMRuntime = runtime;
+		this.PSMDataIn = dataIn;
+		this.PSMDataOut = dataOut;
 		
-		dependencies = new Vector<SchloudTask>();
+		this.dependencies = dependencies;
 		
 		stateLog = new Vector<StateDate>();
 		setState(STATE.PENDING);
 	}
-		
-	public SchloudTask(String name, double givenDuration, double input) {
-		this (name, givenDuration, input, defaultDataSize);
+
+	public SchloudTask(String name, double runtime, double input, double output) {
+		this (name, runtime, input, output, new Vector<SchloudTask>());
+	}
+
+	
+	public SchloudTask(String name, double runtime, double input) {
+		this (name, runtime, input, 0);
 	}
 	
-	public SchloudTask(String name, double givenDuration) {
-		this (name, givenDuration, defaultDataSize, defaultDataSize);
+	public SchloudTask(String name, double runtime) {
+		this (name, runtime, 0);
 	}
 		
 	/**
@@ -93,57 +105,72 @@ public class SchloudTask {
 				return stateLog.get(i).date;
 		return -1;
 	}
-	
-	public void addDependency(SchloudTask task) {
-		dependencies.add(task);
-	}
-	
+		
 	public boolean hasPendingDependencies(){
-		for (SchloudTask t : dependencies) {
-			if (t.state != SchloudTask.STATE.COMPLETE)
-				return true;
-		}
+		if (dependencies!=null)
+			for (SchloudTask t : dependencies) {
+				if (t.state != SchloudTask.STATE.COMPLETE)
+					return true;
+			}
 		return false;
 	}
 	
+	public Task getCommandTask() {
+		return new Task(name+"_command", commandDuration, commandDataSize);
+	}
+
+	public Task getCompleteTask() {
+		return new Task(name+"_complete", commandDuration, commandDataSize);
+	}
+	
+	
 	public Task getInputTask() {
-		return new Task(name+"_input", duration, dataIn);
+		return new Task(name+"_input", 0, inputSize);
+	}
+
+	public Data getInputData() {
+		return new Data(name+"_input_data", inputSize);
+	}
+	
+	public Task getRunTask() {
+		return new Task(name+"_run", duration, 0);
 	}
 	
 	public Task getOutputTask() {
-		return new Task(name+"_output", 0, dataOut);
+		return new Task(name+"_output", 0, outputSize);
 	}
 
-	public String toString() {
-		return "jid: "+name+"\t"+ getDateOfFirst(STATE.PENDING) + "\t" + getDateOfFirst(STATE.RUNNING) + "\t" + getDateOfFirst(STATE.COMPLETE);
+	public Data getOutputData() {
+		return new Data(name+"_output_data", outputSize);
 	}
-
-	public double getRuntime() {
-		return getDateOfLast(STATE.COMPLETE) - getDateOfFirst(STATE.RUNNING);
-	}
-
 	
 	// TODO: add scheduling_strategy
 	// TODO: check walltime/runtime
 	public void writeJSON(BufferedWriter out) throws IOException {
 		out.write("\t\t\t\t\"id\": \""+name+"\",\n");
-		out.write("\t\t\t\t\"submission_date\": "+getDateOfFirst(STATE.PENDING)+",\n");
-		out.write("\t\t\t\t\"start_date\": "+getDateOfFirst(STATE.RUNNING)+",\n");
-		out.write("\t\t\t\t\"walltime\": "+getRuntime()+",\n"); // TERMINATED AND NOT SHUTINGDOWN
-		out.write("\t\t\t\t\"walltime_prediction\": "+runtime+"\n");
 		out.write("\t\t\t\t\"provisioning_strategy\": \""+SchloudController.strategy.getName()+"\",\n"); // NOT THE PREDICTION USED ACTUALLY
+		out.write("\t\t\t\t\"submission_date\": "+getSubmissionDate()+",\n");
+		out.write("\t\t\t\t\"start_date\": "+getStartDate()+",\n");
+		out.write("\t\t\t\t\"walltime_prediction\": "+getWallTimePrediction()+"\n");
+		out.write("\t\t\t\t\"walltime\": "+getWalltime()+",\n"); // TERMINATED AND NOT SHUTINGDOWN
+		out.write("\t\t\t\t\"runtime\": "+getRuntime()+"\n");
+		out.write("\t\t\t\t\"input_size\": "+inputSize+"\n");
+		out.write("\t\t\t\t\"input_time\": "+getInputTime()+"\n");
+		out.write("\t\t\t\t\"output_time\": "+getOutputTime()+"\n");
+		out.write("\t\t\t\t\"output_size\": "+outputSize+"\n");
+		out.write("\t\t\t\t\"management_time\": "+getManagementTime()+"\n");		
 		out.write("\t\t\t\t\"dependencies\": [\n");
 		for (SchloudTask schloudTask : dependencies) {
 			out.write("\t\t\t\t\t\""+schloudTask.name+"\",\n");
 		}
 		out.write("\t\t\t\t],\n");
 		out.write("\t\t\t\t\"PSM_data\": {\n");
-		out.write("\t\t\t\t\t\"runtime_prediction\": \""+runtime+"\",\n");
-		out.write("\t\t\t\t\t\"data_in\": \""+dataIn+"\",\n");
-		out.write("\t\t\t\t\t\"data_out\": \""+dataOut+"\",\n");
+		out.write("\t\t\t\t\t\"runtime_prediction\": \""+PSMRuntime+"\",\n");
+		out.write("\t\t\t\t\t\"data_in\": \""+PSMDataIn+"\",\n");
+		out.write("\t\t\t\t\t\"data_out\": \""+PSMDataOut+"\",\n");
 		out.write("\t\t\t\t},\n");
 	}
-	
+
 	/**
 	 * Sets the state of the instance.
 	 * @param state the state of the instance, from now on.
@@ -164,29 +191,63 @@ public class SchloudTask {
 		return this.name;
 	}
 	
+	public void addDependency(SchloudTask schloudTask) {
+		this.dependencies.add(schloudTask);
+	}
+	
 	public Vector<SchloudTask> getDependencies() {
 		return new Vector<SchloudTask>(this.dependencies);
 	}
 	
 	public double getInputSize() {
-		return this.dataIn;
+		return this.inputSize;
 	}
 	
 	public double getOutputSize() {
-		return this.dataOut;
+		return this.outputSize;
 	}
 	
 	public double getDuration() {
 		return this.duration;
 	}
-	
-	public double getPredictedDuration() {
-		return this.runtime;
+
+	public double getRuntime() {
+		return getDateOfFirst(STATE.OUTPUTTING) - getDateOfLast(STATE.RUNNING);
 	}
 	
-	// Does not take into consideration transfer times
-	protected double getRuntimePredictionOn(SchloudNode node) {
-		//predictedRuntime = computeDuration / node.instance.getSpeed();
-		return duration / node.getSpeed();
+	private double getOutputTime() {
+		return getDateOfLast(STATE.FINISHED) - getDateOfFirst(STATE.OUTPUTTING);
 	}
+
+	private double getInputTime() {
+		return getDateOfFirst(STATE.RUNNING) - getDateOfFirst(STATE.INPUTTING);
+	}
+
+	// Actually the runtime prediction.
+	private double getWallTimePrediction() {
+		return PSMRuntime;
+	}
+
+	private double getWalltime() {
+		return getDateOfFirst(STATE.COMPLETE) - getDateOfFirst(STATE.SUBMITTED);
+	}
+
+	private double getStartDate() {
+		return getDateOfFirst(STATE.INPUTTING);
+	}
+
+	private double getSubmissionDate() {
+		return getDateOfFirst(STATE.PENDING);
+	}
+	
+	private double getManagementTime() {
+		return getWalltime()-getInputTime()-getRuntime()-getOutputTime();
+	}
+	
+	
+	
+	public String toString() {
+		return "Task["+name+","+duration+"("+PSMRuntime+" s),"+inputSize+","+outputSize+","+state+"]";
+	}
+		
 }

@@ -26,7 +26,7 @@ public class SchloudNode extends Process {
 
 	public String instanceId;
 	
-	protected Cloud cloud;
+	protected SchloudCloud cloud;
 	
 	protected LinkedList<SchloudTask> queue;
 	protected LinkedList<SchloudTask> completedQueue;
@@ -42,7 +42,7 @@ public class SchloudNode extends Process {
 	
 	protected double speed;
 	
-	protected SchloudNode(String instanceId, Cloud cloud) {
+	protected SchloudNode(String instanceId, SchloudCloud cloud) {
 		super(cloud.compute.describeInstance(instanceId), instanceId+"_SchloudNode",null);
 		this.instanceId = instanceId;
 		this.cloud=cloud;
@@ -57,7 +57,7 @@ public class SchloudNode extends Process {
 		setState(STATE.PENDING);
 	}
 	
-	public static SchloudNode startNewNode(Cloud cloud) {
+	public static SchloudNode startNewNode(SchloudCloud cloud) {
 		String instanceId = cloud.compute.runInstance(SchloudController.imageId, SchloudController.instanceTypeId);
 		if (instanceId==null) return null;
 		
@@ -126,9 +126,13 @@ public class SchloudNode extends Process {
 		return idleDate;
 	}
 	
+	public double getRuntimePrediction(SchloudTask schloudTask) {
+		return schloudTask.duration/this.speed;
+	}
+	
 	public void enqueue(SchloudTask task) {
 		queue.add(task);
-		idleDate+=task.runtime;
+		idleDate+=getRuntimePrediction(task);
 		if ( state == STATE.IDLE ) {
 			setState(STATE.CLAIMED);
 		}
@@ -138,7 +142,7 @@ public class SchloudNode extends Process {
 		if (task.state!=SchloudTask.STATE.COMPLETE) return false;
 		
 		queue.remove(task);
-		idleDate-=task.runtime;
+		idleDate-=getRuntimePrediction(task);
 		
 		return true;
 	}
@@ -165,26 +169,53 @@ public class SchloudNode extends Process {
 		bootDate=Msg.getClock();
 		 
 		while(true) {
+			// Receiving the command
 			Task task = Task.receive(getMessageBox());
-			currentSchloudTask.setState(SchloudTask.STATE.RUNNING);
-
-			//double runDate=Msg.getClock();
-			//double compDur=task.getComputeDuration();
-			//Msg.info("Received \"" + task.getName() +  "\". Processing it.");
 			try {
 				task.execute();
 			} catch (TaskCancelledException e) {
+				Msg.info("Something bad happened in SimSchlouder: "+e.getStackTrace());
+			}
 
+			//Msg.info("Received \"" + task.getName() +  "\". Processing it.");
+			
+			// Receiving the input data
+			currentSchloudTask.setState(SchloudTask.STATE.INPUTTING);
+			if (currentSchloudTask.getInputSize()!=0) {
+				switch (SimSchlouder.storageType) {
+				case CLOUD :
+					SchloudController.schloudCloud.storage.get(currentSchloudTask.getInputData());
+					break;
+				default :
+					Msg.critical("Storage method "+ SimSchlouder.storageType +" not supported.");
+				}							
+			}
+			
+			// Executing the task
+			currentSchloudTask.setState(SchloudTask.STATE.RUNNING);
+			try {
+				currentSchloudTask.getRunTask().execute();
+			} catch (TaskCancelledException e) {
+				Msg.info("Something bad happened in SimSchlouder: "+e.getStackTrace());
 			}
 			//Msg.info("\"" + task.getName() + "\" done ");
+
+			// Sending the output data
+			currentSchloudTask.setState(SchloudTask.STATE.OUTPUTTING);
+			if (currentSchloudTask.getOutputSize()!=0) {
+				switch (SimSchlouder.storageType) {
+				case CLOUD :
+					SchloudController.schloudCloud.storage.put(currentSchloudTask.getOutputData());
+					break;
+				default :
+					Msg.critical("Storage method "+ SimSchlouder.storageType +" not supported.");
+				}										
+			}
 			
 			currentSchloudTask.setState(SchloudTask.STATE.FINISHED);
 			
-			//Msg.info("RunTime : "+ compDur + " " + (Msg.getClock()-runDate));
-			
+			// Send the complete task
 			currentSchloudTask.getOutputTask().send(getMessageBox());
-			
-			
 		}
 	}
 	
@@ -215,7 +246,7 @@ public class SchloudNode extends Process {
 		out.write("\t\t\"boot_time\": "+(bootDate-pendingDate)+",\n");
 		out.write("\t\t\"boot_time_prediction\": "+(bootDate-pendingDate)+",\n"); // NOT THE PREDICTION USED ACTUALLY
 		out.write("\t\t\"instance_type\": \"standard\",\n"); // NOT THE PREDICTION USED ACTUALLY
-		out.write("\t\t\"cloud\": \""+SchloudController.cloud.name+"\",\n");
+		out.write("\t\t\"cloud\": \""+SchloudController.schloudCloud.name+"\",\n");
 		out.write("\t\t\"jobs\": [\n");
 		for (int i=0; i<completedQueue.size(); i++) {
 			out.write("\t\t\t{\n");

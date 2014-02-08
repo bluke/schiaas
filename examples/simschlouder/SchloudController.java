@@ -47,8 +47,8 @@ public class SchloudController extends org.simgrid.msg.Process {
 	public static Host host;
 	
 	public static AStrategy strategy;
-	public static Cloud cloud;
-	public static HashMap<String, Cloud> clouds;
+	public static SchloudCloud schloudCloud;
+	public static HashMap<String, SchloudCloud> schloudClouds;
 	
 	protected static double period = 10;
 	protected static Mutex emptyQueueMutex;
@@ -116,7 +116,7 @@ public class SchloudController extends org.simgrid.msg.Process {
 		//Msg.info("Stopping node "+node.instance.getName());
 		nodes.remove(node);
 		terminatedNodes.add(node);
-		cloud.compute.terminateInstance(node.instanceId);
+		schloudCloud.compute.terminateInstance(node.instanceId);
 		node.setState(SchloudNode.STATE.TERMINATED);
 	}
 	
@@ -125,13 +125,13 @@ public class SchloudController extends org.simgrid.msg.Process {
 	 * @return the newly created object reference
 	 */
 	public static SchloudNode startNewNode() {
-		SchloudNode node = SchloudNode.startNewNode(SchloudController.cloud);
+		SchloudNode node = SchloudNode.startNewNode(SchloudController.schloudCloud);
 		
 		if (node == null) return null;
 		
 		SchloudController.nodes.add(node);
 		
-		SchloudController.cloud.incrementBootCount();
+		SchloudController.schloudCloud.incrementBootCount();
 		return node;
 	}
 	
@@ -159,7 +159,7 @@ public class SchloudController extends org.simgrid.msg.Process {
 	 * @return the number of BTUs corresponding to our time
 	 */
 	public static int time2BTU(double time) {
-		return (1+((int)(time/cloud.BTU)));
+		return (1+((int)(time/schloudCloud.BTU)));
 	}
 		
 	public static String getPostMortem() {
@@ -199,7 +199,9 @@ public class SchloudController extends org.simgrid.msg.Process {
 	public static void init(String filename) {
 		Msg.verb("Init SchloudController");
 		
-		clouds = new HashMap<String, Cloud>();
+		String storage = null;
+		
+		schloudClouds = new HashMap<String, SchloudCloud>();
 		
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		DocumentBuilder db;
@@ -231,23 +233,34 @@ public class SchloudController extends org.simgrid.msg.Process {
 					double B1 = Double.parseDouble(nodes.item(i).getAttributes().getNamedItem("B1").getNodeValue());
 					double BTU = Double.parseDouble(nodes.item(i).getAttributes().getNamedItem("BTU").getNodeValue());
 					double shutdownMargin = Double.parseDouble(nodes.item(i).getAttributes().getNamedItem("shutdown_margin").getNodeValue());
-					clouds.put(name, new simschlouder.Cloud(name,B0,B1,BTU, shutdownMargin));
+					schloudClouds.put(name, new simschlouder.SchloudCloud(name,B0,B1,BTU, shutdownMargin));
 				}
 				else if (nodes.item(i).getNodeName().compareTo("provisioning") == 0) {
-					NodeList provNodes=nodes.item(i).getChildNodes(); 
+					NodeList provNodes = nodes.item(i).getChildNodes(); 
 					for(int j=0; j<provNodes.getLength(); j++) {  
 						if (provNodes.item(j).getNodeName().compareTo("config")==0) {
-							provisioningCloud=provNodes.item(j).getAttributes().getNamedItem("cloud").getNodeValue();
-							imageId=provNodes.item(j).getAttributes().getNamedItem("image").getNodeValue();
-							instanceTypeId=provNodes.item(j).getAttributes().getNamedItem("instance_type").getNodeValue();
-							boottime=Double.parseDouble(provNodes.item(j).getAttributes().getNamedItem("boottime").getNodeValue());
-							shutdowntime=Double.parseDouble(provNodes.item(j).getAttributes().getNamedItem("shutdowntime").getNodeValue());
+							provisioningCloud = provNodes.item(j).getAttributes().getNamedItem("cloud").getNodeValue();
+							storage = provNodes.item(j).getAttributes().getNamedItem("storage").getNodeValue();
+							imageId = provNodes.item(j).getAttributes().getNamedItem("image").getNodeValue();
+							instanceTypeId = provNodes.item(j).getAttributes().getNamedItem("instance_type").getNodeValue();
+							boottime = Double.parseDouble(provNodes.item(j).getAttributes().getNamedItem("boottime").getNodeValue());
+							shutdowntime = Double.parseDouble(provNodes.item(j).getAttributes().getNamedItem("shutdowntime").getNodeValue());
 						}
 					}
 				}
 			}
 			
-			cloud=clouds.get(provisioningCloud);
+			schloudCloud=schloudClouds.get(provisioningCloud);
+
+			//Storage management
+			if (storage.compareTo("host") == 0) {
+				SimSchlouder.storageType = SimSchlouder.StorageType.CLIENT;
+			} else if (storage.compareTo("instance") == 0) {
+				SimSchlouder.storageType = SimSchlouder.StorageType.INSTANCE;
+			} else {
+				SimSchlouder.storageType = SimSchlouder.StorageType.CLOUD;
+			}			
+			schloudCloud.setStorage(storage);
 			
 		} catch (IOException e) {
 			Msg.critical("SimSchlouder config file not found");
@@ -307,7 +320,7 @@ public class SchloudController extends org.simgrid.msg.Process {
 					+ nodes.get(i).getUptime() + "("+ time2BTU(nodes.get(i).getUptime()) +") ~ "
 					+ nodes.get(i).getUptime()+cloud.shutdownMargin+ "("+ time2BTU(nodes.get(i).getUptime()+cloud.shutdownMargin) +")" );*/
 			
-			if (nodes.get(i).isIdle() && time2BTU(nodes.get(i).getUptime())<time2BTU(nodes.get(i).getUptime()+cloud.shutdownMargin) ) {
+			if (nodes.get(i).isIdle() && time2BTU(nodes.get(i).getUptime())<time2BTU(nodes.get(i).getUptime()+schloudCloud.shutdownMargin) ) {
 				//Msg.info("hou yes " + nodes.get(i).instance.getName());
 				SchloudController.stopNode(nodes.get(i));
 			} else {

@@ -12,6 +12,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.Vector;
 
 import org.simgrid.msg.Host;
 import org.simgrid.msg.HostFailureException;
@@ -30,6 +31,8 @@ public class SimSchlouder {
 		return time*standardPower;
 	}
 	
+	public static enum StorageType {CLOUD, CLIENT, INSTANCE};
+	public static StorageType storageType;
 	
 	public static class TaskFileReaderProcess extends  org.simgrid.msg.Process {
 		
@@ -55,22 +58,28 @@ public class SimSchlouder {
 					waitFor(submissionDate-oldSubmissionDate);
 				}
 				
-				SchloudTask task = new SchloudTask(jid, sc.nextDouble()); 
-
-				taskMap.put(task.name, task);
+				double runtime = sc.nextDouble();
+				
+				double inputSize = 0;
+				double outputSize = 0;
 				if (sc.hasNextDouble()) {
-					task.dataIn = sc.nextDouble();
-					task.dataOut = sc.nextDouble();
+					inputSize = sc.nextDouble()*1000;
+					outputSize = sc.nextDouble()*1000;
 				}
 				
+				Vector<SchloudTask> dependencies = new Vector<SchloudTask>();
 				if (sc.hasNext("\\-\\>")) {
 					sc.next("\\-\\>");
 					while (sc.hasNext()) {
-						task.addDependency(taskMap.get(sc.next()));
+						dependencies.add(taskMap.get(sc.next()));
 					}
 				}
 
-				Msg.verb("Enqueuing task " + task.name + " : " + task.duration/standardPower + " ~ " + task.runtime + " -> " + task.dependencies.size());
+				Msg.info("DEPENDENCIES : "+dependencies.size());
+				SchloudTask task = new SchloudTask(jid, runtime, inputSize, outputSize, dependencies); 
+				taskMap.put(task.name, task);
+				
+				Msg.verb("Enqueuing " + task);
 				SchloudController.enqueueTask(task);
 				sc.close();
 				
@@ -100,17 +109,21 @@ public class SimSchlouder {
 			System.exit(1);	
 		}
 		
+	    
 		SchloudController.init(args[0]);
-
+		
+		Msg.verb("Reading the task file: "+args[1]);
 		String[] tfrpargs = {args[1]};
 		TaskFileReaderProcess tfrp = new TaskFileReaderProcess(Host.getByName("client"),"TaskFileReader",tfrpargs);
 		tfrp.start();
 		
+		Msg.verb("Loading the strategy: "+args[2]);
 		//SchloudController.strategy=SchloudController.STRATEGY.valueOf(args[2].toUpperCase());
 		SchloudController.strategy = SimSchlouder.loadStrategy(args[2].trim());
 		Msg.info("Strategy set to "+SchloudController.strategy.getName());
 		
 		
+		Msg.verb("Running the simulation...");
 		/*  execute the simulation. */
         Msg.run();
         

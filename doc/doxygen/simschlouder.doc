@@ -77,14 +77,14 @@ It is described in a file, which lines are as follows:
 
 For instance, the following line:
 @code
-0_4 10 3394 38650000 178090000 -> 0_1 0_2
+0_4 10 3394 38650 178090 -> 0_1 0_2
 @endcode
 describes a task:
 - named "0_4"
 - submitted at t=10s
 - which runtime is 3394s on a host showing a CPU of standard_power 
-- receiving 38650000 bytes as input
-- outputting 178090000 bytes of data
+- receiving 38650000 MB as input
+- outputting 178090000 MB of data
 - being dependent of the tasks "0_1" and "0_2"
 
 Such input files can be produced using the scripts generateBoT.sh and generateConstantBoT.sh.

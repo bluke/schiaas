@@ -23,12 +23,12 @@ public class SchloudTaskController extends Process {
 		
 		while (!node.queue.isEmpty()) {
 			
-			SchloudTask stask=node.queue.peek();
-			node.currentSchloudTask = stask;
+			SchloudTask schloudTask=node.queue.peek();
+			node.currentSchloudTask = schloudTask;
 			
-			stask.setState(SchloudTask.STATE.SUBMITTED);
+			schloudTask.setState(SchloudTask.STATE.SUBMITTED);
 			
-			stask.getInputTask().send(node.getMessageBox());
+			schloudTask.getCommandTask().send(node.getMessageBox());
 			
 			//Msg.info("waiting for complete " + task.name);
 			Task rt = Task.receive(node.getMessageBox());
@@ -40,7 +40,7 @@ public class SchloudTaskController extends Process {
 			
 			node.completedQueue.add(node.queue.poll());
 			
-			stask.setState(SchloudTask.STATE.COMPLETE);
+			schloudTask.setState(SchloudTask.STATE.COMPLETE);
 			// correct the idleDate
 			//node.idleDate+=stask.getRuntime()-stask.predictedRuntime;
 		}		
