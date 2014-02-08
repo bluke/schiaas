@@ -37,6 +37,7 @@ public class SimSchlouder {
 			super(host,name,args);
 		}
 		
+		// TODO: Errors
 		public void readTaskFile(String fileName) throws FileNotFoundException, HostFailureException {
 			Scanner scf = new Scanner(new File(fileName));
 			HashMap<String, SchloudTask> taskMap = new HashMap<String, SchloudTask>();
@@ -57,20 +58,10 @@ public class SimSchlouder {
 				SchloudTask task = new SchloudTask(jid, sc.nextDouble()); 
 
 				taskMap.put(task.name, task);
-				if (sc.hasNext("~")) {
-					sc.next("~");
-					task.runtimePrediction=sc.nextDouble();
-				}
 				if (sc.hasNextDouble()) {
 					task.dataIn = sc.nextDouble();
-				}
-				if (sc.hasNextDouble()) {
 					task.dataOut = sc.nextDouble();
 				}
-				if (sc.hasNext("~")) {
-					sc.next("~");
-					task.runtimePrediction=sc.nextDouble();
-				}			
 				
 				if (sc.hasNext("\\-\\>")) {
 					sc.next("\\-\\>");
@@ -79,7 +70,7 @@ public class SimSchlouder {
 					}
 				}
 
-				Msg.verb("Enqueuing task " + task.name + " : " + task.duration/standardPower + " ~ " + task.runtimePrediction + " -> " + task.dependencies.size());
+				Msg.verb("Enqueuing task " + task.name + " : " + task.duration/standardPower + " ~ " + task.runtime + " -> " + task.dependencies.size());
 				SchloudController.enqueueTask(task);
 				sc.close();
 				

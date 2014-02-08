@@ -16,7 +16,7 @@ SimSchlouder is packaged with SCHIaaS. After building it, you should have simsch
 @subsection command_line Command Line
 
 @code
-java -cp /usr/local/java/simgrid.jar:../schiaas.jar:cloudmasterslave.jar cloudmasterslave.Masterslave <config file> <input file> <strategy> 
+java -cp /usr/local/java/simgrid.jar:../schiaas.jar:simschlouder.jar simschlouder.SimSchlouder <config file> <input file> <strategy> 
 @endcode
 Where:
 - <config file> is a configuration file (see @ref config_file)
@@ -25,7 +25,7 @@ Where:
 
 For instance:
 @code
-java -cp /usr/local/java/simgrid.jar:../schiaas.jar:cloudmasterslave.jar cloudmasterslave.Masterslave simschlouder.xml sample.tasks ASAP 
+java -cp /usr/local/java/simgrid.jar:../schiaas.jar:simschlouder.jar simschlouder.SimSchlouder simschlouder.xml tasks/bot.tasks ASAP 
 @endcode
 
 
@@ -52,7 +52,7 @@ This output can be visualized using the script schlouder-btu.py.
 @endcode
 
 Where:
-The cconfig tag must have the following attributes:
+The config tag must have the following attributes:
   - platform and deployment and cloud: the Simgrid/SCHIaaS configuration files
   - standard_power: the base unit of CPU power (i.e. the EC2CU)
 
@@ -72,7 +72,7 @@ The provisioning tag must have the information needed specifically by the strate
 The input of SimSchlouder is the workload to execute.
 It is described in a file, which lines are as follows:
 @code
-<task id> <submit date> <runtime> <input data size> <output data size> [-> <task id> ...]
+<task id> <submit date> <runtime> [<input data size> <output data size>] [-> <task id> ...]
 @endcode
 
 For instance, the following line:
@@ -87,7 +87,7 @@ describes a task:
 - outputting 178090000 bytes of data
 - being dependent of the tasks "0_1" and "0_2"
 
-Such input files can be produced using the scripts generateTasks.sh and generateConstantTasks.sh.
+Such input files can be produced using the scripts generateBoT.sh and generateConstantBoT.sh.
 
 
 
@@ -96,7 +96,7 @@ Such input files can be produced using the scripts generateTasks.sh and generate
 The strategy define the policy to provision instances and schedule tasks over them.
 It is the name of a java class, as can be found the the simschlouder.algorithms package.
 
-For instance ASAP try to execute the tasks As Soon As Possible, while AFAP try to use the rented BTU As Full As Possible.
+For instance ASAP tries to execute the tasks As Soon As Possible, while AFAP tries to use the rented BTU As Full As Possible.
 
 See the javadoc for more information.
 */

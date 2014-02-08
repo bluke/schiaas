@@ -35,8 +35,7 @@ public class SchloudTask {
 	protected double dataOut;
 	protected double duration;
 	
-	protected double runtimePrediction = 0;
-	protected double walltimePrediction = 0;
+	protected double runtime = 0;
 	
 	protected STATE state;
 	
@@ -49,14 +48,13 @@ public class SchloudTask {
 	
 	protected static final double defaultDataSize = 1000;
 	
-	public SchloudTask(String name, double runtimePrediction, double dataIn,  double dataOut) {
+	public SchloudTask(String name, double runtime, double dataIn,  double dataOut) {
 		this.name = name;
 		this.dataIn = dataIn;
-		this.duration = SimSchlouder.time2flops(runtimePrediction);
+		this.duration = SimSchlouder.time2flops(runtime);
 		this.dataOut = dataOut;
 		
-		this.runtimePrediction=runtimePrediction;
-		this.walltimePrediction=runtimePrediction;
+		this.runtime=runtime;
 		
 		dependencies = new Vector<SchloudTask>();
 		
@@ -132,7 +130,7 @@ public class SchloudTask {
 		out.write("\t\t\t\t\"submission_date\": "+getDateOfFirst(STATE.PENDING)+",\n");
 		out.write("\t\t\t\t\"start_date\": "+getDateOfFirst(STATE.RUNNING)+",\n");
 		out.write("\t\t\t\t\"walltime\": "+getRuntime()+",\n"); // TERMINATED AND NOT SHUTINGDOWN
-		out.write("\t\t\t\t\"walltime_prediction\": "+runtimePrediction+"\n");
+		out.write("\t\t\t\t\"walltime_prediction\": "+runtime+"\n");
 		out.write("\t\t\t\t\"provisioning_strategy\": \""+SchloudController.strategy.getName()+"\",\n"); // NOT THE PREDICTION USED ACTUALLY
 		out.write("\t\t\t\t\"dependencies\": [\n");
 		for (SchloudTask schloudTask : dependencies) {
@@ -140,7 +138,7 @@ public class SchloudTask {
 		}
 		out.write("\t\t\t\t],\n");
 		out.write("\t\t\t\t\"PSM_data\": {\n");
-		out.write("\t\t\t\t\t\"runtime_prediction\": \""+runtimePrediction+"\",\n");
+		out.write("\t\t\t\t\t\"runtime_prediction\": \""+runtime+"\",\n");
 		out.write("\t\t\t\t\t\"data_in\": \""+dataIn+"\",\n");
 		out.write("\t\t\t\t\t\"data_out\": \""+dataOut+"\",\n");
 		out.write("\t\t\t\t},\n");
@@ -183,7 +181,7 @@ public class SchloudTask {
 	}
 	
 	public double getPredictedDuration() {
-		return this.runtimePrediction;
+		return this.runtime;
 	}
 	
 	// Does not take into consideration transfer times
