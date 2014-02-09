@@ -151,14 +151,14 @@ public class SchloudTask {
 		out.write("\t\t\t\t\"provisioning_strategy\": \""+SchloudController.strategy.getName()+"\",\n"); // NOT THE PREDICTION USED ACTUALLY
 		out.write("\t\t\t\t\"submission_date\": "+getSubmissionDate()+",\n");
 		out.write("\t\t\t\t\"start_date\": "+getStartDate()+",\n");
-		out.write("\t\t\t\t\"walltime_prediction\": "+getWallTimePrediction()+"\n");
+		out.write("\t\t\t\t\"walltime_prediction\": "+getWallTimePrediction()+",\n");
 		out.write("\t\t\t\t\"walltime\": "+getWalltime()+",\n"); // TERMINATED AND NOT SHUTINGDOWN
-		out.write("\t\t\t\t\"runtime\": "+getRuntime()+"\n");
-		out.write("\t\t\t\t\"input_size\": "+inputSize+"\n");
-		out.write("\t\t\t\t\"input_time\": "+getInputTime()+"\n");
-		out.write("\t\t\t\t\"output_time\": "+getOutputTime()+"\n");
-		out.write("\t\t\t\t\"output_size\": "+outputSize+"\n");
-		out.write("\t\t\t\t\"management_time\": "+getManagementTime()+"\n");		
+		out.write("\t\t\t\t\"runtime\": "+getRuntime()+",\n");
+		out.write("\t\t\t\t\"input_size\": "+inputSize+",\n");
+		out.write("\t\t\t\t\"input_time\": "+getInputTime()+",\n");
+		out.write("\t\t\t\t\"output_time\": "+getOutputTime()+",\n");
+		out.write("\t\t\t\t\"output_size\": "+outputSize+",\n");
+		out.write("\t\t\t\t\"management_time\": "+getManagementTime()+",\n");		
 		out.write("\t\t\t\t\"dependencies\": [\n");
 		for (SchloudTask schloudTask : dependencies) {
 			out.write("\t\t\t\t\t\""+schloudTask.name+"\",\n");
