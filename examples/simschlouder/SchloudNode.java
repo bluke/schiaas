@@ -215,7 +215,7 @@ public class SchloudNode extends Process {
 			currentSchloudTask.setState(SchloudTask.STATE.FINISHED);
 			
 			// Send the complete task
-			currentSchloudTask.getOutputTask().send(getMessageBox());
+			currentSchloudTask.getCompleteTask().send(getMessageBox());
 		}
 	}
 	

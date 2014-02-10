@@ -16,12 +16,12 @@ SimSchlouder is packaged with SCHIaaS. After building it, you should have simsch
 @subsection command_line Command Line
 
 @code
-java -cp /usr/local/java/simgrid.jar:../schiaas.jar:simschlouder.jar simschlouder.SimSchlouder <config file> <input file> <strategy> 
+java -cp /usr/local/java/simgrid.jar:../schiaas.jar:simschlouder.jar simschlouder.SimSchlouder <config_file> <input_file> <strategy>
 @endcode
 Where:
-- <config file> is a configuration file (see @ref config_file)
-- <input file> is the file describing the workload to execute (see @ref input_file)
-- <strategy> is the provisioning/strategy to use (see @ref strategy)
+- config_file is a configuration file (see @ref config_file)
+- input_file is the file describing the workload to execute (see @ref input_file)
+- strategy is the provisioning/strategy to use (see @ref strategy)
 
 For instance:
 @code
@@ -34,8 +34,13 @@ java -cp /usr/local/java/simgrid.jar:../schiaas.jar:simschlouder.jar simschloude
 After the execution, a file named simschlouder.json should be output.
 Its format is similar to the <a href="http://schlouder.gforge.inria.fr/index.html#output"> json output from Schlouder</a>.
 
-This output can be visualized using the script schlouder-btu.py.
-
+This output can be visualized using the script btuviewer.sh:
+@code
+./btuviewer.sh
+@endcode
+Afterward, you should have a file named simschlouder.pdf in the btuviewer/ sub-directory.
+This pdf shows a blue box for each task ran on the rented BTUs.
+Inside each blue box: a red box shows the input time; a green box shows the runtime; and an orange box shows the output time.
 
 @section config_file Configuration file
 
@@ -67,7 +72,7 @@ The provisioning tag must have the information needed specifically by the strate
 
 
 
-@section input-file Input file format
+@section input_file Input file format
 
 The input of SimSchlouder is the workload to execute.
 It is described in a file, which lines are as follows:
@@ -88,7 +93,6 @@ describes a task:
 - being dependent of the tasks "0_1" and "0_2"
 
 Such input files can be produced using the scripts generateBoT.sh and generateConstantBoT.sh.
-
 
 
 @section strategy Strategy

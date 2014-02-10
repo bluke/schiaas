@@ -9,7 +9,7 @@
     <docanchor file="simschlouder" title="Command Line">command_line</docanchor>
     <docanchor file="simschlouder" title="Output">output</docanchor>
     <docanchor file="simschlouder" title="Configuration file">config_file</docanchor>
-    <docanchor file="simschlouder" title="Input file format">input-file</docanchor>
+    <docanchor file="simschlouder" title="Input file format">input_file</docanchor>
     <docanchor file="simschlouder" title="Strategy">strategy</docanchor>
   </compound>
   <compound kind="page">

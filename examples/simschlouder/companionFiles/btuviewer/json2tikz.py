@@ -150,8 +150,21 @@ if __name__ == '__main__':
 					t2p(job['runtime']), t2p(job['input_time']), t2p(job['output_time']), t2p(job['management_time']) )
 
 				# forecasted walltime_prediction
+				#fp.write("\\filldraw[draw=black,fill=green,very thin] ({0},{1}) rectangle ({2},{3});\n"
+				#.format(jstart_date+jwalltime,dY+jobM,jstart_date+jwalltime_prediction,dY+btuH/2.0))
+
+				# input time
+				fp.write("\\filldraw[draw=black,fill=red,very thin] ({0},{1}) rectangle ({2},{3});\n"
+				.format(jstart_date,dY+jobM,jstart_date+jinput_time,dY+btuH/2.0))
+
+				# run time
 				fp.write("\\filldraw[draw=black,fill=green,very thin] ({0},{1}) rectangle ({2},{3});\n"
-				.format(jstart_date+jwalltime,dY+jobM,jstart_date+jwalltime_prediction,dY+btuH/2.0))
+				.format(jstart_date+jinput_time,dY+jobM,jstart_date+jinput_time+jruntime,dY+btuH/2.0))
+
+				# output time
+				fp.write("\\filldraw[draw=black,fill=orange,very thin] ({0},{1}) rectangle ({2},{3});\n"
+				.format(jstart_date+jinput_time+jruntime,dY+jobM,jstart_date+jinput_time+jruntime+joutput_time,dY+btuH/2.0))
+
 			iv+=1
 
 			fp.write("\\filldraw[draw=black,fill=yellow,very thin] ({0},{1}) rectangle ({2},{3});\n"

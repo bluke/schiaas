@@ -159,16 +159,20 @@ public class SchloudTask {
 		out.write("\t\t\t\t\"output_time\": "+getOutputTime()+",\n");
 		out.write("\t\t\t\t\"output_size\": "+outputSize+",\n");
 		out.write("\t\t\t\t\"management_time\": "+getManagementTime()+",\n");		
+		
 		out.write("\t\t\t\t\"dependencies\": [\n");
-		for (SchloudTask schloudTask : dependencies) {
-			out.write("\t\t\t\t\t\""+schloudTask.name+"\",\n");
+		for (int i=0; i<dependencies.size(); i++) {
+			out.write("\t\t\t\t\t\""+dependencies.get(i).name+"\"");
+			if (i<dependencies.size()-1) out.write(",");
+			out.write("\n");	
 		}
 		out.write("\t\t\t\t],\n");
+		
 		out.write("\t\t\t\t\"PSM_data\": {\n");
 		out.write("\t\t\t\t\t\"runtime_prediction\": \""+PSMRuntime+"\",\n");
 		out.write("\t\t\t\t\t\"data_in\": \""+PSMDataIn+"\",\n");
-		out.write("\t\t\t\t\t\"data_out\": \""+PSMDataOut+"\",\n");
-		out.write("\t\t\t\t},\n");
+		out.write("\t\t\t\t\t\"data_out\": \""+PSMDataOut+"\"\n");
+		out.write("\t\t\t\t}\n");
 	}
 
 	/**

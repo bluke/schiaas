@@ -1,0 +1,41 @@
+\nonstopmode
+%\documentclass[landscape]{article}
+\documentclass[16pt]{article}
+%\usepackage{standalone}
+\usepackage{tikz}
+%\pgfkeys{/pgf/fpu=true}
+\usepackage{fullpage}
+
+\newlength{\btutikzwidth}
+\newlength{\btutikzheight}
+
+\begin{document}
+
+Description: \input{simschlouder.info}
+
+\begin{center}
+\begin{tabular}{l|rrr}
+
+				& VM count & BTU count & makespan \\
+				 \hline
+ SimSchlouder & \input{simschlouder.stats} \\
+ \hline
+\end{tabular}
+\end{center}
+
+%\includegraphics[width=\textwidth]{diameter.pdf}
+
+\input{simschlouder.latexdim}
+\setlength{\pdfpagewidth}{\btutikzwidth}
+\setlength{\pdfpageheight}{\btutikzheight}
+
+%to include header
+\addtolength{\pdfpageheight}{5cm}
+
+%\vspace*{-2.5cm}
+\hspace*{-3cm}
+\begin{tikzpicture}[scale=0.9]
+\input{simschlouder.tikz}
+\end{tikzpicture}
+ 
+\end{document} 

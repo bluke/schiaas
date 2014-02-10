@@ -63,8 +63,8 @@ public class SimSchlouder {
 				double inputSize = 0;
 				double outputSize = 0;
 				if (sc.hasNextDouble()) {
-					inputSize = sc.nextDouble()*1000;
-					outputSize = sc.nextDouble()*1000;
+					inputSize = sc.nextDouble()*1e6;
+					outputSize = sc.nextDouble()*1e6;
 				}
 				
 				Vector<SchloudTask> dependencies = new Vector<SchloudTask>();

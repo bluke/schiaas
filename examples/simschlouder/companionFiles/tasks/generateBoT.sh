@@ -14,8 +14,8 @@ do
 	while [ $iT -lt $2 ]
 	do 
 		RT=$(($RANDOM % 4000))
-		input_size=$(($RANDOM / 10))
-		output_size=$(($RANDOM / 10))
+		input_size=$(($RANDOM))
+		output_size=$(($RANDOM))
 		echo -e "${iB}_${iT}\t$ST\t$RT\t$input_size\t$output_size"
 		((iT++))
 	done
