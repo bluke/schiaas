@@ -124,15 +124,6 @@ public class Rice extends ComputeEngine {
 	public void doCommand(COMMAND command, Instance instance) {
 		RiceInstance riceInstance = (RiceInstance) instance;
 
-		switch(command) {
-			case START: 
-				riceInstance.riceHost.coreUsedByVMcount+=riceInstance.getCoreNumber();
-				break;
-			case SHUTDOWN:
-				riceInstance.riceHost.coreUsedByVMcount-=riceInstance.getCoreNumber();
-				break;				
-		}
-		
 		RiceControllerProcess rcp = new RiceControllerProcess(this, command, riceInstance);
 		RiceNodeProcess rnp = new RiceNodeProcess(this, riceInstance.riceHost);
 		

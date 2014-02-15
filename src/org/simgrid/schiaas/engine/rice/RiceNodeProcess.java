@@ -31,6 +31,8 @@ public class RiceNodeProcess extends Process {
 		switch (riceTask.command) {
 		case START:
 			
+			riceHost.coreUsedByVMcount+=riceInstance.getCoreNumber();
+			
 			// Image caching management
 			if (riceHost.imagesCache.get(riceInstance.getImage()) == null) {
 				switch (rice.imgCaching) {
@@ -68,6 +70,8 @@ public class RiceNodeProcess extends Process {
 			break;
 			
 		case SHUTDOWN:
+			// TODO: May be an issue when the slot is reused immediately and there is penalty for start/shutdown
+			riceHost.coreUsedByVMcount-=riceInstance.getCoreNumber();  
 			riceInstance.shutdown();
 			riceInstance.destroy();
 			break;
