@@ -91,13 +91,18 @@ public class SchloudController extends org.simgrid.msg.Process {
 	 */
 	public void main(String[] args) throws MsgException {
 		while (!(mainQueue.isEmpty() && nodes.isEmpty() && allTasksSubmitted)) {
-			//Msg.verb("main loop : "+ mainQueue.size() + " tasks remaining to process, and " + nodes.size() +"nodes still alive");
-			try {
-				SchloudController.strategy.execute();
-			} catch (SimSchloudException e) {				
-				e.printStackTrace();
-				//TODO is it a good idea to terminate this process?
-				System.exit(1);
+			Msg.verb("main loop : main queue="+ mainQueue.size() 
+					+ ", idle nodes=" +idleNodesCount+"/("+ nodes.size()+"+"+schloudCloud.compute.describeAvailability(instanceTypeId)+")");
+			
+			if (idleNodesCount!=0 
+				|| schloudCloud.compute.describeAvailability(instanceTypeId)>0) {
+				try {
+					SchloudController.strategy.execute();
+				} catch (SimSchloudException e) {				
+					e.printStackTrace();
+					//TODO is it a good idea to terminate this process?
+					System.exit(1);
+				}
 			}
 			terminateIdleNodes();
 			

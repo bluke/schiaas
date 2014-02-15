@@ -162,21 +162,6 @@ public abstract class Instance extends org.simgrid.msg.VM {
 	}
 	
 	/**
-	 * Updates the time the instance starts 
-	 */
-	public void updateStartTime() {
-		this.startTime = System.currentTimeMillis();
-	}
-	
-	/**
-	 * Updates the time the instance becomes unavailable
-	 */
-	public void updateShutdownTime() {
-		this.shutdownTime = System.currentTimeMillis();
-		this.billTime = (int)(this.shutdownTime - this.startTime);
-	}
-
-	/**
 	 * of course.
 	 * 
 	 * @return A string containing the name of the instance and its host.

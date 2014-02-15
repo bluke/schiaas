@@ -17,21 +17,5 @@ public class RiceInstance extends Instance {
 		super(id, image, instanceType, riceHost.host);
 		this.riceHost = riceHost;
 		this.isPending = true;
-		riceHost.coreUsedByVMcount+=Double.parseDouble(instanceType.getProperty("core"));
-	}
-	
-	/*
-	@Override
-	public void start() {
-		this.isPending = false;
-		this.updateStartTime();
-		super.start();
-	}
-	
-	@Override
-	public void shutdown() {
-		this.updateShutdownTime();
-		super.shutdown();
-	}
-	*/
+	}	
 }

@@ -61,7 +61,6 @@ public class SchloudNode extends Process {
 		String instanceId = cloud.compute.runInstance(SchloudController.imageId, SchloudController.instanceTypeId);
 		if (instanceId==null) return null;
 		
-		
 		SchloudNode node = new SchloudNode(instanceId,cloud);
 		
 		try {

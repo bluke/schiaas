@@ -247,6 +247,7 @@ public class Compute {
 	 *            the id of the image of the instance.
 	 * @param instanceTypeId
 	 *            the id of the type of the instance
+	 *            or null if no instance can be provisioned
 	 * @return the id of the instance, about to be started
 	 */
 	public String runInstance(String imageId, String instanceTypeId) {
@@ -254,6 +255,9 @@ public class Compute {
 				this.getCloud().getId() + "-" + instancesId,
 				this.images.get(imageId),
 				this.instanceTypes.get(instanceTypeId));
+		
+		if (instance == null) return null;
+		
 		this.computeEngine.doCommand(ComputeEngine.COMMAND.START, instance);
 
 
@@ -266,19 +270,22 @@ public class Compute {
 	 * Run a new instance
 	 * 
 	 * @param imageId
-	 *            the id of the image of the instance.
+	 *            the id of the image of the instances to run.
 	 * @param instanceTypeId
-	 *            the id of the type of the instance
-	 * @param nVM
+	 *            the id of the type of the instances to run
+	 * @param nInstances
 	 *            the number of instances to run
-	 * @return the id of the instance, about to be started
+	 * @return an array containing the ids of the instances that will be actually started. 
 	 */
-	public String[] runInstances(String imageId, String instanceTypeId, int nVM) {
-		String[] instancesId = new String[nVM];
-		for (int i = 0; i < nVM; i++) {
-			instancesId[i] = runInstance(imageId, instanceTypeId);
+	public String[] runInstances(String imageId, String instanceTypeId, int nInstances) {
+		Vector<String> instancesId = new Vector<String>();
+		for (int i=0; i<nInstances; i++) {
+			String instanceId = runInstance(imageId, instanceTypeId);
+			if (instanceId == null) break;
+			instancesId.add(instanceId);
 		}
-		return instancesId;
+
+		return (String[]) instancesId.toArray();
 	}
 
 	/**
@@ -291,8 +298,7 @@ public class Compute {
 		if (this.instances.get(instanceId).isTerminating == true) return;
 		
 		this.instances.get(instanceId).isTerminating = true;
-		this.computeEngine.doCommand(ComputeEngine.COMMAND.SHUTDOWN,
-				this.instances.get(instanceId));
+		this.computeEngine.doCommand(ComputeEngine.COMMAND.SHUTDOWN,this.instances.get(instanceId));
 	}
 
 	/**
@@ -326,8 +332,8 @@ public class Compute {
 	 * @return The number of available instances of the given type
 	 */
 	public int describeAvailability(String instanceTypeId) {
-		return this.computeEngine.describeAvailability(this.instanceTypes
-				.get(instanceTypeId));
+		return this.computeEngine.describeAvailability(
+				this.instanceTypes.get(instanceTypeId));
 	}
 
 	/**

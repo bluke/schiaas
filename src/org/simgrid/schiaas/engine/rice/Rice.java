@@ -100,10 +100,9 @@ public class Rice extends ComputeEngine {
 		int i = 0;
 		double core = Double.parseDouble(instanceType.getProperty("core"));
 		while (i < this.riceHosts.size()
-				&& (this.riceHosts.get(i).host.getCoreNumber() - this.riceHosts
-						.get(i).coreUsedByVMcount) < core) {
-			Msg.info("assign " + i + "/" + this.riceHosts.size() + " : " + core
-					+ "-" + this.riceHosts.get(i).coreUsedByVMcount + "/"
+				&& (this.riceHosts.get(i).host.getCoreNumber() - this.riceHosts.get(i).coreUsedByVMcount) < core) {
+			Msg.verb("assign: PM " + i + "/" + this.riceHosts.size() + " : asked cores=" + core
+					+ ", used cores=" + this.riceHosts.get(i).coreUsedByVMcount + "/"
 					+ this.riceHosts.get(i).host.getCoreNumber());
 			i++;
 		}
@@ -117,8 +116,7 @@ public class Rice extends ComputeEngine {
 		double core = Double.parseDouble(instanceType.getProperty("core"));
 		int availability = 0;
 		for (int i = 0; i < this.riceHosts.size(); i++)
-			availability += (this.riceHosts.get(i).host.getCoreNumber() - this.riceHosts
-					.get(i).coreUsedByVMcount) / core;
+			availability += (this.riceHosts.get(i).host.getCoreNumber() - this.riceHosts.get(i).coreUsedByVMcount) / core;
 
 		return availability;
 	}
@@ -126,6 +124,15 @@ public class Rice extends ComputeEngine {
 	public void doCommand(COMMAND command, Instance instance) {
 		RiceInstance riceInstance = (RiceInstance) instance;
 
+		switch(command) {
+			case START: 
+				riceInstance.riceHost.coreUsedByVMcount+=riceInstance.getCoreNumber();
+				break;
+			case SHUTDOWN:
+				riceInstance.riceHost.coreUsedByVMcount-=riceInstance.getCoreNumber();
+				break;				
+		}
+		
 		RiceControllerProcess rcp = new RiceControllerProcess(this, command, riceInstance);
 		RiceNodeProcess rnp = new RiceNodeProcess(this, riceInstance.riceHost);
 		
@@ -144,9 +151,8 @@ public class Rice extends ComputeEngine {
 	@Override
 	public Instance newInstance(String id, Image image, InstanceType instanceType) {
 		RiceHost riceHost = assignVM(instanceType);
-		//RiceHost riceHost = this.riceHosts.get(0);
-		if (riceHost == null)
-			return null;
+
+		if (riceHost == null) return null;
 		return new RiceInstance(id, image, instanceType, riceHost);
 	}
 }
