@@ -75,7 +75,7 @@ public class SimSchlouder {
 					}
 				}
 
-				Msg.info("DEPENDENCIES : "+dependencies.size());
+				//Msg.verb(Dependencies:" : "+dependencies.size());
 				SchloudTask task = new SchloudTask(jid, runtime, inputSize, outputSize, dependencies); 
 				taskMap.put(task.name, task);
 				
