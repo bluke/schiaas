@@ -285,7 +285,7 @@ public class Compute {
 			instancesId.add(instanceId);
 		}
 
-		return (String[]) instancesId.toArray();
+		return instancesId.toArray(new String[0]);
 	}
 
 	/**
