@@ -7,15 +7,11 @@
 			<config controller="bonfire-project-nfs.eu"/>
 	</storage>
 	<storage id="bonfire-fr-inria-image_repo" engine="org.simgrid.schiaas.engine.rise.Rise">
-			<config controler="bonfire-blade-bonfire-project-fr-inria_controller.eu" />
+			<config controller="bonfire-blade-bonfire-project-fr-inria_controller.eu" />
 	</storage>
 	<compute engine="org.simgrid.schiaas.engine.rice.Rice">
-		<config controler="bonfire-blade-bonfire-project-fr-inria_controller.eu"
-			image_storage="bonfire-fr-inria-image_repo"
-			image_caching="PRE"
-			inter_boot_delay="22.13"
-			standard_power="8.80869e8"/>
-		<instance_type id="small" core="1" memory="1024" disk="0" />
+		<config controller="bonfire-blade-bonfire-project-fr-inria_controller.eu" image_storage="bonfire-fr-inria-image_repo" image_caching="PRE" inter_boot_delay="22.13" standard_power="8.80869e8"/>
+		<instance_type id="small" core="1" memory="1024" disk="1690" />
 		<image id="schlouder_image" size="10e9"/>
 		
 		<cluster id="bonfire-project-fr-inria" suffix=".eu" prefix="bonfire-blade-" radical="1-4" />
@@ -24,18 +20,18 @@
 
 <cloud id="bonfire-uk-epcc">
 	<storage id="be-ibbt" engine="org.simgrid.schiaas.engine.rise.Rise">
-			<config controller="bonfire-nfs"/>
+			<config controller="bonfire-project-nfs.eu"/>
 	</storage>
 	<storage id="bonfire-uk-epcc-image_repo" engine="org.simgrid.schiaas.engine.rise.Rise">
-			<config controler="vmhostbonfire-project-uk-epcc_controller.eu" />
+			<config controller="vmhostbonfire-project-uk-epcc_controller.eu" />
 	</storage>
 	<compute engine="org.simgrid.schiaas.engine.rice.Rice">
-		<config controler="vmhostbonfire-project-uk-epcc_controller.eu"
+		<config controller="vmhostbonfire-project-uk-epcc_controller.eu"
 			image_storage="bonfire-uk-epcc-image_repo"
 			image_caching="PRE"
 			inter_boot_delay="42.44"
 			standard_power="1.228312e9"/>
-			<!-- Question : quel standard_power lorsque ça correspond àdifférente machine physique ? -->
+			<!-- TODO: quel standard_power lorsque ça correspond àdifférente machine physique ? -->
 		<instance_type id="small" core="1" memory="1024" disk="0" />
 		<image id="schlouder_image" size="10e9"/>
 		
@@ -46,18 +42,18 @@
 
 <cloud id="bonfire-de-hlrs">
 	<storage id="be-ibbt" engine="org.simgrid.schiaas.engine.rise.Rise">
-			<config controller="bonfire-nfs"/>
+			<config controller="bonfire-project-nfs.eu"/>
 	</storage>
 	<storage id="bonfire-de-hlrs-image_repo" engine="org.simgrid.schiaas.engine.rise.Rise">
-			<config controler="bonfire-project-de-hlrs_controller.eu" />
+			<config controller="bonfire-project-de-hlrs_controller.eu" />
 	</storage>
 	<compute engine="org.simgrid.schiaas.engine.rice.Rice">
-		<config controler="bonfire-project-de-hlrs_controller.eu"
+		<config controller="bonfire-project-de-hlrs_controller.eu"
 			image_storage="bonfire-de-hlrs-image_repo"
 			image_caching="PRE"
 			inter_boot_delay="3.625"
 			standard_power="1.675440e9"/>
-			<!-- Question : quel standard_power lorsque ça correspond à différente machine physique ? -->
+			<!-- TODO: quel standard_power lorsque ça correspond à différente machine physique ? -->
 		<instance_type id="small" core="1" memory="1024" disk="0" />
 		<image id="schlouder_image" size="10e9"/>
 		
