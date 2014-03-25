@@ -10,6 +10,7 @@
 			<config controller="bonfire-blade-bonfire-project-fr-inria_controller.eu" />
 	</storage>
 	<compute engine="org.simgrid.schiaas.engine.rice.Rice">
+		<!-- inter_boot_delay: On one PM, time between 2 boot -->
 		<config controller="bonfire-blade-bonfire-project-fr-inria_controller.eu" image_storage="bonfire-fr-inria-image_repo" image_caching="PRE" inter_boot_delay="22.13" standard_power="8.80869e8"/>
 		<instance_type id="small" core="1" memory="1024" disk="1690" />
 		<image id="schlouder_image" size="10e9"/>
@@ -31,7 +32,6 @@
 			image_caching="PRE"
 			inter_boot_delay="42.44"
 			standard_power="1.228312e9"/>
-			<!-- TODO: quel standard_power lorsque ça correspond àdifférente machine physique ? -->
 		<instance_type id="small" core="1" memory="1024" disk="0" />
 		<image id="schlouder_image" size="10e9"/>
 		
@@ -53,7 +53,6 @@
 			image_caching="PRE"
 			inter_boot_delay="3.625"
 			standard_power="1.675440e9"/>
-			<!-- TODO: quel standard_power lorsque ça correspond à différente machine physique ? -->
 		<instance_type id="small" core="1" memory="1024" disk="0" />
 		<image id="schlouder_image" size="10e9"/>
 		
