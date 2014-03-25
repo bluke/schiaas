@@ -131,7 +131,7 @@ public class SchloudNode extends Process {
 	
 	public void enqueue(SchloudTask task) {
 		queue.add(task);
-		idleDate+=getRuntimePrediction(task);
+		idleDate+=task.getWalltimePrediction();
 		if ( state == STATE.IDLE ) {
 			setState(STATE.CLAIMED);
 		}
@@ -141,7 +141,7 @@ public class SchloudNode extends Process {
 		if (task.state!=SchloudTask.STATE.COMPLETE) return false;
 		
 		queue.remove(task);
-		idleDate-=getRuntimePrediction(task);
+		idleDate-=task.getWalltimePrediction();
 		
 		return true;
 	}

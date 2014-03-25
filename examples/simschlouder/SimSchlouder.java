@@ -59,17 +59,19 @@ public class SimSchlouder {
 					waitFor(submissionDate-oldSubmissionDate);
 				}
 
-				double runtime = sc.nextDouble();
+				double walltimePrediction = sc.nextDouble();
 
+				double runtime = walltimePrediction;
 				double inputSize = 0;
 				double outputSize = 0;
-				if (sc.hasNextDouble()) {
-					inputSize = sc.nextDouble()*1e6;
-					outputSize = sc.nextDouble()*1e6;
-				}
 
 				if (sc.hasNext("~")) {
-					Msg.info("go");
+					sc.next();
+					runtime = sc.nextDouble();
+					if (sc.hasNextDouble()) {
+						inputSize = sc.nextDouble()*1e6;
+						outputSize = sc.nextDouble()*1e6;
+					}
 				}
 				
 				Vector<SchloudTask> dependencies = new Vector<SchloudTask>();
@@ -81,7 +83,7 @@ public class SimSchlouder {
 				}
 
 				//Msg.verb(Dependencies:" : "+dependencies.size());
-				SchloudTask task = new SchloudTask(jid, runtime, inputSize, outputSize, dependencies); 
+				SchloudTask task = new SchloudTask(jid, walltimePrediction, runtime, inputSize, outputSize, dependencies); 
 				taskMap.put(task.name, task);
 				
 				Msg.info("Enqueuing " + task);

@@ -214,6 +214,10 @@ public class SchloudTask {
 		return new Vector<SchloudTask>(this.dependencies);
 	}
 	
+	public double getWalltimePrediction() {
+		return this.walltimePrediction;
+	}
+	
 	public double getInputSize() {
 		return this.inputSize;
 	}
