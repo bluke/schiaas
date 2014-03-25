@@ -32,6 +32,9 @@ public class SchloudTask {
 
 	
 	protected String name;
+	
+	protected double walltimePrediction;
+	
 	protected double duration;
 	protected double inputSize;
 	protected double outputSize;
@@ -52,30 +55,38 @@ public class SchloudTask {
 	protected static final double commandDataSize = 1000;
 	protected static final double commandDuration = 1000;
 	
-	public SchloudTask(String name, double runtime, double dataIn,  double dataOut, Vector<SchloudTask> dependencies) {
+	
+	public SchloudTask(String name, double walltimePrediction, double runtime, double inputSize,  double outputSize, Vector<SchloudTask> dependencies) {
 		this.name = name;
 		
+		this.walltimePrediction = walltimePrediction;
+		
 		this.duration = SimSchlouder.time2flops(runtime);
-		this.inputSize = dataIn;
-		this.outputSize = dataOut;
+		this.inputSize = inputSize;
+		this.outputSize = outputSize;
 		
 		this.PSMRuntime = runtime;
-		this.PSMDataIn = dataIn;
-		this.PSMDataOut = dataOut;
+		this.PSMDataIn = inputSize;
+		this.PSMDataOut = outputSize;
 		
 		this.dependencies = dependencies;
 		
 		stateLog = new Vector<StateDate>();
 		setState(STATE.PENDING);
 	}
+	
+	
+	public SchloudTask(String name, double runtime, double inputSize,  double outputSize, Vector<SchloudTask> dependencies) {
+		this (name, runtime, runtime, inputSize, outputSize, new Vector<SchloudTask>());
+	}
 
-	public SchloudTask(String name, double runtime, double input, double output) {
-		this (name, runtime, input, output, new Vector<SchloudTask>());
+	public SchloudTask(String name, double runtime, double inputSize, double outputSize) {
+		this (name, runtime, inputSize, outputSize, new Vector<SchloudTask>());
 	}
 
 	
-	public SchloudTask(String name, double runtime, double input) {
-		this (name, runtime, input, 0);
+	public SchloudTask(String name, double runtime, double inputSize) {
+		this (name, runtime, inputSize, 0);
 	}
 	
 	public SchloudTask(String name, double runtime) {
@@ -227,9 +238,8 @@ public class SchloudTask {
 		return getDateOfFirst(STATE.RUNNING) - getDateOfFirst(STATE.INPUTTING);
 	}
 
-	// Actually the runtime prediction.
 	private double getWallTimePrediction() {
-		return PSMRuntime;
+		return walltimePrediction;
 	}
 
 	private double getWalltime() {
@@ -251,7 +261,7 @@ public class SchloudTask {
 	
 	
 	public String toString() {
-		return "Task["+name+","+duration+"("+PSMRuntime+" s),"+inputSize+","+outputSize+","+state+"]";
+		return "Task["+name+","+walltimePrediction+","+duration+"("+PSMRuntime+" s),"+inputSize+","+outputSize+","+state+"]";
 	}
 		
 }

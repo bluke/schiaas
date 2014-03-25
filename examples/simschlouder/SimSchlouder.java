@@ -47,6 +47,7 @@ public class SimSchlouder {
 			
 			double oldSubmissionDate = 0;
 			
+
 			while (scf.hasNext()) {
 				Scanner sc = new Scanner(scf.nextLine());
 				
@@ -57,14 +58,18 @@ public class SimSchlouder {
 					Msg.verb("Waiting for next bag of tasks");
 					waitFor(submissionDate-oldSubmissionDate);
 				}
-				
+
 				double runtime = sc.nextDouble();
-				
+
 				double inputSize = 0;
 				double outputSize = 0;
 				if (sc.hasNextDouble()) {
 					inputSize = sc.nextDouble()*1e6;
 					outputSize = sc.nextDouble()*1e6;
+				}
+
+				if (sc.hasNext("~")) {
+					Msg.info("go");
 				}
 				
 				Vector<SchloudTask> dependencies = new Vector<SchloudTask>();
@@ -79,7 +84,7 @@ public class SimSchlouder {
 				SchloudTask task = new SchloudTask(jid, runtime, inputSize, outputSize, dependencies); 
 				taskMap.put(task.name, task);
 				
-				Msg.verb("Enqueuing " + task);
+				Msg.info("Enqueuing " + task);
 				SchloudController.enqueueTask(task);
 				sc.close();
 				
