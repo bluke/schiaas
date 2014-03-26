@@ -25,7 +25,7 @@ public class Rise extends StorageEngine {
 	
 	protected Collection<String> completeTransfers;
 	
-	public Rise(Storage storage) {
+	public Rise(Storage storage) throws Exception {
 		super(storage);
 		
 		try {

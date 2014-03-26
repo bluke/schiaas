@@ -110,9 +110,18 @@ public class Storage {
 	 * @param propId
 	 *            the id of the property, as is the XML config file
 	 * @return the property
+	 * @throws Exception 
 	 */
-	public String getConfig(String propId) {
-		return this.config.get(propId);
+	public String getConfig(String propId) throws Exception {
+		String res = this.config.get(propId);
+		if ( res != null)
+		{
+			return res;
+		}
+		else
+		{
+			throw new MissingConfigException(this.cloud.getId(),"storage",propId);
+		}
 	}
 	
 	

@@ -33,8 +33,10 @@ public class SchloudCloud {
 	 * @param bootTimeB1 the boot time for TODO
 	 * @param BTU the size of a BTU in seconds
 	 * @param shutdownMargin the shutdown time
+	 * @throws Exception 
+	 * @throws NumberFormatException 
 	 */
-	public SchloudCloud(String name, double bootTimeB0, double bootTimeB1, double BTU, double shutdownMargin)	{
+	public SchloudCloud(String name, double bootTimeB0, double bootTimeB1, double BTU, double shutdownMargin) throws NumberFormatException, Exception	{
 		this.name=name;
 		this.bootTimeB0=bootTimeB0;
 		this.bootTimeB1=bootTimeB1;

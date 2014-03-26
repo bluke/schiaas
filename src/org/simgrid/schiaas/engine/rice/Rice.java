@@ -53,8 +53,9 @@ public class Rice extends ComputeEngine {
 	 * 
 	 * @param compute
 	 * @param hosts
+	 * @throws Exception 
 	 */
-	public Rice(Compute compute, Collection<Host> hosts) {
+	public Rice(Compute compute, Collection<Host> hosts) throws Exception {
 		super(compute, hosts);
 
 		try {
@@ -62,7 +63,10 @@ public class Rice extends ComputeEngine {
 		} catch (HostNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (Exception e){
+		
 		}
+		
 
 		this.riceHosts = new Vector<RiceHost>();
 		for (Host host : hosts) {
