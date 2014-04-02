@@ -57,7 +57,30 @@ if __name__ == '__main__':
 	output=sys.argv[2]
 	if (os.path.isfile(output)):
 		os.unlink(output)
+	sub_date = 0
+
+	# Associate a job name with its ID
+	jobs_name_dict = {} 
+	for job in jobs:
+		jobs_name_dict[job['name']] = job['id']
+
 	with open(output, 'w') as fp:
 		for job in jobs:
-			fp.write("{0} 0 {1} {2} {3} ~ {4}\n".format(job['id'], job['walltime'], job['input_size'], job['output_size'], job['walltime_prediction'], ))
+			fp.write("{0} {1} {2}".format(job['id'], sub_date, job['walltime_prediction']))
+			if 'runtime' in job and job['runtime'] is not None:
+				fp.write(" ~ {0} ".format(job['runtime']))
+				if 'input_size' in job and job['input_size'] is not None:
+					input_size = job['input_size']
+				else:
+					input_size = 0
+				if 'output_size' in job and job['output_size'] is not None:
+					output_size = job['output_size']
+				else:
+					output_size = 0
+				fp.write("{0} {1}".format(input_size, output_size))
+			if 'dependencies' in job and len(job['dependencies']) > 0:
+				fp.write(" ->")
+				for dependency_name in job['dependencies']:
+					fp.write(" {0}".format(jobs_name_dict[dependency_name]))
+			fp.write("\n")
 

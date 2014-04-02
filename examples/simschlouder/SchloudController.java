@@ -58,10 +58,6 @@ public class SchloudController extends org.simgrid.msg.Process {
 	public static String imageId;
 	public static String instanceTypeId;
 	
-
-	private static double boottime;
-
-	private static double shutdowntime;	
 	/**
 	 * Creates a new Schlouder controller on a given host.
 	 * The controller is started as a process by SimGrid.
@@ -248,8 +244,6 @@ public class SchloudController extends org.simgrid.msg.Process {
 							storage = provNodes.item(j).getAttributes().getNamedItem("storage").getNodeValue();
 							imageId = provNodes.item(j).getAttributes().getNamedItem("image").getNodeValue();
 							instanceTypeId = provNodes.item(j).getAttributes().getNamedItem("instance_type").getNodeValue();
-							boottime = Double.parseDouble(provNodes.item(j).getAttributes().getNamedItem("boottime").getNodeValue());
-							shutdowntime = Double.parseDouble(provNodes.item(j).getAttributes().getNamedItem("shutdowntime").getNodeValue());
 						}
 					}
 				}
