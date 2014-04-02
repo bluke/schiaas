@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.util.Vector;
+import java.util.Locale;
 
 import org.simgrid.msg.Host;
 import org.simgrid.msg.HostFailureException;
@@ -50,7 +51,8 @@ public class SimSchlouder {
 
 			while (scf.hasNext()) {
 				Scanner sc = new Scanner(scf.nextLine());
-				
+				sc.useLocale(Locale.US);
+
 				String jid = sc.next();
 				double submissionDate = sc.nextDouble();
 				
@@ -121,7 +123,7 @@ public class SimSchlouder {
 		
 		Msg.verb("Reading the task file: "+args[1]);
 		String[] tfrpargs = {args[1]};
-		TaskFileReaderProcess tfrp = new TaskFileReaderProcess(Host.getByName("client"),"TaskFileReader",tfrpargs);
+		TaskFileReaderProcess tfrp = new TaskFileReaderProcess(Host.getByName("lemans.u-strasbg.fr"), "TaskFileReader", tfrpargs);
 		tfrp.start();
 		
 		Msg.verb("Loading the strategy: "+args[2]);
