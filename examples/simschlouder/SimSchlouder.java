@@ -15,12 +15,19 @@ import java.util.Scanner;
 import java.util.Vector;
 import java.util.Locale;
 
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
+
 import org.simgrid.msg.Host;
 import org.simgrid.msg.HostFailureException;
 import org.simgrid.msg.HostNotFoundException;
 import org.simgrid.msg.Msg;
 import org.simgrid.msg.MsgException;
 import org.simgrid.msg.NativeException;
+import org.simgrid.schiaas.SchIaaS;
+import org.xml.sax.SAXException;
 
 import simschlouder.algorithms.AStrategy;
 
@@ -118,7 +125,32 @@ public class SimSchlouder {
 			System.exit(1);	
 		}
 		
+	    SchemaFactory schemaFactory = SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
+		Schema schema = null;
 	    
+		try {
+			schema = schemaFactory.newSchema(new StreamSource(SchIaaS.class.getResourceAsStream("/simschlouder/simschlouder.xsd")));
+		} catch (SAXException e1) {
+			Msg.info("Schema factory failed :");
+			Msg.info(e1.toString());
+			System.exit(1);
+		}
+	    
+		Validator validator = schema.newValidator();
+		
+		try{
+            validator.validate(new StreamSource(new File(args[0])));
+            Msg.info(args[0]+" is valid");
+        }
+        catch (SAXException e) 
+        {
+        	Msg.info(args[0]+" is NOT valid");
+        	Msg.info("Reason: " + e.getLocalizedMessage());
+        	Msg.debug(e.toString());
+            System.exit(1);
+        }
+		
+		
 		SchloudController.init(args[0]);
 		
 		Msg.verb("Reading the task file: "+args[1]);

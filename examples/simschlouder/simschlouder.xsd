@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<xs:schema
+xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+<!-- <provisioning><config cloud= storage= image= instance_type= boottime= shutdowntime= />
+	</provisioning>
+-->
+<xs:complexType name="PConfig">
+		<xs:attribute name="cloud" type="xs:normalizedString" use="required" />
+		<xs:attribute name="storage" type="xs:normalizedString" use="required"/>
+		<xs:attribute name="image" type="xs:normalizedString" use="required"/>
+		<xs:attribute name="instance_type" type="xs:normalizedString" use="required"/>
+		<xs:attribute name="boottime" type="xs:decimal" use="required"/>
+		<xs:attribute name="shutdowntime" type="xs:decimal" use="required"/>
+</xs:complexType>
+
+
+<!-- <provisioning>
+	<config>
+</provisioning>
+-->
+<xs:complexType name="Provisioning">
+	<xs:all>
+		<xs:element name="config" type="PConfig"/>
+	</xs:all>
+</xs:complexType>
+
+
+<!-- <cloud id= B0= B1= BTU= shutdown_margin= max_instances_per_user= />
+-->
+<xs:complexType name="Cloud">
+		<xs:attribute name="id" type="xs:normalizedString" use="required" />
+		<xs:attribute name="B0" type="xs:decimal" use="required"/>
+		<xs:attribute name="B1" type="xs:decimal" use="required"/>
+		<xs:attribute name="BTU" type="xs:integer" use="required"/>
+		<xs:attribute name="shutdown_margin" type="xs:integer" use="required"/>
+		<xs:attribute name="max_instances_per_user" type="xs:integer" default="0"/>
+</xs:complexType>
+
+
+<!-- <broker id= /> 
+-->
+<xs:complexType name="Broker">
+	<xs:attribute name="id" type="xs:normalizedString" use="required"/>
+</xs:complexType>
+
+<!-- <config platform= [deployment=] cloud= standard_power= />
+-->
+<xs:complexType name="Config">
+		<xs:attribute name="platform" type="xs:normalizedString" use="required" />
+		<xs:attribute name="deployment" type="xs:normalizedString"/>
+		<xs:attribute name="cloud" type="xs:normalizedString" use="required"/>
+		<xs:attribute name="standard_power" use="required"/>
+</xs:complexType>
+
+
+
+<!-- <simschlouder version=>
+	<config>
+	<broker>
+	<cloud>*
+	<provisioning>
+
+-->
+<xs:element name="simschlouder" >
+	<xs:complexType>
+		<xs:sequence>
+			<xs:element name="config" type="Config" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="broker" type="Broker" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="cloud" type="Cloud" minOccurs="1" maxOccurs="unbounded"/>
+			<xs:element name="provisioning" type="Provisioning"  minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+		<xs:attribute name="version" type="xs:integer" use="required"/>
+	</xs:complexType>
+</xs:element>
+
+</xs:schema>
