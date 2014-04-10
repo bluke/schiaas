@@ -20,6 +20,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.simgrid.msg.Host;
+import org.simgrid.msg.HostNotFoundException;
 import org.simgrid.msg.Msg;
 import org.simgrid.msg.MsgException;
 import org.simgrid.msg.Mutex;
@@ -44,6 +45,7 @@ public class SchloudController extends org.simgrid.msg.Process {
 	
 	protected static String schloudNodeImage;
 	
+	public static String broker;
 	public static Host host;
 	
 	public static AStrategy strategy;
@@ -218,15 +220,29 @@ public class SchloudController extends org.simgrid.msg.Process {
 			for (int i=0; i<nodes.getLength(); i++) {
 				if (nodes.item(i).getNodeName().compareTo("config") == 0) {
 					String platform = nodes.item(i).getAttributes().getNamedItem("platform").getNodeValue();
-					String deployment = nodes.item(i).getAttributes().getNamedItem("deployment").getNodeValue();
+					String deployment = null;
+					if(nodes.item(i).getAttributes().getNamedItem("deployment")!=null){
+						deployment = nodes.item(i).getAttributes().getNamedItem("deployment").getNodeValue();
+					}
+						
 					String cloud = nodes.item(i).getAttributes().getNamedItem("cloud").getNodeValue();
 					SimSchlouder.standardPower = Double.parseDouble(nodes.item(i).getAttributes().getNamedItem("standard_power").getNodeValue());
 					
 					/* construct the platform and deploy the application */
 					Msg.createEnvironment(platform);
-					Msg.deployApplication(deployment);
+					if(deployment!=null)
+						Msg.deployApplication(deployment);
 					
 					SchIaaS.init(cloud);
+				}else if (nodes.item(i).getNodeName().compareTo("broker") == 0) {
+					broker = nodes.item(i).getAttributes().getNamedItem("id").getNodeValue();
+					String[] arg ={};
+					try {
+						SchloudController process = new SchloudController(Host.getByName(broker),broker,arg);
+						process.start();
+					} catch (HostNotFoundException e) {
+						Msg.critical("Pinning fail : broker \""+ broker +"\" not found");
+					}
 				}
 				else if (nodes.item(i).getNodeName().compareTo("cloud") == 0) {
 					String name = nodes.item(i).getAttributes().getNamedItem("id").getNodeValue();

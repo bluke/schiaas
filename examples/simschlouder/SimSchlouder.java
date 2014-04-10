@@ -155,7 +155,7 @@ public class SimSchlouder {
 		
 		Msg.verb("Reading the task file: "+args[1]);
 		String[] tfrpargs = {args[1]};
-		TaskFileReaderProcess tfrp = new TaskFileReaderProcess(Host.getByName("lemans.u-strasbg.fr"), "TaskFileReader", tfrpargs);
+		TaskFileReaderProcess tfrp = new TaskFileReaderProcess(Host.getByName(SchloudController.broker),"TaskFileReader",tfrpargs);
 		tfrp.start();
 		
 		Msg.verb("Loading the strategy: "+args[2]);
