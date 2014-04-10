@@ -10,8 +10,6 @@ xmlns:xs="http://www.w3.org/2001/XMLSchema">
 		<xs:attribute name="storage" type="xs:normalizedString" use="required"/>
 		<xs:attribute name="image" type="xs:normalizedString" use="required"/>
 		<xs:attribute name="instance_type" type="xs:normalizedString" use="required"/>
-		<xs:attribute name="boottime" type="xs:decimal" use="required"/>
-		<xs:attribute name="shutdowntime" type="xs:decimal" use="required"/>
 </xs:complexType>
 
 
