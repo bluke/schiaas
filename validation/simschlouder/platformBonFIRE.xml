@@ -219,16 +219,14 @@
 		Client -> HLRS: bw=28Mbits/sec 
 		Client <- HLRS: bw=300Mbits/sec -->
         <AS id="Client" routing="Full">
-					<!-- <host id="lemans.u-strasbg.fr" power="1e9" core="2" availability="1.0" availability_file="" state="ON" state_file="" coordinates="" pstate="0.0" /> -->
-            <host id="client" power="1e9" core="2" availability="1.0" availability_file="" state="ON" state_file="" coordinates="" pstate="0.0" />
-            <!-- TODO Quelle puissance ? -->
             <!-- on which Schlouder is installed -->
+			<host id="lemans.u-strasbg.fr" power="1e9" core="2" availability="1.0" availability_file="" state="ON" state_file="" coordinates="" pstate="0.0" />
+            <!-- TODO Quelle puissance ? -->
         </AS>
 
         <link id="internet" bandwidth="1.25GBps" latency="500us" bandwidth_file="" latency_file="" state="ON" state_file="" sharing_policy="SHARED" />
         <!-- Link between every AS -->
-				<!-- <ASroute src="Client" dst="BonFIRE" gw_dst="bonfire-project-entrance_router.eu" gw_src="lemans.u-strasbg.fr" symmetrical="YES"> -->
-        <ASroute src="Client" dst="BonFIRE" gw_dst="bonfire-project-entrance_router.eu" gw_src="client" symmetrical="YES">
+		<ASroute src="Client" dst="BonFIRE" gw_dst="bonfire-project-entrance_router.eu" gw_src="lemans.u-strasbg.fr" symmetrical="YES">
             <link_ctn id="internet" />
         </ASroute>
     </AS>
