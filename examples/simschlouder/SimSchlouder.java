@@ -87,7 +87,14 @@ public class SimSchlouder {
 				if (sc.hasNext("\\-\\>")) {
 					sc.next("\\-\\>");
 					while (sc.hasNext()) {
-						dependencies.add(taskMap.get(sc.next()));
+						String depname = sc.next();
+						SchloudTask dep = taskMap.get(depname);
+						if(dep != null){
+							dependencies.add(dep);
+						}
+						else{
+							Msg.critical("Simschlouder error, job "+jid+" has a unexistant dependency : "+depname);
+						}				
 					}
 				}
 
