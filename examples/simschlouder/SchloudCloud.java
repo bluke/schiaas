@@ -85,6 +85,15 @@ public class SchloudCloud {
 		return (bootTimeB0+bootTimeB1*(bootCount+1));
 	}		
 	
+	public int describeAvailability(String instanceTypeId) {
+		if(SchloudController.nodes.size()<maxInstancesPerUser){
+			return compute.describeAvailability(instanceTypeId);
+		}
+		else {
+			return 0;
+		}
+	}
+	
 	/**
 	 * Gets the shutdown time for one VM
 	 * @return

@@ -59,7 +59,6 @@ public class SchloudController extends org.simgrid.msg.Process {
 
 	public static String imageId;
 	public static String instanceTypeId;
-	public static int maxInstancesPerUser;
 	
 	/**
 	 * Creates a new Schlouder controller on a given host.
@@ -91,10 +90,10 @@ public class SchloudController extends org.simgrid.msg.Process {
 	public void main(String[] args) throws MsgException {
 		while (!(mainQueue.isEmpty() && nodes.isEmpty() && allTasksSubmitted)) {
 			Msg.verb("main loop : main queue="+ mainQueue.size() 
-					+ ", idle nodes=" +idleNodesCount+"/("+ nodes.size()+"+"+schloudCloud.compute.describeAvailability(instanceTypeId)+")");
+					+ ", idle nodes=" +idleNodesCount+"/("+ nodes.size()+"+"+schloudCloud.describeAvailability(instanceTypeId)+")");
 			
 			if (idleNodesCount!=0 
-				|| schloudCloud.compute.describeAvailability(instanceTypeId)>0) {
+				|| schloudCloud.describeAvailability(instanceTypeId)>0) {
 				try {
 					SchloudController.strategy.execute();
 				} catch (SimSchloudException e) {				
@@ -271,7 +270,6 @@ public class SchloudController extends org.simgrid.msg.Process {
 			}
 			
 			schloudCloud=schloudClouds.get(provisioningCloud);
-			maxInstancesPerUser = schloudCloud.maxInstancesPerUser;
 
 			//Storage management
 			if (storage.compareTo("host") == 0) {
