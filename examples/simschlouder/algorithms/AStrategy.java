@@ -65,7 +65,7 @@ public abstract class AStrategy {
 			int iTask = 0;
 			while (iTask<tasks.get(l).size() && 
 					( SchloudController.idleNodesCount!=0 
-					|| SchloudController.schloudCloud.compute.describeAvailability(SchloudController.instanceTypeId)>0) ) {
+					|| SchloudController.schloudCloud.describeAvailability(SchloudController.instanceTypeId)>0) ) {
 				SchloudTask task = tasks.get(l).get(iTask);
 				SchloudNode node = null;
 				if (task.hasPendingDependencies()) {

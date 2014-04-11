@@ -251,7 +251,7 @@ public class SchloudController extends org.simgrid.msg.Process {
 					double BTU = Double.parseDouble(nodes.item(i).getAttributes().getNamedItem("BTU").getNodeValue());
 					double shutdownMargin = Double.parseDouble(nodes.item(i).getAttributes().getNamedItem("shutdown_margin").getNodeValue());
 					int maxInstances = 0;
-					if(nodes.item(i).getAttributes().getNamedItem("deployment")!=null){
+					if(nodes.item(i).getAttributes().getNamedItem("max_instances_per_user")!=null){
 						maxInstances = Integer.parseInt(nodes.item(i).getAttributes().getNamedItem("max_instances_per_user").getNodeValue());
 					}
 					schloudClouds.put(name, new simschlouder.SchloudCloud(name,B0,B1,BTU, shutdownMargin,maxInstances));
