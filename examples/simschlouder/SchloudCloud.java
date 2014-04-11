@@ -12,6 +12,7 @@ public class SchloudCloud {
 	protected double standardPower;
 	protected double BTU;
 	protected double shutdownMargin;
+	protected int maxInstancesPerUser;
 	
 	protected int bootCount;
 	
@@ -33,15 +34,17 @@ public class SchloudCloud {
 	 * @param bootTimeB1 the boot time for TODO
 	 * @param BTU the size of a BTU in seconds
 	 * @param shutdownMargin the shutdown time
+	 * @param maxInsances the maximum allowed Instances per User
 	 * @throws Exception 
 	 * @throws NumberFormatException 
 	 */
-	public SchloudCloud(String name, double bootTimeB0, double bootTimeB1, double BTU, double shutdownMargin) throws NumberFormatException, Exception	{
+	public SchloudCloud(String name, double bootTimeB0, double bootTimeB1, double BTU, double shutdownMargin,int maxInstances) throws NumberFormatException, Exception	{
 		this.name=name;
 		this.bootTimeB0=bootTimeB0;
 		this.bootTimeB1=bootTimeB1;
 		this.BTU=BTU;
 		this.shutdownMargin=shutdownMargin;
+		this.maxInstancesPerUser=maxInstances;
 
 		this.bootCount = 0;
 		this.compute = SchIaaS.getCloud(name).getCompute();
