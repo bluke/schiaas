@@ -9,6 +9,7 @@ import org.simgrid.msg.Msg;
 import org.simgrid.msg.TimeoutException;
 import org.simgrid.msg.TransferFailureException;
 import org.simgrid.schiaas.engine.StorageEngine;
+import org.simgrid.schiaas.exceptions.MissingConfigException;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -112,7 +113,7 @@ public class Storage {
 	 * @return the property
 	 * @throws Exception 
 	 */
-	public String getConfig(String propId) throws Exception {
+	public String getConfig(String propId) throws MissingConfigException {
 		String res = this.config.get(propId);
 		if ( res != null)
 		{

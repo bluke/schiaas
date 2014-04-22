@@ -1,4 +1,4 @@
-package org.simgrid.schiaas;
+package org.simgrid.schiaas.exceptions;
 
 public class MissingConfigException extends Exception{
 	
