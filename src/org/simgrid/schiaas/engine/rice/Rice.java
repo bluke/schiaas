@@ -16,6 +16,7 @@ import org.simgrid.schiaas.Instance;
 import org.simgrid.schiaas.InstanceType;
 import org.simgrid.schiaas.Storage;
 import org.simgrid.schiaas.engine.ComputeEngine;
+import org.simgrid.schiaas.exceptions.MissingConfigException;
 
 /**
  * Reduced Implementation of Compute Engine.
@@ -57,6 +58,17 @@ public class Rice extends ComputeEngine {
 	 */
 	public Rice(Compute compute, Collection<Host> hosts) throws Exception {
 		super(compute, hosts);
+		
+		try{
+			compute.getConfig("controller");
+			compute.getConfig("image_storage");
+			compute.getConfig("image_caching");
+			compute.getConfig("inter_boot_delay");
+		} catch (MissingConfigException e)
+		{
+			Msg.critical(e.getMessage());
+			throw e;
+		}
 
 		try {
 			this.controller = Host.getByName((String) compute.getConfig("controller"));

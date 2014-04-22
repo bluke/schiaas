@@ -12,6 +12,7 @@ import org.simgrid.msg.TransferFailureException;
 import org.simgrid.schiaas.Data;
 import org.simgrid.schiaas.Storage;
 import org.simgrid.schiaas.engine.StorageEngine;
+import org.simgrid.schiaas.exceptions.MissingConfigException;
 
 /**
  * Simple Cloud Storage Implementation
@@ -29,7 +30,17 @@ public class Rise extends StorageEngine {
 		super(storage);
 		
 		try {
+			storage.getConfig("controller");
+		} catch (MissingConfigException e){
+			Msg.critical(e.getMessage());
+			throw e;
+		}
+		
+		try {
 			controller = Host.getByName(storage.getConfig("controller"));
+		}catch (MissingConfigException e){
+			Msg.critical(e.getMessage());
+			e.printStackTrace();
 		} catch (HostNotFoundException e) {
 			Msg.critical("RISE controller host "+storage.getConfig("controller")+" not found.");
 			e.printStackTrace();
