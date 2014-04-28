@@ -67,3 +67,14 @@ COMMENT "${MSG_JAVADOC} Generating API documentation" VERBATIM
 
 add_subdirectory(src)
 add_subdirectory(examples)
+
+#testing
+find_program( TESH_BIN 
+	tesh)
+
+if(NOT ${TESH_BIN} MATCHES TESH_BIN-NOTFOUND)
+	enable_testing()
+	add_test(tesh-cloudmasterslave ${TESH_BIN} --cd ${PROJECT_BINARY_DIR}/cloudmasterslave ${PROJECT_BINARY_DIR}/cloudmasterslave/test.tesh)
+	add_test(tesh-simschlouder-ASAP ${TESH_BIN} --cd ${PROJECT_BINARY_DIR}/simschlouder ${PROJECT_BINARY_DIR}/simschlouder/ASAP.tesh)
+	add_test(tesh-simschlouder-AFAP ${TESH_BIN} --cd ${PROJECT_BINARY_DIR}/simschlouder ${PROJECT_BINARY_DIR}/simschlouder/AFAP.tesh)
+endif(NOT ${TESH_BIN} MATCHES TESH_BIN-NOTFOUND)
