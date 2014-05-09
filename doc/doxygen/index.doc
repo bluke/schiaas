@@ -132,7 +132,7 @@ The storage tag must have the following attributes:
 
 It also must include one config tag, giving any information needed by this engine. For instance, RICE only needs one controller, which will store and distribute the data.
 
-As many storages as needed can be declared, but the ones used by the compute engine must be declared before the compute tag. 
+As many storages as needed can be declared, and they must be declared before the compute tag. 
 
 
 @subsubsection compute_tag Compute tag
