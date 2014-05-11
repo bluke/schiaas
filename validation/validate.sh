@@ -1,6 +1,6 @@
 #!/bin/bash
 
-TASK_FILE=${PWD}/simschlouder/trace.tasks
+SS_CLASSPATH="/usr/local/java/simgrid.jar:$PWD/../bin/schiaas.jar:$PWD/../bin/simschlouder/simschlouder.jar"
 
 if [ $# -gt 0 ]
 then 
@@ -9,53 +9,63 @@ else
 	SOURCES=sources/*
 fi
 
+mkdir data
+
 for source in $SOURCES
 do
-	mkdir -p btuviewer/data
-	rm btuviewer/data/*
+	mkdir btuviewer/data
+	rm -rf btuviewer/data/*
 
-	echo "processing $source"
-	./schlouder2simtasks.py $source $TASK_FILE 
-	
+	mkdir concurrent-jobs/data
+	rm concurrent-jobs/data/* 
+
+
+	# finding the strategy
 	if [ `cat $source | grep "Asap" -c` -ne 0 ] 
 	then 
 		STRATEGY="ASAP"
 	else 
 		STRATEGY="AFAP"
 	fi
-	
+	echo "Found strategy: $STRATEGY"	
 
-	echo "simschlouder with $STRATEGY"	
+	sourceFilename=$(basename "$source")
 
-	cd simschlouder 
-	rm *.json
-	java -classpath "/usr/local/java/simgrid.jar:../../bin/simschlouder.jar" simschlouder.SimSchlouder simschlouder.xml $TASK_FILE $STRATEGY
-	cp simschlouder.json simschlouder-realduration.json
 
-	cp $TASK_FILE /tmp/`basename $TASK_FILE`; cat /tmp/`basename $TASK_FILE` | cut -f1,2,5 -d" " > $TASK_FILE
-        java -classpath "/usr/local/java/simgrid.jar:../../bin/simschlouder.jar" simschlouder.SimSchlouder simschlouder.xml $TASK_FILE $STRATEGY
-	mv simschlouder.json simschlouder-predictiononly.json
-	
-	echo "gluplot diamters"
-	cd ../concurrent-jobs
-	rm *.dat *.eps
-	../json2diameter.py ../$source schlouder
-	../json2diameter.py ../simschlouder/simschlouder-realduration.json simschlouder-realduration
-	../json2diameter.py ../simschlouder/simschlouder-predictiononly.json simschlouder-predictiononly
+	for lob in none wto psm rio
+	do
+		taskFile=${PWD}/data/${sourceFilename%.*}-${lob}.tasks
+		jsonFile=${PWD}/data/${sourceFilename%.*}-${lob}.json
 
+		./json2tasks.py $lob $source > $taskFile
+
+		echo "Simulating $lob"
+		cd simschlouder
+		java -classpath $SS_CLASSPATH simschlouder.SimSchlouder simschlouder.xml $taskFile $STRATEGY 2> simschlouder.out
+		mv simschlouder.json $jsonFile
+		cd ..
+
+		echo "Calculating diameters"
+		./json2diameter.py $jsonFile concurrent-jobs/data/simschlouder-${lob}
+
+		echo "Drawing Tickz"
+		./json2tikz.py $jsonFile btuviewer/data/simschlouder-${lob}
+	done
+
+	echo "Plotting diameters"
+	cd concurrent-jobs
+	../json2diameter.py ../$source data/schlouder
 	gnuplot template.plot
 	epspdf diameter.eps ../btuviewer/data/diameter.pdf
 
-	echo "latex btu"
+	echo "Processing tex"
 	cd ../btuviewer
 	echo $source > data/source.filename
-	../schlouder-btu.py ../$source data/schlouder
-	../schlouder-btu.py ../simschlouder/simschlouder-realduration.json data/simschlouder-realduration
-	../schlouder-btu.py ../simschlouder/simschlouder-predictiononly.json data/simschlouder-predictiononly
+	../json2tikz.py ../$source data/schlouder
 
 	rm *.pdf
-	pdflatex template-btu-schlouder.tex 
-	cp template-btu-schlouder.pdf ../results/`basename $source`.pdf
+	pdflatex template-btu-schlouder.tex
+	cp template-btu-schlouder.pdf ../results/${sourceFilename}.pdf
 
 	cd ..
 done

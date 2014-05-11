@@ -47,12 +47,11 @@ if __name__ == '__main__':
 		results = json.load(fp)
 
 		# Output description
-		
 		output=sys.argv[2] + ".info"
 		if (os.path.isfile(output)):
 			os.unlink(output)
 		with open(output, 'w') as fp:
-			if hasattr(results['info'], 'description'):
+			if hasattr(results, 'info') and hasattr(results['info'], 'description'):
 				fp.write("{0}".format(results['info']['description']))
 			else :
 				fp.write("no description")

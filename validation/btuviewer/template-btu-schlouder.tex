@@ -25,8 +25,10 @@ Description: \input{data/schlouder.info}
 				& VM count & BTU count & makespan \\
 				 \hline
  Schlouder 			& \input{data/schlouder.stats} \\
- SimSchlouder real duration 	& \input{data/simschlouder-realduration.stats} \\
- SimSchlouder prediction only	& \input{data/simschlouder-predictiononly.stats} \\
+ SimSchlouder walltime prediction only 	& \input{data/simschlouder-none.stats} \\
+ SimSchlouder PSM data					& \input{data/simschlouder-psm.stats} \\
+ SimSchlouder real walltime			 	& \input{data/simschlouder-wto.stats} \\
+ SimSchlouder real RT, in, out			& \input{data/simschlouder-rio.stats} \\
  \hline
 \end{tabular}
 \end{center}
@@ -47,25 +49,48 @@ Description: \input{data/schlouder.info}
 
 \newpage
 
-\input{data/simschlouder-realduration.latexdim}
+\input{data/simschlouder-none.latexdim}
 \setlength{\pdfpagewidth}{\btutikzwidth}
 \setlength{\pdfpageheight}{\btutikzheight}
 \vspace*{-2.5cm}
 \hspace*{-3cm}
 \begin{tikzpicture}[scale=0.9]
-\input{data/simschlouder-realduration.tikz}
+\input{data/simschlouder-none.tikz}
 \end{tikzpicture}
 
 \newpage
 
-\input{data/simschlouder-predictiononly.latexdim}
+\input{data/simschlouder-psm.latexdim}
 \setlength{\pdfpagewidth}{\btutikzwidth}
 \setlength{\pdfpageheight}{\btutikzheight}
 \vspace*{-2.5cm}
 \hspace*{-3cm}
 \begin{tikzpicture}[scale=0.9]
-\input{data/simschlouder-predictiononly.tikz}
+\input{data/simschlouder-psm.tikz}
 \end{tikzpicture}
+
+\newpage
+
+\input{data/simschlouder-wto.latexdim}
+\setlength{\pdfpagewidth}{\btutikzwidth}
+\setlength{\pdfpageheight}{\btutikzheight}
+\vspace*{-2.5cm}
+\hspace*{-3cm}
+\begin{tikzpicture}[scale=0.9]
+\input{data/simschlouder-wto.tikz}
+\end{tikzpicture}
+
+\newpage
+
+\input{data/simschlouder-rio.latexdim}
+\setlength{\pdfpagewidth}{\btutikzwidth}
+\setlength{\pdfpageheight}{\btutikzheight}
+\vspace*{-2.5cm}
+\hspace*{-3cm}
+\begin{tikzpicture}[scale=0.9]
+\input{data/simschlouder-rio.tikz}
+\end{tikzpicture}
+
 
 
 \end{document} 
