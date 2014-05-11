@@ -48,25 +48,32 @@ Inside each blue box: a red box shows the input time; a green box shows the runt
 <?xml version='1.0'?>
  <!DOCTYPE simschlouder>
  <simschlouder version="1">
- 	<config platform="platform.xml" deployment="deployment.xml" cloud="cloud.xml" standard_power="9.5e9" />
-	<cloud  id="icps-opst" B0="41.6" B1="6" BTU="3600" shutdown_margin="20"/>
+ 	<config platform="platform.xml" [deployment="deplyment.xml"] cloud="cloud.xml" standard_power="10e9" />
+	<broker id="client" />
+	<cloud  id="icps-opst" B0="41.6" B1="6" BTU="3600" shutdown_margin="20" max_instances_per_user="0"/>
 	<provisioning>
-		<config cloud="icps-opst" image="opst-image" instance_type="small" boottime="41.6" shutdowntime="10"/>
+		<config cloud="icps-opst" storage="myStorage"
+			image="opst-image" instance_type="small"/>
 	</provisioning>
 </simschlouder> 
 @endcode
 
 Where:
-The config tag must have the following attributes:
-  - platform and deployment and cloud: the Simgrid/SCHIaaS configuration files
+The config tag has the following attributes:
+  - platform and cloud: the Simgrid/SCHIaaS configuration files
   - standard_power: the base unit of CPU power (i.e. the EC2CU)
+  - deployment (OPTIONAL) : the Simgrid file, default none
 
-The cloud tag must have the following attributes:
+The broker tag must contain the following attributes : 
+  - id : the id of the host on wich to deploy the Cloud Controller
+
+The cloud tag must has the following attributes:
   - id: the id of the cloud or of the region to use (as in the cloud configuration file)
   - B0: the time to boot a first instance
   - B1: the delay between two consecutive boots
   - BTU: the Billing Time Unit (e.g. 1 hour for amazon EC2)
   - shutdown_margin: the delay before the end of one BTU when an instance shloud be stopped
+  - max_instances_per_user (OPTIONAL) : max instance number allowed simultanusly on the cloud. Default is unlimited, noted "0"
 
 The provisioning tag must have the information needed specifically by the strategy.
 
@@ -77,17 +84,18 @@ The provisioning tag must have the information needed specifically by the strate
 The input of SimSchlouder is the workload to execute.
 It is described in a file, which lines are as follows:
 @code
-<task id> <submit date> <runtime> [<input data size> <output data size>] [-> <task id> ...]
+<task id> <submit date> <walltime> [~ <runtime> [<input data size> <output data size>]] [-> <task id> ...]
 @endcode
 
 For instance, the following line:
 @code
-0_4 10 3394 38650 178090 -> 0_1 0_2
+0_4 10 3394 ~ 3200 38650 178090 -> 0_1 0_2
 @endcode
 describes a task:
 - named "0_4"
 - submitted at t=10s
-- which runtime is 3394s on a host showing a CPU of standard_power 
+- whose predicted walltime is 3394s on a host showing a CPU of standard_power 
+- running in 3200 seconds on a host showing a CPU of standard_power.
 - receiving 38650000 MB as input
 - outputting 178090000 MB of data
 - being dependent of the tasks "0_1" and "0_2"
