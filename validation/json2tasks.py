@@ -16,8 +16,8 @@ def usage():
 	print >> sys.stderr, 'Usage: {0} [-psm] json_file bot_file'.format(sys.argv[0])
 
 parser = argparse.ArgumentParser(description='Convert Schlouder json file to SimSchlouder tasks file.')
-parser.add_argument('lod', choices=['none', 'wto', 'rio', 'psm'],
-	default='none',	help='level of details: none=walltime prediction only, wto=walltime only, rio=runtime input output, psm=psm data')
+parser.add_argument('lod', choices=['wpo', 'wto', 'rio', 'psm'],
+	help='level of details: wpo=walltime prediction only, wto=walltime only, rio=runtime input output, psm=psm data')
 parser.add_argument('json_file', help='input json file')
 
 args = parser.parse_args()

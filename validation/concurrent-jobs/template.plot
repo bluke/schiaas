@@ -35,8 +35,8 @@ set title "Concurrent jobs and VMs"
 plot \
 	"data/schlouder-jobs.dat" u 1:2 w steps ti "Concurrent jobs in Schlouder", \
 	"data/schlouder-vms.dat" u 1:2 w steps ti "Concurrent VMs in Schlouder", \
-	"data/simschlouder-none-jobs.dat" u 1:2 w steps ti "Concurrent jobs in SimSchlouder (walltime prediction only)", \
-	"data/simschlouder-none-vms.dat" u 1:2 w steps ti "Concurrent VMs", \
+	"data/simschlouder-wpo-jobs.dat" u 1:2 w steps ti "Concurrent jobs in SimSchlouder (walltime prediction only)", \
+	"data/simschlouder-wpo-vms.dat" u 1:2 w steps ti "Concurrent VMs", \
 	"data/simschlouder-psm-jobs.dat" u 1:2 w steps ti "Concurrent jobs in SimSchlouder (PSM data)", \
 	"data/simschlouder-psm-vms.dat" u 1:2 w steps ti "Concurrent VMs", \
 	"data/simschlouder-wto-jobs.dat" u 1:2 w steps ti "Concurrent jobs in SimSchlouder (real walltime)", \

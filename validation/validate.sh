@@ -1,6 +1,7 @@
 #!/bin/bash
 
 SS_CLASSPATH="/usr/local/java/simgrid.jar:$PWD/../bin/schiaas.jar:$PWD/../bin/simschlouder/simschlouder.jar"
+STAT_FILE="results/stats.dat"
 
 if [ $# -gt 0 ]
 then 
@@ -10,14 +11,27 @@ else
 fi
 
 mkdir data
+mkdir btuviewer/data
+mkdir concurrent-jobs/data
+
+if [ ! -e "${STAT_FILE}" ] 
+then
+	echo "Creating stat file $STAT_FILE"
+	echo -e "\"source\"\t\"VM\"\t\"BTU\"\t\"makespan\"\t\"wpo VM\"\t\"wpo BTU\"\t\"wpo makespan\"\t\"wto VM\"\t\"wto BTU\"\t\"wto makespan\"\t\"psm VM\"\t\"psm BTU\"\t\"psm makespan\"\t\"rio VM\"\t\"rio BTU\"\t\"rio makespan\"" > $STAT_FILE
+fi
+
 
 for source in $SOURCES
 do
-	mkdir btuviewer/data
-	rm -rf btuviewer/data/*
+	echo "Processing $source"
 
-	mkdir concurrent-jobs/data
+	source=`readlink -f $source`
+	sourceFilename=$(basename "$source")
+
+	echo -en "$sourceFilename" >> $STAT_FILE
+
 	rm concurrent-jobs/data/* 
+	rm -rf btuviewer/data/*
 
 
 	# finding the strategy
@@ -29,19 +43,44 @@ do
 	fi
 	echo "Found strategy: $STRATEGY"	
 
-	sourceFilename=$(basename "$source")
+	# finding the cloud
+	if [[ $source == *inria* ]] 
+	then 
+		CLOUD_FILE="simschlouderBonFIRE-fr-inria.xml"
+	elif [[ $source == *epcc* ]] 
+	then
+		CLOUD_FILE="simschlouderBonFIRE-uk-epcc.xml"
+	elif [[ $source == *hlrs* ]] 
+	then
+		CLOUD_FILE="simschlouderBonFIRE-de-hlrs.xml"
+	else
+		CLOUD_FILE="simschlouderICPS.xml"
+	fi
+	echo "Using: $CLOUD_FILE"
 
 
-	for lob in none wto psm rio
+	echo "Processing source"
+	./json2diameter.py $source concurrent-jobs/data/schlouder
+	stat=`./json2tikz.py $source btuviewer/data/schlouder`
+
+	echo -en "\t$stat" >> $STAT_FILE
+
+	for lob in wpo wto psm rio
 	do
 		taskFile=${PWD}/data/${sourceFilename%.*}-${lob}.tasks
 		jsonFile=${PWD}/data/${sourceFilename%.*}-${lob}.json
 
 		./json2tasks.py $lob $source > $taskFile
+		if [ "$?" -ne 0 ] ; then
+			echo "Fail"
+			echo -en "\tNA\tNA\tNA" >> $STAT_FILE
+			continue
+		fi
+
 
 		echo "Simulating $lob"
 		cd simschlouder
-		java -classpath $SS_CLASSPATH simschlouder.SimSchlouder simschlouder.xml $taskFile $STRATEGY 2> simschlouder.out
+		java -classpath $SS_CLASSPATH simschlouder.SimSchlouder $CLOUD_FILE $taskFile $STRATEGY 2> simschlouder.out
 		mv simschlouder.json $jsonFile
 		cd ..
 
@@ -49,19 +88,20 @@ do
 		./json2diameter.py $jsonFile concurrent-jobs/data/simschlouder-${lob}
 
 		echo "Drawing Tickz"
-		./json2tikz.py $jsonFile btuviewer/data/simschlouder-${lob}
+		stat=`./json2tikz.py $jsonFile btuviewer/data/simschlouder-${lob}`
+		echo -en "\t$stat" >> $STAT_FILE
 	done
+
+	echo >> $STAT_FILE
 
 	echo "Plotting diameters"
 	cd concurrent-jobs
-	../json2diameter.py ../$source data/schlouder
 	gnuplot template.plot
 	epspdf diameter.eps ../btuviewer/data/diameter.pdf
 
 	echo "Processing tex"
 	cd ../btuviewer
 	echo $source > data/source.filename
-	../json2tikz.py ../$source data/schlouder
 
 	rm *.pdf
 	pdflatex template-btu-schlouder.tex
