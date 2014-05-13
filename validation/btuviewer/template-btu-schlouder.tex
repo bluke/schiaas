@@ -9,6 +9,28 @@
 \newlength{\btutikzwidth}
 \newlength{\btutikzheight}
 
+
+
+\newcommand{\inputstat}[1]{
+	\IfFileExists{#1}{\input{#1}}{NA & NA & NA}
+}
+
+\newcommand{\inputtikz}[1]{
+	\IfFileExists{#1.latexdim}{
+		\newpage
+
+		\input{#1.latexdim}
+		\setlength{\pdfpagewidth}{\btutikzwidth}
+		\setlength{\pdfpageheight}{\btutikzheight}
+		\vspace*{-2.5cm}
+		\hspace*{-3cm}
+		\begin{tikzpicture}[scale=0.9]
+		\input{#1.tikz}
+		\end{tikzpicture}
+	}
+}
+
+
 \begin{document}
 
 \title{\input{data/source.filename}}
@@ -25,17 +47,30 @@ Description: \input{data/schlouder.info}
 				& VM count & BTU count & makespan \\
 				 \hline
  Schlouder 			& \input{data/schlouder.stats} \\
- SimSchlouder walltime prediction only 	& \input{data/simschlouder-wpo.stats} \\
- SimSchlouder PSM data					& \input{data/simschlouder-psm.stats} \\
- SimSchlouder real walltime			 	& \input{data/simschlouder-wto.stats} \\
- SimSchlouder real RT, in, out			& \input{data/simschlouder-rio.stats} \\
+ SimSchlouder walltime prediction only 	& \inputstat{data/simschlouder-wpo.stats} \\
+ SimSchlouder PSM data					& \inputstat{data/simschlouder-psm.stats} \\
+ SimSchlouder real walltime			 	& \inputstat{data/simschlouder-wto.stats} \\
+ SimSchlouder real RT, in, out			& \inputstat{data/simschlouder-rio.stats} \\
  \hline
 \end{tabular}
 \end{center}
 
 \includegraphics[width=\textwidth]{data/diameter.pdf}
 
-\newpage
+
+
+\inputtikz{data/schlouder}
+
+\inputtikz{data/simschlouder-wpo}
+
+\inputtikz{data/simschlouder-wto}
+
+\inputtikz{data/simschlouder-psm}
+
+\inputtikz{data/simschlouder-rio}
+
+\end{document} 
+
 
 \input{data/schlouder.latexdim}
 \setlength{\pdfpagewidth}{\btutikzwidth}
