@@ -76,7 +76,7 @@ public abstract class AStrategy {
 				//apply strategy
 				node = this.applyStrategy(task);
 				
-				if (node == null) {
+				if (node == null && SchloudController.schloudCloud.describeAvailability(SchloudController.instanceTypeId)>0 ) {
 					node = SchloudController.startNewNode();
 				}
 				
