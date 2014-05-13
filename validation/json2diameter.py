@@ -10,6 +10,7 @@
 import sys
 import os
 import json
+import math
 from interval_tree import *
 
 def unique(seq, keepstr=True):
@@ -55,6 +56,15 @@ if __name__ == '__main__':
 
 	intervalsVMs = []
 	for vm in results:
+
+		#Correct null stop_date
+		if vm['stop_date'] == None:
+		   # Get the last job execution date
+		   last_job = sorted(vm['jobs'], key=lambda j: int(j['start_date']) + int(j['walltime']))[-1]
+		   end_date = int(last_job['start_date']) + int(last_job['walltime'])
+		   vm['stop_date'] = int(vm['start_date'] + math.ceil((end_date - vm['start_date']) / 3600.0) * 3600)
+
+
 		(start_date, boot_time, stop_date) = (int(vm['start_date']), int(vm['boot_time']), int(vm['stop_date']))
 	
 		# If the stop date is not correct (dos not work if BTU>1)

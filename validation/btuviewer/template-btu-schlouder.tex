@@ -23,6 +23,8 @@
 		\setlength{\pdfpagewidth}{\btutikzwidth}
 		\setlength{\pdfpageheight}{\btutikzheight}
 		\vspace*{-2.5cm}
+		#1
+
 		\hspace*{-3cm}
 		\begin{tikzpicture}[scale=0.9]
 		\input{#1.tikz}
@@ -48,8 +50,8 @@ Description: \input{data/schlouder.info}
 				 \hline
  Schlouder 			& \input{data/schlouder.stats} \\
  SimSchlouder walltime prediction only 	& \inputstat{data/simschlouder-wpo.stats} \\
+ SimSchlouder real walltime			 	& \inputstat{data/simschlouder-wto.stats} \\ 
  SimSchlouder PSM data					& \inputstat{data/simschlouder-psm.stats} \\
- SimSchlouder real walltime			 	& \inputstat{data/simschlouder-wto.stats} \\
  SimSchlouder real RT, in, out			& \inputstat{data/simschlouder-rio.stats} \\
  \hline
 \end{tabular}
