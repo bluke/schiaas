@@ -87,12 +87,7 @@ public class SchloudCloud {
 	
 	public int describeAvailability(String instanceTypeId) {
 		if(this.maxInstancesPerUser!=0){
-			if(this.maxInstancesPerUser <= SchloudController.nodes.size()){
-					return 0;
-			}
-			else{
-					return compute.describeAvailability(instanceTypeId);
-			}	
+			return Math.max(0, Math.min(maxInstancesPerUser - SchloudController.nodes.size(), compute.describeAvailability(instanceTypeId)));
 		}
 		return compute.describeAvailability(instanceTypeId);
 	}
