@@ -162,7 +162,7 @@ public class SchloudController extends org.simgrid.msg.Process {
 	 * @return the number of BTUs corresponding to our time
 	 */
 	public static int time2BTU(double time) {
-		return (1+((int)(time/schloudCloud.BTU)));
+		return (1+((int)(time/schloudCloud.getBtuTime())));
 	}
 		
 	public static String getPostMortem() {
