@@ -125,6 +125,10 @@ public class SchloudNode extends Process {
 		return idleDate;
 	}
 	
+	public double getRemainingIdleTime(){
+		return (SchloudController.time2BTU(idleDate-bootDate)*SchloudController.schloudCloud.getBtuTime())-(idleDate-bootDate);
+	}
+	
 	public double getRuntimePrediction(SchloudTask schloudTask) {
 		return schloudTask.duration/this.speed;
 	}

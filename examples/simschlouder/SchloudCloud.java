@@ -91,6 +91,14 @@ public class SchloudCloud {
 		}
 		return compute.describeAvailability(instanceTypeId);
 	}
+
+	/**
+	 * Gets the BTU time on the cloud
+	 * @return
+	 */
+	public double getBtuTime() {
+		return this.BTU;
+	}
 	
 	/**
 	 * Gets the shutdown time for one VM
