@@ -21,11 +21,22 @@ public class ASAP extends AStrategy {
 	@Override
 	protected SchloudNode applyStrategy(SchloudTask task) {
 		SchloudNode candidate = null;
+		double candidatePredictedIdleTime = SchloudController.schloudCloud.getBtuTime() + 1;
 		for (SchloudNode node : SchloudController.nodes) {
 			//Msg.info("ASAP : "+(Msg.getClock()+cloud.getBootTimePrediction())+"("+cloud.getBootTimePrediction()+ " " + cloud.bootCount + ") - "+ node.getIdleDate());
 			if (node.isIdle() || (Msg.getClock()+SchloudController.schloudCloud.getBootTimePrediction()>=node.getIdleDate())) {
-				candidate = node;
-				break;
+				double predictedIdleTime = (SchloudController.schloudCloud.getBtuTime()*SchloudController.time2BTU(task.getWalltimePrediction()+node.getUpTimeToIdle())) - (task.getWalltimePrediction()+node.getUpTimeToIdle());
+				if(candidate==null){
+					candidate=node;
+					candidatePredictedIdleTime = predictedIdleTime;
+				}
+				else
+				{
+					if(predictedIdleTime<candidatePredictedIdleTime){
+						candidate=node;
+						candidatePredictedIdleTime = predictedIdleTime;
+					}
+				}
 			} 
 		}
 		if( candidate==null && SchloudController.schloudCloud.describeAvailability(SchloudController.instanceTypeId)<=0){
