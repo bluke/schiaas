@@ -60,7 +60,7 @@ public abstract class AStrategy {
 			
 		}
 		
-		//cycle through all nodes and assign them based on the strategy
+		//cycle through all tasks and assign them based on the strategy
 		for (Integer l : tasks.keySet()) { 
 			int iTask = 0;
 			while (iTask<tasks.get(l).size() && 
