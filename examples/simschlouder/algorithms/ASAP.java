@@ -28,6 +28,21 @@ public class ASAP extends AStrategy {
 				break;
 			} 
 		}
+		if( candidate==null && SchloudController.schloudCloud.describeAvailability(SchloudController.instanceTypeId)<=0){
+			// we choose the VM with the closest IdleTime.
+			for (SchloudNode node : SchloudController.nodes) {
+				if(candidate==null){
+					candidate=node;
+				}
+				else
+				{
+					if(node.getIdleDate()<candidate.getIdleDate()){
+						candidate=node;
+					}
+				}
+			}
+		}
+		
 		return candidate;
 	}
 
