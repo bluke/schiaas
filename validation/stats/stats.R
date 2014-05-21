@@ -37,30 +37,58 @@ write.table(makespan[ with(makespan, order(wpo.d)), ], file="makespan.dat")
 
 
 # OMSSA
-btu <- read.table("btu-omssa.dat", header=TRUE)
+stats <- read.table("stats-omssa.dat", header=TRUE)
+btu <- stats[c("source","BTU","wpo.BTU","wto.BTU")]
 btu$wpo.d <- NA
 btu$wpo.d <- abs( btu$BTU - btu$wpo.BTU ) / btu$BTU
 pdf('btu-omssa-cdf-wpo.pdf')
-plot(ecdf(btu$wpo.d))
+plot(ecdf(btu$wpo.d), main="BTU omssa wpo")
 dev.off()
 
 btu$wto.d <- NA
 btu$wto.d <- abs( btu$BTU - btu$wto.BTU ) / btu$BTU
 pdf('btu-omssa-cdf-wto.pdf')
-plot(ecdf(btu$wto.d))
+plot(ecdf(btu$wto.d), main="BTU omssa wto")
+dev.off()
+
+makespan <- stats[c("source","makespan","wpo.makespan","wto.makespan")]
+makespan$wpo.d <- NA
+makespan$wpo.d <- abs( makespan$makespan - makespan$wpo.makespan ) / makespan$makespan
+pdf('makespan-omssa-cdf-wpo.pdf')
+plot(ecdf(makespan$wpo.d), main="Makespan omssa wpo")
+dev.off()
+
+makespan$wto.d <- NA
+makespan$wto.d <- abs( makespan$makespan - makespan$wto.makespan ) / makespan$makespan
+pdf('makespan-omssa-cdf-wto.pdf')
+plot(ecdf(makespan$wto.d), main="Makespan omssa wto")
 dev.off()
 
 # Montage
-btu <- read.table("btu-montage.dat", header=TRUE)
+stats <- read.table("stats-montage.dat", header=TRUE)
+btu <- stats[c("source","BTU","wpo.BTU","wto.BTU")]
 btu$wpo.d <- NA
 btu$wpo.d <- abs( btu$BTU - btu$wpo.BTU ) / btu$BTU
 pdf('btu-montage-cdf-wpo.pdf')
-plot(ecdf(btu$wpo.d))
+plot(ecdf(btu$wpo.d), main="BTU Montage wpo")
 dev.off()
 
 btu$wto.d <- NA
 btu$wto.d <- abs( btu$BTU - btu$wto.BTU ) / btu$BTU
 pdf('btu-montage-cdf-wto.pdf')
-plot(ecdf(btu$wto.d))
+plot(ecdf(btu$wto.d), main="BTU Montage wto")
+dev.off()
+
+makespan <- stats[c("source","makespan","wpo.makespan","wto.makespan")]
+makespan$wpo.d <- NA
+makespan$wpo.d <- abs( makespan$makespan - makespan$wpo.makespan ) / makespan$makespan
+pdf('makespan-montage-cdf-wpo.pdf')
+plot(ecdf(makespan$wpo.d), main="Makespan Montage wpo")
+dev.off()
+
+makespan$wto.d <- NA
+makespan$wto.d <- abs( makespan$makespan - makespan$wto.makespan ) / makespan$makespan
+pdf('makespan-montage-cdf-wto.pdf')
+plot(ecdf(makespan$wto.d), main="Makespan Montage wto")
 dev.off()
 
