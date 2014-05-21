@@ -34,3 +34,33 @@ plot(ecdf(makespan$wto.d))
 dev.off()
 
 write.table(makespan[ with(makespan, order(wpo.d)), ], file="makespan.dat")
+
+
+# OMSSA
+btu <- read.table("btu-omssa.dat", header=TRUE)
+btu$wpo.d <- NA
+btu$wpo.d <- abs( btu$BTU - btu$wpo.BTU ) / btu$BTU
+pdf('btu-omssa-cdf-wpo.pdf')
+plot(ecdf(btu$wpo.d))
+dev.off()
+
+btu$wto.d <- NA
+btu$wto.d <- abs( btu$BTU - btu$wto.BTU ) / btu$BTU
+pdf('btu-omssa-cdf-wto.pdf')
+plot(ecdf(btu$wto.d))
+dev.off()
+
+# Montage
+btu <- read.table("btu-montage.dat", header=TRUE)
+btu$wpo.d <- NA
+btu$wpo.d <- abs( btu$BTU - btu$wpo.BTU ) / btu$BTU
+pdf('btu-montage-cdf-wpo.pdf')
+plot(ecdf(btu$wpo.d))
+dev.off()
+
+btu$wto.d <- NA
+btu$wto.d <- abs( btu$BTU - btu$wto.BTU ) / btu$BTU
+pdf('btu-montage-cdf-wto.pdf')
+plot(ecdf(btu$wto.d))
+dev.off()
+
