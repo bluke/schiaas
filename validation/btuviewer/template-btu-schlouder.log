@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2013.11.29)  13 MAY 2014 17:46
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2013.11.29)  21 MAY 2014 13:02
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -401,7 +401,6 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <5> on input line 47.
  (./data/schlouder.stats) (./data/simschlouder-wpo.stats) (./data/simschlouder-
 wto.stats) (./data/simschlouder-psm.stats)
-(./data/simschlouder-rio.stats)
 <data/diameter.pdf, id=4, 845.1575pt x 597.23125pt>
 File: data/diameter.pdf Graphic file (type pdf)
  <use data/diameter.pdf>
@@ -416,7 +415,7 @@ Overfull \hbox (15.0pt too wide) in paragraph at lines 60--61
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map} <./data/diameter.pdf, page 
 is rotated 90 degrees>] (./data/schlouder.latexdim) (./data/schlouder.tikz)
-Overfull \hbox (234.01532pt too wide) in paragraph at lines 65--67
+Overfull \hbox (530.0641pt too wide) in paragraph at lines 65--67
 []|  []
  []
 
@@ -425,9 +424,18 @@ Underfull \hbox (badness 10000) in paragraph at lines 65--67
 
  []
 
-[2] (./data/simschlouder-wpo.latexdim) (./data/simschlouder-wpo.tikz) [3]
-(./data/simschlouder-wto.latexdim) (./data/simschlouder-wto.tikz)
-Overfull \hbox (742.251pt too wide) in paragraph at lines 69--71
+[2] (./data/simschlouder-wpo.latexdim) (./data/simschlouder-wpo.tikz)
+Overfull \hbox (385.88268pt too wide) in paragraph at lines 67--69
+[]|  []
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 67--69
+
+ []
+
+[3] (./data/simschlouder-wto.latexdim) (./data/simschlouder-wto.tikz)
+Overfull \hbox (377.34705pt too wide) in paragraph at lines 69--71
 []|  []
  []
 
@@ -437,13 +445,12 @@ Underfull \hbox (badness 10000) in paragraph at lines 69--71
  []
 
 [4] (./data/simschlouder-psm.latexdim) (./data/simschlouder-psm.tikz) [5]
-(./data/simschlouder-rio.latexdim) (./data/simschlouder-rio.tikz) [6]
 (./template-btu-schlouder.aux) ) 
 Here is how much of TeX's memory you used:
- 22295 strings out of 495002
- 503471 string characters out of 6180261
- 2242234 words of memory out of 5000000
- 25279 multiletter control sequences out of 15000+600000
+ 20510 strings out of 495002
+ 457788 string characters out of 6180261
+ 1390567 words of memory out of 5000000
+ 23500 multiletter control sequences out of 15000+600000
  6675 words of font info for 24 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  56i,6n,55p,433b,552s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -451,10 +458,10 @@ Here is how much of TeX's memory you used:
 ic/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsf
 onts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm
 /cmr17.pfb>
-Output written on template-btu-schlouder.pdf (6 pages, 893069 bytes).
+Output written on template-btu-schlouder.pdf (5 pages, 341570 bytes).
 PDF statistics:
- 44 PDF objects out of 1000 (max. 8388607)
- 30 compressed objects within 1 object stream
+ 41 PDF objects out of 1000 (max. 8388607)
+ 28 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  18 words of extra memory for PDF output out of 10000 (max. 10000000)
 

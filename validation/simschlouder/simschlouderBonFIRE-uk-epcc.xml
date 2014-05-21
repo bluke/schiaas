@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
  <!DOCTYPE simschlouder>
  <simschlouder version="1">
- 	<config platform="platformBonFIRE.xml" cloud="cloudBonFIRE.xml" standard_power="1.675440e9" />
+ 	<config platform="platformBonFIRE.xml" cloud="cloudBonFIRE.xml" standard_power="1.292798e9" />
  	<broker id="lemans.u-strasbg.fr" />
  	<!-- Boot time prediction = B0 + B1 * n -->
  	<cloud id="bonfire-de-hlrs" B0="41.67" B1="3.625" BTU="3600" shutdown_margin="20" max_instances_per_user="20" />
