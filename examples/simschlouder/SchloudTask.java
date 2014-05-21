@@ -35,6 +35,7 @@ public class SchloudTask {
 	
 	protected double walltimePrediction;
 	
+	protected double runtime;
 	protected double duration;
 	protected double inputSize;
 	protected double outputSize;
@@ -61,7 +62,8 @@ public class SchloudTask {
 		
 		this.walltimePrediction = walltimePrediction;
 		
-		this.duration = SimSchlouder.time2flops(runtime);
+		this.runtime = runtime;
+		setDuration();
 		this.inputSize = inputSize;
 		this.outputSize = outputSize;
 		
@@ -153,6 +155,14 @@ public class SchloudTask {
 
 	public Data getOutputData() {
 		return new Data(name+"_output_data", outputSize);
+	}
+	
+	public void setDuration(double standardPower){
+		this.duration = runtime*standardPower;
+	}
+	
+	public void setDuration(){
+		this.duration = SimSchlouder.time2flops(runtime);
 	}
 	
 	// TODO: add scheduling_strategy
