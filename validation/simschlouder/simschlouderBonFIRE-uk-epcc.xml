@@ -1,12 +1,12 @@
 <?xml version='1.0'?>
  <!DOCTYPE simschlouder>
  <simschlouder version="1">
- 	<config platform="platformBonFIRE.xml" cloud="cloudBonFIRE.xml" standard_power="1.292798e9" />
+ 	<config platform="platformBonFIRE.xml" cloud="cloudBonFIRE.xml" />
  	<broker id="lemans.u-strasbg.fr" />
  	<!-- Boot time prediction = B0 + B1 * n -->
- 	<cloud id="bonfire-de-hlrs" B0="41.67" B1="3.625" BTU="3600" shutdown_margin="20" max_instances_per_user="20" />
-	<cloud id="bonfire-fr-inria" B0="242.7" B1="22.13" BTU="3600" shutdown_margin="20" max_instances_per_user="20" />
-	<cloud id="bonfire-uk-epcc" B0="86.12" B1="42.44" BTU="3600" shutdown_margin="20" max_instances_per_user="20" />
+ 	<cloud id="bonfire-de-hlrs" B0="41.67" B1="3.625" BTU="3600" shutdown_margin="20" max_instances_per_user="20" standard_power="1.763400e9" />
+	<cloud id="bonfire-fr-inria" B0="242.7" B1="22.13" BTU="3600" shutdown_margin="20" max_instances_per_user="20" standard_power="9.27114e8" />
+	<cloud id="bonfire-uk-epcc" B0="86.12" B1="42.44" BTU="3600" shutdown_margin="20" max_instances_per_user="20" standard_power="1.292798e9" />
 	
 	<provisioning>
 		<config cloud="bonfire-uk-epcc" storage="bonfire-uk-epcc-image_repo" image="schlouder_image" instance_type="small" />
