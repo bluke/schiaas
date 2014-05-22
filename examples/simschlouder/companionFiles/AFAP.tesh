@@ -21,22 +21,20 @@ $ java -cp simschlouder.jar:../schiaas.jar:/usr/local/java/simgrid.jar simschlou
 > [10.000000] [surf_vm_workstation/INFO] Create VM(icps-opst-1)@PM(icps-gc-1) with 0 mounted disks
 > [client:SchloudController:(1) 10.000000] [jmsg/INFO] wait
 > [client:SchloudController:(1) 20.000000] [jmsg/INFO] 0_1 selected node: icps-opst-1
-> [client:SchloudController:(1) 20.000000] [jmsg/INFO] 0_2 selected node: icps-opst-0
+> [client:SchloudController:(1) 20.000000] [jmsg/INFO] 0_2 selected node: icps-opst-1
 > [20.000000] [surf_vm_workstation/INFO] Create VM(icps-opst-2)@PM(icps-gc-1) with 0 mounted disks
 > [client:SchloudController:(1) 20.000000] [jmsg/INFO] wait
 > [client:SchloudController:(1) 30.000000] [jmsg/INFO] 0_3 selected node: icps-opst-2
 > [30.000000] [surf_vm_workstation/INFO] Create VM(icps-opst-3)@PM(icps-gc-1) with 0 mounted disks
 > [client:SchloudController:(1) 30.000000] [jmsg/INFO] wait
 > [client:SchloudController:(1) 40.000000] [jmsg/INFO] 0_4 selected node: icps-opst-3
+> [client:SchloudController:(1) 40.000000] [jmsg/INFO] 0_5 selected node: icps-opst-1
+> [client:SchloudController:(1) 40.000000] [jmsg/INFO] 0_6 selected node: icps-opst-0
 > [40.000000] [surf_vm_workstation/INFO] Create VM(icps-opst-4)@PM(icps-gc-1) with 0 mounted disks
 > [client:SchloudController:(1) 40.000000] [jmsg/INFO] wait
-> [client:SchloudController:(1) 50.000000] [jmsg/INFO] 0_5 selected node: icps-opst-4
-> [client:SchloudController:(1) 50.000000] [jmsg/INFO] 0_6 selected node: icps-opst-3
 > [client:SchloudController:(1) 50.000000] [jmsg/INFO] 0_7 selected node: icps-opst-4
-> [50.000000] [surf_vm_workstation/INFO] Create VM(icps-opst-5)@PM(icps-gc-1) with 0 mounted disks
-> [client:SchloudController:(1) 50.000000] [jmsg/INFO] wait
-> [client:SchloudController:(1) 60.000000] [jmsg/INFO] 0_8 selected node: icps-opst-5
-> [client:SchloudController:(1) 60.000000] [jmsg/INFO] 0_9 selected node: icps-opst-5
+> [client:SchloudController:(1) 50.000000] [jmsg/INFO] 0_8 selected node: icps-opst-2
+> [client:SchloudController:(1) 50.000000] [jmsg/INFO] 0_9 selected node: icps-opst-3
 > [client:TaskFileReader:(2) 9647.000000] [jmsg/INFO] Enqueuing Task[1_0,2731.0,2.731E13(2731.0 s),0.0,0.0,PENDING]
 > [client:TaskFileReader:(2) 9647.000000] [jmsg/INFO] Enqueuing Task[1_1,1089.0,1.089E13(1089.0 s),0.0,0.0,PENDING]
 > [client:TaskFileReader:(2) 9647.000000] [jmsg/INFO] Enqueuing Task[1_2,2154.0,2.154E13(2154.0 s),0.0,0.0,PENDING]
@@ -47,30 +45,30 @@ $ java -cp simschlouder.jar:../schiaas.jar:/usr/local/java/simgrid.jar simschlou
 > [client:TaskFileReader:(2) 9647.000000] [jmsg/INFO] Enqueuing Task[1_7,409.0,4.09E12(409.0 s),0.0,0.0,PENDING]
 > [client:TaskFileReader:(2) 9647.000000] [jmsg/INFO] Enqueuing Task[1_8,2728.0,2.728E13(2728.0 s),0.0,0.0,PENDING]
 > [client:TaskFileReader:(2) 9647.000000] [jmsg/INFO] Enqueuing Task[1_9,3693.0,3.693E13(3693.0 s),0.0,0.0,PENDING]
-> [9650.000000] [surf_vm_workstation/INFO] Create VM(icps-opst-6)@PM(icps-gc-1) with 0 mounted disks
+> [9650.000000] [surf_vm_workstation/INFO] Create VM(icps-opst-5)@PM(icps-gc-1) with 0 mounted disks
 > [client:SchloudController:(1) 9650.000000] [jmsg/INFO] wait
-> [client:SchloudController:(1) 9660.000000] [jmsg/INFO] 1_0 selected node: icps-opst-6
-> [9660.000000] [surf_vm_workstation/INFO] Create VM(icps-opst-7)@PM(icps-gc-1) with 0 mounted disks
+> [client:SchloudController:(1) 9660.000000] [jmsg/INFO] 1_0 selected node: icps-opst-5
+> [9660.000000] [surf_vm_workstation/INFO] Create VM(icps-opst-6)@PM(icps-gc-1) with 0 mounted disks
 > [client:SchloudController:(1) 9660.000000] [jmsg/INFO] wait
-> [client:SchloudController:(1) 9670.000000] [jmsg/INFO] 1_1 selected node: icps-opst-7
-> [client:SchloudController:(1) 9670.000000] [jmsg/INFO] 1_2 selected node: icps-opst-7
-> [client:SchloudController:(1) 9670.000000] [jmsg/INFO] 1_3 selected node: icps-opst-6
-> [9670.000000] [surf_vm_workstation/INFO] Create VM(icps-opst-8)@PM(icps-gc-1) with 0 mounted disks
+> [client:SchloudController:(1) 9670.000000] [jmsg/INFO] 1_1 selected node: icps-opst-6
+> [client:SchloudController:(1) 9670.000000] [jmsg/INFO] 1_2 selected node: icps-opst-6
+> [client:SchloudController:(1) 9670.000000] [jmsg/INFO] 1_3 selected node: icps-opst-5
+> [9670.000000] [surf_vm_workstation/INFO] Create VM(icps-opst-7)@PM(icps-gc-1) with 0 mounted disks
 > [client:SchloudController:(1) 9670.000000] [jmsg/INFO] wait
-> [client:SchloudController:(1) 9680.000000] [jmsg/INFO] 1_4 selected node: icps-opst-8
-> [client:SchloudController:(1) 9680.000000] [jmsg/INFO] 1_5 selected node: icps-opst-8
-> [9680.000000] [surf_vm_workstation/INFO] Create VM(icps-opst-9)@PM(icps-gc-1) with 0 mounted disks
+> [client:SchloudController:(1) 9680.000000] [jmsg/INFO] 1_4 selected node: icps-opst-7
+> [client:SchloudController:(1) 9680.000000] [jmsg/INFO] 1_5 selected node: icps-opst-7
+> [9680.000000] [surf_vm_workstation/INFO] Create VM(icps-opst-8)@PM(icps-gc-1) with 0 mounted disks
 > [client:SchloudController:(1) 9680.000000] [jmsg/INFO] wait
-> [client:SchloudController:(1) 9690.000000] [jmsg/INFO] 1_6 selected node: icps-opst-9
-> [client:SchloudController:(1) 9690.000000] [jmsg/INFO] 1_7 selected node: icps-opst-8
-> [9690.000000] [surf_vm_workstation/INFO] Create VM(icps-opst-10)@PM(icps-gc-1) with 0 mounted disks
+> [client:SchloudController:(1) 9690.000000] [jmsg/INFO] 1_6 selected node: icps-opst-8
+> [client:SchloudController:(1) 9690.000000] [jmsg/INFO] 1_7 selected node: icps-opst-7
+> [9690.000000] [surf_vm_workstation/INFO] Create VM(icps-opst-9)@PM(icps-gc-1) with 0 mounted disks
 > [client:SchloudController:(1) 9690.000000] [jmsg/INFO] wait
-> [client:SchloudController:(1) 9700.000000] [jmsg/INFO] 1_8 selected node: icps-opst-10
-> [9700.000000] [surf_vm_workstation/INFO] Create VM(icps-opst-11)@PM(icps-gc-1) with 0 mounted disks
-> [client:SchloudController:(1) 9700.000000] [jmsg/INFO] wait
-> [client:SchloudController:(1) 9710.000000] [jmsg/INFO] 1_9 selected node: icps-opst-11
-> [16890.000000] [jmsg/INFO] MSG_main finished; Cleaning up the simulation...
+> [client:SchloudController:(1) 9700.000000] [jmsg/INFO] 1_8 selected node: icps-opst-9
+> [client:SchloudController:(1) 9700.000000] [jmsg/INFO] 1_9 selected node: icps-opst-6
+> [16850.000000] [jmsg/INFO] MSG_main finished; Cleaning up the simulation...
 > Outcomes:
-> makespan:	13403.00783247457
-> totalBTU:	15.0
-> usage:  	0.744537037037037
+> makespan:	16606.023497423714
+> totalBTU:	13.0
+> usage:  	0.8590811965811965
+
+
