@@ -32,6 +32,7 @@ xmlns:xs="http://www.w3.org/2001/XMLSchema">
 		<xs:attribute name="B1" type="xs:decimal" use="required"/>
 		<xs:attribute name="BTU" type="xs:integer" use="required"/>
 		<xs:attribute name="shutdown_margin" type="xs:integer" use="required"/>
+		<xs:attribute name="standard_power" use="required"/>
 		<xs:attribute name="max_instances_per_user" type="xs:integer" default="0"/>
 </xs:complexType>
 
@@ -48,7 +49,6 @@ xmlns:xs="http://www.w3.org/2001/XMLSchema">
 		<xs:attribute name="platform" type="xs:normalizedString" use="required" />
 		<xs:attribute name="deployment" type="xs:normalizedString"/>
 		<xs:attribute name="cloud" type="xs:normalizedString" use="required"/>
-		<xs:attribute name="standard_power" use="required"/>
 </xs:complexType>
 
 

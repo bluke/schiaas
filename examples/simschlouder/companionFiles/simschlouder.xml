@@ -1,9 +1,9 @@
 <?xml version='1.0'?>
  <!DOCTYPE simschlouder>
  <simschlouder version="1">
- 	<config platform="platform.xml" cloud="cloud.xml" standard_power="10e9" />
+ 	<config platform="platform.xml" cloud="cloud.xml" />
 	<broker id="client" />
-	<cloud  id="icps-opst" B0="41.6" B1="6" BTU="3600" shutdown_margin="20" max_instances_per_user="0"/>
+	<cloud  id="icps-opst" B0="41.6" B1="6" BTU="3600" shutdown_margin="20" standard_power="10e9"  max_instances_per_user="0"/>
 	<!-- <cloud  id="icps-euca" B0="4" B1="53" BTU="3600" shutdown_margin="20"/> -->
 	<provisioning>
 		<config cloud="icps-opst" storage="myStorage"

@@ -33,10 +33,10 @@ import simschlouder.algorithms.AStrategy;
 
 public class SimSchlouder {
 
-	public static double standardPower;
+
 	
 	public static double time2flops(double time) {
-		return time*standardPower;
+		return time*SchloudController.schloudCloud.standardPower;
 	}
 	
 	public static enum StorageType {CLOUD, CLIENT, INSTANCE};

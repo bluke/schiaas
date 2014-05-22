@@ -38,7 +38,7 @@ public class SchloudCloud {
 	 * @throws Exception 
 	 * @throws NumberFormatException 
 	 */
-	public SchloudCloud(String name, double bootTimeB0, double bootTimeB1, double BTU, double shutdownMargin,int maxInstances) throws NumberFormatException, Exception	{
+	public SchloudCloud(String name, double bootTimeB0, double bootTimeB1, double BTU, double shutdownMargin, double standardPower, int maxInstances) throws NumberFormatException, Exception	{
 		this.name=name;
 		this.bootTimeB0=bootTimeB0;
 		this.bootTimeB1=bootTimeB1;
@@ -50,7 +50,7 @@ public class SchloudCloud {
 		this.compute = SchIaaS.getCloud(name).getCompute();
 		this.storage = null;
 		
-		this.standardPower=Double.parseDouble(compute.getConfig("standard_power"));
+		this.standardPower= standardPower;
 	}
 		
 	

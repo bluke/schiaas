@@ -226,7 +226,6 @@ public class SchloudController extends org.simgrid.msg.Process {
 					}
 						
 					String cloud = nodes.item(i).getAttributes().getNamedItem("cloud").getNodeValue();
-					SimSchlouder.standardPower = Double.parseDouble(nodes.item(i).getAttributes().getNamedItem("standard_power").getNodeValue());
 					
 					/* construct the platform and deploy the application */
 					Msg.createEnvironment(platform);
@@ -250,11 +249,12 @@ public class SchloudController extends org.simgrid.msg.Process {
 					double B1 = Double.parseDouble(nodes.item(i).getAttributes().getNamedItem("B1").getNodeValue());
 					double BTU = Double.parseDouble(nodes.item(i).getAttributes().getNamedItem("BTU").getNodeValue());
 					double shutdownMargin = Double.parseDouble(nodes.item(i).getAttributes().getNamedItem("shutdown_margin").getNodeValue());
+					double standardPower = Double.parseDouble(nodes.item(i).getAttributes().getNamedItem("standard_power").getNodeValue());
 					int maxInstances = 0;
 					if(nodes.item(i).getAttributes().getNamedItem("max_instances_per_user")!=null){
 						maxInstances = Integer.parseInt(nodes.item(i).getAttributes().getNamedItem("max_instances_per_user").getNodeValue());
 					}
-					schloudClouds.put(name, new simschlouder.SchloudCloud(name,B0,B1,BTU, shutdownMargin,maxInstances));
+					schloudClouds.put(name, new simschlouder.SchloudCloud(name,B0,B1,BTU, shutdownMargin, standardPower ,maxInstances));
 				}
 				else if (nodes.item(i).getNodeName().compareTo("provisioning") == 0) {
 					NodeList provNodes = nodes.item(i).getChildNodes(); 
