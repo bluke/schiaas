@@ -176,8 +176,9 @@ public class SchloudController extends org.simgrid.msg.Process {
 	/**
 	 * Prints the result of the simulation
 	 * @return a string containing simulation statistics
+	 * @throws SimSchloudException 
 	 */
-	public static String getOutcome() {
+	public static String getOutcome() throws SimSchloudException {
 		double makespan=0;
 		double totalBTU=0;
 		double totalRuntime=0;
@@ -297,8 +298,9 @@ public class SchloudController extends org.simgrid.msg.Process {
 	 * Writes a JSON file for use in later processing
 	 * @param description the ID of the version
 	 * @throws IOException
+	 * @throws SimSchloudException 
 	 */
-	public static void writeJSON(String description) throws IOException {
+	public static void writeJSON(String description) throws IOException, SimSchloudException {
 	    FileWriter fstream = new FileWriter("simschlouder.json", false);
 	    BufferedWriter out = new BufferedWriter(fstream);
 		
