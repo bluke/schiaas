@@ -216,6 +216,7 @@ public class SchloudNode extends Process {
 			}
 			
 			currentSchloudTask.setState(SchloudTask.STATE.FINISHED);
+			this.idleDate+=currentSchloudTask.getWalltime()-currentSchloudTask.getWalltimePrediction();
 			
 			// Send the complete task
 			currentSchloudTask.getCompleteTask().send(getMessageBox());

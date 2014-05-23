@@ -218,6 +218,10 @@ public class SchloudTask {
 		return this.walltimePrediction;
 	}
 	
+	public double getWalltime() {
+		return this.getDateOfFirst(STATE.COMPLETE) - this.getDateOfFirst(STATE.SUBMITTED);
+	}
+	
 	public double getInputSize() {
 		return this.inputSize;
 	}
@@ -246,9 +250,9 @@ public class SchloudTask {
 		return walltimePrediction;
 	}
 
-	private double getWalltime() {
+	/*private double getWalltime() {
 		return getDateOfFirst(STATE.COMPLETE) - getDateOfFirst(STATE.SUBMITTED);
-	}
+	}*/
 
 	private double getStartDate() {
 		return getDateOfFirst(STATE.INPUTTING);
