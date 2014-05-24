@@ -45,6 +45,35 @@ public class SchloudNode extends Process {
 	
 	protected double speed;
 	
+	protected class SchloudNodeController extends Process {
+		private SchloudNode schloudNode;
+		protected SchloudNodeController(SchloudNode schloudNode) {
+			super(SchloudController.host,schloudNode.id+"_SchloudNodeController");
+			this.schloudNode = schloudNode;
+		}
+		public void main(String[] args) throws TransferFailureException, HostFailureException, TimeoutException {
+			try {
+				while(cloud.compute.describeInstance(instanceId).isRunning() == 0)
+				{
+					Msg.info("wait for boot of "+instanceId);
+					Process.currentProcess().waitFor(schloudNode.bootTimePrediction);
+				}
+			} catch (HostFailureException e) {
+				Msg.critical("Something bad happened is SimSchlouder: The host of "+instanceId+" was not found.");
+				e.printStackTrace();
+			}
+			
+		try {
+			schloudNode.start();
+		} catch (HostNotFoundException e) {
+			Msg.critical("Something bad happened is SimSchlouder: The host of "+instanceId+" was not found.");
+			e.printStackTrace();
+		}
+
+		}
+	}
+
+	
 	protected SchloudNode(String instanceId, SchloudCloud cloud) {
 		super(cloud.compute.describeInstance(instanceId), instanceId+"_SchloudNode",null);
 		this.instanceId = instanceId;
@@ -61,35 +90,24 @@ public class SchloudNode extends Process {
 		
 		//Msg.info("idleDate" + idleDate);
 		setState(STATE.PENDING);
+		
 	}
 	
 	public static SchloudNode startNewNode(SchloudCloud cloud) {
 		String instanceId = cloud.compute.runInstance(SchloudController.imageId, SchloudController.instanceTypeId);
 		if (instanceId==null) return null;
 		
-		SchloudNode node = new SchloudNode(instanceId,cloud);
-		
-		try {
-			// Patch dégueu pour attendre que la VM soit lancée : 
-			// le soucis est qu'on ne peut lancer plusieurs VM en même temps.
-			while(cloud.compute.describeInstance(instanceId).isRunning() == 0)
-			{
-				Msg.info("wait");
-				Process.currentProcess().waitFor(10);
-			}
-		} catch (HostFailureException e) {
-			Msg.critical("Something bad happened is SimSchlouder: The host of "+instanceId+" was not found.");
-			e.printStackTrace();
-		}
+		SchloudNode schloudNode = new SchloudNode(instanceId,cloud);
 
-			
+		SchloudNodeController schloudNodeController = schloudNode.new SchloudNodeController(schloudNode); 
 		try {
-			node.start();
+			schloudNodeController.start();
 		} catch (HostNotFoundException e) {
 			Msg.critical("Something bad happened is SimSchlouder: The host of "+instanceId+" was not found.");
 			e.printStackTrace();
 		}
-		return node;
+		
+		return schloudNode;
 	}
 	
 	public void setState(STATE state) {
@@ -174,9 +192,12 @@ public class SchloudNode extends Process {
 
 		//Msg.info("SchloudNode "+name+" waiting for its instance"+instance.getName()+ " to boot");
 		//TODO optimize wait time according to boot/delay times
+		/* Not possible, because the instance can not run a process before boot.
 		while (cloud.compute.describeInstance(instanceId).isRunning() == 0) {
-			 waitFor(10);
+			Msg.info("wait for boot");
+			 waitFor(11);
 		}
+		*/
 		bootDate=Msg.getClock();
 		 
 		while(true) {
