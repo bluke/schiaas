@@ -39,6 +39,7 @@ public class SchloudNode extends Process {
 	protected double pendingDate;
 	protected double terminatedDate;
 	protected double bootDate;
+	protected double bootTimePrediction;
 	
 	protected double speed;
 	
@@ -53,6 +54,9 @@ public class SchloudNode extends Process {
 		this.completedQueue = new LinkedList<SchloudTask>();
 		
 		idleDate = Msg.getClock()+cloud.getBootTimePrediction();
+		
+		bootTimePrediction=cloud.getBootTimePrediction();
+		
 		//Msg.info("idleDate" + idleDate);
 		setState(STATE.PENDING);
 	}
@@ -247,8 +251,8 @@ public class SchloudNode extends Process {
 		out.write("\t\t\"start_date\": "+pendingDate+",\n");
 		out.write("\t\t\"stop_date\": "+terminatedDate+",\n"); // TERMINATED AND NOT SHUTTINGDOWN
 		out.write("\t\t\"boot_time\": "+(bootDate-pendingDate)+",\n");
-		out.write("\t\t\"boot_time_prediction\": "+(bootDate-pendingDate)+",\n"); // NOT THE PREDICTION USED ACTUALLY
-		out.write("\t\t\"instance_type\": \"standard\",\n"); // NOT THE PREDICTION USED ACTUALLY
+		out.write("\t\t\"boot_time_prediction\": "+bootTimePrediction+",\n");
+		out.write("\t\t\"instance_type\": \"standard\",\n"); 
 		out.write("\t\t\"cloud\": \""+SchloudController.schloudCloud.name+"\",\n");
 		out.write("\t\t\"jobs\": [\n");
 		for (int i=0; i<completedQueue.size(); i++) {

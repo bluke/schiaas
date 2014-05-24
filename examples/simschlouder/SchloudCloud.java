@@ -83,7 +83,7 @@ public class SchloudCloud {
 	 */
 	public double getBootTimePrediction() {
 		return (bootTimeB0+bootTimeB1*(bootCount+1));
-	}		
+	}
 	
 	public int describeAvailability(String instanceTypeId) {
 		if(this.maxInstancesPerUser!=0){
