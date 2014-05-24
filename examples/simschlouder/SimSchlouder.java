@@ -30,6 +30,7 @@ import org.simgrid.schiaas.SchIaaS;
 import org.xml.sax.SAXException;
 
 import simschlouder.algorithms.AStrategy;
+import simschlouder.util.SimSchloudException;
 
 public class SimSchlouder {
 
@@ -123,7 +124,7 @@ public class SimSchlouder {
 		}
 	}
 	
-    public static void main(String[] args) throws NativeException, HostNotFoundException, IOException, HostFailureException {       
+    public static void main(String[] args) throws NativeException, HostNotFoundException, IOException, HostFailureException, SimSchloudException {       
 	    Msg.init(args);
 	
 	    if (args.length < 3) {

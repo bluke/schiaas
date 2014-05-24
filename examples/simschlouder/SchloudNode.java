@@ -19,6 +19,8 @@ import org.simgrid.msg.TimeoutException;
 import org.simgrid.msg.TransferFailureException;
 import org.simgrid.msg.Process;
 
+import simschlouder.util.SimSchloudException;
+
 
 public class SchloudNode extends Process {
 	
@@ -101,6 +103,8 @@ public class SchloudNode extends Process {
 		}
 		
 		switch (state) {
+		case IDLE: idleDate=Msg.getClock();
+			break;
 		case PENDING: pendingDate=Msg.getClock();
 			break;
 		case TERMINATED: terminatedDate=Msg.getClock();
@@ -245,7 +249,7 @@ public class SchloudNode extends Process {
 		return s;
 	}
 
-	public void writeJSON(BufferedWriter out) throws IOException {
+	public void writeJSON(BufferedWriter out) throws IOException, SimSchloudException {
 		out.write("\t\t\"instance_id\": \""+name+"\",\n");
 		out.write("\t\t\"host\": \""+getHost().getName()+"\",\n");
 		out.write("\t\t\"start_date\": "+pendingDate+",\n");

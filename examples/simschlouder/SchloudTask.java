@@ -9,6 +9,8 @@ import org.simgrid.msg.Msg;
 import org.simgrid.msg.Task;
 import org.simgrid.schiaas.Data;
 
+import simschlouder.util.SimSchloudException;
+
 
 public class SchloudTask {
 	
@@ -98,23 +100,24 @@ public class SchloudTask {
 	 * @param state The state you are looking for.
 	 * @return The date you are looking for.
 	 */
-	public double getDateOfLast(STATE state) {
+	public double getDateOfLast(STATE state) throws SimSchloudException {
 		for (int i=stateLog.size()-1; i>=0; i--)
 			if (stateLog.get(i).state == state)
 				return stateLog.get(i).date;
-		return -1;
+		throw new SimSchloudException("task " +this.name+ " never has state :" +state);
 	}
 	
 	/**
 	 * Get the date of the first change to a given state.
 	 * @param state The state you are looking for.
 	 * @return The date you are looking for.
+	 * @throws SimSchloudException 
 	 */
-	public double getDateOfFirst(STATE state) {
+	public double getDateOfFirst(STATE state) throws SimSchloudException {
 		for (int i=0; i<stateLog.size(); i++)
 			if (stateLog.get(i).state == state)
 				return stateLog.get(i).date;
-		return -1;
+		throw new SimSchloudException("task " +this.name+ " never has state :" +state);
 	}
 		
 	public boolean hasPendingDependencies(){
@@ -157,7 +160,7 @@ public class SchloudTask {
 	
 	// TODO: add scheduling_strategy
 	// TODO: check walltime/runtime
-	public void writeJSON(BufferedWriter out) throws IOException {
+	public void writeJSON(BufferedWriter out) throws IOException, SimSchloudException {
 		out.write("\t\t\t\t\"id\": \""+name+"\",\n");
 		out.write("\t\t\t\t\"provisioning_strategy\": \""+SchloudController.strategy.getName()+"\",\n"); // NOT THE PREDICTION USED ACTUALLY
 		out.write("\t\t\t\t\"submission_date\": "+getSubmissionDate()+",\n");
@@ -218,6 +221,15 @@ public class SchloudTask {
 		return this.walltimePrediction;
 	}
 	
+	public double getWalltime() {
+		try{
+		return this.getDateOfFirst(STATE.COMPLETE) - this.getDateOfFirst(STATE.SUBMITTED);
+		} catch (SimSchloudException e){
+			return this.walltimePrediction;
+		}
+		
+	}
+	
 	public double getInputSize() {
 		return this.inputSize;
 	}
@@ -230,15 +242,15 @@ public class SchloudTask {
 		return this.duration;
 	}
 
-	public double getRuntime() {
+	public double getRuntime() throws SimSchloudException {
 		return getDateOfFirst(STATE.OUTPUTTING) - getDateOfLast(STATE.RUNNING);
 	}
 	
-	private double getOutputTime() {
+	private double getOutputTime() throws SimSchloudException {
 		return getDateOfLast(STATE.FINISHED) - getDateOfFirst(STATE.OUTPUTTING);
 	}
 
-	private double getInputTime() {
+	private double getInputTime() throws SimSchloudException {
 		return getDateOfFirst(STATE.RUNNING) - getDateOfFirst(STATE.INPUTTING);
 	}
 
@@ -246,19 +258,19 @@ public class SchloudTask {
 		return walltimePrediction;
 	}
 
-	private double getWalltime() {
+	/*private double getWalltime() {
 		return getDateOfFirst(STATE.COMPLETE) - getDateOfFirst(STATE.SUBMITTED);
-	}
+	}*/
 
-	private double getStartDate() {
+	private double getStartDate() throws SimSchloudException {
 		return getDateOfFirst(STATE.INPUTTING);
 	}
 
-	private double getSubmissionDate() {
+	private double getSubmissionDate() throws SimSchloudException {
 		return getDateOfFirst(STATE.PENDING);
 	}
 	
-	private double getManagementTime() {
+	private double getManagementTime() throws SimSchloudException {
 		return getWalltime()-getInputTime()-getRuntime()-getOutputTime();
 	}
 	

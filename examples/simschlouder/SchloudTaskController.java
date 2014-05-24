@@ -43,6 +43,7 @@ public class SchloudTaskController extends Process {
 			schloudTask.setState(SchloudTask.STATE.COMPLETE);
 			// correct the idleDate
 			//node.idleDate+=stask.getRuntime()-stask.predictedRuntime;
+			node.idleDate+=schloudTask.getWalltime()-schloudTask.getWalltimePrediction();
 		}		
 		 
 		node.setState(SchloudNode.STATE.IDLE);
