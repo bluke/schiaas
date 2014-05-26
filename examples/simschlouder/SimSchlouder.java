@@ -134,8 +134,7 @@ public class SimSchlouder {
 			System.exit(1);	
 		}
 		
-	    if (args.length==4)
-	    	outJsonFile=args[3];
+	    if (args.length==4) outJsonFile=args[3];
 	    
 	    SchemaFactory schemaFactory = SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
 		Schema schema = null;

@@ -21,24 +21,24 @@ public class SchloudTaskController extends Process {
 	}
 
 	public void main(String[] arg0) throws MsgException {
-		
+		/*
 		Msg.verb("SchloudTaskController "+name+" waiting for its node "+node.id+ " to boot");
 		//TODO optimize wait time according to boot/delay times
 		while (node.state == STATE.PENDING ) {
 			Msg.verb("wait for boot "+ node.state);
 			waitFor(10);
 		}
-				
+			*/	
 		while (!node.queue.isEmpty()) {
 		
-			node.setState(SchloudNode.STATE.BUSY);
 			
 			SchloudTask schloudTask=node.queue.peek();
 			node.currentSchloudTask = schloudTask;
 			
-			schloudTask.setState(SchloudTask.STATE.SUBMITTED);
-			
 			schloudTask.getCommandTask().send(node.getMessageBox());
+			
+			schloudTask.setState(SchloudTask.STATE.SUBMITTED);			
+			node.setState(SchloudNode.STATE.BUSY);
 			
 			//Msg.info("waiting for complete " + task.name);
 			Task rt = Task.receive(node.getMessageBox());
