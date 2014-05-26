@@ -70,17 +70,17 @@
 
             <AS id="de-hlrs" routing="Full">
 
-                <cluster id="bonfire-project-de-hlrs-1" suffix=".eu" prefix="node01" radical="01-14" power="1.787138e9" bw="940e6" lat="170us" core="1" sharing_policy="FULLDUPLEX" bb_bw="" bb_lat="" bb_sharing_policy="SHARED" availability_file="" state_file="" router_id="" limiter_link="" loopback_bw="" loopback_lat="" />
+                <cluster id="bonfire-project-de-hlrs-1" suffix=".eu" prefix="node01" radical="01-14" power="1.787138e9" bw="940e6" lat="170us" core="24" sharing_policy="FULLDUPLEX" bb_bw="" bb_lat="" bb_sharing_policy="SHARED" availability_file="" state_file="" router_id="" limiter_link="" loopback_bw="" loopback_lat="" />
 
                 <link id="link_bonfire-project-de-hlrs-1" bandwidth="940e6" latency="170us" bandwidth_file="" latency_file="" state="ON" state_file="" sharing_policy="SHARED" />
 
-                <cluster id="bonfire-project-de-hlrs-2" suffix=".eu" prefix="node02" radical="01-14" power="1.763400e9" bw="940e6" lat="170us" core="1" sharing_policy="FULLDUPLEX" bb_bw="" bb_lat="" bb_sharing_policy="SHARED" availability_file="" state_file="" router_id="" limiter_link="" loopback_bw="" loopback_lat="" />
+                <cluster id="bonfire-project-de-hlrs-2" suffix=".eu" prefix="node02" radical="01-14" power="1.763400e9" bw="940e6" lat="170us" core="24" sharing_policy="FULLDUPLEX" bb_bw="" bb_lat="" bb_sharing_policy="SHARED" availability_file="" state_file="" router_id="" limiter_link="" loopback_bw="" loopback_lat="" />
                 <link id="link_bonfire-project-de-hlrs-2" bandwidth="940e6" latency="170us" bandwidth_file="" latency_file="" state="ON" state_file="" sharing_policy="SHARED" />
 
-                <cluster id="bonfire-project-de-hlrs-3" suffix=".eu" prefix="floccus0" radical="1-6" power="3.40429e8" bw="940e6" lat="170us" core="1" sharing_policy="FULLDUPLEX" bb_bw="" bb_lat="" bb_sharing_policy="SHARED" availability_file="" state_file="" router_id="" limiter_link="" loopback_bw="" loopback_lat="" />
+                <cluster id="bonfire-project-de-hlrs-3" suffix=".eu" prefix="floccus0" radical="1-6" power="3.40429e8" bw="940e6" lat="170us" core="24" sharing_policy="FULLDUPLEX" bb_bw="" bb_lat="" bb_sharing_policy="SHARED" availability_file="" state_file="" router_id="" limiter_link="" loopback_bw="" loopback_lat="" />
                 <link id="link_bonfire-project-de-hlrs-3" bandwidth="940e6" latency="170us" bandwidth_file="" latency_file="" state="ON" state_file="" sharing_policy="SHARED" />
 
-                <cluster id="bonfire-project-de-hlrs-4" suffix=".eu" prefix="floccus1" radical="5-6" power="1.646871e9" bw="940e6" lat="170us" core="1" sharing_policy="FULLDUPLEX" bb_bw="" bb_lat="" bb_sharing_policy="SHARED" availability_file="" state_file="" router_id="" limiter_link="" loopback_bw="" loopback_lat="" />
+                <cluster id="bonfire-project-de-hlrs-4" suffix=".eu" prefix="floccus1" radical="5-6" power="1.646871e9" bw="940e6" lat="170us" core="24" sharing_policy="FULLDUPLEX" bb_bw="" bb_lat="" bb_sharing_policy="SHARED" availability_file="" state_file="" router_id="" limiter_link="" loopback_bw="" loopback_lat="" />
                 <link id="link_bonfire-project-de-hlrs-4" bandwidth="940e6" latency="170us" bandwidth_file="" latency_file="" state="ON" state_file="" sharing_policy="SHARED" />
 
                 <AS id="bonfire-project-de-hlrs-controller" routing="Full">

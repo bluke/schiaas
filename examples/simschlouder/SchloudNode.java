@@ -53,11 +53,14 @@ public class SchloudNode extends Process {
 		}
 		public void main(String[] args) throws TransferFailureException, HostFailureException, TimeoutException {
 			try {
+				// Wait for at least the predicted boottime. Can be optimized.
+				Process.currentProcess().waitFor(schloudNode.bootTimePrediction);
 				while(cloud.compute.describeInstance(instanceId).isRunning() == 0)
 				{
 					Msg.info("wait for boot of "+instanceId);
-					Process.currentProcess().waitFor(schloudNode.bootTimePrediction);
+					Process.currentProcess().waitFor(5);
 				}
+				schloudNode.setState(STATE.IDLE);
 			} catch (HostFailureException e) {
 				Msg.critical("Something bad happened is SimSchlouder: The host of "+instanceId+" was not found.");
 				e.printStackTrace();
@@ -190,14 +193,6 @@ public class SchloudNode extends Process {
 	
 	public void main(String[] args) throws TransferFailureException, HostFailureException, TimeoutException {
 
-		//Msg.info("SchloudNode "+name+" waiting for its instance"+instance.getName()+ " to boot");
-		//TODO optimize wait time according to boot/delay times
-		/* Not possible, because the instance can not run a process before boot.
-		while (cloud.compute.describeInstance(instanceId).isRunning() == 0) {
-			Msg.info("wait for boot");
-			 waitFor(11);
-		}
-		*/
 		bootDate=Msg.getClock();
 		 
 		while(true) {

@@ -301,7 +301,7 @@ public class SchloudController extends org.simgrid.msg.Process {
 	 * @throws SimSchloudException 
 	 */
 	public static void writeJSON(String description) throws IOException, SimSchloudException {
-	    FileWriter fstream = new FileWriter("simschlouder.json", false);
+	    FileWriter fstream = new FileWriter(SimSchlouder.outJsonFile, false);
 	    BufferedWriter out = new BufferedWriter(fstream);
 		
 		out.write("{\n");

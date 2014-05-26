@@ -1,10 +1,13 @@
 package simschlouder;
 
 
+import org.simgrid.msg.Msg;
 import org.simgrid.msg.MsgException;
 import org.simgrid.msg.Process;
 import org.simgrid.msg.Task;
 import org.simgrid.msg.TaskCancelledException;
+
+import simschlouder.SchloudNode.STATE;
 
 
 public class SchloudTaskController extends Process {
@@ -19,9 +22,16 @@ public class SchloudTaskController extends Process {
 
 	public void main(String[] arg0) throws MsgException {
 		
-		node.setState(SchloudNode.STATE.BUSY);
-		
+		Msg.verb("SchloudTaskController "+name+" waiting for its node "+node.id+ " to boot");
+		//TODO optimize wait time according to boot/delay times
+		while (node.state == STATE.PENDING ) {
+			Msg.verb("wait for boot "+ node.state);
+			waitFor(10);
+		}
+				
 		while (!node.queue.isEmpty()) {
+		
+			node.setState(SchloudNode.STATE.BUSY);
 			
 			SchloudTask schloudTask=node.queue.peek();
 			node.currentSchloudTask = schloudTask;

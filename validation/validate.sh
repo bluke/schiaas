@@ -3,12 +3,29 @@
 SS_CLASSPATH="/usr/local/java/simgrid.jar:$PWD/../bin/schiaas.jar:$PWD/../bin/simschlouder/simschlouder.jar"
 STAT_FILE="results/stats.dat"
 
+
+if [ "$1" == "--fast" ]
+then 
+	echo "Fast validation (stats only)"
+	FAST=true
+	LODS="wpo wto"
+	shift
+else
+	echo "Full validation"
+	FAST=false
+	LODS="wpo wto psm rio"
+fi
+
+
 if [ $# -gt 0 ]
 then 
 	SOURCES="$*"
+	NSOURCES="$#"
 else
 	SOURCES=sources/*
+	NSOURCES=`ls -l sources/* | wc -l`
 fi
+
 
 mkdir data
 mkdir btuviewer/data
@@ -17,13 +34,18 @@ mkdir concurrent-jobs/data
 if [ ! -e "${STAT_FILE}" ] 
 then
 	echo "Creating stat file $STAT_FILE"
-	echo -e "\"source\"\t\"VM\"\t\"BTU\"\t\"makespan\"\t\"wpo VM\"\t\"wpo BTU\"\t\"wpo makespan\"\t\"wto VM\"\t\"wto BTU\"\t\"wto makespan\"\t\"psm VM\"\t\"psm BTU\"\t\"psm makespan\"\t\"rio VM\"\t\"rio BTU\"\t\"rio makespan\"" > $STAT_FILE
+	echo -en "\"source\"\t\"VM\"\t\"BTU\"\t\"makespan\"\t\"wpo VM\"\t\"wpo BTU\"\t\"wpo makespan\"\t\"wto VM\"\t\"wto BTU\"\t\"wto makespan\"" > $STAT_FILE
+	if $FAST ; then
+		echo -en "\t\"psm VM\"\t\"psm BTU\"\t\"psm makespan\"\t\"rio VM\"\t\"rio BTU\"\t\"rio makespan\"" >> $STAT_FILE
+	fi
+	echo >> $STAT_FILE
 fi
 
-
+iSources=1
 for source in $SOURCES
 do
-	echo "Processing $source"
+	echo "[${iSources}/${NSOURCES}] Processing $source"
+	iSources=$(( iSources + 1 ))
 
 	source=`readlink -f $source`
 	sourceFilename=$(basename "$source")
@@ -65,34 +87,26 @@ do
 
 	echo -en "\t$stat" >> $STAT_FILE
 
-	for lob in wpo wto psm rio
+	pids=""
+	for lod in $LODS
 	do
-		taskFile=${PWD}/data/${sourceFilename%.*}-${lob}.tasks
-		jsonFile=${PWD}/data/${sourceFilename%.*}-${lob}.json
+		rm -f /tmp/$lod
+		./validateLod.sh $source $lod $CLOUD_FILE $STRATEGY > /tmp/$lod &
+		pids="$pids $!"
+	done
 
-		./json2tasks.py $lob $source > $taskFile
-		if [ "$?" -ne 0 ] ; then
-			echo "Fail"
-			echo -en "\tNA\tNA\tNA" >> $STAT_FILE
-			continue
-		fi
+	wait $pids
 
-
-		echo "Simulating $lob"
-		cd simschlouder
-		java -classpath $SS_CLASSPATH simschlouder.SimSchlouder $CLOUD_FILE $taskFile $STRATEGY 2> simschlouder.out
-		mv simschlouder.json $jsonFile
-		cd ..
-
-		echo "Calculating diameters"
-		./json2diameter.py $jsonFile concurrent-jobs/data/simschlouder-${lob}
-
-		echo "Drawing Tickz"
-		stat=`./json2tikz.py $jsonFile btuviewer/data/simschlouder-${lob}`
-		echo -en "\t$stat" >> $STAT_FILE
+	for lod in $LODS
+	do
+		echo -en "`cat /tmp/$lod | tr " " "\t"`" >> $STAT_FILE
 	done
 
 	echo >> $STAT_FILE
+
+	if $FAST ; then
+		continue
+	fi
 
 	echo "Plotting diameters"
 	cd concurrent-jobs
@@ -103,8 +117,8 @@ do
 	cd ../btuviewer
 	echo $source > data/source.filename
 
-	rm *.pdf
-	pdflatex template-btu-schlouder.tex
+	rm -f *.pdf
+	pdflatex template-btu-schlouder.tex > pdflatex.out
 	cp template-btu-schlouder.pdf ../results/${sourceFilename}.pdf
 
 	cd ..

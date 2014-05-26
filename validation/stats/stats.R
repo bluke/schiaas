@@ -36,6 +36,24 @@ dev.off()
 write.table(makespan[ with(makespan, order(wpo.d)), ], file="makespan.dat")
 
 
+min(btu$wpo.d)
+max(btu$wpo.d)
+mean(btu$wpo.d)
+
+min(btu$wto.d)
+max(btu$wto.d)
+mean(btu$wto.d)
+
+
+min(makespan$wpo.d)
+max(makespan$wpo.d)
+mean(makespan$wpo.d)
+
+min(makespan$wto.d)
+max(makespan$wto.d)
+mean(makespan$wto.d)
+
+
 # OMSSA
 stats <- read.table("stats-omssa.dat", header=TRUE)
 btu <- stats[c("source","BTU","wpo.BTU","wto.BTU")]

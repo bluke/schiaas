@@ -42,6 +42,7 @@ public class SimSchlouder {
 	
 	public static enum StorageType {CLOUD, CLIENT, INSTANCE};
 	public static StorageType storageType;
+	public static String outJsonFile = "simschlouder.json";
 	
 	public static class TaskFileReaderProcess extends  org.simgrid.msg.Process {
 		
@@ -128,11 +129,14 @@ public class SimSchlouder {
 	    Msg.init(args);
 	
 	    if (args.length < 3) {
-			Msg.info("Usage   : SimSchlouder simschlouder_file tasks_file strategyClass");
+			Msg.info("Usage   : SimSchlouder simschlouder_file tasks_file strategyClass [output json file]");
 			Msg.info("example : SimSchlouder simschlouder.xml workload.tasks ASAP");
 			System.exit(1);	
 		}
 		
+	    if (args.length==4)
+	    	outJsonFile=args[3];
+	    
 	    SchemaFactory schemaFactory = SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
 		Schema schema = null;
 	    
