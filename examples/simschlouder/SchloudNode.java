@@ -124,8 +124,6 @@ public class SchloudNode extends Process {
 		}
 		
 		switch (state) {
-		case IDLE: idleDate=Msg.getClock();
-			break;
 		case PENDING: pendingDate=Msg.getClock();
 			break;
 		case TERMINATED: terminatedDate=Msg.getClock();

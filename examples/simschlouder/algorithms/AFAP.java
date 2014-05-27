@@ -1,5 +1,7 @@
 package simschlouder.algorithms;
 
+import org.simgrid.msg.Msg;
+
 import simschlouder.SchloudCloud;
 import simschlouder.SchloudController;
 import simschlouder.SchloudNode;
@@ -27,6 +29,7 @@ public class AFAP extends AStrategy {
 
 			double currentidleTime = node.getRemainingIdleTime();
 			double predictedIdleTime = (SchloudController.schloudCloud.getBtuTime()*SchloudController.time2BTU(schloudTask.getWalltimePrediction()+node.getUpTimeToIdle())) - (schloudTask.getWalltimePrediction()+node.getUpTimeToIdle());
+			//Msg.info(predictedIdleTime+"<"+currentidleTime+" && "+predictedIdleTime+"<"+candidatePredictedIdleTime);
 			if ( predictedIdleTime < currentidleTime && predictedIdleTime < candidatePredictedIdleTime  ) {
 				candidate = node;
 				candidatePredictedIdleTime = predictedIdleTime;
@@ -48,7 +51,7 @@ public class AFAP extends AStrategy {
 		}
 			
 
-		
+		//Msg.info("Candidate is"+candidate);
 		return candidate;
 	}
 
