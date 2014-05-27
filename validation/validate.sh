@@ -4,6 +4,29 @@ SS_CLASSPATH="/usr/local/java/simgrid.jar:$PWD/../bin/schiaas.jar:$PWD/../bin/si
 STAT_FILE="results/stats.dat"
 
 
+FAST=false
+LODS="wpo wto psm rio"
+BTPLN=false
+
+while getopts "fb" option
+do
+	case $option in
+	f)
+		echo "- Fast execution (stats only)"
+		FAST=true
+		LODS="wpo wto"
+		shift
+		(( OPTIND -- ))
+		;;
+	b)
+		echo "- Linear regression of boot_time_prediction"
+		BTPLN=true
+		shift
+		(( OPTIND -- ))
+		;;
+	esac
+done
+
 if [ "$1" == "--fast" ]
 then 
 	echo "Fast validation (stats only)"
@@ -12,8 +35,6 @@ then
 	shift
 else
 	echo "Full validation"
-	FAST=false
-	LODS="wpo wto psm rio"
 fi
 
 
@@ -26,10 +47,10 @@ else
 	NSOURCES=`ls -l sources/* | wc -l`
 fi
 
-
-mkdir data
-mkdir btuviewer/data
-mkdir concurrent-jobs/data
+mkdir -p results
+mkdir -p data
+mkdir -p btuviewer/data
+mkdir -p concurrent-jobs/data
 
 if [ ! -e "${STAT_FILE}" ] 
 then
@@ -85,18 +106,20 @@ do
 	./json2diameter.py $source concurrent-jobs/data/schlouder
 	stat=`./json2tikz.py $source btuviewer/data/schlouder`
 
-	echo "Linear regression of boot_time_prediction"
-	cat $source | grep boot_time_prediction | cut -f2 -d":" | sed 's/,//' | sort -n | nl > /tmp/btp
-	echo 'read.table("/tmp/btp") -> btp ; lm(btp$V2 ~ btp$V1)' | R --no-save | tail -3 | head -1 > /tmp/btplr
-	B0=`cat /tmp/btplr | tr -s " " | cut -f2 -d" "`
-	B1=`cat /tmp/btplr | tr -s " " | cut -f3 -d" "`
-	if [ $B1 != "NA" ] ; then
-		cat simschlouder/$CLOUD_FILE | sed "s/B0=\"[0-9\.]*\"/B0=\"$B0\"/" | sed "s/B1=\"[0-9\.]*\"/B1=\"$B1\"/" > /tmp/simschlouder.xml
-	else 
-		cat simschlouder/$CLOUD_FILE | sed "s/B0=\"[0-9\.]*\"/B0=\"$B0\"/" > /tmp/simschlouder.xml
+	if $BTPLN
+	then
+		echo "Linear regression of boot_time_prediction"
+		cat $source | grep boot_time_prediction | cut -f2 -d":" | sed 's/,//' | sort -n | nl > /tmp/btp
+		echo 'options("scipen"=100) ; read.table("/tmp/btp") -> btp ; lm(btp$V2 ~ btp$V1)' | R --no-save | tail -3 | head -1 | tr -s " " " " > /tmp/btplr
+		B0=`cat /tmp/btplr | cut -f2 -d" "`
+		B1=`cat /tmp/btplr | cut -f3 -d" "`
+		if [ "$B1" != "NA" ] ; then
+			cat simschlouder/$CLOUD_FILE | sed "s/B0=\"[0-9\.]*\"/B0=\"$B0\"/" | sed "s/B1=\"[0-9\.]*\"/B1=\"$B1\"/" > /tmp/simschlouder.xml
+		else 
+			cat simschlouder/$CLOUD_FILE | sed "s/B0=\"[0-9\.]*\"/B0=\"$B0\"/" > /tmp/simschlouder.xml
+		fi
+		CLOUD_FILE="/tmp/simschlouder.xml"
 	fi
-	CLOUD_FILE="/tmp/simschlouder.xml"
-
 
 	echo -en "\t$stat" >> $STAT_FILE
 
@@ -136,3 +159,9 @@ do
 
 	cd ..
 done
+
+echo "Computing stats"
+cat results/stats.dat | cut -f1-10 > stats/stats.dat
+cd stats
+R --no-save < stats.R > stats
+cd ..
