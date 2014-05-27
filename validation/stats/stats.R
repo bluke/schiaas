@@ -33,7 +33,7 @@ pdf('makespan-cdf-wto.pdf')
 plot(ecdf(makespan$wto.d))
 dev.off()
 
-write.table(makespan[ with(makespan, order(wpo.d)), ], file="makespan.dat")
+write.table(makespan[ with(makespan, order(wto.d)), ], file="makespan.dat")
 
 
 min(btu$wpo.d)
