@@ -85,6 +85,19 @@ do
 	./json2diameter.py $source concurrent-jobs/data/schlouder
 	stat=`./json2tikz.py $source btuviewer/data/schlouder`
 
+	echo "Linear regression of boot_time_prediction"
+	cat $source | grep boot_time_prediction | cut -f2 -d":" | sed 's/,//' | sort -n | nl > /tmp/btp
+	echo 'read.table("/tmp/btp") -> btp ; lm(btp$V2 ~ btp$V1)' | R --no-save | tail -3 | head -1 > /tmp/btplr
+	B0=`cat /tmp/btplr | tr -s " " | cut -f2 -d" "`
+	B1=`cat /tmp/btplr | tr -s " " | cut -f3 -d" "`
+	if [ $B1 != "NA" ] ; then
+		cat simschlouder/$CLOUD_FILE | sed "s/B0=\"[0-9\.]*\"/B0=\"$B0\"/" | sed "s/B1=\"[0-9\.]*\"/B1=\"$B1\"/" > /tmp/simschlouder.xml
+	else 
+		cat simschlouder/$CLOUD_FILE | sed "s/B0=\"[0-9\.]*\"/B0=\"$B0\"/" > /tmp/simschlouder.xml
+	fi
+	CLOUD_FILE="/tmp/simschlouder.xml"
+
+
 	echo -en "\t$stat" >> $STAT_FILE
 
 	pids=""
