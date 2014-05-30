@@ -8,7 +8,7 @@ FAST=false
 LODS="wpo wto psm rio"
 BTPLN=false
 
-while getopts "fb" option
+while getopts "fbp" option
 do
 	case $option in
 	f)
@@ -21,6 +21,12 @@ do
 	b)
 		echo "- Linear regression of boot_time_prediction"
 		BTPLN=true
+		shift
+		(( OPTIND -- ))
+		;;
+	p)
+		echo "- Plots only (no stats)"
+		STAT_FILE=/dev/null
 		shift
 		(( OPTIND -- ))
 		;;
@@ -110,9 +116,9 @@ do
 	then
 		echo "Linear regression of boot_time_prediction"
 		cat $source | grep boot_time_prediction | cut -f2 -d":" | sed 's/,//' | sort -n | nl > /tmp/btp
-		echo 'options("scipen"=100) ; read.table("/tmp/btp") -> btp ; lm(btp$V2 ~ btp$V1)' | R --no-save | tail -3 | head -1 | tr -s " " " " > /tmp/btplr
-		B0=`cat /tmp/btplr | cut -f2 -d" "`
-		B1=`cat /tmp/btplr | cut -f3 -d" "`
+		echo 'options("scipen"=100) ; read.table("/tmp/btp") -> btp ; lm(btp$V2 ~ btp$V1)' | R --no-save | tail -3 | head -1 | tr -s " " " " | sed 's/^ *//' > /tmp/btplr
+		B0=`cat /tmp/btplr | cut -f1 -d" "`
+		B1=`cat /tmp/btplr | cut -f2 -d" "`
 		if [ "$B1" != "NA" ] ; then
 			cat simschlouder/$CLOUD_FILE | sed "s/B0=\"[0-9\.]*\"/B0=\"$B0\"/" | sed "s/B1=\"[0-9\.]*\"/B1=\"$B1\"/" > /tmp/simschlouder.xml
 		else 
@@ -160,8 +166,12 @@ do
 	cd ..
 done
 
-echo "Computing stats"
-cat results/stats.dat | cut -f1-10 > stats/stats.dat
-cd stats
-R --no-save < stats.R > stats
-cd ..
+if [ "$STAT_FILE" != "/dev/null" ]
+then
+	echo "Computing stats"
+	cat $STAT_FILE | cut -f1-10 > stats/stats.dat
+	cd stats
+	R --no-save < stats.R > stats
+	R --no-save < statsPSM.R > /dev/null
+	cd ..
+fi

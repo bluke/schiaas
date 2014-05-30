@@ -17,12 +17,12 @@ STRATEGY=$4
 taskFile=${PWD}/data/${sourceFilename%.*}-${lod}.tasks
 jsonFile=${PWD}/data/${sourceFilename%.*}-${lod}.json
 outFile=${PWD}/data/${sourceFilename%.*}-${lod}.out
+errFile=${PWD}/data/${sourceFilename%.*}-${lod}.err
 
 
-
-./json2tasks.py $lod $source > $taskFile
+./json2tasks.py $lod $source > $taskFile 2> $errFile
 if [ "$?" -ne 0 ] ; then
-	echo "Error: Json file incomplete" >&2
+	echo "Error $lod: Json file incomplete" >&2
 	echo -en "\tNA\tNA\tNA"
 	exit 2
 fi
