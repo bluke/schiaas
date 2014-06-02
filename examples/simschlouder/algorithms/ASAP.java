@@ -24,31 +24,23 @@ public class ASAP extends AStrategy {
 		double candidatePredictedIdleTime = SchloudController.schloudCloud.getBtuTime() + 1;
 		for (SchloudNode node : SchloudController.nodes) {
 			//Msg.info("ASAP : "+(Msg.getClock()+cloud.getBootTimePrediction())+"("+cloud.getBootTimePrediction()+ " " + cloud.bootCount + ") - "+ node.getIdleDate());
-			if (node.isIdle() || (Msg.getClock()+SchloudController.schloudCloud.getBootTimePrediction()>=node.getIdleDate())) {
-				double predictedIdleTime = (SchloudController.schloudCloud.getBtuTime()*SchloudController.time2BTU(task.getWalltimePrediction()+node.getUpTimeToIdle())) - (task.getWalltimePrediction()+node.getUpTimeToIdle());
+			
+			if (Msg.getClock()+SchloudController.schloudCloud.getBootTimePrediction()>=node.getIdleDate()) {
+				double predictedIdleTime = 
+					(SchloudController.schloudCloud.getBtuTime()
+						*SchloudController.time2BTU(task.getWalltimePrediction()
+						+node.getUpTimeToIdle())) 
+					- (task.getWalltimePrediction()+node.getUpTimeToIdle());
 				if(candidate==null){
 					candidate=node;
 					candidatePredictedIdleTime = predictedIdleTime;
 				}
 				else
 				{
+					// Sub-optimal: should choose idle node over soon-to-be ones
 					if(predictedIdleTime<candidatePredictedIdleTime){
 						candidate=node;
 						candidatePredictedIdleTime = predictedIdleTime;
-					}
-				}
-			} 
-		}
-		if( candidate==null && SchloudController.schloudCloud.describeAvailability(SchloudController.instanceTypeId)<=0){
-			// we choose the VM with the closest IdleTime.
-			for (SchloudNode node : SchloudController.nodes) {
-				if(candidate==null){
-					candidate=node;
-				}
-				else
-				{
-					if(node.getIdleDate()<candidate.getIdleDate()){
-						candidate=node;
 					}
 				}
 			}
