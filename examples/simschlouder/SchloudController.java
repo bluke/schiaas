@@ -163,7 +163,7 @@ public class SchloudController extends org.simgrid.msg.Process {
 	 * @return the number of BTUs corresponding to our time
 	 */
 	public static int time2BTU(double time) {
-		return (1+((int)(time/schloudCloud.getBtuTime())));
+		return (1+((int)((time-5)/schloudCloud.getBtuTime())));
 	}
 
 	/**
@@ -346,7 +346,9 @@ public class SchloudController extends org.simgrid.msg.Process {
 					+ nodes.get(i).getUptime() + "("+ time2BTU(nodes.get(i).getUptime()) +") ~ "
 					+ nodes.get(i).getUptime()+cloud.shutdownMargin+ "("+ time2BTU(nodes.get(i).getUptime()+cloud.shutdownMargin) +")" );*/
 			
-			if (nodes.get(i).isIdle() && time2BTU(nodes.get(i).getUptime())<time2BTU(nodes.get(i).getUptime()+schloudCloud.shutdownMargin) ) {
+			if (nodes.get(i).isIdle() 
+					&& time2BTU(nodes.get(i).getUptime())<time2BTU(nodes.get(i).getUptime()+2*schloudCloud.shutdownMargin)
+					&& time2BTU(nodes.get(i).getUptime()+schloudCloud.shutdownMargin)<time2BTU(nodes.get(i).getUptime()+2*schloudCloud.shutdownMargin)) {
 				//Msg.info("hou yes " + nodes.get(i).instance.getName());
 				SchloudController.stopNode(nodes.get(i));
 			} else {

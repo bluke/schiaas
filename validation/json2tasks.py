@@ -43,9 +43,9 @@ def cmpvm(vm1, vm2):
 	elif int(vm1['start_date']) > int(vm2['start_date']):
 		return 1
 	else:
-		if int(vm1['boot_time_prediction']) < int(vm2['boot_time_prediction']):
+		if int(vm1['boot_time']) < int(vm2['boot_time']):
 			return -1
-		elif int(vm1['boot_time_prediction']) > int(vm2['boot_time_prediction']):
+		elif int(vm1['boot_time']) > int(vm2['boot_time']):
 			return 1
 		else:
 			return 0
@@ -70,7 +70,10 @@ if args.lod == 'wto':
 	print "[boots]"
 	for vm in results:
 		btps.append(vm['boot_time_prediction'])
-		bts.append(vm['boot_time'])
+		#bts.append(vm['boot_time'])
+		first_start_date = sorted(vm['jobs'], key=lambda j: j['start_date'])[0]['start_date']
+		bts.append(first_start_date-vm['start_date'])
+
 	bts.sort()
 	i = 0
 	for btp in btps:
@@ -80,11 +83,13 @@ if args.lod == 'wto':
 
 # Fill an unique list of jobs
 jobs = []
+results.sort(cmp=cmpvm)
 for vm in results:
+	vm['jobs'].sort(cmp=cmpjob)
 	jobs += vm['jobs']
 
 # Sort it all. 
-jobs.sort(cmp=cmpjob)
+#jobs.sort(cmp=cmpjob)
 # jobs.sort(key=lambda j: j['id'])
 
 # Associate a job name with its ID
@@ -96,6 +101,7 @@ for job in jobs:
 first_submission_date = sorted(jobs, key=lambda j: j['submission_date'])[0]['submission_date']
 
 for job in jobs:
+	job['submission_date'] = first_submission_date # patch to mix jobs/not clean at all
 	print("{0}\t{1}\t{2}".format(job['id'], job['submission_date'] - first_submission_date, job['walltime_prediction'])),
 	runtime = input_size = output_size = None
 
