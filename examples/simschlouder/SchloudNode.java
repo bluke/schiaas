@@ -45,16 +45,31 @@ public class SchloudNode extends Process {
 	
 	protected double speed;
 	
+	
+	/**
+	 * A process to wait for the instance to run
+	 * @author julien
+	 */
 	protected class SchloudNodeController extends Process {
 		private SchloudNode schloudNode;
+		private double bootTimePrediction;
+		private double bootTime;
 		protected SchloudNodeController(SchloudNode schloudNode) {
 			super(SchloudController.host,schloudNode.id+"_SchloudNodeController");
 			this.schloudNode = schloudNode;
+			this.bootTimePrediction = SchloudController.schloudCloud.getBootTimePrediction();
+			this.bootTime = this.bootTimePrediction;
+			// Whenever there are some boot times to be forced
+			if (!SchloudController.schloudCloud.bootTimes.isEmpty()) {
+				this.bootTimePrediction = SchloudController.schloudCloud.bootTimePredictions.removeFirst();
+				this.bootTime = SchloudController.schloudCloud.bootTimes.removeFirst();
+			} 
 		}
 		public void main(String[] args) throws TransferFailureException, HostFailureException, TimeoutException {
 			try {
 				// Wait for at least the predicted boottime. Can be optimized.
-				Process.currentProcess().waitFor(schloudNode.bootTimePrediction);
+				Process.currentProcess().waitFor(bootTime);
+				
 				while(cloud.compute.describeInstance(instanceId).isRunning() == 0)
 				{
 					Msg.info("wait for boot of "+instanceId);
@@ -76,7 +91,11 @@ public class SchloudNode extends Process {
 		}
 	}
 
-	
+	/**
+	 * A Schlouder Node, basically peeking tasks and executing them.
+	 * @param instanceId
+	 * @param cloud
+	 */
 	protected SchloudNode(String instanceId, SchloudCloud cloud) {
 		super(cloud.compute.describeInstance(instanceId), instanceId+"_SchloudNode",null);
 		this.instanceId = instanceId;

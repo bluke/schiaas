@@ -57,11 +57,23 @@ public class SimSchlouder {
 			
 			double oldSubmissionDate = 0;
 			
-
+			Scanner sc = new Scanner(scf.nextLine());
+			if (sc.hasNext("\\[boots\\]")) {
+				sc.close();
+				sc = new Scanner(scf.nextLine());
+				do {
+					SchloudController.schloudCloud.bootTimePredictions.add(sc.nextInt());
+					SchloudController.schloudCloud.bootTimes.add(sc.nextInt());
+					sc = new Scanner(scf.nextLine());
+				} while (!sc.hasNext("\\[tasks\\]"));				
+			} else {
+				scf = new Scanner(new File(fileName));
+			}
+	
 			while (scf.hasNext()) {
-				Scanner sc = new Scanner(scf.nextLine());
+				sc = new Scanner(scf.nextLine());
 				sc.useLocale(Locale.US);
-
+				
 				String jid = sc.next();
 				double submissionDate = sc.nextDouble();
 				

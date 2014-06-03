@@ -23,7 +23,7 @@ public class AFAP extends AStrategy {
 	protected SchloudNode applyStrategy(SchloudTask schloudTask) {
 		SchloudNode candidate = null;
 		
-		double candidatePredictedIdleTime = SchloudController.schloudCloud.getBtuTime() + 1;
+		double candidatePredictedIdleTime = SchloudController.schloudCloud.getBtuTime();
 		
 		for (SchloudNode node : SchloudController.nodes) {
 
@@ -35,6 +35,7 @@ public class AFAP extends AStrategy {
 				candidatePredictedIdleTime = predictedIdleTime;
 			} 
 		}
+		
 		if( candidate==null && SchloudController.schloudCloud.describeAvailability(SchloudController.instanceTypeId)<=0){
 			// we choose the VM with the closest IdleTime.
 			for (SchloudNode node : SchloudController.nodes) {
@@ -49,7 +50,7 @@ public class AFAP extends AStrategy {
 				}
 			}
 		}
-			
+		
 
 		//Msg.info("Candidate is"+candidate);
 		return candidate;

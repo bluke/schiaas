@@ -1,5 +1,8 @@
 package simschlouder;
 
+import java.util.LinkedList;
+import java.util.Vector;
+
 import org.simgrid.msg.Msg;
 import org.simgrid.schiaas.Compute;
 import org.simgrid.schiaas.SchIaaS;
@@ -15,6 +18,9 @@ public class SchloudCloud {
 	protected int maxInstancesPerUser;
 	
 	protected int bootCount;
+	
+	protected LinkedList<Integer> bootTimes;
+	protected LinkedList<Integer> bootTimePredictions;
 	
 	public Compute compute;
 	public Storage storage;
@@ -51,6 +57,9 @@ public class SchloudCloud {
 		this.storage = null;
 		
 		this.standardPower= standardPower;
+		
+		bootTimes = new LinkedList<Integer>();
+		bootTimePredictions = new LinkedList<Integer>();
 	}
 		
 	
@@ -82,9 +91,18 @@ public class SchloudCloud {
 	 * @return the predicted boot time in seconds
 	 */
 	public double getBootTimePrediction() {
+		if (!bootTimePredictions.isEmpty())
+			return bootTimePredictions.peekFirst();
 		return (bootTimeB0+bootTimeB1*(bootCount+1));
 	}
 	
+	/**
+	 * Give the current availability of new instances on this.
+	 * 
+	 * @param instanceTypeId
+	 *            The id of a type of instance
+	 * @return The number of available instances of the given type
+	 */
 	public int describeAvailability(String instanceTypeId) {
 		if(this.maxInstancesPerUser!=0){
 			return Math.max(0, Math.min(maxInstancesPerUser - SchloudController.nodes.size(), compute.describeAvailability(instanceTypeId)));

@@ -22,20 +22,33 @@ parser.add_argument('json_file', help='input json file')
 
 args = parser.parse_args()
 
-# Job comparator: by sub_date, then by id
+# Job comparator: by sub_date, then by start_date
 def cmpjob(j1, j2):
 	if int(j1['submission_date']) < int(j2['submission_date']):
 		return -1
 	elif int(j1['submission_date']) > int(j2['submission_date']):
 		return 1
 	else:
-		if j1['id'] < j2['id']:
+		if j1['start_date'] < j2['start_date']:
 			return -1
-		elif j1['id'] > j2['id']:
+		elif j1['start_date'] > j2['start_date']:
 			return 1
 		else:
 			return 0
 	
+# Vm comparator: by start_date, then by boot_time_prediction
+def cmpvm(vm1, vm2):
+	if int(vm1['start_date']) < int(vm2['start_date']):
+		return -1
+	elif int(vm1['start_date']) > int(vm2['start_date']):
+		return 1
+	else:
+		if int(vm1['boot_time_prediction']) < int(vm2['boot_time_prediction']):
+			return -1
+		elif int(vm1['boot_time_prediction']) > int(vm2['boot_time_prediction']):
+			return 1
+		else:
+			return 0
 
 # Date of the first vm start
 beginDate = 0
@@ -47,15 +60,30 @@ with open(args.json_file) as fp:
 	# If the json is a more recent version
 	if 'nodes' in results:
 		results = results['nodes']
-results.sort(key=lambda vm:int(vm['start_date']))
+results.sort(cmp=cmpvm)
 beginDate = int(results[0]['start_date'])
+
+# Output the boot_times
+if args.lod == 'wto':
+	btps = []
+	bts = []
+	print "[boots]"
+	for vm in results:
+		btps.append(vm['boot_time_prediction'])
+		bts.append(vm['boot_time'])
+	bts.sort()
+	i = 0
+	for btp in btps:
+		print("{0}\t{1}".format(btp, bts[i]))
+		i = i+1
+	print "[tasks]"
 
 # Fill an unique list of jobs
 jobs = []
 for vm in results:
 	jobs += vm['jobs']
 
-# Sort it all. WARNING: Only based on job ids
+# Sort it all. 
 jobs.sort(cmp=cmpjob)
 # jobs.sort(key=lambda j: j['id'])
 
@@ -68,7 +96,7 @@ for job in jobs:
 first_submission_date = sorted(jobs, key=lambda j: j['submission_date'])[0]['submission_date']
 
 for job in jobs:
-	print("{0} {1} {2}".format(job['id'], job['submission_date'] - first_submission_date, job['walltime_prediction'])),
+	print("{0}\t{1}\t{2}".format(job['id'], job['submission_date'] - first_submission_date, job['walltime_prediction'])),
 	runtime = input_size = output_size = None
 
 	if args.lod == 'psm' and 'PSM_data' in job and 'runtime_prediction' in job['PSM_data'] and job['PSM_data']['runtime_prediction'] is not None:
@@ -97,10 +125,10 @@ for job in jobs:
 			runtime = 0.0
 		print(" ~ {0}".format(runtime)),
 	if input_size is not None and output_size is not None:
-		print("{0} {1}".format(input_size, output_size)),
+		print("{0}\t{1}".format(input_size, output_size)),
 
 	if 'dependencies' in job and len(job['dependencies']) > 0:
-		print(" ->"),
+		print("\t->"),
 		for dependency_name in job['dependencies']:
 			print(" {0}".format(jobs_name_dict[dependency_name])),
 	print("")

@@ -88,9 +88,10 @@ public class SchloudController extends org.simgrid.msg.Process {
 	 * Entry point for the controller process
 	 */
 	public void main(String[] args) throws MsgException {
+		waitFor(10);
 		while (!(mainQueue.isEmpty() && nodes.isEmpty() && allTasksSubmitted)) {
 			Msg.verb("main loop : main queue="+ mainQueue.size() 
-					+ ", idle nodes=" +idleNodesCount+"/("+ nodes.size()+"+"+schloudCloud.describeAvailability(instanceTypeId)+")");
+				+ ", idle nodes=" +idleNodesCount+"/("+ nodes.size()+"+"+schloudCloud.describeAvailability(instanceTypeId)+")");
 			
 			if (idleNodesCount!=0 
 				|| schloudCloud.describeAvailability(instanceTypeId)>0) {
@@ -164,7 +165,11 @@ public class SchloudController extends org.simgrid.msg.Process {
 	public static int time2BTU(double time) {
 		return (1+((int)(time/schloudCloud.getBtuTime())));
 	}
-		
+
+	/**
+	 * returns a description of the terminated nodes
+	 * @return a string representing the terminated nodes
+	 */
 	public static String getPostMortem() {
 		String s = "";
 		for (SchloudNode node : terminatedNodes) {
@@ -174,7 +179,7 @@ public class SchloudController extends org.simgrid.msg.Process {
 	}
 	
 	/**
-	 * Prints the result of the simulation
+	 * returns the result of the simulation
 	 * @return a string containing simulation statistics
 	 * @throws SimSchloudException 
 	 */
