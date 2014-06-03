@@ -10,6 +10,27 @@ import org.simgrid.schiaas.Image;
 import org.simgrid.schiaas.Instance;
 import org.simgrid.schiaas.InstanceType;
 
+/**
+ * Basic example of a stepper command system
+ * Available commands are (arguments are mandatory) :
+ *  - describeInstanceTypes
+ *  - describeInstanceType [type]
+ *  - describeImages
+ *  - describeImage [img]
+ *  - describeAvailability [type]
+ *  - runInstance [img] [type]
+ *  - runInstances [img] [type] [num]
+ *  - describeInstances
+ *  - describeInstance [inst]
+ *  - suspendInstance [inst]
+ *  - resumeInstance [inst]
+ *  - terminateInstance [inst]
+ *  - terminate
+ *  - help
+ * 
+ * @author luke
+ *
+ */
 public class BaseStepper extends Stepper {
 
 

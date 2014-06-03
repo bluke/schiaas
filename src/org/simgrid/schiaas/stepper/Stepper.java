@@ -97,21 +97,38 @@ public abstract class Stepper extends Process {
 		}
 	}
 
+	/**
+	 * Sets the startDates from which every other dates are mesured
+	 */
 	private void setStart(){
 		if(this.startDate == -1)
 			startDate = System.currentTimeMillis(); 
 	}
 	
+	/**
+	 * Tells the stepper to stop waiting for new connection
+	 */
 	protected void stopListening(){
 		this.listening  = false;
 	}
 	
+	/**
+	 * Move the simulation to the date corresponding to the time elapsed since startDate
+	 * @throws HostFailureException
+	 */
 	protected void step() throws HostFailureException{
 		double now = System.currentTimeMillis();
 		this.waitFor(((now-this.startDate)/1000)-Msg.getClock());
 	}
 	
-	
+	/**
+	 * Receives the message send by the client and execute the corresponding command
+	 * @param input
+	 * 			The string send as a command by the client
+	 * @return
+	 * 			The response to send to the client
+	 * @throws HostFailureException
+	 */
 	protected abstract String execute(String input) throws HostFailureException;
 	
 	

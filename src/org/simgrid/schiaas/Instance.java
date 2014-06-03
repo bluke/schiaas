@@ -39,10 +39,13 @@ public abstract class Instance extends org.simgrid.msg.VM {
 	/** The physical host of the instance. */
 	protected Host host;
 
-	/** The current state of the instance. */
+	//** The current state of the instance. */
 	// protected STATE state;
 	
+	/** True if the machine is pending boot */
 	protected boolean isPending;
+	
+	/** True if the machine is shutting down */
 	protected boolean isTerminating;
 
 	

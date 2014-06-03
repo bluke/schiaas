@@ -7,5 +7,5 @@ package org.simgrid.schiaas.engine;
  * Time: 15:44
  * To change this template use File | Settings | File Templates.
  */
-public class NetworkEngine {
+public abstract class NetworkEngine {
 }

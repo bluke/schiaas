@@ -35,15 +35,19 @@ cmake -Denable_java=on .
 make
 sudo make install
 @endcode
+You can also get the Simgrid jar from the <a href="http://simgrid.gforge.inria.fr/">simgrid website</a>. 
+Make sure to have at least version 3.11
 
-@subsection running_retrieving Retrieving the latest unstable version
 
-The last version of SCHIaaS can be retrieved from the git repository:
+@subsection running_retrieving Retrieving and Installing Schiaas
+
+The last version of SCHIaaS can be retrieved from the git repository :
 @code
 git clone https://gforge.inria.fr/git/schiaas/schiaas.git
 or
 git clone git://scm.gforge.inria.fr/schiaas/schiaas.git
 @endcode
+Please note the code is still unstable.
 
 Afterward, you can build SCHIaaS:
 @code
