@@ -160,6 +160,10 @@ public abstract class Instance extends org.simgrid.msg.VM {
 	public boolean isPending() {
 		return this.isPending;
 	}
+
+	public boolean isTerminating() {
+		return this.isTerminating;
+	}
 	
 	/**
 	 * of course.
