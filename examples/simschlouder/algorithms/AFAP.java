@@ -25,15 +25,21 @@ public class AFAP extends AStrategy {
 		
 		double candidatePredictedIdleTime = SchloudController.schloudCloud.getBtuTime();
 		
+		double btu = SchloudController.schloudCloud.getBtuTime();
+		
 		for (SchloudNode node : SchloudController.nodes) {
 
-			double currentidleTime = node.getRemainingIdleTime();
+			double currentIdleTime = node.getRemainingIdleTime();
+			
+			double predictedUpTimeToIdle = 
+				node.getUpTimeToIdle() + schloudTask.getWalltimePrediction();  
+				//+ SchloudController.schloudCloud.getShutdownMargin();
+			
 			double predictedIdleTime = 
-					(SchloudController.schloudCloud.getBtuTime() * SchloudController.time2BTU(
-								schloudTask.getWalltimePrediction() + node.getUpTimeToIdle() ) ) 
-					- (schloudTask.getWalltimePrediction() + node.getUpTimeToIdle());
+				( btu * SchloudController.time2BTU(predictedUpTimeToIdle) ) 
+				- predictedUpTimeToIdle;
 			//Msg.info(predictedIdleTime+"<"+currentidleTime+" && "+predictedIdleTime+"<"+candidatePredictedIdleTime);
-			if ( predictedIdleTime < currentidleTime && predictedIdleTime < candidatePredictedIdleTime  ) {
+			if ( predictedIdleTime < currentIdleTime && predictedIdleTime < candidatePredictedIdleTime  ) {
 				candidate = node;
 				candidatePredictedIdleTime = predictedIdleTime;
 			} 
