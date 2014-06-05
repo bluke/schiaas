@@ -1,0 +1,27 @@
+#!/usr/local/bin/tesh
+
+! timeout 25
+! output ignore
+& java -cp livesim.jar:../schiaas.jar:/usr/local/java/simgrid.jar livesim.LiveSim platformTest.xml cloudTest.xml 1907 --log=root.thres:critical 
+! output display
+$ sleep 3
+$ netcat localhost 1907
+< describeInstanceTypes
+> [small,large,medium]
+< describeImages 
+> [myImage]
+< runInstance myImage medium
+> myCloud-0
+< runInstances myImage small 2
+> 2
+< disconnect
+
+$ sleep 20
+$ netcat localhost 1907
+< describeInstances
+> [myCloud-2,myCloud-0,myCloud-1]
+< terminateInstance myCloud-1
+> understood
+< terminate
+
+

@@ -71,6 +71,8 @@ add_subdirectory(examples)
 #testing
 find_program( TESH_BIN 
 	tesh)
+find_program ( NETCAT_BIN 
+	netcat)
 
 if(NOT ${TESH_BIN} MATCHES TESH_BIN-NOTFOUND)
 	enable_testing()
@@ -78,6 +80,13 @@ if(NOT ${TESH_BIN} MATCHES TESH_BIN-NOTFOUND)
 	add_test(tesh-simschlouder-ASAP ${TESH_BIN} --cd ${PROJECT_BINARY_DIR}/simschlouder ${PROJECT_BINARY_DIR}/simschlouder/ASAP.tesh)
 	add_test(tesh-simschlouder-AFAP ${TESH_BIN} --cd ${PROJECT_BINARY_DIR}/simschlouder ${PROJECT_BINARY_DIR}/simschlouder/AFAP.tesh)
 	add_test(tesh-simschlouder-FirstFit ${TESH_BIN} --cd ${PROJECT_BINARY_DIR}/simschlouder ${PROJECT_BINARY_DIR}/simschlouder/FirstFit.tesh)
+
+if(NOT ${NETCAT_BIN} MATCHES NETCAT_BIN-NOTFOUND)
+	add_test(tesh-livesim ${TESH_BIN} --cd ${PROJECT_BINARY_DIR}/livesim ${PROJECT_BINARY_DIR}/livesim/test.tesh)
+endif(NOT ${NETCAT_BIN} MATCHES NETCAT_BIN-NOTFOUND)
+
+
 elseif( ${TESH_BIN} MATCHES TESH_BIN-NOTFOUND)
 	message( STATUS "Tesh Not Found : no testing will be available. Tesh is part of the simgrid project ")
 endif(NOT ${TESH_BIN} MATCHES TESH_BIN-NOTFOUND)
+

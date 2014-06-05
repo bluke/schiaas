@@ -92,9 +92,9 @@ public class BaseStepper extends Stepper {
 				
 				Collection<Instance> collection = compute.describeInstances();
 				Iterator<Instance> i = collection.iterator();
-				output = "["+i.next().getId();
+				output = "["+i.next().getName();
 				while(i.hasNext()){
-					output+=","+i.next().getId();
+					output+=","+i.next().getName();
 				}
 				output+="]";
 				
@@ -105,7 +105,7 @@ public class BaseStepper extends Stepper {
 			}else if(command.matches("runInstances")){
 				
 				String[] ids = compute.runInstances(args[1], args[2], Integer.parseInt(args[3]));
-				output = ids.toString();
+				output = Integer.toString(ids.length);
 				
 			}else if(command.matches("terminateInstance")){
 				
@@ -131,6 +131,10 @@ public class BaseStepper extends Stepper {
 			}else if(command.matches("help")){
 				
 				output = "Good luck;";
+				
+			}else if(command.matches("disconnect")){
+				
+				output = null;
 				
 			}
 			

@@ -9,11 +9,14 @@ import org.simgrid.schiaas.stepper.BaseStepper;
 public class LiveSim {
 
 		public static void main(String[] args) throws HostNotFoundException {
-			if(args.length!=3){
+
+			Msg.init(args);
+			
+			if(args.length<3){
 				Msg.info("Usage : SimSocket platform.xml cloud.xml port");
 				System.exit(-1);
 			}
-			Msg.init(args);
+
 			Msg.createEnvironment(args[0]);
 			SchIaaS.init(args[1]);
 			
