@@ -5,7 +5,6 @@
     <title>SimSchlouder Documentation</title>
     <filename>simschlouder</filename>
     <docanchor file="simschlouder" title="SimSchlouder">Running</docanchor>
-    <docanchor file="index" title="Prerequisite">running_prerequisite</docanchor>
     <docanchor file="simschlouder" title="Command Line">command_line</docanchor>
     <docanchor file="simschlouder" title="Output">output</docanchor>
     <docanchor file="simschlouder" title="Configuration file">config_file</docanchor>
@@ -18,7 +17,7 @@
     <filename>index</filename>
     <docanchor file="index" title="Running SCHIaaS">running</docanchor>
     <docanchor file="index" title="Prerequisite">running_prerequisite</docanchor>
-    <docanchor file="index" title="Retrieving the latest unstable version">running_retrieving</docanchor>
+    <docanchor file="index" title="Retrieving and Installing Schiaas">running_retrieving</docanchor>
     <docanchor file="index" title="Tutorial: the master-slave example">tutorial</docanchor>
     <docanchor file="index" title="Simulation setup">tutorial_setup</docanchor>
     <docanchor file="index" title="Cloud tag">cloud_tag</docanchor>

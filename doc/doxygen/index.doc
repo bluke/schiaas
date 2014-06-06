@@ -69,6 +69,7 @@ Then you should have schiaas.jar inside the bin directory, which you can use to 
 
 
 
+You may also get a pre-compiled schiaas.jar <a href="./schiaas.jar">here</a>. Note that this jar was last updated at the same time has this doc.
 
 
 @section tutorial Tutorial: the master-slave example
@@ -117,6 +118,8 @@ Last, a new configuration file is introduced to declare cloud configuration, clo
 	</cloud>
 </clouds> 
 @endcode
+
+Cloud files are validated using <a href="./cloud.xsd">cloud.xsd</a> found in the schiaas sources.
 
 @subsubsection cloud_tag Cloud tag
 

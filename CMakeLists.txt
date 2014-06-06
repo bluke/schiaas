@@ -64,6 +64,10 @@ COMMAND ${Java_JAVADOC_EXECUTABLE}
 -quiet
 COMMENT "${MSG_JAVADOC} Generating API documentation" VERBATIM
 )
+add_custom_command( TARGET documentation POST_BUILD COMMAND cp ARGS ${PROJECT_SOURCE_DIR}/org/simgrid/schiaas/cloud.xsd ${PROJECT_DOC_DIR}/html/ )
+add_custom_command( TARGET documentation POST_BUILD COMMAND cp ARGS ${PROJECT_EXAMPLES_DIR}/simschlouder/simschlouder.xsd ${PROJECT_DOC_DIR}/html/ )
+add_custom_command( TARGET documentation POST_BUILD COMMAND cp ARGS ${PROJECT_BINARY_DIR}/schiaas.jar ${PROJECT_DOC_DIR}/html/ )
+add_custom_command( TARGET documentation POST_BUILD COMMAND cp ARGS ${PROJECT_BINARY_DIR}/simschlouder/simschlouder.jar ${PROJECT_DOC_DIR}/html/ )
 
 add_subdirectory(src)
 add_subdirectory(examples)
