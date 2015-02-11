@@ -1,33 +1,53 @@
 package simschlouder;
 
 import java.util.LinkedList;
-import java.util.Vector;
-
-import org.simgrid.msg.Msg;
 import org.simgrid.schiaas.Compute;
 import org.simgrid.schiaas.SchIaaS;
 import org.simgrid.schiaas.Storage;
 
+/**
+ * Represents a cloud in the SimSchlouder system
+ * @author julien.gossa@unistra.fr
+ *
+ */
 public class SchloudCloud {
+	/** Name of the cloud */
 	public String name;
+	
+	/** Linear regression of boot time */
 	protected double bootTimeB0;
 	protected double bootTimeB1;
+	
+	/** Like EC2CU */
 	protected double standardPower;
+	
+	/** Duration of the Billing Time Unit in s. e.g. 3600s for EC2 */
 	protected double BTU;
+	
+	/** Margin for shutdown command: the instances are shuted down if idle at BTU-shutdownMargin */
 	protected double shutdownMargin;
+	
+	/** Maximum instances allowed per user. NB: SimSchlouder is single-uuser for now. */
 	protected int maxInstancesPerUser;
 	
+	/** Amount of currently booting instances */
 	protected int bootCount;
 	
+	/** List of bootTimes, as exactly observed in real experiments */
 	protected LinkedList<Integer> bootTimes;
+	
+	/** List of bootTime predictions, as exactly observed in real experiments */
 	protected LinkedList<Integer> bootTimePredictions;
 	
+	/** The compute to use. */
 	public Compute compute;
+	
+	/** The storage to use */
 	public Storage storage;
 	
 	/**
 	 * Enumerates the possible commands to control instances.
-	 * @author julien
+	 * @author julien.gossa@unistra.fr
 	 */
 	public static enum COMMAND { RUN, SHUTDOWN, SUSPEND, RESUME, REBOOT, FINALIZE };
 
@@ -65,6 +85,7 @@ public class SchloudCloud {
 	
 	/**
 	 * Set the storage to use for task data;
+	 * @param storage The storage to use.
 	 */
 	public void setStorage(String storage) {
 		this.storage = SchIaaS.getCloud(name).getStorage(storage);
@@ -87,8 +108,8 @@ public class SchloudCloud {
 	
 	/**
 	 * Returns the predicted boot time.
-	 * Works only with "PRE" caching strategy
-	 * @return the predicted boot time in seconds
+	 * Works only with "PRE" caching strategy.
+	 * @return the predicted boot time in seconds, using predictions reported in experiments when available.
 	 */
 	public double getBootTimePrediction() {
 		if (!bootTimePredictions.isEmpty())
@@ -105,13 +126,17 @@ public class SchloudCloud {
 	 */
 	public int describeAvailability(String instanceTypeId) {
 		if(this.maxInstancesPerUser!=0){
-			return Math.max(0, Math.min(maxInstancesPerUser - SchloudController.nodes.size(), compute.describeAvailability(instanceTypeId)));
+			return Math.max(
+					0, 
+					Math.min(
+							maxInstancesPerUser - SchloudController.nodes.size(), 
+							compute.describeAvailability(instanceTypeId)));
 		}
 		return compute.describeAvailability(instanceTypeId);
 	}
 
 	/**
-	 * Gets the BTU time on the cloud
+	 * Gets the BTU on the cloud
 	 * @return
 	 */
 	public double getBtuTime() {

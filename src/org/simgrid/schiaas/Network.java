@@ -3,6 +3,12 @@ package org.simgrid.schiaas;
 
 import org.w3c.dom.Node;
 
+/**
+ * Network component: management of network virtualization
+ * Not implemented yet
+ * 
+ * @author julien.gossa@unistra.fr
+ */
 //TODO implement functionality and add XML structure in cloud file
 
 public class Network {

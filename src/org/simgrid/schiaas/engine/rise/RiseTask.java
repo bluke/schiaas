@@ -1,6 +1,5 @@
 package org.simgrid.schiaas.engine.rise;
 
-import org.simgrid.msg.Msg;
 import org.simgrid.msg.Task;
 import org.simgrid.schiaas.Data;
 import org.simgrid.schiaas.engine.StorageEngine;
@@ -8,7 +7,7 @@ import org.simgrid.schiaas.engine.StorageEngine.REQUEST;
 
 /**
  * Rise request task.
- * @author julien
+ * @author julien.gossa@unistra.fr
  */
 public class RiseTask extends Task{
 	

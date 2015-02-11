@@ -1,25 +1,33 @@
 package simschlouder;
 
 
-import org.simgrid.msg.Msg;
 import org.simgrid.msg.MsgException;
 import org.simgrid.msg.Process;
 import org.simgrid.msg.Task;
 import org.simgrid.msg.TaskCancelledException;
 
-import simschlouder.SchloudNode.STATE;
-
-
+/**
+ * Represents a controller of SchloudTasks
+ * @author julien.gossa@unistra.fr
+ */
 public class SchloudTaskController extends Process {
 	
+	/** the node running this controller */
 	protected SchloudNode node;
 
+	/**
+	 * Contructor
+	 * @param node the node to run this controller.
+	 */
 	protected SchloudTaskController(SchloudNode node) {
 		super(SchloudController.host, "SchloudTaskProcess:"+node.instanceId);
 		
 		this.node = node;
 	}
 
+	/**
+	 * Execute SchloudTasks until there is no more.
+	 */
 	public void main(String[] arg0) throws MsgException {
 		/*
 		Msg.verb("SchloudTaskController "+name+" waiting for its node "+node.id+ " to boot");
@@ -30,7 +38,6 @@ public class SchloudTaskController extends Process {
 		}
 			*/	
 		while (!node.queue.isEmpty()) {
-		
 			
 			SchloudTask schloudTask=node.queue.peek();
 			node.currentSchloudTask = schloudTask;

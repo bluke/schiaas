@@ -13,6 +13,8 @@ import org.w3c.dom.NodeList;
 /**
  * This class encapsulates all services provided by a particular instance of a
  * cloud.
+ * 
+ * @author julien.gossa@unistra.fr
  */
 public class Cloud {
 

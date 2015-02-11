@@ -1,17 +1,12 @@
 package org.simgrid.schiaas.engine.rice;
 
-import org.simgrid.msg.Msg;
 import org.simgrid.msg.Task;
-import org.simgrid.schiaas.Data;
-import org.simgrid.schiaas.Instance;
 import org.simgrid.schiaas.engine.ComputeEngine;
 import org.simgrid.schiaas.engine.ComputeEngine.COMMAND;
-import org.simgrid.schiaas.engine.StorageEngine;
-import org.simgrid.schiaas.engine.StorageEngine.REQUEST;
 
 /**
- * Rise request task.
- * @author julien
+ * Rise command task.
+ * @author julien.gossa@unistra.fr
  */
 public class RiceTask extends Task{
 	

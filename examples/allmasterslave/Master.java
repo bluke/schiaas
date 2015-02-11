@@ -49,7 +49,6 @@ public class Master extends Process {
 		/**
 		 * VM instance management
 		 */
-		
 		Host [] hosts = new Host[slavesCount];
 		VM [] vms = new VM[slavesCount];
 		int nHosts = Host.all().length;
@@ -73,7 +72,7 @@ public class Master extends Process {
 			String[] slaveInstancesId = myCompute.runInstances("myImage", "small", slavesCount);
 
 			
-
+			// Wait for the instances to boot
 			for (int i=0; i<slavesCount; i++) {
 				Msg.info("waiting for boot");
 				while (myCompute.describeInstance(slaveInstancesId[i]).isRunning() == 0) {
@@ -83,7 +82,7 @@ public class Master extends Process {
 				hosts[i]=myCompute.describeInstance(slaveInstancesId[i]);
 			}
 			break;
-						
+
 		case VM:
 			for (int i=0; i<slavesCount; i++) {
 				Msg.info("waiting for boot "+i+" "+nHosts+" node-"+(i%(nHosts-1)+1)+".me");

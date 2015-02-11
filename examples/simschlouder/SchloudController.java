@@ -24,40 +24,60 @@ import org.simgrid.msg.HostNotFoundException;
 import org.simgrid.msg.Msg;
 import org.simgrid.msg.MsgException;
 import org.simgrid.msg.Mutex;
-import org.simgrid.msg.Process;
-import org.simgrid.schiaas.Compute;
 import org.simgrid.schiaas.SchIaaS;
-
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
 import simschlouder.algorithms.AStrategy;
-import simschlouder.util.SimSchloudException;
+import simschlouder.util.SimSchlouderException;
 
+/**
+ * Represents the controller on the SimSchlouder system
+ * @author julien.gossa@unistra.fr
+ *
+ */
 public class SchloudController extends org.simgrid.msg.Process {
-		
+	
+	/** Set of alive worker nodes */
 	public static Vector<SchloudNode> nodes;
+	
+	/** Set of terminated worker nodes */
 	public static Vector<SchloudNode> terminatedNodes;
+	
+	/** Main queue of pending tasks */
 	public static LinkedList<SchloudTask> mainQueue;
 	
+	/** Amount of idle worker nodes */
 	public static int idleNodesCount;
 	
-	protected static String schloudNodeImage;
-	
+	/** Id of the host of the SimSchlouder controller */
+	/** TODO: check whether necessary */
 	public static String broker;
+	
+	/** Host of the SimSchloder controller */
 	public static Host host;
 	
+	/** Provisioning strategy */
 	public static AStrategy strategy;
+	
+	/** Cloud to run instances */
 	public static SchloudCloud schloudCloud;
+	
+	/** Set of clouds to run instancess, for multi-clouds strategies */
 	public static HashMap<String, SchloudCloud> schloudClouds;
 	
+	/** Period to scan the mainqueue, provision instances, and distribute tasks */ 
 	protected static double period = 10;
+	/** Mutex to track whether the mainqueue is empty */
 	protected static Mutex emptyQueueMutex;
 
+	/** True when all of the tasks have been submitted */
 	protected static boolean allTasksSubmitted=false;
 
+	/** Id of the instance image */  
 	public static String imageId;
+	/** Id of the instance type */
 	public static String instanceTypeId;
 	
 	/**
@@ -99,7 +119,7 @@ public class SchloudController extends org.simgrid.msg.Process {
 				|| schloudCloud.describeAvailability(instanceTypeId)>0) {
 				try {
 					SchloudController.strategy.execute();
-				} catch (SimSchloudException e) {				
+				} catch (SimSchlouderException e) {				
 					e.printStackTrace();
 					//TODO is it a good idea to terminate this process?
 					System.exit(1);
@@ -182,9 +202,9 @@ public class SchloudController extends org.simgrid.msg.Process {
 	/**
 	 * returns the result of the simulation
 	 * @return a string containing simulation statistics
-	 * @throws SimSchloudException 
+	 * @throws SimSchlouderException 
 	 */
-	public static String getOutcome() throws SimSchloudException {
+	public static String getOutcome() throws SimSchlouderException {
 		double makespan=0;
 		double totalBTU=0;
 		double totalRuntime=0;
@@ -301,12 +321,13 @@ public class SchloudController extends org.simgrid.msg.Process {
 	}
 
 	/**
-	 * Writes a JSON file for use in later processing
+	 * Writes a JSON file for use in later processing.
+	 * Unfortunately handmade, because no standard lib was found at the time.
 	 * @param description the ID of the version
 	 * @throws IOException
-	 * @throws SimSchloudException 
+	 * @throws SimSchlouderException 
 	 */
-	public static void writeJSON(String description) throws IOException, SimSchloudException {
+	public static void writeJSON(String description) throws IOException, SimSchlouderException {
 	    FileWriter fstream = new FileWriter(SimSchlouder.outJsonFile, false);
 	    BufferedWriter out = new BufferedWriter(fstream);
 		

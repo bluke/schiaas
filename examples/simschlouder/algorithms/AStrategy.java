@@ -9,7 +9,7 @@ import simschlouder.SchloudController;
 import simschlouder.SchloudNode;
 import simschlouder.SchloudTask;
 import simschlouder.util.DAGutils;
-import simschlouder.util.SimSchloudException;
+import simschlouder.util.SimSchlouderException;
 
 /**
  * Handles the task placement. Relies on scheduling and allocation policies
@@ -33,9 +33,9 @@ public abstract class AStrategy {
 	
 	/**
 	 * Runs the task placement strategy
-	 * @throws SimSchloudException
+	 * @throws SimSchlouderException
 	 */
-	public void execute() throws SimSchloudException {		
+	public void execute() throws SimSchlouderException {		
 		SchloudController.schloudCloud.resetBootCount();
 		
 		TreeMap<Integer, LinkedList<SchloudTask>> tasks = null;

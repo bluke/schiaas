@@ -2,7 +2,7 @@ package org.simgrid.schiaas;
 
 import org.simgrid.msg.Host;
 
-//ajouter dpIntensity / fonction de la netBW pour la migration
+//TODO : add dpIntensity / function of netBW for migration
 
 /**
  * Represents an Instance, that is a VM controller by SimIaaS.

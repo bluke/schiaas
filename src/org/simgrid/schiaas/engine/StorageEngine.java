@@ -7,20 +7,17 @@ import org.simgrid.schiaas.Data;
 import org.simgrid.schiaas.Storage;
 
 /**
- * Created with IntelliJ IDEA.
- * User: alebre
- * Date: 19/07/13
- * Time: 15:43
- * To change this template use File | Settings | File Templates.
+ * Interface for StorageEngine: internals to manage the storage virtualization
+ * 
+ * @author julien.gossa@unistra.fr
  */
 public abstract class StorageEngine {
 	
-	/** The compute of this */
+	/** The Storage of this */
 	protected Storage storage;
 
 	/**
 	 * Enumerates the possible request to the storage. 
-	 * @author julien
 	 */
 	public static enum REQUEST {
 		PUT, GET, DELETE, LIST;
@@ -29,8 +26,8 @@ public abstract class StorageEngine {
 	/**
 	 * Unique constructor.
 	 * 
-	 * @param compute
-	 *            The compute of this.
+	 * @param storage
+	 *            The Storage of this.
 	 */
 	public StorageEngine(Storage storage) {
 		this.storage = storage;

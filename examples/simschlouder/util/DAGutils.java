@@ -30,11 +30,11 @@ public final class DAGutils {
 	 * Default constructor. This method is private since we use a singleton pattern on this class since
 	 * we only use it to find out information on the submitted DAG
 	 * @param tasks the list of tasks making up the DAG
-	 * @throws SimSchloudException 
+	 * @throws SimSchlouderException 
 	 */
-	private DAGutils(LinkedList<SchloudTask> tasks) throws SimSchloudException {
+	private DAGutils(LinkedList<SchloudTask> tasks) throws SimSchlouderException {
 		if (tasks == null)
-			throw new SimSchloudException("Task list cannot be null");
+			throw new SimSchlouderException("Task list cannot be null");
 		this.tasks = tasks;
 		this.computeAllSuccessors();
 	}
@@ -42,9 +42,9 @@ public final class DAGutils {
 	/**
 	 * Default constructor. It does not populate the task list. The user will have to use
 	 * the exposed methods do do that afterwards.
-	 * @throws SimSchloudException
+	 * @throws SimSchlouderException
 	 */
-	private DAGutils() throws SimSchloudException {		
+	private DAGutils() throws SimSchlouderException {		
 		this.tasks = new LinkedList<SchloudTask>();
 	} 
 	
@@ -52,9 +52,9 @@ public final class DAGutils {
 	 * Reference to the <i>DAGutils</i> object
 	 * @param tasks the list of tasks making up the DAG
 	 * @return the reference to the object
-	 * @throws SimSchloudException 
+	 * @throws SimSchlouderException 
 	 */
-	public static DAGutils getDAG(LinkedList<SchloudTask> tasks) throws SimSchloudException {
+	public static DAGutils getDAG(LinkedList<SchloudTask> tasks) throws SimSchlouderException {
 		if (DAGutils.dag == null) {
 			DAGutils.dag = new DAGutils(tasks);
 		}
@@ -65,9 +65,9 @@ public final class DAGutils {
 	 * Reference to the <i>DAGutils</i> object. It returns an object already populated with tasks
 	 * or a one that without them.
 	 * @return the reference to the object
-	 * @throws SimSchloudException
+	 * @throws SimSchlouderException
 	 */
-	public static DAGutils getDAG() throws SimSchloudException {
+	public static DAGutils getDAG() throws SimSchlouderException {
 		if (DAGutils.dag == null) {
 			DAGutils.dag = new DAGutils();
 		}
@@ -116,7 +116,7 @@ public final class DAGutils {
 		for (SchloudTask t : this.tasks) {
 			try {
 				priorities.put(t.getName(), this.computePriority(t));
-			} catch (SimSchloudException e) {
+			} catch (SimSchlouderException e) {
 				Msg.error(e.getMessage());
 				return null;			
 			}
@@ -146,7 +146,7 @@ public final class DAGutils {
 		for (SchloudTask t : this.tasks) {
 			try {
 				level = this.getLevel(t, 0);
-			} catch (SimSchloudException e) {
+			} catch (SimSchlouderException e) {
 				Msg.error(e.getMessage());
 				return null;
 			}
@@ -165,11 +165,11 @@ public final class DAGutils {
 	 * Computes the predecessors of a given task
 	 * @param t the task
 	 * @return a list of predecessors
-	 * @throws SimSchloudException 
+	 * @throws SimSchlouderException 
 	 */
-	public Vector<SchloudTask> predecessor(SchloudTask t) throws SimSchloudException {
+	public Vector<SchloudTask> predecessor(SchloudTask t) throws SimSchlouderException {
 		if (t == null)
-			throw new SimSchloudException("Task for which predecessor is computed cannot be null");
+			throw new SimSchlouderException("Task for which predecessor is computed cannot be null");
 		
 		return t.getDependencies();
 	}
@@ -178,11 +178,11 @@ public final class DAGutils {
 	 * Computes the successors of a task
 	 * @param t the task
 	 * @return a list of successors
-	 * @throws SimSchloudException 
+	 * @throws SimSchlouderException 
 	 */
-	public Vector<SchloudTask> succesor(SchloudTask t) throws SimSchloudException {		
+	public Vector<SchloudTask> succesor(SchloudTask t) throws SimSchlouderException {		
 		if (t == null)
-			throw new SimSchloudException("Task for which the successor is computed cannot be null");
+			throw new SimSchlouderException("Task for which the successor is computed cannot be null");
 		
 		return this.successors.get(t.getName());
 		
@@ -211,9 +211,9 @@ public final class DAGutils {
 	 * Method used to recursively compute the priority of a task
 	 * @param t the task
 	 * @return the priority of the task
-	 * @throws SimSchloudException 
+	 * @throws SimSchlouderException 
 	 */
-	private Double computePriority(SchloudTask t) throws SimSchloudException {
+	private Double computePriority(SchloudTask t) throws SimSchlouderException {
 		Vector<SchloudTask> succ = this.succesor(t);
 		if (succ.size() > 0) {
 			Vector<Double> vals = new Vector<Double>(succ.size());
@@ -232,9 +232,9 @@ public final class DAGutils {
 	 * @param t the task
 	 * @param level the current level
 	 * @return the level
-	 * @throws SimSchloudException 
+	 * @throws SimSchlouderException 
 	 */
-	private int getLevel(SchloudTask t, int level) throws SimSchloudException {
+	private int getLevel(SchloudTask t, int level) throws SimSchlouderException {
 		Vector<SchloudTask> preds = this.predecessor(t);
 		if (preds.size() == 0) {
 			return level;
@@ -267,9 +267,9 @@ public final class DAGutils {
 	/**
 	 * Test method
 	 * @param args
-	 * @throws SimSchloudException 
+	 * @throws SimSchlouderException 
 	 */
-	public static void main(String[] args) throws SimSchloudException {
+	public static void main(String[] args) throws SimSchlouderException {
 		LinkedList<SchloudTask> tasks = new LinkedList<SchloudTask>();
 		
 		SchloudTask task = new SchloudTask("1",200,10,20);

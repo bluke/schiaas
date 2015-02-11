@@ -2,7 +2,7 @@ package org.simgrid.schiaas.exceptions;
 
 /**
  * Exception for missing parameter in hash table parsed from config tag in cloud.xml 
- * @author luke
+ * @author lbertot@unistra.fr
  *
  */
 public class MissingConfigException extends Exception{

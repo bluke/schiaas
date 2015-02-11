@@ -8,7 +8,7 @@ import org.w3c.dom.Node;
 /**
  * Represents a VM image
  * 
- * @author julien
+ * @author julien.gossa@unistra.fr
  */
 public class Image {
 

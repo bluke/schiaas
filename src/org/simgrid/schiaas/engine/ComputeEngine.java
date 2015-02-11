@@ -3,16 +3,15 @@ package org.simgrid.schiaas.engine;
 import java.util.Collection;
 
 import org.simgrid.msg.Host;
-import org.simgrid.msg.HostNotFoundException;
 import org.simgrid.schiaas.Compute;
 import org.simgrid.schiaas.Image;
 import org.simgrid.schiaas.Instance;
 import org.simgrid.schiaas.InstanceType;
 
 /**
- * An engine of Compute.
+ * Interface for ComputeEngine: internals to manage the instances lifecycle
  * 
- * @author julien
+ * @author julien.gossa@unistra.fr
  */
 public abstract class ComputeEngine {
 

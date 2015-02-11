@@ -7,7 +7,7 @@ import org.w3c.dom.Node;
 
 /**
  * Represents an instance type, similar to Amazon's small, medium, large, ...
- * @author julien
+ * @author julien.gossa@unistra.fr
  *
  */
 public class InstanceType {

@@ -5,13 +5,11 @@ import org.simgrid.msg.Msg;
 import org.simgrid.msg.MsgException;
 import org.simgrid.msg.Process;
 import org.simgrid.schiaas.Data;
-import org.simgrid.schiaas.Instance;
 import org.simgrid.schiaas.engine.StorageEngine;
 
 /**
- * Useless for now.
- * @author julien
- *
+ * Process handling Storage commands.
+ * @author julien.gossa@unistra.fr
  */
 public class RiseProcess extends Process {
 	
@@ -37,6 +35,9 @@ public class RiseProcess extends Process {
 
 	} 
 	
+	/**
+	 * MSG's main: receives and handle one storage request. 
+	 */
 	public void main(String[] args) throws MsgException {
 		
 		// receive the request

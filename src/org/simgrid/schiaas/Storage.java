@@ -14,8 +14,11 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-//TODO implement functionality and add XML structure in cloud file
-
+/**
+ * Storage component: Manage the storage virtualization
+ * 
+ * @author julien.gossa@unistra.fr
+ */
 public class Storage {
 	
 	/** ID of this */

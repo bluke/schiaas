@@ -4,11 +4,8 @@ import java.util.Collection;
 import java.util.Vector;
 
 import org.simgrid.msg.Host;
-import org.simgrid.msg.HostFailureException;
 import org.simgrid.msg.HostNotFoundException;
 import org.simgrid.msg.Msg;
-import org.simgrid.msg.TimeoutException;
-import org.simgrid.msg.TransferFailureException;
 import org.simgrid.schiaas.Compute;
 import org.simgrid.schiaas.Data;
 import org.simgrid.schiaas.Image;
@@ -20,8 +17,9 @@ import org.simgrid.schiaas.exceptions.MissingConfigException;
 
 /**
  * Reduced Implementation of Compute Engine.
+ * Simple management of the instances lifecycle.
  * 
- * @author julien
+ * @author julien.gossa@unistra.fr
  */
 public class Rice extends ComputeEngine {
 
@@ -37,7 +35,6 @@ public class Rice extends ComputeEngine {
 
 	/**
 	 * Enumerates the possible image caching strategies.
-	 * @author julien
 	 */
 	protected static enum IMGCACHING {
 		ON, OFF, PRE
@@ -52,11 +49,12 @@ public class Rice extends ComputeEngine {
 	/**
 	 * Constructor
 	 * 
-	 * @param compute
-	 * @param hosts
-	 * @throws Exception 
+	 * @param compute The compute of this. 	 
+	 * @param hosts The set of physical hosts usable by this. 
+	 * @throws MissingConfigException Thrown whenever one required configuration parameter is not found.
+	 * @throws HostNotFoundException Thrown whenever one given host is not found. 
 	 */
-	public Rice(Compute compute, Collection<Host> hosts) throws Exception {
+	public Rice(Compute compute, Collection<Host> hosts) throws MissingConfigException, HostNotFoundException {
 		super(compute, hosts);
 		
 		try{
@@ -128,6 +126,11 @@ public class Rice extends ComputeEngine {
 		return this.riceHosts.get(i);
 	}
 
+	/**
+	 * Checks the amount of instances of one given type that can be ran on this Compute.
+	 * @param instanceType A type of instance
+	 * @return The amount of instances of this type that can be ran
+	 */
 	public int describeAvailability(InstanceType instanceType) {
 		double core = Double.parseDouble(instanceType.getProperty("core"));
 		int availability = 0;
@@ -137,6 +140,11 @@ public class Rice extends ComputeEngine {
 		return availability;
 	}
 
+	/**
+	 * Executes one command.
+	 * @param command The command to execute.
+	 * @param instance The instance concerned by the command.
+	 */
 	public void doCommand(COMMAND command, Instance instance) {
 		RiceInstance riceInstance = (RiceInstance) instance;
 
@@ -152,9 +160,16 @@ public class Rice extends ComputeEngine {
 		}
 	}
 
+	/**
+	 * Terminate this.
+	 */
 	public void terminate() {
 	}
 
+	/**
+	 * Selects one physical host and creates a new instance.
+	 * @return The newly created instance, or null if no suitable physical host can be found.
+	 */
 	@Override
 	public Instance newInstance(String id, Image image, InstanceType instanceType) {
 		RiceHost riceHost = assignVM(instanceType);

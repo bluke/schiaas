@@ -19,36 +19,58 @@ import org.simgrid.msg.TimeoutException;
 import org.simgrid.msg.TransferFailureException;
 import org.simgrid.msg.Process;
 
-import simschlouder.util.SimSchloudException;
+import simschlouder.util.SimSchlouderException;
 
 
+/**
+ * Represents a worker node in the SimSchlouder system
+ * @author julien.gossa@unistra.fr
+ *
+ */
 public class SchloudNode extends Process {
 	
+	/** 
+	 * Enumerates the states of SimSchlouder worker nodes
+	 * @author julien.gossa@unistra.fr
+	 */
 	public enum STATE {PENDING,CLAIMED,IDLE,BUSY,TERMINATED};
 
+	/** Id of the instance running this worker node */
 	public String instanceId;
 	
+	/** Cloud where this node is */
 	protected SchloudCloud cloud;
 	
-	protected LinkedList<SchloudTask> queue;
+	/** Local tasks queue of this node */
+	protected LinkedList<SchloudTask> queue;	
+	/** Local completed taskas queue of this node */
 	protected LinkedList<SchloudTask> completedQueue;
 	
+	/** Currently running task */
 	protected SchloudTask currentSchloudTask;
 	
+	/** Current state of this node */
 	protected STATE state;
 	
+	/** The date when this node becomes idle */
 	protected double idleDate;
+	/** The date when this node becomes pending */
 	protected double pendingDate;
+	/** The date when this node becomes terminated */
 	protected double terminatedDate;
+	/** The date when this node booted */
 	protected double bootDate;
+	/** The prediction of the boottime of this node */
 	protected double bootTimePrediction;
 	
+	/** CPU speed of the node. Used to convert task runtime to MSG's compute duration */
 	protected double speed;
 	
 	
 	/**
-	 * A process to wait for the instance to run
-	 * @author julien
+	 * A process to wait for the instance to run.
+	 * Patch until the boot is properly managed from simgrid side.
+	 * @author julien.gossa@unistra.fr
 	 */
 	protected class SchloudNodeController extends Process {
 		private SchloudNode schloudNode;
@@ -115,6 +137,11 @@ public class SchloudNode extends Process {
 		
 	}
 	
+	/**
+	 * Start a new node.
+	 * @param cloud the cloud to start the new node.
+	 * @return a new worker node.
+	 */
 	public static SchloudNode startNewNode(SchloudCloud cloud) {
 		String instanceId = cloud.compute.runInstance(SchloudController.imageId, SchloudController.instanceTypeId);
 		if (instanceId==null) return null;
@@ -132,6 +159,10 @@ public class SchloudNode extends Process {
 		return schloudNode;
 	}
 	
+	/**
+	 * Set the state of this node.
+	 * @param state the new state of this node.
+	 */
 	public void setState(STATE state) {
 		Msg.verb("SchloudNode " + name + " state set to " + state);
 		
@@ -152,7 +183,20 @@ public class SchloudNode extends Process {
 		
 		this.state = state;
 	}
+
+	/**
+	 * 
+	 * @return the speed of this node
+	 */
+	public double getSpeed() {
+		return speed;
+	}
+
 	
+	/**
+	 * 
+	 * @return the up-time of this node (from pending to now or terminated)
+	 */
 	public double getUptime() {
 		if (state == STATE.TERMINATED) {
 			return terminatedDate - pendingDate;
@@ -160,6 +204,10 @@ public class SchloudNode extends Process {
 		return Msg.getClock() - pendingDate;
 	}
 	
+	/**
+	 * 
+	 * @return the time from the boot to the idle state.
+	 */
 	public double getUpTimeToIdle() {
 		if (isIdle()) {
 			return Msg.getClock() - pendingDate;
@@ -167,18 +215,35 @@ public class SchloudNode extends Process {
 		return  idleDate - pendingDate;
 	}
 	
+	/**
+	 * 
+	 * @return the date when this node becomes idle
+	 */
 	public double getIdleDate() {
 		return idleDate;
 	}
 	
+	/**
+	 * 
+	 * @return the remaining idle time on this node 
+	 */
 	public double getRemainingIdleTime(){
 		return (SchloudController.time2BTU(getUpTimeToIdle())*SchloudController.schloudCloud.getBtuTime())-(getUpTimeToIdle());
 	}
 	
+	/**
+	 * 
+	 * @param schloudTask the task 
+	 * @return the prediction of runtime of the task on this node
+	 */
 	public double getRuntimePrediction(SchloudTask schloudTask) {
 		return schloudTask.duration/this.speed;
 	}
 	
+	/**
+	 * Enqueue a task into this node queue
+	 * @param task the task to enqueue
+	 */
 	public void enqueue(SchloudTask task) {
 		queue.add(task);
 		idleDate+=task.getWalltimePrediction();
@@ -187,6 +252,11 @@ public class SchloudNode extends Process {
 		}
 	}
 	
+	/**
+	 * Dequeue a task from this node queue
+	 * @param task the task to dequeue
+	 * @return false if the task is not completed, true otherwise
+	 */
 	public boolean dequeue(SchloudTask task) {
 		if (task.state!=SchloudTask.STATE.COMPLETE) return false;
 		
@@ -197,7 +267,9 @@ public class SchloudNode extends Process {
 	}
 
 
-	
+	/**
+	 * process the queue of this node, by running a SchloudTaskController.
+	 */
 	protected void processQueue() {
 		SchloudTaskController stc = new SchloudTaskController(this);
 		try {
@@ -208,6 +280,9 @@ public class SchloudNode extends Process {
 		}
 	}
 	
+	/**
+	 * Receives tasks and processes them.
+	 */
 	public void main(String[] args) throws TransferFailureException, HostFailureException, TimeoutException {
 
 		bootDate=Msg.getClock();
@@ -218,7 +293,7 @@ public class SchloudNode extends Process {
 			try {
 				task.execute();
 			} catch (TaskCancelledException e) {
-				Msg.info("Something bad happened in SimSchlouder: "+e.getStackTrace());
+				Msg.critical("Something bad happened in SimSchlouder: "+e.getStackTrace());
 			}
 
 			//Msg.info("Received \"" + task.getName() +  "\". Processing it.");
@@ -240,7 +315,7 @@ public class SchloudNode extends Process {
 			try {
 				currentSchloudTask.getRunTask().execute();
 			} catch (TaskCancelledException e) {
-				Msg.info("Something bad happened in SimSchlouder: "+e.getStackTrace());
+				Msg.critical("Something bad happened in SimSchlouder: "+e.getStackTrace());
 			}
 			//Msg.info("\"" + task.getName() + "\" done ");
 
@@ -263,17 +338,27 @@ public class SchloudNode extends Process {
 		}
 	}
 	
-
+	/**
+	 * 
+	 * @return an ID for the MSG message box to communicate with this node
+	 */
 	protected String getMessageBox() {
 		return "SSMB"+msgName(); 
 	}
 
+	/**
+	 * 
+	 * @return whether this node is currently idle
+	 */
 	public boolean isIdle() {
 		return (state == STATE.IDLE);
 		//return (instance.getCount()==0);
 		//return (idleDate <= Msg.getClock()); 
 	}
 	
+	/**
+	 * ToString
+	 */
 	public String toString() {
 		String s = instanceId.toString();
 		for (SchloudTask st : completedQueue) {
@@ -282,7 +367,14 @@ public class SchloudNode extends Process {
 		return s;
 	}
 
-	public void writeJSON(BufferedWriter out) throws IOException, SimSchloudException {
+	/**
+	 * Writes a JSON file for use in later processing.
+	 * Unfortunately handmade, because no standard lib was found at the time.
+	 * @param description the ID of the version
+	 * @throws IOException
+	 * @throws SimSchlouderException 
+	 */
+	public void writeJSON(BufferedWriter out) throws IOException, SimSchlouderException {
 		out.write("\t\t\"instance_id\": \""+name+"\",\n");
 		out.write("\t\t\"host\": \""+getHost().getName()+"\",\n");
 		out.write("\t\t\"start_date\": "+pendingDate+",\n");
@@ -302,8 +394,5 @@ public class SchloudNode extends Process {
 		out.write("\t\t]\n");
 	}
 
-	public double getSpeed() {
-		return speed;
-	}
 	
 }

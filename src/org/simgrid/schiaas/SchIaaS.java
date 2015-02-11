@@ -24,6 +24,8 @@ import org.xml.sax.SAXParseException;
 /**
  * This class is the equivalent of the MSG class and provides all services to
  * setup the different cloud platforms.
+ * 
+ * @author julien.gossa@unistra.fr
  */
 public class SchIaaS {
 	

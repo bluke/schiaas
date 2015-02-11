@@ -4,25 +4,32 @@ import org.simgrid.msg.Msg;
 import org.simgrid.msg.MsgException;
 import org.simgrid.msg.Process;
 import org.simgrid.msg.Task;
-import org.simgrid.schiaas.Instance;
 import org.simgrid.schiaas.engine.rice.RiceHost.IMGSTATUS;
 
 /**
- * Useless for now.
- * @author julien
- *
+ * Process handling Compute commands from the node side.
+ * @author julien.gossa@unistra.fr
  */
 public class RiceNodeProcess extends Process {
 		
 	protected Rice rice;
 	protected RiceHost riceHost;
 	
+	/**
+	 * Constructor.
+	 * @param rice The RICE concerned by the command.
+	 * @param riceHost The host concerned by the command.
+	 */
 	public RiceNodeProcess(Rice rice, RiceHost riceHost) {
 		super(riceHost.host, rice.getCompute().getId()+" Rice Controller");
 		this.rice = rice;
 		this.riceHost = riceHost;
 	} 
 	
+	/**
+	 * MSG's main: receives the task corresponding to the command from the controller 
+	 * and execute this command.
+	 */
 	public void main(String[] args) throws MsgException {
 		
 		RiceTask riceTask = (RiceTask) Task.receive(riceHost.messageBox());
@@ -37,7 +44,7 @@ public class RiceNodeProcess extends Process {
 			if (riceHost.imagesCache.get(riceInstance.getImage()) == null) {
 				switch (rice.imgCaching) {
 				case ON:
-					riceHost.imagesCache.put(riceInstance.getImage(), IMGSTATUS.TRANSFERING);
+					riceHost.imagesCache.put(riceInstance.getImage(), IMGSTATUS.TRANSFERRING);
 					rice.imgStorage.get("RICEIMG-"+riceInstance.getImage().getId());
 					riceHost.imagesCache.put(riceInstance.getImage(), IMGSTATUS.AVAILABLE);
 					break;
@@ -47,7 +54,7 @@ public class RiceNodeProcess extends Process {
 					riceHost.imagesCache.put(riceInstance.getImage(), IMGSTATUS.AVAILABLE);
 				}				
 			}
-			else while (riceHost.imagesCache.get(riceInstance.getImage()) == IMGSTATUS.TRANSFERING) {
+			else while (riceHost.imagesCache.get(riceInstance.getImage()) == IMGSTATUS.TRANSFERRING) {
 				waitFor(rice.interBootDelay);
 			}
 			
