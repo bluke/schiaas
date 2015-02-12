@@ -60,7 +60,7 @@ public class SchloudCloud {
 	 * @param bootTimeB1 the boot time for TODO
 	 * @param BTU the size of a BTU in seconds
 	 * @param shutdownMargin the shutdown time
-	 * @param maxInsances the maximum allowed Instances per User
+	 * @param maxInstances the maximum allowed Instances per User
 	 * @throws Exception 
 	 * @throws NumberFormatException 
 	 */
@@ -136,16 +136,14 @@ public class SchloudCloud {
 	}
 
 	/**
-	 * Gets the BTU on the cloud
-	 * @return
+	 * @return the BTU of the cloud
 	 */
 	public double getBtuTime() {
 		return this.BTU;
 	}
 	
 	/**
-	 * Gets the shutdown time for one VM
-	 * @return
+	 * @return the shutdown time for one VM
 	 */
 	public double getShutdownMargin() {
 		return this.shutdownMargin;

@@ -24,9 +24,8 @@ public class RiceTask extends Task{
 	
 	/**
 	 * Constructor of a RICE task.
-	 * @param request the request type
-	 * @param data the data concerned by the task
-	 * @param response true if this task is a response
+	 * @param riceInstance the instance of the RICE
+	 * @param command the command of this task
 	 */
 	protected RiceTask(RiceInstance riceInstance, COMMAND command) {
 		super("RiceTask",commandComputeSize,commandDataSize);

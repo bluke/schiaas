@@ -1,8 +1,5 @@
 package simschlouder.algorithms;
 
-import org.simgrid.msg.Msg;
-
-import simschlouder.SchloudCloud;
 import simschlouder.SchloudController;
 import simschlouder.SchloudNode;
 import simschlouder.SchloudTask;

@@ -17,7 +17,7 @@ import simschlouder.SchloudTask;
  * Handles DAG specific operations such as listing the successors and predecessors
  * of a given task, adding a new task to the DAG or computing priorities based
  * on rank or level.
- * @author mfrincu
+ * @author mfrincu@info.uvt.ro
  *
  */
 public final class DAGutils {

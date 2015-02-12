@@ -191,8 +191,7 @@ public class Storage {
 	
 	/**
 	 * Delete one data.
-	 * @param data
-	 * 			the data
+	 * @param dataId the data ID
 	 * @throws TimeoutException 
 	 * @throws HostFailureException 
 	 * @throws TransferFailureException 
@@ -204,6 +203,7 @@ public class Storage {
 	
 	/**
 	 * List the stored data.
+	 * @return a map of the stored data
 	 * @throws TimeoutException 
 	 * @throws HostFailureException 
 	 * @throws TransferFailureException 

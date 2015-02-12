@@ -314,9 +314,9 @@ public class Compute {
 	/**
 	 * Suspend a given instance.
 	 * 
-	 * @param theInstance
+	 * @param instanceId
 	 *            The id of the instance to be be suspended.
-	 * @TODO check why it isn't working
+	 * TODO check why it isn't working
 	 */
 	public void suspendInstance(String instanceId) {
 		this.computeEngine.doCommand(ComputeEngine.COMMAND.SUSPEND,
@@ -326,7 +326,7 @@ public class Compute {
 	/**
 	 * Resume a given instance.
 	 * 
-	 * @param theInstance
+	 * @param instanceId
 	 *            The if of the instance to be be resumed.
 	 */
 	public void resumeInstance(String instanceId) {

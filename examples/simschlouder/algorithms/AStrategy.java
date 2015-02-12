@@ -101,7 +101,7 @@ public abstract class AStrategy {
 	/**
 	 * Applies the algorithm specific heuristics. 
 	 * Return null if you want to allocate a new VM for the task
-	 * @param the task to be scheduled
+	 * @param task the task to be scheduled
 	 * @return one of the existing nodes or null in case none is valid
 	 */
 	protected abstract SchloudNode applyStrategy(SchloudTask task);

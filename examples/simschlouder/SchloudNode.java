@@ -370,7 +370,6 @@ public class SchloudNode extends Process {
 	/**
 	 * Writes a JSON file for use in later processing.
 	 * Unfortunately handmade, because no standard lib was found at the time.
-	 * @param description the ID of the version
 	 * @throws IOException
 	 * @throws SimSchlouderException 
 	 */

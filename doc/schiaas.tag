@@ -5,6 +5,7 @@
     <title>SimSchlouder Documentation</title>
     <filename>simschlouder</filename>
     <docanchor file="simschlouder" title="SimSchlouder">Running</docanchor>
+    <docanchor file="simschlouder" title="Prerequisite">ss_running_prerequisite</docanchor>
     <docanchor file="simschlouder" title="Command Line">command_line</docanchor>
     <docanchor file="simschlouder" title="Output">output</docanchor>
     <docanchor file="simschlouder" title="Configuration file">config_file</docanchor>

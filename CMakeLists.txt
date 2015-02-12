@@ -48,7 +48,8 @@ COMMAND ${Java_JAVADOC_EXECUTABLE}
 -sourcepath ${PROJECT_SOURCE_DIR}
 -d ${DOC_INSTALL_PATH}/schiaas
 -subpackages org
--link http://simgrid.gforge.inria.fr/simgrid/3.11/doc/javadoc/
+-classpath ${SIMGRID_JAR}
+-link http://simgrid.gforge.inria.fr/simgrid/3.12/doc/javadoc/
 -doctitle "<h1>SchIaaS</h1>"
 -windowtitle "SchIaaS"
 -use
@@ -57,7 +58,9 @@ COMMAND ${Java_JAVADOC_EXECUTABLE}
 -sourcepath ${PROJECT_EXAMPLES_DIR}
 -d ${DOC_INSTALL_PATH}/simschlouder
 -subpackages simschlouder
+-classpath ${SIMGRID_JAR}:${PROJECT_BINARY_DIR}/schiaas.jar
 -link ../schiaas 
+-link http://simgrid.gforge.inria.fr/simgrid/3.12/doc/javadoc/
 -doctitle "<h1>SimSchlouder</h1>"
 -windowtitle "SimSchlouder"
 -use
