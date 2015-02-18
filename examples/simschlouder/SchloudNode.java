@@ -220,7 +220,7 @@ public class SchloudNode extends Process {
 	 * @return the date when this node becomes idle
 	 */
 	public double getIdleDate() {
-		if (state == STATE.PENDING) return idleDate - bootTimePrediction; 
+		//if (state == STATE.PENDING) return idleDate - bootTimePrediction; 
 		return idleDate;
 	}
 	
