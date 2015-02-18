@@ -13,6 +13,13 @@
     <docanchor file="simschlouder" title="Strategy">strategy</docanchor>
   </compound>
   <compound kind="page">
+    <name>lab_intro</name>
+    <title>The lab documentation</title>
+    <filename>lab_intro</filename>
+    <docanchor file="lab_intro" title="Prerequisites">lab_prerequisites</docanchor>
+    <docanchor file="lab_intro" title="Lab sub-directories">lab_dirs</docanchor>
+  </compound>
+  <compound kind="page">
     <name>index</name>
     <title>SCHIaaS Documentation</title>
     <filename>index</filename>

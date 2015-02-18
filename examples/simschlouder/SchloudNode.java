@@ -228,7 +228,9 @@ public class SchloudNode extends Process {
 	 * @return the remaining idle time on this node 
 	 */
 	public double getRemainingIdleTime(){
-		return (SchloudController.time2BTU(getUpTimeToIdle())*SchloudController.schloudCloud.getBtuTime())-(getUpTimeToIdle());
+		return (SchloudController.time2BTU(getUpTimeToIdle())
+				*SchloudController.schloudCloud.getBtuTime())
+				-(getUpTimeToIdle());
 	}
 	
 	/**

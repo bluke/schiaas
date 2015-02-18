@@ -4,7 +4,6 @@
 """
 	This script take a JSON output from Schlouder as input, and output 
 	a tikz representing the different BTUs
-
 """
 
 import sys
@@ -23,7 +22,7 @@ makespan=0
 BTUCount=0
 VMCount=0
 
-# Layouts	
+# Layouts
 btuH = 0.2  # Height of btu/vm
 btuM = 0.5    # Margin between 2 btu/vm
 jobM = 0.0  # Up and down margin of jobs inside BTU
@@ -34,7 +33,6 @@ def t2p(s):
 # Date to Point
 def d2p(d):
 	return t2p(d-beginDate)
-
 
 
 if __name__ == '__main__':

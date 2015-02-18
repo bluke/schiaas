@@ -1,21 +1,19 @@
 
-R version 3.0.1 (2013-05-16) -- "Good Sport"
-Copyright (C) 2013 The R Foundation for Statistical Computing
+R version 3.1.1 (2014-07-10) -- "Sock it to Me"
+Copyright (C) 2014 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
-R is free software and comes with ABSOLUTELY NO WARRANTY.
-You are welcome to redistribute it under certain conditions.
-Type 'license()' or 'licence()' for distribution details.
+R est un logiciel libre livré sans AUCUNE GARANTIE.
+Vous pouvez le redistribuer sous certaines conditions.
+Tapez 'license()' ou 'licence()' pour plus de détails.
 
-  Natural language support but running in an English locale
+R est un projet collaboratif avec de nombreux contributeurs.
+Tapez 'contributors()' pour plus d'information et
+'citation()' pour la façon de le citer dans les publications.
 
-R is a collaborative project with many contributors.
-Type 'contributors()' for more information and
-'citation()' on how to cite R or R packages in publications.
-
-Type 'demo()' for some demos, 'help()' for on-line help, or
-'help.start()' for an HTML browser interface to help.
-Type 'q()' to quit R.
+Tapez 'demo()' pour des démonstrations, 'help()' pour l'aide
+en ligne ou 'help.start()' pour obtenir l'aide au format HTML.
+Tapez 'q()' pour quitter R.
 
 > # R script to compute validation stats
 > 
@@ -98,29 +96,29 @@ null device
 > min(btu$wpo.d)
 [1] 0
 > max(btu$wpo.d)
-[1] 2.210526
+[1] 3
 > mean(btu$wpo.d)
-[1] 0.1329991
+[1] 0.2323335
 > 
 > min(btu$wto.d)
 [1] 0
 > max(btu$wto.d)
-[1] 0.6
+[1] 3
 > mean(btu$wto.d)
-[1] 0.05087241
+[1] 0.106746
 > 
 > 
 > min(makespan$wpo.d)
-[1] 0.002028398
+[1] 0.005163078
 > max(makespan$wpo.d)
-[1] 1.450636
+[1] 1.372194
 > mean(makespan$wpo.d)
-[1] 0.2739035
+[1] 0.3238067
 > 
 > min(makespan$wto.d)
 [1] 0
 > max(makespan$wto.d)
 [1] 0.5526979
 > mean(makespan$wto.d)
-[1] 0.0735063
+[1] 0.09765305
 > 
