@@ -21,23 +21,26 @@ public class ASAP extends AStrategy {
 	@Override
 	protected SchloudNode applyStrategy(SchloudTask task) {
 		SchloudNode candidate = null;
+		SchloudNode finishSooner = null;
+		if (!SchloudController.nodes.isEmpty())
+			finishSooner = SchloudController.nodes.firstElement();
+		
 		for (SchloudNode node : SchloudController.nodes) {
 			//Msg.info("ASAP : "+(Msg.getClock()+cloud.getBootTimePrediction())+"("+cloud.getBootTimePrediction()+ " " + cloud.bootCount + ") - "+ node.getIdleDate());
 			
-			if (Msg.getClock()+SchloudController.schloudCloud.getBootTimePrediction()>=node.getIdleDate()) {
-				if(candidate==null){
-					candidate=node;
-				}
-				else
-				{
-					// Sub-optimal: should choose idle node over soon-to-be ones
-					//if(predictedIdleTime<candidatePredictedIdleTime){
-					if ( (candidate.getIdleDate() > node.getIdleDate()) ) { //|| (!candidate.isIdle() && node.isIdle()) )  {
-						candidate=node;
-					}
-				}
-			}
+			// Look for the first instance to become available
+			if (node.getIdleDate() < finishSooner.getIdleDate())
+				finishSooner = node;
+			
+			// Look for the ASAP candidate 
+			if (node.getIdleDate() < Msg.getClock()+SchloudController.schloudCloud.getBootTimePrediction()) 
+				if ( candidate == null || node.getRemainingIdleTime(task) < candidate.getRemainingIdleTime(task) )
+					candidate = node;
 		}
+		
+		// If no new instance can be started
+		if (SchloudController.schloudCloud.describeAvailability(SchloudController.instanceTypeId)==0)
+				return finishSooner;
 		
 		return candidate;
 	}

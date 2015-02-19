@@ -106,7 +106,7 @@ do
 		CLOUD_FILE="simschlouderICPS.xml"
 	fi
 	echo "Using: $CLOUD_FILE"
-
+	CLOUD_FILE=`realpath simschlouder/$CLOUD_FILE`
 
 	echo "Processing source"
 	./json2diameter.py $source concurrent-jobs/data/schlouder
@@ -120,12 +120,20 @@ do
 		B0=`cat /tmp/btplr | cut -f1 -d" "`
 		B1=`cat /tmp/btplr | cut -f2 -d" "`
 		if [ "$B1" != "NA" ] ; then
-			cat simschlouder/$CLOUD_FILE | sed "s/B0=\"[0-9\.]*\"/B0=\"$B0\"/" | sed "s/B1=\"[0-9\.]*\"/B1=\"$B1\"/" > /tmp/simschlouder.xml
+			cat $CLOUD_FILE | sed "s/B0=\"[0-9\.]*\"/B0=\"$B0\"/" | sed "s/B1=\"[0-9\.]*\"/B1=\"$B1\"/" > /tmp/simschlouder.xml
 		else 
-			cat simschlouder/$CLOUD_FILE | sed "s/B0=\"[0-9\.]*\"/B0=\"$B0\"/" > /tmp/simschlouder.xml
+			cat $CLOUD_FILE | sed "s/B0=\"[0-9\.]*\"/B0=\"$B0\"/" > /tmp/simschlouder.xml
 		fi
 		CLOUD_FILE="/tmp/simschlouder.xml"
 	fi
+
+	# Fix the XP with 22 vms
+	if [ `grep host -c $source` -eq 22 ]
+	then
+		cat $CLOUD_FILE | sed 's/max_instances_per_user="20"/max_instances_per_user="22"/' > /tmp/simschloudervm.xml
+		CLOUD_FILE="/tmp/simschloudervm.xml"	
+	fi
+
 
 	echo -en "\t$stat" >> $STAT_FILE
 

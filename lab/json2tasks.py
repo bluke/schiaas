@@ -3,7 +3,7 @@
 
 """
 	This script take a JSON output from Schlouder as input, and output 
-	a bot file in the simschlouder format
+	a tasks file in the simschlouder format
 """
 
 import sys
@@ -22,8 +22,14 @@ parser.add_argument('json_file', help='input json file')
 
 args = parser.parse_args()
 
+#  is montage?
+if 'pleiade' in args.json_file: 
+	is_montage = True
+else:
+	is_montage = False
+
 # Job comparator: by sub_date, then by start_date
-def cmpjob(j1, j2):
+def cmpjob_date(j1, j2):
 	if int(j1['submission_date']) < int(j2['submission_date']):
 		return -1
 	elif int(j1['submission_date']) > int(j2['submission_date']):
@@ -36,20 +42,40 @@ def cmpjob(j1, j2):
 		else:
 			return 0
 	
+# Job comparator: by name, for pleiade
+task_types = ['project', 'overlaps', 'diff', 'bgmodel', 'background', 'add', 'gather']
+def cmpjob_name(j1, j2):
+	# if not pleiade	
+	if not is_montage :
+		if j1['name'] == j2['name'] : return 0
+		if j1['name'] < j2['name'] : return -1
+		return 1
+
+	js1 = j1['name'].split('_')
+	js2 = j2['name'].split('_')
+
+	# project types
+	if len(js1) < 5 : return 1 # for gather
+	if len(js2) < 5 : return -1 # for gather
+	if js1[4] != js2[4] :
+		return task_types.index(js1[4]) - task_types.index(js2[4])
+
+	# h j k
+	if js1[2] != js2[2] :
+		if js1[2] < js2[2] : return -1
+		return 1
+
+	# number
+	if len (js1)<5 : return 0
+	return int(js1[5]) - int(js2[5])
+
+
 # Vm comparator: by start_date, then by boot_time_prediction
 def cmpvm(vm1, vm2):
-	if int(vm1['start_date']) < int(vm2['start_date']):
-		return -1
-	elif int(vm1['start_date']) > int(vm2['start_date']):
-		return 1
-	else:
-		if int(vm1['boot_time']) < int(vm2['boot_time']):
-			return -1
-		elif int(vm1['boot_time']) > int(vm2['boot_time']):
-			return 1
-		else:
-			return 0
-
+	if int(vm1['start_date']) != int(vm2['start_date']):
+		return int(vm1['start_date']) - int(vm2['start_date'])
+	return int(vm1['boot_time']) - int(vm2['boot_time'])
+		
 # Date of the first vm start
 beginDate = 0
 
@@ -85,11 +111,11 @@ if args.lod == 'wto':
 jobs = []
 results.sort(cmp=cmpvm)
 for vm in results:
-	vm['jobs'].sort(cmp=cmpjob)
+	#vm['jobs'].sort(cmp=cmpjob_name)
 	jobs += vm['jobs']
 
 # Sort it all. 
-#jobs.sort(cmp=cmpjob)
+jobs.sort(cmp=cmpjob_name)
 # jobs.sort(key=lambda j: j['id'])
 
 # Associate a job name with its ID
@@ -102,7 +128,7 @@ first_submission_date = sorted(jobs, key=lambda j: j['submission_date'])[0]['sub
 
 for job in jobs:
 	job['submission_date'] = first_submission_date # patch to mix jobs/not clean at all
-	print("{0}\t{1}\t{2}".format(job['id'], job['submission_date'] - first_submission_date, job['walltime_prediction'])),
+	print("{0}\t{1}\t{2}".format(job['name'], job['submission_date'] - first_submission_date, job['walltime_prediction'])),
 	runtime = input_size = output_size = None
 
 	if args.lod == 'psm' and 'PSM_data' in job and 'runtime_prediction' in job['PSM_data'] and job['PSM_data']['runtime_prediction'] is not None:
@@ -136,6 +162,7 @@ for job in jobs:
 	if 'dependencies' in job and len(job['dependencies']) > 0:
 		print("\t->"),
 		for dependency_name in job['dependencies']:
-			print(" {0}".format(jobs_name_dict[dependency_name])),
+			# print(" {0}".format(jobs_name_dict[dependency_name])),
+			print(" {0}".format(dependency_name)),
 	print("")
 

@@ -223,6 +223,7 @@ public class SchloudNode extends Process {
 		//if (state == STATE.PENDING) return idleDate - bootTimePrediction; 
 		return idleDate;
 	}
+
 	
 	/**
 	 * 
@@ -233,6 +234,18 @@ public class SchloudNode extends Process {
 				*SchloudController.schloudCloud.getBtuTime())
 				-(getUpTimeToIdle());
 	}
+
+	/**
+	 * @param task a SchloudTask
+	 * @return the remaining idle time on this node 
+	 * if the task is assigned to this node 
+	 */
+	public double getRemainingIdleTime(SchloudTask task){
+		return (SchloudController.time2BTU(getUpTimeToIdle()+task.walltimePrediction)
+				*SchloudController.schloudCloud.getBtuTime())
+				-(getUpTimeToIdle()+task.walltimePrediction);
+	}
+
 	
 	/**
 	 * 
