@@ -30,7 +30,7 @@ fi
 
 echo "Simulating $lod" >&2
 cd simschlouder
-java -classpath $SS_CLASSPATH simschlouder.SimSchlouder $CLOUD_FILE $taskFile $STRATEGY $jsonFile 2> $outFile 1>&2
+java -classpath $SS_CLASSPATH simschlouder.SimSchlouder $CLOUD_FILE $taskFile $STRATEGY $jsonFile  2> $outFile 1>&2
 cd ..
 
 echo "Calculating diameters $lod" >&2

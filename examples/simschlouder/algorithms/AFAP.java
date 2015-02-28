@@ -1,5 +1,7 @@
 package simschlouder.algorithms;
 
+import org.simgrid.msg.Msg;
+
 import simschlouder.SchloudController;
 import simschlouder.SchloudNode;
 import simschlouder.SchloudTask;
@@ -17,48 +19,47 @@ public class AFAP extends AStrategy {
 	}
 
 	@Override
-	protected SchloudNode applyStrategy(SchloudTask schloudTask) {
+	protected SchloudNode applyStrategy(SchloudTask task) {
 		SchloudNode candidate = null;
+		SchloudNode finishSooner = null;
+		if (!SchloudController.nodes.isEmpty())
+			finishSooner = SchloudController.nodes.firstElement();
 		
 		double candidatePredictedIdleTime = SchloudController.schloudCloud.getBtuTime();
 		
-		double btu = SchloudController.schloudCloud.getBtuTime();
-		
 		for (SchloudNode node : SchloudController.nodes) {
 
+			// Look for the first instance to become available
+			if (task.getName().equals("2mass_pleiades_j_2x2_diff_0")) {  
+				Msg.info("sooner "+node.instanceId+":"+node.getIdleDate()+" - "+finishSooner.instanceId+":"+finishSooner.getIdleDate());
+				if (candidate != null)
+					Msg.info("afap "+node.instanceId+":"+node.getRemainingIdleTime()+" "+node.getRemainingIdleTime(task)+" - "+candidate.instanceId+":"+candidatePredictedIdleTime);
+			}
+			
+				if (node.getIdleDate() <= finishSooner.getIdleDate()) {
+			//if (node.getUpTimeToIdle() <= finishSooner.getUpTimeToIdle()) {
+				//Msg.info("sooner");
+				finishSooner = node;
+			}
+
 			double currentIdleTime = node.getRemainingIdleTime();
+			double predictedIdleTime = node.getRemainingIdleTime(task);
 			
-			double predictedUpTimeToIdle = 
-				node.getUpTimeToIdle() + schloudTask.getWalltimePrediction();  
-				//+ SchloudController.schloudCloud.getShutdownMargin();
-			
-			double predictedIdleTime = 
-				( btu * SchloudController.time2BTU(predictedUpTimeToIdle) ) 
-				- predictedUpTimeToIdle;
 			//Msg.info(predictedIdleTime+"<"+currentidleTime+" && "+predictedIdleTime+"<"+candidatePredictedIdleTime);
-			if ( predictedIdleTime < currentIdleTime && predictedIdleTime < candidatePredictedIdleTime  ) {
-				candidate = node;
-				candidatePredictedIdleTime = predictedIdleTime;
-			} 
+			//  <= After bugfix
+			if ( predictedIdleTime < currentIdleTime )
+				if ( candidate == null ||  predictedIdleTime <= candidatePredictedIdleTime ) {
+					candidate = node;
+					candidatePredictedIdleTime = predictedIdleTime;
+				} 
 		}
+		
+		//Msg.info("Candidate for "+task.getName()+" is "+candidate+" ("+finishSooner+")");
 		
 		if( candidate==null && SchloudController.schloudCloud.describeAvailability(SchloudController.instanceTypeId)<=0){
 			// we choose the VM with the closest IdleTime.
-			for (SchloudNode node : SchloudController.nodes) {
-				if(candidate==null){
-					candidate=node;
-				}
-				else
-				{
-					if(node.getIdleDate()<candidate.getIdleDate()){
-						candidate=node;
-					}
-				}
-			}
+			return finishSooner;
 		}
-		
-
-		//Msg.info("Candidate is"+candidate);
 		return candidate;
 	}
 

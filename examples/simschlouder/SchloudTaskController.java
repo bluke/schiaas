@@ -1,6 +1,7 @@
 package simschlouder;
 
 
+import org.simgrid.msg.Msg;
 import org.simgrid.msg.MsgException;
 import org.simgrid.msg.Process;
 import org.simgrid.msg.Task;
@@ -16,7 +17,7 @@ public class SchloudTaskController extends Process {
 	protected SchloudNode node;
 
 	/**
-	 * Contructor
+	 * Constructor
 	 * @param node the node to run this controller.
 	 */
 	protected SchloudTaskController(SchloudNode node) {
@@ -47,9 +48,9 @@ public class SchloudTaskController extends Process {
 			schloudTask.setState(SchloudTask.STATE.SUBMITTED);			
 			node.setState(SchloudNode.STATE.BUSY);
 			
-			//Msg.info("waiting for complete " + task.name);
+			//Msg.info("waiting for complete " + schloudTask.name);
 			Task rt = Task.receive(node.getMessageBox());
-			//Msg.info("complete received " + task.name);
+			//Msg.info("complete received " + schloudTask.name);
 			try {
 				rt.execute();
 			} catch (TaskCancelledException e) {
@@ -59,10 +60,9 @@ public class SchloudTaskController extends Process {
 			
 			schloudTask.setState(SchloudTask.STATE.COMPLETE);
 			// correct the idleDate
-			//node.idleDate+=stask.getRuntime()-stask.predictedRuntime;
 			node.idleDate+=schloudTask.getWalltime()-schloudTask.getWalltimePrediction();
-		}		
-		 
+		}
+		
 		node.setState(SchloudNode.STATE.IDLE);
 
 		//Msg.info("SchloudTaskController "+name+" finished");

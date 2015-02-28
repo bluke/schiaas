@@ -128,7 +128,7 @@ do
 	fi
 
 	# Fix the XP with 22 vms
-	if [ `grep host -c $source` -eq 22 ]
+	if [ "`grep host -c $source`" -eq "22" ]
 	then
 		cat $CLOUD_FILE | sed 's/max_instances_per_user="20"/max_instances_per_user="22"/' > /tmp/simschloudervm.xml
 		CLOUD_FILE="/tmp/simschloudervm.xml"	
@@ -179,7 +179,7 @@ then
 	echo "Computing stats"
 	cat $STAT_FILE | cut -f1-10 > stats/stats.dat
 	cd stats
-	R --no-save < stats.R > stats
+	R --no-save < stats.R > stats.out
 	R --no-save < statsPSM.R > /dev/null
 	cd ..
 fi

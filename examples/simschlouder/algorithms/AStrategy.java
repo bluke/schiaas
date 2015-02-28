@@ -63,16 +63,14 @@ public abstract class AStrategy {
 		//cycle through all tasks and assign them based on the strategy
 		for (Integer l : tasks.keySet()) { 
 			int iTask = 0;
-			while (iTask<tasks.get(l).size() && 
-					( SchloudController.idleNodesCount!=0 
-					|| SchloudController.schloudCloud.describeAvailability(SchloudController.instanceTypeId)>0) ) {
+			while (iTask<tasks.get(l).size()) {
 				SchloudTask task = tasks.get(l).get(iTask);
 				SchloudNode node = null;
 				if (task.hasPendingDependencies()) {
 					iTask++;
 					continue;
 				}
-							
+
 				//apply strategy
 				node = this.applyStrategy(task);
 				

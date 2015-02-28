@@ -8,7 +8,7 @@ import simschlouder.SchloudTask;
 
 /**
  * The As Soon As Possible Strategy: TODO describe it
- * @author mfrincu
+ * @author julien.gossa@unistra.fr
  *
  */
 public class ASAP extends AStrategy {

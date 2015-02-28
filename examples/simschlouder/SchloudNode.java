@@ -87,15 +87,17 @@ public class SchloudNode extends Process {
 				this.bootTime = SchloudController.schloudCloud.bootTimes.removeFirst();
 			} 
 		}
+		
 		public void main(String[] args) throws TransferFailureException, HostFailureException, TimeoutException {
 			try {
 				// Wait for at least the predicted boottime. Can be optimized.
 				Process.currentProcess().waitFor(bootTime);
+				idleDate += bootTime - bootTimePrediction;
 				
 				while(cloud.compute.describeInstance(instanceId).isRunning() == 0)
 				{
 					Msg.info("wait for boot of "+instanceId);
-					Process.currentProcess().waitFor(5);
+					Process.currentProcess().waitFor(0.1);
 				}
 				schloudNode.setState(STATE.IDLE);
 			} catch (HostFailureException e) {
@@ -129,10 +131,10 @@ public class SchloudNode extends Process {
 		this.completedQueue = new LinkedList<SchloudTask>();
 		
 		idleDate = Msg.getClock()+cloud.getBootTimePrediction();
+		//Msg.info("idledate "+instanceId+" "+idleDate);
 		
 		bootTimePrediction=cloud.getBootTimePrediction();
 		
-		//Msg.info("idleDate" + idleDate);
 		setState(STATE.PENDING);
 		
 	}
@@ -180,7 +182,6 @@ public class SchloudNode extends Process {
 			break;
 		}
 		
-		
 		this.state = state;
 	}
 
@@ -209,10 +210,11 @@ public class SchloudNode extends Process {
 	 * @return the time from the boot to the idle state.
 	 */
 	public double getUpTimeToIdle() {
-		if (isIdle()) {
-			return Msg.getClock() - pendingDate;
-		}
-		return  idleDate - pendingDate;
+		// Da bug
+		if (Msg.getClock()<pendingDate+10 && (state == STATE.PENDING || state == STATE.CLAIMED))
+			return getIdleDate() - pendingDate - bootTimePrediction;
+
+		return getIdleDate() - pendingDate;
 	}
 	
 	/**
@@ -220,8 +222,18 @@ public class SchloudNode extends Process {
 	 * @return the date when this node becomes idle
 	 */
 	public double getIdleDate() {
-		//if (state == STATE.PENDING) return idleDate - bootTimePrediction; 
+		if (isIdle()) {
+			return Msg.getClock() - pendingDate;
+		}
 		return idleDate;
+	}
+
+	/**
+	 * @return the full idle time on this node 
+	 */
+	public double getFullIdleTime(){
+		return ( (SchloudController.time2BTU(getIdleDate() - pendingDate) * cloud.getBtuTime())
+				- (idleDate - pendingDate) );
 	}
 
 	
@@ -229,21 +241,19 @@ public class SchloudNode extends Process {
 	 * 
 	 * @return the remaining idle time on this node 
 	 */
-	public double getRemainingIdleTime(){
-		return (SchloudController.time2BTU(getUpTimeToIdle())
-				*SchloudController.schloudCloud.getBtuTime())
-				-(getUpTimeToIdle());
-	}
-
+	public double getRemainingIdleTime(){			
+		return (  (SchloudController.time2BTU(getUpTimeToIdle() + cloud.getShutdownMargin()) * cloud.getBtuTime()) 
+				- (getUpTimeToIdle() + cloud.getShutdownMargin()) );
+	}	
+	
 	/**
 	 * @param task a SchloudTask
 	 * @return the remaining idle time on this node 
 	 * if the task is assigned to this node 
 	 */
 	public double getRemainingIdleTime(SchloudTask task){
-		return (SchloudController.time2BTU(getUpTimeToIdle()+task.walltimePrediction)
-				*SchloudController.schloudCloud.getBtuTime())
-				-(getUpTimeToIdle()+task.walltimePrediction);
+		return (  (SchloudController.time2BTU(getUpTimeToIdle() + cloud.getShutdownMargin() + task.walltimePrediction) * cloud.getBtuTime()) 
+				- (getUpTimeToIdle() + cloud.getShutdownMargin() + task.walltimePrediction ) );
 	}
 
 	
@@ -262,10 +272,12 @@ public class SchloudNode extends Process {
 	 */
 	public void enqueue(SchloudTask task) {
 		queue.add(task);
-		idleDate+=task.getWalltimePrediction();
 		if ( state == STATE.IDLE ) {
+			idleDate = Msg.getClock();
 			setState(STATE.CLAIMED);
 		}
+		idleDate+=task.getWalltimePrediction();
+		//Msg.info("idledate "+instanceId+" "+idleDate+" "+(idleDate-23));
 	}
 	
 	/**

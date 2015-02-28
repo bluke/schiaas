@@ -46,6 +46,10 @@ public class SchloudTask {
 	
 	/** The prediction of the walltime of the task */
 	protected double walltimePrediction;
+
+	/** The standard walltime of the task (with standard power)*/
+	protected double standardWalltime;
+
 	
 	/** MSG's duration of the task */
 	protected double duration;
@@ -88,8 +92,9 @@ public class SchloudTask {
 		this.name = name;
 		
 		this.walltimePrediction = walltimePrediction;
+		this.standardWalltime = runtime;
 		
-		this.duration = SimSchlouder.time2flops(runtime);
+		this.duration = SimSchlouder.timeToDuration(runtime);
 		this.inputSize = inputSize;
 		this.outputSize = outputSize;
 		
@@ -249,10 +254,12 @@ public class SchloudTask {
 		// TODO: add scheduling_strategy
 		// TODO: check walltime/runtime
 		out.write("\t\t\t\t\"id\": \""+name+"\",\n");
+		out.write("\t\t\t\t\"name\": \""+name+"\",\n");
 		out.write("\t\t\t\t\"provisioning_strategy\": \""+SchloudController.strategy.getName()+"\",\n"); // NOT THE PREDICTION USED ACTUALLY
 		out.write("\t\t\t\t\"submission_date\": "+getSubmissionDate()+",\n");
 		out.write("\t\t\t\t\"start_date\": "+getStartDate()+",\n");
 		out.write("\t\t\t\t\"walltime_prediction\": "+getWallTimePrediction()+",\n");
+		out.write("\t\t\t\t\"standard_walltime\": "+standardWalltime+",\n");
 		out.write("\t\t\t\t\"walltime\": "+getWalltime()+",\n"); // TERMINATED AND NOT SHUTINGDOWN
 		out.write("\t\t\t\t\"runtime\": "+getRuntime()+",\n");
 		out.write("\t\t\t\t\"input_size\": "+inputSize+",\n");

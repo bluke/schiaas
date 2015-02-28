@@ -36,7 +36,7 @@ public class SimSchlouder {
 
 
 	
-	public static double time2flops(double time) {
+	public static double timeToDuration(double time) {
 		return time*SchloudController.schloudCloud.standardPower;
 	}
 	
@@ -58,6 +58,16 @@ public class SimSchlouder {
 			double oldSubmissionDate = 0;
 			
 			Scanner sc = new Scanner(scf.nextLine());
+			if (sc.hasNext("\\[provisioning\\_dates\\]")) {
+				SchloudController.provisioningDates = new Vector<Double>();
+				sc.close();
+				sc = new Scanner(scf.nextLine());
+				do {
+					SchloudController.provisioningDates.add(sc.nextDouble());
+					sc = new Scanner(scf.nextLine());
+				} while (sc.hasNextDouble());
+			}
+			
 			if (sc.hasNext("\\[boots\\]")) {
 				sc.close();
 				sc = new Scanner(scf.nextLine());

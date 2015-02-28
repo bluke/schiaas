@@ -2,7 +2,7 @@
 # -*- coding:utf8 -*-
 
 """
-	This script take a JSON output from Schlouder as input, and output 
+	This script takes a JSON output from Schlouder as input, and output 
 	a tasks file in the simschlouder format
 """
 
@@ -22,6 +22,9 @@ parser.add_argument('json_file', help='input json file')
 
 args = parser.parse_args()
 
+
+ordered_job_names = []
+
 #  is montage?
 if 'pleiade' in args.json_file: 
 	is_montage = True
@@ -35,20 +38,20 @@ def cmpjob_date(j1, j2):
 	elif int(j1['submission_date']) > int(j2['submission_date']):
 		return 1
 	else:
-		if j1['start_date'] < j2['start_date']:
+		if j1['start_dte'] < j2['start_date']:
 			return -1
 		elif j1['start_date'] > j2['start_date']:
 			return 1
 		else:
 			return 0
 	
-# Job comparator: by name, for pleiade
+# Job comparator: by name, for montage
 task_types = ['project', 'overlaps', 'diff', 'bgmodel', 'background', 'add', 'gather']
 def cmpjob_name(j1, j2):
-	# if not pleiade	
+	# if OMSSA
 	if not is_montage :
 		if j1['name'] == j2['name'] : return 0
-		if j1['name'] < j2['name'] : return -1
+		if j1['name'].replace("_","+") < j2['name'].replace("_","+") : return -1
 		return 1
 
 	js1 = j1['name'].split('_')
@@ -70,14 +73,18 @@ def cmpjob_name(j1, j2):
 	return int(js1[5]) - int(js2[5])
 
 
-# Vm comparator: by start_date, then by boot_time_prediction
+# Vm comparator
 def cmpvm(vm1, vm2):
-	if int(vm1['start_date']) != int(vm2['start_date']):
-		return int(vm1['start_date']) - int(vm2['start_date'])
-	return int(vm1['boot_time']) - int(vm2['boot_time'])
-		
-# Date of the first vm start
-beginDate = 0
+	first_job1 = sorted(vm1['jobs'], key=lambda j: j['start_date'])[0]
+	first_job2 = sorted(vm2['jobs'], key=lambda j: j['start_date'])[0]
+
+	if vm1['start_date'] != vm2['start_date']:
+		return int(vm1['start_date'] - vm2['start_date'])
+
+	if first_job1['start_date'] != first_job2['start_date']:
+		return int(first_job1['start_date']) - int(first_job2['start_date'])
+
+	return (ordered_job_names.index(first_job1['name']) - ordered_job_names.index(first_job2['name']) )
 
 
 # Open the JSON
@@ -86,32 +93,12 @@ with open(args.json_file) as fp:
 	# If the json is a more recent version
 	if 'nodes' in results:
 		results = results['nodes']
-results.sort(cmp=cmpvm)
-beginDate = int(results[0]['start_date'])
-
-# Output the boot_times
-if args.lod == 'wto':
-	btps = []
-	bts = []
-	print "[boots]"
-	for vm in results:
-		btps.append(vm['boot_time_prediction'])
-		#bts.append(vm['boot_time'])
-		first_start_date = sorted(vm['jobs'], key=lambda j: j['start_date'])[0]['start_date']
-		bts.append(first_start_date-vm['start_date'])
-
-	bts.sort()
-	i = 0
-	for btp in btps:
-		print("{0}\t{1}".format(btp, bts[i]))
-		i = i+1
-	print "[tasks]"
-
 # Fill an unique list of jobs
 jobs = []
-results.sort(cmp=cmpvm)
 for vm in results:
 	#vm['jobs'].sort(cmp=cmpjob_name)
+	for job in vm['jobs']:
+		job['vm_start_date'] = vm['start_date']
 	jobs += vm['jobs']
 
 # Sort it all. 
@@ -122,13 +109,76 @@ jobs.sort(cmp=cmpjob_name)
 jobs_name_dict = {} 
 for job in jobs:
 	jobs_name_dict[job['name']] = job['id']
+	ordered_job_names.append(job['name'])
+
+results.sort(cmp=cmpvm)
+
 
 # Get the first submission date of the jobs
 first_submission_date = sorted(jobs, key=lambda j: j['submission_date'])[0]['submission_date']
 
+
+# Output the validation data
+if args.lod == 'wto':
+
+	# Output the provisioning thread dates
+	print "[provisioning_dates]"
+	last_prov_date = 0
+	for vm in results:
+		if last_prov_date < vm['start_date'] and vm['start_date'] < first_submission_date + 300:
+			last_prov_date = vm['start_date']
+			print(vm['start_date'] - first_submission_date)
+
+	# Output the boot_times
+	print "[boots]"
+#	btps = []
+#	bts = []
+
+	# messy patch to add more btp. DOES NO WORK WITH ONLY ONE VM.
+	old_bt = 0
+	old_btp = 0
+	for vm in results:
+#		btps.append(vm['boot_time_prediction'])
+		#bts.append(vm['boot_time'])
+		first_start_date = sorted(vm['jobs'], key=lambda j: j['start_date'])[0]['start_date']
+		first_sub_date = sorted(vm['jobs'], key=lambda j: j['submission_date'])[0]['submission_date']
+#		bts.append(first_start_date-vm['start_date'])
+		
+		print("{0}\t{1}\t{2}".format(
+			vm['boot_time_prediction'], 
+			first_start_date-vm['start_date'],
+			first_sub_date-first_submission_date))
+
+		d_btp = vm['boot_time_prediction'] - old_btp
+		d_bt = first_start_date-vm['start_date'] - old_bt
+		old_btp = vm['boot_time_prediction']
+		old_bt = first_start_date-vm['start_date']
+
+	print("{0}\t{1}".format(
+		old_btp + d_btp, 
+		old_bt + d_bt ))
+
+
+#	bts.sort()
+#	i = 0
+#	for btp in btps:
+#		print("{0}\t{1}".format(btp, bts[i]))
+#		i = i+1
+
+	print "[tasks]"
+
+last_prov_date = jobs[0]['submission_date']
 for job in jobs:
-	job['submission_date'] = first_submission_date # patch to mix jobs/not clean at all
-	print("{0}\t{1}\t{2}".format(job['name'], job['submission_date'] - first_submission_date, job['walltime_prediction'])),
+	#patch to fix provisioning threads dates
+	if job['submission_date'] != jobs[0]['submission_date']	or last_prov_date != jobs[0]['submission_date']:
+		if job['vm_start_date'] - first_submission_date < 300 and last_prov_date < job['vm_start_date']-1:
+			last_prov_date = job['vm_start_date']-1
+		job['submission_date'] = last_prov_date
+	
+	print("{0}\t{1}\t{2}".format(
+		job['name'], 
+		job['submission_date'] - first_submission_date, 
+		job['walltime_prediction'])),
 	runtime = input_size = output_size = None
 
 	if args.lod == 'psm' and 'PSM_data' in job and 'runtime_prediction' in job['PSM_data'] and job['PSM_data']['runtime_prediction'] is not None:

@@ -3,56 +3,21 @@
  <platform version="3">
  
  <AS  id="AS0" routing="Full">
+	
+	<cluster id="icps" prefix="icps-gc-" suffix=".me" radical="1-30" 
+         power="10e9" core="25" bw="120e6" lat="0.0001"
+    	 bb_bw="120e6" bb_lat="0.0001" />
  
-	 <AS  id="AS_OPST"  routing="Full">
-	   <host id="icps-opst-cc" power="1e9" core="2"/> 
-	   
-	   <host id="icps-gc-1" power="10e9" core="24"/> 
-	   <host id="icps-gc-2" power="10e9" core="24"/>
-	   <host id="icps-gc-3" power="10e9" core="24"/>
-	      
-	   <link id="1" bandwidth="120e6" latency="0.0001"/>
-	   <link id="2" bandwidth="120e6" latency="0.0001"/>
-	   <link id="3" bandwidth="120e6" latency="0.0001"/>
-	   <link id="5" bandwidth="120e6" latency="0.0001"/>
-	   
-	   <route src="icps-opst-cc" dst="icps-gc-1" symmetrical="YES"><link_ctn id="5"/><link_ctn id="1"/></route>
-	   <route src="icps-opst-cc" dst="icps-gc-2" symmetrical="YES"><link_ctn id="5"/><link_ctn id="2"/></route>
-	   <route src="icps-opst-cc" dst="icps-gc-3" symmetrical="YES"><link_ctn id="5"/><link_ctn id="3"/></route>
-   
-	   <route src="icps-gc-1" dst="icps-gc-2" symmetrical="YES"><link_ctn id="1"/><link_ctn id="2"/></route>
-	   <route src="icps-gc-1" dst="icps-gc-3" symmetrical="YES"><link_ctn id="1"/><link_ctn id="3"/></route>
-	   <route src="icps-gc-2" dst="icps-gc-3" symmetrical="YES"><link_ctn id="2"/><link_ctn id="3"/></route>
-	 </AS>
-	 
-	 
-	 <AS  id="AS_EUCA"  routing="Full">
-	   <host id="icps-euca-cc" power="1e9" core="2"/> 
-
-	   
-	   <host id="icps-gc-4" power="10e9" core="24"/>
-	      
-	   
-	   <link id="4" bandwidth="120e6" latency="0.0001"/>
-	   <link id="6" bandwidth="60e6" latency="0.0002"/>
-	   
-	   
-	   <route src="icps-euca-cc" dst="icps-gc-4" symmetrical="YES"><link_ctn id="6"/><link_ctn id="4"/></route>
-	      
-	   
-	 </AS>
-	 
-	 <AS  id="AS_Client"  routing="Full">
-	   <host id="client" power="120e6" core="2"> <prop id="cloudid" value="none"/> </host>
+ 	 <AS id="AS_Controller" routing="Full">
+	   <host id="controller" power="1e9" core="2" />
 	 </AS>
 	
-	<link id="client2opst" bandwidth="120e6" latency="0.0001"/> 
-	<link id="client2euca" bandwidth="60e6" latency="0.0002"/> 
-	<link id="as2as" bandwidth="120e6" latency="0.0001"/>
+	<link id="controller2icps" bandwidth="1e9" latency="5E-5"/> 
 	
-	<ASroute src="AS_Client" dst="AS_EUCA" gw_src="client" gw_dst="icps-euca-cc" symmetrical="YES"><link_ctn id="client2euca"/></ASroute>
-	<ASroute src="AS_Client" dst="AS_OPST" gw_src="client" gw_dst="icps-opst-cc" symmetrical="YES"><link_ctn id="client2opst"/></ASroute>
-	<ASroute src="AS_EUCA" dst="AS_OPST" gw_src="icps-opst-cc" gw_dst="icps-euca-cc" symmetrical="YES"><link_ctn id="as2as"/></ASroute>
+	<ASroute src="AS_Controller" dst="icps" gw_src="controller" gw_dst="icps-gc-icps_router.me" symmetrical="YES">
+		<link_ctn id="controller2icps"/>
+	</ASroute>
+	
 </AS> 
  
  </platform>

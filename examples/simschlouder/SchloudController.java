@@ -79,6 +79,10 @@ public class SchloudController extends org.simgrid.msg.Process {
 	public static String imageId;
 	/** Id of the instance type */
 	public static String instanceTypeId;
+
+	/** Provisioning thread warmup time (for validation purposes) */
+	public static Vector<Double> provisioningDates; 
+	
 	
 	/**
 	 * Creates a new Schlouder controller on a given host.
@@ -108,11 +112,18 @@ public class SchloudController extends org.simgrid.msg.Process {
 	 * Entry point for the controller process
 	 */
 	public void main(String[] args) throws MsgException {
-		waitFor(10);
+		
+		double lastProvisioningDate = 1;
+		waitFor(lastProvisioningDate);
+		if (provisioningDates != null && provisioningDates.size()>0) {
+			lastProvisioningDate = provisioningDates.remove(0); 
+		}
+		waitFor(lastProvisioningDate - 1);
+			
 		while (!(mainQueue.isEmpty() && nodes.isEmpty() && allTasksSubmitted)) {
 			Msg.verb("main loop : main queue="+ mainQueue.size() 
 				+ ", idle nodes=" +idleNodesCount+"/("+ nodes.size()+"+"+schloudCloud.describeAvailability(instanceTypeId)+")");
-			
+						
 			terminateIdleNodes();
 			
 			if (idleNodesCount!=0 
@@ -126,7 +137,13 @@ public class SchloudController extends org.simgrid.msg.Process {
 				}
 			}
 			
-			waitFor(period);
+			if (provisioningDates != null && provisioningDates.size()>0) {
+				lastProvisioningDate = provisioningDates.remove(0);
+				waitFor(lastProvisioningDate-Msg.getClock());
+			}
+			else {
+				waitFor(period);
+			}
 		}
 		
         SchIaaS.terminate();
@@ -184,7 +201,9 @@ public class SchloudController extends org.simgrid.msg.Process {
 	 * @return the number of BTUs corresponding to our time
 	 */
 	public static int time2BTU(double time) {
-		return (1+((int)(time/schloudCloud.getBtuTime())));
+		// time-1 in order to consider a full BTU (i.e. 3600s) as one BTU
+		if (time>1) time--;
+		return (1+((int)((time)/schloudCloud.getBtuTime())));
 	}
 
 	/**
@@ -362,10 +381,14 @@ public class SchloudController extends org.simgrid.msg.Process {
 	protected void terminateIdleNodes() {
 		if (idleNodesCount==0) return;
 		int i=0;
-		while (i<nodes.size()) {			
-			if (nodes.get(i).isIdle() 
-					&& time2BTU(nodes.get(i).getUptime())<time2BTU(nodes.get(i).getUptime()+schloudCloud.shutdownMargin) ) {
-				//Msg.info("hou yes " + nodes.get(i).instance.getName());
+		while (i<nodes.size()) {
+			//if ( time2BTU(nodes.get(i).getUptime())	< time2BTU(nodes.get(i).getUptime()+schloudCloud.shutdownMargin))
+				//Msg.info("TERMINATE " + nodes.get(i).instanceId + " : " + nodes.get(i).getFullIdleTime());
+			
+			if ( time2BTU(nodes.get(i).getUptime())	< time2BTU(nodes.get(i).getUptime()+schloudCloud.shutdownMargin) 
+					&& nodes.get(i).isIdle() 
+					&& nodes.get(i).getFullIdleTime() > schloudCloud.shutdownMargin ) {
+				//Msg.info("TERMINATE " + nodes.get(i).instanceId + " : " + nodes.get(i).getFullIdleTime());
 				SchloudController.stopNode(nodes.get(i));
 			} else {
 				i++;
