@@ -1,0 +1,1342 @@
+{
+    "info": {
+        "description": "", 
+        "version": "7d57c1288e4de8ca2ebfa7d725d6bc71a0ceac7d", 
+        "storage": {
+            "type": "n/a", 
+            "location": "n/a"
+        }, 
+        "start_date": 1388342376, 
+        "scheduling_thread_start_date": 1388342399
+    }, 
+    "nodes": [
+        {
+            "jobs": [
+                {
+                    "submission_date": 1388342399, 
+                    "management_time": 1.1249839930000007, 
+                    "input_time": 4.8, 
+                    "name": "X001825CYC+LM_1.mgf", 
+                    "output_size": 4642289, 
+                    "command_line": "/tmp/schlouder/dbPr5kGtmb hrt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/10000/X001825CYC+LM_1.mgf", 
+                    "PSM_data": {
+                        "runtime_prediction": "9", 
+                        "data_in": "21179780", 
+                        "data_out": "4188959"
+                    }, 
+                    "error_time": 0, 
+                    "start_date": 1388342555, 
+                    "output_files_size": {
+                        "X001825CYC+LM_1.omx.gz": 4640479, 
+                        "X001825CYC+LM_1.log": 1810
+                    }, 
+                    "walltime_prediction": 13, 
+                    "dependencies": [], 
+                    "scheduled_date": 1388342404, 
+                    "input_files_size": {
+                        "X001825CYC+LM_1.mgf": 1901336, 
+                        "mods.xml": 117497, 
+                        "usermods.xml": 213, 
+                        "run.sh": 4871, 
+                        "human_DCpSP_ABU_20110615-blast.tgz": 14417326, 
+                        "hrt_params.xml": 4385
+                    }, 
+                    "scheduling_strategy": "Schlouder::Scheduling::Default", 
+                    "input_size": 16445628, 
+                    "runtime": 17.6, 
+                    "provisioning_strategy": "Schlouder::Provisioning::Asap", 
+                    "id": 9666, 
+                    "output_time": 2.6, 
+                    "walltime": 26
+                }, 
+                {
+                    "submission_date": 1388342399, 
+                    "management_time": 2.4272302299999993, 
+                    "input_time": 1.1, 
+                    "name": "X001826CYC+LM_1.mgf", 
+                    "output_size": 4604156, 
+                    "command_line": "/tmp/schlouder/TamQrFoQIa hrt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/10000/X001826CYC+LM_1.mgf", 
+                    "PSM_data": {
+                        "runtime_prediction": "9", 
+                        "data_in": "21179780", 
+                        "data_out": "4188959"
+                    }, 
+                    "error_time": 0, 
+                    "start_date": 1388342583, 
+                    "output_files_size": {
+                        "X001826CYC+LM_1.log": 2465, 
+                        "X001826CYC+LM_1.omx.gz": 4601691
+                    }, 
+                    "walltime_prediction": 13, 
+                    "dependencies": [], 
+                    "scheduled_date": 1388342404, 
+                    "input_files_size": {
+                        "X001826CYC+LM_1.mgf": 1736377, 
+                        "mods.xml": 117497, 
+                        "usermods.xml": 213, 
+                        "run.sh": 4871, 
+                        "human_DCpSP_ABU_20110615-blast.tgz": 14417326, 
+                        "hrt_params.xml": 4385
+                    }, 
+                    "scheduling_strategy": "Schlouder::Scheduling::Default", 
+                    "input_size": 16280669, 
+                    "runtime": 16.0, 
+                    "provisioning_strategy": "Schlouder::Provisioning::Asap", 
+                    "id": 9668, 
+                    "output_time": 2.5, 
+                    "walltime": 22
+                }, 
+                {
+                    "submission_date": 1388342399, 
+                    "management_time": 2.020523744, 
+                    "input_time": 1.1, 
+                    "name": "X001827CYC+LM_1.mgf", 
+                    "output_size": 3325487, 
+                    "command_line": "/tmp/schlouder/gi696X6aG7 hrt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/10000/X001827CYC+LM_1.mgf", 
+                    "PSM_data": {
+                        "runtime_prediction": "7", 
+                        "data_in": "21179780", 
+                        "data_out": "4188959"
+                    }, 
+                    "error_time": 0, 
+                    "start_date": 1388342605, 
+                    "output_files_size": {
+                        "X001827CYC+LM_1.omx.gz": 3322079, 
+                        "X001827CYC+LM_1.log": 3408
+                    }, 
+                    "walltime_prediction": 11, 
+                    "dependencies": [], 
+                    "scheduled_date": 1388342404, 
+                    "input_files_size": {
+                        "mods.xml": 117497, 
+                        "usermods.xml": 213, 
+                        "run.sh": 4871, 
+                        "human_DCpSP_ABU_20110615-blast.tgz": 14417326, 
+                        "hrt_params.xml": 4385, 
+                        "X001827CYC+LM_1.mgf": 1219804
+                    }, 
+                    "scheduling_strategy": "Schlouder::Scheduling::Default", 
+                    "input_size": 15764096, 
+                    "runtime": 13.1, 
+                    "provisioning_strategy": "Schlouder::Provisioning::Asap", 
+                    "id": 9670, 
+                    "output_time": 1.8, 
+                    "walltime": 18
+                }, 
+                {
+                    "submission_date": 1388342399, 
+                    "management_time": 0.6510659000000008, 
+                    "input_time": 0.8, 
+                    "name": "X001828CYC+LM_1.mgf", 
+                    "output_size": 3532470, 
+                    "command_line": "/tmp/schlouder/FExtjBYzQ2 hrt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/10000/X001828CYC+LM_1.mgf", 
+                    "PSM_data": {
+                        "runtime_prediction": "7", 
+                        "data_in": "21179780", 
+                        "data_out": "4188959"
+                    }, 
+                    "error_time": 0, 
+                    "start_date": 1388342623, 
+                    "output_files_size": {
+                        "X001828CYC+LM_1.omx.gz": 3529349, 
+                        "X001828CYC+LM_1.log": 3121
+                    }, 
+                    "walltime_prediction": 11, 
+                    "dependencies": [], 
+                    "scheduled_date": 1388342404, 
+                    "input_files_size": {
+                        "mods.xml": 117497, 
+                        "usermods.xml": 213, 
+                        "run.sh": 4871, 
+                        "human_DCpSP_ABU_20110615-blast.tgz": 14417326, 
+                        "hrt_params.xml": 4385, 
+                        "X001828CYC+LM_1.mgf": 1291348
+                    }, 
+                    "scheduling_strategy": "Schlouder::Scheduling::Default", 
+                    "input_size": 15835640, 
+                    "runtime": 12.7, 
+                    "provisioning_strategy": "Schlouder::Provisioning::Asap", 
+                    "id": 9672, 
+                    "output_time": 1.8, 
+                    "walltime": 16
+                }, 
+                {
+                    "submission_date": 1388342399, 
+                    "management_time": 2.4701239970000017, 
+                    "input_time": 0.9, 
+                    "name": "X001829CYC+LM_1.mgf", 
+                    "output_size": 4394815, 
+                    "command_line": "/tmp/schlouder/YSX0QKdhQ_ hrt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/10000/X001829CYC+LM_1.mgf", 
+                    "PSM_data": {
+                        "runtime_prediction": "8", 
+                        "data_in": "21179780", 
+                        "data_out": "4188959"
+                    }, 
+                    "error_time": 0, 
+                    "start_date": 1388342641, 
+                    "output_files_size": {
+                        "X001829CYC+LM_1.log": 2998, 
+                        "X001829CYC+LM_1.omx.gz": 4391817
+                    }, 
+                    "walltime_prediction": 12, 
+                    "dependencies": [], 
+                    "scheduled_date": 1388342404, 
+                    "input_files_size": {
+                        "mods.xml": 117497, 
+                        "usermods.xml": 213, 
+                        "run.sh": 4871, 
+                        "human_DCpSP_ABU_20110615-blast.tgz": 14417326, 
+                        "hrt_params.xml": 4385, 
+                        "X001829CYC+LM_1.mgf": 1735200
+                    }, 
+                    "scheduling_strategy": "Schlouder::Scheduling::Default", 
+                    "input_size": 16279492, 
+                    "runtime": 14.2, 
+                    "provisioning_strategy": "Schlouder::Provisioning::Asap", 
+                    "id": 9674, 
+                    "output_time": 2.4, 
+                    "walltime": 20
+                }, 
+                {
+                    "submission_date": 1388342399, 
+                    "management_time": 2.769521847, 
+                    "input_time": 0.9, 
+                    "name": "X001830CYC+LM_1.mgf", 
+                    "output_size": 4919610, 
+                    "command_line": "/tmp/schlouder/qWI80WYh9v hrt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/10000/X001830CYC+LM_1.mgf", 
+                    "PSM_data": {
+                        "runtime_prediction": "9", 
+                        "data_in": "21179780", 
+                        "data_out": "4188959"
+                    }, 
+                    "error_time": 0, 
+                    "start_date": 1388342661, 
+                    "output_files_size": {
+                        "X001830CYC+LM_1.omx.gz": 4917186, 
+                        "X001830CYC+LM_1.log": 2424
+                    }, 
+                    "walltime_prediction": 13, 
+                    "dependencies": [], 
+                    "scheduled_date": 1388342404, 
+                    "input_files_size": {
+                        "mods.xml": 117497, 
+                        "usermods.xml": 213, 
+                        "run.sh": 4871, 
+                        "human_DCpSP_ABU_20110615-blast.tgz": 14417326, 
+                        "hrt_params.xml": 4385, 
+                        "X001830CYC+LM_1.mgf": 2042846
+                    }, 
+                    "scheduling_strategy": "Schlouder::Scheduling::Default", 
+                    "input_size": 16587138, 
+                    "runtime": 15.2, 
+                    "provisioning_strategy": "Schlouder::Provisioning::Asap", 
+                    "id": 9677, 
+                    "output_time": 4.0, 
+                    "walltime": 23
+                }, 
+                {
+                    "submission_date": 1388342399, 
+                    "management_time": 0.8325200089999996, 
+                    "input_time": 0.8, 
+                    "name": "X001832CYC+LM_1.mgf", 
+                    "output_size": 5020902, 
+                    "command_line": "/tmp/schlouder/L7eaqHXQID hrt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/10000/X001832CYC+LM_1.mgf", 
+                    "PSM_data": {
+                        "runtime_prediction": "9", 
+                        "data_in": "21179780", 
+                        "data_out": "4188959"
+                    }, 
+                    "error_time": 0, 
+                    "start_date": 1388342684, 
+                    "output_files_size": {
+                        "X001832CYC+LM_1.omx.gz": 5018273, 
+                        "X001832CYC+LM_1.log": 2629
+                    }, 
+                    "walltime_prediction": 13, 
+                    "dependencies": [], 
+                    "scheduled_date": 1388342404, 
+                    "input_files_size": {
+                        "mods.xml": 117497, 
+                        "usermods.xml": 213, 
+                        "run.sh": 4871, 
+                        "hrt_params.xml": 4385, 
+                        "human_DCpSP_ABU_20110615-blast.tgz": 14417326, 
+                        "X001832CYC+LM_1.mgf": 1830482
+                    }, 
+                    "scheduling_strategy": "Schlouder::Scheduling::Default", 
+                    "input_size": 16374774, 
+                    "runtime": 15.5, 
+                    "provisioning_strategy": "Schlouder::Provisioning::Asap", 
+                    "id": 9682, 
+                    "output_time": 4.9, 
+                    "walltime": 22
+                }, 
+                {
+                    "submission_date": 1388342399, 
+                    "management_time": 1.4768590669999995, 
+                    "input_time": 1.1, 
+                    "name": "X001833CYC+LM_1.mgf", 
+                    "output_size": 5247481, 
+                    "command_line": "/tmp/schlouder/o60OHgTDtU hrt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/10000/X001833CYC+LM_1.mgf", 
+                    "PSM_data": {
+                        "runtime_prediction": "10", 
+                        "data_in": "21179780", 
+                        "data_out": "4188959"
+                    }, 
+                    "error_time": 0, 
+                    "start_date": 1388342706, 
+                    "output_files_size": {
+                        "X001833CYC+LM_1.log": 2055, 
+                        "X001833CYC+LM_1.omx.gz": 5245426
+                    }, 
+                    "walltime_prediction": 14, 
+                    "dependencies": [], 
+                    "scheduled_date": 1388342404, 
+                    "input_files_size": {
+                        "mods.xml": 117497, 
+                        "usermods.xml": 213, 
+                        "run.sh": 4871, 
+                        "X001833CYC+LM_1.mgf": 2092960, 
+                        "human_DCpSP_ABU_20110615-blast.tgz": 14417326, 
+                        "hrt_params.xml": 4385
+                    }, 
+                    "scheduling_strategy": "Schlouder::Scheduling::Default", 
+                    "input_size": 16637252, 
+                    "runtime": 16.6, 
+                    "provisioning_strategy": "Schlouder::Provisioning::Asap", 
+                    "id": 9685, 
+                    "output_time": 2.9, 
+                    "walltime": 22
+                }, 
+                {
+                    "submission_date": 1388342400, 
+                    "management_time": 2.3011523840000017, 
+                    "input_time": 2.1, 
+                    "name": "X001837CYC+LM_1.mgf", 
+                    "output_size": 5811575, 
+                    "command_line": "/tmp/schlouder/SHYUvrsJgc hrt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/10000/X001837CYC+LM_1.mgf", 
+                    "PSM_data": {
+                        "runtime_prediction": "11", 
+                        "data_in": "21179780", 
+                        "data_out": "4188959"
+                    }, 
+                    "error_time": 0, 
+                    "start_date": 1388342728, 
+                    "output_files_size": {
+                        "X001837CYC+LM_1.omx.gz": 5809725, 
+                        "X001837CYC+LM_1.log": 1850
+                    }, 
+                    "walltime_prediction": 15, 
+                    "dependencies": [], 
+                    "scheduled_date": 1388342404, 
+                    "input_files_size": {
+                        "mods.xml": 117497, 
+                        "usermods.xml": 213, 
+                        "run.sh": 4871, 
+                        "human_DCpSP_ABU_20110615-blast.tgz": 14417326, 
+                        "hrt_params.xml": 4385, 
+                        "X001837CYC+LM_1.mgf": 2551467
+                    }, 
+                    "scheduling_strategy": "Schlouder::Scheduling::Default", 
+                    "input_size": 17095759, 
+                    "runtime": 18.4, 
+                    "provisioning_strategy": "Schlouder::Provisioning::Asap", 
+                    "id": 9689, 
+                    "output_time": 3.1, 
+                    "walltime": 26
+                }, 
+                {
+                    "submission_date": 1388342400, 
+                    "management_time": 2.3295418020000014, 
+                    "input_time": 0.8, 
+                    "name": "X001838CYC+LM_1.mgf", 
+                    "output_size": 5179768, 
+                    "command_line": "/tmp/schlouder/b3v45wIDx1 hrt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/10000/X001838CYC+LM_1.mgf", 
+                    "PSM_data": {
+                        "runtime_prediction": "10", 
+                        "data_in": "21179780", 
+                        "data_out": "4188959"
+                    }, 
+                    "error_time": 0, 
+                    "start_date": 1388342754, 
+                    "output_files_size": {
+                        "X001838CYC+LM_1.omx.gz": 5177262, 
+                        "X001838CYC+LM_1.log": 2506
+                    }, 
+                    "walltime_prediction": 14, 
+                    "dependencies": [], 
+                    "scheduled_date": 1388342404, 
+                    "input_files_size": {
+                        "mods.xml": 117497, 
+                        "usermods.xml": 213, 
+                        "run.sh": 4871, 
+                        "human_DCpSP_ABU_20110615-blast.tgz": 14417326, 
+                        "hrt_params.xml": 4385, 
+                        "X001838CYC+LM_1.mgf": 1937035
+                    }, 
+                    "scheduling_strategy": "Schlouder::Scheduling::Default", 
+                    "input_size": 16481327, 
+                    "runtime": 16.1, 
+                    "provisioning_strategy": "Schlouder::Provisioning::Asap", 
+                    "id": 9692, 
+                    "output_time": 2.7, 
+                    "walltime": 22
+                }, 
+                {
+                    "submission_date": 1388342400, 
+                    "management_time": 0.8525916220000003, 
+                    "input_time": 0.5, 
+                    "name": "X001843CYC+LM_1.mgf", 
+                    "output_size": 480149, 
+                    "command_line": "/tmp/schlouder/KruCT72Yo7 hrt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/10000/X001843CYC+LM_1.mgf", 
+                    "PSM_data": {
+                        "runtime_prediction": "4", 
+                        "data_in": "21179780", 
+                        "data_out": "4188959"
+                    }, 
+                    "error_time": 0, 
+                    "start_date": 1388342776, 
+                    "output_files_size": {
+                        "X001843CYC+LM_1.omx.gz": 473092, 
+                        "X001843CYC+LM_1.log": 7057
+                    }, 
+                    "walltime_prediction": 8, 
+                    "dependencies": [], 
+                    "scheduled_date": 1388342404, 
+                    "input_files_size": {
+                        "X001843CYC+LM_1.mgf": 449786, 
+                        "mods.xml": 117497, 
+                        "usermods.xml": 213, 
+                        "run.sh": 4871, 
+                        "human_DCpSP_ABU_20110615-blast.tgz": 14417326, 
+                        "hrt_params.xml": 4385
+                    }, 
+                    "scheduling_strategy": "Schlouder::Scheduling::Default", 
+                    "input_size": 14994078, 
+                    "runtime": 6.1, 
+                    "provisioning_strategy": "Schlouder::Provisioning::Asap", 
+                    "id": 9695, 
+                    "output_time": 0.5, 
+                    "walltime": 8
+                }, 
+                {
+                    "submission_date": 1388342400, 
+                    "management_time": 1.9093342689999986, 
+                    "input_time": 0.8, 
+                    "name": "X001844CYC+LM_1.mgf", 
+                    "output_size": 5348360, 
+                    "command_line": "/tmp/schlouder/KnRp2NQP3c hrt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/10000/X001844CYC+LM_1.mgf", 
+                    "PSM_data": {
+                        "runtime_prediction": "11", 
+                        "data_in": "21179780", 
+                        "data_out": "4188959"
+                    }, 
+                    "error_time": 0, 
+                    "start_date": 1388342786, 
+                    "output_files_size": {
+                        "X001844CYC+LM_1.omx.gz": 5345772, 
+                        "X001844CYC+LM_1.log": 2588
+                    }, 
+                    "walltime_prediction": 15, 
+                    "dependencies": [], 
+                    "scheduled_date": 1388342404, 
+                    "input_files_size": {
+                        "mods.xml": 117497, 
+                        "usermods.xml": 213, 
+                        "run.sh": 4871, 
+                        "human_DCpSP_ABU_20110615-blast.tgz": 14417326, 
+                        "hrt_params.xml": 4385, 
+                        "X001844CYC+LM_1.mgf": 2209966
+                    }, 
+                    "scheduling_strategy": "Schlouder::Scheduling::Default", 
+                    "input_size": 16754258, 
+                    "runtime": 16.6, 
+                    "provisioning_strategy": "Schlouder::Provisioning::Asap", 
+                    "id": 9696, 
+                    "output_time": 2.7, 
+                    "walltime": 22
+                }, 
+                {
+                    "submission_date": 1388342400, 
+                    "management_time": 2.1715851489999984, 
+                    "input_time": 1.2, 
+                    "name": "X001845CYC+LM_1.mgf", 
+                    "output_size": 4810908, 
+                    "command_line": "/tmp/schlouder/XFY623nxaF hrt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/10000/X001845CYC+LM_1.mgf", 
+                    "PSM_data": {
+                        "runtime_prediction": "10", 
+                        "data_in": "21179780", 
+                        "data_out": "4188959"
+                    }, 
+                    "error_time": 0, 
+                    "start_date": 1388342808, 
+                    "output_files_size": {
+                        "X001845CYC+LM_1.omx.gz": 4807295, 
+                        "X001845CYC+LM_1.log": 3613
+                    }, 
+                    "walltime_prediction": 14, 
+                    "dependencies": [], 
+                    "scheduled_date": 1388342404, 
+                    "input_files_size": {
+                        "mods.xml": 117497, 
+                        "usermods.xml": 213, 
+                        "run.sh": 4871, 
+                        "human_DCpSP_ABU_20110615-blast.tgz": 14417326, 
+                        "hrt_params.xml": 4385, 
+                        "X001845CYC+LM_1.mgf": 2005322
+                    }, 
+                    "scheduling_strategy": "Schlouder::Scheduling::Default", 
+                    "input_size": 16549614, 
+                    "runtime": 15.5, 
+                    "provisioning_strategy": "Schlouder::Provisioning::Asap", 
+                    "id": 9697, 
+                    "output_time": 3.1, 
+                    "walltime": 22
+                }, 
+                {
+                    "submission_date": 1388342400, 
+                    "management_time": 1.7588163299999984, 
+                    "input_time": 1.0, 
+                    "name": "X001853CYC+LM_1.mgf", 
+                    "output_size": 3782360, 
+                    "command_line": "/tmp/schlouder/dJqKVryrB3 hrt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/10000/X001853CYC+LM_1.mgf", 
+                    "PSM_data": {
+                        "runtime_prediction": "8", 
+                        "data_in": "21179780", 
+                        "data_out": "4188959"
+                    }, 
+                    "error_time": 0, 
+                    "start_date": 1388342830, 
+                    "output_files_size": {
+                        "X001853CYC+LM_1.log": 4146, 
+                        "X001853CYC+LM_1.omx.gz": 3778214
+                    }, 
+                    "walltime_prediction": 12, 
+                    "dependencies": [], 
+                    "scheduled_date": 1388342404, 
+                    "input_files_size": {
+                        "X001853CYC+LM_1.mgf": 1373671, 
+                        "mods.xml": 117497, 
+                        "usermods.xml": 213, 
+                        "run.sh": 4871, 
+                        "human_DCpSP_ABU_20110615-blast.tgz": 14417326, 
+                        "hrt_params.xml": 4385
+                    }, 
+                    "scheduling_strategy": "Schlouder::Scheduling::Default", 
+                    "input_size": 15917963, 
+                    "runtime": 13.0, 
+                    "provisioning_strategy": "Schlouder::Provisioning::Asap", 
+                    "id": 9698, 
+                    "output_time": 2.3, 
+                    "walltime": 18
+                }, 
+                {
+                    "submission_date": 1388342400, 
+                    "management_time": 2.217792632, 
+                    "input_time": 1.5, 
+                    "name": "X001854CYC+LM_1.mgf", 
+                    "output_size": 2693362, 
+                    "command_line": "/tmp/schlouder/5OdxqUiOIa hrt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/10000/X001854CYC+LM_1.mgf", 
+                    "PSM_data": {
+                        "runtime_prediction": "6", 
+                        "data_in": "21179780", 
+                        "data_out": "4188959"
+                    }, 
+                    "error_time": 0, 
+                    "start_date": 1388342848, 
+                    "output_files_size": {
+                        "X001854CYC+LM_1.log": 4556, 
+                        "X001854CYC+LM_1.omx.gz": 2688806
+                    }, 
+                    "walltime_prediction": 11, 
+                    "dependencies": [], 
+                    "scheduled_date": 1388342404, 
+                    "input_files_size": {
+                        "mods.xml": 117497, 
+                        "usermods.xml": 213, 
+                        "run.sh": 4871, 
+                        "human_DCpSP_ABU_20110615-blast.tgz": 14417326, 
+                        "hrt_params.xml": 4385, 
+                        "X001854CYC+LM_1.mgf": 1161814
+                    }, 
+                    "scheduling_strategy": "Schlouder::Scheduling::Default", 
+                    "input_size": 15706106, 
+                    "runtime": 10.7, 
+                    "provisioning_strategy": "Schlouder::Provisioning::Asap", 
+                    "id": 9699, 
+                    "output_time": 1.5, 
+                    "walltime": 16
+                }
+            ], 
+            "previous_boot_attempts": [], 
+            "stop_date": 1388345955, 
+            "boot_time_prediction": 212, 
+            "instance_id": "/locations/uk-epcc/computes/28441", 
+            "instance_type": "m1.small", 
+            "host": "bonfire-vm-1", 
+            "boot_time": 145, 
+            "start_date": 1388342409, 
+            "cloud": "BonFIRE-epcc", 
+            "user": "emichon"
+        }, 
+        {
+            "jobs": [
+                {
+                    "submission_date": 1388342399, 
+                    "management_time": 2.0657557010000005, 
+                    "input_time": 4.8, 
+                    "name": "X001831CYC+LM_1.mgf", 
+                    "output_size": 4767851, 
+                    "command_line": "/tmp/schlouder/pjQLgmQtWj hrt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/10000/X001831CYC+LM_1.mgf", 
+                    "PSM_data": {
+                        "runtime_prediction": "9", 
+                        "data_in": "21179780", 
+                        "data_out": "4188959"
+                    }, 
+                    "error_time": 0, 
+                    "start_date": 1388342563, 
+                    "output_files_size": {
+                        "X001831CYC+LM_1.log": 3122, 
+                        "X001831CYC+LM_1.omx.gz": 4764729
+                    }, 
+                    "walltime_prediction": 13, 
+                    "dependencies": [], 
+                    "scheduled_date": 1388342404, 
+                    "input_files_size": {
+                        "mods.xml": 117497, 
+                        "usermods.xml": 213, 
+                        "run.sh": 4871, 
+                        "human_DCpSP_ABU_20110615-blast.tgz": 14417326, 
+                        "X001831CYC+LM_1.mgf": 1915732, 
+                        "hrt_params.xml": 4385
+                    }, 
+                    "scheduling_strategy": "Schlouder::Scheduling::Default", 
+                    "input_size": 16460024, 
+                    "runtime": 15.9, 
+                    "provisioning_strategy": "Schlouder::Provisioning::Asap", 
+                    "id": 9667, 
+                    "output_time": 3.2, 
+                    "walltime": 26
+                }, 
+                {
+                    "submission_date": 1388342399, 
+                    "management_time": 0.9068561439999989, 
+                    "input_time": 1.0, 
+                    "name": "X001834CYC+LM_1.mgf", 
+                    "output_size": 5880490, 
+                    "command_line": "/tmp/schlouder/J_BeFz6cl2 hrt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/10000/X001834CYC+LM_1.mgf", 
+                    "PSM_data": {
+                        "runtime_prediction": "11", 
+                        "data_in": "21179780", 
+                        "data_out": "4188959"
+                    }, 
+                    "error_time": 0, 
+                    "start_date": 1388342589, 
+                    "output_files_size": {
+                        "X001834CYC+LM_1.omx.gz": 5878189, 
+                        "X001834CYC+LM_1.log": 2301
+                    }, 
+                    "walltime_prediction": 15, 
+                    "dependencies": [], 
+                    "scheduled_date": 1388342404, 
+                    "input_files_size": {
+                        "mods.xml": 117497, 
+                        "usermods.xml": 213, 
+                        "run.sh": 4871, 
+                        "human_DCpSP_ABU_20110615-blast.tgz": 14417326, 
+                        "hrt_params.xml": 4385, 
+                        "X001834CYC+LM_1.mgf": 2340552
+                    }, 
+                    "scheduling_strategy": "Schlouder::Scheduling::Default", 
+                    "input_size": 16884844, 
+                    "runtime": 17.3, 
+                    "provisioning_strategy": "Schlouder::Provisioning::Asap", 
+                    "id": 9669, 
+                    "output_time": 2.9, 
+                    "walltime": 22
+                }, 
+                {
+                    "submission_date": 1388342399, 
+                    "management_time": 1.5470228500000012, 
+                    "input_time": 1.3, 
+                    "name": "X001835CYC+LM_1.mgf", 
+                    "output_size": 6081671, 
+                    "command_line": "/tmp/schlouder/pzohiYfyqI hrt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/10000/X001835CYC+LM_1.mgf", 
+                    "PSM_data": {
+                        "runtime_prediction": "11", 
+                        "data_in": "21179780", 
+                        "data_out": "4188959"
+                    }, 
+                    "error_time": 0, 
+                    "start_date": 1388342611, 
+                    "output_files_size": {
+                        "X001835CYC+LM_1.omx.gz": 6080436, 
+                        "X001835CYC+LM_1.log": 1235
+                    }, 
+                    "walltime_prediction": 15, 
+                    "dependencies": [], 
+                    "scheduled_date": 1388342404, 
+                    "input_files_size": {
+                        "mods.xml": 117497, 
+                        "usermods.xml": 213, 
+                        "run.sh": 4871, 
+                        "human_DCpSP_ABU_20110615-blast.tgz": 14417326, 
+                        "hrt_params.xml": 4385, 
+                        "X001835CYC+LM_1.mgf": 2669538
+                    }, 
+                    "scheduling_strategy": "Schlouder::Scheduling::Default", 
+                    "input_size": 17213830, 
+                    "runtime": 17.9, 
+                    "provisioning_strategy": "Schlouder::Provisioning::Asap", 
+                    "id": 9671, 
+                    "output_time": 3.3, 
+                    "walltime": 24
+                }, 
+                {
+                    "submission_date": 1388342400, 
+                    "management_time": 1.3067194809999982, 
+                    "input_time": 0.9, 
+                    "name": "X001839CYC+LM_1.mgf", 
+                    "output_size": 5495601, 
+                    "command_line": "/tmp/schlouder/tDd77XOhxR hrt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/10000/X001839CYC+LM_1.mgf", 
+                    "PSM_data": {
+                        "runtime_prediction": "11", 
+                        "data_in": "21179780", 
+                        "data_out": "4188959"
+                    }, 
+                    "error_time": 0, 
+                    "start_date": 1388342635, 
+                    "output_files_size": {
+                        "X001839CYC+LM_1.log": 1973, 
+                        "X001839CYC+LM_1.omx.gz": 5493628
+                    }, 
+                    "walltime_prediction": 15, 
+                    "dependencies": [], 
+                    "scheduled_date": 1388342404, 
+                    "input_files_size": {
+                        "mods.xml": 117497, 
+                        "usermods.xml": 213, 
+                        "run.sh": 4871, 
+                        "human_DCpSP_ABU_20110615-blast.tgz": 14417326, 
+                        "hrt_params.xml": 4385, 
+                        "X001839CYC+LM_1.mgf": 2426630
+                    }, 
+                    "scheduling_strategy": "Schlouder::Scheduling::Default", 
+                    "input_size": 16970922, 
+                    "runtime": 17.3, 
+                    "provisioning_strategy": "Schlouder::Provisioning::Asap", 
+                    "id": 9673, 
+                    "output_time": 2.5, 
+                    "walltime": 22
+                }, 
+                {
+                    "submission_date": 1388342400, 
+                    "management_time": 3.5297586159999987, 
+                    "input_time": 1.6, 
+                    "name": "X001840CYC+LM_1.mgf", 
+                    "output_size": 5374441, 
+                    "command_line": "/tmp/schlouder/sg3L2NMSw1 hrt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/10000/X001840CYC+LM_1.mgf", 
+                    "PSM_data": {
+                        "runtime_prediction": "11", 
+                        "data_in": "21179780", 
+                        "data_out": "4188959"
+                    }, 
+                    "error_time": 0, 
+                    "start_date": 1388342657, 
+                    "output_files_size": {
+                        "X001840CYC+LM_1.log": 2424, 
+                        "X001840CYC+LM_1.omx.gz": 5372017
+                    }, 
+                    "walltime_prediction": 15, 
+                    "dependencies": [], 
+                    "scheduled_date": 1388342404, 
+                    "input_files_size": {
+                        "X001840CYC+LM_1.mgf": 2184804, 
+                        "mods.xml": 117497, 
+                        "usermods.xml": 213, 
+                        "run.sh": 4871, 
+                        "human_DCpSP_ABU_20110615-blast.tgz": 14417326, 
+                        "hrt_params.xml": 4385
+                    }, 
+                    "scheduling_strategy": "Schlouder::Scheduling::Default", 
+                    "input_size": 16729096, 
+                    "runtime": 17.4, 
+                    "provisioning_strategy": "Schlouder::Provisioning::Asap", 
+                    "id": 9676, 
+                    "output_time": 4.5, 
+                    "walltime": 27
+                }, 
+                {
+                    "submission_date": 1388342400, 
+                    "management_time": 1.0112702839999983, 
+                    "input_time": 1.2, 
+                    "name": "X001846CYC+LM_1.mgf", 
+                    "output_size": 4154111, 
+                    "command_line": "/tmp/schlouder/HwMid1Brv3 hrt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/10000/X001846CYC+LM_1.mgf", 
+                    "PSM_data": {
+                        "runtime_prediction": "10", 
+                        "data_in": "21179780", 
+                        "data_out": "4188959"
+                    }, 
+                    "error_time": 0, 
+                    "start_date": 1388342684, 
+                    "output_files_size": {
+                        "X001846CYC+LM_1.omx.gz": 4151236, 
+                        "X001846CYC+LM_1.log": 2875
+                    }, 
+                    "walltime_prediction": 14, 
+                    "dependencies": [], 
+                    "scheduled_date": 1388342404, 
+                    "input_files_size": {
+                        "mods.xml": 117497, 
+                        "usermods.xml": 213, 
+                        "run.sh": 4871, 
+                        "human_DCpSP_ABU_20110615-blast.tgz": 14417326, 
+                        "hrt_params.xml": 4385, 
+                        "X001846CYC+LM_1.mgf": 1902208
+                    }, 
+                    "scheduling_strategy": "Schlouder::Scheduling::Default", 
+                    "input_size": 16446500, 
+                    "runtime": 15.3, 
+                    "provisioning_strategy": "Schlouder::Provisioning::Asap", 
+                    "id": 9681, 
+                    "output_time": 4.5, 
+                    "walltime": 22
+                }, 
+                {
+                    "submission_date": 1388342400, 
+                    "management_time": 0.7185845439999987, 
+                    "input_time": 1.1, 
+                    "name": "X001847CYC+LM_1.mgf", 
+                    "output_size": 4585081, 
+                    "command_line": "/tmp/schlouder/hAyI_wHBwX hrt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/10000/X001847CYC+LM_1.mgf", 
+                    "PSM_data": {
+                        "runtime_prediction": "10", 
+                        "data_in": "21179780", 
+                        "data_out": "4188959"
+                    }, 
+                    "error_time": 0, 
+                    "start_date": 1388342706, 
+                    "output_files_size": {
+                        "X001847CYC+LM_1.log": 2711, 
+                        "X001847CYC+LM_1.omx.gz": 4582370
+                    }, 
+                    "walltime_prediction": 14, 
+                    "dependencies": [], 
+                    "scheduled_date": 1388342404, 
+                    "input_files_size": {
+                        "mods.xml": 117497, 
+                        "usermods.xml": 213, 
+                        "run.sh": 4871, 
+                        "human_DCpSP_ABU_20110615-blast.tgz": 14417326, 
+                        "hrt_params.xml": 4385, 
+                        "X001847CYC+LM_1.mgf": 1894614
+                    }, 
+                    "scheduling_strategy": "Schlouder::Scheduling::Default", 
+                    "input_size": 16438906, 
+                    "runtime": 15.3, 
+                    "provisioning_strategy": "Schlouder::Provisioning::Asap", 
+                    "id": 9684, 
+                    "output_time": 2.9, 
+                    "walltime": 20
+                }, 
+                {
+                    "submission_date": 1388342400, 
+                    "management_time": 1.6726307069999997, 
+                    "input_time": 0.5, 
+                    "name": "X001855CYC+LM_1.mgf", 
+                    "output_size": 2797687, 
+                    "command_line": "/tmp/schlouder/jP8p14mV5d hrt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/10000/X001855CYC+LM_1.mgf", 
+                    "PSM_data": {
+                        "runtime_prediction": "7", 
+                        "data_in": "21179780", 
+                        "data_out": "4188959"
+                    }, 
+                    "error_time": 0, 
+                    "start_date": 1388342728, 
+                    "output_files_size": {
+                        "X001855CYC+LM_1.omx.gz": 2793418, 
+                        "X001855CYC+LM_1.log": 4269
+                    }, 
+                    "walltime_prediction": 11, 
+                    "dependencies": [], 
+                    "scheduled_date": 1388342404, 
+                    "input_files_size": {
+                        "mods.xml": 117497, 
+                        "usermods.xml": 213, 
+                        "run.sh": 4871, 
+                        "human_DCpSP_ABU_20110615-blast.tgz": 14417326, 
+                        "hrt_params.xml": 4385, 
+                        "X001855CYC+LM_1.mgf": 1071208
+                    }, 
+                    "scheduling_strategy": "Schlouder::Scheduling::Default", 
+                    "input_size": 15615500, 
+                    "runtime": 11.8, 
+                    "provisioning_strategy": "Schlouder::Provisioning::Asap", 
+                    "id": 9688, 
+                    "output_time": 2.0, 
+                    "walltime": 16
+                }, 
+                {
+                    "submission_date": 1388342400, 
+                    "management_time": 2.401727353, 
+                    "input_time": 1.0, 
+                    "name": "X001856CYC+LM_1.mgf", 
+                    "output_size": 2150469, 
+                    "command_line": "/tmp/schlouder/zPjcVHL1B8 hrt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/10000/X001856CYC+LM_1.mgf", 
+                    "PSM_data": {
+                        "runtime_prediction": "7", 
+                        "data_in": "21179780", 
+                        "data_out": "4188959"
+                    }, 
+                    "error_time": 0, 
+                    "start_date": 1388342744, 
+                    "output_files_size": {
+                        "X001856CYC+LM_1.omx.gz": 2146323, 
+                        "X001856CYC+LM_1.log": 4146
+                    }, 
+                    "walltime_prediction": 11, 
+                    "dependencies": [], 
+                    "scheduled_date": 1388342404, 
+                    "input_files_size": {
+                        "mods.xml": 117497, 
+                        "usermods.xml": 213, 
+                        "run.sh": 4871, 
+                        "human_DCpSP_ABU_20110615-blast.tgz": 14417326, 
+                        "hrt_params.xml": 4385, 
+                        "X001856CYC+LM_1.mgf": 905191
+                    }, 
+                    "scheduling_strategy": "Schlouder::Scheduling::Default", 
+                    "input_size": 15449483, 
+                    "runtime": 11.0, 
+                    "provisioning_strategy": "Schlouder::Provisioning::Asap", 
+                    "id": 9690, 
+                    "output_time": 1.6, 
+                    "walltime": 16
+                }
+            ], 
+            "previous_boot_attempts": [], 
+            "stop_date": 1388345960, 
+            "boot_time_prediction": 274, 
+            "instance_id": "/locations/uk-epcc/computes/28443", 
+            "instance_type": "m1.small", 
+            "host": "bonfire-vm-3", 
+            "boot_time": 152, 
+            "start_date": 1388342409, 
+            "cloud": "BonFIRE-epcc", 
+            "user": "emichon"
+        }, 
+        {
+            "jobs": [
+                {
+                    "submission_date": 1388342400, 
+                    "management_time": 2.9261142100000015, 
+                    "input_time": 3.3, 
+                    "name": "X001836CYC+LM_1.mgf", 
+                    "output_size": 6325127, 
+                    "command_line": "/tmp/schlouder/JaUnDM3gHm hrt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/10000/X001836CYC+LM_1.mgf", 
+                    "PSM_data": {
+                        "runtime_prediction": "12", 
+                        "data_in": "21179780", 
+                        "data_out": "4188959"
+                    }, 
+                    "error_time": 0, 
+                    "start_date": 1388342649, 
+                    "output_files_size": {
+                        "X001836CYC+LM_1.log": 1523, 
+                        "X001836CYC+LM_1.omx.gz": 6323604
+                    }, 
+                    "walltime_prediction": 16, 
+                    "dependencies": [], 
+                    "scheduled_date": 1388342404, 
+                    "input_files_size": {
+                        "X001836CYC+LM_1.mgf": 2825667, 
+                        "mods.xml": 117497, 
+                        "usermods.xml": 213, 
+                        "run.sh": 4871, 
+                        "human_DCpSP_ABU_20110615-blast.tgz": 14417326, 
+                        "hrt_params.xml": 4385
+                    }, 
+                    "scheduling_strategy": "Schlouder::Scheduling::Default", 
+                    "input_size": 17369959, 
+                    "runtime": 18.7, 
+                    "provisioning_strategy": "Schlouder::Provisioning::Asap", 
+                    "id": 9675, 
+                    "output_time": 4.0, 
+                    "walltime": 29
+                }, 
+                {
+                    "submission_date": 1388342400, 
+                    "management_time": 2.0201062719999996, 
+                    "input_time": 3.2, 
+                    "name": "X001841CYC+LM_1.mgf", 
+                    "output_size": 4157981, 
+                    "command_line": "/tmp/schlouder/DLOr_wd1_2 hrt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/10000/X001841CYC+LM_1.mgf", 
+                    "PSM_data": {
+                        "runtime_prediction": "9", 
+                        "data_in": "21179780", 
+                        "data_out": "4188959"
+                    }, 
+                    "error_time": 0, 
+                    "start_date": 1388342678, 
+                    "output_files_size": {
+                        "X001841CYC+LM_1.omx.gz": 4155352, 
+                        "X001841CYC+LM_1.log": 2629
+                    }, 
+                    "walltime_prediction": 13, 
+                    "dependencies": [], 
+                    "scheduled_date": 1388342404, 
+                    "input_files_size": {
+                        "mods.xml": 117497, 
+                        "usermods.xml": 213, 
+                        "run.sh": 4871, 
+                        "human_DCpSP_ABU_20110615-blast.tgz": 14417326, 
+                        "hrt_params.xml": 4385, 
+                        "X001841CYC+LM_1.mgf": 1702312
+                    }, 
+                    "scheduling_strategy": "Schlouder::Scheduling::Default", 
+                    "input_size": 16246604, 
+                    "runtime": 14.5, 
+                    "provisioning_strategy": "Schlouder::Provisioning::Asap", 
+                    "id": 9679, 
+                    "output_time": 2.3, 
+                    "walltime": 22
+                }, 
+                {
+                    "submission_date": 1388342400, 
+                    "management_time": 2.5605389380000005, 
+                    "input_time": 4.9, 
+                    "name": "X001842CYC+LM_1.mgf", 
+                    "output_size": 4636769, 
+                    "command_line": "/tmp/schlouder/neyWC6ovS4 hrt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/10000/X001842CYC+LM_1.mgf", 
+                    "PSM_data": {
+                        "runtime_prediction": "10", 
+                        "data_in": "21179780", 
+                        "data_out": "4188959"
+                    }, 
+                    "error_time": 0, 
+                    "start_date": 1388342700, 
+                    "output_files_size": {
+                        "X001842CYC+LM_1.log": 2629, 
+                        "X001842CYC+LM_1.omx.gz": 4634140
+                    }, 
+                    "walltime_prediction": 14, 
+                    "dependencies": [], 
+                    "scheduled_date": 1388342404, 
+                    "input_files_size": {
+                        "X001842CYC+LM_1.mgf": 1978033, 
+                        "mods.xml": 117497, 
+                        "usermods.xml": 213, 
+                        "run.sh": 4871, 
+                        "human_DCpSP_ABU_20110615-blast.tgz": 14417326, 
+                        "hrt_params.xml": 4385
+                    }, 
+                    "scheduling_strategy": "Schlouder::Scheduling::Default", 
+                    "input_size": 16522325, 
+                    "runtime": 15.7, 
+                    "provisioning_strategy": "Schlouder::Provisioning::Asap", 
+                    "id": 9683, 
+                    "output_time": 2.8, 
+                    "walltime": 26
+                }, 
+                {
+                    "submission_date": 1388342400, 
+                    "management_time": 1.0493475210000014, 
+                    "input_time": 1.0, 
+                    "name": "X001848CYC+LM_1.mgf", 
+                    "output_size": 4699302, 
+                    "command_line": "/tmp/schlouder/ib8dycYpnv hrt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/10000/X001848CYC+LM_1.mgf", 
+                    "PSM_data": {
+                        "runtime_prediction": "10", 
+                        "data_in": "21179780", 
+                        "data_out": "4188959"
+                    }, 
+                    "error_time": 0, 
+                    "start_date": 1388342726, 
+                    "output_files_size": {
+                        "X001848CYC+LM_1.log": 3531, 
+                        "X001848CYC+LM_1.omx.gz": 4695771
+                    }, 
+                    "walltime_prediction": 14, 
+                    "dependencies": [], 
+                    "scheduled_date": 1388342404, 
+                    "input_files_size": {
+                        "mods.xml": 117497, 
+                        "usermods.xml": 213, 
+                        "run.sh": 4871, 
+                        "human_DCpSP_ABU_20110615-blast.tgz": 14417326, 
+                        "hrt_params.xml": 4385, 
+                        "X001848CYC+LM_1.mgf": 1804174
+                    }, 
+                    "scheduling_strategy": "Schlouder::Scheduling::Default", 
+                    "input_size": 16348466, 
+                    "runtime": 15.5, 
+                    "provisioning_strategy": "Schlouder::Provisioning::Asap", 
+                    "id": 9687, 
+                    "output_time": 2.4, 
+                    "walltime": 20
+                }, 
+                {
+                    "submission_date": 1388342400, 
+                    "management_time": 2.0317065959999994, 
+                    "input_time": 0.8, 
+                    "name": "X001849CYC+LM_1.mgf", 
+                    "output_size": 4226387, 
+                    "command_line": "/tmp/schlouder/pLoWWIOaAX hrt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/10000/X001849CYC+LM_1.mgf", 
+                    "PSM_data": {
+                        "runtime_prediction": "9", 
+                        "data_in": "21179780", 
+                        "data_out": "4188959"
+                    }, 
+                    "error_time": 0, 
+                    "start_date": 1388342746, 
+                    "output_files_size": {
+                        "X001849CYC+LM_1.omx.gz": 4222938, 
+                        "X001849CYC+LM_1.log": 3449
+                    }, 
+                    "walltime_prediction": 13, 
+                    "dependencies": [], 
+                    "scheduled_date": 1388342404, 
+                    "input_files_size": {
+                        "X001849CYC+LM_1.mgf": 1544804, 
+                        "mods.xml": 117497, 
+                        "usermods.xml": 213, 
+                        "run.sh": 4871, 
+                        "human_DCpSP_ABU_20110615-blast.tgz": 14417326, 
+                        "hrt_params.xml": 4385
+                    }, 
+                    "scheduling_strategy": "Schlouder::Scheduling::Default", 
+                    "input_size": 16089096, 
+                    "runtime": 14.5, 
+                    "provisioning_strategy": "Schlouder::Provisioning::Asap", 
+                    "id": 9691, 
+                    "output_time": 2.7, 
+                    "walltime": 20
+                }, 
+                {
+                    "submission_date": 1388342400, 
+                    "management_time": 1.3393307720000003, 
+                    "input_time": 0.8, 
+                    "name": "X001857CYC+LM_1.mgf", 
+                    "output_size": 830551, 
+                    "command_line": "/tmp/schlouder/Tyc6Cp48Qh hrt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/10000/X001857CYC+LM_1.mgf", 
+                    "PSM_data": {
+                        "runtime_prediction": "4", 
+                        "data_in": "21179780", 
+                        "data_out": "4188959"
+                    }, 
+                    "error_time": 0, 
+                    "start_date": 1388342766, 
+                    "output_files_size": {
+                        "X001857CYC+LM_1.omx.gz": 823781, 
+                        "X001857CYC+LM_1.log": 6770
+                    }, 
+                    "walltime_prediction": 8, 
+                    "dependencies": [], 
+                    "scheduled_date": 1388342404, 
+                    "input_files_size": {
+                        "mods.xml": 117497, 
+                        "usermods.xml": 213, 
+                        "run.sh": 4871, 
+                        "human_DCpSP_ABU_20110615-blast.tgz": 14417326, 
+                        "hrt_params.xml": 4385, 
+                        "X001857CYC+LM_1.mgf": 537882
+                    }, 
+                    "scheduling_strategy": "Schlouder::Scheduling::Default", 
+                    "input_size": 15082174, 
+                    "runtime": 7.2, 
+                    "provisioning_strategy": "Schlouder::Provisioning::Asap", 
+                    "id": 9694, 
+                    "output_time": 0.7, 
+                    "walltime": 10
+                }
+            ], 
+            "previous_boot_attempts": [], 
+            "stop_date": 1388345961, 
+            "boot_time_prediction": 304, 
+            "instance_id": "/locations/uk-epcc/computes/28442", 
+            "instance_type": "m1.small", 
+            "host": "bonfire-vm-2", 
+            "boot_time": 239, 
+            "start_date": 1388342409, 
+            "cloud": "BonFIRE-epcc", 
+            "user": "emichon"
+        }, 
+        {
+            "jobs": [
+                {
+                    "submission_date": 1388342400, 
+                    "management_time": 2.3329789850000004, 
+                    "input_time": 3.0, 
+                    "name": "X001843CYC_1964+LM_1.mgf", 
+                    "output_size": 183459, 
+                    "command_line": "/tmp/schlouder/RwdD3aOT2Q hrt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/10000/X001843CYC_1964+LM_1.mgf", 
+                    "PSM_data": {
+                        "runtime_prediction": "1", 
+                        "data_in": "21179780", 
+                        "data_out": "4188959"
+                    }, 
+                    "error_time": 0, 
+                    "start_date": 1388342667, 
+                    "output_files_size": {
+                        "X001843CYC_1964+LM_1.omx.gz": 178574, 
+                        "X001843CYC_1964+LM_1.log": 4885
+                    }, 
+                    "walltime_prediction": 5, 
+                    "dependencies": [], 
+                    "scheduled_date": 1388342404, 
+                    "input_files_size": {
+                        "mods.xml": 117497, 
+                        "usermods.xml": 213, 
+                        "X001843CYC_1964+LM_1.mgf": 236785, 
+                        "human_DCpSP_ABU_20110615-blast.tgz": 14417326, 
+                        "hrt_params.xml": 4385, 
+                        "run.sh": 4871
+                    }, 
+                    "scheduling_strategy": "Schlouder::Scheduling::Default", 
+                    "input_size": 14781077, 
+                    "runtime": 11.2, 
+                    "provisioning_strategy": "Schlouder::Provisioning::Asap", 
+                    "id": 9678, 
+                    "output_time": 0.4, 
+                    "walltime": 17
+                }, 
+                {
+                    "submission_date": 1388342400, 
+                    "management_time": 1.4263196540000003, 
+                    "input_time": 2.1, 
+                    "name": "X001850CYC+LM_1.mgf", 
+                    "output_size": 4306337, 
+                    "command_line": "/tmp/schlouder/gY56tMP9eI hrt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/10000/X001850CYC+LM_1.mgf", 
+                    "PSM_data": {
+                        "runtime_prediction": "9", 
+                        "data_in": "21179780", 
+                        "data_out": "4188959"
+                    }, 
+                    "error_time": 0, 
+                    "start_date": 1388342684, 
+                    "output_files_size": {
+                        "X001850CYC+LM_1.omx.gz": 4302068, 
+                        "X001850CYC+LM_1.log": 4269
+                    }, 
+                    "walltime_prediction": 13, 
+                    "dependencies": [], 
+                    "scheduled_date": 1388342404, 
+                    "input_files_size": {
+                        "X001850CYC+LM_1.mgf": 1633317, 
+                        "mods.xml": 117497, 
+                        "usermods.xml": 213, 
+                        "run.sh": 4871, 
+                        "human_DCpSP_ABU_20110615-blast.tgz": 14417326, 
+                        "hrt_params.xml": 4385
+                    }, 
+                    "scheduling_strategy": "Schlouder::Scheduling::Default", 
+                    "input_size": 16177609, 
+                    "runtime": 26.2, 
+                    "provisioning_strategy": "Schlouder::Provisioning::Asap", 
+                    "id": 9680, 
+                    "output_time": 2.3, 
+                    "walltime": 32
+                }, 
+                {
+                    "submission_date": 1388342400, 
+                    "management_time": 2.1067181039999987, 
+                    "input_time": 1.0, 
+                    "name": "X001851CYC+LM_1.mgf", 
+                    "output_size": 4044465, 
+                    "command_line": "/tmp/schlouder/aaiVk3KdXe hrt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/10000/X001851CYC+LM_1.mgf", 
+                    "PSM_data": {
+                        "runtime_prediction": "9", 
+                        "data_in": "21179780", 
+                        "data_out": "4188959"
+                    }, 
+                    "error_time": 0, 
+                    "start_date": 1388342716, 
+                    "output_files_size": {
+                        "X001851CYC+LM_1.log": 5048, 
+                        "X001851CYC+LM_1.omx.gz": 4039417
+                    }, 
+                    "walltime_prediction": 13, 
+                    "dependencies": [], 
+                    "scheduled_date": 1388342404, 
+                    "input_files_size": {
+                        "X001851CYC+LM_1.mgf": 1461494, 
+                        "mods.xml": 117497, 
+                        "usermods.xml": 213, 
+                        "run.sh": 4871, 
+                        "human_DCpSP_ABU_20110615-blast.tgz": 14417326, 
+                        "hrt_params.xml": 4385
+                    }, 
+                    "scheduling_strategy": "Schlouder::Scheduling::Default", 
+                    "input_size": 16005786, 
+                    "runtime": 20.2, 
+                    "provisioning_strategy": "Schlouder::Provisioning::Asap", 
+                    "id": 9686, 
+                    "output_time": 2.7, 
+                    "walltime": 26
+                }
+            ], 
+            "previous_boot_attempts": [], 
+            "stop_date": 1388345962, 
+            "boot_time_prediction": 335, 
+            "instance_id": "/locations/uk-epcc/computes/28444", 
+            "instance_type": "m1.small", 
+            "host": "bonfire-vm-4", 
+            "boot_time": 256, 
+            "start_date": 1388342409, 
+            "cloud": "BonFIRE-epcc", 
+            "user": "emichon"
+        }, 
+        {
+            "jobs": [
+                {
+                    "submission_date": 1388342400, 
+                    "management_time": 2.459559302999999, 
+                    "input_time": 6.8, 
+                    "name": "X001852CYC+LM_1.mgf", 
+                    "output_size": 3934188, 
+                    "command_line": "/tmp/schlouder/1jIfRsWCrQ hrt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/haute_resolution/input/10000/X001852CYC+LM_1.mgf", 
+                    "PSM_data": {
+                        "runtime_prediction": "8", 
+                        "data_in": "21179780", 
+                        "data_out": "4188959"
+                    }, 
+                    "error_time": 0, 
+                    "start_date": 1388342760, 
+                    "output_files_size": {
+                        "X001852CYC+LM_1.omx.gz": 3930574, 
+                        "X001852CYC+LM_1.log": 3614
+                    }, 
+                    "walltime_prediction": 12, 
+                    "dependencies": [], 
+                    "scheduled_date": 1388342404, 
+                    "input_files_size": {
+                        "mods.xml": 117497, 
+                        "usermods.xml": 213, 
+                        "run.sh": 4871, 
+                        "human_DCpSP_ABU_20110615-blast.tgz": 14417326, 
+                        "hrt_params.xml": 4385, 
+                        "X001852CYC+LM_1.mgf": 1458248
+                    }, 
+                    "scheduling_strategy": "Schlouder::Scheduling::Default", 
+                    "input_size": 16002540, 
+                    "runtime": 20.7, 
+                    "provisioning_strategy": "Schlouder::Provisioning::Asap", 
+                    "id": 9693, 
+                    "output_time": 2.1, 
+                    "walltime": 32
+                }
+            ], 
+            "previous_boot_attempts": [], 
+            "stop_date": 1388345963, 
+            "boot_time_prediction": 366, 
+            "instance_id": "/locations/uk-epcc/computes/28445", 
+            "instance_type": "m1.small", 
+            "host": "bonfire-vm-5", 
+            "boot_time": 349, 
+            "start_date": 1388342409, 
+            "cloud": "BonFIRE-epcc", 
+            "user": "emichon"
+        }
+    ]
+}
