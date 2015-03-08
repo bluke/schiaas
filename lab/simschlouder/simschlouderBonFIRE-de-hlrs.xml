@@ -12,7 +12,7 @@
 	<cloud id="bonfire-uk-epcc" B0="86.12" B1="42.44" BTU="3600" shutdown_margin="50" max_instances_per_user="20" standard_power="1.228312e9" />
 	
 	<provisioning>
-		<config cloud="bonfire-de-hlrs" storage="bonfire-de-hlrs-image_repo" image="schlouder_image" instance_type="small" />
+		<config cloud="bonfire-de-hlrs" storage="bonfire-de-hlrs-image_repo" image="schlouder_image" instance_type="small" idle_date_bug="true"/>
 	</provisioning>
 </simschlouder> 
  

@@ -52,28 +52,25 @@ public class SimSchlouder {
 		
 		// TODO: Errors
 		public void readTaskFile(String fileName) throws FileNotFoundException, HostFailureException {
+			
+		    Locale.setDefault(new Locale("en", "US"));
+			
 			Scanner scf = new Scanner(new File(fileName));
 			HashMap<String, SchloudTask> taskMap = new HashMap<String, SchloudTask>();
 			
 			double oldSubmissionDate = 0;
 			
-			Scanner sc = new Scanner(scf.nextLine());
-			if (sc.hasNext("\\[provisioning\\_dates\\]")) {
-				SchloudController.provisioningDates = new Vector<Double>();
-				sc.close();
-				sc = new Scanner(scf.nextLine());
-				do {
-					SchloudController.provisioningDates.add(sc.nextDouble());
-					sc = new Scanner(scf.nextLine());
-				} while (sc.hasNextDouble());
-			}
-			
+			Scanner sc = new Scanner(scf.nextLine());			
 			if (sc.hasNext("\\[boots\\]")) {
 				sc.close();
 				sc = new Scanner(scf.nextLine());
 				do {
-					SchloudController.schloudCloud.bootTimePredictions.add(sc.nextInt());
+					SchloudController.schloudCloud.bootTimePredictions.add(sc.nextDouble());
 					SchloudController.schloudCloud.bootTimes.add(sc.nextInt());
+					if (sc.hasNextInt())
+						SchloudController.schloudCloud.provisioningDates.add(sc.nextInt());
+					if (sc.hasNextInt())
+						SchloudController.schloudCloud.lagTimes.add(sc.nextInt());
 					sc = new Scanner(scf.nextLine());
 				} while (!sc.hasNext("\\[tasks\\]"));				
 			} else {

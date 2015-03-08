@@ -1,5 +1,6 @@
 package simschlouder.algorithms;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.TreeMap;
 
@@ -8,6 +9,7 @@ import org.simgrid.msg.Msg;
 import simschlouder.SchloudController;
 import simschlouder.SchloudNode;
 import simschlouder.SchloudTask;
+import simschlouder.SchloudTask.STATE;
 import simschlouder.util.DAGutils;
 import simschlouder.util.SimSchlouderException;
 
@@ -35,8 +37,7 @@ public abstract class AStrategy {
 	 * Runs the task placement strategy
 	 * @throws SimSchlouderException
 	 */
-	public void execute() throws SimSchlouderException {		
-		SchloudController.schloudCloud.resetBootCount();
+	public void execute() throws SimSchlouderException {
 		
 		TreeMap<Integer, LinkedList<SchloudTask>> tasks = null;
 		DAGutils dag = DAGutils.getDAG(SchloudController.mainQueue);
@@ -70,7 +71,11 @@ public abstract class AStrategy {
 					iTask++;
 					continue;
 				}
+				
+				task.setState(STATE.SCHEDULED);
 
+				// Sort to imitate the order of Schlouder
+				Collections.sort(SchloudController.nodes);
 				//apply strategy
 				node = this.applyStrategy(task);
 				

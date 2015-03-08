@@ -27,6 +27,8 @@ public class AFAP extends AStrategy {
 		
 		double candidatePredictedIdleTime = SchloudController.schloudCloud.getBtuTime();
 		
+		Msg.info("AFAP Strategy for "+task);
+	
 		for (SchloudNode node : SchloudController.nodes) {
 
 			// Look for the first instance to become available
@@ -47,11 +49,16 @@ public class AFAP extends AStrategy {
 			
 			//Msg.info(predictedIdleTime+"<"+currentidleTime+" && "+predictedIdleTime+"<"+candidatePredictedIdleTime);
 			//  <= After bugfix
-			if ( predictedIdleTime < currentIdleTime )
-				if ( candidate == null ||  predictedIdleTime <= candidatePredictedIdleTime ) {
+			if ( predictedIdleTime <= currentIdleTime )
+				if ( candidate == null ||  predictedIdleTime < candidatePredictedIdleTime ) {
 					candidate = node;
 					candidatePredictedIdleTime = predictedIdleTime;
 				} 
+			
+			Msg.info("AFAP "+node.instanceId+"("+node.getState()+"): "+currentIdleTime+" >= "+predictedIdleTime
+					+" < "+candidatePredictedIdleTime
+					+" - "+finishSooner.instanceId+"\t"+((candidate!=null)?candidate.instanceId:"null"));
+
 		}
 		
 		//Msg.info("Candidate for "+task.getName()+" is "+candidate+" ("+finishSooner+")");

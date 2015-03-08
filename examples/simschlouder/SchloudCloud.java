@@ -1,6 +1,8 @@
 package simschlouder;
 
 import java.util.LinkedList;
+
+import org.simgrid.msg.Msg;
 import org.simgrid.schiaas.Compute;
 import org.simgrid.schiaas.SchIaaS;
 import org.simgrid.schiaas.Storage;
@@ -37,7 +39,14 @@ public class SchloudCloud {
 	protected LinkedList<Integer> bootTimes;
 	
 	/** List of bootTime predictions, as exactly observed in real experiments */
-	protected LinkedList<Integer> bootTimePredictions;
+	protected LinkedList<Double> bootTimePredictions;
+
+	/** List of provisioning dates, as exactly observed in real experiments */
+	protected LinkedList<Integer> provisioningDates;
+
+	/** List of lag time (after boot date, before first task start), as exactly observed in real experiments */
+	protected LinkedList<Integer> lagTimes;
+
 	
 	/** The compute to use. */
 	public Compute compute;
@@ -79,7 +88,9 @@ public class SchloudCloud {
 		this.standardPower= standardPower;
 		
 		bootTimes = new LinkedList<Integer>();
-		bootTimePredictions = new LinkedList<Integer>();
+		bootTimePredictions = new LinkedList<Double>();
+		provisioningDates = new LinkedList<Integer>();
+		lagTimes = new LinkedList<Integer>();
 	}
 		
 	
@@ -96,6 +107,7 @@ public class SchloudCloud {
 	 * Resets the number of booted VMs in this cloud
 	 */
 	public void resetBootCount() {
+		Msg.info("RESET BOOT COUNT");
 		bootCount=0;
 	}
 	
@@ -103,6 +115,7 @@ public class SchloudCloud {
 	 * Adds one VM to the list of booted machines
 	 */
 	public void incrementBootCount() {
+		Msg.info("INC BOOT COUNT "+ bootCount);
 		this.bootCount++;
 	}
 	
@@ -112,9 +125,9 @@ public class SchloudCloud {
 	 * @return the predicted boot time in seconds, using predictions reported in experiments when available.
 	 */
 	public double getBootTimePrediction() {
-		if (!bootTimePredictions.isEmpty())
-			return bootTimePredictions.peekFirst();
-		return (bootTimeB0+bootTimeB1*(bootCount+1));
+		// Da bug
+		if (bootCount == 1) bootCount = 2;
+		return Math.round(bootTimeB0+bootTimeB1*bootCount);
 	}
 	
 	/**

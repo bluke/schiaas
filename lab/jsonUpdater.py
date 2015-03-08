@@ -55,11 +55,11 @@ def cmpjob_name(j1, j2):
 	# if not pleiade	
 	if not is_montage :
 		if j1['name'] == j2['name'] : return 0
-		if j1['name'].replace("_","+") < j2['name'].replace("_","+") : return -1
+		if j1['name'].replace("_","+") < j2['name'].replace("_","+"): return -1
 		return 1
 
-	js1 = j1.split('_')
-	js2 = j2.split('_')
+	js1 = j1['name'].split('_')
+	js2 = j2['name'].split('_')
 
 	# project types
 	if len(js1) < 5 : return 1 # for gather
@@ -86,33 +86,61 @@ with open(args.json_file) as fp:
 	if 'nodes' in fullresults:
 		results = fullresults['nodes']
 	else:
-		result = fullresults
+		results = fullresults
+		fullresults = {}
 		fullresults['nodes'] = results
+		fullresults['info'] = {}
 
 jobs = []
+results.sort(cmpvm)
 for vm in results:
 	if not 'host' in vm:
-		vm['host'] = vm['instance_id']
+		vm['host'] = vm['instance_id']	
 	jobs += vm['jobs']
 
 # Get the first submission date of the jobs
 first_submission_date = sorted(jobs, key=lambda j: j['submission_date'])[0]['submission_date']
 
 
+# to fix the missing scheduled_date
+current_min_scheduled_date = first_submission_date
+future_min_scheduled_date = results[0]['start_date']
+min_scheduled_date = {}
+for vm in results:
+	if vm['start_date'] > future_min_scheduled_date:
+		current_min_scheduled_date = future_min_scheduled_date
+		future_min_scheduled_date = vm['start_date']
+#	print ("{0} {1} {2}".format(
+#		vm['instance_id'], current_min_scheduled_date, future_min_scheduled_date))
+	for job in vm['jobs']:
+		min_scheduled_date[job['id']] = current_min_scheduled_date
+		if job['submission_date'] == 0:
+			min_scheduled_date[job['id']] += 1
+
+
+
 # update the jobs
+scheduled_dates_status = "logged"
 jobs.sort(cmpjob_name)
+scheduled_date = 0
 for job in jobs:
 	# add the standard_walltimes
 	if not 'standard_walltime' in job:
 		job['standard_walltime'] = job['walltime']
-
 	# fix the missing scheduled_dates
 	if not 'scheduled_date' in job:
-		job['scheduled_date'] = job['submission_date']
-		if 'dependencies' in job:
+		scheduled_dates_status = "infered"
+		
+		job['scheduled_date'] = max(
+			scheduled_date,
+			job['submission_date'] + min_scheduled_date[job['id']] - first_submission_date )
+		
+		if 'dependencies' in job and len (job['dependencies']) > 0:
 			for dep in job['dependencies']:
 				if job['scheduled_date'] < jobs_dict[dep]['start_date']+jobs_dict[dep]['walltime']:
 					job['scheduled_date'] = jobs_dict[dep]['start_date']+jobs_dict[dep]['walltime']
+		else:
+			scheduled_date = job['scheduled_date']
 
 	# fix the dates
 	job['submission_date'] -= first_submission_date
@@ -120,19 +148,24 @@ for job in jobs:
 	job['scheduled_date'] -= first_submission_date
 
 	# add the index
-	job['index'] = jobs.index(job)
+	if 'index' not in job:
+		job['index'] = jobs.index(job)
 	
 
 # Update the vms
 results.sort(cmp=cmpvm)
 for vm in results:
 	vm['start_date'] -= first_submission_date
-	vm['stop_date'] -= first_submission_date
-	vm['index'] = results.index(vm)
+	if vm['stop_date'] is not None:
+		vm['stop_date'] -= first_submission_date
+	if 'index' not in vm:
+		vm['index'] = results.index(vm)
+
 
 # Update the general infos
 fullresults['info']['updated_to_version'] = subprocess.check_output(['git', 'log', '-n1', '--format=format:"%H"', 'jsonUpdater.py'])
 fullresults['info']['first_date'] = first_submission_date
+fullresults['info']['scheduled_dates'] = scheduled_dates_status
 
 # Output the result
 print json.dumps(fullresults, sort_keys=True,

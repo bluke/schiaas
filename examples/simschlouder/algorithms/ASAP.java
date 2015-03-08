@@ -1,5 +1,7 @@
 package simschlouder.algorithms;
 
+import java.util.Collections;
+
 import org.simgrid.msg.Msg;
 
 import simschlouder.SchloudController;
@@ -22,12 +24,14 @@ public class ASAP extends AStrategy {
 	protected SchloudNode applyStrategy(SchloudTask task) {
 		SchloudNode candidate = null;
 		SchloudNode finishSooner = null;
+	
+		Msg.info("ASAP Strategy for "+task);
+		
 		if (!SchloudController.nodes.isEmpty())
 			finishSooner = SchloudController.nodes.firstElement();
 		
 		for (SchloudNode node : SchloudController.nodes) {
-			//Msg.info("ASAP : "+(Msg.getClock()+cloud.getBootTimePrediction())+"("+cloud.getBootTimePrediction()+ " " + cloud.bootCount + ") - "+ node.getIdleDate());
-			
+						
 			// Look for the first instance to become available
 			if (node.getIdleDate() < finishSooner.getIdleDate())
 				finishSooner = node;
@@ -36,6 +40,12 @@ public class ASAP extends AStrategy {
 			if (node.getIdleDate() < Msg.getClock()+SchloudController.schloudCloud.getBootTimePrediction()) 
 				if ( candidate == null || node.getRemainingIdleTime(task) < candidate.getRemainingIdleTime(task) )
 					candidate = node;
+
+			// Track one given task
+			//if (task.getName().equals("F025743DA_1.mgf"))  
+				Msg.info("ASAP "+node.instanceId+"("+node.getState()+"): "+node.getIdleDate()+"<"+(Msg.getClock()+SchloudController.schloudCloud.getBootTimePrediction())
+					+" / "+node.getRemainingIdleTime(task)
+					+" - "+finishSooner.instanceId+"\t"+((candidate!=null)?candidate.instanceId:"null"));
 		}
 		
 		// If no new instance can be started

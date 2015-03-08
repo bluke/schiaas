@@ -23,7 +23,7 @@ public class SchloudTask {
 	 * @author julien.gossa@unistra.fr
 	 *
 	 */
-	public enum STATE {PENDING,SUBMITTED,INPUTTING,RUNNING,OUTPUTTING,FINISHED,COMPLETE};
+	public enum STATE {PENDING,SCHEDULED,SUBMITTED,INPUTTING,RUNNING,OUTPUTTING,FINISHED,COMPLETE};
 	
 	/**
 	 * Represents an event for the instance: a date and the state of the instance since this date.
@@ -43,6 +43,12 @@ public class SchloudTask {
 
 	/** The name of the task */
 	protected String name;
+	
+	/** The id of the task */
+	protected int id;
+	
+	/** The current id of tasks */
+	static int currentId = 0;
 	
 	/** The prediction of the walltime of the task */
 	protected double walltimePrediction;
@@ -90,6 +96,7 @@ public class SchloudTask {
 	 */
 	public SchloudTask(String name, double walltimePrediction, double runtime, double inputSize,  double outputSize, Vector<SchloudTask> dependencies) {
 		this.name = name;
+		this.id = currentId++;
 		
 		this.walltimePrediction = walltimePrediction;
 		this.standardWalltime = runtime;
@@ -253,10 +260,12 @@ public class SchloudTask {
 	public void writeJSON(BufferedWriter out) throws IOException, SimSchlouderException {
 		// TODO: add scheduling_strategy
 		// TODO: check walltime/runtime
-		out.write("\t\t\t\t\"id\": \""+name+"\",\n");
+		out.write("\t\t\t\t\"id\": \""+id+"\",\n");
+		out.write("\t\t\t\t\"index\": "+id+",\n");
 		out.write("\t\t\t\t\"name\": \""+name+"\",\n");
 		out.write("\t\t\t\t\"provisioning_strategy\": \""+SchloudController.strategy.getName()+"\",\n"); // NOT THE PREDICTION USED ACTUALLY
 		out.write("\t\t\t\t\"submission_date\": "+getSubmissionDate()+",\n");
+		out.write("\t\t\t\t\"scheduled_date\": "+getScheduledDate()+",\n");
 		out.write("\t\t\t\t\"start_date\": "+getStartDate()+",\n");
 		out.write("\t\t\t\t\"walltime_prediction\": "+getWallTimePrediction()+",\n");
 		out.write("\t\t\t\t\"standard_walltime\": "+standardWalltime+",\n");
@@ -287,7 +296,7 @@ public class SchloudTask {
 	 * Sets the state of the instance.
 	 * @param state the state of the instance, from now on.
 	 */
-	protected void setState(STATE state)
+	public void setState(STATE state)
 	{
 		this.state=state;
 		stateLog.add(new StateDate(state,Msg.getClock()));
@@ -409,6 +418,14 @@ public class SchloudTask {
 		return getDateOfFirst(STATE.INPUTTING);
 	}
 
+	/**
+	 * @return the scheduled date of this task
+	 * @throws SimSchlouderException whenever this time can not be retrieved
+	 */
+	private double getScheduledDate() throws SimSchlouderException {
+		return getDateOfFirst(STATE.SCHEDULED);
+	}	
+	
 	/**
 	 * @return the submission date of this task
 	 * @throws SimSchlouderException whenever this time can not be retrieved

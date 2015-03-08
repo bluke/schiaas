@@ -8,6 +8,7 @@ package simschlouder;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.LinkedList;
 
 import org.simgrid.msg.HostFailureException;
@@ -27,16 +28,22 @@ import simschlouder.util.SimSchlouderException;
  * @author julien.gossa@unistra.fr
  *
  */
-public class SchloudNode extends Process {
+public class SchloudNode extends Process implements Comparable<SchloudNode>{
 	
 	/** 
 	 * Enumerates the states of SimSchlouder worker nodes
 	 * @author julien.gossa@unistra.fr
 	 */
-	public enum STATE {PENDING,CLAIMED,IDLE,BUSY,TERMINATED};
+	public enum STATE {FUTURE,PENDING,CLAIMED,IDLE,BUSY,TERMINATED};
 
 	/** Id of the instance running this worker node */
 	public String instanceId;
+
+	/** The index of the instance */
+	public int index;
+	
+	/** The current index of tasks */
+	static int currentIndex = 0;
 	
 	/** Cloud where this node is */
 	protected SchloudCloud cloud;
@@ -51,11 +58,13 @@ public class SchloudNode extends Process {
 	
 	/** Current state of this node */
 	protected STATE state;
-	
+
+	/** The date when this node becomes future */
+	protected double futureDate;	
+	/** The date when this node becomes pending */
+	protected double pendingDate;	
 	/** The date when this node becomes idle */
 	protected double idleDate;
-	/** The date when this node becomes pending */
-	protected double pendingDate;
 	/** The date when this node becomes terminated */
 	protected double terminatedDate;
 	/** The date when this node booted */
@@ -76,30 +85,65 @@ public class SchloudNode extends Process {
 		private SchloudNode schloudNode;
 		private double bootTimePrediction;
 		private double bootTime;
+		private double provisioningDate;
+		private double lagTime;
 		protected SchloudNodeController(SchloudNode schloudNode) {
 			super(SchloudController.host,schloudNode.id+"_SchloudNodeController");
 			this.schloudNode = schloudNode;
 			this.bootTimePrediction = SchloudController.schloudCloud.getBootTimePrediction();
 			this.bootTime = this.bootTimePrediction;
+			this.provisioningDate = Msg.getClock();
+			
 			// Whenever there are some boot times to be forced
 			if (!SchloudController.schloudCloud.bootTimes.isEmpty()) {
 				this.bootTimePrediction = SchloudController.schloudCloud.bootTimePredictions.removeFirst();
 				this.bootTime = SchloudController.schloudCloud.bootTimes.removeFirst();
-			} 
+			}
+			// Whenever there are some provisioning dates to be forced
+			//Msg.info("remove prov date: "+SchloudController.schloudCloud.provisioningDates.peekFirst()+ " " + SchloudController.schloudCloud.provisioningDates.size());
+			if (!SchloudController.schloudCloud.provisioningDates.isEmpty()) 			
+				this.provisioningDate = SchloudController.schloudCloud.provisioningDates.removeFirst();
+			if (!SchloudController.schloudCloud.lagTimes.isEmpty()) 			
+				this.lagTime = SchloudController.schloudCloud.lagTimes.removeFirst();
 		}
 		
 		public void main(String[] args) throws TransferFailureException, HostFailureException, TimeoutException {
 			try {
-				// Wait for at least the predicted boottime. Can be optimized.
-				Process.currentProcess().waitFor(bootTime);
-				idleDate += bootTime - bootTimePrediction;
+				schloudNode.setState(STATE.FUTURE);
+				idleDate = Msg.getClock()+bootTimePrediction;
 				
+				// Wait for the provisioning date
+				double provisioningDelay = provisioningDate-Msg.getClock();
+				if (provisioningDelay < 0) provisioningDelay = 0;
+				Msg.verb(instanceId+" waits for provisioning: "+provisioningDelay);
+				Process.currentProcess().waitFor(provisioningDelay);
+				
+				schloudNode.setState(STATE.PENDING);
+				//idleDate += provisioningDelay;
+				
+				// Da Bug 
+				SchloudController.schloudCloud.resetBootCount();
+				
+				// Wait for at least the predicted boottime. Can be optimized.
+				Msg.verb(instanceId+" waits for boot: "+bootTime);
+				Process.currentProcess().waitFor(bootTime);				
 				while(cloud.compute.describeInstance(instanceId).isRunning() == 0)
 				{
-					Msg.info("wait for boot of "+instanceId);
-					Process.currentProcess().waitFor(0.1);
+					Msg.verb(instanceId+" boot delayed");
+					Process.currentProcess().waitFor(1);
 				}
-				schloudNode.setState(STATE.IDLE);
+				// Should be IDLE if no job are enqueued at this time
+				schloudNode.setState(STATE.CLAIMED);
+				idleDate += provisioningDelay + bootTime - bootTimePrediction;
+				
+				Msg.verb(instanceId+" booted ");
+				bootDate=Msg.getClock();
+				
+				// Wait for the lag time
+				Msg.info(instanceId+" wait for lag time "+lagTime);
+				waitFor(lagTime);
+				
+				
 			} catch (HostFailureException e) {
 				Msg.critical("Something bad happened is SimSchlouder: The host of "+instanceId+" was not found.");
 				e.printStackTrace();
@@ -123,20 +167,17 @@ public class SchloudNode extends Process {
 	protected SchloudNode(String instanceId, SchloudCloud cloud) {
 		super(cloud.compute.describeInstance(instanceId), instanceId+"_SchloudNode",null);
 		this.instanceId = instanceId;
+		this.index = currentIndex++;
 		this.cloud=cloud;
 		
 		speed = cloud.compute.describeInstance(instanceId).getSpeed();
 		
 		this.queue = new LinkedList<SchloudTask>();
 		this.completedQueue = new LinkedList<SchloudTask>();
-		
-		idleDate = Msg.getClock()+cloud.getBootTimePrediction();
-		//Msg.info("idledate "+instanceId+" "+idleDate);
-		
+		 		
 		bootTimePrediction=cloud.getBootTimePrediction();
 		
-		setState(STATE.PENDING);
-		
+		setState(STATE.FUTURE);
 	}
 	
 	/**
@@ -160,6 +201,29 @@ public class SchloudNode extends Process {
 		
 		return schloudNode;
 	}
+
+	
+	@Override
+    public int compareTo(SchloudNode other){
+		if (this.state != STATE.FUTURE && other.state != STATE.FUTURE)
+			if (this.pendingDate != other.pendingDate) 
+				return (int)(this.pendingDate - other.pendingDate);
+			else
+				return (int)(other.index - this.index);
+		
+		if (this.state != STATE.FUTURE) return 1;
+		if (other.state != STATE.FUTURE) return -1;
+		
+		return (int)(this.index - other.index);
+	}
+	
+	/**
+	 * Get the state of this node.
+	 * @param state of this node.
+	 */
+	public STATE getState() {
+		return this.state;
+	}
 	
 	/**
 	 * Set the state of this node.
@@ -176,6 +240,8 @@ public class SchloudNode extends Process {
 		}
 		
 		switch (state) {
+		case FUTURE: pendingDate=futureDate=Msg.getClock();
+			break;
 		case PENDING: pendingDate=Msg.getClock();
 			break;
 		case TERMINATED: terminatedDate=Msg.getClock();
@@ -184,13 +250,29 @@ public class SchloudNode extends Process {
 		
 		this.state = state;
 	}
+	
+	
 
 	/**
-	 * 
 	 * @return the speed of this node
 	 */
 	public double getSpeed() {
 		return speed;
+	}
+
+	
+	/**
+	 * @return the future date of this node
+	 */
+	public double getFutureDate() {
+		return futureDate;
+	}
+
+	/**
+	 * @return the pending date of this node
+	 */
+	public double getPendingDate() {
+		return pendingDate;
 	}
 
 	
@@ -211,8 +293,10 @@ public class SchloudNode extends Process {
 	 */
 	public double getUpTimeToIdle() {
 		// Da bug
-		if (Msg.getClock()<pendingDate+10 && (state == STATE.PENDING || state == STATE.CLAIMED))
-			return getIdleDate() - pendingDate - bootTimePrediction;
+		if (state == STATE.FUTURE)
+			return (getIdleDate() - bootTimePrediction) - pendingDate;
+		if (state == STATE.CLAIMED)
+			return Msg.getClock() - pendingDate;
 
 		return getIdleDate() - pendingDate;
 	}
@@ -221,10 +305,8 @@ public class SchloudNode extends Process {
 	 * 
 	 * @return the date when this node becomes idle
 	 */
-	public double getIdleDate() {
-		if (isIdle()) {
-			return Msg.getClock() - pendingDate;
-		}
+	public double getIdleDate() {		
+		if (state == STATE.IDLE) return Msg.getClock();
 		return idleDate;
 	}
 
@@ -312,8 +394,6 @@ public class SchloudNode extends Process {
 	 * Receives tasks and processes them.
 	 */
 	public void main(String[] args) throws TransferFailureException, HostFailureException, TimeoutException {
-
-		bootDate=Msg.getClock();
 		 
 		while(true) {
 			// Receiving the command
@@ -380,8 +460,6 @@ public class SchloudNode extends Process {
 	 */
 	public boolean isIdle() {
 		return (state == STATE.IDLE);
-		//return (instance.getCount()==0);
-		//return (idleDate <= Msg.getClock()); 
 	}
 	
 	/**
@@ -403,6 +481,7 @@ public class SchloudNode extends Process {
 	 */
 	public void writeJSON(BufferedWriter out) throws IOException, SimSchlouderException {
 		out.write("\t\t\"instance_id\": \""+name+"\",\n");
+		out.write("\t\t\"index\": \""+index+"\",\n");
 		out.write("\t\t\"host\": \""+getHost().getName()+"\",\n");
 		out.write("\t\t\"start_date\": "+pendingDate+",\n");
 		out.write("\t\t\"stop_date\": "+terminatedDate+",\n"); // TERMINATED AND NOT SHUTTINGDOWN

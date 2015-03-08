@@ -1,1330 +1,1446 @@
-[
+{
+  "info": {
+    "first_date": 1386174115,
+    "scheduled_dates": "infered",
+    "updated_to_version": "\"a9c47a7a6a307a41e3a950ec84a73d5a96ab49df\""
+  },
+  "nodes": [
     {
-        "jobs": [
-            {
-                "submission_date": 1386174115, 
-                "management_time": 2.663825571000018, 
-                "input_time": 79.5, 
-                "name": "F025715DA_1.mgf", 
-                "output_size": 13725011, 
-                "command_line": "/tmp/schlouder/mYItiwd424 brt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/basse_resolution/input/10000/F025715DA_1.mgf", 
-                "PSM_data": {
-                    "runtime_prediction": 188, 
-                    "data_in": 36063277, 
-                    "data_out": 12420877
-                }, 
-                "error_time": 0, 
-                "start_date": 1386174369, 
-                "output_files_size": {
-                    "F025715DA_1.log": 499, 
-                    "F025715DA_1.omx.gz": 13724512
-                }, 
-                "walltime_prediction": 140, 
-                "dependencies": [], 
-                "input_files_size": {
-                    "brt_params.xml": 4385, 
-                    "mods.xml": 117497, 
-                    "usermods.xml": 213, 
-                    "run.sh": 4871, 
-                    "human_DCpSP_ABU_20110615-blast.tgz": 14417326, 
-                    "F025715DA_1.mgf": 19503475
-                }, 
-                "scheduling_strategy": "Schlouder::Scheduling::Default", 
-                "input_size": 34047767, 
-                "runtime": 162.8, 
-                "provisioning_strategy": "Schlouder::Provisioning::Asap", 
-                "id": 4566, 
-                "output_time": 17.0, 
-                "walltime": 262
-            }, 
-            {
-                "submission_date": 1386174115, 
-                "management_time": 0.5401980499999866, 
-                "input_time": 41.9, 
-                "name": "F025717DA_1.mgf", 
-                "output_size": 13998169, 
-                "command_line": "/tmp/schlouder/7FNZwZpvHQ brt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/basse_resolution/input/10000/F025717DA_1.mgf", 
-                "PSM_data": {
-                    "runtime_prediction": 189, 
-                    "data_in": 36063277, 
-                    "data_out": 12420877
-                }, 
-                "error_time": 0, 
-                "start_date": 1386174631, 
-                "output_files_size": {
-                    "F025717DA_1.omx.gz": 13997631, 
-                    "F025717DA_1.log": 538
-                }, 
-                "walltime_prediction": 141, 
-                "dependencies": [], 
-                "input_files_size": {
-                    "brt_params.xml": 4385, 
-                    "mods.xml": 117497, 
-                    "usermods.xml": 213, 
-                    "run.sh": 4871, 
-                    "human_DCpSP_ABU_20110615-blast.tgz": 14417326, 
-                    "F025717DA_1.mgf": 19922357
-                }, 
-                "scheduling_strategy": "Schlouder::Scheduling::Default", 
-                "input_size": 34466649, 
-                "runtime": 167.1, 
-                "provisioning_strategy": "Schlouder::Provisioning::Asap", 
-                "id": 4578, 
-                "output_time": 11.4, 
-                "walltime": 221
-            }, 
-            {
-                "submission_date": 1386174115, 
-                "management_time": 1.2625420619999943, 
-                "input_time": 15.7, 
-                "name": "F025720DA_1.mgf", 
-                "output_size": 9532580, 
-                "command_line": "/tmp/schlouder/vzsh0wmEXh brt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/basse_resolution/input/10000/F025720DA_1.mgf", 
-                "PSM_data": {
-                    "runtime_prediction": 135, 
-                    "data_in": 36063277, 
-                    "data_out": 12420877
-                }, 
-                "error_time": 0, 
-                "start_date": 1386174852, 
-                "output_files_size": {
-                    "F025720DA_1.log": 456, 
-                    "F025720DA_1.omx.gz": 9532124
-                }, 
-                "walltime_prediction": 117, 
-                "dependencies": [], 
-                "input_files_size": {
-                    "brt_params.xml": 4385, 
-                    "mods.xml": 117497, 
-                    "usermods.xml": 213, 
-                    "run.sh": 4871, 
-                    "human_DCpSP_ABU_20110615-blast.tgz": 14417326, 
-                    "F025720DA_1.mgf": 14129978
-                }, 
-                "scheduling_strategy": "Schlouder::Scheduling::Default", 
-                "input_size": 28674270, 
-                "runtime": 129.1, 
-                "provisioning_strategy": "Schlouder::Provisioning::Asap", 
-                "id": 4588, 
-                "output_time": 5.0, 
-                "walltime": 151
-            }, 
-            {
-                "submission_date": 1386174115, 
-                "management_time": 0, 
-                "input_time": 20.6, 
-                "name": "F025723DA_1.mgf", 
-                "output_size": 13758732, 
-                "command_line": "/tmp/schlouder/9P7AYo2pTx brt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/basse_resolution/input/10000/F025723DA_1.mgf", 
-                "PSM_data": {
-                    "runtime_prediction": 184, 
-                    "data_in": 36063277, 
-                    "data_out": 12420877
-                }, 
-                "error_time": 0, 
-                "start_date": 1386175003, 
-                "output_files_size": {
-                    "F025723DA_1.omx.gz": 13758235, 
-                    "F025723DA_1.log": 497
-                }, 
-                "walltime_prediction": 139, 
-                "dependencies": [], 
-                "input_files_size": {
-                    "brt_params.xml": 4385, 
-                    "mods.xml": 117497, 
-                    "usermods.xml": 213, 
-                    "run.sh": 4871, 
-                    "human_DCpSP_ABU_20110615-blast.tgz": 14417326, 
-                    "F025723DA_1.mgf": 18658316
-                }, 
-                "scheduling_strategy": "Schlouder::Scheduling::Default", 
-                "input_size": 33202608, 
-                "runtime": 163.5, 
-                "provisioning_strategy": "Schlouder::Provisioning::Asap", 
-                "id": 4592, 
-                "output_time": 10.0, 
-                "walltime": 194
-            }, 
-            {
-                "submission_date": 1386174115, 
-                "management_time": 2.204951824999995, 
-                "input_time": 8.2, 
-                "name": "F025730DA_1.mgf", 
-                "output_size": 7406654, 
-                "command_line": "/tmp/schlouder/uVTLCoDzxL brt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/basse_resolution/input/10000/F025730DA_1.mgf", 
-                "PSM_data": {
-                    "runtime_prediction": 87, 
-                    "data_in": 36063277, 
-                    "data_out": 12420877
-                }, 
-                "error_time": 0, 
-                "start_date": 1386175197, 
-                "output_files_size": {
-                    "F025730DA_1.log": 456, 
-                    "F025730DA_1.omx.gz": 7406198
-                }, 
-                "walltime_prediction": 95, 
-                "dependencies": [], 
-                "input_files_size": {
-                    "brt_params.xml": 4385, 
-                    "F025730DA_1.mgf": 10549920, 
-                    "mods.xml": 117497, 
-                    "usermods.xml": 213, 
-                    "run.sh": 4871, 
-                    "human_DCpSP_ABU_20110615-blast.tgz": 14417326
-                }, 
-                "scheduling_strategy": "Schlouder::Scheduling::Default", 
-                "input_size": 25094212, 
-                "runtime": 104.9, 
-                "provisioning_strategy": "Schlouder::Provisioning::Asap", 
-                "id": 4596, 
-                "output_time": 3.7, 
-                "walltime": 119
-            }, 
-            {
-                "submission_date": 1386174116, 
-                "management_time": 0.41088201799999524, 
-                "input_time": 8.7, 
-                "name": "F025739DA_1.mgf", 
-                "output_size": 12857519, 
-                "command_line": "/tmp/schlouder/msMmJ0THwh brt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/basse_resolution/input/10000/F025739DA_1.mgf", 
-                "PSM_data": {
-                    "runtime_prediction": 168, 
-                    "data_in": 36063277, 
-                    "data_out": 12420877
-                }, 
-                "error_time": 0, 
-                "start_date": 1386175316, 
-                "output_files_size": {
-                    "F025739DA_1.omx.gz": 12856899, 
-                    "F025739DA_1.log": 620
-                }, 
-                "walltime_prediction": 132, 
-                "dependencies": [], 
-                "input_files_size": {
-                    "brt_params.xml": 4385, 
-                    "mods.xml": 117497, 
-                    "usermods.xml": 213, 
-                    "run.sh": 4871, 
-                    "human_DCpSP_ABU_20110615-blast.tgz": 14417326, 
-                    "F025739DA_1.mgf": 16678760
-                }, 
-                "scheduling_strategy": "Schlouder::Scheduling::Default", 
-                "input_size": 31223052, 
-                "runtime": 154.6, 
-                "provisioning_strategy": "Schlouder::Provisioning::Asap", 
-                "id": 4597, 
-                "output_time": 6.3, 
-                "walltime": 170
-            }
-        ], 
-        "previous_boot_attempts": [], 
-        "stop_date": 1386177671, 
-        "boot_time_prediction": 139, 
-        "instance_id": "/locations/fr-inria/computes/50414", 
-        "instance_type": "m1.small", 
-        "host": "bonfire-vm-4", 
-        "boot_time": 244, 
-        "start_date": 1386174125, 
-        "cloud": "BonFIRE-inria", 
-        "user": "emichon"
-    }, 
+      "boot_time": 244,
+      "boot_time_prediction": 139,
+      "cloud": "BonFIRE-inria",
+      "host": "bonfire-vm-4",
+      "index": 0,
+      "instance_id": "/locations/fr-inria/computes/50414",
+      "instance_type": "m1.small",
+      "jobs": [
+        {
+          "PSM_data": {
+            "data_in": 36063277,
+            "data_out": 12420877,
+            "runtime_prediction": 188
+          },
+          "command_line": "/tmp/schlouder/mYItiwd424 brt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/basse_resolution/input/10000/F025715DA_1.mgf",
+          "dependencies": [],
+          "error_time": 0,
+          "id": 4566,
+          "index": 0,
+          "input_files_size": {
+            "F025715DA_1.mgf": 19503475,
+            "brt_params.xml": 4385,
+            "human_DCpSP_ABU_20110615-blast.tgz": 14417326,
+            "mods.xml": 117497,
+            "run.sh": 4871,
+            "usermods.xml": 213
+          },
+          "input_size": 34047767,
+          "input_time": 79.5,
+          "management_time": 2.663825571000018,
+          "name": "F025715DA_1.mgf",
+          "output_files_size": {
+            "F025715DA_1.log": 499,
+            "F025715DA_1.omx.gz": 13724512
+          },
+          "output_size": 13725011,
+          "output_time": 17.0,
+          "provisioning_strategy": "Schlouder::Provisioning::Asap",
+          "runtime": 162.8,
+          "scheduled_date": 0,
+          "scheduling_strategy": "Schlouder::Scheduling::Default",
+          "standard_walltime": 262,
+          "start_date": 254,
+          "submission_date": 0,
+          "walltime": 262,
+          "walltime_prediction": 140
+        },
+        {
+          "PSM_data": {
+            "data_in": 36063277,
+            "data_out": 12420877,
+            "runtime_prediction": 189
+          },
+          "command_line": "/tmp/schlouder/7FNZwZpvHQ brt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/basse_resolution/input/10000/F025717DA_1.mgf",
+          "dependencies": [],
+          "error_time": 0,
+          "id": 4578,
+          "index": 2,
+          "input_files_size": {
+            "F025717DA_1.mgf": 19922357,
+            "brt_params.xml": 4385,
+            "human_DCpSP_ABU_20110615-blast.tgz": 14417326,
+            "mods.xml": 117497,
+            "run.sh": 4871,
+            "usermods.xml": 213
+          },
+          "input_size": 34466649,
+          "input_time": 41.9,
+          "management_time": 0.5401980499999866,
+          "name": "F025717DA_1.mgf",
+          "output_files_size": {
+            "F025717DA_1.log": 538,
+            "F025717DA_1.omx.gz": 13997631
+          },
+          "output_size": 13998169,
+          "output_time": 11.4,
+          "provisioning_strategy": "Schlouder::Provisioning::Asap",
+          "runtime": 167.1,
+          "scheduled_date": 0,
+          "scheduling_strategy": "Schlouder::Scheduling::Default",
+          "standard_walltime": 221,
+          "start_date": 516,
+          "submission_date": 0,
+          "walltime": 221,
+          "walltime_prediction": 141
+        },
+        {
+          "PSM_data": {
+            "data_in": 36063277,
+            "data_out": 12420877,
+            "runtime_prediction": 135
+          },
+          "command_line": "/tmp/schlouder/vzsh0wmEXh brt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/basse_resolution/input/10000/F025720DA_1.mgf",
+          "dependencies": [],
+          "error_time": 0,
+          "id": 4588,
+          "index": 5,
+          "input_files_size": {
+            "F025720DA_1.mgf": 14129978,
+            "brt_params.xml": 4385,
+            "human_DCpSP_ABU_20110615-blast.tgz": 14417326,
+            "mods.xml": 117497,
+            "run.sh": 4871,
+            "usermods.xml": 213
+          },
+          "input_size": 28674270,
+          "input_time": 15.7,
+          "management_time": 1.2625420619999943,
+          "name": "F025720DA_1.mgf",
+          "output_files_size": {
+            "F025720DA_1.log": 456,
+            "F025720DA_1.omx.gz": 9532124
+          },
+          "output_size": 9532580,
+          "output_time": 5.0,
+          "provisioning_strategy": "Schlouder::Provisioning::Asap",
+          "runtime": 129.1,
+          "scheduled_date": 0,
+          "scheduling_strategy": "Schlouder::Scheduling::Default",
+          "standard_walltime": 151,
+          "start_date": 737,
+          "submission_date": 0,
+          "walltime": 151,
+          "walltime_prediction": 117
+        },
+        {
+          "PSM_data": {
+            "data_in": 36063277,
+            "data_out": 12420877,
+            "runtime_prediction": 184
+          },
+          "command_line": "/tmp/schlouder/9P7AYo2pTx brt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/basse_resolution/input/10000/F025723DA_1.mgf",
+          "dependencies": [],
+          "error_time": 0,
+          "id": 4592,
+          "index": 8,
+          "input_files_size": {
+            "F025723DA_1.mgf": 18658316,
+            "brt_params.xml": 4385,
+            "human_DCpSP_ABU_20110615-blast.tgz": 14417326,
+            "mods.xml": 117497,
+            "run.sh": 4871,
+            "usermods.xml": 213
+          },
+          "input_size": 33202608,
+          "input_time": 20.6,
+          "management_time": 0,
+          "name": "F025723DA_1.mgf",
+          "output_files_size": {
+            "F025723DA_1.log": 497,
+            "F025723DA_1.omx.gz": 13758235
+          },
+          "output_size": 13758732,
+          "output_time": 10.0,
+          "provisioning_strategy": "Schlouder::Provisioning::Asap",
+          "runtime": 163.5,
+          "scheduled_date": 0,
+          "scheduling_strategy": "Schlouder::Scheduling::Default",
+          "standard_walltime": 194,
+          "start_date": 888,
+          "submission_date": 0,
+          "walltime": 194,
+          "walltime_prediction": 139
+        },
+        {
+          "PSM_data": {
+            "data_in": 36063277,
+            "data_out": 12420877,
+            "runtime_prediction": 87
+          },
+          "command_line": "/tmp/schlouder/uVTLCoDzxL brt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/basse_resolution/input/10000/F025730DA_1.mgf",
+          "dependencies": [],
+          "error_time": 0,
+          "id": 4596,
+          "index": 15,
+          "input_files_size": {
+            "F025730DA_1.mgf": 10549920,
+            "brt_params.xml": 4385,
+            "human_DCpSP_ABU_20110615-blast.tgz": 14417326,
+            "mods.xml": 117497,
+            "run.sh": 4871,
+            "usermods.xml": 213
+          },
+          "input_size": 25094212,
+          "input_time": 8.2,
+          "management_time": 2.204951824999995,
+          "name": "F025730DA_1.mgf",
+          "output_files_size": {
+            "F025730DA_1.log": 456,
+            "F025730DA_1.omx.gz": 7406198
+          },
+          "output_size": 7406654,
+          "output_time": 3.7,
+          "provisioning_strategy": "Schlouder::Provisioning::Asap",
+          "runtime": 104.9,
+          "scheduled_date": 0,
+          "scheduling_strategy": "Schlouder::Scheduling::Default",
+          "standard_walltime": 119,
+          "start_date": 1082,
+          "submission_date": 0,
+          "walltime": 119,
+          "walltime_prediction": 95
+        },
+        {
+          "PSM_data": {
+            "data_in": 36063277,
+            "data_out": 12420877,
+            "runtime_prediction": 168
+          },
+          "command_line": "/tmp/schlouder/msMmJ0THwh brt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/basse_resolution/input/10000/F025739DA_1.mgf",
+          "dependencies": [],
+          "error_time": 0,
+          "id": 4597,
+          "index": 24,
+          "input_files_size": {
+            "F025739DA_1.mgf": 16678760,
+            "brt_params.xml": 4385,
+            "human_DCpSP_ABU_20110615-blast.tgz": 14417326,
+            "mods.xml": 117497,
+            "run.sh": 4871,
+            "usermods.xml": 213
+          },
+          "input_size": 31223052,
+          "input_time": 8.7,
+          "management_time": 0.41088201799999524,
+          "name": "F025739DA_1.mgf",
+          "output_files_size": {
+            "F025739DA_1.log": 620,
+            "F025739DA_1.omx.gz": 12856899
+          },
+          "output_size": 12857519,
+          "output_time": 6.3,
+          "provisioning_strategy": "Schlouder::Provisioning::Asap",
+          "runtime": 154.6,
+          "scheduled_date": 1,
+          "scheduling_strategy": "Schlouder::Scheduling::Default",
+          "standard_walltime": 170,
+          "start_date": 1201,
+          "submission_date": 1,
+          "walltime": 170,
+          "walltime_prediction": 132
+        }
+      ],
+      "previous_boot_attempts": [],
+      "start_date": 10,
+      "stop_date": 3556,
+      "user": "emichon"
+    },
     {
-        "jobs": [
-            {
-                "submission_date": 1386174115, 
-                "management_time": 1.258283849999998, 
-                "input_time": 84.3, 
-                "name": "F025716DA_1.mgf", 
-                "output_size": 14085877, 
-                "command_line": "/tmp/schlouder/7FSsQUGbM8 brt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/basse_resolution/input/10000/F025716DA_1.mgf", 
-                "PSM_data": {
-                    "runtime_prediction": 187, 
-                    "data_in": 36063277, 
-                    "data_out": 12420877
-                }, 
-                "error_time": 0, 
-                "start_date": 1386174369, 
-                "output_files_size": {
-                    "F025716DA_1.omx.gz": 14085419, 
-                    "F025716DA_1.log": 458
-                }, 
-                "walltime_prediction": 140, 
-                "dependencies": [], 
-                "input_files_size": {
-                    "brt_params.xml": 4385, 
-                    "mods.xml": 117497, 
-                    "usermods.xml": 213, 
-                    "run.sh": 4871, 
-                    "human_DCpSP_ABU_20110615-blast.tgz": 14417326, 
-                    "F025716DA_1.mgf": 19686472
-                }, 
-                "scheduling_strategy": "Schlouder::Scheduling::Default", 
-                "input_size": 34230764, 
-                "runtime": 159.0, 
-                "provisioning_strategy": "Schlouder::Provisioning::Asap", 
-                "id": 4565, 
-                "output_time": 17.4, 
-                "walltime": 262
-            }, 
-            {
-                "submission_date": 1386174115, 
-                "management_time": 1.7418186429999878, 
-                "input_time": 36.0, 
-                "name": "F025721DA_1.mgf", 
-                "output_size": 13595681, 
-                "command_line": "/tmp/schlouder/ctyo1E8FKP brt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/basse_resolution/input/10000/F025721DA_1.mgf", 
-                "PSM_data": {
-                    "runtime_prediction": 187, 
-                    "data_in": 36063277, 
-                    "data_out": 12420877
-                }, 
-                "error_time": 0, 
-                "start_date": 1386174631, 
-                "output_files_size": {
-                    "F025721DA_1.omx.gz": 13595225, 
-                    "F025721DA_1.log": 456
-                }, 
-                "walltime_prediction": 140, 
-                "dependencies": [], 
-                "input_files_size": {
-                    "brt_params.xml": 4385, 
-                    "mods.xml": 117497, 
-                    "usermods.xml": 213, 
-                    "run.sh": 4871, 
-                    "human_DCpSP_ABU_20110615-blast.tgz": 14417326, 
-                    "F025721DA_1.mgf": 19130896
-                }, 
-                "scheduling_strategy": "Schlouder::Scheduling::Default", 
-                "input_size": 33675188, 
-                "runtime": 154.5, 
-                "provisioning_strategy": "Schlouder::Provisioning::Asap", 
-                "id": 4577, 
-                "output_time": 6.7, 
-                "walltime": 199
-            }, 
-            {
-                "submission_date": 1386174115, 
-                "management_time": 1.9110056590000113, 
-                "input_time": 21.9, 
-                "name": "F025726DA_1.mgf", 
-                "output_size": 12706382, 
-                "command_line": "/tmp/schlouder/zT8gDc0Cz_ brt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/basse_resolution/input/10000/F025726DA_1.mgf", 
-                "PSM_data": {
-                    "runtime_prediction": 146, 
-                    "data_in": 36063277, 
-                    "data_out": 12420877
-                }, 
-                "error_time": 0, 
-                "start_date": 1386174830, 
-                "output_files_size": {
-                    "F025726DA_1.omx.gz": 12705844, 
-                    "F025726DA_1.log": 538
-                }, 
-                "walltime_prediction": 122, 
-                "dependencies": [], 
-                "input_files_size": {
-                    "brt_params.xml": 4385, 
-                    "mods.xml": 117497, 
-                    "usermods.xml": 213, 
-                    "run.sh": 4871, 
-                    "human_DCpSP_ABU_20110615-blast.tgz": 14417326, 
-                    "F025726DA_1.mgf": 16188057
-                }, 
-                "scheduling_strategy": "Schlouder::Scheduling::Default", 
-                "input_size": 30732349, 
-                "runtime": 137.4, 
-                "provisioning_strategy": "Schlouder::Provisioning::Asap", 
-                "id": 4585, 
-                "output_time": 7.8, 
-                "walltime": 169
-            }, 
-            {
-                "submission_date": 1386174115, 
-                "management_time": 0.4595795159999909, 
-                "input_time": 23.5, 
-                "name": "F025731DA_1.mgf", 
-                "output_size": 13679914, 
-                "command_line": "/tmp/schlouder/Nb8x4kZnNk brt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/basse_resolution/input/10000/F025731DA_1.mgf", 
-                "PSM_data": {
-                    "runtime_prediction": 190, 
-                    "data_in": 36063277, 
-                    "data_out": 12420877
-                }, 
-                "error_time": 0, 
-                "start_date": 1386174999, 
-                "output_files_size": {
-                    "F025731DA_1.omx.gz": 13679458, 
-                    "F025731DA_1.log": 456
-                }, 
-                "walltime_prediction": 141, 
-                "dependencies": [], 
-                "input_files_size": {
-                    "brt_params.xml": 4385, 
-                    "mods.xml": 117497, 
-                    "usermods.xml": 213, 
-                    "run.sh": 4871, 
-                    "human_DCpSP_ABU_20110615-blast.tgz": 14417326, 
-                    "F025731DA_1.mgf": 18931251
-                }, 
-                "scheduling_strategy": "Schlouder::Scheduling::Default", 
-                "input_size": 33475543, 
-                "runtime": 157.6, 
-                "provisioning_strategy": "Schlouder::Provisioning::Asap", 
-                "id": 4591, 
-                "output_time": 6.4, 
-                "walltime": 188
-            }, 
-            {
-                "submission_date": 1386174116, 
-                "management_time": 1.492208909999988, 
-                "input_time": 14.7, 
-                "name": "F025744DA_1.mgf", 
-                "output_size": 11752700, 
-                "command_line": "/tmp/schlouder/IPnXEdsU7M brt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/basse_resolution/input/10000/F025744DA_1.mgf", 
-                "PSM_data": {
-                    "runtime_prediction": 151, 
-                    "data_in": 36063277, 
-                    "data_out": 12420877
-                }, 
-                "error_time": 0, 
-                "start_date": 1386175187, 
-                "output_files_size": {
-                    "F025744DA_1.omx.gz": 11752080, 
-                    "F025744DA_1.log": 620
-                }, 
-                "walltime_prediction": 124, 
-                "dependencies": [], 
-                "input_files_size": {
-                    "brt_params.xml": 4385, 
-                    "F025744DA_1.mgf": 15258327, 
-                    "mods.xml": 117497, 
-                    "usermods.xml": 213, 
-                    "run.sh": 4871, 
-                    "human_DCpSP_ABU_20110615-blast.tgz": 14417326
-                }, 
-                "scheduling_strategy": "Schlouder::Scheduling::Default", 
-                "input_size": 29802619, 
-                "runtime": 137.5, 
-                "provisioning_strategy": "Schlouder::Provisioning::Asap", 
-                "id": 4595, 
-                "output_time": 5.3, 
-                "walltime": 159
-            }
-        ], 
-        "previous_boot_attempts": [], 
-        "stop_date": 1386177676, 
-        "boot_time_prediction": 274, 
-        "instance_id": "/locations/fr-inria/computes/50418", 
-        "instance_type": "m1.small", 
-        "host": "bonfire-vm-8", 
-        "boot_time": 243, 
-        "start_date": 1386174125, 
-        "cloud": "BonFIRE-inria", 
-        "user": "emichon"
-    }, 
+      "boot_time": 243,
+      "boot_time_prediction": 274,
+      "cloud": "BonFIRE-inria",
+      "host": "bonfire-vm-8",
+      "index": 1,
+      "instance_id": "/locations/fr-inria/computes/50418",
+      "instance_type": "m1.small",
+      "jobs": [
+        {
+          "PSM_data": {
+            "data_in": 36063277,
+            "data_out": 12420877,
+            "runtime_prediction": 187
+          },
+          "command_line": "/tmp/schlouder/7FSsQUGbM8 brt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/basse_resolution/input/10000/F025716DA_1.mgf",
+          "dependencies": [],
+          "error_time": 0,
+          "id": 4565,
+          "index": 1,
+          "input_files_size": {
+            "F025716DA_1.mgf": 19686472,
+            "brt_params.xml": 4385,
+            "human_DCpSP_ABU_20110615-blast.tgz": 14417326,
+            "mods.xml": 117497,
+            "run.sh": 4871,
+            "usermods.xml": 213
+          },
+          "input_size": 34230764,
+          "input_time": 84.3,
+          "management_time": 1.258283849999998,
+          "name": "F025716DA_1.mgf",
+          "output_files_size": {
+            "F025716DA_1.log": 458,
+            "F025716DA_1.omx.gz": 14085419
+          },
+          "output_size": 14085877,
+          "output_time": 17.4,
+          "provisioning_strategy": "Schlouder::Provisioning::Asap",
+          "runtime": 159.0,
+          "scheduled_date": 0,
+          "scheduling_strategy": "Schlouder::Scheduling::Default",
+          "standard_walltime": 262,
+          "start_date": 254,
+          "submission_date": 0,
+          "walltime": 262,
+          "walltime_prediction": 140
+        },
+        {
+          "PSM_data": {
+            "data_in": 36063277,
+            "data_out": 12420877,
+            "runtime_prediction": 187
+          },
+          "command_line": "/tmp/schlouder/ctyo1E8FKP brt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/basse_resolution/input/10000/F025721DA_1.mgf",
+          "dependencies": [],
+          "error_time": 0,
+          "id": 4577,
+          "index": 6,
+          "input_files_size": {
+            "F025721DA_1.mgf": 19130896,
+            "brt_params.xml": 4385,
+            "human_DCpSP_ABU_20110615-blast.tgz": 14417326,
+            "mods.xml": 117497,
+            "run.sh": 4871,
+            "usermods.xml": 213
+          },
+          "input_size": 33675188,
+          "input_time": 36.0,
+          "management_time": 1.7418186429999878,
+          "name": "F025721DA_1.mgf",
+          "output_files_size": {
+            "F025721DA_1.log": 456,
+            "F025721DA_1.omx.gz": 13595225
+          },
+          "output_size": 13595681,
+          "output_time": 6.7,
+          "provisioning_strategy": "Schlouder::Provisioning::Asap",
+          "runtime": 154.5,
+          "scheduled_date": 0,
+          "scheduling_strategy": "Schlouder::Scheduling::Default",
+          "standard_walltime": 199,
+          "start_date": 516,
+          "submission_date": 0,
+          "walltime": 199,
+          "walltime_prediction": 140
+        },
+        {
+          "PSM_data": {
+            "data_in": 36063277,
+            "data_out": 12420877,
+            "runtime_prediction": 146
+          },
+          "command_line": "/tmp/schlouder/zT8gDc0Cz_ brt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/basse_resolution/input/10000/F025726DA_1.mgf",
+          "dependencies": [],
+          "error_time": 0,
+          "id": 4585,
+          "index": 11,
+          "input_files_size": {
+            "F025726DA_1.mgf": 16188057,
+            "brt_params.xml": 4385,
+            "human_DCpSP_ABU_20110615-blast.tgz": 14417326,
+            "mods.xml": 117497,
+            "run.sh": 4871,
+            "usermods.xml": 213
+          },
+          "input_size": 30732349,
+          "input_time": 21.9,
+          "management_time": 1.9110056590000113,
+          "name": "F025726DA_1.mgf",
+          "output_files_size": {
+            "F025726DA_1.log": 538,
+            "F025726DA_1.omx.gz": 12705844
+          },
+          "output_size": 12706382,
+          "output_time": 7.8,
+          "provisioning_strategy": "Schlouder::Provisioning::Asap",
+          "runtime": 137.4,
+          "scheduled_date": 0,
+          "scheduling_strategy": "Schlouder::Scheduling::Default",
+          "standard_walltime": 169,
+          "start_date": 715,
+          "submission_date": 0,
+          "walltime": 169,
+          "walltime_prediction": 122
+        },
+        {
+          "PSM_data": {
+            "data_in": 36063277,
+            "data_out": 12420877,
+            "runtime_prediction": 190
+          },
+          "command_line": "/tmp/schlouder/Nb8x4kZnNk brt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/basse_resolution/input/10000/F025731DA_1.mgf",
+          "dependencies": [],
+          "error_time": 0,
+          "id": 4591,
+          "index": 16,
+          "input_files_size": {
+            "F025731DA_1.mgf": 18931251,
+            "brt_params.xml": 4385,
+            "human_DCpSP_ABU_20110615-blast.tgz": 14417326,
+            "mods.xml": 117497,
+            "run.sh": 4871,
+            "usermods.xml": 213
+          },
+          "input_size": 33475543,
+          "input_time": 23.5,
+          "management_time": 0.4595795159999909,
+          "name": "F025731DA_1.mgf",
+          "output_files_size": {
+            "F025731DA_1.log": 456,
+            "F025731DA_1.omx.gz": 13679458
+          },
+          "output_size": 13679914,
+          "output_time": 6.4,
+          "provisioning_strategy": "Schlouder::Provisioning::Asap",
+          "runtime": 157.6,
+          "scheduled_date": 0,
+          "scheduling_strategy": "Schlouder::Scheduling::Default",
+          "standard_walltime": 188,
+          "start_date": 884,
+          "submission_date": 0,
+          "walltime": 188,
+          "walltime_prediction": 141
+        },
+        {
+          "PSM_data": {
+            "data_in": 36063277,
+            "data_out": 12420877,
+            "runtime_prediction": 151
+          },
+          "command_line": "/tmp/schlouder/IPnXEdsU7M brt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/basse_resolution/input/10000/F025744DA_1.mgf",
+          "dependencies": [],
+          "error_time": 0,
+          "id": 4595,
+          "index": 29,
+          "input_files_size": {
+            "F025744DA_1.mgf": 15258327,
+            "brt_params.xml": 4385,
+            "human_DCpSP_ABU_20110615-blast.tgz": 14417326,
+            "mods.xml": 117497,
+            "run.sh": 4871,
+            "usermods.xml": 213
+          },
+          "input_size": 29802619,
+          "input_time": 14.7,
+          "management_time": 1.492208909999988,
+          "name": "F025744DA_1.mgf",
+          "output_files_size": {
+            "F025744DA_1.log": 620,
+            "F025744DA_1.omx.gz": 11752080
+          },
+          "output_size": 11752700,
+          "output_time": 5.3,
+          "provisioning_strategy": "Schlouder::Provisioning::Asap",
+          "runtime": 137.5,
+          "scheduled_date": 1,
+          "scheduling_strategy": "Schlouder::Scheduling::Default",
+          "standard_walltime": 159,
+          "start_date": 1072,
+          "submission_date": 1,
+          "walltime": 159,
+          "walltime_prediction": 124
+        }
+      ],
+      "previous_boot_attempts": [],
+      "start_date": 10,
+      "stop_date": 3561,
+      "user": "emichon"
+    },
     {
-        "jobs": [
-            {
-                "submission_date": 1386174115, 
-                "management_time": 2.5444101620000197, 
-                "input_time": 82.0, 
-                "name": "F025718DA_1.mgf", 
-                "output_size": 14248574, 
-                "command_line": "/tmp/schlouder/TI9APbtNMS brt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/basse_resolution/input/10000/F025718DA_1.mgf", 
-                "PSM_data": {
-                    "runtime_prediction": 199, 
-                    "data_in": 36063277, 
-                    "data_out": 12420877
-                }, 
-                "error_time": 0, 
-                "start_date": 1386174371, 
-                "output_files_size": {
-                    "F025718DA_1.log": 458, 
-                    "F025718DA_1.omx.gz": 14248116
-                }, 
-                "walltime_prediction": 145, 
-                "dependencies": [], 
-                "input_files_size": {
-                    "brt_params.xml": 4385, 
-                    "mods.xml": 117497, 
-                    "usermods.xml": 213, 
-                    "run.sh": 4871, 
-                    "human_DCpSP_ABU_20110615-blast.tgz": 14417326, 
-                    "F025718DA_1.mgf": 20420415
-                }, 
-                "scheduling_strategy": "Schlouder::Scheduling::Default", 
-                "input_size": 34964707, 
-                "runtime": 165.3, 
-                "provisioning_strategy": "Schlouder::Provisioning::Asap", 
-                "id": 4568, 
-                "output_time": 16.1, 
-                "walltime": 266
-            }, 
-            {
-                "submission_date": 1386174115, 
-                "management_time": 0.8940385310000067, 
-                "input_time": 38.7, 
-                "name": "F025724DA_1.mgf", 
-                "output_size": 14161759, 
-                "command_line": "/tmp/schlouder/CqioYczFiG brt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/basse_resolution/input/10000/F025724DA_1.mgf", 
-                "PSM_data": {
-                    "runtime_prediction": 187, 
-                    "data_in": 36063277, 
-                    "data_out": 12420877
-                }, 
-                "error_time": 0, 
-                "start_date": 1386174637, 
-                "output_files_size": {
-                    "F025724DA_1.omx.gz": 14161303, 
-                    "F025724DA_1.log": 456
-                }, 
-                "walltime_prediction": 140, 
-                "dependencies": [], 
-                "input_files_size": {
-                    "brt_params.xml": 4385, 
-                    "F025724DA_1.mgf": 18586212, 
-                    "mods.xml": 117497, 
-                    "usermods.xml": 213, 
-                    "run.sh": 4871, 
-                    "human_DCpSP_ABU_20110615-blast.tgz": 14417326
-                }, 
-                "scheduling_strategy": "Schlouder::Scheduling::Default", 
-                "input_size": 33130504, 
-                "runtime": 155.9, 
-                "provisioning_strategy": "Schlouder::Provisioning::Asap", 
-                "id": 4579, 
-                "output_time": 13.5, 
-                "walltime": 209
-            }, 
-            {
-                "submission_date": 1386174115, 
-                "management_time": 2.130783658000013, 
-                "input_time": 25.9, 
-                "name": "F025732DA_1.mgf", 
-                "output_size": 13758627, 
-                "command_line": "/tmp/schlouder/ATLUTvLJvW brt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/basse_resolution/input/10000/F025732DA_1.mgf", 
-                "PSM_data": {
-                    "runtime_prediction": 185, 
-                    "data_in": 36063277, 
-                    "data_out": 12420877
-                }, 
-                "error_time": 0, 
-                "start_date": 1386174846, 
-                "output_files_size": {
-                    "F025732DA_1.log": 456, 
-                    "F025732DA_1.omx.gz": 13758171
-                }, 
-                "walltime_prediction": 139, 
-                "dependencies": [], 
-                "input_files_size": {
-                    "brt_params.xml": 4385, 
-                    "mods.xml": 117497, 
-                    "usermods.xml": 213, 
-                    "run.sh": 4871, 
-                    "F025732DA_1.mgf": 18417780, 
-                    "human_DCpSP_ABU_20110615-blast.tgz": 14417326
-                }, 
-                "scheduling_strategy": "Schlouder::Scheduling::Default", 
-                "input_size": 32962072, 
-                "runtime": 155.1, 
-                "provisioning_strategy": "Schlouder::Provisioning::Asap", 
-                "id": 4587, 
-                "output_time": 7.9, 
-                "walltime": 191
-            }, 
-            {
-                "submission_date": 1386174116, 
-                "management_time": 1.6594365869999876, 
-                "input_time": 12.6, 
-                "name": "F025740DA_1.mgf", 
-                "output_size": 12446843, 
-                "command_line": "/tmp/schlouder/NIpQhU0Sy8 brt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/basse_resolution/input/10000/F025740DA_1.mgf", 
-                "PSM_data": {
-                    "runtime_prediction": 162, 
-                    "data_in": 36063277, 
-                    "data_out": 12420877
-                }, 
-                "error_time": 0, 
-                "start_date": 1386175037, 
-                "output_files_size": {
-                    "F025740DA_1.omx.gz": 12446305, 
-                    "F025740DA_1.log": 538
-                }, 
-                "walltime_prediction": 129, 
-                "dependencies": [], 
-                "input_files_size": {
-                    "brt_params.xml": 4385, 
-                    "mods.xml": 117497, 
-                    "usermods.xml": 213, 
-                    "run.sh": 4871, 
-                    "F025740DA_1.mgf": 16185143, 
-                    "human_DCpSP_ABU_20110615-blast.tgz": 14417326
-                }, 
-                "scheduling_strategy": "Schlouder::Scheduling::Default", 
-                "input_size": 30729435, 
-                "runtime": 144.0, 
-                "provisioning_strategy": "Schlouder::Provisioning::Asap", 
-                "id": 4594, 
-                "output_time": 7.8, 
-                "walltime": 166
-            }
-        ], 
-        "previous_boot_attempts": [], 
-        "stop_date": 1386177677, 
-        "boot_time_prediction": 341, 
-        "instance_id": "/locations/fr-inria/computes/50413", 
-        "instance_type": "m1.small", 
-        "host": "bonfire-vm-3", 
-        "boot_time": 245, 
-        "start_date": 1386174125, 
-        "cloud": "BonFIRE-inria", 
-        "user": "emichon"
-    }, 
+      "boot_time": 245,
+      "boot_time_prediction": 341,
+      "cloud": "BonFIRE-inria",
+      "host": "bonfire-vm-3",
+      "index": 2,
+      "instance_id": "/locations/fr-inria/computes/50413",
+      "instance_type": "m1.small",
+      "jobs": [
+        {
+          "PSM_data": {
+            "data_in": 36063277,
+            "data_out": 12420877,
+            "runtime_prediction": 199
+          },
+          "command_line": "/tmp/schlouder/TI9APbtNMS brt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/basse_resolution/input/10000/F025718DA_1.mgf",
+          "dependencies": [],
+          "error_time": 0,
+          "id": 4568,
+          "index": 3,
+          "input_files_size": {
+            "F025718DA_1.mgf": 20420415,
+            "brt_params.xml": 4385,
+            "human_DCpSP_ABU_20110615-blast.tgz": 14417326,
+            "mods.xml": 117497,
+            "run.sh": 4871,
+            "usermods.xml": 213
+          },
+          "input_size": 34964707,
+          "input_time": 82.0,
+          "management_time": 2.5444101620000197,
+          "name": "F025718DA_1.mgf",
+          "output_files_size": {
+            "F025718DA_1.log": 458,
+            "F025718DA_1.omx.gz": 14248116
+          },
+          "output_size": 14248574,
+          "output_time": 16.1,
+          "provisioning_strategy": "Schlouder::Provisioning::Asap",
+          "runtime": 165.3,
+          "scheduled_date": 0,
+          "scheduling_strategy": "Schlouder::Scheduling::Default",
+          "standard_walltime": 266,
+          "start_date": 256,
+          "submission_date": 0,
+          "walltime": 266,
+          "walltime_prediction": 145
+        },
+        {
+          "PSM_data": {
+            "data_in": 36063277,
+            "data_out": 12420877,
+            "runtime_prediction": 187
+          },
+          "command_line": "/tmp/schlouder/CqioYczFiG brt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/basse_resolution/input/10000/F025724DA_1.mgf",
+          "dependencies": [],
+          "error_time": 0,
+          "id": 4579,
+          "index": 9,
+          "input_files_size": {
+            "F025724DA_1.mgf": 18586212,
+            "brt_params.xml": 4385,
+            "human_DCpSP_ABU_20110615-blast.tgz": 14417326,
+            "mods.xml": 117497,
+            "run.sh": 4871,
+            "usermods.xml": 213
+          },
+          "input_size": 33130504,
+          "input_time": 38.7,
+          "management_time": 0.8940385310000067,
+          "name": "F025724DA_1.mgf",
+          "output_files_size": {
+            "F025724DA_1.log": 456,
+            "F025724DA_1.omx.gz": 14161303
+          },
+          "output_size": 14161759,
+          "output_time": 13.5,
+          "provisioning_strategy": "Schlouder::Provisioning::Asap",
+          "runtime": 155.9,
+          "scheduled_date": 0,
+          "scheduling_strategy": "Schlouder::Scheduling::Default",
+          "standard_walltime": 209,
+          "start_date": 522,
+          "submission_date": 0,
+          "walltime": 209,
+          "walltime_prediction": 140
+        },
+        {
+          "PSM_data": {
+            "data_in": 36063277,
+            "data_out": 12420877,
+            "runtime_prediction": 185
+          },
+          "command_line": "/tmp/schlouder/ATLUTvLJvW brt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/basse_resolution/input/10000/F025732DA_1.mgf",
+          "dependencies": [],
+          "error_time": 0,
+          "id": 4587,
+          "index": 17,
+          "input_files_size": {
+            "F025732DA_1.mgf": 18417780,
+            "brt_params.xml": 4385,
+            "human_DCpSP_ABU_20110615-blast.tgz": 14417326,
+            "mods.xml": 117497,
+            "run.sh": 4871,
+            "usermods.xml": 213
+          },
+          "input_size": 32962072,
+          "input_time": 25.9,
+          "management_time": 2.130783658000013,
+          "name": "F025732DA_1.mgf",
+          "output_files_size": {
+            "F025732DA_1.log": 456,
+            "F025732DA_1.omx.gz": 13758171
+          },
+          "output_size": 13758627,
+          "output_time": 7.9,
+          "provisioning_strategy": "Schlouder::Provisioning::Asap",
+          "runtime": 155.1,
+          "scheduled_date": 0,
+          "scheduling_strategy": "Schlouder::Scheduling::Default",
+          "standard_walltime": 191,
+          "start_date": 731,
+          "submission_date": 0,
+          "walltime": 191,
+          "walltime_prediction": 139
+        },
+        {
+          "PSM_data": {
+            "data_in": 36063277,
+            "data_out": 12420877,
+            "runtime_prediction": 162
+          },
+          "command_line": "/tmp/schlouder/NIpQhU0Sy8 brt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/basse_resolution/input/10000/F025740DA_1.mgf",
+          "dependencies": [],
+          "error_time": 0,
+          "id": 4594,
+          "index": 25,
+          "input_files_size": {
+            "F025740DA_1.mgf": 16185143,
+            "brt_params.xml": 4385,
+            "human_DCpSP_ABU_20110615-blast.tgz": 14417326,
+            "mods.xml": 117497,
+            "run.sh": 4871,
+            "usermods.xml": 213
+          },
+          "input_size": 30729435,
+          "input_time": 12.6,
+          "management_time": 1.6594365869999876,
+          "name": "F025740DA_1.mgf",
+          "output_files_size": {
+            "F025740DA_1.log": 538,
+            "F025740DA_1.omx.gz": 12446305
+          },
+          "output_size": 12446843,
+          "output_time": 7.8,
+          "provisioning_strategy": "Schlouder::Provisioning::Asap",
+          "runtime": 144.0,
+          "scheduled_date": 1,
+          "scheduling_strategy": "Schlouder::Scheduling::Default",
+          "standard_walltime": 166,
+          "start_date": 922,
+          "submission_date": 1,
+          "walltime": 166,
+          "walltime_prediction": 129
+        }
+      ],
+      "previous_boot_attempts": [],
+      "start_date": 10,
+      "stop_date": 3562,
+      "user": "emichon"
+    },
     {
-        "jobs": [
-            {
-                "submission_date": 1386174115, 
-                "management_time": 1.7792011039999807, 
-                "input_time": 88.2, 
-                "name": "F025719DA_1.mgf", 
-                "output_size": 14012438, 
-                "command_line": "/tmp/schlouder/JWV4cGQwRk brt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/basse_resolution/input/10000/F025719DA_1.mgf", 
-                "PSM_data": {
-                    "runtime_prediction": 196, 
-                    "data_in": 36063277, 
-                    "data_out": 12420877
-                }, 
-                "error_time": 0, 
-                "start_date": 1386174371, 
-                "output_files_size": {
-                    "F025719DA_1.omx.gz": 14011939, 
-                    "F025719DA_1.log": 499
-                }, 
-                "walltime_prediction": 144, 
-                "dependencies": [], 
-                "input_files_size": {
-                    "brt_params.xml": 4385, 
-                    "mods.xml": 117497, 
-                    "usermods.xml": 213, 
-                    "run.sh": 4871, 
-                    "human_DCpSP_ABU_20110615-blast.tgz": 14417326, 
-                    "F025719DA_1.mgf": 20161696
-                }, 
-                "scheduling_strategy": "Schlouder::Scheduling::Default", 
-                "input_size": 34705988, 
-                "runtime": 163.9, 
-                "provisioning_strategy": "Schlouder::Provisioning::Asap", 
-                "id": 4567, 
-                "output_time": 14.2, 
-                "walltime": 268
-            }, 
-            {
-                "submission_date": 1386174115, 
-                "management_time": 0.9426619600000095, 
-                "input_time": 38.0, 
-                "name": "F025727DA_1.mgf", 
-                "output_size": 14091960, 
-                "command_line": "/tmp/schlouder/Uk2zRhg0aI brt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/basse_resolution/input/10000/F025727DA_1.mgf", 
-                "PSM_data": {
-                    "runtime_prediction": 179, 
-                    "data_in": 36063277, 
-                    "data_out": 12420877
-                }, 
-                "error_time": 0, 
-                "start_date": 1386174639, 
-                "output_files_size": {
-                    "F025727DA_1.log": 456, 
-                    "F025727DA_1.omx.gz": 14091504
-                }, 
-                "walltime_prediction": 136, 
-                "dependencies": [], 
-                "input_files_size": {
-                    "brt_params.xml": 4385, 
-                    "F025727DA_1.mgf": 18034645, 
-                    "mods.xml": 117497, 
-                    "usermods.xml": 213, 
-                    "run.sh": 4871, 
-                    "human_DCpSP_ABU_20110615-blast.tgz": 14417326
-                }, 
-                "scheduling_strategy": "Schlouder::Scheduling::Default", 
-                "input_size": 32578937, 
-                "runtime": 153.4, 
-                "provisioning_strategy": "Schlouder::Provisioning::Asap", 
-                "id": 4580, 
-                "output_time": 12.7, 
-                "walltime": 205
-            }, 
-            {
-                "submission_date": 1386174116, 
-                "management_time": 2.05981343900001, 
-                "input_time": 27.3, 
-                "name": "F025735DA_1.mgf", 
-                "output_size": 12839581, 
-                "command_line": "/tmp/schlouder/ZVLbNMBxGk brt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/basse_resolution/input/10000/F025735DA_1.mgf", 
-                "PSM_data": {
-                    "runtime_prediction": 163, 
-                    "data_in": 36063277, 
-                    "data_out": 12420877
-                }, 
-                "error_time": 0, 
-                "start_date": 1386174844, 
-                "output_files_size": {
-                    "F025735DA_1.omx.gz": 12839043, 
-                    "F025735DA_1.log": 538
-                }, 
-                "walltime_prediction": 129, 
-                "dependencies": [], 
-                "input_files_size": {
-                    "brt_params.xml": 4385, 
-                    "mods.xml": 117497, 
-                    "usermods.xml": 213, 
-                    "run.sh": 4871, 
-                    "human_DCpSP_ABU_20110615-blast.tgz": 14417326, 
-                    "F025735DA_1.mgf": 16647053
-                }, 
-                "scheduling_strategy": "Schlouder::Scheduling::Default", 
-                "input_size": 31191345, 
-                "runtime": 144.9, 
-                "provisioning_strategy": "Schlouder::Provisioning::Asap", 
-                "id": 4586, 
-                "output_time": 10.8, 
-                "walltime": 185
-            }, 
-            {
-                "submission_date": 1386174116, 
-                "management_time": 1.6109504469999933, 
-                "input_time": 16.8, 
-                "name": "F025745DA_1.mgf", 
-                "output_size": 11665698, 
-                "command_line": "/tmp/schlouder/YAIoQBjksh brt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/basse_resolution/input/10000/F025745DA_1.mgf", 
-                "PSM_data": {
-                    "runtime_prediction": 150, 
-                    "data_in": 36063277, 
-                    "data_out": 12420877
-                }, 
-                "error_time": 0, 
-                "start_date": 1386175029, 
-                "output_files_size": {
-                    "F025745DA_1.log": 661, 
-                    "F025745DA_1.omx.gz": 11665037
-                }, 
-                "walltime_prediction": 124, 
-                "dependencies": [], 
-                "input_files_size": {
-                    "brt_params.xml": 4385, 
-                    "mods.xml": 117497, 
-                    "usermods.xml": 213, 
-                    "run.sh": 4871, 
-                    "human_DCpSP_ABU_20110615-blast.tgz": 14417326, 
-                    "F025745DA_1.mgf": 15079850
-                }, 
-                "scheduling_strategy": "Schlouder::Scheduling::Default", 
-                "input_size": 29624142, 
-                "runtime": 138.0, 
-                "provisioning_strategy": "Schlouder::Provisioning::Asap", 
-                "id": 4593, 
-                "output_time": 7.6, 
-                "walltime": 164
-            }
-        ], 
-        "previous_boot_attempts": [], 
-        "stop_date": 1386177678, 
-        "boot_time_prediction": 408, 
-        "instance_id": "/locations/fr-inria/computes/50415", 
-        "instance_type": "m1.small", 
-        "host": "bonfire-vm-5", 
-        "boot_time": 246, 
-        "start_date": 1386174125, 
-        "cloud": "BonFIRE-inria", 
-        "user": "emichon"
-    }, 
+      "boot_time": 246,
+      "boot_time_prediction": 408,
+      "cloud": "BonFIRE-inria",
+      "host": "bonfire-vm-5",
+      "index": 3,
+      "instance_id": "/locations/fr-inria/computes/50415",
+      "instance_type": "m1.small",
+      "jobs": [
+        {
+          "PSM_data": {
+            "data_in": 36063277,
+            "data_out": 12420877,
+            "runtime_prediction": 196
+          },
+          "command_line": "/tmp/schlouder/JWV4cGQwRk brt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/basse_resolution/input/10000/F025719DA_1.mgf",
+          "dependencies": [],
+          "error_time": 0,
+          "id": 4567,
+          "index": 4,
+          "input_files_size": {
+            "F025719DA_1.mgf": 20161696,
+            "brt_params.xml": 4385,
+            "human_DCpSP_ABU_20110615-blast.tgz": 14417326,
+            "mods.xml": 117497,
+            "run.sh": 4871,
+            "usermods.xml": 213
+          },
+          "input_size": 34705988,
+          "input_time": 88.2,
+          "management_time": 1.7792011039999807,
+          "name": "F025719DA_1.mgf",
+          "output_files_size": {
+            "F025719DA_1.log": 499,
+            "F025719DA_1.omx.gz": 14011939
+          },
+          "output_size": 14012438,
+          "output_time": 14.2,
+          "provisioning_strategy": "Schlouder::Provisioning::Asap",
+          "runtime": 163.9,
+          "scheduled_date": 0,
+          "scheduling_strategy": "Schlouder::Scheduling::Default",
+          "standard_walltime": 268,
+          "start_date": 256,
+          "submission_date": 0,
+          "walltime": 268,
+          "walltime_prediction": 144
+        },
+        {
+          "PSM_data": {
+            "data_in": 36063277,
+            "data_out": 12420877,
+            "runtime_prediction": 179
+          },
+          "command_line": "/tmp/schlouder/Uk2zRhg0aI brt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/basse_resolution/input/10000/F025727DA_1.mgf",
+          "dependencies": [],
+          "error_time": 0,
+          "id": 4580,
+          "index": 12,
+          "input_files_size": {
+            "F025727DA_1.mgf": 18034645,
+            "brt_params.xml": 4385,
+            "human_DCpSP_ABU_20110615-blast.tgz": 14417326,
+            "mods.xml": 117497,
+            "run.sh": 4871,
+            "usermods.xml": 213
+          },
+          "input_size": 32578937,
+          "input_time": 38.0,
+          "management_time": 0.9426619600000095,
+          "name": "F025727DA_1.mgf",
+          "output_files_size": {
+            "F025727DA_1.log": 456,
+            "F025727DA_1.omx.gz": 14091504
+          },
+          "output_size": 14091960,
+          "output_time": 12.7,
+          "provisioning_strategy": "Schlouder::Provisioning::Asap",
+          "runtime": 153.4,
+          "scheduled_date": 0,
+          "scheduling_strategy": "Schlouder::Scheduling::Default",
+          "standard_walltime": 205,
+          "start_date": 524,
+          "submission_date": 0,
+          "walltime": 205,
+          "walltime_prediction": 136
+        },
+        {
+          "PSM_data": {
+            "data_in": 36063277,
+            "data_out": 12420877,
+            "runtime_prediction": 163
+          },
+          "command_line": "/tmp/schlouder/ZVLbNMBxGk brt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/basse_resolution/input/10000/F025735DA_1.mgf",
+          "dependencies": [],
+          "error_time": 0,
+          "id": 4586,
+          "index": 20,
+          "input_files_size": {
+            "F025735DA_1.mgf": 16647053,
+            "brt_params.xml": 4385,
+            "human_DCpSP_ABU_20110615-blast.tgz": 14417326,
+            "mods.xml": 117497,
+            "run.sh": 4871,
+            "usermods.xml": 213
+          },
+          "input_size": 31191345,
+          "input_time": 27.3,
+          "management_time": 2.05981343900001,
+          "name": "F025735DA_1.mgf",
+          "output_files_size": {
+            "F025735DA_1.log": 538,
+            "F025735DA_1.omx.gz": 12839043
+          },
+          "output_size": 12839581,
+          "output_time": 10.8,
+          "provisioning_strategy": "Schlouder::Provisioning::Asap",
+          "runtime": 144.9,
+          "scheduled_date": 1,
+          "scheduling_strategy": "Schlouder::Scheduling::Default",
+          "standard_walltime": 185,
+          "start_date": 729,
+          "submission_date": 1,
+          "walltime": 185,
+          "walltime_prediction": 129
+        },
+        {
+          "PSM_data": {
+            "data_in": 36063277,
+            "data_out": 12420877,
+            "runtime_prediction": 150
+          },
+          "command_line": "/tmp/schlouder/YAIoQBjksh brt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/basse_resolution/input/10000/F025745DA_1.mgf",
+          "dependencies": [],
+          "error_time": 0,
+          "id": 4593,
+          "index": 30,
+          "input_files_size": {
+            "F025745DA_1.mgf": 15079850,
+            "brt_params.xml": 4385,
+            "human_DCpSP_ABU_20110615-blast.tgz": 14417326,
+            "mods.xml": 117497,
+            "run.sh": 4871,
+            "usermods.xml": 213
+          },
+          "input_size": 29624142,
+          "input_time": 16.8,
+          "management_time": 1.6109504469999933,
+          "name": "F025745DA_1.mgf",
+          "output_files_size": {
+            "F025745DA_1.log": 661,
+            "F025745DA_1.omx.gz": 11665037
+          },
+          "output_size": 11665698,
+          "output_time": 7.6,
+          "provisioning_strategy": "Schlouder::Provisioning::Asap",
+          "runtime": 138.0,
+          "scheduled_date": 1,
+          "scheduling_strategy": "Schlouder::Scheduling::Default",
+          "standard_walltime": 164,
+          "start_date": 914,
+          "submission_date": 1,
+          "walltime": 164,
+          "walltime_prediction": 124
+        }
+      ],
+      "previous_boot_attempts": [],
+      "start_date": 10,
+      "stop_date": 3563,
+      "user": "emichon"
+    },
     {
-        "jobs": [
-            {
-                "submission_date": 1386174115, 
-                "management_time": 2.4642098109999893, 
-                "input_time": 65.3, 
-                "name": "F025722DA_1.mgf", 
-                "output_size": 8812473, 
-                "command_line": "/tmp/schlouder/PNGaS2wWLn brt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/basse_resolution/input/10000/F025722DA_1.mgf", 
-                "PSM_data": {
-                    "runtime_prediction": 122, 
-                    "data_in": 36063277, 
-                    "data_out": 12420877
-                }, 
-                "error_time": 0, 
-                "start_date": 1386174375, 
-                "output_files_size": {
-                    "F025722DA_1.omx.gz": 8812015, 
-                    "F025722DA_1.log": 458
-                }, 
-                "walltime_prediction": 111, 
-                "dependencies": [], 
-                "input_files_size": {
-                    "brt_params.xml": 4385, 
-                    "mods.xml": 117497, 
-                    "usermods.xml": 213, 
-                    "run.sh": 4871, 
-                    "human_DCpSP_ABU_20110615-blast.tgz": 14417326, 
-                    "F025722DA_1.mgf": 12857543
-                }, 
-                "scheduling_strategy": "Schlouder::Scheduling::Default", 
-                "input_size": 27401835, 
-                "runtime": 120.0, 
-                "provisioning_strategy": "Schlouder::Provisioning::Asap", 
-                "id": 4570, 
-                "output_time": 5.3, 
-                "walltime": 193
-            }, 
-            {
-                "submission_date": 1386174115, 
-                "management_time": 0.3208480270000109, 
-                "input_time": 21.4, 
-                "name": "F025728DA_1.mgf", 
-                "output_size": 13512647, 
-                "command_line": "/tmp/schlouder/kEtKaGH5Fx brt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/basse_resolution/input/10000/F025728DA_1.mgf", 
-                "PSM_data": {
-                    "runtime_prediction": 163, 
-                    "data_in": 36063277, 
-                    "data_out": 12420877
-                }, 
-                "error_time": 0, 
-                "start_date": 1386174568, 
-                "output_files_size": {
-                    "F025728DA_1.log": 456, 
-                    "F025728DA_1.omx.gz": 13512191
-                }, 
-                "walltime_prediction": 129, 
-                "dependencies": [], 
-                "input_files_size": {
-                    "F025728DA_1.mgf": 17048741, 
-                    "brt_params.xml": 4385, 
-                    "mods.xml": 117497, 
-                    "usermods.xml": 213, 
-                    "run.sh": 4871, 
-                    "human_DCpSP_ABU_20110615-blast.tgz": 14417326
-                }, 
-                "scheduling_strategy": "Schlouder::Scheduling::Default", 
-                "input_size": 31593033, 
-                "runtime": 145.2, 
-                "provisioning_strategy": "Schlouder::Provisioning::Asap", 
-                "id": 4575, 
-                "output_time": 8.1, 
-                "walltime": 175
-            }, 
-            {
-                "submission_date": 1386174116, 
-                "management_time": 0.5577593300000103, 
-                "input_time": 9.3, 
-                "name": "F025736DA_1.mgf", 
-                "output_size": 11805497, 
-                "command_line": "/tmp/schlouder/2iTwEw3HOK brt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/basse_resolution/input/10000/F025736DA_1.mgf", 
-                "PSM_data": {
-                    "runtime_prediction": 139, 
-                    "data_in": 36063277, 
-                    "data_out": 12420877
-                }, 
-                "error_time": 0, 
-                "start_date": 1386174743, 
-                "output_files_size": {
-                    "F025736DA_1.omx.gz": 11804959, 
-                    "F025736DA_1.log": 538
-                }, 
-                "walltime_prediction": 119, 
-                "dependencies": [], 
-                "input_files_size": {
-                    "brt_params.xml": 4385, 
-                    "mods.xml": 117497, 
-                    "usermods.xml": 213, 
-                    "run.sh": 4871, 
-                    "human_DCpSP_ABU_20110615-blast.tgz": 14417326, 
-                    "F025736DA_1.mgf": 15221467
-                }, 
-                "scheduling_strategy": "Schlouder::Scheduling::Default", 
-                "input_size": 29765759, 
-                "runtime": 131.9, 
-                "provisioning_strategy": "Schlouder::Provisioning::Asap", 
-                "id": 4583, 
-                "output_time": 5.3, 
-                "walltime": 147
-            }, 
-            {
-                "submission_date": 1386174116, 
-                "management_time": 2.7551201519999893, 
-                "input_time": 3.9, 
-                "name": "F025746DA_1.mgf", 
-                "output_size": 10738451, 
-                "command_line": "/tmp/schlouder/AZGM4pneJi brt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/basse_resolution/input/10000/F025746DA_1.mgf", 
-                "PSM_data": {
-                    "runtime_prediction": 137, 
-                    "data_in": 36063277, 
-                    "data_out": 12420877
-                }, 
-                "error_time": 0, 
-                "start_date": 1386174890, 
-                "output_files_size": {
-                    "F025746DA_1.omx.gz": 10737872, 
-                    "F025746DA_1.log": 579
-                }, 
-                "walltime_prediction": 118, 
-                "dependencies": [], 
-                "input_files_size": {
-                    "brt_params.xml": 4385, 
-                    "mods.xml": 117497, 
-                    "usermods.xml": 213, 
-                    "run.sh": 4871, 
-                    "human_DCpSP_ABU_20110615-blast.tgz": 14417326, 
-                    "F025746DA_1.mgf": 14090736
-                }, 
-                "scheduling_strategy": "Schlouder::Scheduling::Default", 
-                "input_size": 28635028, 
-                "runtime": 129.7, 
-                "provisioning_strategy": "Schlouder::Provisioning::Asap", 
-                "id": 4590, 
-                "output_time": 6.7, 
-                "walltime": 143
-            }
-        ], 
-        "previous_boot_attempts": [], 
-        "stop_date": 1386177679, 
-        "boot_time_prediction": 475, 
-        "instance_id": "/locations/fr-inria/computes/50416", 
-        "instance_type": "m1.small", 
-        "host": "bonfire-vm-6", 
-        "boot_time": 250, 
-        "start_date": 1386174125, 
-        "cloud": "BonFIRE-inria", 
-        "user": "emichon"
-    }, 
+      "boot_time": 250,
+      "boot_time_prediction": 475,
+      "cloud": "BonFIRE-inria",
+      "host": "bonfire-vm-6",
+      "index": 4,
+      "instance_id": "/locations/fr-inria/computes/50416",
+      "instance_type": "m1.small",
+      "jobs": [
+        {
+          "PSM_data": {
+            "data_in": 36063277,
+            "data_out": 12420877,
+            "runtime_prediction": 122
+          },
+          "command_line": "/tmp/schlouder/PNGaS2wWLn brt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/basse_resolution/input/10000/F025722DA_1.mgf",
+          "dependencies": [],
+          "error_time": 0,
+          "id": 4570,
+          "index": 7,
+          "input_files_size": {
+            "F025722DA_1.mgf": 12857543,
+            "brt_params.xml": 4385,
+            "human_DCpSP_ABU_20110615-blast.tgz": 14417326,
+            "mods.xml": 117497,
+            "run.sh": 4871,
+            "usermods.xml": 213
+          },
+          "input_size": 27401835,
+          "input_time": 65.3,
+          "management_time": 2.4642098109999893,
+          "name": "F025722DA_1.mgf",
+          "output_files_size": {
+            "F025722DA_1.log": 458,
+            "F025722DA_1.omx.gz": 8812015
+          },
+          "output_size": 8812473,
+          "output_time": 5.3,
+          "provisioning_strategy": "Schlouder::Provisioning::Asap",
+          "runtime": 120.0,
+          "scheduled_date": 0,
+          "scheduling_strategy": "Schlouder::Scheduling::Default",
+          "standard_walltime": 193,
+          "start_date": 260,
+          "submission_date": 0,
+          "walltime": 193,
+          "walltime_prediction": 111
+        },
+        {
+          "PSM_data": {
+            "data_in": 36063277,
+            "data_out": 12420877,
+            "runtime_prediction": 163
+          },
+          "command_line": "/tmp/schlouder/kEtKaGH5Fx brt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/basse_resolution/input/10000/F025728DA_1.mgf",
+          "dependencies": [],
+          "error_time": 0,
+          "id": 4575,
+          "index": 13,
+          "input_files_size": {
+            "F025728DA_1.mgf": 17048741,
+            "brt_params.xml": 4385,
+            "human_DCpSP_ABU_20110615-blast.tgz": 14417326,
+            "mods.xml": 117497,
+            "run.sh": 4871,
+            "usermods.xml": 213
+          },
+          "input_size": 31593033,
+          "input_time": 21.4,
+          "management_time": 0.3208480270000109,
+          "name": "F025728DA_1.mgf",
+          "output_files_size": {
+            "F025728DA_1.log": 456,
+            "F025728DA_1.omx.gz": 13512191
+          },
+          "output_size": 13512647,
+          "output_time": 8.1,
+          "provisioning_strategy": "Schlouder::Provisioning::Asap",
+          "runtime": 145.2,
+          "scheduled_date": 0,
+          "scheduling_strategy": "Schlouder::Scheduling::Default",
+          "standard_walltime": 175,
+          "start_date": 453,
+          "submission_date": 0,
+          "walltime": 175,
+          "walltime_prediction": 129
+        },
+        {
+          "PSM_data": {
+            "data_in": 36063277,
+            "data_out": 12420877,
+            "runtime_prediction": 139
+          },
+          "command_line": "/tmp/schlouder/2iTwEw3HOK brt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/basse_resolution/input/10000/F025736DA_1.mgf",
+          "dependencies": [],
+          "error_time": 0,
+          "id": 4583,
+          "index": 21,
+          "input_files_size": {
+            "F025736DA_1.mgf": 15221467,
+            "brt_params.xml": 4385,
+            "human_DCpSP_ABU_20110615-blast.tgz": 14417326,
+            "mods.xml": 117497,
+            "run.sh": 4871,
+            "usermods.xml": 213
+          },
+          "input_size": 29765759,
+          "input_time": 9.3,
+          "management_time": 0.5577593300000103,
+          "name": "F025736DA_1.mgf",
+          "output_files_size": {
+            "F025736DA_1.log": 538,
+            "F025736DA_1.omx.gz": 11804959
+          },
+          "output_size": 11805497,
+          "output_time": 5.3,
+          "provisioning_strategy": "Schlouder::Provisioning::Asap",
+          "runtime": 131.9,
+          "scheduled_date": 1,
+          "scheduling_strategy": "Schlouder::Scheduling::Default",
+          "standard_walltime": 147,
+          "start_date": 628,
+          "submission_date": 1,
+          "walltime": 147,
+          "walltime_prediction": 119
+        },
+        {
+          "PSM_data": {
+            "data_in": 36063277,
+            "data_out": 12420877,
+            "runtime_prediction": 137
+          },
+          "command_line": "/tmp/schlouder/AZGM4pneJi brt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/basse_resolution/input/10000/F025746DA_1.mgf",
+          "dependencies": [],
+          "error_time": 0,
+          "id": 4590,
+          "index": 31,
+          "input_files_size": {
+            "F025746DA_1.mgf": 14090736,
+            "brt_params.xml": 4385,
+            "human_DCpSP_ABU_20110615-blast.tgz": 14417326,
+            "mods.xml": 117497,
+            "run.sh": 4871,
+            "usermods.xml": 213
+          },
+          "input_size": 28635028,
+          "input_time": 3.9,
+          "management_time": 2.7551201519999893,
+          "name": "F025746DA_1.mgf",
+          "output_files_size": {
+            "F025746DA_1.log": 579,
+            "F025746DA_1.omx.gz": 10737872
+          },
+          "output_size": 10738451,
+          "output_time": 6.7,
+          "provisioning_strategy": "Schlouder::Provisioning::Asap",
+          "runtime": 129.7,
+          "scheduled_date": 1,
+          "scheduling_strategy": "Schlouder::Scheduling::Default",
+          "standard_walltime": 143,
+          "start_date": 775,
+          "submission_date": 1,
+          "walltime": 143,
+          "walltime_prediction": 118
+        }
+      ],
+      "previous_boot_attempts": [],
+      "start_date": 10,
+      "stop_date": 3564,
+      "user": "emichon"
+    },
     {
-        "jobs": [
-            {
-                "submission_date": 1386174115, 
-                "management_time": 1.144886748999994, 
-                "input_time": 72.9, 
-                "name": "F025725DA_1.mgf", 
-                "output_size": 13800579, 
-                "command_line": "/tmp/schlouder/Q4VMj8gjZN brt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/basse_resolution/input/10000/F025725DA_1.mgf", 
-                "PSM_data": {
-                    "runtime_prediction": 171, 
-                    "data_in": 36063277, 
-                    "data_out": 12420877
-                }, 
-                "error_time": 0, 
-                "start_date": 1386174375, 
-                "output_files_size": {
-                    "F025725DA_1.log": 499, 
-                    "F025725DA_1.omx.gz": 13800080
-                }, 
-                "walltime_prediction": 133, 
-                "dependencies": [], 
-                "input_files_size": {
-                    "brt_params.xml": 4385, 
-                    "mods.xml": 117497, 
-                    "usermods.xml": 213, 
-                    "run.sh": 4871, 
-                    "F025725DA_1.mgf": 17981345, 
-                    "human_DCpSP_ABU_20110615-blast.tgz": 14417326
-                }, 
-                "scheduling_strategy": "Schlouder::Scheduling::Default", 
-                "input_size": 32525637, 
-                "runtime": 150.1, 
-                "provisioning_strategy": "Schlouder::Provisioning::Asap", 
-                "id": 4569, 
-                "output_time": 8.9, 
-                "walltime": 233
-            }, 
-            {
-                "submission_date": 1386174116, 
-                "management_time": 2.2642486539999993, 
-                "input_time": 17.9, 
-                "name": "F025733DA_1.mgf", 
-                "output_size": 13430634, 
-                "command_line": "/tmp/schlouder/y5S1QuBrQi brt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/basse_resolution/input/10000/F025733DA_1.mgf", 
-                "PSM_data": {
-                    "runtime_prediction": 170, 
-                    "data_in": 36063277, 
-                    "data_out": 12420877
-                }, 
-                "error_time": 0, 
-                "start_date": 1386174608, 
-                "output_files_size": {
-                    "F025733DA_1.omx.gz": 13430178, 
-                    "F025733DA_1.log": 456
-                }, 
-                "walltime_prediction": 132, 
-                "dependencies": [], 
-                "input_files_size": {
-                    "brt_params.xml": 4385, 
-                    "F025733DA_1.mgf": 16951866, 
-                    "mods.xml": 117497, 
-                    "usermods.xml": 213, 
-                    "run.sh": 4871, 
-                    "human_DCpSP_ABU_20110615-blast.tgz": 14417326
-                }, 
-                "scheduling_strategy": "Schlouder::Scheduling::Default", 
-                "input_size": 31496158, 
-                "runtime": 148.4, 
-                "provisioning_strategy": "Schlouder::Provisioning::Asap", 
-                "id": 4576, 
-                "output_time": 7.4, 
-                "walltime": 176
-            }, 
-            {
-                "submission_date": 1386174116, 
-                "management_time": 1.591055914000009, 
-                "input_time": 7.7, 
-                "name": "F025741DA_1.mgf", 
-                "output_size": 12482063, 
-                "command_line": "/tmp/schlouder/F3af7Z3yTP brt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/basse_resolution/input/10000/F025741DA_1.mgf", 
-                "PSM_data": {
-                    "runtime_prediction": 156, 
-                    "data_in": 36063277, 
-                    "data_out": 12420877
-                }, 
-                "error_time": 0, 
-                "start_date": 1386174784, 
-                "output_files_size": {
-                    "F025741DA_1.omx.gz": 12481525, 
-                    "F025741DA_1.log": 538
-                }, 
-                "walltime_prediction": 126, 
-                "dependencies": [], 
-                "input_files_size": {
-                    "brt_params.xml": 4385, 
-                    "mods.xml": 117497, 
-                    "usermods.xml": 213, 
-                    "run.sh": 4871, 
-                    "human_DCpSP_ABU_20110615-blast.tgz": 14417326, 
-                    "F025741DA_1.mgf": 15282540
-                }, 
-                "scheduling_strategy": "Schlouder::Scheduling::Default", 
-                "input_size": 29826832, 
-                "runtime": 141.1, 
-                "provisioning_strategy": "Schlouder::Provisioning::Asap", 
-                "id": 4584, 
-                "output_time": 6.7, 
-                "walltime": 157
-            }
-        ], 
-        "previous_boot_attempts": [], 
-        "stop_date": 1386177680, 
-        "boot_time_prediction": 543, 
-        "instance_id": "/locations/fr-inria/computes/50417", 
-        "instance_type": "m1.small", 
-        "host": "bonfire-vm-7", 
-        "boot_time": 249, 
-        "start_date": 1386174125, 
-        "cloud": "BonFIRE-inria", 
-        "user": "emichon"
-    }, 
+      "boot_time": 249,
+      "boot_time_prediction": 543,
+      "cloud": "BonFIRE-inria",
+      "host": "bonfire-vm-7",
+      "index": 5,
+      "instance_id": "/locations/fr-inria/computes/50417",
+      "instance_type": "m1.small",
+      "jobs": [
+        {
+          "PSM_data": {
+            "data_in": 36063277,
+            "data_out": 12420877,
+            "runtime_prediction": 171
+          },
+          "command_line": "/tmp/schlouder/Q4VMj8gjZN brt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/basse_resolution/input/10000/F025725DA_1.mgf",
+          "dependencies": [],
+          "error_time": 0,
+          "id": 4569,
+          "index": 10,
+          "input_files_size": {
+            "F025725DA_1.mgf": 17981345,
+            "brt_params.xml": 4385,
+            "human_DCpSP_ABU_20110615-blast.tgz": 14417326,
+            "mods.xml": 117497,
+            "run.sh": 4871,
+            "usermods.xml": 213
+          },
+          "input_size": 32525637,
+          "input_time": 72.9,
+          "management_time": 1.144886748999994,
+          "name": "F025725DA_1.mgf",
+          "output_files_size": {
+            "F025725DA_1.log": 499,
+            "F025725DA_1.omx.gz": 13800080
+          },
+          "output_size": 13800579,
+          "output_time": 8.9,
+          "provisioning_strategy": "Schlouder::Provisioning::Asap",
+          "runtime": 150.1,
+          "scheduled_date": 0,
+          "scheduling_strategy": "Schlouder::Scheduling::Default",
+          "standard_walltime": 233,
+          "start_date": 260,
+          "submission_date": 0,
+          "walltime": 233,
+          "walltime_prediction": 133
+        },
+        {
+          "PSM_data": {
+            "data_in": 36063277,
+            "data_out": 12420877,
+            "runtime_prediction": 170
+          },
+          "command_line": "/tmp/schlouder/y5S1QuBrQi brt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/basse_resolution/input/10000/F025733DA_1.mgf",
+          "dependencies": [],
+          "error_time": 0,
+          "id": 4576,
+          "index": 18,
+          "input_files_size": {
+            "F025733DA_1.mgf": 16951866,
+            "brt_params.xml": 4385,
+            "human_DCpSP_ABU_20110615-blast.tgz": 14417326,
+            "mods.xml": 117497,
+            "run.sh": 4871,
+            "usermods.xml": 213
+          },
+          "input_size": 31496158,
+          "input_time": 17.9,
+          "management_time": 2.2642486539999993,
+          "name": "F025733DA_1.mgf",
+          "output_files_size": {
+            "F025733DA_1.log": 456,
+            "F025733DA_1.omx.gz": 13430178
+          },
+          "output_size": 13430634,
+          "output_time": 7.4,
+          "provisioning_strategy": "Schlouder::Provisioning::Asap",
+          "runtime": 148.4,
+          "scheduled_date": 1,
+          "scheduling_strategy": "Schlouder::Scheduling::Default",
+          "standard_walltime": 176,
+          "start_date": 493,
+          "submission_date": 1,
+          "walltime": 176,
+          "walltime_prediction": 132
+        },
+        {
+          "PSM_data": {
+            "data_in": 36063277,
+            "data_out": 12420877,
+            "runtime_prediction": 156
+          },
+          "command_line": "/tmp/schlouder/F3af7Z3yTP brt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/basse_resolution/input/10000/F025741DA_1.mgf",
+          "dependencies": [],
+          "error_time": 0,
+          "id": 4584,
+          "index": 26,
+          "input_files_size": {
+            "F025741DA_1.mgf": 15282540,
+            "brt_params.xml": 4385,
+            "human_DCpSP_ABU_20110615-blast.tgz": 14417326,
+            "mods.xml": 117497,
+            "run.sh": 4871,
+            "usermods.xml": 213
+          },
+          "input_size": 29826832,
+          "input_time": 7.7,
+          "management_time": 1.591055914000009,
+          "name": "F025741DA_1.mgf",
+          "output_files_size": {
+            "F025741DA_1.log": 538,
+            "F025741DA_1.omx.gz": 12481525
+          },
+          "output_size": 12482063,
+          "output_time": 6.7,
+          "provisioning_strategy": "Schlouder::Provisioning::Asap",
+          "runtime": 141.1,
+          "scheduled_date": 1,
+          "scheduling_strategy": "Schlouder::Scheduling::Default",
+          "standard_walltime": 157,
+          "start_date": 669,
+          "submission_date": 1,
+          "walltime": 157,
+          "walltime_prediction": 126
+        }
+      ],
+      "previous_boot_attempts": [],
+      "start_date": 10,
+      "stop_date": 3565,
+      "user": "emichon"
+    },
     {
-        "jobs": [
-            {
-                "submission_date": 1386174115, 
-                "management_time": 1.0304493129999912, 
-                "input_time": 54.4, 
-                "name": "F025729DA_1.mgf", 
-                "output_size": 9333552, 
-                "command_line": "/tmp/schlouder/I1Pgu7j6gM brt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/basse_resolution/input/10000/F025729DA_1.mgf", 
-                "PSM_data": {
-                    "runtime_prediction": 105, 
-                    "data_in": 36063277, 
-                    "data_out": 12420877
-                }, 
-                "error_time": 0, 
-                "start_date": 1386174405, 
-                "output_files_size": {
-                    "F025729DA_1.omx.gz": 9333094, 
-                    "F025729DA_1.log": 458
-                }, 
-                "walltime_prediction": 103, 
-                "dependencies": [], 
-                "input_files_size": {
-                    "brt_params.xml": 4385, 
-                    "mods.xml": 117497, 
-                    "usermods.xml": 213, 
-                    "run.sh": 4871, 
-                    "human_DCpSP_ABU_20110615-blast.tgz": 14417326, 
-                    "F025729DA_1.mgf": 12752145
-                }, 
-                "scheduling_strategy": "Schlouder::Scheduling::Default", 
-                "input_size": 27296437, 
-                "runtime": 173.2, 
-                "provisioning_strategy": "Schlouder::Provisioning::Asap", 
-                "id": 4571, 
-                "output_time": 9.4, 
-                "walltime": 238
-            }, 
-            {
-                "submission_date": 1386174116, 
-                "management_time": 1.4888881509999976, 
-                "input_time": 31.1, 
-                "name": "F025737DA_1.mgf", 
-                "output_size": 11324997, 
-                "command_line": "/tmp/schlouder/xph8zLttDa brt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/basse_resolution/input/10000/F025737DA_1.mgf", 
-                "PSM_data": {
-                    "runtime_prediction": 133, 
-                    "data_in": 36063277, 
-                    "data_out": 12420877
-                }, 
-                "error_time": 0, 
-                "start_date": 1386174645, 
-                "output_files_size": {
-                    "F025737DA_1.log": 579, 
-                    "F025737DA_1.omx.gz": 11324418
-                }, 
-                "walltime_prediction": 116, 
-                "dependencies": [], 
-                "input_files_size": {
-                    "brt_params.xml": 4385, 
-                    "mods.xml": 117497, 
-                    "usermods.xml": 213, 
-                    "run.sh": 4871, 
-                    "human_DCpSP_ABU_20110615-blast.tgz": 14417326, 
-                    "F025737DA_1.mgf": 15181669
-                }, 
-                "scheduling_strategy": "Schlouder::Scheduling::Default", 
-                "input_size": 29725961, 
-                "runtime": 196.7, 
-                "provisioning_strategy": "Schlouder::Provisioning::Asap", 
-                "id": 4581, 
-                "output_time": 5.7, 
-                "walltime": 235
-            }, 
-            {
-                "submission_date": 1386174116, 
-                "management_time": 1.289725610000005, 
-                "input_time": 4.3, 
-                "name": "F025747DA_1.mgf", 
-                "output_size": 9507084, 
-                "command_line": "/tmp/schlouder/SdEqkDLMzA brt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/basse_resolution/input/10000/F025747DA_1.mgf", 
-                "PSM_data": {
-                    "runtime_prediction": 132, 
-                    "data_in": 36063277, 
-                    "data_out": 12420877
-                }, 
-                "error_time": 0, 
-                "start_date": 1386174880, 
-                "output_files_size": {
-                    "F025747DA_1.log": 825, 
-                    "F025747DA_1.omx.gz": 9506259
-                }, 
-                "walltime_prediction": 115, 
-                "dependencies": [], 
-                "input_files_size": {
-                    "brt_params.xml": 4385, 
-                    "mods.xml": 117497, 
-                    "usermods.xml": 213, 
-                    "run.sh": 4871, 
-                    "human_DCpSP_ABU_20110615-blast.tgz": 14417326, 
-                    "F025747DA_1.mgf": 12772878
-                }, 
-                "scheduling_strategy": "Schlouder::Scheduling::Default", 
-                "input_size": 27317170, 
-                "runtime": 201.8, 
-                "provisioning_strategy": "Schlouder::Provisioning::Asap", 
-                "id": 4589, 
-                "output_time": 5.6, 
-                "walltime": 213
-            }
-        ], 
-        "previous_boot_attempts": [], 
-        "stop_date": 1386177681, 
-        "boot_time_prediction": 610, 
-        "instance_id": "/locations/fr-inria/computes/50412", 
-        "instance_type": "m1.small", 
-        "host": "bonfire-vm-2", 
-        "boot_time": 279, 
-        "start_date": 1386174125, 
-        "cloud": "BonFIRE-inria", 
-        "user": "emichon"
-    }, 
+      "boot_time": 279,
+      "boot_time_prediction": 610,
+      "cloud": "BonFIRE-inria",
+      "host": "bonfire-vm-2",
+      "index": 6,
+      "instance_id": "/locations/fr-inria/computes/50412",
+      "instance_type": "m1.small",
+      "jobs": [
+        {
+          "PSM_data": {
+            "data_in": 36063277,
+            "data_out": 12420877,
+            "runtime_prediction": 105
+          },
+          "command_line": "/tmp/schlouder/I1Pgu7j6gM brt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/basse_resolution/input/10000/F025729DA_1.mgf",
+          "dependencies": [],
+          "error_time": 0,
+          "id": 4571,
+          "index": 14,
+          "input_files_size": {
+            "F025729DA_1.mgf": 12752145,
+            "brt_params.xml": 4385,
+            "human_DCpSP_ABU_20110615-blast.tgz": 14417326,
+            "mods.xml": 117497,
+            "run.sh": 4871,
+            "usermods.xml": 213
+          },
+          "input_size": 27296437,
+          "input_time": 54.4,
+          "management_time": 1.0304493129999912,
+          "name": "F025729DA_1.mgf",
+          "output_files_size": {
+            "F025729DA_1.log": 458,
+            "F025729DA_1.omx.gz": 9333094
+          },
+          "output_size": 9333552,
+          "output_time": 9.4,
+          "provisioning_strategy": "Schlouder::Provisioning::Asap",
+          "runtime": 173.2,
+          "scheduled_date": 0,
+          "scheduling_strategy": "Schlouder::Scheduling::Default",
+          "standard_walltime": 238,
+          "start_date": 290,
+          "submission_date": 0,
+          "walltime": 238,
+          "walltime_prediction": 103
+        },
+        {
+          "PSM_data": {
+            "data_in": 36063277,
+            "data_out": 12420877,
+            "runtime_prediction": 133
+          },
+          "command_line": "/tmp/schlouder/xph8zLttDa brt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/basse_resolution/input/10000/F025737DA_1.mgf",
+          "dependencies": [],
+          "error_time": 0,
+          "id": 4581,
+          "index": 22,
+          "input_files_size": {
+            "F025737DA_1.mgf": 15181669,
+            "brt_params.xml": 4385,
+            "human_DCpSP_ABU_20110615-blast.tgz": 14417326,
+            "mods.xml": 117497,
+            "run.sh": 4871,
+            "usermods.xml": 213
+          },
+          "input_size": 29725961,
+          "input_time": 31.1,
+          "management_time": 1.4888881509999976,
+          "name": "F025737DA_1.mgf",
+          "output_files_size": {
+            "F025737DA_1.log": 579,
+            "F025737DA_1.omx.gz": 11324418
+          },
+          "output_size": 11324997,
+          "output_time": 5.7,
+          "provisioning_strategy": "Schlouder::Provisioning::Asap",
+          "runtime": 196.7,
+          "scheduled_date": 1,
+          "scheduling_strategy": "Schlouder::Scheduling::Default",
+          "standard_walltime": 235,
+          "start_date": 530,
+          "submission_date": 1,
+          "walltime": 235,
+          "walltime_prediction": 116
+        },
+        {
+          "PSM_data": {
+            "data_in": 36063277,
+            "data_out": 12420877,
+            "runtime_prediction": 132
+          },
+          "command_line": "/tmp/schlouder/SdEqkDLMzA brt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/basse_resolution/input/10000/F025747DA_1.mgf",
+          "dependencies": [],
+          "error_time": 0,
+          "id": 4589,
+          "index": 32,
+          "input_files_size": {
+            "F025747DA_1.mgf": 12772878,
+            "brt_params.xml": 4385,
+            "human_DCpSP_ABU_20110615-blast.tgz": 14417326,
+            "mods.xml": 117497,
+            "run.sh": 4871,
+            "usermods.xml": 213
+          },
+          "input_size": 27317170,
+          "input_time": 4.3,
+          "management_time": 1.289725610000005,
+          "name": "F025747DA_1.mgf",
+          "output_files_size": {
+            "F025747DA_1.log": 825,
+            "F025747DA_1.omx.gz": 9506259
+          },
+          "output_size": 9507084,
+          "output_time": 5.6,
+          "provisioning_strategy": "Schlouder::Provisioning::Asap",
+          "runtime": 201.8,
+          "scheduled_date": 1,
+          "scheduling_strategy": "Schlouder::Scheduling::Default",
+          "standard_walltime": 213,
+          "start_date": 765,
+          "submission_date": 1,
+          "walltime": 213,
+          "walltime_prediction": 115
+        }
+      ],
+      "previous_boot_attempts": [],
+      "start_date": 10,
+      "stop_date": 3566,
+      "user": "emichon"
+    },
     {
-        "jobs": [
-            {
-                "submission_date": 1386174116, 
-                "management_time": 1.601637339000007, 
-                "input_time": 26.9, 
-                "name": "F025734DA_1.mgf", 
-                "output_size": 12725189, 
-                "command_line": "/tmp/schlouder/217xPgCSyI brt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/basse_resolution/input/10000/F025734DA_1.mgf", 
-                "PSM_data": {
-                    "runtime_prediction": 161, 
-                    "data_in": 36063277, 
-                    "data_out": 12420877
-                }, 
-                "error_time": 0, 
-                "start_date": 1386174446, 
-                "output_files_size": {
-                    "F025734DA_1.omx.gz": 12724691, 
-                    "F025734DA_1.log": 498
-                }, 
-                "walltime_prediction": 128, 
-                "dependencies": [], 
-                "input_files_size": {
-                    "brt_params.xml": 4385, 
-                    "mods.xml": 117497, 
-                    "usermods.xml": 213, 
-                    "run.sh": 4871, 
-                    "human_DCpSP_ABU_20110615-blast.tgz": 14417326, 
-                    "F025734DA_1.mgf": 16487509
-                }, 
-                "scheduling_strategy": "Schlouder::Scheduling::Default", 
-                "input_size": 31031801, 
-                "runtime": 216.1, 
-                "provisioning_strategy": "Schlouder::Provisioning::Asap", 
-                "id": 4572, 
-                "output_time": 6.4, 
-                "walltime": 251
-            }, 
-            {
-                "submission_date": 1386174116, 
-                "management_time": 2.328613116000014, 
-                "input_time": 7.7, 
-                "name": "F025742DA_1.mgf", 
-                "output_size": 12921454, 
-                "command_line": "/tmp/schlouder/XMfd24GT7E brt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/basse_resolution/input/10000/F025742DA_1.mgf", 
-                "PSM_data": {
-                    "runtime_prediction": 171, 
-                    "data_in": 36063277, 
-                    "data_out": 12420877
-                }, 
-                "error_time": 0, 
-                "start_date": 1386174697, 
-                "output_files_size": {
-                    "F025742DA_1.log": 538, 
-                    "F025742DA_1.omx.gz": 12920916
-                }, 
-                "walltime_prediction": 133, 
-                "dependencies": [], 
-                "input_files_size": {
-                    "brt_params.xml": 4385, 
-                    "mods.xml": 117497, 
-                    "usermods.xml": 213, 
-                    "F025742DA_1.mgf": 16278791, 
-                    "human_DCpSP_ABU_20110615-blast.tgz": 14417326, 
-                    "run.sh": 4871
-                }, 
-                "scheduling_strategy": "Schlouder::Scheduling::Default", 
-                "input_size": 30823083, 
-                "runtime": 230.7, 
-                "provisioning_strategy": "Schlouder::Provisioning::Asap", 
-                "id": 4582, 
-                "output_time": 7.2, 
-                "walltime": 248
-            }
-        ], 
-        "previous_boot_attempts": [], 
-        "stop_date": 1386177682, 
-        "boot_time_prediction": 677, 
-        "instance_id": "/locations/fr-inria/computes/50411", 
-        "instance_type": "m1.small", 
-        "host": "bonfire-vm-1", 
-        "boot_time": 317, 
-        "start_date": 1386174125, 
-        "cloud": "BonFIRE-inria", 
-        "user": "emichon"
-    }, 
+      "boot_time": 317,
+      "boot_time_prediction": 677,
+      "cloud": "BonFIRE-inria",
+      "host": "bonfire-vm-1",
+      "index": 7,
+      "instance_id": "/locations/fr-inria/computes/50411",
+      "instance_type": "m1.small",
+      "jobs": [
+        {
+          "PSM_data": {
+            "data_in": 36063277,
+            "data_out": 12420877,
+            "runtime_prediction": 161
+          },
+          "command_line": "/tmp/schlouder/217xPgCSyI brt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/basse_resolution/input/10000/F025734DA_1.mgf",
+          "dependencies": [],
+          "error_time": 0,
+          "id": 4572,
+          "index": 19,
+          "input_files_size": {
+            "F025734DA_1.mgf": 16487509,
+            "brt_params.xml": 4385,
+            "human_DCpSP_ABU_20110615-blast.tgz": 14417326,
+            "mods.xml": 117497,
+            "run.sh": 4871,
+            "usermods.xml": 213
+          },
+          "input_size": 31031801,
+          "input_time": 26.9,
+          "management_time": 1.601637339000007,
+          "name": "F025734DA_1.mgf",
+          "output_files_size": {
+            "F025734DA_1.log": 498,
+            "F025734DA_1.omx.gz": 12724691
+          },
+          "output_size": 12725189,
+          "output_time": 6.4,
+          "provisioning_strategy": "Schlouder::Provisioning::Asap",
+          "runtime": 216.1,
+          "scheduled_date": 1,
+          "scheduling_strategy": "Schlouder::Scheduling::Default",
+          "standard_walltime": 251,
+          "start_date": 331,
+          "submission_date": 1,
+          "walltime": 251,
+          "walltime_prediction": 128
+        },
+        {
+          "PSM_data": {
+            "data_in": 36063277,
+            "data_out": 12420877,
+            "runtime_prediction": 171
+          },
+          "command_line": "/tmp/schlouder/XMfd24GT7E brt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/basse_resolution/input/10000/F025742DA_1.mgf",
+          "dependencies": [],
+          "error_time": 0,
+          "id": 4582,
+          "index": 27,
+          "input_files_size": {
+            "F025742DA_1.mgf": 16278791,
+            "brt_params.xml": 4385,
+            "human_DCpSP_ABU_20110615-blast.tgz": 14417326,
+            "mods.xml": 117497,
+            "run.sh": 4871,
+            "usermods.xml": 213
+          },
+          "input_size": 30823083,
+          "input_time": 7.7,
+          "management_time": 2.328613116000014,
+          "name": "F025742DA_1.mgf",
+          "output_files_size": {
+            "F025742DA_1.log": 538,
+            "F025742DA_1.omx.gz": 12920916
+          },
+          "output_size": 12921454,
+          "output_time": 7.2,
+          "provisioning_strategy": "Schlouder::Provisioning::Asap",
+          "runtime": 230.7,
+          "scheduled_date": 1,
+          "scheduling_strategy": "Schlouder::Scheduling::Default",
+          "standard_walltime": 248,
+          "start_date": 582,
+          "submission_date": 1,
+          "walltime": 248,
+          "walltime_prediction": 133
+        }
+      ],
+      "previous_boot_attempts": [],
+      "start_date": 10,
+      "stop_date": 3567,
+      "user": "emichon"
+    },
     {
-        "jobs": [
-            {
-                "submission_date": 1386174116, 
-                "management_time": 1.456345596999995, 
-                "input_time": 41.5, 
-                "name": "F025738DA_1.mgf", 
-                "output_size": 12692397, 
-                "command_line": "/tmp/schlouder/oiBTPl3FYv brt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/basse_resolution/input/10000/F025738DA_1.mgf", 
-                "PSM_data": {
-                    "runtime_prediction": 165, 
-                    "data_in": 36063277, 
-                    "data_out": 12420877
-                }, 
-                "error_time": 0, 
-                "start_date": 1386174562, 
-                "output_files_size": {
-                    "F025738DA_1.log": 540, 
-                    "F025738DA_1.omx.gz": 12691857
-                }, 
-                "walltime_prediction": 130, 
-                "dependencies": [], 
-                "input_files_size": {
-                    "brt_params.xml": 4385, 
-                    "mods.xml": 117497, 
-                    "usermods.xml": 213, 
-                    "run.sh": 4871, 
-                    "human_DCpSP_ABU_20110615-blast.tgz": 14417326, 
-                    "F025738DA_1.mgf": 16676578
-                }, 
-                "scheduling_strategy": "Schlouder::Scheduling::Default", 
-                "input_size": 31220870, 
-                "runtime": 224.0, 
-                "provisioning_strategy": "Schlouder::Provisioning::Asap", 
-                "id": 4574, 
-                "output_time": 9.1, 
-                "walltime": 276
-            }
-        ], 
-        "previous_boot_attempts": [], 
-        "stop_date": 1386177683, 
-        "boot_time_prediction": 744, 
-        "instance_id": "/locations/fr-inria/computes/50419", 
-        "instance_type": "m1.small", 
-        "host": "bonfire-vm-9", 
-        "boot_time": 436, 
-        "start_date": 1386174125, 
-        "cloud": "BonFIRE-inria", 
-        "user": "emichon"
-    }, 
+      "boot_time": 436,
+      "boot_time_prediction": 744,
+      "cloud": "BonFIRE-inria",
+      "host": "bonfire-vm-9",
+      "index": 8,
+      "instance_id": "/locations/fr-inria/computes/50419",
+      "instance_type": "m1.small",
+      "jobs": [
+        {
+          "PSM_data": {
+            "data_in": 36063277,
+            "data_out": 12420877,
+            "runtime_prediction": 165
+          },
+          "command_line": "/tmp/schlouder/oiBTPl3FYv brt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/basse_resolution/input/10000/F025738DA_1.mgf",
+          "dependencies": [],
+          "error_time": 0,
+          "id": 4574,
+          "index": 23,
+          "input_files_size": {
+            "F025738DA_1.mgf": 16676578,
+            "brt_params.xml": 4385,
+            "human_DCpSP_ABU_20110615-blast.tgz": 14417326,
+            "mods.xml": 117497,
+            "run.sh": 4871,
+            "usermods.xml": 213
+          },
+          "input_size": 31220870,
+          "input_time": 41.5,
+          "management_time": 1.456345596999995,
+          "name": "F025738DA_1.mgf",
+          "output_files_size": {
+            "F025738DA_1.log": 540,
+            "F025738DA_1.omx.gz": 12691857
+          },
+          "output_size": 12692397,
+          "output_time": 9.1,
+          "provisioning_strategy": "Schlouder::Provisioning::Asap",
+          "runtime": 224.0,
+          "scheduled_date": 1,
+          "scheduling_strategy": "Schlouder::Scheduling::Default",
+          "standard_walltime": 276,
+          "start_date": 447,
+          "submission_date": 1,
+          "walltime": 276,
+          "walltime_prediction": 130
+        }
+      ],
+      "previous_boot_attempts": [],
+      "start_date": 10,
+      "stop_date": 3568,
+      "user": "emichon"
+    },
     {
-        "jobs": [
-            {
-                "submission_date": 1386174116, 
-                "management_time": 2.298820744000011, 
-                "input_time": 36.2, 
-                "name": "F025743DA_1.mgf", 
-                "output_size": 12478250, 
-                "command_line": "/tmp/schlouder/vqLryVlQfT brt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/basse_resolution/input/10000/F025743DA_1.mgf", 
-                "PSM_data": {
-                    "runtime_prediction": 160, 
-                    "data_in": 36063277, 
-                    "data_out": 12420877
-                }, 
-                "error_time": 0, 
-                "start_date": 1386174562, 
-                "output_files_size": {
-                    "F025743DA_1.omx.gz": 12477709, 
-                    "F025743DA_1.log": 541
-                }, 
-                "walltime_prediction": 128, 
-                "dependencies": [], 
-                "input_files_size": {
-                    "brt_params.xml": 4385, 
-                    "mods.xml": 117497, 
-                    "usermods.xml": 213, 
-                    "run.sh": 4871, 
-                    "human_DCpSP_ABU_20110615-blast.tgz": 14417326, 
-                    "F025743DA_1.mgf": 15726755
-                }, 
-                "scheduling_strategy": "Schlouder::Scheduling::Default", 
-                "input_size": 30271047, 
-                "runtime": 216.7, 
-                "provisioning_strategy": "Schlouder::Provisioning::Asap", 
-                "id": 4573, 
-                "output_time": 6.9, 
-                "walltime": 262
-            }
-        ], 
-        "previous_boot_attempts": [], 
-        "stop_date": 1386177684, 
-        "boot_time_prediction": 812, 
-        "instance_id": "/locations/fr-inria/computes/50420", 
-        "instance_type": "m1.small", 
-        "host": "bonfire-vm-10", 
-        "boot_time": 436, 
-        "start_date": 1386174125, 
-        "cloud": "BonFIRE-inria", 
-        "user": "emichon"
+      "boot_time": 436,
+      "boot_time_prediction": 812,
+      "cloud": "BonFIRE-inria",
+      "host": "bonfire-vm-10",
+      "index": 9,
+      "instance_id": "/locations/fr-inria/computes/50420",
+      "instance_type": "m1.small",
+      "jobs": [
+        {
+          "PSM_data": {
+            "data_in": 36063277,
+            "data_out": 12420877,
+            "runtime_prediction": 160
+          },
+          "command_line": "/tmp/schlouder/vqLryVlQfT brt /home/stagiaires/emichon/Documents/repositories/icps-gc-publis/etienne/omssa/testCloud/basse_resolution/input/10000/F025743DA_1.mgf",
+          "dependencies": [],
+          "error_time": 0,
+          "id": 4573,
+          "index": 28,
+          "input_files_size": {
+            "F025743DA_1.mgf": 15726755,
+            "brt_params.xml": 4385,
+            "human_DCpSP_ABU_20110615-blast.tgz": 14417326,
+            "mods.xml": 117497,
+            "run.sh": 4871,
+            "usermods.xml": 213
+          },
+          "input_size": 30271047,
+          "input_time": 36.2,
+          "management_time": 2.298820744000011,
+          "name": "F025743DA_1.mgf",
+          "output_files_size": {
+            "F025743DA_1.log": 541,
+            "F025743DA_1.omx.gz": 12477709
+          },
+          "output_size": 12478250,
+          "output_time": 6.9,
+          "provisioning_strategy": "Schlouder::Provisioning::Asap",
+          "runtime": 216.7,
+          "scheduled_date": 1,
+          "scheduling_strategy": "Schlouder::Scheduling::Default",
+          "standard_walltime": 262,
+          "start_date": 447,
+          "submission_date": 1,
+          "walltime": 262,
+          "walltime_prediction": 128
+        }
+      ],
+      "previous_boot_attempts": [],
+      "start_date": 10,
+      "stop_date": 3569,
+      "user": "emichon"
     }
-]
+  ]
+}

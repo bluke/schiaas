@@ -8,19 +8,13 @@ FAST=false
 LODS="wpo wto psm rio"
 BTPLN=false
 
-while getopts "fbp" option
+while getopts "fp" option
 do
 	case $option in
 	f)
 		echo "- Fast execution (stats only)"
 		FAST=true
 		LODS="wpo wto"
-		shift
-		(( OPTIND -- ))
-		;;
-	b)
-		echo "- Linear regression of boot_time_prediction"
-		BTPLN=true
 		shift
 		(( OPTIND -- ))
 		;;
@@ -92,19 +86,41 @@ do
 	fi
 	echo "Found strategy: $STRATEGY"	
 
+	# finding the boot_time_predictions
+	BTPfound=0
+	for BTP in 41 48 53 86 139 198 212 220 242
+	do  
+		if [ `grep -c "\"boot_time_prediction\": ${BTP}," $source` -ne 0 ]
+		then
+			BTPfound=1
+			break
+		fi
+	done
+	if [ $BTPfound -eq 0 ]
+	then
+		echo "Boot Time Prediction not found"
+		exit -1
+	fi
+
 	# finding the cloud
 	if [[ $source == *inria* ]] 
 	then 
-		CLOUD_FILE="simschlouderBonFIRE-fr-inria.xml"
+		CLOUD_FILE="simschlouderBonFIRE-fr-inria-$BTP.xml"
 	elif [[ $source == *epcc* ]] 
 	then
-		CLOUD_FILE="simschlouderBonFIRE-uk-epcc.xml"
+		CLOUD_FILE="simschlouderBonFIRE-uk-epcc-$BTP.xml"
 	elif [[ $source == *hlrs* ]] 
 	then
-		CLOUD_FILE="simschlouderBonFIRE-de-hlrs.xml"
+		CLOUD_FILE="simschlouderBonFIRE-de-hlrs-$BTP.xml"
+	elif [[ $source == *openstack* ]] 
+	then
+		CLOUD_FILE="simschlouderICPS-$BTP.xml"
 	else
-		CLOUD_FILE="simschlouderICPS.xml"
+		echo "Cloud not found"
+		exit -1
 	fi
+
+
 	echo "Using: $CLOUD_FILE"
 	CLOUD_FILE=`realpath simschlouder/$CLOUD_FILE`
 
@@ -112,26 +128,11 @@ do
 	./json2diameter.py $source concurrent-jobs/data/schlouder
 	stat=`./json2tikz.py $source btuviewer/data/schlouder`
 
-	if $BTPLN
-	then
-		echo "Linear regression of boot_time_prediction"
-		cat $source | grep boot_time_prediction | cut -f2 -d":" | sed 's/,//' | sort -n | nl > /tmp/btp
-		echo 'options("scipen"=100) ; read.table("/tmp/btp") -> btp ; lm(btp$V2 ~ btp$V1)' | R --no-save | tail -3 | head -1 | tr -s " " " " | sed 's/^ *//' > /tmp/btplr
-		B0=`cat /tmp/btplr | cut -f1 -d" "`
-		B1=`cat /tmp/btplr | cut -f2 -d" "`
-		if [ "$B1" != "NA" ] ; then
-			cat $CLOUD_FILE | sed "s/B0=\"[0-9\.]*\"/B0=\"$B0\"/" | sed "s/B1=\"[0-9\.]*\"/B1=\"$B1\"/" > /tmp/simschlouder.xml
-		else 
-			cat $CLOUD_FILE | sed "s/B0=\"[0-9\.]*\"/B0=\"$B0\"/" > /tmp/simschlouder.xml
-		fi
-		CLOUD_FILE="/tmp/simschlouder.xml"
-	fi
-
 	# Fix the XP with 22 vms
 	if [ "`grep host -c $source`" -eq "22" ]
 	then
-		cat $CLOUD_FILE | sed 's/max_instances_per_user="20"/max_instances_per_user="22"/' > /tmp/simschloudervm.xml
-		CLOUD_FILE="/tmp/simschloudervm.xml"	
+		cat $CLOUD_FILE | sed 's/max_instances_per_user="20"/max_instances_per_user="22"/' > /tmp/simschlouder.xml
+		CLOUD_FILE="/tmp/simschlouder.xml"	
 	fi
 
 

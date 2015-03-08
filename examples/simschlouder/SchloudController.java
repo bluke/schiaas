@@ -12,6 +12,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Vector;
@@ -68,7 +69,7 @@ public class SchloudController extends org.simgrid.msg.Process {
 	public static HashMap<String, SchloudCloud> schloudClouds;
 	
 	/** Period to scan the mainqueue, provision instances, and distribute tasks */ 
-	protected static double period = 10;
+	protected static double period = 5;
 	/** Mutex to track whether the mainqueue is empty */
 	protected static Mutex emptyQueueMutex;
 
@@ -80,9 +81,9 @@ public class SchloudController extends org.simgrid.msg.Process {
 	/** Id of the instance type */
 	public static String instanceTypeId;
 
-	/** Provisioning thread warmup time (for validation purposes) */
-	public static Vector<Double> provisioningDates; 
-	
+	/** To reproduce the Schlouder bug, for validation purposes */
+	public static Boolean idleTimeBug;
+
 	
 	/**
 	 * Creates a new Schlouder controller on a given host.
@@ -106,6 +107,8 @@ public class SchloudController extends org.simgrid.msg.Process {
 		emptyQueueMutex = new Mutex();
 		
 		SchloudController.host = host;
+		
+		idleTimeBug = false;
 	}
 
 	/**
@@ -113,21 +116,16 @@ public class SchloudController extends org.simgrid.msg.Process {
 	 */
 	public void main(String[] args) throws MsgException {
 		
-		double lastProvisioningDate = 1;
-		waitFor(lastProvisioningDate);
-		if (provisioningDates != null && provisioningDates.size()>0) {
-			lastProvisioningDate = provisioningDates.remove(0); 
-		}
-		waitFor(lastProvisioningDate - 1);
-			
+		period = 1;
+		
 		while (!(mainQueue.isEmpty() && nodes.isEmpty() && allTasksSubmitted)) {
 			Msg.verb("main loop : main queue="+ mainQueue.size() 
 				+ ", idle nodes=" +idleNodesCount+"/("+ nodes.size()+"+"+schloudCloud.describeAvailability(instanceTypeId)+")");
 						
 			terminateIdleNodes();
 			
-			if (idleNodesCount!=0 
-				|| schloudCloud.describeAvailability(instanceTypeId)>0) {
+			// if (idleNodesCount!=0 || schloudCloud.describeAvailability(instanceTypeId)>0) {
+			if (!mainQueue.isEmpty()) {
 				try {
 					SchloudController.strategy.execute();
 				} catch (SimSchlouderException e) {				
@@ -137,13 +135,12 @@ public class SchloudController extends org.simgrid.msg.Process {
 				}
 			}
 			
-			if (provisioningDates != null && provisioningDates.size()>0) {
-				lastProvisioningDate = provisioningDates.remove(0);
-				waitFor(lastProvisioningDate-Msg.getClock());
-			}
-			else {
-				waitFor(period);
-			}
+			if ( allTasksSubmitted ) 
+			//	|| ((!mainQueue.isEmpty() 
+			//	&& mainQueue.peekFirst().dependencies!= null && mainQueue.peekFirst().dependencies.size() > 0 )))
+				period = 5;
+			
+			waitFor(period);
 		}
 		
         SchIaaS.terminate();
@@ -170,7 +167,7 @@ public class SchloudController extends org.simgrid.msg.Process {
 		SchloudNode node = SchloudNode.startNewNode(SchloudController.schloudCloud);
 		
 		if (node == null) return null;
-		
+				
 		SchloudController.nodes.add(node);
 		
 		SchloudController.schloudCloud.incrementBootCount();
@@ -270,7 +267,7 @@ public class SchloudController extends org.simgrid.msg.Process {
 					if(nodes.item(i).getAttributes().getNamedItem("deployment")!=null){
 						deployment = nodes.item(i).getAttributes().getNamedItem("deployment").getNodeValue();
 					}
-						
+					
 					String cloud = nodes.item(i).getAttributes().getNamedItem("cloud").getNodeValue();
 					
 					/* construct the platform and deploy the application */
@@ -310,6 +307,7 @@ public class SchloudController extends org.simgrid.msg.Process {
 							storage = provNodes.item(j).getAttributes().getNamedItem("storage").getNodeValue();
 							imageId = provNodes.item(j).getAttributes().getNamedItem("image").getNodeValue();
 							instanceTypeId = provNodes.item(j).getAttributes().getNamedItem("instance_type").getNodeValue();
+							// There fo schloudbug
 						}
 					}
 				}
