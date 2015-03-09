@@ -1,9 +1,10 @@
 #!/usr/bin/python -O
 # -*- coding:utf8 -*-
 
-"""
-	This script updates the JSON output from Schlouder for validation purposes
-"""
+##	This script takes 2 json files, supposed to concern the same experiment,
+##  and outputs for each task whether the sceduling decision is the same.
+##
+##  @author julien.gossa@unistra.fr
 
 import sys
 import os
@@ -21,7 +22,7 @@ parser.add_argument('sim_json_file', help='simulation json file')
 
 args = parser.parse_args()
 
-# Job comparator: by by start_date, then by sub_date
+# Job comparator
 def cmpjob(j1, j2):
 	if j1['scheduled_date'] != j2['scheduled_date']:
 		return int(j1['scheduled_date'] - j2['scheduled_date'])

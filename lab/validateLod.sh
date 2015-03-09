@@ -1,3 +1,7 @@
+## This script executes one simulation, used only by validate.sh.
+## @author julien.gossa@unistra.fr
+
+
 if [ $# -ne 4 ] ; then
 	echo "Usage : $0 [source] [level of detail] $*" >&2 
 	echo -en "\tNA\tNA\tNA"

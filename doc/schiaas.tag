@@ -19,6 +19,22 @@
     <docanchor file="lab_intro" title="Prerequisites">lab_prerequisites</docanchor>
     <docanchor file="lab_intro" title="Lab sub-directories">lab_dirs</docanchor>
   </compound>
+  <compound kind="dir">
+    <name>/home/julien/repo/schiaas/lab</name>
+    <path>/home/julien/repo/schiaas/lab/</path>
+    <filename>dir_684fa5c5e4cabec14ab59e41caa6242f.html</filename>
+    <file>calibrate.sh</file>
+    <file>interval_tree.py</file>
+    <file>json2diameter.py</file>
+    <file>json2infos.py</file>
+    <file>json2tasks.py</file>
+    <file>json2tikz.py</file>
+    <file>jsonDiff.py</file>
+    <file>jsonUpdater.py</file>
+    <file>schlouder-btu.py</file>
+    <file>validate.sh</file>
+    <file>validateLod.sh</file>
+  </compound>
   <compound kind="page">
     <name>index</name>
     <title>SCHIaaS Documentation</title>

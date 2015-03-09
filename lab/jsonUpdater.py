@@ -1,10 +1,10 @@
 #!/usr/bin/python -O
 # -*- coding:utf8 -*-
 
-"""
-	This script take a JSON output from Schlouder as input, and output 
-	an updated JSON, with missing values added, and order of things
-"""
+##	This script takes a JSON output from Schlouder as input, and output 
+##  an updated JSON, with missing values added, and things ordered.
+##
+##  @author julien.gossa@unistra.fr
 
 import sys
 import os

@@ -86,7 +86,7 @@ This file is validated by simschlouder using the <a href="./simschlouder.xsd">si
 The input of SimSchlouder is the workload to execute.
 It is described in a file, which lines are as follows:
 @code
-<task id> <submit date> <walltime> [~ <runtime> [<input data size> <output data size>]] [-> <task id> ...]
+<task id> <submission date> <walltime prediction> [~ <real runtime> [<input data size> <output data size>]] [-> <dependency> ...]
 @endcode
 
 For instance, the following line:
@@ -96,8 +96,8 @@ For instance, the following line:
 describes a task:
 - named "0_4"
 - submitted at t=10s
-- whose predicted walltime is 3394s on a host showing a CPU of standard_power 
-- running in 3200 seconds on a host showing a CPU of standard_power.
+- whose predicted walltime is 3394s according to standard_power
+- running in 3200 seconds according to standard_power
 - receiving 38650000 MB as input
 - outputting 178090000 MB of data
 - being dependent of the tasks "0_1" and "0_2"

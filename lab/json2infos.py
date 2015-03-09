@@ -1,10 +1,11 @@
 #!/usr/bin/python -O
 # -*- coding:utf8 -*-
 
-"""
-	This script take a JSON output from Schlouder as input, and output 
-	a bot file in the simschlouder format
-"""
+##	This script takes a JSON as input, and print human-readable information.
+##
+##  Tasks are printed by VM and run date.
+##
+##  @author julien.gossa@unistra.fr
 
 import sys
 import os

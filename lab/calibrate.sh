@@ -1,5 +1,7 @@
 #!/bin/bash
 
+## This scripts computes B0 and B1 of predicted boot times from a set of json fils
+
 if [ $# -lt 1 ]
 then 
 	echo "Usage : $0 json_file [json_files...]"

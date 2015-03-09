@@ -1,7 +1,5 @@
 package simschlouder.algorithms;
 
-import java.util.Collections;
-
 import org.simgrid.msg.Msg;
 
 import simschlouder.SchloudController;

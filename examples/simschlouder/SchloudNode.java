@@ -8,7 +8,6 @@ package simschlouder;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.util.Collections;
 import java.util.LinkedList;
 
 import org.simgrid.msg.HostFailureException;
@@ -96,7 +95,6 @@ public class SchloudNode extends Process implements Comparable<SchloudNode>{
 			
 			// Whenever there are some boot times to be forced
 			if (!SchloudController.schloudCloud.bootTimes.isEmpty()) {
-				this.bootTimePrediction = SchloudController.schloudCloud.bootTimePredictions.removeFirst();
 				this.bootTime = SchloudController.schloudCloud.bootTimes.removeFirst();
 			}
 			// Whenever there are some provisioning dates to be forced
@@ -121,8 +119,8 @@ public class SchloudNode extends Process implements Comparable<SchloudNode>{
 				schloudNode.setState(STATE.PENDING);
 				//idleDate += provisioningDelay;
 				
-				// Da Bug 
-				SchloudController.schloudCloud.resetBootCount();
+				// This imitates a Schlouder bug
+				if (SimSchlouder.validation) SchloudController.schloudCloud.resetBootCount();
 				
 				// Wait for at least the predicted boottime. Can be optimized.
 				Msg.verb(instanceId+" waits for boot: "+bootTime);
@@ -138,6 +136,7 @@ public class SchloudNode extends Process implements Comparable<SchloudNode>{
 				
 				Msg.verb(instanceId+" booted ");
 				bootDate=Msg.getClock();
+				if (!SimSchlouder.validation) SchloudController.schloudCloud.decrementBootCount();
 				
 				// Wait for the lag time
 				Msg.info(instanceId+" wait for lag time "+lagTime);
@@ -219,7 +218,7 @@ public class SchloudNode extends Process implements Comparable<SchloudNode>{
 	
 	/**
 	 * Get the state of this node.
-	 * @param state of this node.
+	 * @return state of this node.
 	 */
 	public STATE getState() {
 		return this.state;
@@ -293,9 +292,9 @@ public class SchloudNode extends Process implements Comparable<SchloudNode>{
 	 */
 	public double getUpTimeToIdle() {
 		// Da bug
-		if (state == STATE.FUTURE)
+		if (SimSchlouder.validation && state == STATE.FUTURE)
 			return (getIdleDate() - bootTimePrediction) - pendingDate;
-		if (state == STATE.CLAIMED)
+		if (SimSchlouder.validation && state == STATE.CLAIMED)
 			return Msg.getClock() - pendingDate;
 
 		return getIdleDate() - pendingDate;

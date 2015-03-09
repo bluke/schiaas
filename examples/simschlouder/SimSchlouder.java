@@ -32,18 +32,47 @@ import org.xml.sax.SAXException;
 import simschlouder.algorithms.AStrategy;
 import simschlouder.util.SimSchlouderException;
 
+/**
+ * Main entry point of SimSchlouder.
+ * Provides global information about the simulation and handles the task file.
+ * @author julien.gossa@unistra.fr
+ */
 public class SimSchlouder {
 
 
-	
+	/**
+	 * Convert real time to Msg task durations according to the cloud standard power. 
+	 * @param time a time in seconds.
+	 * @return task durations according to the cloud standard power.
+	 */
 	public static double timeToDuration(double time) {
 		return time*SchloudController.schloudCloud.standardPower;
 	}
 	
+	/**
+	 * The different types of cloud storages.
+	 * @author julien.gossa@unistra.fr
+	 */
 	public static enum StorageType {CLOUD, CLIENT, INSTANCE};
+	
+	/** The type of storage - use at your own risk */
 	public static StorageType storageType;
+	
+	/** The json output file name. */
 	public static String outJsonFile = "simschlouder.json";
 	
+	/** Flag to indicate if the simulator is used to validation purpose */
+	public static Boolean validation = false;
+	
+	/**
+	 * Read the task file.
+	 * The format of this file is:
+	 * [boots] (optional section)
+	 * vm_boottime [vm_provisioning_date [vm_future_date]]
+	 * [tasks] 
+	 * task_name submission_date walltie_prediction [~ real_walltime] [-> dependencies]
+	 * @author julien.gossa@unistra.fr
+	 */
 	public static class TaskFileReaderProcess extends  org.simgrid.msg.Process {
 		
 		public TaskFileReaderProcess(Host host, String name, String[] args) {
@@ -65,7 +94,6 @@ public class SimSchlouder {
 				sc.close();
 				sc = new Scanner(scf.nextLine());
 				do {
-					SchloudController.schloudCloud.bootTimePredictions.add(sc.nextDouble());
 					SchloudController.schloudCloud.bootTimes.add(sc.nextInt());
 					if (sc.hasNextInt())
 						SchloudController.schloudCloud.provisioningDates.add(sc.nextInt());
@@ -144,6 +172,15 @@ public class SimSchlouder {
 		}
 	}
 	
+	/**
+	 * Main entry point of the simulation.
+	 * @param args is given by the jvm
+	 * @throws NativeException
+	 * @throws HostNotFoundException
+	 * @throws IOException
+	 * @throws HostFailureException
+	 * @throws SimSchlouderException
+	 */
     public static void main(String[] args) throws NativeException, HostNotFoundException, IOException, HostFailureException, SimSchlouderException {       
 	    Msg.init(args);
 	

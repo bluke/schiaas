@@ -1,5 +1,17 @@
 #!/bin/bash
 
+## This scripts runs validation campaign.
+##
+## If no schlouder json file is given as argument, 
+## all json files from the sources directory will be used.
+## 
+## After execution :
+## - the data directory contains simulations results
+## - the results directory contains one report for each experiment, if the -f option is not given
+## - the stats directory contains reports about the global campaign, if the -p option is not given
+##
+## @author julien.gossa@unistra.com
+
 SS_CLASSPATH="/usr/local/java/simgrid.jar:$PWD/../bin/schiaas.jar:$PWD/../bin/simschlouder/simschlouder.jar"
 STAT_FILE="results/stats.dat"
 
@@ -26,17 +38,6 @@ do
 		;;
 	esac
 done
-
-if [ "$1" == "--fast" ]
-then 
-	echo "Fast validation (stats only)"
-	FAST=true
-	LODS="wpo wto"
-	shift
-else
-	echo "Full validation"
-fi
-
 
 if [ $# -gt 0 ]
 then 

@@ -12,7 +12,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Vector;
@@ -81,9 +80,6 @@ public class SchloudController extends org.simgrid.msg.Process {
 	/** Id of the instance type */
 	public static String instanceTypeId;
 
-	/** To reproduce the Schlouder bug, for validation purposes */
-	public static Boolean idleTimeBug;
-
 	
 	/**
 	 * Creates a new Schlouder controller on a given host.
@@ -93,7 +89,7 @@ public class SchloudController extends org.simgrid.msg.Process {
 	 * The VMs are represented by <i>SchloudNode</i> processes
 	 * @param host the host
 	 * @param name the name of the controller
-	 * @param args
+	 * @param args useless
 	 */
 	public SchloudController(Host host, String name, String [] args) {
 		super(host,"SchloudController",args);
@@ -107,8 +103,6 @@ public class SchloudController extends org.simgrid.msg.Process {
 		emptyQueueMutex = new Mutex();
 		
 		SchloudController.host = host;
-		
-		idleTimeBug = false;
 	}
 
 	/**
@@ -307,7 +301,8 @@ public class SchloudController extends org.simgrid.msg.Process {
 							storage = provNodes.item(j).getAttributes().getNamedItem("storage").getNodeValue();
 							imageId = provNodes.item(j).getAttributes().getNamedItem("image").getNodeValue();
 							instanceTypeId = provNodes.item(j).getAttributes().getNamedItem("instance_type").getNodeValue();
-							// There fo schloudbug
+							if (provNodes.item(j).getAttributes().getNamedItem("validation") != null)
+								SimSchlouder.validation = provNodes.item(j).getAttributes().getNamedItem("validation").getNodeValue().equals("true");
 						}
 					}
 				}

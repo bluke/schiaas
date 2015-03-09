@@ -1,10 +1,17 @@
 #!/usr/bin/python -O
 # -*- coding:utf8 -*-
 
-"""
-	This script takes a JSON output from Schlouder as input, and output 
-	a tasks file in the simschlouder format
-"""
+##	This script takes a JSON output from Schlouder as input, and outputs
+##	a tasks file in the simschlouder format.
+##
+##  The lod (level_of_details) argument can be:
+##  - wpo: Walltime Prediction Only, to validate SimSchlouder as a prediction 
+##  - wto: Walltime Only, to validate SimSchlouder without communications
+##  - rio: Real Input Output, validate SimSchlouder with communications
+##  - psm: Provisioning Simulation Module, validate SimSchlouder as a prediction with communictions
+##
+##  @author julien.gossa@unistra.fr
+
 
 import sys
 import os
@@ -13,7 +20,7 @@ import argparse
 
 
 def usage():
-	print >> sys.stderr, 'Usage: {0} [-psm] json_file bot_file'.format(sys.argv[0])
+	print >> sys.stderr, 'Usage: {0} level_of_details json_file bot_file'.format(sys.argv[0])
 
 parser = argparse.ArgumentParser(description='Convert Schlouder json file to SimSchlouder tasks file.')
 parser.add_argument('lod', choices=['wpo', 'wto', 'rio', 'psm'],
@@ -63,25 +70,10 @@ if args.lod == 'wto':
 		first_start_date = sorted(vm['jobs'], key=lambda j: j['start_date'])[0]['start_date']
 		first_sub_date = sorted(vm['jobs'], key=lambda j: j['submission_date'])[0]['submission_date']
 		
-		print("{0}\t{1}\t{2}\t{3}".format(
-			vm['boot_time_prediction'],
+		print("{0}\t{1}\t{2}".format(
 			vm['boot_time'],
 			vm['start_date'],
 			first_start_date-vm['start_date']-vm['boot_time']))
-
-		if (vm['boot_time_prediction'] > old_btp):
-			d_btp = vm['boot_time_prediction'] - old_btp
-		if (first_start_date-vm['start_date'] > old_bt):
-			d_bt = vm['boot_time'] - old_bt
-		old_btp = vm['boot_time_prediction']
-		old_bt = vm['boot_time']
-		old_sd = vm['start_date']
-
-	#print("{0}\t{1}\t{2}\t0".format(
-	#	old_btp + d_btp, 
-	#	old_bt + d_bt,
-	#	old_sd ))
-
 
 	print "[tasks]"
 
