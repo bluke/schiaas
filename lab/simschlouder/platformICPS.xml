@@ -4,8 +4,8 @@
  
  <AS  id="AS0" routing="Full">
 	
-	<cluster id="icps" prefix="icps-gc-" suffix=".me" radical="1-30" 
-         power="10e9" core="25" bw="120e6" lat="0.0001"
+	<cluster id="icps" prefix="icps-gc-" suffix=".me" radical="1-2" 
+         power="10e9" core="24" bw="120e6" lat="0.0001"
     	 bb_bw="120e6" bb_lat="0.0001" />
  
  	 <AS id="AS_Controller" routing="Full">

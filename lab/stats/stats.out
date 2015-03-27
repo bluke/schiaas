@@ -1,0 +1,124 @@
+
+R version 3.1.1 (2014-07-10) -- "Sock it to Me"
+Copyright (C) 2014 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R est un logiciel libre livré sans AUCUNE GARANTIE.
+Vous pouvez le redistribuer sous certaines conditions.
+Tapez 'license()' ou 'licence()' pour plus de détails.
+
+R est un projet collaboratif avec de nombreux contributeurs.
+Tapez 'contributors()' pour plus d'information et
+'citation()' pour la façon de le citer dans les publications.
+
+Tapez 'demo()' pour des démonstrations, 'help()' pour l'aide
+en ligne ou 'help.start()' pour obtenir l'aide au format HTML.
+Tapez 'q()' pour quitter R.
+
+> # R script to compute validation stats
+> 
+> stats <- read.table("stats.dat", header=TRUE)
+> 
+> btu <- stats[c("source","BTU","wpo.BTU","wto.BTU")]
+> btu$wpo.d <- NA
+> btu$wpo.d <- abs( btu$BTU - btu$wpo.BTU ) / btu$BTU
+> btu$wto.d <- NA
+> btu$wto.d <- abs( btu$BTU - btu$wto.BTU ) / btu$BTU
+> write.table(btu[ with(btu, order(wpo.d)), ], file="btu.dat", row.names=FALSE)
+> 
+> 
+> makespan <- stats[c("source","makespan","wpo.makespan","wto.makespan")]
+> makespan$wpo.d <- NA
+> makespan$wpo.d <- abs( makespan$makespan - makespan$wpo.makespan ) / makespan$makespan
+> makespan$wto.d <- NA
+> makespan$wto.d <- abs( makespan$makespan - makespan$wto.makespan ) / makespan$makespan
+> write.table(makespan[ with(makespan, order(wpo.d)), ], file="makespan.dat", row.names=FALSE)
+> 
+> 
+> 
+> pdf('global-cdf.pdf')
+> plot(ecdf(btu$wpo.d),verticals=TRUE, do.p=FALSE, lty=1, col="red", 
++ 	main="Global error", xlab="error", ylab="amount of cases")
+> lines(ecdf(btu$wto.d),verticals=TRUE, do.p=FALSE, lty=3, col="red")
+> lines(ecdf(makespan$wpo.d),verticals=TRUE, do.p=FALSE, lty=1, col="blue")
+> lines(ecdf(makespan$wto.d),verticals=TRUE, do.p=FALSE, lty=3, col="blue")
+> legend(0.7,0.3,c("btu wpo","btu wto","makespan wpo","makespan wto"),lty=c(1,3,1,3),col=c("red","red","blue","blue"))
+> dev.off()
+null device 
+          1 
+> 
+> pdf('expes-btu-cdf.pdf')
+> plot(ecdf(btu[grep("pleiade",btu$source),]$wpo.d),verticals=TRUE, do.p=FALSE, lty=1, col="red",
++ 	main="BTU error per xp", xlab="error", ylab="amount of cases")
+> lines(ecdf(btu[grep("pleiade",btu$source),]$wto.d),verticals=TRUE, do.p=FALSE, lty=3, col="red")
+> lines(ecdf(btu[grep("pleiade",btu$source,invert=TRUE),]$wpo.d),verticals=TRUE, do.p=FALSE, lty=1, col="blue")
+> lines(ecdf(btu[grep("pleiade",btu$source,invert=TRUE),]$wto.d),verticals=TRUE, do.p=FALSE, lty=3, col="blue")
+> legend(0.7,0.3,c("montage btu wpo","montage btu wto","omssa btu wpo","omssa btu wto"),lty=c(1,3,1,3),col=c("red","red","blue","blue"))
+> dev.off()
+null device 
+          1 
+> 
+> pdf('cloud-btu-cdf.pdf')
+> plot(ecdf(btu[grep("openstack",btu$source),]$wpo.d),verticals=TRUE, do.p=FALSE, lty=1, col="red",
++ 	main="BTU error per cloud", xlab="error", ylab="amount of cases")
+> lines(ecdf(btu[grep("openstack",btu$source),]$wto.d),verticals=TRUE, do.p=FALSE, lty=3, col="red")
+> lines(ecdf(btu[grep("bonfire",btu$source),]$wpo.d),verticals=TRUE, do.p=FALSE, lty=1, col="blue")
+> lines(ecdf(btu[grep("bonfire",btu$source),]$wto.d),verticals=TRUE, do.p=FALSE, lty=3, col="blue")
+> legend(0.7,0.3,c("icps btu wpo","icps btu wto","bonfire btu wpo","bonfire btu wto"),lty=c(1,3,1,3),col=c("red","red","blue","blue"))
+> dev.off()
+null device 
+          1 
+> 
+> pdf('expes-makespan-cdf.pdf')
+> plot(ecdf(makespan[grep("pleiade",makespan$source),]$wpo.d),verticals=TRUE, do.p=FALSE, lty=1, col="red",
++ 	main="Makespan error per xp", xlab="error", ylab="amount of cases")
+> lines(ecdf(makespan[grep("pleiade",makespan$source),]$wto.d),verticals=TRUE, do.p=FALSE, lty=3, col="red")
+> lines(ecdf(makespan[grep("pleiade",makespan$source,invert=TRUE),]$wpo.d),verticals=TRUE, do.p=FALSE, lty=1, col="blue")
+> lines(ecdf(makespan[grep("pleiade",makespan$source,invert=TRUE),]$wto.d),verticals=TRUE, do.p=FALSE, lty=3, col="blue")
+> legend(0.7,0.3,c("montage makespan wpo","montage makespan wto","omssa makespan wpo","omssa makespan wto"),lty=c(1,3,1,3),col=c("red","red","blue","blue"))
+> dev.off()
+null device 
+          1 
+> 
+> pdf('cloud-makespan-cdf.pdf')
+> plot(ecdf(makespan[grep("openstack",makespan$source),]$wpo.d),verticals=TRUE, do.p=FALSE, lty=1, col="red",
++ 	main="Makespan error per cloud", xlab="error", ylab="amount of cases")
+> lines(ecdf(makespan[grep("openstack",makespan$source),]$wto.d),verticals=TRUE, do.p=FALSE, lty=3, col="red")
+> lines(ecdf(makespan[grep("bonfire",makespan$source),]$wpo.d),verticals=TRUE, do.p=FALSE, lty=1, col="blue")
+> lines(ecdf(makespan[grep("bonfire",makespan$source),]$wto.d),verticals=TRUE, do.p=FALSE, lty=3, col="blue")
+> legend(0.7,0.3,c("icps makespan wpo","icps makespan wto","bonfire makespan wpo","bonfire makespan wto"),lty=c(1,3,1,3),col=c("red","red","blue","blue"))
+> dev.off()
+null device 
+          1 
+> 
+> 
+> 
+> min(btu$wpo.d)
+[1] 0
+> max(btu$wpo.d)
+[1] 3
+> mean(btu$wpo.d)
+[1] 0.1546057
+> 
+> min(btu$wto.d)
+[1] 0
+> max(btu$wto.d)
+[1] 0.5
+> mean(btu$wto.d)
+[1] 0.02479146
+> 
+> 
+> min(makespan$wpo.d)
+[1] 0.0007954746
+> max(makespan$wpo.d)
+[1] 3.927779
+> mean(makespan$wpo.d)
+[1] 0.2238022
+> 
+> min(makespan$wto.d)
+[1] 0
+> max(makespan$wto.d)
+[1] 0.4516239
+> mean(makespan$wto.d)
+[1] 0.03328168
+> 

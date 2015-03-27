@@ -29,10 +29,6 @@ parser.add_argument('json_file', help='input json file')
 
 args = parser.parse_args()
 
-def bootTimePredictionFix(btp):
-	n=int((btp-48)/6)
-	return btp+0.5-n*0.02
-
 
 # Job comparator
 def cmpjob(j1, j2):
