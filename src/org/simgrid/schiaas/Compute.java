@@ -52,9 +52,6 @@ public class Compute {
 	/** Contains all the config properties of this compute instance. */
 	protected Map<String, String> config;
 
-	/** Contains all the hosts of this compute instance. */
-	protected Collection<Host> hosts;
-
 	/** Standard power, e.g. EC2CU.*/
 	protected double standardPower;
 	
@@ -176,6 +173,14 @@ public class Compute {
 		return this.cloud;
 	}
 
+	/**
+	 * 
+	 * @return the compute engine of this, for admin purpose
+	 */
+	public ComputeEngine getComputeEngine() {
+		return this.computeEngine;
+	}
+	
 	/**
 	 * for all properties
 	 * 
@@ -345,7 +350,7 @@ public class Compute {
 		return this.computeEngine.describeAvailability(
 				this.instanceTypes.get(instanceTypeId));
 	}
-
+	
 	/**
 	 * Terminate this, by terminating all instances and then the engine
 	 * 

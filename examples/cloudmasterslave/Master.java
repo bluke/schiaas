@@ -9,6 +9,7 @@
 
 package cloudmasterslave;
 
+import java.util.Collection;
 import java.util.Map;
 
 import org.simgrid.msg.Host;
@@ -91,7 +92,7 @@ public class Master extends Process {
 			//SchIaaS.getCloud("myCloud").getNetwork().sendTask(task, slaveInstancesId[i % slavesCount]);
 
 		}
-
+		
 		/**
 		 * storage management (including storage cost)
 		 */
@@ -126,15 +127,32 @@ public class Master extends Process {
 		 */
 
 		// Suspend and resume one instance
-
 		waitFor(150);
 		Msg.info("Suspending " + slaveInstancesId[0]);
 		myCompute.suspendInstance(slaveInstancesId[0]);
 		waitFor(200);
 		Msg.info("Resuming " + slaveInstancesId[0]);
 		myCompute.resumeInstance(slaveInstancesId[0]);
+		waitFor(100);
+		
+		// Migrate one VM, as this is an admin operation, one must use the compute engine
+		Collection<Host> hosts = myCompute.getComputeEngine().getHosts();
+		Msg.info(" " + hosts);
+		Msg.info("Migrating "+slaveInstancesId[0]+" to "+(Host)hosts.toArray()[1]);
+		Msg.info(" - " + myCompute.describeInstance(slaveInstancesId[0]));
+		myCompute.getComputeEngine().liveMigration(slaveInstancesId[0], (Host)hosts.toArray()[1]);
+		Msg.info("Migration of "+slaveInstancesId[0]+" to "+(Host)hosts.toArray()[1]+" complete.");
+		Msg.info(" - " + myCompute.describeInstance(slaveInstancesId[0]));
 
-
+		// Offload one physical host
+		Msg.info("Offloading "+(Host)hosts.toArray()[1]);
+		for (int i=0; i<slavesCount; i++) 
+			Msg.info(" - " + myCompute.describeInstance(slaveInstancesId[i]));
+		myCompute.getComputeEngine().offLoad((Host)hosts.toArray()[1]);
+		Msg.info("Offloading "+(Host)hosts.toArray()[1]+" complete.");
+		for (int i=0; i<slavesCount; i++) 
+			Msg.info(" - " + myCompute.describeInstance(slaveInstancesId[i]));
+		
 		Msg.info("All tasks have been dispatched. Let's tell everybody the computation is over.");
 
 		for (int i = 0; i < slavesCount; i++) {

@@ -36,9 +36,6 @@ public abstract class Instance extends org.simgrid.msg.VM {
 	/** The type of the instance. */
 	protected InstanceType instanceType;
 
-	/** The physical host of the instance. */
-	protected Host host;
-
 	//** The current state of the instance. */
 	// protected STATE state;
 	
@@ -58,11 +55,8 @@ public abstract class Instance extends org.simgrid.msg.VM {
 	 *            The image of the instance.
 	 * @param instanceType
 	 *            The type of the instance.
-	 * @param host
-	 *            The physical host of the instance.
 	 */
-	protected Instance(String id, Image image, InstanceType instanceType,
-			Host host) {
+	protected Instance(String id, Image image, InstanceType instanceType, Host host) {
 		super(host, id, Integer.parseInt(instanceType.getProperty("core")),
 				Integer.parseInt(instanceType.getProperty("ramSize")), Integer
 						.parseInt(instanceType.getProperty("netCap")),
@@ -75,7 +69,6 @@ public abstract class Instance extends org.simgrid.msg.VM {
 		this.image = image;
 		
 		this.instanceType = instanceType;
-		this.host = host;
 		
 		this.isPending = true;
 		this.isTerminating = false;
@@ -119,9 +112,7 @@ public abstract class Instance extends org.simgrid.msg.VM {
 	/**
 	 * @return The physical host of this.
 	 */
-	protected Host getHost() {
-		return this.host;
-	}
+	protected abstract Host getHost();
 	
 	/** 
 	 * @return The total billing time for running this instance
@@ -174,7 +165,7 @@ public abstract class Instance extends org.simgrid.msg.VM {
 	 * @return A string containing the name of the instance and its host.
 	 */
 	public String toString() {
-		return "Instance : " + getName() + " : " + this.host.getName();
+		return "Instance : " + getName() + " : " + this.getHost().getName();
 	}
 
 }

@@ -36,6 +36,9 @@ public class RiceHost {
 	/** Mutex used to track the boot of local VMs. */
 	protected Mutex bootMutex;
 	
+	/** The flag to know if this host is available to host new instances */
+	protected boolean availability;
+	
 	/**
 	 * Constructor.
 	 * @param host The physical simgrid host.
@@ -47,8 +50,14 @@ public class RiceHost {
 		this.imagesCache = new HashMap<Image,IMGSTATUS>();
 		
 		bootMutex = new Mutex();
+		
+		availability = true;
 	}
 
+	protected boolean isAvailable() {
+		return availability;
+	}
+	
 	/**
 	 * @return The id of the MSG message box used to send commands. 
 	 */

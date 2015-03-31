@@ -4,8 +4,8 @@
  
  <AS  id="AS0" routing="Full">
 	
-	<cluster id="my_cluster" prefix="node-" suffix=".me" radical="1-100" 
-         power="1e9" core="100" bw="1e9" lat="5E-5"
+	<cluster id="my_cluster" prefix="node-" suffix=".me" radical="1-4" 
+         power="1e9" core="24" bw="1e9" lat="5E-5"
     	 bb_bw="10e9" bb_lat="5E-4" />
  
  	 <AS id="AS_Controller" routing="Full">

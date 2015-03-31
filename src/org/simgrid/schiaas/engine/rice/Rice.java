@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Vector;
 
 import org.simgrid.msg.Host;
+import org.simgrid.msg.HostFailureException;
 import org.simgrid.msg.HostNotFoundException;
 import org.simgrid.msg.Msg;
 import org.simgrid.schiaas.Compute;
@@ -45,6 +46,9 @@ public class Rice extends ComputeEngine {
 
 	/** the delay between two consecutive boots */
 	protected double interBootDelay;
+	
+	/** the index for the round robin to assign vm to pm */
+	private int iAssignVM;
 	
 	/**
 	 * Constructor
@@ -97,6 +101,9 @@ public class Rice extends ComputeEngine {
 		
 		imgCaching = IMGCACHING.valueOf(compute.getConfig("image_caching"));
 		interBootDelay = Double.parseDouble(getCompute().getConfig("inter_boot_delay"));
+		
+		// Init the VM to PM Assignation
+		iAssignVM = 0;
 	}
 
 	/**
@@ -111,19 +118,23 @@ public class Rice extends ComputeEngine {
 	 *         strategy.
 	 */
 	public RiceHost assignVM(InstanceType instanceType) {
-		int i = 0;
-		double core = Double.parseDouble(instanceType.getProperty("core"));
-		while (i < this.riceHosts.size()
-				&& (this.riceHosts.get(i).host.getCoreNumber() - this.riceHosts.get(i).coreUsedByVMcount) < core) {
-			Msg.verb("assign: PM " + i + "/" + this.riceHosts.size() + " : asked cores=" + core
-					+ ", used cores=" + this.riceHosts.get(i).coreUsedByVMcount + "/"
-					+ this.riceHosts.get(i).host.getCoreNumber());
-			i++;
-		}
-
-		if (i == this.riceHosts.size())
+		
+		if (compute.describeAvailability(instanceType.getId())==0)
 			return null;
-		return this.riceHosts.get(i);
+				
+		double core = Double.parseDouble(instanceType.getProperty("core"));
+		while (true) {
+			RiceHost riceHost = this.riceHosts.get(iAssignVM);
+			
+			Msg.info("Assign: probing PM " + iAssignVM + "/" + this.riceHosts.size() + " : asked cores=" + core
+					+ ", used cores=" + riceHost.coreUsedByVMcount + "/"
+					+ riceHost.host.getCoreNumber());
+			
+			iAssignVM = (iAssignVM+1)%this.riceHosts.size();
+
+			if (riceHost.isAvailable() && (riceHost.host.getCoreNumber() - riceHost.coreUsedByVMcount) >= core)
+				return riceHost;
+		}
 	}
 
 	/**
@@ -160,9 +171,84 @@ public class Rice extends ComputeEngine {
 		}
 	}
 
+	protected RiceHost getRiceHostOf(Host host) throws HostNotFoundException {
+		for(RiceHost riceHost : riceHosts) {
+			if (riceHost.host == host)
+				return riceHost;
+		}
+
+		throw new HostNotFoundException("RiceHost not found for "+host);
+	}	
+		
+	
+	/**
+	 * Migrate an instance to one given host
+	 * 
+	 * @param instance The instance to migrate
+	 * @param host The host to migrate the instance to
+	 * @throws HostFailureException, hostNotFoundException 
+	 */
+	@Override
+	public void liveMigration(String instanceId, Host host) throws HostFailureException, HostNotFoundException {
+		RiceInstance riceInstance = (RiceInstance) compute.describeInstance(instanceId);
+		
+		RiceHost fromHost = getRiceHostOf(riceInstance.riceHost.host);
+		RiceHost toHost = getRiceHostOf(host);
+		
+		
+		fromHost.coreUsedByVMcount -= riceInstance.getCoreNumber();
+		toHost.coreUsedByVMcount += riceInstance.getCoreNumber();
+		
+		riceInstance.riceHost = toHost;
+		
+		riceInstance.migrate(toHost.host);
+	}
+
+	/**
+	 * Migrate an instance to one host chosen by RICE
+	 * 
+	 * @param instance The instance to migrate
+	 * @param host The host to migrate the instance to
+	 * @throws HostFailureException, hostNotFoundException 
+	 */
+	@Override
+	public Host liveMigration(String instanceId) throws HostFailureException, HostNotFoundException {
+		RiceInstance riceInstance = (RiceInstance) compute.describeInstance(instanceId);
+		RiceHost riceHost = assignVM(riceInstance.instanceType());
+		if (riceHost == null) return null;
+		
+		liveMigration(instanceId, riceHost.host);
+		
+		return riceHost.host;
+	}
+
+	
+	/**
+	 * Offload one given host of its VMs 
+	 * 
+	 * @param host
+	 *            The host to offload
+	 * @throws HostNotFoundException 
+	 * @throws HostFailureException
+	 */
+	@Override
+	public void offLoad(Host host)  throws HostNotFoundException, HostFailureException {
+		RiceHost riceHost = getRiceHostOf(host);
+		
+		riceHost.availability = false;
+		
+		for (Instance instance: compute.describeInstances()) {
+			RiceInstance riceInstance = (RiceInstance) instance;
+			if (riceInstance.riceHost.host == host)
+				liveMigration(instance.getId());
+		}
+	}
+
+	
 	/**
 	 * Terminate this.
 	 */
+	@Override
 	public void terminate() {
 	}
 
@@ -177,4 +263,5 @@ public class Rice extends ComputeEngine {
 		if (riceHost == null) return null;
 		return new RiceInstance(id, image, instanceType, riceHost);
 	}
+		
 }
