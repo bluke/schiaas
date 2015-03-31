@@ -52,7 +52,7 @@ public abstract class ComputeEngine {
 	public Compute getCompute() {
 		return this.compute;
 	}
-	
+
 	/**
 	 * @return The hosts of this
 	 */

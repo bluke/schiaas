@@ -24,7 +24,9 @@
     <path>/home/julien/repo/schiaas/lab/</path>
     <filename>dir_684fa5c5e4cabec14ab59e41caa6242f.html</filename>
     <file>calibrate.sh</file>
+    <file>compare.sh</file>
     <file>interval_tree.py</file>
+    <file>json2com.py</file>
     <file>json2diameter.py</file>
     <file>json2infos.py</file>
     <file>json2tasks.py</file>
