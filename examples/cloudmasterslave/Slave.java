@@ -38,15 +38,13 @@ public class Slave extends Process {
 			if (task instanceof FinalizeTask) {
 				break;
 			}
-			//Msg.info("Received \"" + task.getName() +  "\". Processing it.");
+			//Msg.info("Received \"" + task.getName() +  "\". Processing it on "+ Host.currentHost().getName());
 			try {
 				task.execute();
 			} catch (TaskCancelledException e) {
 
 			}
-			//Msg.info("\"" + task.getName() + "\" done ");
-			
-			Msg.info("RunTime : "+(Msg.getClock()-runDate));
+			Msg.info("\"" + task.getName() + "\" done in "+(Msg.getClock()-runDate)+"s.");
 		}
 
 		Msg.info("Received Finalize. I'm done. See you!");

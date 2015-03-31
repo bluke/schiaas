@@ -219,7 +219,7 @@ public class Cloud {
 	 * Of course
 	 */
 	public String toString() {
-		return ("Cloud " + id);
+		return ("Cloud:" + id);
 	}
 
 }

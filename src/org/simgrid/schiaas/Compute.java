@@ -267,7 +267,7 @@ public class Compute {
 	 */
 	public String runInstance(String imageId, String instanceTypeId) {
 		Instance instance = this.computeEngine.newInstance(
-				this.getCloud().getId() + "-" + instancesId,
+				this.getCloud().getId() + "-" + String.format("%03d", instancesId),
 				this.images.get(imageId),
 				this.instanceTypes.get(instanceTypeId));
 		

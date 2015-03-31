@@ -47,7 +47,7 @@ public class Masterslave {
         /* print cloud reports */
         Msg.info("Cloud details\n");
         for (Cloud cloud : SchIaaS.getClouds())  {
-        	Msg.info("Cloud:"+cloud.getId());
+        	Msg.info(""+cloud);
         	for (Instance instance : cloud.getCompute().describeInstances()) {
         		Msg.info(" - "+instance);
         	}

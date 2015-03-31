@@ -129,15 +129,18 @@ public class Master extends Process {
 		// Suspend and resume one instance
 		waitFor(150);
 		Msg.info("Suspending " + slaveInstancesId[0]);
+		Msg.info(" - "+myCompute.describeInstance(slaveInstancesId[0]));
 		myCompute.suspendInstance(slaveInstancesId[0]);
+		Msg.info(" - "+myCompute.describeInstance(slaveInstancesId[0]));
 		waitFor(200);
+		Msg.info(" - "+myCompute.describeInstance(slaveInstancesId[0]));
 		Msg.info("Resuming " + slaveInstancesId[0]);
+		Msg.info(" - "+myCompute.describeInstance(slaveInstancesId[0]));
 		myCompute.resumeInstance(slaveInstancesId[0]);
 		waitFor(100);
 		
 		// Migrate one VM, as this is an admin operation, one must use the compute engine
 		Collection<Host> hosts = myCompute.getComputeEngine().getHosts();
-		Msg.info(" " + hosts);
 		Msg.info("Migrating "+slaveInstancesId[0]+" to "+(Host)hosts.toArray()[1]);
 		Msg.info(" - " + myCompute.describeInstance(slaveInstancesId[0]));
 		myCompute.getComputeEngine().liveMigration(slaveInstancesId[0], (Host)hosts.toArray()[1]);
@@ -164,7 +167,7 @@ public class Master extends Process {
 		// Wait an arbitrary time for Slaves to finalize
 		waitFor(36000);
 		
-		myCompute.terminateInstance( slaveInstancesId[0]);
+		myCompute.terminateInstance(slaveInstancesId[0]);
 		
 		// Terminating SchIaaS
 		Msg.info("Terminating");

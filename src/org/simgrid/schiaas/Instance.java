@@ -165,7 +165,7 @@ public abstract class Instance extends org.simgrid.msg.VM {
 	 * @return A string containing the name of the instance and its host.
 	 */
 	public String toString() {
-		return "Instance : " + getName() + " : " + this.getHost().getName();
+		return "Instance:" + getName() + " (" + this.getHost().getName()+")";
 	}
 
 }
