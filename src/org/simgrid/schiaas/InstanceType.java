@@ -32,11 +32,11 @@ public class InstanceType {
 		// default properties
 		this.properties.put("core", "1");
 		this.properties.put("ramSize", "256");
-		this.properties.put("netCap", "10");
+		this.properties.put("netCap", "125");
 		this.properties.put("diskPath", "/default");
 		this.properties.put("diskSize", "1000");
-		this.properties.put("migNetSpeed", "10");
-		this.properties.put("dpIntensity", "1");
+		this.properties.put("migNetSpeed", "125");
+		this.properties.put("dpIntensity", "60");
 
 		// properties from XML config file
 		for (int i = 0; i < instanceTypeXMLNode.getAttributes().getLength(); i++) {

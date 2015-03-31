@@ -359,9 +359,6 @@ public class Compute {
 	public void terminate() throws HostFailureException {
 		Msg.verb("Terminating all remaining instances");
 		for (Instance instance : this.instances.values()) {
-			//Msg.info("teste "+instance);
-			//Msg.verb(instance + " " + instance.isAvail());
-			//Msg.info("teste");
 			terminateInstance(instance.id);
 		}
 		this.computeEngine.terminate();

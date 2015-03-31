@@ -25,6 +25,7 @@ xmlns:xs="http://www.w3.org/2001/XMLSchema">
 		<xs:attribute name="core" type="xs:nonNegativeInteger" use="required" />
 		<xs:attribute name="memory" type="xs:string" use="required" />
 		<xs:attribute name="disk" type="xs:string" use="required" />
+		<xs:anyAttribute processContents="lax" />
 	</xs:complexType>
 
 
