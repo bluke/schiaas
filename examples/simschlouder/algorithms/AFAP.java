@@ -33,9 +33,9 @@ public class AFAP extends AStrategy {
 
 			// Look for the first instance to become available
 			if (task.getName().equals("2mass_pleiades_j_2x2_diff_0")) {  
-				Msg.info("sooner "+node.instanceId+":"+node.getIdleDate()+" - "+finishSooner.instanceId+":"+finishSooner.getIdleDate());
+				Msg.verb("sooner "+node.instanceId+":"+node.getIdleDate()+" - "+finishSooner.instanceId+":"+finishSooner.getIdleDate());
 				if (candidate != null)
-					Msg.info("afap "+node.instanceId+":"+node.getRemainingIdleTime()+" "+node.getRemainingIdleTime(task)+" - "+candidate.instanceId+":"+candidatePredictedIdleTime);
+					Msg.verb("afap "+node.instanceId+":"+node.getRemainingIdleTime()+" "+node.getRemainingIdleTime(task)+" - "+candidate.instanceId+":"+candidatePredictedIdleTime);
 			}
 			
 				if (node.getIdleDate() <= finishSooner.getIdleDate()) {
@@ -55,7 +55,7 @@ public class AFAP extends AStrategy {
 					candidatePredictedIdleTime = predictedIdleTime;
 				} 
 			
-			Msg.info("AFAP "+node.instanceId+"("+node.getState()+"): "+currentIdleTime+" >= "+predictedIdleTime
+			Msg.verb("AFAP "+node.instanceId+"("+node.getState()+"): "+currentIdleTime+" >= "+predictedIdleTime
 					+" < "+candidatePredictedIdleTime
 					+" - "+finishSooner.instanceId+"\t"+((candidate!=null)?candidate.instanceId:"null"));
 

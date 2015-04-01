@@ -1,5 +1,6 @@
 package org.simgrid.schiaas.engine.rice;
 
+import java.io.FileNotFoundException;
 import java.util.Collection;
 import java.util.Vector;
 
@@ -24,12 +25,14 @@ import org.simgrid.schiaas.exceptions.MissingConfigException;
  */
 public class Rice extends ComputeEngine {
 
-
 	/** Host of the controller of this. */
 	protected Host controller;
 
 	/** All the host of this. */
 	protected Vector<RiceHost> riceHosts;
+	
+	/** The controller of migrations */
+	protected MigrationController migrationController;
 
 	/** Storage used for the images. */
 	protected Storage imgStorage;
@@ -57,8 +60,9 @@ public class Rice extends ComputeEngine {
 	 * @param hosts The set of physical hosts usable by this. 
 	 * @throws MissingConfigException Thrown whenever one required configuration parameter is not found.
 	 * @throws HostNotFoundException Thrown whenever one given host is not found. 
+	 * @throws FileNotFoundException 
 	 */
-	public Rice(Compute compute, Collection<Host> hosts) throws MissingConfigException, HostNotFoundException {
+	public Rice(Compute compute, Collection<Host> hosts) throws MissingConfigException, HostNotFoundException, FileNotFoundException {
 		super(compute, hosts);
 		
 		try{
@@ -72,6 +76,7 @@ public class Rice extends ComputeEngine {
 			throw e;
 		}
 
+		// retrieving the controller
 		try {
 			this.controller = Host.getByName((String) compute.getConfig("controller"));
 		} catch (HostNotFoundException e) {
@@ -80,13 +85,22 @@ public class Rice extends ComputeEngine {
 		} catch (Exception e){
 		
 		}
-		
 
+		// retrieving the hosts
 		this.riceHosts = new Vector<RiceHost>();
 		for (Host host : hosts) {
 			this.riceHosts.add(new RiceHost(host));
 		}
 		
+		// Running the migrationController
+		
+		try {
+			this.migrationController = new MigrationController(this, compute.getConfig("offloads_file"));
+		} catch (MissingConfigException e)	{
+		} 
+		
+		
+		// retrieving the images
 		Msg.info("storing images");
 		imgStorage = compute.getCloud().getStorage(compute.getConfig("image_storage"));
 		for (Image image : compute.describeImages().values()) {
@@ -98,7 +112,7 @@ public class Rice extends ComputeEngine {
 				e.printStackTrace();
 			}
 		}
-		
+
 		imgCaching = IMGCACHING.valueOf(compute.getConfig("image_caching"));
 		interBootDelay = Double.parseDouble(getCompute().getConfig("inter_boot_delay"));
 		
@@ -126,7 +140,7 @@ public class Rice extends ComputeEngine {
 		while (true) {
 			RiceHost riceHost = this.riceHosts.get(iAssignVM);
 			
-			Msg.info("Assign: probing PM " + iAssignVM + "/" + this.riceHosts.size() + " : asked cores=" + core
+			Msg.verb("Assign: probing PM " + iAssignVM + "/" + this.riceHosts.size() + " : asked cores=" + core
 					+ ", used cores=" + riceHost.coreUsedByVMcount + "/"
 					+ riceHost.host.getCoreNumber());
 			
@@ -243,7 +257,6 @@ public class Rice extends ComputeEngine {
 				liveMigration(instance.getId());
 		}
 	}
-
 	
 	/**
 	 * Terminate this.

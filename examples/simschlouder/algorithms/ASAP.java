@@ -23,7 +23,7 @@ public class ASAP extends AStrategy {
 		SchloudNode candidate = null;
 		SchloudNode finishSooner = null;
 	
-		Msg.info("ASAP Strategy for "+task);
+		Msg.verb("ASAP Strategy for "+task);
 		
 		if (!SchloudController.nodes.isEmpty())
 			finishSooner = SchloudController.nodes.firstElement();
@@ -41,7 +41,7 @@ public class ASAP extends AStrategy {
 
 			// Track one given task
 			//if (task.getName().equals("F025743DA_1.mgf"))  
-				Msg.info("ASAP "+node.instanceId+"("+node.getState()+"): "+node.getIdleDate()+"<"+(Msg.getClock()+SchloudController.schloudCloud.getBootTimePrediction())
+				Msg.verb("ASAP "+node.instanceId+"("+node.getState()+"): "+node.getIdleDate()+"<"+(Msg.getClock()+SchloudController.schloudCloud.getBootTimePrediction())
 					+" / "+node.getRemainingIdleTime(task)
 					+" - "+finishSooner.instanceId+"\t"+((candidate!=null)?candidate.instanceId:"null"));
 		}

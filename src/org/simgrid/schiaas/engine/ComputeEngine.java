@@ -5,6 +5,7 @@ import java.util.Collection;
 import org.simgrid.msg.Host;
 import org.simgrid.msg.HostFailureException;
 import org.simgrid.msg.HostNotFoundException;
+import org.simgrid.msg.Msg;
 import org.simgrid.schiaas.Compute;
 import org.simgrid.schiaas.Image;
 import org.simgrid.schiaas.Instance;
@@ -124,6 +125,7 @@ public abstract class ComputeEngine {
 	 * @throws HostFailureException
 	 */
 	public abstract void offLoad(Host host)  throws HostNotFoundException, HostFailureException;
+	
 	
 	/**
 	 * Terminate this.

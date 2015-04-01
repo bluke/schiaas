@@ -28,7 +28,6 @@ public class RiseProcess extends Process {
 		
 		try {
 			this.start();
-			//this.run();
 		} catch(HostNotFoundException e) {
 			Msg.critical("Something bad happend in RISE"+e.getMessage());
 		}

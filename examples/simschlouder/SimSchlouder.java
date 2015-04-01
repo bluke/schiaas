@@ -64,6 +64,11 @@ public class SimSchlouder {
 	/** Flag to indicate if the simulator is used to validation purpose */
 	public static Boolean validation = false;
 	
+	/** The process to read the taskfile */
+	public static TaskFileReaderProcess taskFileReaderProcess;
+
+	
+	
 	/**
 	 * Read the task file.
 	 * The format of this file is:
@@ -91,8 +96,6 @@ public class SimSchlouder {
 			
 			Scanner sc = new Scanner(scf.nextLine());			
 			if (sc.hasNext("\\[boots\\]")) {
-				sc.close();
-				sc = new Scanner(scf.nextLine());
 				do {
 					SchloudController.schloudCloud.bootTimes.add(sc.nextInt());
 					if (sc.hasNextInt())
@@ -222,8 +225,8 @@ public class SimSchlouder {
 		
 		Msg.verb("Reading the task file: "+args[1]);
 		String[] tfrpargs = {args[1]};
-		TaskFileReaderProcess tfrp = new TaskFileReaderProcess(Host.getByName(SchloudController.broker),"TaskFileReader",tfrpargs);
-		tfrp.start();
+		taskFileReaderProcess = new TaskFileReaderProcess(Host.getByName(SchloudController.broker),"TaskFileReader",tfrpargs);
+		taskFileReaderProcess.start();
 		
 		Msg.verb("Loading the strategy: "+args[2]);
 		//SchloudController.strategy=SchloudController.STRATEGY.valueOf(args[2].toUpperCase());
@@ -231,9 +234,11 @@ public class SimSchlouder {
 		Msg.info("Strategy set to "+SchloudController.strategy.getName());
 		
 		
+		
 		Msg.verb("Running the simulation...");
 		/*  execute the simulation. */
         Msg.run();
+        
         
         //Msg.info("Cloud description\n"+Compute.getCloudsDescription());
         //Msg.info("Nodes description\n"+SchloudController.getPostMortem());
