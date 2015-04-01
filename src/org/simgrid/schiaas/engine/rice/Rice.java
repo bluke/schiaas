@@ -8,6 +8,8 @@ import org.simgrid.msg.Host;
 import org.simgrid.msg.HostFailureException;
 import org.simgrid.msg.HostNotFoundException;
 import org.simgrid.msg.Msg;
+import org.simgrid.msg.MsgException;
+import org.simgrid.msg.Process;
 import org.simgrid.schiaas.Compute;
 import org.simgrid.schiaas.Data;
 import org.simgrid.schiaas.Image;
@@ -34,6 +36,17 @@ public class Rice extends ComputeEngine {
 	/** The controller of migrations */
 	protected MigrationController migrationController;
 
+	/**
+	 * Enumerates the possible off-load types.
+	 */
+	protected static enum OFFLOADTYPE {
+		SEQUENTIAL, PARALLEL
+	};
+
+	/** the off-load type */
+	protected OFFLOADTYPE offLoadType;
+	
+	
 	/** Storage used for the images. */
 	protected Storage imgStorage;
 
@@ -93,10 +106,14 @@ public class Rice extends ComputeEngine {
 		}
 		
 		// Running the migrationController
-		
 		try {
 			this.migrationController = new MigrationController(this, compute.getConfig("offloads_file"));
 		} catch (MissingConfigException e)	{
+		} 
+		try {
+			offLoadType = OFFLOADTYPE.valueOf(compute.getConfig("offload_type"));
+		} catch (MissingConfigException e)	{
+			offLoadType = OFFLOADTYPE.SEQUENTIAL;
 		} 
 		
 		
@@ -236,6 +253,28 @@ public class Rice extends ComputeEngine {
 		return riceHost.host;
 	}
 
+	/**
+	 * Process to handle one live migration, used to parallelize migrations during off-loads 
+	 * @author julien.gossa@unistra.fr
+	 */
+	protected class LiveMigrationProcess extends Process {
+		private String instanceId;	
+		
+		protected LiveMigrationProcess(String instanceId) throws HostNotFoundException {
+			super(controller, "LiveMigrationProcess:"+instanceId);
+			this.instanceId = instanceId;
+			try {
+				this.start();
+			} catch(HostNotFoundException e) {
+				Msg.critical("Something bad happend in the LiveMigrationProcess of RICE"+e.getMessage());
+			}
+		}
+
+		public void main(String[] arg0) throws MsgException {
+			liveMigration(instanceId);
+		}
+	}
+
 	
 	/**
 	 * Offload one given host of its VMs 
@@ -254,7 +293,17 @@ public class Rice extends ComputeEngine {
 		for (Instance instance: compute.describeInstances()) {
 			RiceInstance riceInstance = (RiceInstance) instance;
 			if (riceInstance.riceHost.host == host)
-				liveMigration(instance.getId());
+				switch(offLoadType) {
+				case SEQUENTIAL :
+					liveMigration(instance.getId());
+					break;
+				case PARALLEL :
+					new LiveMigrationProcess(instance.getId());
+					break;
+				default :
+					Msg.critical("Off-load type not reconized");
+				}
+				
 		}
 	}
 	
