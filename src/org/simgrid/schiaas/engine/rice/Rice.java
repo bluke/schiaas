@@ -215,7 +215,7 @@ public class Rice extends ComputeEngine {
 	/**
 	 * Migrate an instance to one given host
 	 * 
-	 * @param instance The instance to migrate
+	 * @param instanceId The id of the instance to migrate
 	 * @param host The host to migrate the instance to
 	 * @throws HostFailureException, hostNotFoundException 
 	 */
@@ -232,14 +232,15 @@ public class Rice extends ComputeEngine {
 		
 		riceInstance.riceHost = toHost;
 		
+		Msg.info("lm : "+riceInstance.getId()+" "+toHost.host.getName());
 		riceInstance.migrate(toHost.host);
 	}
 
 	/**
-	 * Migrate an instance to one host chosen by RICE
+	 * Migrate an instance to one host chosen by RICE.
 	 * 
-	 * @param instance The instance to migrate
-	 * @param host The host to migrate the instance to
+	 * @param instanceId The id of the instance to migrate
+	 * @return the host choosen by RICE, or null whenever there was no suitable host available.
 	 * @throws HostFailureException, hostNotFoundException 
 	 */
 	@Override
@@ -271,6 +272,7 @@ public class Rice extends ComputeEngine {
 		}
 
 		public void main(String[] arg0) throws MsgException {
+			Msg.info("lmp : "+instanceId);
 			liveMigration(instanceId);
 		}
 	}
@@ -292,7 +294,7 @@ public class Rice extends ComputeEngine {
 		
 		for (Instance instance: compute.describeInstances()) {
 			RiceInstance riceInstance = (RiceInstance) instance;
-			if (riceInstance.riceHost.host == host)
+			if (riceInstance.riceHost.host == host) {
 				switch(offLoadType) {
 				case SEQUENTIAL :
 					liveMigration(instance.getId());
@@ -303,7 +305,7 @@ public class Rice extends ComputeEngine {
 				default :
 					Msg.critical("Off-load type not reconized");
 				}
-				
+			}
 		}
 	}
 	

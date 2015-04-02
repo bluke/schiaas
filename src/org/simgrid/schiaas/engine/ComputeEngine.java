@@ -98,8 +98,8 @@ public abstract class ComputeEngine {
 	/**
 	 * Migrate an instance to one given host
 	 * 
-	 * @param instance
-	 *            The id of instance to migrate
+	 * @param instanceId
+	 *            The id of of instance to migrate
 	 * @param host
 	 *            The host to migrate the instance to
 	 */
@@ -108,8 +108,8 @@ public abstract class ComputeEngine {
 	/**
 	 * Migrate an instance to one host chose by the engine
 	 * 
-	 * @param instance
-	 *            The id of instance to migrate
+	 * @param instanceId
+	 *            The id of the instance to migrate
 	 *            
 	 * @return The host to which the instance is migrating
 	 */
