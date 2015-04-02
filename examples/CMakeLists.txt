@@ -22,6 +22,14 @@ add_jar(allmasterslave ${allmasterslave_src} OUTPUT_DIR ${PROJECT_BINARY_DIR}/al
 
 add_custom_command( TARGET allmasterslave POST_BUILD COMMAND cp -r ${PROJECT_EXAMPLES_DIR}/allmasterslave/companionFiles/* ${PROJECT_BINARY_DIR}/allmasterslave)
 
+# sgbugmasterslave
+file(GLOB_RECURSE sgbugmasterslave_src ${PROJECT_EXAMPLES_DIR}/sgbugmasterslave/*.java)
+set(CMAKE_JAVA_JAR_ENTRY_POINT sgbugmasterslave.Masterslave)
+add_jar(sgbugmasterslave ${sgbugmasterslave_src} OUTPUT_DIR ${PROJECT_BINARY_DIR}/sgbugmasterslave)
+
+add_custom_command( TARGET sgbugmasterslave POST_BUILD COMMAND cp -r ${PROJECT_EXAMPLES_DIR}/sgbugmasterslave/companionFiles/* ${PROJECT_BINARY_DIR}/sgbugmasterslave)
+
+
 #LiveSim
 file(GLOB_RECURSE livesim_src ${PROJECT_EXAMPLES_DIR}/livesim/*.java)
 set(CMAKE_JAVA_JAR_ENTRY_POINT livesim.LiveSim)
