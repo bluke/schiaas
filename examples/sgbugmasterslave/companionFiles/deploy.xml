@@ -1,0 +1,13 @@
+<?xml version='1.0'?>
+<!DOCTYPE platform SYSTEM "http://simgrid.gforge.inria.fr/simgrid.dtd">
+<platform version="3">
+  <!-- The master process (with some arguments) -->
+
+  <process host="controller" function="sgbugmasterslave.Master">
+     <argument value="100000"/>       <!-- Number of tasks -->
+     <argument value="5e10"/>  <!-- Computation size of tasks -->
+     <argument value="1e9"/>   <!-- Communication size of tasks -->
+     <argument value="1000"/>  <!-- Number of masterslave.Slaves -->
+  </process>
+
+</platform>
