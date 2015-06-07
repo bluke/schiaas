@@ -37,9 +37,9 @@ public class RiseTask extends Task{
 		
 		switch (request) {
 		case PUT:
-			if (response == false) setDataSize(data.getSize());
+			if (response == false) setBytesAmount(data.getSize());
 		case GET: 
-			if (response == true) setDataSize(data.getSize());
+			if (response == true) setBytesAmount(data.getSize());
 			break;
 		case LIST:
 		case DELETE:

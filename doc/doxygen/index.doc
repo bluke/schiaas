@@ -81,7 +81,7 @@ this tutorial shows how to deploy slaves instances on the fly.
 
 @subsection tutorial_setup Simulation setup
 
-First of all, the platform file does not need to be change.
+First of all, the platform file does not need to be modified.
 
 Second, the deployment file does not need to include slave processes placement anymore, 
 as slaves processes will be binded to instances at runtime.
@@ -112,9 +112,20 @@ Last, a new configuration file is introduced to declare cloud configuration, clo
 			<host id="Boivin"/>
 			<host id="Jean_Yves"/>
 			<host id="TeX"/>
-			...
+			<host id="Geoff"/>
+			<host id="Disney"/>
+			<host id="iRMX"/>
+			<host id="McGee"/>
+			<host id="Gatien"/>
+			<host id="Laroche"/>
+			<host id="Tanguay"/>
+			<host id="Morin"/>
+			<host id="Ethernet"/>
+			<host id="Bellemarre"/>
+			<host id="Kuenning"/>
+			<host id="Gaston"/>
+			<host id="Harry"/>
 		</compute>
-
 	</cloud>
 </clouds> 
 @endcode

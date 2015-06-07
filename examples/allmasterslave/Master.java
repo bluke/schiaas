@@ -155,12 +155,12 @@ public class Master extends Process {
 		case VM:
 			for (int i = 0; i < slavesCount; i++) {
 				VM vm = (VM) hosts[i];
-				vm.destroy();
+				vm.shutdown();
 			}
 			break;			
 		case VMHOST:
 			for (int i = 0; i < slavesCount; i++) {
-				vms[i].destroy();
+				vms[i].shutdown();
 			}
 			break;
 		case HOST:

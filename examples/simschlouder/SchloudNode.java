@@ -49,7 +49,7 @@ public class SchloudNode extends Process implements Comparable<SchloudNode>{
 	
 	/** Local tasks queue of this node */
 	protected LinkedList<SchloudTask> queue;	
-	/** Local completed taskas queue of this node */
+	/** Local completed tasks queue of this node */
 	protected LinkedList<SchloudTask> completedQueue;
 	
 	/** Currently running task */
@@ -87,7 +87,7 @@ public class SchloudNode extends Process implements Comparable<SchloudNode>{
 		private double provisioningDate;
 		private double lagTime;
 		protected SchloudNodeController(SchloudNode schloudNode) {
-			super(SchloudController.host,schloudNode.id+"_SchloudNodeController");
+			super(SchloudController.host,schloudNode.getName()+"_SchloudNodeController");
 			this.schloudNode = schloudNode;
 			this.bootTimePrediction = SchloudController.schloudCloud.getBootTimePrediction();
 			this.bootTime = this.bootTimePrediction;
@@ -114,7 +114,7 @@ public class SchloudNode extends Process implements Comparable<SchloudNode>{
 				double provisioningDelay = provisioningDate-Msg.getClock();
 				if (provisioningDelay < 0) provisioningDelay = 0;
 				Msg.verb(instanceId+" waits for provisioning: "+provisioningDelay);
-				Process.currentProcess().waitFor(provisioningDelay);
+				Process.getCurrentProcess().waitFor(provisioningDelay);
 				
 				schloudNode.setState(STATE.PENDING);
 				//idleDate += provisioningDelay;
@@ -124,11 +124,11 @@ public class SchloudNode extends Process implements Comparable<SchloudNode>{
 				
 				// Wait for at least the predicted boottime. Can be optimized.
 				Msg.verb(instanceId+" waits for boot: "+bootTime);
-				Process.currentProcess().waitFor(bootTime);				
+				Process.getCurrentProcess().waitFor(bootTime);				
 				while(cloud.compute.describeInstance(instanceId).isRunning() == 0)
 				{
 					Msg.verb(instanceId+" boot delayed");
-					Process.currentProcess().waitFor(1);
+					Process.getCurrentProcess().waitFor(1);
 				}
 				// Should be IDLE if no job are enqueued at this time
 				schloudNode.setState(STATE.CLAIMED);
@@ -229,7 +229,7 @@ public class SchloudNode extends Process implements Comparable<SchloudNode>{
 	 * @param state the new state of this node.
 	 */
 	public void setState(STATE state) {
-		Msg.verb("SchloudNode " + name + " state set to " + state);
+		Msg.verb("SchloudNode " + getName() + " state set to " + state);
 		
 		if (this.state == STATE.IDLE && state != STATE.IDLE) {
 			SchloudController.idleNodesCount--;
@@ -450,7 +450,7 @@ public class SchloudNode extends Process implements Comparable<SchloudNode>{
 	 * @return an ID for the MSG message box to communicate with this node
 	 */
 	protected String getMessageBox() {
-		return "SSMB"+msgName(); 
+		return "SSMB"+getName(); 
 	}
 
 	/**
@@ -479,7 +479,7 @@ public class SchloudNode extends Process implements Comparable<SchloudNode>{
 	 * @throws SimSchlouderException 
 	 */
 	public void writeJSON(BufferedWriter out) throws IOException, SimSchlouderException {
-		out.write("\t\t\"instance_id\": \""+name+"\",\n");
+		out.write("\t\t\"instance_id\": \""+getName()+"\",\n");
 		out.write("\t\t\"index\": \""+index+"\",\n");
 		out.write("\t\t\"host\": \""+getHost().getName()+"\",\n");
 		out.write("\t\t\"start_date\": "+pendingDate+",\n");

@@ -80,7 +80,7 @@ public class RiceNodeProcess extends Process {
 			// TODO: May be an issue when the slot is reused immediately and there is penalty for start/shutdown
 			riceHost.coreUsedByVMcount-=riceInstance.getCoreNumber();  
 			riceInstance.shutdown();
-			riceInstance.destroy();
+			//riceInstance.destroy();
 			break;
 		case SUSPEND:
 			riceInstance.suspend();

@@ -41,9 +41,9 @@ public class Master extends Process {
 		}
 
 		public void main(String[] arg0) throws MsgException {
-			Msg.info("Start of lmp : "+this.name);
+			Msg.info("Start of lmp : "+this.getName());
 			vm.migrate(host);
-			Msg.info("End of lmp : "+this.name);
+			Msg.info("End of lmp : "+this.getName());
 		}
 	}
 
@@ -93,7 +93,7 @@ public class Master extends Process {
 		// Terminating 
 		Msg.info("Terminating");
 		for (int i = 0; i < nVMs; i++) {
-			vms[i].destroy();
+			vms[i].shutdown();
 		}
 		Msg.info("Goodbye now!");
 

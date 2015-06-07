@@ -96,14 +96,16 @@ public class SimSchlouder {
 			
 			Scanner sc = new Scanner(scf.nextLine());			
 			if (sc.hasNext("\\[boots\\]")) {
+				sc = new Scanner(scf.nextLine());
 				do {
+					Msg.info("TEST");
 					SchloudController.schloudCloud.bootTimes.add(sc.nextInt());
 					if (sc.hasNextInt())
 						SchloudController.schloudCloud.provisioningDates.add(sc.nextInt());
 					if (sc.hasNextInt())
 						SchloudController.schloudCloud.lagTimes.add(sc.nextInt());
 					sc = new Scanner(scf.nextLine());
-				} while (!sc.hasNext("\\[tasks\\]"));				
+				} while (sc.hasNextInt());				
 			} else {
 				scf = new Scanner(new File(fileName));
 			}
