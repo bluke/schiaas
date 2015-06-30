@@ -13,6 +13,7 @@ import java.util.LinkedList;
 import org.simgrid.msg.HostFailureException;
 import org.simgrid.msg.HostNotFoundException;
 import org.simgrid.msg.Msg;
+import org.simgrid.msg.NativeException;
 import org.simgrid.msg.Task;
 import org.simgrid.msg.TaskCancelledException;
 import org.simgrid.msg.TimeoutException;
@@ -441,7 +442,12 @@ public class SchloudNode extends Process implements Comparable<SchloudNode>{
 			currentSchloudTask.setState(SchloudTask.STATE.FINISHED);
 			
 			// Send the complete task
-			currentSchloudTask.getCompleteTask().send(getMessageBox());
+			try {
+				currentSchloudTask.getCompleteTask().send(getMessageBox());
+			} catch (NativeException e) {
+				Msg.critical("Something bad happened at the C level: "+e.getMessage());
+				e.printStackTrace();
+			}
 		}
 	}
 	

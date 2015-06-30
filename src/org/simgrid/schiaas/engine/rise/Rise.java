@@ -7,6 +7,7 @@ import org.simgrid.msg.Host;
 import org.simgrid.msg.HostFailureException;
 import org.simgrid.msg.HostNotFoundException;
 import org.simgrid.msg.Msg;
+import org.simgrid.msg.NativeException;
 import org.simgrid.msg.TimeoutException;
 import org.simgrid.msg.TransferFailureException;
 import org.simgrid.schiaas.Data;
@@ -98,7 +99,12 @@ public class Rise extends StorageEngine {
 		
 		// Send the request
 		RiseTask reqTask = new RiseTask(request, data, false);
-		reqTask.send(requestMessageBox());
+		try {
+			reqTask.send(requestMessageBox());
+		} catch (NativeException e) {
+			Msg.critical("Something bad happened at the C level: "+e.getMessage());
+			e.printStackTrace();
+		}
 
 		switch (request) {
 		case GET: 
