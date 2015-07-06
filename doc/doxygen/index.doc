@@ -16,7 +16,7 @@ It supports main VM management functions:
 
 For now, it does not support other cloud functionalities, such as network management.
 
-SchIaaS is an improved interface: every operation is actually handle by an engine. This allows SchIaaS applications to be compatible with any cloud internals, or even use different internals together in a multi-cloud context.
+SCHIaaS is an improved interface: every operation is actually handle by an engine. This allows SCHIaaS applications to be compatible with any cloud internals, or even use different internals together in a multi-cloud context.
 
 For now, two engines are available and fully functional:
 - RICE: Reduced Implementation of Compute Engine
@@ -76,17 +76,54 @@ You may also get a pre-compiled schiaas.jar <a href="./schiaas.jar">here</a>. No
 
 @section tutorial Tutorial: the master-slave example
 
-This tutorial assume that you have already followed the SimGrid's Java MSG master-slave example. 
+@subsection tutorial_overview Overview of the Example
 
-Instead of declaring slaves into the deployment file, 
-this tutorial shows how to deploy slaves instances on the fly.
+
+For a better understanding of this tutorial we recommend that you read the SimGrid's Java MSG master-slave example. 
+The following is essentially a summary of the differences between the SimGrid's way of describing a master-slave computation
+and the SCHIaaS's one.
+The main difference between this cloud scenario and the original SimGrid example lies in the 
+fact that slave instances are deployed on the fly, while in the original SimGrid example, 
+slaves to launch were statically declared in the deployment configuration.
+
+
+Recall that setting up this example requires :
+- configuration (XML) files to describe the environment and the mapping of processes to hosts  
+- Java programs to describe the behavior of the processes: 
+	- **Masterslave.java** is the orchestrator: it reads the configuration files and runs the simulation
+	- **Master.java** describes the Master process's behavior: 
+   it creates a number of slave processes specified in the deployement configuration file, and do clever things with slave processes.
+   In the SimGrid Masterslave example, the master is just sending data to slaves, while we demonstrate additional cloud-related features like 
+   migration of VM in this SCHIaaS example.
+	- **Slave.java**: the Slave behavior (unchanged from simGrid example) which simply receives data from the Master.
+
+
 
 @subsection tutorial_setup Simulation setup
 
-First of all, the platform file does not need to be modified.
+Recall that SimGrid uses a *platform file* to describe the set of all hardware devices available,
+and a *deployment file* to tell onto which of these devices the different processes run. 
+An example platform file is <a href="../../examples/cloudmasterslave/companionFiles/platform.xml">here</a>.
 
-Second, the deployment file does not need to include slave processes placement anymore, 
-as slaves processes will be binded to instances at runtime.
+ 
+For a schiaas simulation, the platform file is the one you would normally use for a SimGrid simulation. 
+The deployment file is also similar excepted that it does not need to include the placement of slave processes anymore, as slaves processes will be binded to instances at runtime.
+Below is an example of deployment description, where we specify that the *Master* process runs on host *Jacquelin*.
+@code
+<?xml version='1.0'?>
+<!DOCTYPE platform SYSTEM "http://simgrid.gforge.inria.fr/simgrid.dtd">
+<platform version="3">
+  <!-- The master process (with some arguments) -->
+
+  <process host="Jacquelin" function="cloudmasterslave.Master">
+     <argument value="10"/>       <!-- Number of tasks -->
+     <argument value="5e10"/>  <!-- Computation size of tasks -->
+     <argument value="1000000"/>   <!-- Communication size of tasks -->
+     <argument value="10"/>  <!-- Number of masterslave.Slaves -->
+  </process>
+
+</platform>
+@endcode
 
 Last, a new configuration file is introduced to declare cloud configuration, cloud.xml:
 @code
@@ -180,9 +217,11 @@ It must also include the following tags:
 
 @subsubsection tutorial_initialization Initialization
 
-In order to initialize SCHIaaS, you must use SchIaaS.init(), its argument being the cloud configuration file. This is typically done in Masterslave.java:
+As previously explained, we need an orchestrator to read and setup the environment. 
+This is the *Masterslave.java* file in this example. 
+In addition, it has to initialize SCHIaaS though SCHIaaS.init(), its argument being the cloud configuration file. 
 @code
-import org.simgrid.schiaas.SchIaaS;
+import org.simgrid.schiaas.SCHIaaS;
 [...]
 
 	/* construct the platform and deploy the application */
@@ -190,34 +229,37 @@ import org.simgrid.schiaas.SchIaaS;
 	Msg.deployApplication(args[1]);
 	
 	/* construct the cloud and deploy the associated processes */
-	SchIaaS.init(args[2]);
+	SCHIaaS.init(args[2]);
 
 	/*  execute the simulation. */
-    Msg.run();
+	Msg.run();
 @endcode
 
 
 @subsubsection tutorial_instance Instances management
 
-The main modification concernes Master.java, which must declare an instance image and run one instance per slave:
+*Master.java* controls the application launch. Given that we simulate virtualization through VM images, *Master.java*
+contains a couple of changes as compared to the original Master.java of SimGrid.
+It must declare an instance image and run one instance per slave:
+
 @code
 import org.simgrid.schiaas.*;
 [...]
 	Msg.info("Hello! Got "+  slavesCount + " slaves and "+tasksCount+" tasks to process");
 	// Retrieve the Compute module of MyCloud
-	Compute myCompute = SchIaaS.getCloud("myCloud").getCompute();
+	Compute myCompute = SCHIaaS.getCloud("myCloud").getCompute();
 	
 	// Run one instance per slave on myCloud
 	String[] slaveInstancesId = myCompute.runInstances("myImage", "small", slavesCount);
 @endcode
-Afterward, slaveInstancesId constains instances' id, which are the name of SimGrid's VMs and can be used just like any SimGrid host.
+Afterwards, slaveInstancesId constains instances' id, which are the name of SimGrid's VMs and can be used just like any SimGrid host.
 
 Please note that if you ask for more instances than your cloud can provide, runInstances and runInstance will return null. Careful users will check how many instances can be ran:
 @code
 for (InstanceType instanceType : myCompute.describeInstanceTypes()) {
 			Msg.info(instanceType.getId()+ ": "
 					+ myCompute.describeAvailability(instanceType.getId()));
-		}
+}
 @endcode
 
 Before using theses instances, you must wait for the end of their boot process,
@@ -253,9 +295,9 @@ Finally, you can terminate instances one by one:
 myCompute.terminateInstance(oneInstanceId);
 @endcode
 
-Then, you have to terminate SchIaaS to clean-up the simulation:
+Then, you have to terminate SCHIaaS to clean-up the simulation:
 @code
-SchIaaS.terminate();
+SCHIaaS.terminate();
 @endcode
 Please note that this will also terminate all the instances that are still running.
 
@@ -263,7 +305,7 @@ Please note that this will also terminate all the instances that are still runni
 
 You can also manipulate some data:
 @code
-Storage myStorage = SchIaaS.getCloud("myCloud").getStorage("myStorage");
+Storage myStorage = SCHIaaS.getCloud("myCloud").getStorage("myStorage");
 
 Data someData = new Data("someData", 1e9);
 
@@ -298,7 +340,7 @@ Msg.run();
 
 /* print cloud reports */
 Msg.info("Cloud details\n");
-for (Cloud cloud : SchIaaS.getClouds())  {
+for (Cloud cloud : SCHIaaS.getClouds())  {
 	Msg.info("Cloud:"+cloud.getId());
 	for (Instance instance : cloud.getCompute().describeInstances()) {
 		Msg.info(" - "+instance);
