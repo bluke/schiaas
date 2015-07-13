@@ -146,6 +146,7 @@ public class Master extends Process {
 		myCompute.getComputeEngine().liveMigration(slaveInstancesId[0], (Host)hosts.toArray()[1]);
 		Msg.info("Migration of "+slaveInstancesId[0]+" to "+(Host)hosts.toArray()[1]+" complete.");
 		Msg.info(" - " + myCompute.describeInstance(slaveInstancesId[0]));
+		
 
 		// Offload one physical host
 		Msg.info("Offloading "+(Host)hosts.toArray()[1]);
@@ -155,6 +156,8 @@ public class Master extends Process {
 		Msg.info("Offloading "+(Host)hosts.toArray()[1]+" complete.");
 		for (int i=0; i<slavesCount; i++) 
 			Msg.info(" - " + myCompute.describeInstance(slaveInstancesId[i]));
+		
+		
 		
 		Msg.info("All tasks have been dispatched. Let's tell everybody the computation is over.");
 
