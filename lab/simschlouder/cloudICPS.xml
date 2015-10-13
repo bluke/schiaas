@@ -3,7 +3,7 @@
  <clouds version="1">
 		
 	<cloud id="icps-opst">		
-		<storage id="myStorage" engine="org.simgrid.schiaas.engine.rise.Rise">
+		<storage id="myStorage" engine="org.simgrid.schiaas.engine.frise.FRise">
 			<config controller="controller"/>
 		</storage>
 
