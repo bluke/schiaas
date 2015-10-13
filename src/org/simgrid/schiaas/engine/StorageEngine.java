@@ -34,6 +34,4 @@ public abstract class StorageEngine {
 	}
 		
 	public abstract void doRequest(REQUEST get, Data data) throws TransferFailureException, HostFailureException, TimeoutException;
-
-	public abstract boolean isTransferComplete(String dataId);	
 }

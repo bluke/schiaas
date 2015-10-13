@@ -102,10 +102,7 @@ public class Master extends Process {
 
 		Msg.info("Store some data");
 		myStorage.put(someData);
-		
-		Msg.info("Check whether the data transfer is complete: " +
-				myStorage.isTransferComplete("someData"));
-		
+				
 		Msg.info("Retrieve some stored data");
 		someData = myStorage.get("someData");
 

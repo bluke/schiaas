@@ -26,8 +26,6 @@ public class Rise extends StorageEngine {
 	/** Host of the controller of this. */
 	protected Host controller;
 	
-	protected Collection<String> completeTransfers;
-	
 	public Rise(Storage storage) throws Exception {
 		super(storage);
 		
@@ -50,8 +48,6 @@ public class Rise extends StorageEngine {
 			Msg.critical("RISE controller host "+storage.getConfig("controller")+" not found.");
 			e.printStackTrace();
 		}
-		
-		completeTransfers = new HashSet<String>();
 	}
 
 	/**
@@ -112,20 +108,8 @@ public class Rise extends StorageEngine {
 			RiseTask respTask = (RiseTask) RiseTask.receive(responseMessageBox(reqTask));
 			break;
 		case PUT:
-			completeTransfers.add(data.getId());
-			break;
 		case DELETE:
-			completeTransfers.remove(data.getId());
 			break;
 		}
-	}
-	
-	/**
-	 * @param dataId The ID of the data.
-	 * @return true if the transfer of the data is complete.
-	 */
-	public boolean isTransferComplete(String dataId) {
-		return completeTransfers.contains(dataId);
-	}
-	
+	}	
 }

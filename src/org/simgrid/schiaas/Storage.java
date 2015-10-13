@@ -222,13 +222,4 @@ public class Storage {
 		    Msg.info(data.getId()+" "+data.getSize());
 		}
 	}
-	
-/**
- * Check whether the transfer of data is complete
- * @param dataId the ID of the data.
- * @return true if the transfer of the data is complete
- */
-	public boolean isTransferComplete(String dataId) {
-		return storageEngine.isTransferComplete(dataId);
-	}
 }
