@@ -1,4 +1,4 @@
-package org.simgrid.schiaas.engine.rice;
+package org.simgrid.schiaas.engine.compute.rice;
 
 import org.simgrid.msg.Task;
 import org.simgrid.schiaas.engine.ComputeEngine;

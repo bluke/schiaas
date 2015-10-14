@@ -1,4 +1,4 @@
-package org.simgrid.schiaas.engine.rice;
+package org.simgrid.schiaas.engine.compute.rice;
 
 import java.io.FileNotFoundException;
 import java.util.Collection;

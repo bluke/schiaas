@@ -1,10 +1,10 @@
-package org.simgrid.schiaas.engine.rice;
+package org.simgrid.schiaas.engine.compute.rice;
 
 import org.simgrid.msg.Msg;
 import org.simgrid.msg.MsgException;
 import org.simgrid.msg.Process;
 import org.simgrid.msg.Task;
-import org.simgrid.schiaas.engine.rice.RiceHost.IMGSTATUS;
+import org.simgrid.schiaas.engine.compute.rice.RiceHost.IMGSTATUS;
 
 /**
  * Process handling Compute commands from the node side.

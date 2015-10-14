@@ -1,40 +1,32 @@
-package org.simgrid.schiaas.engine.frise;
+package org.simgrid.schiaas.engine.storage.rise;
+
+import java.util.Collection;
+import java.util.HashSet;
 
 import org.simgrid.msg.Host;
 import org.simgrid.msg.HostFailureException;
 import org.simgrid.msg.HostNotFoundException;
 import org.simgrid.msg.Msg;
-import org.simgrid.msg.TaskCancelledException;
+import org.simgrid.msg.NativeException;
 import org.simgrid.msg.TimeoutException;
 import org.simgrid.msg.TransferFailureException;
-import org.simgrid.msg.Task;
-import org.simgrid.msg.Process;
 import org.simgrid.schiaas.Data;
 import org.simgrid.schiaas.Storage;
 import org.simgrid.schiaas.engine.StorageEngine;
 import org.simgrid.schiaas.exceptions.MissingConfigException;
 
 /**
- * Fast Reduced Implementation of Storage Engine.
+ * Reduced Implementation of Storage Engine.
  * Simple management of the storage virtualization.
- * Faster to simulate than RISE, but less accurate: storage does not wait for the reception of the request
- * to start the transfer the answer.
  * 
  * @author julien.gossa@unistra.fr
  */
-public class FRise extends StorageEngine {
+public class Rise extends StorageEngine {
 	
 	/** Host of the controller of this. */
 	protected Host controller;
 	
-	/** The data size of the request/answer without specific data. */
-	protected static double commandDataSize = 1000;
-
-	/** The compute size of a request/answer. */
-	protected static double commandComputeSize = 0;
-
-	
-	public FRise(Storage storage) throws Exception {
+	public Rise(Storage storage) throws Exception {
 		super(storage);
 		
 		try {
@@ -60,6 +52,7 @@ public class FRise extends StorageEngine {
 
 	/**
 	 * Getter of the storage of this 
+	 * @author julien
 	 */
 	protected Storage getStorage() {
 		return storage;
@@ -70,6 +63,19 @@ public class FRise extends StorageEngine {
 	 */
 	protected String requestMessageBox() {
 		return "MB_REQ_"+storage.getCloud().getId()+"_"+storage.getId();
+	}
+
+	/**
+	 * @param riseTask The task subject of the response.
+	 * @return The message box used to put responses.
+	 */
+	protected String responseMessageBox(RiseTask riseTask) {
+		String dataString = "";
+		if (riseTask.data != null)
+			dataString = "_"+riseTask.data.getId();
+		
+		return "MB_RESP_"+storage.getCloud().getId()+"_"+storage.getId()+"_"
+				+riseTask.request+dataString;
 	}
 
 	
@@ -85,37 +91,25 @@ public class FRise extends StorageEngine {
 	public void doRequest(REQUEST request, Data data) 
 			throws TransferFailureException, HostFailureException, TimeoutException {
 		
-		Task riseTask;
-		Host hosts[] = {controller,Process.getCurrentProcess().getHost()};
-		double flops[] = {commandComputeSize, commandComputeSize};
-		double bytes[] = {}; 
+		RiseProcess riseProcess = new RiseProcess(this, request, data);
 		
-		switch (request) {
-		case GET: 
-			double gbytes[] = {0, data.getSize(), commandDataSize, 0};			
-			bytes = gbytes;
-			
-		case PUT:
-			double pbytes[] = {0, commandDataSize, data.getSize(), 0};			
-			bytes = pbytes;
-			break;
-			
-		case DELETE:
-		case LIST:
-			double lbytes[] = {0, data.getSize(), data.getSize(), 0};			
-			bytes = lbytes;
-			break;
-			
-		}
-		
-		// Execute the storage task
-		riseTask = new Task("RiseTask-"+request+"-"+data.getId(), hosts, flops, bytes);
+		// Send the request
+		RiseTask reqTask = new RiseTask(request, data, false);
 		try {
-			riseTask.execute();
-		} catch (TaskCancelledException e) {
+			reqTask.send(requestMessageBox());
+		} catch (NativeException e) {
 			Msg.critical("Something bad happened at the C level: "+e.getMessage());
 			e.printStackTrace();
 		}
+
+		switch (request) {
+		case GET: 
+		case LIST:
+			RiseTask respTask = (RiseTask) RiseTask.receive(responseMessageBox(reqTask));
+			break;
+		case PUT:
+		case DELETE:
+			break;
+		}
 	}	
 }
-

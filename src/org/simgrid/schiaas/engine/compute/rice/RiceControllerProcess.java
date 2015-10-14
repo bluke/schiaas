@@ -1,4 +1,4 @@
-package org.simgrid.schiaas.engine.rice;
+package org.simgrid.schiaas.engine.compute.rice;
 
 import org.simgrid.msg.MsgException;
 import org.simgrid.msg.Process;

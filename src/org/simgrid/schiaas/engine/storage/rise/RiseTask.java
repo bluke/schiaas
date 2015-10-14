@@ -1,4 +1,4 @@
-package org.simgrid.schiaas.engine.rise;
+package org.simgrid.schiaas.engine.storage.rise;
 
 import org.simgrid.msg.Task;
 import org.simgrid.schiaas.Data;

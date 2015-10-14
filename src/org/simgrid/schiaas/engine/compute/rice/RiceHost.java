@@ -1,4 +1,4 @@
-package org.simgrid.schiaas.engine.rice;
+package org.simgrid.schiaas.engine.compute.rice;
 
 import java.util.HashMap;
 import java.util.Map;

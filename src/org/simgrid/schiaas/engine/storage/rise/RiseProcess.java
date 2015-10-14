@@ -1,4 +1,4 @@
-package org.simgrid.schiaas.engine.rise;
+package org.simgrid.schiaas.engine.storage.rise;
 
 import org.simgrid.msg.HostNotFoundException;
 import org.simgrid.msg.Msg;
