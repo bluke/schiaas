@@ -2,7 +2,7 @@ package org.simgrid.schiaas.engine.compute.rice;
 
 import org.simgrid.msg.MsgException;
 import org.simgrid.msg.Process;
-import org.simgrid.schiaas.engine.ComputeEngine.COMMAND;
+import org.simgrid.schiaas.engine.compute.ComputeEngine.COMMAND;
 
 /**
  * Process handling Compute commands from the controller side.

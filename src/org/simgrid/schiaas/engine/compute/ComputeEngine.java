@@ -1,15 +1,14 @@
-package org.simgrid.schiaas.engine;
+package org.simgrid.schiaas.engine.compute;
 
 import java.util.Collection;
 
 import org.simgrid.msg.Host;
 import org.simgrid.msg.HostFailureException;
-import org.simgrid.msg.HostNotFoundException;
-import org.simgrid.msg.Msg;
 import org.simgrid.schiaas.Compute;
 import org.simgrid.schiaas.Image;
 import org.simgrid.schiaas.Instance;
 import org.simgrid.schiaas.InstanceType;
+
 
 /**
  * Interface for ComputeEngine: internals to manage the instances lifecycle
@@ -20,13 +19,13 @@ public abstract class ComputeEngine {
 
 	/** The compute of this */
 	protected Compute compute;
-	
-	/** The physical hosts used to run instances */
-	protected Collection<Host> hosts;
 
+	/** The scheduler of this */
+	protected ComputeScheduler computeScheduler;
+
+	
 	/**
 	 * Enumerates the possible commands to control instances.
-	 * 
 	 * @author julien
 	 */
 	public static enum COMMAND {
@@ -34,17 +33,19 @@ public abstract class ComputeEngine {
 	};
 
 	/**
-	 * Unique constructor.
+	 * Constructor with scheduler.
 	 * 
 	 * @param compute
 	 *            The compute of this.
 	 * @param hosts
 	 *            All of the host of this.
+	 * @param computeScheduler
+	 * 			  The scheduler of this.
 	 * TODO delete host of kept into Compute
 	 */
-	public ComputeEngine(Compute compute, Collection<Host> hosts) {
+	public ComputeEngine(Compute compute, Collection<Host> hosts, ComputeScheduler computeScheduler) {
 		this.compute = compute;
-		this.hosts = hosts;
+		this.computeScheduler = computeScheduler;
 	}
 
 	/**
@@ -53,14 +54,19 @@ public abstract class ComputeEngine {
 	public Compute getCompute() {
 		return this.compute;
 	}
-
+	
 	/**
 	 * @return The hosts of this
 	 */
-	public Collection<Host> getHosts() {
-		return this.hosts;
-	}
+	public abstract Collection<Host> getHosts();
 
+	/**
+	 * @return The computeHosts of this.
+	 */
+	public abstract Collection<ComputeHost> getComputeHosts();	
+	
+	
+	public abstract ComputeHost getComputeHostByName(String hostName);
 
 	/**
 	 * Return a new instance, because the id is set here (for homogeneity),
@@ -96,14 +102,14 @@ public abstract class ComputeEngine {
 	public abstract void doCommand(COMMAND command, Instance instance);
 
 	/**
-	 * Migrate an instance to one given host
+	 * Migrate an instance to one given ComputeHost
 	 * 
 	 * @param instanceId
 	 *            The id of of instance to migrate
-	 * @param host
+	 * @param computeHost
 	 *            The host to migrate the instance to
 	 */
-	public abstract void liveMigration(String instanceId, Host host)  throws HostFailureException, HostNotFoundException;
+	public abstract void liveMigration(String instanceId, ComputeHost computeHost) throws HostFailureException;
 
 	/**
 	 * Migrate an instance to one host chose by the engine
@@ -113,20 +119,8 @@ public abstract class ComputeEngine {
 	 *            
 	 * @return The host to which the instance is migrating
 	 */
-	public abstract Host liveMigration(String instanceId)  throws HostFailureException, HostNotFoundException;
-
-	
-	/**
-	 * Offload one given host of its VMs 
-	 * 
-	 * @param host
-	 *            The host to offload
-	 * @throws HostNotFoundException 
-	 * @throws HostFailureException
-	 */
-	public abstract void offLoad(Host host)  throws HostNotFoundException, HostFailureException;
-	
-	
+	public abstract ComputeHost liveMigration(String instanceId) throws HostFailureException;
+		
 	/**
 	 * Terminate this.
 	 */

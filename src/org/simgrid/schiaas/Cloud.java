@@ -1,5 +1,6 @@
 package org.simgrid.schiaas;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -40,9 +41,12 @@ public class Cloud {
 	 * @throws InstantiationException
 	 * @throws IllegalAccessException
 	 * @throws ClassNotFoundException
+	 * @throws SecurityException 
+	 * @throws NoSuchMethodException 
+	 * @throws InvocationTargetException 
+	 * @throws IllegalArgumentException 
 	 */
-	public Cloud(Node cloudXMLNode) throws InstantiationException,
-			IllegalAccessException, ClassNotFoundException {
+	public Cloud(Node cloudXMLNode) throws InstantiationException, IllegalAccessException, ClassNotFoundException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 
 		this.storages = new HashMap<String, Storage>();
 

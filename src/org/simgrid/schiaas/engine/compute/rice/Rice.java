@@ -16,7 +16,10 @@ import org.simgrid.schiaas.Image;
 import org.simgrid.schiaas.Instance;
 import org.simgrid.schiaas.InstanceType;
 import org.simgrid.schiaas.Storage;
-import org.simgrid.schiaas.engine.ComputeEngine;
+import org.simgrid.schiaas.engine.compute.ComputeEngine;
+import org.simgrid.schiaas.engine.compute.ComputeHost;
+import org.simgrid.schiaas.engine.compute.ComputeScheduler;
+import org.simgrid.schiaas.engine.compute.rice.RiceHost;
 import org.simgrid.schiaas.exceptions.MissingConfigException;
 
 /**
@@ -26,15 +29,18 @@ import org.simgrid.schiaas.exceptions.MissingConfigException;
  * @author julien.gossa@unistra.fr
  */
 public class Rice extends ComputeEngine {
-
+	
+	/** Scheduler */
+	protected ComputeScheduler scheduler;
+	
 	/** Host of the controller of this. */
 	protected Host controller;
 
 	/** All the host of this. */
-	protected Vector<RiceHost> riceHosts;
+	private Vector<Host> hosts;	
 	
-	/** The controller of migrations */
-	protected MigrationController migrationController;
+	/** All the computeHost of this. */
+	protected Vector<ComputeHost> riceHosts;
 
 	/**
 	 * Enumerates the possible off-load types.
@@ -63,20 +69,15 @@ public class Rice extends ComputeEngine {
 	/** the delay between two consecutive boots */
 	protected double interBootDelay;
 	
-	/** the index for the round robin to assign vm to pm */
-	private int iAssignVM;
-	
 	/**
-	 * Constructor
+	 * Constructor.
 	 * 
-	 * @param compute The compute of this. 	 
-	 * @param hosts The set of physical hosts usable by this. 
 	 * @throws MissingConfigException Thrown whenever one required configuration parameter is not found.
 	 * @throws HostNotFoundException Thrown whenever one given host is not found. 
 	 * @throws FileNotFoundException 
 	 */
-	public Rice(Compute compute, Collection<Host> hosts) throws MissingConfigException, HostNotFoundException, FileNotFoundException {
-		super(compute, hosts);
+	public Rice(Compute compute, Collection<Host> hosts, ComputeScheduler computeScheduler) throws MissingConfigException, HostNotFoundException, FileNotFoundException {
+		super(compute, hosts, computeScheduler);
 		
 		try{
 			compute.getConfig("controller");
@@ -87,7 +88,7 @@ public class Rice extends ComputeEngine {
 		{
 			Msg.critical(e.getMessage());
 			throw e;
-		}
+		}		
 
 		// retrieving the controller
 		try {
@@ -100,22 +101,11 @@ public class Rice extends ComputeEngine {
 		}
 
 		// retrieving the hosts
-		this.riceHosts = new Vector<RiceHost>();
+		this.riceHosts = new Vector<ComputeHost>();
+
 		for (Host host : hosts) {
 			this.riceHosts.add(new RiceHost(host));
 		}
-		
-		// Running the migrationController
-		try {
-			this.migrationController = new MigrationController(this, compute.getConfig("offloads_file"));
-		} catch (MissingConfigException e)	{
-		} 
-		try {
-			offLoadType = OFFLOADTYPE.valueOf(compute.getConfig("offload_type"));
-		} catch (MissingConfigException e)	{
-			offLoadType = OFFLOADTYPE.SEQUENTIAL;
-		} 
-		
 		
 		// retrieving the images
 		Msg.info("storing images");
@@ -132,40 +122,24 @@ public class Rice extends ComputeEngine {
 
 		imgCaching = IMGCACHING.valueOf(compute.getConfig("image_caching"));
 		interBootDelay = Double.parseDouble(getCompute().getConfig("inter_boot_delay"));
-		
-		// Init the VM to PM Assignation
-		iAssignVM = 0;
 	}
 
-	/**
-	 * Select one host to run a new instance of a given type. Basically search
-	 * for one host having enough available cores to satisfy the type of
-	 * instance.
-	 * 
-	 * @param instanceType
-	 *            The type of instance.
-	 * @return One host able to run an instance of this type. TODO (or not)
-	 *         Generalize this by an abstraction to be able too plug any
-	 *         strategy.
-	 */
-	public RiceHost assignVM(InstanceType instanceType) {
-		
-		if (compute.describeAvailability(instanceType.getId())==0)
-			return null;
-				
-		double core = Double.parseDouble(instanceType.getProperty("core"));
-		while (true) {
-			RiceHost riceHost = this.riceHosts.get(iAssignVM);
-			
-			Msg.verb("Assign: probing PM " + iAssignVM + "/" + this.riceHosts.size() + " : asked cores=" + core
-					+ ", used cores=" + riceHost.coreUsedByVMcount + "/"
-					+ riceHost.host.getCoreNumber());
-			
-			iAssignVM = (iAssignVM+1)%this.riceHosts.size();
+	@Override
+	public Collection<Host> getHosts() {
+		return hosts;
+	}
 
-			if (riceHost.isAvailable() && (riceHost.host.getCoreNumber() - riceHost.coreUsedByVMcount) >= core)
-				return riceHost;
-		}
+	@Override
+	public Collection<ComputeHost> getComputeHosts() {
+		return riceHosts;
+	}
+	
+	@Override
+	public ComputeHost getComputeHostByName(String hostName) {
+		for (ComputeHost ch : riceHosts)
+			if (ch.getHost().getName().equals(hostName))
+				return ch;
+		return null;
 	}
 
 	/**
@@ -177,7 +151,7 @@ public class Rice extends ComputeEngine {
 		double core = Double.parseDouble(instanceType.getProperty("core"));
 		int availability = 0;
 		for (int i = 0; i < this.riceHosts.size(); i++)
-			availability += (this.riceHosts.get(i).host.getCoreNumber() - this.riceHosts.get(i).coreUsedByVMcount) / core;
+			availability += (((RiceHost)this.riceHosts.get(i)).freeCores) / core;
 
 		return availability;
 	}
@@ -201,15 +175,6 @@ public class Rice extends ComputeEngine {
 			e.printStackTrace();
 		}
 	}
-
-	protected RiceHost getRiceHostOf(Host host) throws HostNotFoundException {
-		for(RiceHost riceHost : riceHosts) {
-			if (riceHost.host == host)
-				return riceHost;
-		}
-
-		throw new HostNotFoundException("RiceHost not found for "+host);
-	}	
 		
 	
 	/**
@@ -217,23 +182,16 @@ public class Rice extends ComputeEngine {
 	 * 
 	 * @param instanceId The id of the instance to migrate
 	 * @param host The host to migrate the instance to
-	 * @throws HostFailureException, hostNotFoundException 
+	 * @throws HostFailureException when the migration fails at the simgrid level
 	 */
 	@Override
-	public void liveMigration(String instanceId, Host host) throws HostFailureException, HostNotFoundException {
-		RiceInstance riceInstance = (RiceInstance) compute.describeInstance(instanceId);
+	public void liveMigration(String instanceId, ComputeHost destination) throws  HostFailureException {
 		
-		RiceHost fromHost = getRiceHostOf(riceInstance.riceHost.host);
-		RiceHost toHost = getRiceHostOf(host);
+		RiceInstance riceInstance = (RiceInstance) compute.describeInstance(instanceId);		
+		riceInstance.riceHost = (RiceHost) destination;
 		
-		
-		fromHost.coreUsedByVMcount -= riceInstance.getCoreNumber();
-		toHost.coreUsedByVMcount += riceInstance.getCoreNumber();
-		
-		riceInstance.riceHost = toHost;
-		
-		Msg.info("lm : "+riceInstance.getId()+" "+toHost.host.getName());
-		riceInstance.migrate(toHost.host);
+		Msg.verb("live migration: "+riceInstance.getId()+" to "+destination.getHost().getName());
+		riceInstance.migrate(destination.getHost());
 	}
 
 	/**
@@ -241,17 +199,18 @@ public class Rice extends ComputeEngine {
 	 * 
 	 * @param instanceId The id of the instance to migrate
 	 * @return the host choosen by RICE, or null whenever there was no suitable host available.
-	 * @throws HostFailureException, hostNotFoundException 
+	 * @throws MigrationException when the migration fails at the simgrid level
 	 */
 	@Override
-	public Host liveMigration(String instanceId) throws HostFailureException, HostNotFoundException {
+	public ComputeHost liveMigration(String instanceId) throws HostFailureException {
 		RiceInstance riceInstance = (RiceInstance) compute.describeInstance(instanceId);
-		RiceHost riceHost = assignVM(riceInstance.instanceType());
-		if (riceHost == null) return null;
 		
-		liveMigration(instanceId, riceHost.host);
+		ComputeHost riceHost = (RiceHost) scheduler.schedule(riceInstance.getInstanceType());
+		if (riceHost == null || riceHost == riceInstance.getHost()) return null;
 		
-		return riceHost.host;
+		liveMigration(instanceId, riceHost);
+		
+		return riceHost;
 	}
 
 	/**
@@ -277,7 +236,6 @@ public class Rice extends ComputeEngine {
 		}
 	}
 
-	
 	/**
 	 * Offload one given host of its VMs 
 	 * 
@@ -286,15 +244,13 @@ public class Rice extends ComputeEngine {
 	 * @throws HostNotFoundException 
 	 * @throws HostFailureException
 	 */
-	@Override
-	public void offLoad(Host host)  throws HostNotFoundException, HostFailureException {
-		RiceHost riceHost = getRiceHostOf(host);
+	public void offLoad(ComputeHost computeHost)  throws HostNotFoundException, HostFailureException {
 		
-		riceHost.availability = false;
+		computeHost.setAvailability(false);
 		
 		for (Instance instance: compute.describeInstances()) {
 			RiceInstance riceInstance = (RiceInstance) instance;
-			if (riceInstance.riceHost.host == host) {
+			if (riceInstance.riceHost.host == computeHost) {
 				switch(offLoadType) {
 				case SEQUENTIAL :
 					liveMigration(instance.getId());
@@ -308,6 +264,8 @@ public class Rice extends ComputeEngine {
 			}
 		}
 	}
+
+	
 	
 	/**
 	 * Terminate this.
@@ -322,10 +280,9 @@ public class Rice extends ComputeEngine {
 	 */
 	@Override
 	public Instance newInstance(String id, Image image, InstanceType instanceType) {
-		RiceHost riceHost = assignVM(instanceType);
-
+		RiceHost riceHost = (RiceHost) scheduler.schedule(instanceType);
+		
 		if (riceHost == null) return null;
 		return new RiceInstance(id, image, instanceType, riceHost);
-	}
-		
+	}		
 }

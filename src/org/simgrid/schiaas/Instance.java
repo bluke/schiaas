@@ -98,7 +98,7 @@ public abstract class Instance extends org.simgrid.msg.VM {
 	/**
 	 * @return The type of this.
 	 */
-	public InstanceType instanceType() {
+	public InstanceType getInstanceType() {
 		return this.instanceType;
 	}
 

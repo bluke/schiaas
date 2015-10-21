@@ -1,8 +1,8 @@
 package org.simgrid.schiaas.engine.compute.rice;
 
 import org.simgrid.msg.Task;
-import org.simgrid.schiaas.engine.ComputeEngine;
-import org.simgrid.schiaas.engine.ComputeEngine.COMMAND;
+import org.simgrid.schiaas.engine.compute.ComputeEngine;
+import org.simgrid.schiaas.engine.compute.ComputeEngine.COMMAND;
 
 /**
  * Rise command task.

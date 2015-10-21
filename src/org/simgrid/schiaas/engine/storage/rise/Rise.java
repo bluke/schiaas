@@ -12,7 +12,7 @@ import org.simgrid.msg.TimeoutException;
 import org.simgrid.msg.TransferFailureException;
 import org.simgrid.schiaas.Data;
 import org.simgrid.schiaas.Storage;
-import org.simgrid.schiaas.engine.StorageEngine;
+import org.simgrid.schiaas.engine.storage.StorageEngine;
 import org.simgrid.schiaas.exceptions.MissingConfigException;
 
 /**

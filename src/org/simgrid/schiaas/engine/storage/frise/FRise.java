@@ -11,7 +11,7 @@ import org.simgrid.msg.Task;
 import org.simgrid.msg.Process;
 import org.simgrid.schiaas.Data;
 import org.simgrid.schiaas.Storage;
-import org.simgrid.schiaas.engine.StorageEngine;
+import org.simgrid.schiaas.engine.storage.StorageEngine;
 import org.simgrid.schiaas.exceptions.MissingConfigException;
 
 /**

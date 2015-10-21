@@ -2,8 +2,8 @@ package org.simgrid.schiaas.engine.storage.rise;
 
 import org.simgrid.msg.Task;
 import org.simgrid.schiaas.Data;
-import org.simgrid.schiaas.engine.StorageEngine;
-import org.simgrid.schiaas.engine.StorageEngine.REQUEST;
+import org.simgrid.schiaas.engine.storage.StorageEngine;
+import org.simgrid.schiaas.engine.storage.StorageEngine.REQUEST;
 
 /**
  * Rise request task.

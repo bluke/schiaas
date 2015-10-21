@@ -12,6 +12,9 @@
 			<config controller="controller" 
 					image_storage="myStorage" image_caching="PRE"
 					inter_boot_delay="10"/>
+					
+			<scheduler name="org.simgrid.schiaas.engine.compute.scheduler.simplescheduler.SimpleBalancer"
+					   type="balancer">
 			
 			<instance_type id="small" core="1" memory="1000" disk="1690" />				
 			<instance_type id="medium" core="2" memory="1000" disk="1690"/>
@@ -21,8 +24,6 @@
 
 			<cluster id="my_cluster" prefix="node-" suffix=".me" radical="1-4"/>  
 		</compute>
-
-		<!-- TODO add network and storage here and in the XSD file -->
 
 	</cloud>
 </clouds> 

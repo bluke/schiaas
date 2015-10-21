@@ -1,5 +1,7 @@
 package org.simgrid.schiaas.exceptions;
 
+import org.simgrid.schiaas.Cloud;
+
 /**
  * Exception for missing parameter in hash table parsed from config tag in cloud.xml 
  * @author lbertot@unistra.fr
@@ -7,8 +9,8 @@ package org.simgrid.schiaas.exceptions;
  */
 public class MissingConfigException extends Exception{
 	
-	/** ID of the cloud where the error happens */
-	private String cloud;
+	/** The cloud where the error happens */
+	private Cloud cloud;
 	
 	/** Name of the module throwing the error*/ 
 	private String module;
@@ -19,14 +21,14 @@ public class MissingConfigException extends Exception{
 	/**
 	 * 
 	 * @param cloud
-	 * 			ID of the cloud in which the error happens
+	 * 			The cloud in which the error happens
 	 * @param type
 	 * 			Engine type in which the error happened
 	 * @param propID
 	 * 			Name of the missing parameter
 	 */
-	public MissingConfigException(String cloud, String type, String propID) {
-		super("In cloud "+cloud+", the "+type+"-engine configuration parameter "+propID+" was not found.");
+	public MissingConfigException(Cloud cloud, String type, String propID) {
+		super("In cloud "+cloud.getId()+", the "+type+"-engine configuration parameter "+propID+" was not found.");
 		
 		this.cloud = cloud;
 		this.module = type;
@@ -37,7 +39,7 @@ public class MissingConfigException extends Exception{
 	 *  Get faulty cloud name
 	 * @return this.cloud
 	 */
-	public String getCloud(){
+	public Cloud getCloud(){
 		return this.cloud;
 	}
 

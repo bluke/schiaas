@@ -1,4 +1,4 @@
-package org.simgrid.schiaas.engine;
+package org.simgrid.schiaas.engine.storage;
 
 import org.simgrid.msg.HostFailureException;
 import org.simgrid.msg.TimeoutException;

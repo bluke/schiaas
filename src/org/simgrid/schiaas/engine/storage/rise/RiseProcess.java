@@ -5,7 +5,7 @@ import org.simgrid.msg.Msg;
 import org.simgrid.msg.MsgException;
 import org.simgrid.msg.Process;
 import org.simgrid.schiaas.Data;
-import org.simgrid.schiaas.engine.StorageEngine;
+import org.simgrid.schiaas.engine.storage.StorageEngine;
 
 /**
  * Process handling Storage commands.

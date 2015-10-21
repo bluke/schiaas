@@ -8,7 +8,7 @@ import org.simgrid.msg.HostFailureException;
 import org.simgrid.msg.Msg;
 import org.simgrid.msg.TimeoutException;
 import org.simgrid.msg.TransferFailureException;
-import org.simgrid.schiaas.engine.StorageEngine;
+import org.simgrid.schiaas.engine.storage.StorageEngine;
 import org.simgrid.schiaas.exceptions.MissingConfigException;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -124,7 +124,7 @@ public class Storage {
 		}
 		else
 		{
-			throw new MissingConfigException(this.cloud.getId(),"storage",propId);
+			throw new MissingConfigException(this.cloud,"storage",propId);
 		}
 	}
 	

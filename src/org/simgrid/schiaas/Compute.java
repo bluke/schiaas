@@ -18,7 +18,8 @@ import org.simgrid.msg.*;
 import org.simgrid.schiaas.Image;
 import org.simgrid.schiaas.Instance;
 import org.simgrid.schiaas.InstanceType;
-import org.simgrid.schiaas.engine.ComputeEngine;
+import org.simgrid.schiaas.engine.compute.ComputeEngine;
+import org.simgrid.schiaas.engine.compute.ComputeScheduler;
 import org.simgrid.schiaas.exceptions.MissingConfigException;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -65,9 +66,13 @@ public class Compute {
 	 * @throws InstantiationException
 	 * @throws IllegalAccessException
 	 * @throws ClassNotFoundException
+	 * @throws SecurityException 
+	 * @throws NoSuchMethodException 
+	 * @throws InvocationTargetException 
+	 * @throws IllegalArgumentException 
 	 */
 	protected Compute(Cloud cloud, Node computeXMLNode)
-			throws InstantiationException, IllegalAccessException, ClassNotFoundException {
+			throws InstantiationException, IllegalAccessException, ClassNotFoundException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 
 		this.instances = new HashMap<String, Instance>();
 		this.instancesId = 0;
@@ -81,9 +86,11 @@ public class Compute {
 
 		String engine = computeXMLNode.getAttributes().getNamedItem("engine")
 				.getNodeValue();
-
+		
 		Msg.debug("Compute initialization, engine=" + engine);
 
+		ComputeScheduler computeScheduler = null;
+		
 		Collection<Host> hosts = new Vector<Host>();
 		NodeList nodes = computeXMLNode.getChildNodes();
 		for (int i = 0; i < nodes.getLength(); i++) {
@@ -96,6 +103,18 @@ public class Compute {
 				}
 			}
 
+			if (nodes.item(i).getNodeName().compareTo("scheduler") == 0) {
+				HashMap<String, String> schedulerConfig = new HashMap<String, String>();
+				String SchedulerName;
+				NamedNodeMap configNNM = nodes.item(i).getAttributes();
+				for (int j = 0; j < configNNM.getLength(); j++) {
+					schedulerConfig.put(configNNM.item(j).getNodeName(),
+										configNNM.item(j).getNodeValue());
+				}
+				String schedulerName = schedulerConfig.remove("name");
+				computeScheduler = ComputeScheduler.load(schedulerName, computeEngine, schedulerConfig);
+			}
+			
 			if (nodes.item(i).getNodeName().compareTo("cluster") == 0) {
 				Msg.info("cluster");
 				String id=nodes.item(i).getAttributes().getNamedItem("id").getNodeValue();
@@ -136,7 +155,7 @@ public class Compute {
 		try {
 			this.computeEngine = (ComputeEngine) Class.forName(engine)
 					.getConstructor(Compute.class, Collection.class)
-					.newInstance(this, hosts);
+					.newInstance(this, hosts, computeScheduler);
 		} catch (IllegalArgumentException e) {
 			Msg.critical("Something wrong happened while loading the cloud engine "
 					+ engine);
@@ -182,7 +201,7 @@ public class Compute {
 	}
 	
 	/**
-	 * for all properties
+	 * Getter for all configuration properties
 	 * 
 	 * @param propId
 	 *            the id of the property, as is the XML config file
@@ -191,14 +210,12 @@ public class Compute {
 	 */
 	public String getConfig(String propId) throws MissingConfigException {
 		String res = this.config.get(propId);
-		if ( res != null)
+		if ( res == null)
 		{
-			return res;
+			throw new MissingConfigException(this.cloud,"compute",propId);
 		}
-		else
-		{
-			throw new MissingConfigException(this.cloud.getId(),"compute",propId);
-		}
+		
+		return res;
 	}
 
 	/**
