@@ -3,6 +3,7 @@ package org.simgrid.schiaas.engine.compute.scheduler.simplescheduler;
 import java.util.Collection;
 import java.util.Map;
 
+import org.simgrid.msg.Msg;
 import org.simgrid.schiaas.InstanceType;
 import org.simgrid.schiaas.engine.compute.ComputeScheduler;
 import org.simgrid.schiaas.engine.compute.ComputeEngine;
@@ -12,7 +13,7 @@ import org.simgrid.schiaas.engine.compute.ComputeHost;
 /**
  * This scheduler selects the host with the greatest weight.
  */
-public abstract class SimpleScheduler extends ComputeScheduler {
+public class SimpleScheduler extends ComputeScheduler {
 	
 	/**
 	 * Enumerates the possible scheduler types
@@ -25,8 +26,13 @@ public abstract class SimpleScheduler extends ComputeScheduler {
 	
 	public SimpleScheduler(ComputeEngine computeEngine, Map<String, String> config) {
 		super(computeEngine, config);
-		
-		this.type = TYPE.valueOf(config.get("type").toUpperCase());
+
+		try {
+			this.type = TYPE.valueOf(config.get("type").toUpperCase());
+		} catch (IllegalArgumentException e) {
+			Msg.critical("The type of scheduling '"+config.get("type")+"' is not supported by the SimpleScheduler");
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -34,7 +40,6 @@ public abstract class SimpleScheduler extends ComputeScheduler {
 	 * The greatest one will be selected to host the VMs. 
 	 * @param computeHost the compute host to evaluate
 	 * @param instanceType the type of the instance to be scheduled.
-	 * @return the weight of the candidate host, 0 if not suitable.
 	 */
 	protected double getWeight(ComputeHost computeHost, InstanceType instanceType) {
 		
@@ -57,24 +62,23 @@ public abstract class SimpleScheduler extends ComputeScheduler {
 	 */
 	@Override
 	public ComputeHost schedule(InstanceType instanceType) {
-			
 		Collection<ComputeHost> computeHosts = computeEngine.getComputeHosts();
 		
 		ComputeHost result = null;
-		double resultWeight = 0;
+		double resultWeight = -Double.MAX_VALUE;
 		
 		for (ComputeHost ch : computeHosts)  {
 			
-			if ( ch.canHost(instanceType) > 0 )
-			{
+			if ( ch.isAvailable() && ch.canHost(instanceType) > 0 )	{
 				double weight = getWeight(ch, instanceType);
+				Msg.info("Weigth of "+ch.getHost().getName()+" = "+weight);
 				if ( weight > resultWeight ) {
 					result = ch;
 					resultWeight = weight;
 				}
 			}
 		}
-		
+
 		return result;
 	}
 	

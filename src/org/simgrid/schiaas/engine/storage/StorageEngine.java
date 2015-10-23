@@ -1,6 +1,7 @@
 package org.simgrid.schiaas.engine.storage;
 
 import org.simgrid.msg.HostFailureException;
+import org.simgrid.msg.Msg;
 import org.simgrid.msg.TimeoutException;
 import org.simgrid.msg.TransferFailureException;
 import org.simgrid.schiaas.Data;
@@ -31,6 +32,7 @@ public abstract class StorageEngine {
 	 */
 	public StorageEngine(Storage storage) {
 		this.storage = storage;
+		Msg.debug("Storage engine initialization");
 	}
 		
 	public abstract void doRequest(REQUEST get, Data data) throws TransferFailureException, HostFailureException, TimeoutException;

@@ -66,10 +66,6 @@ public class Cloud {
 				Storage storage = new Storage(this, nodes.item(i));
 				this.storages.put(storage.getId(), storage);
 			}
-			
-			if (nodes.item(i).getNodeName().compareTo("network") == 0) {
-				this.network = new Network(this, nodes.item(i));
-			}
 		}
 	}
 

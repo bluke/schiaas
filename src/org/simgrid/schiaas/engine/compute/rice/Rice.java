@@ -2,6 +2,7 @@ package org.simgrid.schiaas.engine.compute.rice;
 
 import java.io.FileNotFoundException;
 import java.util.Collection;
+import java.util.List;
 import java.util.Vector;
 
 import org.simgrid.msg.Host;
@@ -29,10 +30,7 @@ import org.simgrid.schiaas.exceptions.MissingConfigException;
  * @author julien.gossa@unistra.fr
  */
 public class Rice extends ComputeEngine {
-	
-	/** Scheduler */
-	protected ComputeScheduler scheduler;
-	
+		
 	/** Host of the controller of this. */
 	protected Host controller;
 
@@ -76,8 +74,8 @@ public class Rice extends ComputeEngine {
 	 * @throws HostNotFoundException Thrown whenever one given host is not found. 
 	 * @throws FileNotFoundException 
 	 */
-	public Rice(Compute compute, Collection<Host> hosts, ComputeScheduler computeScheduler) throws MissingConfigException, HostNotFoundException, FileNotFoundException {
-		super(compute, hosts, computeScheduler);
+	public Rice(Compute compute, List<Host> hosts) throws MissingConfigException, HostNotFoundException, FileNotFoundException {
+		super(compute, hosts);
 		
 		try{
 			compute.getConfig("controller");
@@ -125,12 +123,12 @@ public class Rice extends ComputeEngine {
 	}
 
 	@Override
-	public Collection<Host> getHosts() {
+	public List<Host> getHosts() {
 		return hosts;
 	}
 
 	@Override
-	public Collection<ComputeHost> getComputeHosts() {
+	public List<ComputeHost> getComputeHosts() {
 		return riceHosts;
 	}
 	
@@ -188,10 +186,13 @@ public class Rice extends ComputeEngine {
 	public void liveMigration(String instanceId, ComputeHost destination) throws  HostFailureException {
 		
 		RiceInstance riceInstance = (RiceInstance) compute.describeInstance(instanceId);		
-		riceInstance.riceHost = (RiceHost) destination;
 		
 		Msg.verb("live migration: "+riceInstance.getId()+" to "+destination.getHost().getName());
+		
+		((RiceHost) destination).addInstance(riceInstance);
 		riceInstance.migrate(destination.getHost());
+		riceInstance.riceHost.removeInstance(riceInstance);
+		riceInstance.riceHost = (RiceHost) destination;
 	}
 
 	/**
@@ -205,7 +206,7 @@ public class Rice extends ComputeEngine {
 	public ComputeHost liveMigration(String instanceId) throws HostFailureException {
 		RiceInstance riceInstance = (RiceInstance) compute.describeInstance(instanceId);
 		
-		ComputeHost riceHost = (RiceHost) scheduler.schedule(riceInstance.getInstanceType());
+		ComputeHost riceHost = (RiceHost) computeScheduler.schedule(riceInstance.getInstanceType());
 		if (riceHost == null || riceHost == riceInstance.getHost()) return null;
 		
 		liveMigration(instanceId, riceHost);
@@ -280,7 +281,7 @@ public class Rice extends ComputeEngine {
 	 */
 	@Override
 	public Instance newInstance(String id, Image image, InstanceType instanceType) {
-		RiceHost riceHost = (RiceHost) scheduler.schedule(instanceType);
+		RiceHost riceHost = (RiceHost) computeScheduler.schedule(instanceType);
 		
 		if (riceHost == null) return null;
 		return new RiceInstance(id, image, instanceType, riceHost);

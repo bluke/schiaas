@@ -37,9 +37,6 @@ public class RiceNodeProcess extends Process {
 				
 		switch (riceTask.command) {
 		case START:
-			
-			riceHost.addInstance(riceInstance);
-			
 			// Image caching management
 			if (riceHost.imagesCache.get(riceInstance.getImage()) == null) {
 				switch (rice.imgCaching) {

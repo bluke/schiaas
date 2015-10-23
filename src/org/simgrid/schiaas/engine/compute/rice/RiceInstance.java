@@ -27,13 +27,15 @@ public class RiceInstance extends Instance {
 		super(id, image, instanceType, riceHost.host);
 		this.riceHost = riceHost;
 		this.isPending = true;
+		
+		riceHost.addInstance(this);
 	}
 	
 	/**
 	 * @return The physical host of this.
 	 */
 	@Override
-	protected Host getHost() {
+	public Host getHost() {
 		return this.riceHost.host;
 	}
 }

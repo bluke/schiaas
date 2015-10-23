@@ -1,9 +1,11 @@
 package org.simgrid.schiaas.engine.compute;
 
-import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 import org.simgrid.msg.Host;
 import org.simgrid.msg.HostFailureException;
+import org.simgrid.msg.Msg;
 import org.simgrid.schiaas.Compute;
 import org.simgrid.schiaas.Image;
 import org.simgrid.schiaas.Instance;
@@ -43,9 +45,11 @@ public abstract class ComputeEngine {
 	 * 			  The scheduler of this.
 	 * TODO delete host of kept into Compute
 	 */
-	public ComputeEngine(Compute compute, Collection<Host> hosts, ComputeScheduler computeScheduler) {
+	public ComputeEngine(Compute compute, List<Host> hosts) {
 		this.compute = compute;
-		this.computeScheduler = computeScheduler;
+		this.computeScheduler = null;
+		
+		Msg.debug("Compute engine initialization");
 	}
 
 	/**
@@ -56,14 +60,25 @@ public abstract class ComputeEngine {
 	}
 	
 	/**
+	 * Set and start the scheduler 	
+	 * @param computeScheduler the scheduler to use in this compute.
+	 */
+	public void setComputeScheduler(String schedulerName, Map<String, String> config){
+		if (this.computeScheduler != null)
+			this.computeScheduler.terminate();
+		
+		this.computeScheduler = ComputeScheduler.load(schedulerName, this, config);;
+	}
+	
+	/**
 	 * @return The hosts of this
 	 */
-	public abstract Collection<Host> getHosts();
+	public abstract List<Host> getHosts();
 
 	/**
 	 * @return The computeHosts of this.
 	 */
-	public abstract Collection<ComputeHost> getComputeHosts();	
+	public abstract List<ComputeHost> getComputeHosts();	
 	
 	
 	public abstract ComputeHost getComputeHostByName(String hostName);
@@ -124,6 +139,9 @@ public abstract class ComputeEngine {
 	/**
 	 * Terminate this.
 	 */
-	public abstract void terminate();
+	public void terminate() {
+		if (this.computeScheduler != null)
+			this.computeScheduler.terminate();
+	}
 
 }

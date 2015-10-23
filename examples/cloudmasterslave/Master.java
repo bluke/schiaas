@@ -10,6 +10,7 @@
 package cloudmasterslave;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import org.simgrid.msg.Host;
@@ -64,12 +65,13 @@ public class Master extends Process {
 					+ myCompute.describeAvailability(instanceType.getId()));
 		}
 		
-		
 		// Run one instance per slave on myCloud
 		String[] slaveInstancesId = myCompute.runInstances("myImage", "small", slavesCount);
 
+		// Check how many instances have been accepted
+		slavesCount = myCompute.describeInstances().size();
+		Msg.info("running slaves "+slavesCount);
 		
-
 		for (int i=0; i<slavesCount; i++) {
 			Msg.info("waiting for boot");
 			while (myCompute.describeInstance(slaveInstancesId[i]).isRunning() == 0) {
@@ -94,7 +96,6 @@ public class Master extends Process {
 
 			task.send("slave_"+(i%slavesCount));
 			//SchIaaS.getCloud("myCloud").getNetwork().sendTask(task, slaveInstancesId[i % slavesCount]);
-
 		}
 		
 		/**
@@ -129,14 +130,16 @@ public class Master extends Process {
 
 		waitFor(150);
 		Msg.info("Suspending " + slaveInstancesId[0]);
-		Msg.info(" - "+myCompute.describeInstance(slaveInstancesId[0]));
+		Msg.info(" - isRunning = "+myCompute.describeInstance(slaveInstancesId[0]).isRunning());
 		myCompute.suspendInstance(slaveInstancesId[0]);
-		Msg.info(" - "+myCompute.describeInstance(slaveInstancesId[0]));
+		waitFor(1);
+		Msg.info(" - isRunning = "+myCompute.describeInstance(slaveInstancesId[0]).isRunning());
 		waitFor(200);
-		Msg.info(" - "+myCompute.describeInstance(slaveInstancesId[0]));
+		Msg.info(" - isRunning = "+myCompute.describeInstance(slaveInstancesId[0]).isRunning());
 		Msg.info("Resuming " + slaveInstancesId[0]);
-		Msg.info(" - "+myCompute.describeInstance(slaveInstancesId[0]));
 		myCompute.resumeInstance(slaveInstancesId[0]);
+		waitFor(1);
+		Msg.info(" - isRunning = "+myCompute.describeInstance(slaveInstancesId[0]).isRunning());
 		waitFor(100);
 		
 		
@@ -151,53 +154,62 @@ public class Master extends Process {
 		 * - The instances hosted on one host
 		 */ 
 		ComputeEngine computeEngine = myCompute.getComputeEngine();
-		Collection<ComputeHost> computeHosts = computeEngine.getComputeHosts();
-		ComputeHost computeHost = (ComputeHost) computeHosts.toArray()[0];
-		Collection<Instance> instances = ((ComputeHost) computeHosts.toArray()[1]).getHostedInstances();
-
-		
-		/**
-		 * Migrating one VM
-		 */
-		Msg.info("Migrating "+slaveInstancesId[0]+" to "+ computeHost);
-		Msg.info(" - " + myCompute.describeInstance(slaveInstancesId[0]));
-		computeEngine.liveMigration(slaveInstancesId[0], computeHost);
-		Msg.info("Migration of "+slaveInstancesId[0]+" to "+computeHost+" complete.");
-		Msg.info(" - " + myCompute.describeInstance(slaveInstancesId[0]));
-		
+		List<ComputeHost> computeHosts = computeEngine.getComputeHosts();
+		ComputeHost computeHost1 = computeHosts.get(0);
+		Collection<Instance> instances = computeHost1.getHostedInstances();
 
 		/**
-		 * Offloading one host of all of it VMs sequentially
+		 * Migrating one VM from the second host to the first
 		 */
-		Msg.info("Sequential offloading "+computeHost);
-		for (int i=0; i<slavesCount; i++) 
-			Msg.info(" - " + myCompute.describeInstance(slaveInstancesId[i]));
-		ComputeTools.offLoad(computeEngine, computeHost);
-		Msg.info("Offloading "+computeHost+" complete.");
-		for (int i=0; i<slavesCount; i++) 
-			Msg.info(" - " + myCompute.describeInstance(slaveInstancesId[i]));
-		
-		/**
-		 * Resetting the availability of one computeHost to host new VMs.
-		 */
-		computeHost.setAvailability(true);
-		
-		/**
-		 * offloading one host of all of it VMs in parallel 
-		 */
-		Msg.info("Parallel offloading "+computeHost);
-		computeHost = (ComputeHost) computeHosts.toArray()[0];
-		for (int i=0; i<slavesCount; i++) 
-			Msg.info(" - " + myCompute.describeInstance(slaveInstancesId[i]));
-		ComputeTools.parallelOffLoad(computeEngine, computeHost);
-		while (computeHost.getHostedInstances().size() != 0) {
-			Msg.info("Still " + computeHost.getHostedInstances().size() + " instances running on " + computeHost );
-			waitFor(10);
+		ComputeHost computeHost2 = null;
+		try {
+			computeHost2  = computeHosts.get(1);
+		} catch (Exception e) {
+			Msg.critical("This scenario needs at least two hosts in the cloud compute");
+			e.printStackTrace();
 		}
-		Msg.info("Offloading "+computeHost+" complete.");
-		for (int i=0; i<slavesCount; i++) 
-			Msg.info(" - " + myCompute.describeInstance(slaveInstancesId[i]));
 		
+		try {
+			Instance instance = computeHost2.getHostedInstances().iterator().next();
+			Msg.info("Migrating "+instance.getId()+" to "+ computeHost1.getHost().getName());
+			Msg.info(" - current host: " + instance.getHost().getName());
+			computeEngine.liveMigration(instance.getId(), computeHost1);
+			Msg.info("Migration of "+instance.getId()+" to "+computeHost1.getHost().getName()+" complete.");
+			Msg.info(" - current host: " + instance.getHost().getName());
+		} catch (Exception e) {
+			Msg.info("Second Host not found, or no instance hosted on it.");
+		}
+		
+
+		/**
+		 * Offloading the first host of all of it VMs sequentially
+		 */
+		Msg.info("Sequential offloading of "+computeHost1.getHost().getName());
+		Msg.info(" - Number of hosted instances  "+ computeHost1.getHostedInstances().size());
+		ComputeTools.offLoad(computeEngine, computeHost1);
+		Msg.info("Offloading "+computeHost1.getHost().getName()+" complete.");
+		Msg.info(" - Number of hosted instances  "+ computeHost1.getHostedInstances().size());
+		
+		/**
+		 * Resetting the availability of the first computeHost to host new VMs.
+		 */
+		computeHost1.setAvailability(true);
+		
+		/**
+		 * offloading the second host of all of it VMs in parallel 
+		 */
+		Msg.info("Parallel offloading of "+computeHost2.getHost().getName() + " (might take some time due to network bottleneck)");
+		Msg.info(" - Number of hosted instances  "+ computeHost2.getHostedInstances().size());
+		ComputeTools.parallelOffLoad(computeEngine, computeHost2);
+		int j = 0;
+		while (computeHost2.getHostedInstances().size() != 0) {
+			Msg.info("Still " + computeHost2.getHostedInstances().size() + " instances running on " + computeHost1 );
+			waitFor(100);
+		}
+		Msg.info("Offloading "+computeHost2.getHost().getName()+" complete.");
+		Msg.info(" - Number of hosted instances  "+ computeHost2.getHostedInstances().size());
+		
+		/*********************** END OF SIMULATION ***********************/
 		
 		Msg.info("All tasks have been dispatched. Let's tell everybody the computation is over.");
 

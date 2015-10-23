@@ -40,6 +40,7 @@ public class Masterslave {
 		/* construct the cloud and deploy the associated processes */
 		Msg.info("Cloud Initialization");
 		SchIaaS.init(args[2]);
+
 		
 		/* execute the simulation */
         Msg.run();        

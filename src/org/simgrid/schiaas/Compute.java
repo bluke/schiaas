@@ -9,9 +9,9 @@
 
 package org.simgrid.schiaas;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 import org.simgrid.msg.*;
@@ -63,17 +63,11 @@ public class Compute {
 	 *            the cloud of this
 	 * @param computeXMLNode
 	 *            the node pointing out a compute node in the XML config file
-	 * @throws InstantiationException
-	 * @throws IllegalAccessException
-	 * @throws ClassNotFoundException
-	 * @throws SecurityException 
-	 * @throws NoSuchMethodException 
-	 * @throws InvocationTargetException 
-	 * @throws IllegalArgumentException 
 	 */
-	protected Compute(Cloud cloud, Node computeXMLNode)
-			throws InstantiationException, IllegalAccessException, ClassNotFoundException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+	protected Compute(Cloud cloud, Node computeXMLNode) {
 
+		Msg.debug("Compute initialization of the cloud : " + cloud.getId());
+		
 		this.instances = new HashMap<String, Instance>();
 		this.instancesId = 0;
 		
@@ -88,11 +82,13 @@ public class Compute {
 				.getNodeValue();
 		
 		Msg.debug("Compute initialization, engine=" + engine);
-
-		ComputeScheduler computeScheduler = null;
 		
-		Collection<Host> hosts = new Vector<Host>();
+		List<Host> hosts = new Vector<Host>();
 		NodeList nodes = computeXMLNode.getChildNodes();
+
+		String schedulerName = null;
+		HashMap<String, String> schedulerConfig = new HashMap<String, String>();
+
 		for (int i = 0; i < nodes.getLength(); i++) {
 
 			if (nodes.item(i).getNodeName().compareTo("config") == 0) {
@@ -104,15 +100,13 @@ public class Compute {
 			}
 
 			if (nodes.item(i).getNodeName().compareTo("scheduler") == 0) {
-				HashMap<String, String> schedulerConfig = new HashMap<String, String>();
-				String SchedulerName;
+				schedulerName = "undefined";
 				NamedNodeMap configNNM = nodes.item(i).getAttributes();
 				for (int j = 0; j < configNNM.getLength(); j++) {
 					schedulerConfig.put(configNNM.item(j).getNodeName(),
 										configNNM.item(j).getNodeValue());
 				}
-				String schedulerName = schedulerConfig.remove("name");
-				computeScheduler = ComputeScheduler.load(schedulerName, computeEngine, schedulerConfig);
+				schedulerName = schedulerConfig.remove("name"); 
 			}
 			
 			if (nodes.item(i).getNodeName().compareTo("cluster") == 0) {
@@ -154,25 +148,17 @@ public class Compute {
 
 		try {
 			this.computeEngine = (ComputeEngine) Class.forName(engine)
-					.getConstructor(Compute.class, Collection.class)
-					.newInstance(this, hosts, computeScheduler);
-		} catch (IllegalArgumentException e) {
-			Msg.critical("Something wrong happened while loading the cloud engine "
-					+ engine);
-			e.printStackTrace();
-		} catch (InvocationTargetException e){
-			Msg.critical("Something wrong happened while loading the cloud engine "
-					+ engine);
-			e.printStackTrace();
-		} catch (NoSuchMethodException e){
-			Msg.critical("Something wrong happened while loading the cloud engine "
-					+ engine);
-			e.printStackTrace();
-		} catch (SecurityException e){
+					.getConstructor(Compute.class, List.class)
+					.newInstance(this, hosts);
+		} catch (Exception e) {
 			Msg.critical("Something wrong happened while loading the cloud engine "
 					+ engine);
 			e.printStackTrace();
 		}
+		if (schedulerName != null) {
+			this.computeEngine.setComputeScheduler(schedulerName, schedulerConfig);
+		}
+			
 		
 	}
 

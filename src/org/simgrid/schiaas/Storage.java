@@ -44,11 +44,11 @@ public class Storage {
 	 * @param storageXMLNode
 	 *            TODO got to do it,, need time to develop the STOMAC - STOrage
 	 *            MinimAl Component.
-	 * @throws ClassNotFoundException 
-	 * @throws IllegalAccessException 
-	 * @throws InstantiationException 
 	 */
-	public Storage(Cloud cloud, Node storageXMLNode) throws InstantiationException, IllegalAccessException, ClassNotFoundException {
+	public Storage(Cloud cloud, Node storageXMLNode) {
+		
+		Msg.debug("Storage initialization");
+		
 		this.cloud = cloud;
 		this.id = storageXMLNode.getAttributes().getNamedItem("id").getNodeValue();
 		String engine = storageXMLNode.getAttributes().getNamedItem("engine").getNodeValue();
@@ -67,24 +67,11 @@ public class Storage {
 				}
 			}
 		}
-		
 		try {
 			this.storageEngine = (StorageEngine) Class.forName(engine)
 					.getConstructor(Storage.class)
 					.newInstance(this);
-		} catch (IllegalArgumentException e) {
-			Msg.critical("Something wrong happened while loading the storage engine "
-					+ engine);
-			e.printStackTrace();
-		} catch(InvocationTargetException e) {
-			Msg.critical("Something wrong happened while loading the storage engine "
-					+ engine);
-			e.printStackTrace();
-		} catch(NoSuchMethodException e) {
-			Msg.critical("Something wrong happened while loading the storage engine "
-					+ engine);
-			e.printStackTrace();
-		} catch(SecurityException e) {
+		} catch (Exception e) {
 			Msg.critical("Something wrong happened while loading the storage engine "
 					+ engine);
 			e.printStackTrace();

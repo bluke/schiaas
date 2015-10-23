@@ -1,11 +1,12 @@
 package org.simgrid.schiaas.engine.compute.rice;
 
-import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
 import org.simgrid.msg.Host;
+import org.simgrid.msg.Msg;
 import org.simgrid.msg.Mutex;
 import org.simgrid.schiaas.Image;
 import org.simgrid.schiaas.Instance;
@@ -84,7 +85,7 @@ public class RiceHost implements ComputeHost {
 
 	
 	@Override
-	public Collection<Instance> getHostedInstances() {
+	public List<Instance> getHostedInstances() {
 		return instances;
 	}
 

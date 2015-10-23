@@ -112,7 +112,7 @@ public abstract class Instance extends org.simgrid.msg.VM {
 	/**
 	 * @return The physical host of this.
 	 */
-	protected abstract Host getHost();
+	public abstract Host getHost();
 	
 	/** 
 	 * @return The total billing time for running this instance

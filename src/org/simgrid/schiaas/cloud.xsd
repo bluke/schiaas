@@ -18,6 +18,14 @@ xmlns:xs="http://www.w3.org/2001/XMLSchema">
 	</xs:complexType>
 
 
+<!-- <scheduler [*=]>
+TODO: make "name" mandatory 
+-->
+	<xs:complexType name="SchedulerConfig">
+		<xs:anyAttribute processContents="lax" />
+	</xs:complexType>
+
+
 <!-- <instance_type id=  core=  memory=  disk= />
 -->
 	<xs:complexType name="Instance">
@@ -56,6 +64,7 @@ xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
 <!-- <compute engine=  >
 		<config ...>
+		<scheduler ...>
 		<instance_type ...>*
 		<image ...>
 		<cluster>|<host> *
@@ -64,6 +73,7 @@ xmlns:xs="http://www.w3.org/2001/XMLSchema">
 	<xs:complexType name="Compute">
 		<xs:sequence>
 			<xs:element name="config" type="EngineConfig"/>
+			<xs:element name="scheduler" type="SchedulerConfig" minOccurs="0" maxOccurs="1"/>
 			<xs:element name="instance_type" type="Instance" maxOccurs="unbounded" />
 			<xs:element name="image" type="Image" maxOccurs="unbounded" />
 			<xs:choice maxOccurs="unbounded">

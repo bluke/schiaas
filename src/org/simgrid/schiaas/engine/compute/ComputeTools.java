@@ -55,7 +55,8 @@ public class ComputeTools {
 		
 		computeHost.setAvailability(false);
 		
-		for (Instance instance: computeHost.getHostedInstances()) {
+		while (!computeHost.getHostedInstances().isEmpty()) {
+			Instance instance = computeHost.getHostedInstances().iterator().next();
 			try {
 				computeEngine.liveMigration(instance.getId());
 			} catch (HostFailureException e) {

@@ -64,9 +64,21 @@ public abstract class ComputeScheduler {
      * @param computeEngine the engine of the compute using this scheduler.
 	 * @param config the configuration of this scheduler 
      * @return an <i>ComputeScheduler</i> object
-     * @throws ClassNotFoundException 
      */
-	public static ComputeScheduler load(String schedulerName, ComputeEngine computeEngine, Map<String, String> config) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, ClassNotFoundException {
-    		return (ComputeScheduler)Class.forName(schedulerName).getConstructor(ComputeEngine.class).newInstance(computeEngine, config);
+	public static ComputeScheduler load(String schedulerName, ComputeEngine computeEngine, Map<String, String> config) {
+		ComputeScheduler computeScheduler = null;
+		
+		try {
+			computeScheduler = (ComputeScheduler)Class.forName(schedulerName).getConstructor(ComputeEngine.class, Map.class).newInstance(computeEngine, config);
+		} catch (Exception e) {
+			Msg.critical("Something wrong happened while loading the scheduler "
+					+ schedulerName);
+			e.printStackTrace();
+		}	
+		
+		return computeScheduler;
     }
+
+	public void terminate() {
+	}
 }
