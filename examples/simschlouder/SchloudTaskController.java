@@ -20,7 +20,7 @@ public class SchloudTaskController extends Process {
 	 * @param node the node to run this controller.
 	 */
 	protected SchloudTaskController(SchloudNode node) {
-		super(SchloudController.host, "SchloudTaskController:"+node.instanceId);
+		super(SchloudController.host, "SchloudTaskController:"+node.instance);
 		
 		this.node = node;
 	}

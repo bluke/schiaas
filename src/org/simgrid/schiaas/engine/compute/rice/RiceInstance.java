@@ -34,7 +34,6 @@ public class RiceInstance extends Instance {
 	/**
 	 * @return The physical host of this.
 	 */
-	@Override
 	public Host getHost() {
 		return this.riceHost.host;
 	}

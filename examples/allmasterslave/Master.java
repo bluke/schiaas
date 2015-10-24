@@ -9,6 +9,7 @@
 
 package allmasterslave;
 
+import java.util.Collection;
 import java.util.Map;
 
 import org.simgrid.msg.Host;
@@ -19,6 +20,7 @@ import org.simgrid.msg.Process;
 import org.simgrid.msg.VM;
 import org.simgrid.schiaas.Compute;
 import org.simgrid.schiaas.Data;
+import org.simgrid.schiaas.Instance;
 import org.simgrid.schiaas.InstanceType;
 import org.simgrid.schiaas.SchIaaS;
 import org.simgrid.schiaas.Storage;
@@ -69,17 +71,18 @@ public class Master extends Process {
 			
 			
 			// Run one instance per slave on myCloud
-			String[] slaveInstancesId = myCompute.runInstances("myImage", "small", slavesCount);
-
+			Collection<Instance> slaveInstances = myCompute.runInstances("myImage", "small", slavesCount);
+			
 			
 			// Wait for the instances to boot
-			for (int i=0; i<slavesCount; i++) {
+			int h = 0;
+			for (Instance instance : slaveInstances) {
 				Msg.info("waiting for boot");
-				while (myCompute.describeInstance(slaveInstancesId[i]).isRunning() == 0) {
+				while (instance.isRunning() == 0) {
 					waitFor(10);
 				}
 
-				hosts[i]=myCompute.describeInstance(slaveInstancesId[i]);
+				hosts[h++]=instance;
 			}
 			break;
 

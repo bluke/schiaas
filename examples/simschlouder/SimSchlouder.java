@@ -96,7 +96,7 @@ public class SimSchlouder {
 			
 			Scanner sc = new Scanner(scf.nextLine());			
 			if (sc.hasNext("\\[boots\\]")) {
-				
+				sc.close();
 				sc = new Scanner(scf.nextLine());
 				do {
 					SchloudController.schloudCloud.bootTimes.add(sc.nextInt());

@@ -36,7 +36,7 @@ public class ComputeTools {
 		}
 
 		public void main(String[] arg0) throws MsgException {
-			computeEngine.liveMigration(instance.getId());
+			computeEngine.liveMigration(instance);
 		}
 	}
 
@@ -58,7 +58,7 @@ public class ComputeTools {
 		while (!computeHost.getHostedInstances().isEmpty()) {
 			Instance instance = computeHost.getHostedInstances().iterator().next();
 			try {
-				computeEngine.liveMigration(instance.getId());
+				computeEngine.liveMigration(instance);
 			} catch (HostFailureException e) {
 				Msg.error("An error occurs during the migration of the instance "+instance.getId());
 				e.printStackTrace();

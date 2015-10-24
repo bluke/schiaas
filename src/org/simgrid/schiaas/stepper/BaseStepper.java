@@ -100,12 +100,12 @@ public class BaseStepper extends Stepper {
 				
 			}else if(command.matches("runInstance")){
 				
-				output = compute.runInstance(args[1], args[2]);
+				output = compute.runInstance(args[1], args[2]).getId();
 				
 			}else if(command.matches("runInstances")){
 				
-				String[] ids = compute.runInstances(args[1], args[2], Integer.parseInt(args[3]));
-				output = Integer.toString(ids.length);
+				Collection<Instance> instances = compute.runInstances(args[1], args[2], Integer.parseInt(args[3]));
+				output = Integer.toString(instances.size());
 				
 			}else if(command.matches("terminateInstance")){
 				

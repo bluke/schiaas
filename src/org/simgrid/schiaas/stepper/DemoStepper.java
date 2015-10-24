@@ -29,7 +29,7 @@ public class DemoStepper extends Stepper {
 			response = img.getId();
 
 		} else if(command[0].matches("VMcreate")){
-			response = this.compute.runInstance(command[2], command[3]);
+			response = this.compute.runInstance(command[2], command[3]).getId();
 
 		}else if(command[0].matches("VMlocalIP")){
 			response = "0.0.0.0";

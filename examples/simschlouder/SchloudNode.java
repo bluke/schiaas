@@ -19,6 +19,7 @@ import org.simgrid.msg.TaskCancelledException;
 import org.simgrid.msg.TimeoutException;
 import org.simgrid.msg.TransferFailureException;
 import org.simgrid.msg.Process;
+import org.simgrid.schiaas.Instance;
 
 import simschlouder.util.SimSchlouderException;
 
@@ -36,9 +37,9 @@ public class SchloudNode extends Process implements Comparable<SchloudNode>{
 	 */
 	public enum STATE {FUTURE,PENDING,CLAIMED,IDLE,BUSY,TERMINATED};
 
-	/** Id of the instance running this worker node */
-	public String instanceId;
-
+	/** The instance of this */
+	public Instance instance;
+	
 	/** The index of the instance */
 	public int index;
 	
@@ -114,7 +115,7 @@ public class SchloudNode extends Process implements Comparable<SchloudNode>{
 				// Wait for the provisioning date
 				double provisioningDelay = provisioningDate-Msg.getClock();
 				if (provisioningDelay < 0) provisioningDelay = 0;
-				Msg.verb(instanceId+" waits for provisioning: "+provisioningDelay);
+				Msg.verb(instance.getId()+" waits for provisioning: "+provisioningDelay);
 				Process.getCurrentProcess().waitFor(provisioningDelay);
 				
 				schloudNode.setState(STATE.PENDING);
@@ -124,35 +125,35 @@ public class SchloudNode extends Process implements Comparable<SchloudNode>{
 				if (SimSchlouder.validation) SchloudController.schloudCloud.resetBootCount();
 				
 				// Wait for at least the predicted boottime. Can be optimized.
-				Msg.verb(instanceId+" waits for boot: "+bootTime);
+				Msg.verb(instance.getId()+" waits for boot: "+bootTime);
 				Process.getCurrentProcess().waitFor(bootTime);				
-				while(cloud.compute.describeInstance(instanceId).isRunning() == 0)
+				while(instance.isRunning() == 0)
 				{
-					Msg.verb(instanceId+" boot delayed");
+					Msg.verb(instance.getId()+" boot delayed");
 					Process.getCurrentProcess().waitFor(1);
 				}
 				// Should be IDLE if no job are enqueued at this time
 				schloudNode.setState(STATE.CLAIMED);
 				idleDate += provisioningDelay + bootTime - bootTimePrediction;
 				
-				Msg.verb(instanceId+" booted ");
+				Msg.verb(instance.getId()+" booted ");
 				bootDate=Msg.getClock();
 				if (!SimSchlouder.validation) SchloudController.schloudCloud.decrementBootCount();
 				
 				// Wait for the lag time
-				Msg.info(instanceId+" wait for lag time "+lagTime);
+				Msg.info(instance.getId()+" wait for lag time "+lagTime);
 				waitFor(lagTime);
 				
 				
 			} catch (HostFailureException e) {
-				Msg.critical("Something bad happened is SimSchlouder: The host of "+instanceId+" was not found.");
+				Msg.critical("Something bad happened is SimSchlouder: The host of "+instance.getId()+" was not found.");
 				e.printStackTrace();
 			}
 			
 		try {
 			schloudNode.start();
 		} catch (HostNotFoundException e) {
-			Msg.critical("Something bad happened is SimSchlouder: The host of "+instanceId+" was not found.");
+			Msg.critical("Something bad happened is SimSchlouder: The host of "+instance.getId()+" was not found.");
 			e.printStackTrace();
 		}
 
@@ -164,13 +165,12 @@ public class SchloudNode extends Process implements Comparable<SchloudNode>{
 	 * @param instanceId
 	 * @param cloud
 	 */
-	protected SchloudNode(String instanceId, SchloudCloud cloud) {
-		super(cloud.compute.describeInstance(instanceId), instanceId+"_SchloudNode",null);
-		this.instanceId = instanceId;
+	protected SchloudNode(Instance instance, SchloudCloud cloud) {
+		super(instance, instance.getId()+"_SchloudNode",null);
 		this.index = currentIndex++;
 		this.cloud=cloud;
 		
-		speed = cloud.compute.describeInstance(instanceId).getSpeed();
+		speed = instance.getSpeed();
 		
 		this.queue = new LinkedList<SchloudTask>();
 		this.completedQueue = new LinkedList<SchloudTask>();
@@ -186,16 +186,16 @@ public class SchloudNode extends Process implements Comparable<SchloudNode>{
 	 * @return a new worker node.
 	 */
 	public static SchloudNode startNewNode(SchloudCloud cloud) {
-		String instanceId = cloud.compute.runInstance(SchloudController.imageId, SchloudController.instanceTypeId);
-		if (instanceId==null) return null;
+		Instance instance = cloud.compute.runInstance(SchloudController.imageId, SchloudController.instanceTypeId);
+		if (instance == null) return null;
 		
-		SchloudNode schloudNode = new SchloudNode(instanceId,cloud);
+		SchloudNode schloudNode = new SchloudNode(instance,cloud);
 
 		SchloudNodeController schloudNodeController = schloudNode.new SchloudNodeController(schloudNode); 
 		try {
 			schloudNodeController.start();
 		} catch (HostNotFoundException e) {
-			Msg.critical("Something bad happened is SimSchlouder: The host of "+instanceId+" was not found.");
+			Msg.critical("Something bad happened is SimSchlouder: The host of "+instance.getId()+" was not found.");
 			e.printStackTrace();
 		}
 		
@@ -471,7 +471,7 @@ public class SchloudNode extends Process implements Comparable<SchloudNode>{
 	 * ToString
 	 */
 	public String toString() {
-		String s = instanceId.toString();
+		String s = instance.getId().toString();
 		for (SchloudTask st : completedQueue) {
 			s += "\n"+st;
 		}

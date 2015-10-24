@@ -80,8 +80,18 @@ public abstract class ComputeEngine {
 	 */
 	public abstract List<ComputeHost> getComputeHosts();	
 	
-	
+	/**
+	 * @param hostName an host name
+	 * @return the corresponding ComputeHost
+	 */
 	public abstract ComputeHost getComputeHostByName(String hostName);
+	
+	/**
+	 * @param instance an instance
+	 * @return the ComputeHost hosting the instance
+	 */
+	public abstract ComputeHost getComputeHostOf(Instance instance);
+
 
 	/**
 	 * Return a new instance, because the id is set here (for homogeneity),
@@ -119,22 +129,22 @@ public abstract class ComputeEngine {
 	/**
 	 * Migrate an instance to one given ComputeHost
 	 * 
-	 * @param instanceId
-	 *            The id of of instance to migrate
+	 * @param instance
+	 *            The instance to migrate
 	 * @param computeHost
 	 *            The host to migrate the instance to
 	 */
-	public abstract void liveMigration(String instanceId, ComputeHost computeHost) throws HostFailureException;
+	public abstract void liveMigration(Instance instance, ComputeHost computeHost) throws HostFailureException;
 
 	/**
 	 * Migrate an instance to one host chose by the engine
 	 * 
-	 * @param instanceId
-	 *            The id of the instance to migrate
+	 * @param instance
+	 *            The instance to migrate
 	 *            
 	 * @return The host to which the instance is migrating
 	 */
-	public abstract ComputeHost liveMigration(String instanceId) throws HostFailureException;
+	public abstract ComputeHost liveMigration(Instance instance) throws HostFailureException;
 		
 	/**
 	 * Terminate this.

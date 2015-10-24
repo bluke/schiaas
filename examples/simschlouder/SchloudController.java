@@ -149,7 +149,7 @@ public class SchloudController extends org.simgrid.msg.Process {
 		//Msg.info("Stopping node "+node.instance.getName());
 		nodes.remove(node);
 		terminatedNodes.add(node);
-		schloudCloud.compute.terminateInstance(node.instanceId);
+		schloudCloud.compute.terminateInstance(node.instance);
 		node.setState(SchloudNode.STATE.TERMINATED);
 	}
 	

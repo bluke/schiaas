@@ -266,9 +266,9 @@ public class Compute {
 	 * @param instanceTypeId
 	 *            the id of the type of the instance
 	 *            or null if no instance can be provisioned
-	 * @return the id of the instance, about to be started
+	 * @return the instance, about to be started
 	 */
-	public String runInstance(String imageId, String instanceTypeId) {
+	public Instance runInstance(String imageId, String instanceTypeId) {
 		Instance instance = this.computeEngine.newInstance(
 				this.getCloud().getId() + "-" + String.format("%03d", instancesId),
 				this.images.get(imageId),
@@ -281,11 +281,11 @@ public class Compute {
 
 		this.instances.put(instance.id, instance);
 		instancesId++;
-		return instance.id;
+		return instance;
 	}
 
 	/**
-	 * Run a new instance
+	 * Run several new instances
 	 * 
 	 * @param imageId
 	 *            the id of the image of the instances to run.
@@ -293,17 +293,17 @@ public class Compute {
 	 *            the id of the type of the instances to run
 	 * @param nInstances
 	 *            the number of instances to run
-	 * @return an array containing the ids of the instances that will be actually started. 
+	 * @return a collection of the instances, about to be started 
 	 */
-	public String[] runInstances(String imageId, String instanceTypeId, int nInstances) {
-		Vector<String> instancesId = new Vector<String>();
+	public Collection<Instance> runInstances(String imageId, String instanceTypeId, int nInstances) {
+		Collection<Instance> instances = new Vector<Instance>();
 		for (int i=0; i<nInstances; i++) {
-			String instanceId = runInstance(imageId, instanceTypeId);
-			if (instanceId == null) break;
-			instancesId.add(instanceId);
+			Instance instance = runInstance(imageId, instanceTypeId);
+			if (instance == null) break;
+			instances.add(instance);
 		}
 
-		return instancesId.toArray(new String[0]);
+		return instances;
 	}
 
 	/**
@@ -313,12 +313,23 @@ public class Compute {
 	 *            The id of the instance to be be terminated.
 	 */
 	public void terminateInstance(String instanceId) {
-		if (this.instances.get(instanceId).isTerminating == true) return;
-		
-		this.instances.get(instanceId).isTerminating = true;
-		this.computeEngine.doCommand(ComputeEngine.COMMAND.SHUTDOWN,this.instances.get(instanceId));
+		terminateInstance(this.instances.get(instanceId));
 	}
 
+	/**
+	 * Terminate a given instance.
+	 * 
+	 * @param instance
+	 *            The instance to be be terminated.
+	 */
+	public void terminateInstance(Instance instance) {		
+		if (instance.isTerminating == true) return;
+		
+		instance.isTerminating = true;
+		this.computeEngine.doCommand(ComputeEngine.COMMAND.SHUTDOWN,instance);
+	}
+
+	
 	/**
 	 * Suspend a given instance.
 	 * 
@@ -331,6 +342,7 @@ public class Compute {
 				this.instances.get(instanceId));
 	}
 
+	
 	/**
 	 * Resume a given instance.
 	 * 

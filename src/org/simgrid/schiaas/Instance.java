@@ -8,20 +8,12 @@ import org.simgrid.msg.Host;
  * Represents an Instance, that is a VM controller by SimIaaS.
  * @author julien.gossa@unistra.fr
  */
-public abstract class Instance extends org.simgrid.msg.VM {
+public class Instance extends org.simgrid.msg.VM {
 
 	/**
 	 * The last start and shutdown times of this instance
 	 */
 	protected long startTime, shutdownTime;
-	
-	/**
-	 * The total billing time for running this instance.
-	 * If for instance the instance has been saved to an external storage and
-	 * later resurrected the time spent in the storage does not count. It will
-	 * be billed separately.
-	 */
-	protected int billTime;
 	
 	/** Enumerates the different state of the instance. */
 	// public static enum STATE { PENDING, BOOTING, RUNNING, REBOOTING, 
@@ -112,14 +104,10 @@ public abstract class Instance extends org.simgrid.msg.VM {
 	/**
 	 * @return The physical host of this.
 	 */
-	public abstract Host getHost();
+//	public Host getHost() {
+//		return this.
+//	}
 	
-	/** 
-	 * @return The total billing time for running this instance
-	 */
-	public int getBillingTime() {
-		return this.billTime;
-	}
 
 	// /**
 	// * Sets the state of the instance.
@@ -165,7 +153,7 @@ public abstract class Instance extends org.simgrid.msg.VM {
 	 * @return A string containing the name of the instance and its host.
 	 */
 	public String toString() {
-		return "Instance:" + getName() + " (" + this.getHost().getName()+")";
+		return "Instance:" + getName();
+		//return "Instance:" + getName() + " (" + this.getHost().getName()+")";
 	}
-
 }

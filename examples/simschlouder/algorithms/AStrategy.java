@@ -84,7 +84,7 @@ public abstract class AStrategy {
 				}
 				
 				if (node != null) {
-					Msg.info(task.getName() + " selected node: " + node.instanceId);
+					Msg.info(task.getName() + " selected node: " + node.instance.getId());
 					SchloudController.setTaskToNode(tasks.get(l).remove(iTask), node);
 					SchloudController.mainQueue.remove(task);
 				} else {

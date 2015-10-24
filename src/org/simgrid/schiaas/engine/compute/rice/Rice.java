@@ -183,9 +183,9 @@ public class Rice extends ComputeEngine {
 	 * @throws HostFailureException when the migration fails at the simgrid level
 	 */
 	@Override
-	public void liveMigration(String instanceId, ComputeHost destination) throws  HostFailureException {
+	public void liveMigration(Instance instance, ComputeHost destination) throws  HostFailureException {
 		
-		RiceInstance riceInstance = (RiceInstance) compute.describeInstance(instanceId);		
+		RiceInstance riceInstance = (RiceInstance) instance;		
 		
 		Msg.verb("live migration: "+riceInstance.getId()+" to "+destination.getHost().getName());
 		
@@ -203,13 +203,13 @@ public class Rice extends ComputeEngine {
 	 * @throws MigrationException when the migration fails at the simgrid level
 	 */
 	@Override
-	public ComputeHost liveMigration(String instanceId) throws HostFailureException {
-		RiceInstance riceInstance = (RiceInstance) compute.describeInstance(instanceId);
+	public ComputeHost liveMigration(Instance instance) throws HostFailureException {
+		RiceInstance riceInstance = (RiceInstance) instance;
 		
 		ComputeHost riceHost = (RiceHost) computeScheduler.schedule(riceInstance.getInstanceType());
 		if (riceHost == null || riceHost == riceInstance.getHost()) return null;
 		
-		liveMigration(instanceId, riceHost);
+		liveMigration(instance, riceHost);
 		
 		return riceHost;
 	}
@@ -219,11 +219,11 @@ public class Rice extends ComputeEngine {
 	 * @author julien.gossa@unistra.fr
 	 */
 	protected class LiveMigrationProcess extends Process {
-		private String instanceId;	
+		private Instance instance;	
 		
-		protected LiveMigrationProcess(String instanceId) throws HostNotFoundException {
-			super(controller, "LiveMigrationProcess:"+instanceId);
-			this.instanceId = instanceId;
+		protected LiveMigrationProcess(Instance instance) throws HostNotFoundException {
+			super(controller, "LiveMigrationProcess:"+instance.getId());
+			this.instance = instance;
 			try {
 				this.start();
 			} catch(HostNotFoundException e) {
@@ -232,8 +232,7 @@ public class Rice extends ComputeEngine {
 		}
 
 		public void main(String[] arg0) throws MsgException {
-			Msg.info("lmp : "+instanceId);
-			liveMigration(instanceId);
+			liveMigration(instance);
 		}
 	}
 
@@ -254,10 +253,10 @@ public class Rice extends ComputeEngine {
 			if (riceInstance.riceHost.host == computeHost) {
 				switch(offLoadType) {
 				case SEQUENTIAL :
-					liveMigration(instance.getId());
+					liveMigration(instance);
 					break;
 				case PARALLEL :
-					new LiveMigrationProcess(instance.getId());
+					new LiveMigrationProcess(instance);
 					break;
 				default :
 					Msg.critical("Off-load type not reconized");
@@ -285,5 +284,10 @@ public class Rice extends ComputeEngine {
 		
 		if (riceHost == null) return null;
 		return new RiceInstance(id, image, instanceType, riceHost);
+	}
+
+	@Override
+	public ComputeHost getComputeHostOf(Instance instance) {
+		return ((RiceInstance)instance).riceHost;
 	}		
 }

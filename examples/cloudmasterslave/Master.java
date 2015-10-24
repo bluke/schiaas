@@ -28,6 +28,7 @@ import org.simgrid.schiaas.Storage;
 import org.simgrid.schiaas.engine.compute.ComputeEngine;
 import org.simgrid.schiaas.engine.compute.ComputeHost;
 import org.simgrid.schiaas.engine.compute.ComputeTools;
+import org.simgrid.schiaas.engine.compute.rice.RiceInstance;
 
 public class Master extends Process {
 	public Master(Host host, String name, String[] args) {
@@ -56,32 +57,34 @@ public class Master extends Process {
 		 * VM instance management
 		 */
 		// Retrieve the Compute module of MyCloud
-		Compute myCompute = SchIaaS.getCloud("myCloud").getCompute();
+		Compute compute = SchIaaS.getCloud("myCloud").getCompute();
 		
 		// Check the availability of resources on MyCloud
 		Msg.info("Instances availability:");
-		for (InstanceType instanceType : myCompute.describeInstanceTypes()) {
+		for (InstanceType instanceType : compute.describeInstanceTypes()) {
 			Msg.info(instanceType.getId()+ ": "
-					+ myCompute.describeAvailability(instanceType.getId()));
+					+ compute.describeAvailability(instanceType.getId()));
 		}
 		
 		// Run one instance per slave on myCloud
-		String[] slaveInstancesId = myCompute.runInstances("myImage", "small", slavesCount);
+		Collection<Instance> instances = compute.runInstances("myImage", "small", slavesCount);
+  
+		// Check how many instances have been accepted and retrieve them into an array
+		// (One can actually use the Collection "instances", that's just to fit the legacy simgrid syntax)
+		slavesCount = compute.describeInstances().size();
+		Instance[] slaveInstances = instances.toArray(new Instance[slavesCount]);
 
-		// Check how many instances have been accepted
-		slavesCount = myCompute.describeInstances().size();
 		Msg.info("running slaves "+slavesCount);
 		
 		for (int i=0; i<slavesCount; i++) {
 			Msg.info("waiting for boot");
-			while (myCompute.describeInstance(slaveInstancesId[i]).isRunning() == 0) {
+			while (slaveInstances[i].isRunning() == 0) {
 				waitFor(10);
 			}
 			
-			Msg.info("Starting a slave on "+myCompute.describeInstance(slaveInstancesId[i]).getName());
+			Msg.info("Starting a slave on "+slaveInstances[i].getName());
 			String [] slaveArgs = {""+i};
-			Slave s = new Slave(myCompute.describeInstance(slaveInstancesId[i]),
-								"slave_"+i,slaveArgs);
+			Slave s = new Slave(slaveInstances[i], "slave_"+i,slaveArgs);
 			s.start();
 		}
 		
@@ -129,17 +132,17 @@ public class Master extends Process {
 		 */
 
 		waitFor(150);
-		Msg.info("Suspending " + slaveInstancesId[0]);
-		Msg.info(" - isRunning = "+myCompute.describeInstance(slaveInstancesId[0]).isRunning());
-		myCompute.suspendInstance(slaveInstancesId[0]);
+		Msg.info("Suspending " + slaveInstances[0].getId());
+		Msg.info(" - isRunning = " + slaveInstances[0].isRunning() );
+		compute.suspendInstance(slaveInstances[0].getId());
 		waitFor(1);
-		Msg.info(" - isRunning = "+myCompute.describeInstance(slaveInstancesId[0]).isRunning());
+		Msg.info(" - isRunning = " + slaveInstances[0].isRunning() );
 		waitFor(200);
-		Msg.info(" - isRunning = "+myCompute.describeInstance(slaveInstancesId[0]).isRunning());
-		Msg.info("Resuming " + slaveInstancesId[0]);
-		myCompute.resumeInstance(slaveInstancesId[0]);
+		Msg.info(" - isRunning = " + slaveInstances[0].isRunning() );
+		Msg.info("Resuming " + slaveInstances[0].getId());
+		compute.resumeInstance(slaveInstances[0].getId());
 		waitFor(1);
-		Msg.info(" - isRunning = "+myCompute.describeInstance(slaveInstancesId[0]).isRunning());
+		Msg.info(" - isRunning = " + slaveInstances[0].isRunning() );
 		waitFor(100);
 		
 		
@@ -152,11 +155,13 @@ public class Master extends Process {
 		 * - The list of physical host of the cloud
 		 * - One of its host 
 		 * - The instances hosted on one host
+		 * - The ComputeHost hosting one instance
 		 */ 
-		ComputeEngine computeEngine = myCompute.getComputeEngine();
+		ComputeEngine computeEngine = compute.getComputeEngine();
 		List<ComputeHost> computeHosts = computeEngine.getComputeHosts();
 		ComputeHost computeHost1 = computeHosts.get(0);
-		Collection<Instance> instances = computeHost1.getHostedInstances();
+		Collection<Instance> instances1 = computeHost1.getHostedInstances();
+		ComputeHost computeHost = computeEngine.getComputeHostOf(instances1.iterator().next());
 
 		/**
 		 * Migrating one VM from the second host to the first
@@ -172,10 +177,10 @@ public class Master extends Process {
 		try {
 			Instance instance = computeHost2.getHostedInstances().iterator().next();
 			Msg.info("Migrating "+instance.getId()+" to "+ computeHost1.getHost().getName());
-			Msg.info(" - current host: " + instance.getHost().getName());
-			computeEngine.liveMigration(instance.getId(), computeHost1);
+			Msg.info(" - current host: " + computeEngine.getComputeHostOf(instance).getHost().getName());
+			computeEngine.liveMigration(instance, computeHost1);
 			Msg.info("Migration of "+instance.getId()+" to "+computeHost1.getHost().getName()+" complete.");
-			Msg.info(" - current host: " + instance.getHost().getName());
+			Msg.info(" - current host: " + computeEngine.getComputeHostOf(instance).getHost().getName());
 		} catch (Exception e) {
 			Msg.info("Second Host not found, or no instance hosted on it.");
 		}
@@ -221,7 +226,7 @@ public class Master extends Process {
 		// Wait an arbitrary time for Slaves to finalize
 		waitFor(36000);
 		
-		myCompute.terminateInstance(slaveInstancesId[0]);
+		compute.terminateInstance(slaveInstances[0].getId());
 		
 		// Terminating SchIaaS
 		Msg.info("Terminating");
