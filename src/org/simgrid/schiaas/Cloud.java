@@ -28,9 +28,6 @@ public class Cloud {
 	/** Storages as a service such as S3, EBS */
 	protected Map<String, Storage> storages;
 
-	/** Network As a Service */
-	protected Network network;
-
 	
 	/**
 	 * Unique constructor from an XML node
@@ -102,14 +99,6 @@ public class Cloud {
 	public Storage getStorage(String storageId) {
 		return this.storages.get(storageId);
 	}
-
-	/**
-	 * 
-	 * @return the network component of the cloud
-	 */
-	public Network getNetwork() {
-		return this.network;
-	}
 		
 	/**
 	 * Terminate the cloud, by terminating all of its components
@@ -124,11 +113,6 @@ public class Cloud {
 		for (Storage storage : this.storages.values()) {
 			storage.terminate();
 		}
-
-		if (this.network != null)
-			this.network.terminate();
-
-		// compute billing
 	}
 
 	/**

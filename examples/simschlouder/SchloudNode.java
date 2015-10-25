@@ -246,6 +246,8 @@ public class SchloudNode extends Process implements Comparable<SchloudNode>{
 			break;
 		case TERMINATED: terminatedDate=Msg.getClock();
 			break;
+		default:
+			break;
 		}
 		
 		this.state = state;
@@ -385,7 +387,7 @@ public class SchloudNode extends Process implements Comparable<SchloudNode>{
 		try {
 			stc.start();
 		} catch (HostNotFoundException e) {
-			// TODO Auto-generated catch block
+			Msg.critical("Something bad happened in Schoulder while trying to execute a task on "+this.getHost());
 			e.printStackTrace();
 		}
 	}

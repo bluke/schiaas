@@ -5,9 +5,9 @@ import simschlouder.SchloudNode;
 import simschlouder.SchloudTask;
 
 /**
- * The First Fit strategy: TODO describe it
+ * The First Fit strategy.
+ * Simply schedule the tasks to the first instance that can handle it at constant cost.
  * @author mfrincu 
- *
  */
 public class FirstFit extends AStrategy {
 

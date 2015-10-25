@@ -1,8 +1,5 @@
 package org.simgrid.schiaas.engine.storage.rise;
 
-import java.util.Collection;
-import java.util.HashSet;
-
 import org.simgrid.msg.Host;
 import org.simgrid.msg.HostFailureException;
 import org.simgrid.msg.HostNotFoundException;

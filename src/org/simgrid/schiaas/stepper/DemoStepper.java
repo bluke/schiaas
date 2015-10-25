@@ -12,7 +12,6 @@ public class DemoStepper extends Stepper {
 
 	public DemoStepper(Host host, int port, String cloudId) {
 		super(host, port, cloudId);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override

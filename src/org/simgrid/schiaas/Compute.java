@@ -19,7 +19,6 @@ import org.simgrid.schiaas.Image;
 import org.simgrid.schiaas.Instance;
 import org.simgrid.schiaas.InstanceType;
 import org.simgrid.schiaas.engine.compute.ComputeEngine;
-import org.simgrid.schiaas.engine.compute.ComputeScheduler;
 import org.simgrid.schiaas.exceptions.MissingConfigException;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -335,7 +334,6 @@ public class Compute {
 	 * 
 	 * @param instanceId
 	 *            The id of the instance to be be suspended.
-	 * TODO check why it isn't working
 	 */
 	public void suspendInstance(String instanceId) {
 		this.computeEngine.doCommand(ComputeEngine.COMMAND.SUSPEND,

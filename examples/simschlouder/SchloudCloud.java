@@ -61,8 +61,8 @@ public class SchloudCloud {
 	/**
 	 * Default constructor
 	 * @param name the name of the cloud
-	 * @param bootTimeB0 the boot time for TODO
-	 * @param bootTimeB1 the boot time for TODO
+	 * @param bootTimeB0 the boot time
+	 * @param bootTimeB1 the boot time
 	 * @param BTU the size of a BTU in seconds
 	 * @param shutdownMargin the shutdown time
 	 * @param maxInstances the maximum allowed Instances per User

@@ -7,13 +7,10 @@
 
 package allmasterslave;
 
-import org.simgrid.msg.Host;
 import org.simgrid.msg.HostNotFoundException;
 import org.simgrid.msg.Msg;
 import org.simgrid.msg.NativeException;
-import org.simgrid.schiaas.Instance;
 import org.simgrid.schiaas.SchIaaS;
-import org.simgrid.schiaas.Cloud;
 
 public class Masterslave {
    public static final int TASK_COMP_SIZE = 2000000000;

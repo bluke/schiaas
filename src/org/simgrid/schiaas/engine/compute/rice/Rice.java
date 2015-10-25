@@ -1,7 +1,6 @@
 package org.simgrid.schiaas.engine.compute.rice;
 
 import java.io.FileNotFoundException;
-import java.util.Collection;
 import java.util.List;
 import java.util.Vector;
 
@@ -19,7 +18,6 @@ import org.simgrid.schiaas.InstanceType;
 import org.simgrid.schiaas.Storage;
 import org.simgrid.schiaas.engine.compute.ComputeEngine;
 import org.simgrid.schiaas.engine.compute.ComputeHost;
-import org.simgrid.schiaas.engine.compute.ComputeScheduler;
 import org.simgrid.schiaas.engine.compute.rice.RiceHost;
 import org.simgrid.schiaas.exceptions.MissingConfigException;
 
@@ -92,7 +90,7 @@ public class Rice extends ComputeEngine {
 		try {
 			this.controller = Host.getByName((String) compute.getConfig("controller"));
 		} catch (HostNotFoundException e) {
-			// TODO Auto-generated catch block
+			Msg.critical("Something bad happened in RISE while trying to locate its controller: "+compute.getConfig("controller"));
 			e.printStackTrace();
 		} catch (Exception e){
 		
@@ -263,15 +261,6 @@ public class Rice extends ComputeEngine {
 				}
 			}
 		}
-	}
-
-	
-	
-	/**
-	 * Terminate this.
-	 */
-	@Override
-	public void terminate() {
 	}
 
 	/**

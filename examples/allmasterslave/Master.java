@@ -10,8 +10,6 @@
 package allmasterslave;
 
 import java.util.Collection;
-import java.util.Map;
-
 import org.simgrid.msg.Host;
 import org.simgrid.msg.Msg;
 import org.simgrid.msg.MsgException;
@@ -19,11 +17,9 @@ import org.simgrid.msg.Task;
 import org.simgrid.msg.Process;
 import org.simgrid.msg.VM;
 import org.simgrid.schiaas.Compute;
-import org.simgrid.schiaas.Data;
 import org.simgrid.schiaas.Instance;
 import org.simgrid.schiaas.InstanceType;
 import org.simgrid.schiaas.SchIaaS;
-import org.simgrid.schiaas.Storage;
 
 public class Master extends Process {
 	public Master(Host host, String name, String[] args) {

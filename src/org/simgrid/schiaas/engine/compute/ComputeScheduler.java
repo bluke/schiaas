@@ -1,6 +1,5 @@
 package org.simgrid.schiaas.engine.compute;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
 import org.simgrid.msg.Msg;
@@ -48,6 +47,14 @@ public abstract class ComputeScheduler {
 		
 		return res;
 	}
+	
+	/**
+	 * 
+	 * @return the compute engine
+	 */
+	public ComputeEngine getComputeEngine() {
+		return this.computeEngine;
+	}
 
 	
 	/**
@@ -77,8 +84,10 @@ public abstract class ComputeScheduler {
 		}	
 		
 		return computeScheduler;
-    }
-
-	public void terminate() {
-	}
+    }	
+	
+	/**
+	 * Called at the termination of the cloud
+	 */
+	public abstract void terminate();
 }

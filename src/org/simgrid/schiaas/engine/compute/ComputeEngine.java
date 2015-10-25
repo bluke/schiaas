@@ -43,7 +43,6 @@ public abstract class ComputeEngine {
 	 *            All of the host of this.
 	 * @param computeScheduler
 	 * 			  The scheduler of this.
-	 * TODO delete host of kept into Compute
 	 */
 	public ComputeEngine(Compute compute, List<Host> hosts) {
 		this.compute = compute;
@@ -63,10 +62,7 @@ public abstract class ComputeEngine {
 	 * Set and start the scheduler 	
 	 * @param computeScheduler the scheduler to use in this compute.
 	 */
-	public void setComputeScheduler(String schedulerName, Map<String, String> config){
-		if (this.computeScheduler != null)
-			this.computeScheduler.terminate();
-		
+	public void setComputeScheduler(String schedulerName, Map<String, String> config){		
 		this.computeScheduler = ComputeScheduler.load(schedulerName, this, config);;
 	}
 	
@@ -150,8 +146,10 @@ public abstract class ComputeEngine {
 	 * Terminate this.
 	 */
 	public void terminate() {
-		if (this.computeScheduler != null)
+		Msg.debug("Terminating the compute engine");
+		if (this.computeScheduler != null) {
 			this.computeScheduler.terminate();
+		}
 	}
 
 }

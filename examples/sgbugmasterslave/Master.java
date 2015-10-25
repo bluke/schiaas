@@ -9,13 +9,10 @@
 
 package sgbugmasterslave;
 
-import java.util.Map;
-
 import org.simgrid.msg.Host;
 import org.simgrid.msg.HostNotFoundException;
 import org.simgrid.msg.Msg;
 import org.simgrid.msg.MsgException;
-import org.simgrid.msg.Task;
 import org.simgrid.msg.Process;
 import org.simgrid.msg.VM;
 

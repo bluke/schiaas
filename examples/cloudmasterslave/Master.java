@@ -18,7 +18,6 @@ import org.simgrid.msg.Msg;
 import org.simgrid.msg.MsgException;
 import org.simgrid.msg.Task;
 import org.simgrid.msg.Process;
-import org.simgrid.msg.VM;
 import org.simgrid.schiaas.Compute;
 import org.simgrid.schiaas.Data;
 import org.simgrid.schiaas.Instance;
@@ -28,7 +27,6 @@ import org.simgrid.schiaas.Storage;
 import org.simgrid.schiaas.engine.compute.ComputeEngine;
 import org.simgrid.schiaas.engine.compute.ComputeHost;
 import org.simgrid.schiaas.engine.compute.ComputeTools;
-import org.simgrid.schiaas.engine.compute.rice.RiceInstance;
 
 public class Master extends Process {
 	public Master(Host host, String name, String[] args) {
@@ -206,7 +204,7 @@ public class Master extends Process {
 		Msg.info("Parallel offloading of "+computeHost2.getHost().getName() + " (might take some time due to network bottleneck)");
 		Msg.info(" - Number of hosted instances  "+ computeHost2.getHostedInstances().size());
 		ComputeTools.parallelOffLoad(computeEngine, computeHost2);
-		int j = 0;
+
 		while (computeHost2.getHostedInstances().size() != 0) {
 			Msg.info("Still " + computeHost2.getHostedInstances().size() + " instances running on " + computeHost1 );
 			waitFor(100);

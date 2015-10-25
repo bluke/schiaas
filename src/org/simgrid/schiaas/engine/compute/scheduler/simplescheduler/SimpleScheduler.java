@@ -51,7 +51,6 @@ public class SimpleScheduler extends ComputeScheduler {
 		default:
 			return 0;
 		}
-		
 	}
 
 	
@@ -71,7 +70,7 @@ public class SimpleScheduler extends ComputeScheduler {
 			
 			if ( ch.isAvailable() && ch.canHost(instanceType) > 0 )	{
 				double weight = getWeight(ch, instanceType);
-				Msg.info("Weigth of "+ch.getHost().getName()+" = "+weight);
+				//Msg.info("Weigth of "+ch.getHost().getName()+" = "+weight);
 				if ( weight > resultWeight ) {
 					result = ch;
 					resultWeight = weight;
@@ -80,6 +79,10 @@ public class SimpleScheduler extends ComputeScheduler {
 		}
 
 		return result;
+	}
+	
+	@Override
+	public void terminate() {	
 	}
 	
 }

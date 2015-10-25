@@ -7,7 +7,8 @@ import simschlouder.SchloudNode;
 import simschlouder.SchloudTask;
 
 /**
- * The As Soon As Possible Strategy: TODO describe it
+ * The As Soon As Possible Strategy.
+ * This strategy aims at running the submitted task as soon as possible. 
  * @author julien.gossa@unistra.fr
  *
  */

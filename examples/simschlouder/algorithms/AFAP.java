@@ -7,7 +7,8 @@ import simschlouder.SchloudNode;
 import simschlouder.SchloudTask;
 
 /**
- * The As Full As Possible strategy: TODO describe it
+ * The As Full As Possible strategy.
+ * This strategy aims at filling the provisioned instances as most as possible.
  * @author mfrincu
  *
  */

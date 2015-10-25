@@ -1,8 +1,6 @@
 package org.simgrid.schiaas.engine.compute;
 
 import java.util.Collection;
-import java.util.List;
-
 import org.simgrid.msg.Host;
 import org.simgrid.schiaas.Instance;
 import org.simgrid.schiaas.InstanceType;

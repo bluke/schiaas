@@ -1,6 +1,5 @@
 package org.simgrid.schiaas;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -117,7 +116,6 @@ public class Storage {
 	
 	
 	public void terminate() {
-		// TODO Auto-generated method stub
 	}
 
 	/**

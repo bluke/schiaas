@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.Vector;
 
 import org.simgrid.msg.Host;
-import org.simgrid.msg.Msg;
 import org.simgrid.msg.Mutex;
 import org.simgrid.schiaas.Image;
 import org.simgrid.schiaas.Instance;
