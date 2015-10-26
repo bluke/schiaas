@@ -92,9 +92,9 @@ public class BaseStepper extends Stepper {
 				
 				Collection<Instance> collection = compute.describeInstances();
 				Iterator<Instance> i = collection.iterator();
-				output = "["+i.next().getName();
+				output = "["+i.next().getId();
 				while(i.hasNext()){
-					output+=","+i.next().getName();
+					output+=","+i.next().getId();
 				}
 				output+="]";
 				

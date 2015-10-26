@@ -80,9 +80,9 @@ public class Master extends Process {
 				waitFor(10);
 			}
 			
-			Msg.info("Starting a slave on "+slaveInstances[i].getName());
+			Msg.info("Starting a slave on "+slaveInstances[i].getId());
 			String [] slaveArgs = {""+i};
-			Slave s = new Slave(slaveInstances[i], "slave_"+i,slaveArgs);
+			Slave s = new Slave(slaveInstances[i].vm(), "slave_"+i,slaveArgs);
 			s.start();
 		}
 		

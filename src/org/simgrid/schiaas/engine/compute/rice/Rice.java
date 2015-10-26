@@ -186,7 +186,7 @@ public class Rice extends ComputeEngine {
 		Msg.verb("live migration: "+riceInstance.getId()+" to "+destination.getHost().getName());
 		
 		((RiceHost) destination).addInstance(riceInstance);
-		riceInstance.migrate(destination.getHost());
+		riceInstance.vm().migrate(destination.getHost());
 		riceInstance.riceHost.removeInstance(riceInstance);
 		riceInstance.riceHost = (RiceHost) destination;
 	}

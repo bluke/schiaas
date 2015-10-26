@@ -78,7 +78,7 @@ public class Master extends Process {
 					waitFor(10);
 				}
 
-				hosts[h++]=instance;
+				hosts[h++]=instance.vm();
 			}
 			break;
 

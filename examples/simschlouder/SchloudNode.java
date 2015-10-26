@@ -166,11 +166,11 @@ public class SchloudNode extends Process implements Comparable<SchloudNode>{
 	 * @param cloud
 	 */
 	protected SchloudNode(Instance instance, SchloudCloud cloud) {
-		super(instance, instance.getId()+"_SchloudNode",null);
+		super(instance.vm(), instance.getId()+"_SchloudNode",null);
 		this.index = currentIndex++;
 		this.cloud=cloud;
 		
-		speed = instance.getSpeed();
+		speed = instance.vm().getSpeed();
 		
 		this.queue = new LinkedList<SchloudTask>();
 		this.completedQueue = new LinkedList<SchloudTask>();

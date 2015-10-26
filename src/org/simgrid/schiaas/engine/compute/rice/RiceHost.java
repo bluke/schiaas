@@ -95,7 +95,7 @@ public class RiceHost implements ComputeHost {
 	 */
 	public void addInstance(RiceInstance riceInstance) {
 		this.instances.add(riceInstance);
-		freeCores -= riceInstance.getCoreNumber();
+		freeCores -= riceInstance.vm().getCoreNumber();
 	}
 
 	/**
@@ -105,7 +105,7 @@ public class RiceHost implements ComputeHost {
 	 */
 	public void removeInstance(RiceInstance riceInstance) {
 		this.instances.remove(riceInstance);
-		freeCores += riceInstance.getCoreNumber();
+		freeCores += riceInstance.vm().getCoreNumber();
 	}
 
 	

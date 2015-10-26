@@ -2,6 +2,7 @@ package org.simgrid.schiaas;
 
 import org.simgrid.msg.Host;
 import org.simgrid.msg.Msg;
+import org.simgrid.msg.VM;
 import org.simgrid.schiaas.engine.compute.ComputeEngine;
 
 //TODO : add dpIntensity / function of netBW for migration
@@ -10,10 +11,13 @@ import org.simgrid.schiaas.engine.compute.ComputeEngine;
  * Represents an Instance, that is a VM controller by SimIaaS.
  * @author julien.gossa@unistra.fr
  */
-public class Instance extends org.simgrid.msg.VM {
+public class Instance {
 	
 	/** The Compute of the instance */
 	protected Compute compute;
+
+	/** The VM of the instance */
+	protected VM vm;
 	
 	/** The ID of the instance. */
 	protected String id;
@@ -40,7 +44,7 @@ public class Instance extends org.simgrid.msg.VM {
 	 * @param instanceType The type of the instance.
 	 */
 	protected Instance(Compute compute, String id, Image image, InstanceType instanceType, Host host) {
-		super(	host, id, 
+		this.vm = new VM(	host, id+"_VM", 
 				Integer.parseInt(instanceType.getProperty("core")),
 				Integer.parseInt(instanceType.getProperty("ramSize")), 
 				Integer.parseInt(instanceType.getProperty("netCap")),
@@ -58,6 +62,14 @@ public class Instance extends org.simgrid.msg.VM {
 		this.isPending = true;
 	}
 
+	/**
+	 * @return The vm of this.
+	 */
+	public VM vm() {
+		return this.vm;
+	}
+
+	
 	/**
 	 * @return The id of this.
 	 */
@@ -112,6 +124,12 @@ public class Instance extends org.simgrid.msg.VM {
 		return this.isTerminating;
 	}
 
+	/**
+	 * @return true if this instance is running.
+	 */
+	public int isRunning() {
+		return vm.isRunning();
+	}
 
 	/**
 	 * Suspend this instance.
@@ -155,27 +173,11 @@ public class Instance extends org.simgrid.msg.VM {
 	}
 
 	/**
-	 * Create an error : Instances cannot be started, they must be asked by Compute.runInstance().
-	 */
-	public void start() {
-		Msg.critical("Start command is prohibited on Instance: use Compute.runInstance() instead");
-	}
-
-	/**
 	 * Terminate this instance.
 	 */
 	public void terminate() {
 		this.isTerminating = true;
 		this.compute.computeEngine.doCommand(ComputeEngine.COMMAND.SHUTDOWN,this);
-	}
-
-	/**
-	 * Terminate this instance.
-	 * Handled as terminate() and create a warning.
-	 */
-	public void shutdown() {
-		Msg.warn("Shutdown command on Instance are intercepted and handled as terminate");
-		this.terminate();
 	}
 
 	
@@ -185,6 +187,7 @@ public class Instance extends org.simgrid.msg.VM {
 	 * @return A string containing the name of the instance and its host.
 	 */
 	public String toString() {
-		return "Instance:" + getName();
+		return "Instance:" + id;
 	}
+
 }
