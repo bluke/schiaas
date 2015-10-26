@@ -49,8 +49,7 @@ public class DemoStepper extends Stepper {
 			Collection<Instance> instances = this.compute.describeInstances();
 			response = "";
 			for(Instance inst : instances){
-				if(!inst.isTerminating())
-					response = inst.getName() +" "+response;
+				response = inst.getName() +" "+response;
 			}
 
 		}else if(command[0].matches("isBooted")){

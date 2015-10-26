@@ -1,6 +1,8 @@
 package org.simgrid.schiaas;
 
 import org.simgrid.msg.Host;
+import org.simgrid.msg.Msg;
+import org.simgrid.schiaas.engine.compute.ComputeEngine;
 
 //TODO : add dpIntensity / function of netBW for migration
 
@@ -9,16 +11,10 @@ import org.simgrid.msg.Host;
  * @author julien.gossa@unistra.fr
  */
 public class Instance extends org.simgrid.msg.VM {
-
-	/**
-	 * The last start and shutdown times of this instance
-	 */
-	protected long startTime, shutdownTime;
 	
-	/** Enumerates the different state of the instance. */
-	// public static enum STATE { PENDING, BOOTING, RUNNING, REBOOTING, 
-	// SUSPENDING, SUSPENDED, RESUMING, SHUTTINGDOWN, TERMINATED };
-
+	/** The Compute of the instance */
+	protected Compute compute;
+	
 	/** The ID of the instance. */
 	protected String id;
 	
@@ -27,43 +23,39 @@ public class Instance extends org.simgrid.msg.VM {
 
 	/** The type of the instance. */
 	protected InstanceType instanceType;
-
-	//** The current state of the instance. */
-	// protected STATE state;
 	
 	/** True if the machine is pending boot */
 	protected boolean isPending;
-	
-	/** True if the machine is shutting down */
-	protected boolean isTerminating;
 
+	/** True if the machine is terminating */
+	protected boolean isTerminating;
+		
 	
 	/**
 	 * Constructor to deploy and start a new instance.
 	 * 
-	 * @param id
-	 *            The id of the instance
-	 * @param image
-	 *            The image of the instance.
-	 * @param instanceType
-	 *            The type of the instance.
+	 * @param compute The compute of the instance
+	 * @param id The id of the instance
+	 * @param image The image of the instance.
+	 * @param instanceType The type of the instance.
 	 */
-	protected Instance(String id, Image image, InstanceType instanceType, Host host) {
-		super(host, id, Integer.parseInt(instanceType.getProperty("core")),
-				Integer.parseInt(instanceType.getProperty("ramSize")), Integer
-						.parseInt(instanceType.getProperty("netCap")),
-				instanceType.getProperty("diskPath"), Integer
-						.parseInt(instanceType.getProperty("diskSize")),
+	protected Instance(Compute compute, String id, Image image, InstanceType instanceType, Host host) {
+		super(	host, id, 
+				Integer.parseInt(instanceType.getProperty("core")),
+				Integer.parseInt(instanceType.getProperty("ramSize")), 
+				Integer.parseInt(instanceType.getProperty("netCap")),
+				instanceType.getProperty("diskPath"), 
+				Integer.parseInt(instanceType.getProperty("diskSize")),
 				Integer.parseInt(instanceType.getProperty("migNetSpeed")),
 				Integer.parseInt(instanceType.getProperty("dpIntensity")));
 
+		this.compute = compute;
 		this.id = id;
 		this.image = image;
 		
 		this.instanceType = instanceType;
 		
 		this.isPending = true;
-		this.isTerminating = false;
 	}
 
 	/**
@@ -102,38 +94,6 @@ public class Instance extends org.simgrid.msg.VM {
 	}
 
 	/**
-	 * @return The physical host of this.
-	 */
-//	public Host getHost() {
-//		return this.
-//	}
-	
-
-	// /**
-	// * Sets the state of the instance.
-	// * @param state the state of the instance, from now on.
-	// */
-	/*
-	 * protected void setState(STATE state) { this.state=state;
-	 * 
-	 * //Trace.vmVariableSet(state.toString(),getName(),Msg.getClock());
-	 * //Trace.hostPopState (this.getHost().getName(), "VM_STATE");
-	 * //Trace.hostPushState (this.getHost().getName(), "VM_STATE",
-	 * state.name());
-	 * 
-	 * Msg.verb("State of "+name+" changed to "+state); }
-	 */
-
-	// /**
-	// * Gets the current state of the instance.
-	// * @return the current state of the instance.
-	// */
-	// public STATE getState()
-	// {
-	// return state;
-	// }
-
-	/**
 	 * In addition to VM state.
 	 * 
 	 * @return true if this is pending (i.e. is waiting for start because of
@@ -143,9 +103,81 @@ public class Instance extends org.simgrid.msg.VM {
 		return this.isPending;
 	}
 
+	/**
+	 * In addition to VM state.
+	 * 
+	 * @return true if this instance is terminating.
+	 */
 	public boolean isTerminating() {
 		return this.isTerminating;
 	}
+
+
+	/**
+	 * Suspend this instance.
+	 */
+	public void suspend() {
+		this.compute.computeEngine.doCommand(ComputeEngine.COMMAND.SUSPEND,this);
+	}
+
+	/**
+	 * Resume this instance.
+	 */
+	public void resume() {
+		this.compute.computeEngine.doCommand(ComputeEngine.COMMAND.RESUME,this);
+	}
+	
+	/**
+	 * Save this instance.
+	 * Currently handled as suspend() and will be implemented whenever it is supported by simgrid.
+	 */
+	public void save() {
+		//TODO create save whenever it is supported by simgrid
+		Msg.warn("Instance.save() is currently handled as Instance.suspend()");
+		this.suspend();
+	}
+
+	/**
+	 * Restore this instance.
+	 * Currently handled as resume() and will be implemented whenever it is supported by simgrid.
+	 */
+	public void restore() {
+		//TODO create restore whenever it is supported by simgrid
+		Msg.warn("Instance.restore() is currently handled as Instance.resume()");
+		this.resume();
+	}
+	
+	/**
+	 * Reboot this instance.
+	 */
+	public void reboot() {
+		this.compute.computeEngine.doCommand(ComputeEngine.COMMAND.REBOOT,this);
+	}
+
+	/**
+	 * Create an error : Instances cannot be started, they must be asked by Compute.runInstance().
+	 */
+	public void start() {
+		Msg.critical("Start command is prohibited on Instance: use Compute.runInstance() instead");
+	}
+
+	/**
+	 * Terminate this instance.
+	 */
+	public void terminate() {
+		this.isTerminating = true;
+		this.compute.computeEngine.doCommand(ComputeEngine.COMMAND.SHUTDOWN,this);
+	}
+
+	/**
+	 * Terminate this instance.
+	 * Handled as terminate() and create a warning.
+	 */
+	public void shutdown() {
+		Msg.warn("Shutdown command on Instance are intercepted and handled as terminate");
+		this.terminate();
+	}
+
 	
 	/**
 	 * of course.
@@ -154,6 +186,5 @@ public class Instance extends org.simgrid.msg.VM {
 	 */
 	public String toString() {
 		return "Instance:" + getName();
-		//return "Instance:" + getName() + " (" + this.getHost().getName()+")";
 	}
 }

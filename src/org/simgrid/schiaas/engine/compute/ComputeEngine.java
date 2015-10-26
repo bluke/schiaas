@@ -28,7 +28,7 @@ public abstract class ComputeEngine {
 	
 	/**
 	 * Enumerates the possible commands to control instances.
-	 * @author julien
+	 * @author julien.gossa@unistra.fr
 	 */
 	public static enum COMMAND {
 		START, SHUTDOWN, SUSPEND, RESUME, REBOOT
@@ -37,12 +37,9 @@ public abstract class ComputeEngine {
 	/**
 	 * Constructor with scheduler.
 	 * 
-	 * @param compute
-	 *            The compute of this.
-	 * @param hosts
-	 *            All of the host of this.
-	 * @param computeScheduler
-	 * 			  The scheduler of this.
+	 * @param compute The compute of this.
+	 * @param hosts All of the host of this.
+	 * @param computeScheduler The scheduler of this.
 	 */
 	public ComputeEngine(Compute compute, List<Host> hosts) {
 		this.compute = compute;

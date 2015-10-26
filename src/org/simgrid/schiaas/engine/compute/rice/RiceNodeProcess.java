@@ -2,6 +2,7 @@ package org.simgrid.schiaas.engine.compute.rice;
 
 import org.simgrid.msg.Msg;
 import org.simgrid.msg.MsgException;
+import org.simgrid.msg.VM;
 import org.simgrid.msg.Process;
 import org.simgrid.msg.Task;
 import org.simgrid.schiaas.engine.compute.rice.RiceHost.IMGSTATUS;
@@ -67,7 +68,7 @@ public class RiceNodeProcess extends Process {
 			// Boot
 			riceHost.lastBootDate=Msg.getClock();
 			Msg.verb(riceInstance.getName()+" is booting");
-			riceInstance.start();
+			riceInstance.super.start();
 			
 			waitFor(rice.interBootDelay);
 			riceHost.bootMutex.release();
@@ -76,19 +77,17 @@ public class RiceNodeProcess extends Process {
 		case SHUTDOWN:
 			// TODO: May be an issue when the slot is reused immediately and there is penalty for start/shutdown
 			riceHost.removeInstance(riceInstance);
-			riceInstance.shutdown();
-			//riceInstance.destroy();
+			((VM)riceInstance).shutdown();
 			break;
 		case SUSPEND:
-			riceInstance.suspend();
+			((VM)riceInstance).suspend();
 			break;
 		case RESUME:
-			riceInstance.resume();
+			((VM)riceInstance).resume();
 			break;
 		case REBOOT:
-			// TODO: Adrien will rename these VM methods to match their
-			riceInstance.shutdown();		
-			riceInstance.start();
+			((VM)riceInstance).shutdown();		
+			((VM)riceInstance).start();
 			break;
 		}			
 	}

@@ -1,6 +1,7 @@
 package org.simgrid.schiaas.engine.compute.rice;
 
 import org.simgrid.msg.Host;
+import org.simgrid.schiaas.Compute;
 import org.simgrid.schiaas.Image;
 import org.simgrid.schiaas.Instance;
 import org.simgrid.schiaas.InstanceType;
@@ -18,15 +19,15 @@ public class RiceInstance extends Instance {
 	
 	/**
 	 * Constructor.
+	 * @param compute The compute of this instance.
 	 * @param id The id of this instance.
 	 * @param image The image of this instance.
 	 * @param instanceType The type of this instance.
 	 * @param riceHost The physical host of this instance.
 	 */
-	protected RiceInstance(String id, Image image, InstanceType instanceType, RiceHost riceHost) {
-		super(id, image, instanceType, riceHost.host);
+	protected RiceInstance(Compute compute, String id, Image image, InstanceType instanceType, RiceHost riceHost) {
+		super(compute, id, image, instanceType, riceHost.host);
 		this.riceHost = riceHost;
-		this.isPending = true;
 		
 		riceHost.addInstance(this);
 	}

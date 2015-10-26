@@ -8,8 +8,6 @@ import org.simgrid.msg.Host;
 import org.simgrid.msg.HostFailureException;
 import org.simgrid.msg.HostNotFoundException;
 import org.simgrid.msg.Msg;
-import org.simgrid.msg.MsgException;
-import org.simgrid.msg.Process;
 import org.simgrid.schiaas.Compute;
 import org.simgrid.schiaas.Data;
 import org.simgrid.schiaas.Image;
@@ -213,57 +211,6 @@ public class Rice extends ComputeEngine {
 	}
 
 	/**
-	 * Process to handle one live migration, used to parallelize migrations during off-loads 
-	 * @author julien.gossa@unistra.fr
-	 */
-	protected class LiveMigrationProcess extends Process {
-		private Instance instance;	
-		
-		protected LiveMigrationProcess(Instance instance) throws HostNotFoundException {
-			super(controller, "LiveMigrationProcess:"+instance.getId());
-			this.instance = instance;
-			try {
-				this.start();
-			} catch(HostNotFoundException e) {
-				Msg.critical("Something bad happend in the LiveMigrationProcess of RICE"+e.getMessage());
-			}
-		}
-
-		public void main(String[] arg0) throws MsgException {
-			liveMigration(instance);
-		}
-	}
-
-	/**
-	 * Offload one given host of its VMs 
-	 * 
-	 * @param host
-	 *            The host to offload
-	 * @throws HostNotFoundException 
-	 * @throws HostFailureException
-	 */
-	public void offLoad(ComputeHost computeHost)  throws HostNotFoundException, HostFailureException {
-		
-		computeHost.setAvailability(false);
-		
-		for (Instance instance: compute.describeInstances()) {
-			RiceInstance riceInstance = (RiceInstance) instance;
-			if (riceInstance.riceHost.host == computeHost) {
-				switch(offLoadType) {
-				case SEQUENTIAL :
-					liveMigration(instance);
-					break;
-				case PARALLEL :
-					new LiveMigrationProcess(instance);
-					break;
-				default :
-					Msg.critical("Off-load type not reconized");
-				}
-			}
-		}
-	}
-
-	/**
 	 * Selects one physical host and creates a new instance.
 	 * @return The newly created instance, or null if no suitable physical host can be found.
 	 */
@@ -272,7 +219,7 @@ public class Rice extends ComputeEngine {
 		RiceHost riceHost = (RiceHost) computeScheduler.schedule(instanceType);
 		
 		if (riceHost == null) return null;
-		return new RiceInstance(id, image, instanceType, riceHost);
+		return new RiceInstance(compute, id, image, instanceType, riceHost);
 	}
 
 	@Override

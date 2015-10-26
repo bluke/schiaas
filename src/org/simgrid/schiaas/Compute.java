@@ -157,8 +157,6 @@ public class Compute {
 		if (schedulerName != null) {
 			this.computeEngine.setComputeScheduler(schedulerName, schedulerConfig);
 		}
-			
-		
 	}
 
 	/**
@@ -312,7 +310,7 @@ public class Compute {
 	 *            The id of the instance to be be terminated.
 	 */
 	public void terminateInstance(String instanceId) {
-		terminateInstance(this.instances.get(instanceId));
+		this.instances.get(instanceId).terminate();
 	}
 
 	/**
@@ -321,11 +319,8 @@ public class Compute {
 	 * @param instance
 	 *            The instance to be be terminated.
 	 */
-	public void terminateInstance(Instance instance) {		
-		if (instance.isTerminating == true) return;
-		
-		instance.isTerminating = true;
-		this.computeEngine.doCommand(ComputeEngine.COMMAND.SHUTDOWN,instance);
+	public void terminateInstance(Instance instance) {
+		instance.terminate();
 	}
 
 	
@@ -336,22 +331,39 @@ public class Compute {
 	 *            The id of the instance to be be suspended.
 	 */
 	public void suspendInstance(String instanceId) {
-		this.computeEngine.doCommand(ComputeEngine.COMMAND.SUSPEND,
-				this.instances.get(instanceId));
+		this.instances.get(instanceId).suspend();
+	}
+
+	/**
+	 * Suspend a given instance.
+	 * 
+	 * @param instance
+	 *            The instance to be be suspended.
+	 */
+	public void suspendInstance(Instance instance) {
+		instance.suspend();
 	}
 
 	
 	/**
 	 * Resume a given instance.
 	 * 
-	 * @param instanceId
-	 *            The if of the instance to be be resumed.
+	 * @param instanceId The if of the instance to be be resumed.
 	 */
 	public void resumeInstance(String instanceId) {
-		this.computeEngine.doCommand(ComputeEngine.COMMAND.RESUME,
-				this.instances.get(instanceId));
+		this.instances.get(instanceId).resume();
 	}
 
+	/**
+	 * Resume a given instance.
+	 * 
+	 * @param instance The instance to be be resumed.
+	 */
+	public void resumeInstance(Instance instance) {
+		instance.resume();
+	}
+
+	
 	/**
 	 * Give the current availability of new instances on this.
 	 * 
@@ -372,7 +384,9 @@ public class Compute {
 	public void terminate() throws HostFailureException {
 		Msg.verb("Terminating all remaining instances");
 		for (Instance instance : this.instances.values()) {
-			terminateInstance(instance.id);
+			if (! instance.isTerminating) {
+				terminateInstance(instance.id);
+			}
 		}
 		this.computeEngine.terminate();
 	}

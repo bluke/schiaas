@@ -18,15 +18,13 @@ public class ComputeTools {
 	 * @author julien.gossa@unistra.fr
 	 */
 	private static class LiveMigrationProcess extends Process {
-		private Instance instance;		
-		private ComputeEngine computeEngine;		
-		
+		private Instance instance;
+		private ComputeEngine computeEngine;
 		
 		protected LiveMigrationProcess(ComputeEngine computeEngine, ComputeHost computeHost, Instance instance) {
-			super(computeHost.getHost(), "OffLoadProcess:"+computeHost);
+			super(computeHost.getHost(), "LiveMigrationProcess:"+computeHost);
 			this.computeEngine = computeEngine;
 			this.instance = instance;
-
 			
 			try {
 				this.start();
