@@ -8,6 +8,7 @@ import java.util.Map;
 import org.simgrid.msg.HostFailureException;
 
 import org.simgrid.msg.Msg;
+import org.simgrid.schiaas.tracing.Trace;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -28,6 +29,9 @@ public class Cloud {
 	/** Storages as a service such as S3, EBS */
 	protected Map<String, Storage> storages;
 
+	/** Tracing */
+	protected Trace trace;
+	
 	
 	/**
 	 * Unique constructor from an XML node
@@ -49,6 +53,8 @@ public class Cloud {
 
 		this.id = cloudXMLNode.getAttributes().getNamedItem("id")
 				.getNodeValue();
+		
+		this.trace = Trace.newCategorizedTrace("cloud", id);
 
 		Msg.debug("Cloud initialization: " + id);
 

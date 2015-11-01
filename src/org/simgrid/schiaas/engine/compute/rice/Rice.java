@@ -162,7 +162,7 @@ public class Rice extends ComputeEngine {
 		RiceNodeProcess rnp = new RiceNodeProcess(this, riceInstance.riceHost);
 		
 		try {
-			rcp.start();
+			rcp.start();			
 			rnp.start();
 		} catch (HostNotFoundException e) {
 			Msg.critical("Something bad happened in RISE while trying to execute a command");

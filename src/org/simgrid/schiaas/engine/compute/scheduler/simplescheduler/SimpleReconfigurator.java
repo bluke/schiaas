@@ -76,11 +76,14 @@ public class SimpleReconfigurator extends SimpleScheduler {
 				if ( i >= instances.length ) i = 0;
 				Instance instance = (Instance) instances[i];
 			
-				// Check is the is a better place for the scanned instance
-				ComputeHost bestHost = schedule(instance.getInstanceType());
-				if (  getWeight(bestHost,instance.getInstanceType()) 
-					< getWeight(scheduler.computeEngine.getComputeHostOf(instance),instance.getInstanceType()) ) {
-					computeEngine.liveMigration(instance, bestHost);
+				// Check if the instance can be migrated 
+				// and if there is a better place for the scanned instance
+				if (instance.isRunning() != 0 ) {
+					ComputeHost bestHost = schedule(instance.getInstanceType());
+					if (  getWeight(bestHost,instance.getInstanceType()) 
+						< getWeight(scheduler.computeEngine.getComputeHostOf(instance),instance.getInstanceType()) ) {
+						computeEngine.liveMigration(instance, bestHost);
+					}
 				}
 				
 				i++;

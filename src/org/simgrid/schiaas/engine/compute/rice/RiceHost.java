@@ -96,6 +96,7 @@ public class RiceHost implements ComputeHost {
 	public void addInstance(RiceInstance riceInstance) {
 		this.instances.add(riceInstance);
 		freeCores -= riceInstance.vm().getCoreNumber();
+		riceInstance.getTrace().addEvent("schedule", this.host.getName());
 	}
 
 	/**

@@ -122,19 +122,15 @@ public abstract class ComputeEngine {
 	/**
 	 * Migrate an instance to one given ComputeHost
 	 * 
-	 * @param instance
-	 *            The instance to migrate
-	 * @param computeHost
-	 *            The host to migrate the instance to
+	 * @param instance The instance to migrate
+	 * @param computeHost The host to migrate the instance to
 	 */
 	public abstract void liveMigration(Instance instance, ComputeHost computeHost) throws HostFailureException;
 
 	/**
 	 * Migrate an instance to one host chose by the engine
 	 * 
-	 * @param instance
-	 *            The instance to migrate
-	 *            
+	 * @param instance The instance to migrate
 	 * @return The host to which the instance is migrating
 	 */
 	public abstract ComputeHost liveMigration(Instance instance) throws HostFailureException;

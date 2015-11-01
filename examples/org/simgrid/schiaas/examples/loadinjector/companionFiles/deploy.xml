@@ -1,0 +1,21 @@
+<?xml version='1.0'?>
+<!DOCTYPE platform SYSTEM "http://simgrid.gforge.inria.fr/simgrid.dtd">
+<platform version="3">
+  <!-- The master process (with some arguments) -->
+
+  <process host="controller" function="org.simgrid.schiaas.examples.loadinjector.InjectorProcess">
+     <argument value="org.simgrid.schiaas.examples.loadinjector.injectors.SinInjector"/>       <!-- Injector type -->
+     <!-- Arguments to pass to the selected injector -->
+     <argument value="10000"/>		<!-- SinInjector.duration -->
+     <argument value="10"/>			<!-- SinInjector.period -->
+     <argument value="1000"/>		<!-- SinInjector.instancePeriod -->
+     <argument value="20"/>			<!-- SinInjector.instanceMin -->
+     <argument value="60"/>			<!-- SinInjector.instanceMax -->
+     <argument value="100"/>		<!-- SinInjector.loadPeriod -->
+     <argument value="20"/>			<!-- SinInjector.loadMin -->
+     <argument value="100"/>		<!-- SinInjector.loadMax -->
+     <argument value="myImage"/>	<!-- SinInjector.image -->
+     <argument value="small"/>		<!-- SinInjector.instanceType -->     
+  </process>
+
+</platform>

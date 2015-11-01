@@ -16,6 +16,7 @@ import javax.xml.validation.*;
 import org.simgrid.msg.HostFailureException;
 import org.simgrid.msg.Msg;
 import org.simgrid.schiaas.Cloud;
+import org.simgrid.schiaas.tracing.Trace;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
@@ -100,7 +101,14 @@ public class SchIaaS {
     }
 
 	/**
-	 * 
+	 * @return The map of all of the clouds.
+	 */
+	public static Map<String, Cloud> getClouds() {
+		return SchIaaS.clouds;
+	}
+
+	
+	/**
 	 * @param cloudId
 	 *            The ID of one cloud.
 	 * @return The cloud of one ID.
@@ -110,16 +118,7 @@ public class SchIaaS {
 	}
 
 	/**
-	 * 
-	 * @return All of the clouds.
-	 */
-	public static Collection<Cloud> getClouds() {
-		return SchIaaS.clouds.values();
-	}
-
-	/**
 	 * Terminate all of the clouds
-	 * 
 	 * @throws HostFailureException
 	 */
 	public static void terminate() throws HostFailureException {
@@ -127,7 +126,6 @@ public class SchIaaS {
 		for (Cloud cloud : SchIaaS.clouds.values()) {
 			cloud.terminate();
 		}
-
 	}
 
 	/**

@@ -6,6 +6,7 @@ import org.simgrid.msg.Msg;
 import org.simgrid.schiaas.InstanceType;
 import org.simgrid.schiaas.engine.compute.ComputeEngine;
 import org.simgrid.schiaas.exceptions.MissingConfigException;
+import org.simgrid.schiaas.tracing.Trace;
 
 /**
  * Describes a abstract scheduler, to decide where new instances must be run, and enforce reconfiguration plans.
@@ -19,7 +20,10 @@ public abstract class ComputeScheduler {
 	
 	/** Contains all the config properties of this scheduler. */
 	protected Map<String, String> config;
-		
+	
+	/** Tracing */
+	protected Trace trace;
+	
 	/**
 	 * Constructor.
 	 * @param computeEngine the compute engine using this scheduler
@@ -28,6 +32,9 @@ public abstract class ComputeScheduler {
 	public ComputeScheduler(ComputeEngine computeEngine, Map<String, String> config) {
 		this.computeEngine = computeEngine;
 		this.config = config;
+		
+		trace = computeEngine.getCompute().getTrace().newSubTrace("scheduler");
+		trace.addProperties(config);
 	}
 	
 	/**

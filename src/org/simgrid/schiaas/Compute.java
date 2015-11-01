@@ -20,6 +20,7 @@ import org.simgrid.schiaas.Instance;
 import org.simgrid.schiaas.InstanceType;
 import org.simgrid.schiaas.engine.compute.ComputeEngine;
 import org.simgrid.schiaas.exceptions.MissingConfigException;
+import org.simgrid.schiaas.tracing.Trace;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -55,6 +56,9 @@ public class Compute {
 	/** Standard power, e.g. EC2CU.*/
 	protected double standardPower;
 	
+	/** tracing */
+	protected Trace trace; 
+	
 	/**
 	 * Unique constructor from XML config file
 	 * 
@@ -76,10 +80,12 @@ public class Compute {
 		this.images = new HashMap<String, Image>();
 
 		this.cloud = cloud;
+		
+		this.trace = cloud.trace.newSubTrace("compute");
 
 		String engine = computeXMLNode.getAttributes().getNamedItem("engine")
 				.getNodeValue();
-		
+		this.config.put("engine", engine);
 		Msg.debug("Compute initialization, engine=" + engine);
 		
 		List<Host> hosts = new Vector<Host>();
@@ -105,7 +111,7 @@ public class Compute {
 					schedulerConfig.put(configNNM.item(j).getNodeName(),
 										configNNM.item(j).getNodeValue());
 				}
-				schedulerName = schedulerConfig.remove("name"); 
+				schedulerName = schedulerConfig.get("name"); 
 			}
 			
 			if (nodes.item(i).getNodeName().compareTo("cluster") == 0) {
@@ -157,6 +163,8 @@ public class Compute {
 		if (schedulerName != null) {
 			this.computeEngine.setComputeScheduler(schedulerName, schedulerConfig);
 		}
+		
+		trace.addProperties(config);
 	}
 
 	/**
@@ -176,12 +184,19 @@ public class Compute {
 	}
 
 	/**
-	 * 
 	 * @return the compute engine of this, for admin purpose
 	 */
 	public ComputeEngine getComputeEngine() {
 		return this.computeEngine;
 	}
+
+	/**
+	 * @return the trace of this
+	 */
+	public Trace getTrace() {
+		return this.trace;
+	}
+
 	
 	/**
 	 * Getter for all configuration properties
@@ -266,10 +281,30 @@ public class Compute {
 	 * @return the instance, about to be started
 	 */
 	public Instance runInstance(String imageId, String instanceTypeId) {
+		Image image = this.images.get(imageId);
+		if (image == null) Msg.critical("Image "+imageId+" was not found");
+			
+		InstanceType instanceType = this.instanceTypes.get(instanceTypeId);
+		if (instanceType == null) Msg.critical("InstanceType "+instanceTypeId+" was not found");
+		
+		return runInstance(image, instanceType);
+	}
+
+	/**
+	 * Run a new instance, using a simple round-robin scheduling
+	 * 
+	 * @param image
+	 *            the image of the instance.
+	 * @param instanceType
+	 *            the type of the instance
+	 *            or null if no instance can be provisioned
+	 * @return the instance, about to be started
+	 */
+	public Instance runInstance(Image image, InstanceType instanceType) {
 		Instance instance = this.computeEngine.newInstance(
 				this.getCloud().getId() + "-" + String.format("%03d", instancesId),
-				this.images.get(imageId),
-				this.instanceTypes.get(instanceTypeId));
+				image,
+				instanceType);
 		
 		if (instance == null) return null;
 		
@@ -281,6 +316,7 @@ public class Compute {
 		return instance;
 	}
 
+	
 	/**
 	 * Run several new instances
 	 * 

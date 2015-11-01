@@ -22,7 +22,7 @@ public class RiceNodeProcess extends Process {
 	 * @param riceHost The host concerned by the command.
 	 */
 	public RiceNodeProcess(Rice rice, RiceHost riceHost) {
-		super(riceHost.host, rice.getCompute().getId()+" Rice Controller");
+		super(riceHost.host, rice.getCompute().getId()+"-Rice-Node-"+riceHost.getHost().getName());
 		this.rice = rice;
 		this.riceHost = riceHost;
 	} 

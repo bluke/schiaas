@@ -64,7 +64,6 @@ public class ComputeTools {
 		}
 	}
 	
-	
 	/**
 	 * Asynchrone parallel offloader.
 	 * Set the given host to unavailable and offloads its VMs.
@@ -80,4 +79,40 @@ public class ComputeTools {
 			new LiveMigrationProcess(computeEngine, computeHost, instance);			
 		}
 	}
+	
+	/**
+	 * Spawn a process to wait for the given instance to run
+	 * before starting the given process 
+	 * 
+	 * @param computeEngine the engine to use
+	 * @param instance the instance to wait for running
+	 * @param process the process to start afterward
+	 * @throws HostNotFoundException just like process.start()
+	 */
+	public static void waitForRunningAndStart(final ComputeEngine computeEngine, final Instance instance, final Process process) throws HostNotFoundException {
+		class WaitProcess extends Process {
+			public WaitProcess() {
+				super(computeEngine.getComputeHostOf(instance).getHost(), "WaitProcess-"+process.getName());
+			}
+			@Override
+			public void main(String[] arg0) throws MsgException {
+				while(instance.isRunning() == 0) {
+					waitFor(1);
+				}
+				try {
+					process.start();
+				} catch (HostNotFoundException e) {
+					Msg.critical("Something went wrong while trying start "+process.getName()
+						+"after waiting for "+instance.getId()+" to run."); 
+					e.printStackTrace();
+				}
+
+			}
+		}
+		
+		Process waitProcess = new WaitProcess();
+
+		waitProcess.start();
+	}
+	
 }

@@ -52,5 +52,4 @@ public interface ComputeHost {
 	 */
 	public abstract double getFreeDisk();
 	
-
 }

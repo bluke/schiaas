@@ -4,6 +4,7 @@ import org.simgrid.msg.Host;
 import org.simgrid.msg.Msg;
 import org.simgrid.msg.VM;
 import org.simgrid.schiaas.engine.compute.ComputeEngine;
+import org.simgrid.schiaas.tracing.Trace;
 
 //TODO : add dpIntensity / function of netBW for migration
 
@@ -17,7 +18,7 @@ public class Instance {
 	protected Compute compute;
 
 	/** The VM of the instance */
-	protected VM vm;
+	protected TracedVM vm;
 	
 	/** The ID of the instance. */
 	protected String id;
@@ -34,6 +35,8 @@ public class Instance {
 	/** True if the machine is terminating */
 	protected boolean isTerminating;
 		
+	/** Tracing */
+	protected Trace trace;
 	
 	/**
 	 * Constructor to deploy and start a new instance.
@@ -44,7 +47,7 @@ public class Instance {
 	 * @param instanceType The type of the instance.
 	 */
 	protected Instance(Compute compute, String id, Image image, InstanceType instanceType, Host host) {
-		this.vm = new VM(	host, id+"_VM", 
+		this.vm = new TracedVM(	host, id+"_VM", 
 				Integer.parseInt(instanceType.getProperty("core")),
 				Integer.parseInt(instanceType.getProperty("ramSize")), 
 				Integer.parseInt(instanceType.getProperty("netCap")),
@@ -52,7 +55,7 @@ public class Instance {
 				Integer.parseInt(instanceType.getProperty("diskSize")),
 				Integer.parseInt(instanceType.getProperty("migNetSpeed")),
 				Integer.parseInt(instanceType.getProperty("dpIntensity")));
-
+		
 		this.compute = compute;
 		this.id = id;
 		this.image = image;
@@ -60,6 +63,11 @@ public class Instance {
 		this.instanceType = instanceType;
 		
 		this.isPending = true;
+		
+		this.trace = compute.trace.newCategorizedSubTrace("instance", id);
+		this.trace.addProperty("image", this.image.getId());
+		this.trace.addProperty("instance_type", this.instanceType.getId());
+		this.trace.addEvent("command", "runinstance");
 	}
 
 	/**
@@ -68,7 +76,6 @@ public class Instance {
 	public VM vm() {
 		return this.vm;
 	}
-
 	
 	/**
 	 * @return The id of this.
@@ -99,12 +106,13 @@ public class Instance {
 	}
 
 	/**
-	 * @return The id of the type of this.
+	 * @return The trace of this.
 	 */
-	public String instanceTypeId() {
-		return this.instanceType.getId();
+	public Trace getTrace() {
+		return this.trace;
 	}
 
+	
 	/**
 	 * In addition to VM state.
 	 * 
@@ -135,6 +143,7 @@ public class Instance {
 	 * Suspend this instance.
 	 */
 	public void suspend() {
+		this.trace.addEvent("command", "suspend");
 		this.compute.computeEngine.doCommand(ComputeEngine.COMMAND.SUSPEND,this);
 	}
 
@@ -142,6 +151,7 @@ public class Instance {
 	 * Resume this instance.
 	 */
 	public void resume() {
+		this.trace.addEvent("command", "resume");
 		this.compute.computeEngine.doCommand(ComputeEngine.COMMAND.RESUME,this);
 	}
 	
@@ -150,6 +160,7 @@ public class Instance {
 	 * Currently handled as suspend() and will be implemented whenever it is supported by simgrid.
 	 */
 	public void save() {
+		this.trace.addEvent("command", "save");
 		//TODO create save whenever it is supported by simgrid
 		Msg.warn("Instance.save() is currently handled as Instance.suspend()");
 		this.suspend();
@@ -160,6 +171,7 @@ public class Instance {
 	 * Currently handled as resume() and will be implemented whenever it is supported by simgrid.
 	 */
 	public void restore() {
+		this.trace.addEvent("command", "restore");
 		//TODO create restore whenever it is supported by simgrid
 		Msg.warn("Instance.restore() is currently handled as Instance.resume()");
 		this.resume();
@@ -169,6 +181,7 @@ public class Instance {
 	 * Reboot this instance.
 	 */
 	public void reboot() {
+		this.trace.addEvent("command", "reboot");
 		this.compute.computeEngine.doCommand(ComputeEngine.COMMAND.REBOOT,this);
 	}
 
@@ -176,11 +189,11 @@ public class Instance {
 	 * Terminate this instance.
 	 */
 	public void terminate() {
+		this.trace.addEvent("command", "terminate");
 		this.isTerminating = true;
 		this.compute.computeEngine.doCommand(ComputeEngine.COMMAND.SHUTDOWN,this);
 	}
 
-	
 	/**
 	 * of course.
 	 * 
@@ -189,5 +202,5 @@ public class Instance {
 	public String toString() {
 		return "Instance:" + id;
 	}
-
+	
 }

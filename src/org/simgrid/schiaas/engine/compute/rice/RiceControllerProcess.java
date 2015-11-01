@@ -21,7 +21,7 @@ public class RiceControllerProcess extends Process {
 	 * @param riceInstance The instance concerned by the command.
 	 */
 	public RiceControllerProcess(Rice rice, COMMAND command, RiceInstance riceInstance) {
-		super(rice.controller, rice.getCompute().getId()+"-Rice-Controller");
+		super(rice.controller, rice.getCompute().getId()+"-Rice-Controller-"+command+"-"+riceInstance.getId());
 		this.rice = rice;
 		this.riceInstance = riceInstance;
 		this.command = command;

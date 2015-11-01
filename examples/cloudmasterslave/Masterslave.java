@@ -13,6 +13,7 @@ import org.simgrid.msg.NativeException;
 import org.simgrid.schiaas.Instance;
 import org.simgrid.schiaas.SchIaaS;
 import org.simgrid.schiaas.Cloud;
+import org.simgrid.schiaas.tracing.Trace;
 
 public class Masterslave {
    public static final int TASK_COMP_SIZE = 2000000000;
@@ -32,26 +33,28 @@ public class Masterslave {
 			Msg.info("example : Masterslave basic_platform.xml basic_deployment.xml basic_cloud.xml");
 			System.exit(1);	
 		}
-	    	    
+	    
 		/* construct the platform and deploy the application */
 		Msg.createEnvironment(args[0]);
 		Msg.deployApplication(args[1]);
 		
 		/* construct the cloud and deploy the associated processes */
 		Msg.info("Cloud Initialization");
+		Trace.init("masterslave.trace", "Example of MasterSlavec on cloud");
 		SchIaaS.init(args[2]);
 
-		
 		/* execute the simulation */
         Msg.run();        
         
         /* print cloud reports */
         Msg.info("Cloud details\n");
-        for (Cloud cloud : SchIaaS.getClouds())  {
+        for (Cloud cloud : SchIaaS.getClouds().values())  {
         	Msg.info(""+cloud);
         	for (Instance instance : cloud.getCompute().describeInstances()) {
         		Msg.info(" - "+instance);
         	}
         }
+        
+        Trace.close();
     }
 }
