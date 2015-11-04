@@ -6,7 +6,7 @@ import org.simgrid.msg.Msg;
 import org.simgrid.schiaas.InstanceType;
 import org.simgrid.schiaas.engine.compute.ComputeEngine;
 import org.simgrid.schiaas.exceptions.MissingConfigException;
-import org.simgrid.schiaas.tracing.Trace;
+import org.simgrid.schiaas.tools.Trace;
 
 /**
  * Describes a abstract scheduler, to decide where new instances must be run, and enforce reconfiguration plans.

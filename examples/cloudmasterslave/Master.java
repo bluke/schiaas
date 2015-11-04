@@ -223,10 +223,11 @@ public class Master extends Process {
 
 		// Wait an arbitrary time for Slaves to finalize
 		waitFor(36000);
+
+		// Terminate a given instance
+		compute.terminateInstance(slaveInstances[0]);
 		
-		compute.terminateInstance(slaveInstances[0].getId());
-		
-		// Terminating SchIaaS
+		// Terminating SchIaaS (and all instances at once)
 		Msg.info("Terminating");
 		SchIaaS.terminate();
 

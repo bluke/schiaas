@@ -13,7 +13,7 @@ import org.simgrid.msg.NativeException;
 import org.simgrid.schiaas.Instance;
 import org.simgrid.schiaas.SchIaaS;
 import org.simgrid.schiaas.Cloud;
-import org.simgrid.schiaas.tracing.Trace;
+import org.simgrid.schiaas.tools.Trace;
 
 public class Masterslave {
    public static final int TASK_COMP_SIZE = 2000000000;

@@ -15,25 +15,10 @@ add_jar(cloudmasterslave ${cloudmasterslave_src} OUTPUT_DIR ${PROJECT_BINARY_DIR
 
 add_custom_command( TARGET cloudmasterslave POST_BUILD COMMAND cp -r ${PROJECT_EXAMPLES_DIR}/cloudmasterslave/companionFiles/* ${PROJECT_BINARY_DIR}/cloudmasterslave)
 
-# AllMasterSlave
-file(GLOB_RECURSE allmasterslave_src ${PROJECT_EXAMPLES_DIR}/allmasterslave/*.java)
-set(CMAKE_JAVA_JAR_ENTRY_POINT allmasterslave.Masterslave)
-add_jar(allmasterslave ${allmasterslave_src} OUTPUT_DIR ${PROJECT_BINARY_DIR}/allmasterslave)
+#loadinjector
+file(GLOB_RECURSE loadinjector_src ${PROJECT_EXAMPLES_DIR}/loadinjector/*.java)
+set(CMAKE_JAVA_JAR_ENTRY_POINT loadinjector.SimpleInjection)
+add_jar(loadinjector ${loadinjector_src} OUTPUT_DIR ${PROJECT_BINARY_DIR}/loadinjector)
 
-add_custom_command( TARGET allmasterslave POST_BUILD COMMAND cp -r ${PROJECT_EXAMPLES_DIR}/allmasterslave/companionFiles/* ${PROJECT_BINARY_DIR}/allmasterslave)
-
-# sgbugmasterslave
-file(GLOB_RECURSE sgbugmasterslave_src ${PROJECT_EXAMPLES_DIR}/sgbugmasterslave/*.java)
-set(CMAKE_JAVA_JAR_ENTRY_POINT sgbugmasterslave.Masterslave)
-add_jar(sgbugmasterslave ${sgbugmasterslave_src} OUTPUT_DIR ${PROJECT_BINARY_DIR}/sgbugmasterslave)
-
-add_custom_command( TARGET sgbugmasterslave POST_BUILD COMMAND cp -r ${PROJECT_EXAMPLES_DIR}/sgbugmasterslave/companionFiles/* ${PROJECT_BINARY_DIR}/sgbugmasterslave)
-
-
-#LiveSim
-file(GLOB_RECURSE livesim_src ${PROJECT_EXAMPLES_DIR}/livesim/*.java)
-set(CMAKE_JAVA_JAR_ENTRY_POINT livesim.LiveSim)
-add_jar(livesim ${livesim_src} OUTPUT_DIR ${PROJECT_BINARY_DIR}/livesim)
-
-add_custom_command( TARGET livesim POST_BUILD COMMAND cp -r ${PROJECT_EXAMPLES_DIR}/livesim/companionFiles/* ${PROJECT_BINARY_DIR}/livesim)
+add_custom_command( TARGET loadinjector POST_BUILD COMMAND cp -r ${PROJECT_EXAMPLES_DIR}/loadinjector/companionFiles/* ${PROJECT_BINARY_DIR}/loadinjector)
 

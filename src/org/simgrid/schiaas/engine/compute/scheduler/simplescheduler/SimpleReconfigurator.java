@@ -67,7 +67,7 @@ public class SimpleReconfigurator extends SimpleScheduler {
 			while(! scheduler.terminating) {
 				
 				waitFor(scheduler.delay); 
-				Msg.info("Reconfiguration");
+				Msg.verb("Reconfiguration");
 				
 				
 				// Scan the instances

@@ -3,7 +3,7 @@ package org.simgrid.schiaas;
 import org.simgrid.msg.Host;
 import org.simgrid.msg.HostFailureException;
 import org.simgrid.msg.VM;
-import org.simgrid.schiaas.tracing.Trace;
+import org.simgrid.schiaas.tools.Trace;
 
 public class TracedVM extends VM {
 	

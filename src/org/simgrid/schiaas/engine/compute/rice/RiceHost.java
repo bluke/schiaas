@@ -11,6 +11,7 @@ import org.simgrid.schiaas.Image;
 import org.simgrid.schiaas.Instance;
 import org.simgrid.schiaas.InstanceType;
 import org.simgrid.schiaas.engine.compute.ComputeHost;
+import org.simgrid.schiaas.tools.Trace;
 
 /**
  * Host at Compute level, with cloud admin-level information.
@@ -52,13 +53,17 @@ public class RiceHost implements ComputeHost {
 	/** The flag to know if this host is available to host new instances */
 	protected boolean availability;
 	
+	/** The trace of this Host */
+	Trace trace;
+	
 	/**
 	 * Constructor.
+	 * @param rice The rice using this host.
 	 * @param host The physical simgrid host.
 	 * @param ramSize RAM available for VMs (in MB)
 	 * @param diskSize disk available for VMs (in MB)
 	 */
-	protected RiceHost(Host host, int ramSize, int diskSize) {
+	protected RiceHost(Rice rice, Host host, int ramSize, int diskSize) {
 		this.host = host;
 		this.lastBootDate = -1e9;
 		this.imagesCache = new HashMap<Image,IMGSTATUS>();
@@ -72,14 +77,21 @@ public class RiceHost implements ComputeHost {
 		bootMutex = new Mutex();
 		
 		availability = true;
+		
+		trace = rice.getCompute().getTrace().newCategorizedSubTrace("ComputeHost", host.getName());
+		trace.addProperty("cores",""+freeCores);
+		trace.addProperty("ram_size",""+ramSize);
+		trace.addProperty("diskSize",""+diskSize);
+		trace.addEvent("free_cores", ""+freeCores);
 	}
 
 	/**
 	 * Constructor with default ram and disk values (4GB per core).
+	 * @param rice The rice using this host.
 	 * @param host The physical simgrid host.
 	 */
-	protected RiceHost(Host host) {
-		this(host, (int)host.getCoreNumber()*4096, (int)host.getCoreNumber()*4096);
+	protected RiceHost(Rice rice, Host host) {
+		this(rice, host, (int)host.getCoreNumber()*4096, (int)host.getCoreNumber()*4096);
 	}
 
 	
@@ -97,6 +109,7 @@ public class RiceHost implements ComputeHost {
 		this.instances.add(riceInstance);
 		freeCores -= riceInstance.vm().getCoreNumber();
 		riceInstance.getTrace().addEvent("schedule", this.host.getName());
+		trace.addEvent("free_cores", ""+freeCores);
 	}
 
 	/**
@@ -107,6 +120,7 @@ public class RiceHost implements ComputeHost {
 	public void removeInstance(RiceInstance riceInstance) {
 		this.instances.remove(riceInstance);
 		freeCores += riceInstance.vm().getCoreNumber();
+		trace.addEvent("free_cores", ""+freeCores);
 	}
 
 	
@@ -123,6 +137,7 @@ public class RiceHost implements ComputeHost {
 	@Override
 	public void setAvailability(boolean availability) {
 		this.availability = availability;
+		trace.addEvent("availability", ""+availability);
 	}
 
 	@Override

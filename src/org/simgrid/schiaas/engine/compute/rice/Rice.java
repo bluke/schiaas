@@ -98,11 +98,11 @@ public class Rice extends ComputeEngine {
 		this.riceHosts = new Vector<ComputeHost>();
 
 		for (Host host : hosts) {
-			this.riceHosts.add(new RiceHost(host));
+			this.riceHosts.add(new RiceHost(this,host));
 		}
 		
 		// retrieving the images
-		Msg.info("storing images");
+		Msg.verb("RICE: storing images");
 		imgStorage = compute.getCloud().getStorage(compute.getConfig("image_storage"));
 		for (Image image : compute.describeImages().values()) {
 			Data imgData = new Data("RICEIMG-"+image.getId(), Double.parseDouble(image.getProperty("size")));

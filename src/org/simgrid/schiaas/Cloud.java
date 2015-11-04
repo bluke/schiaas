@@ -8,7 +8,7 @@ import java.util.Map;
 import org.simgrid.msg.HostFailureException;
 
 import org.simgrid.msg.Msg;
-import org.simgrid.schiaas.tracing.Trace;
+import org.simgrid.schiaas.tools.Trace;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
