@@ -10,6 +10,7 @@ import org.simgrid.schiaas.Compute;
 import org.simgrid.schiaas.Image;
 import org.simgrid.schiaas.Instance;
 import org.simgrid.schiaas.InstanceType;
+import org.simgrid.schiaas.exceptions.VMSchedulingException;
 
 
 /**
@@ -98,8 +99,9 @@ public abstract class ComputeEngine {
 	 * @param instanceType
 	 *            The type of the instance
 	 * @return A new instance
+	 * @throws VMSchedulingException When the scheduler fails to schedule the instance
 	 */
-	public abstract Instance newInstance(String id, Image image, InstanceType instanceType);
+	public abstract Instance newInstance(String id, Image image, InstanceType instanceType) throws VMSchedulingException;
 
 	/**
 	 * 
@@ -132,8 +134,9 @@ public abstract class ComputeEngine {
 	 * 
 	 * @param instance The instance to migrate
 	 * @return The host to which the instance is migrating
+	 * @throws VMSchedulingException When the scheduler fails to schedule the instance
 	 */
-	public abstract ComputeHost liveMigration(Instance instance) throws HostFailureException;
+	public abstract ComputeHost liveMigration(Instance instance) throws HostFailureException, VMSchedulingException;
 		
 	/**
 	 * Terminate this.

@@ -20,6 +20,7 @@ import org.simgrid.schiaas.Instance;
 import org.simgrid.schiaas.InstanceType;
 import org.simgrid.schiaas.engine.compute.ComputeEngine;
 import org.simgrid.schiaas.exceptions.MissingConfigException;
+import org.simgrid.schiaas.exceptions.VMSchedulingException;
 import org.simgrid.schiaas.tools.Trace;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -38,7 +39,7 @@ public class Compute {
 	/** engine of this */
 	protected ComputeEngine computeEngine;
 
-	/** Contains all the instances of this compute instance, alive and terminated. */
+	/** Contains all the instances of this compute instance. */
 	protected Map<String, Instance> instances;
 	
 	/** A counter to set instances' id. */
@@ -115,7 +116,6 @@ public class Compute {
 			}
 			
 			if (nodes.item(i).getNodeName().compareTo("cluster") == 0) {
-				Msg.info("cluster");
 				String id=nodes.item(i).getAttributes().getNamedItem("id").getNodeValue();
 				String prefix=nodes.item(i).getAttributes().getNamedItem("prefix").getNodeValue();
 				String suffix=nodes.item(i).getAttributes().getNamedItem("suffix").getNodeValue();
@@ -279,8 +279,9 @@ public class Compute {
 	 *            the id of the type of the instance
 	 *            or null if no instance can be provisioned
 	 * @return the instance, about to be started
+	 * @throws VMSchedulingException When the scheduler fails to schedule the instance
 	 */
-	public Instance runInstance(String imageId, String instanceTypeId) {
+	public Instance runInstance(String imageId, String instanceTypeId) throws VMSchedulingException {
 		Image image = this.images.get(imageId);
 		if (image == null) Msg.critical("Image "+imageId+" was not found");
 			
@@ -299,14 +300,13 @@ public class Compute {
 	 *            the type of the instance
 	 *            or null if no instance can be provisioned
 	 * @return the instance, about to be started
+	 * @throws VMSchedulingException When the scheduler fails to schedule the instance
 	 */
-	public Instance runInstance(Image image, InstanceType instanceType) {
+	public Instance runInstance(Image image, InstanceType instanceType) throws VMSchedulingException {
 		Instance instance = this.computeEngine.newInstance(
 				this.getCloud().getId() + "-" + String.format("%03d", instancesId),
 				image,
 				instanceType);
-		
-		if (instance == null) return null;
 		
 		this.computeEngine.doCommand(ComputeEngine.COMMAND.START, instance);
 
@@ -327,8 +327,10 @@ public class Compute {
 	 * @param nInstances
 	 *            the number of instances to run
 	 * @return a collection of the instances, about to be started 
+	 * @throws VMSchedulingException When the scheduler fails to schedule one of the instance.
+	 * 								 Does not attempt to run any more afterward.
 	 */
-	public Collection<Instance> runInstances(String imageId, String instanceTypeId, int nInstances) {
+	public Collection<Instance> runInstances(String imageId, String instanceTypeId, int nInstances) throws VMSchedulingException {
 		Collection<Instance> instances = new Vector<Instance>();
 		for (int i=0; i<nInstances; i++) {
 			Instance instance = runInstance(imageId, instanceTypeId);
@@ -340,34 +342,13 @@ public class Compute {
 	}
 
 	/**
-	 * Terminate a given instance.
-	 * 
-	 * @param instanceId
-	 *            The id of the instance to be be terminated.
-	 */
-	public void terminateInstance(String instanceId) {
-		this.instances.get(instanceId).terminate();
-	}
-
-	/**
-	 * Terminate a given instance.
-	 * 
-	 * @param instance
-	 *            The instance to be be terminated.
-	 */
-	public void terminateInstance(Instance instance) {
-		instance.terminate();
-	}
-
-	
-	/**
 	 * Suspend a given instance.
 	 * 
 	 * @param instanceId
 	 *            The id of the instance to be be suspended.
 	 */
 	public void suspendInstance(String instanceId) {
-		this.instances.get(instanceId).suspend();
+		suspendInstance(this.instances.get(instanceId));
 	}
 
 	/**
@@ -377,7 +358,8 @@ public class Compute {
 	 *            The instance to be be suspended.
 	 */
 	public void suspendInstance(Instance instance) {
-		instance.suspend();
+		instance.trace.addEvent("command", "suspend");
+		computeEngine.doCommand(ComputeEngine.COMMAND.SUSPEND,instance);
 	}
 
 	
@@ -387,18 +369,60 @@ public class Compute {
 	 * @param instanceId The if of the instance to be be resumed.
 	 */
 	public void resumeInstance(String instanceId) {
-		this.instances.get(instanceId).resume();
+		resumeInstance(this.instances.get(instanceId));
 	}
 
 	/**
-	 * Resume a given instance.
+	 * Resume the given instance.
 	 * 
 	 * @param instance The instance to be be resumed.
 	 */
 	public void resumeInstance(Instance instance) {
-		instance.resume();
+		instance.trace.addEvent("command", "resume");
+		computeEngine.doCommand(ComputeEngine.COMMAND.RESUME,instance);
+	}
+	
+	/**
+	 * Reboot the given instance
+	 * @param instanceId the id of the instance to reboot
+	 */
+	public void rebootInstance(String instanceId) {
+		rebootInstance(this.instances.get(instanceId));
 	}
 
+	/**
+	 * Reboot the given instance
+	 * @param instance the instance to reboot
+	 */	
+	public void rebootInstance(Instance instance) {
+		instance.trace.addEvent("command", "reboot");
+		computeEngine.doCommand(ComputeEngine.COMMAND.REBOOT,instance);
+	}
+
+	
+	/**
+	 * Terminate a given instance.
+	 * 
+	 * @param instanceId
+	 *            The id of the instance to be be terminated.
+	 */
+	public void terminateInstance(String instanceId) {
+		terminateInstance(this.instances.get(instanceId));
+	}
+
+	/**
+	 * Terminate a given instance.
+	 * @param instance
+	 *            The instance to be be terminated.
+	 */
+	public void terminateInstance(Instance instance) {
+		if (instance.isTerminating) return;
+		instance.trace.addEvent("command", "terminate");
+		instance.isTerminating = true;
+		computeEngine.doCommand(ComputeEngine.COMMAND.SHUTDOWN,instance);
+		this.instances.remove(instance.id);
+	}
+	
 	
 	/**
 	 * Give the current availability of new instances on this.
@@ -418,11 +442,9 @@ public class Compute {
 	 * @throws HostFailureException
 	 */
 	public void terminate() throws HostFailureException {
-		Msg.verb("Terminating all remaining instances");
-		for (Instance instance : this.instances.values()) {
-			if (! instance.isTerminating) {
-				terminateInstance(instance.id);
-			}
+		Msg.info("Terminating all remaining instances");
+		while (this.instances.values().size() > 0) {
+			terminateInstance(this.instances.values().iterator().next());
 		}
 		this.computeEngine.terminate();
 	}

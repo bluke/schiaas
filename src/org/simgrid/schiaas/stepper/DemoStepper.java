@@ -7,6 +7,7 @@ import org.simgrid.msg.HostFailureException;
 import org.simgrid.msg.Msg;
 import org.simgrid.schiaas.Image;
 import org.simgrid.schiaas.Instance;
+import org.simgrid.schiaas.exceptions.VMSchedulingException;
 
 public class DemoStepper extends Stepper {
 
@@ -15,7 +16,7 @@ public class DemoStepper extends Stepper {
 	}
 
 	@Override
-	protected String execute(String received) throws HostFailureException {
+	protected String execute(String received) throws HostFailureException, VMSchedulingException {
 		String[] command = received.split(" ");
 		String response = "Invalid Command";
 		if(command[0].matches("VMimage")){
@@ -39,7 +40,7 @@ public class DemoStepper extends Stepper {
 
 		}else if(command[0].matches("VMstatus")){
 			Instance inst = this.compute.describeInstance(command[1]);
-			if (inst.isRunning()!=0){
+			if (inst.isRunning()){
 				response = "32";
 			}else{
 				response = "0";
@@ -54,7 +55,7 @@ public class DemoStepper extends Stepper {
 
 		}else if(command[0].matches("isBooted")){
 			Instance inst = this.compute.describeInstance(command[1]);
-			if (inst.isRunning()!=0){
+			if (inst.isRunning()){
 				response = "true";
 			}else{
 				response = "false";

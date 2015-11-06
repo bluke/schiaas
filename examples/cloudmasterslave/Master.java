@@ -27,6 +27,7 @@ import org.simgrid.schiaas.Storage;
 import org.simgrid.schiaas.engine.compute.ComputeEngine;
 import org.simgrid.schiaas.engine.compute.ComputeHost;
 import org.simgrid.schiaas.engine.compute.ComputeTools;
+import org.simgrid.schiaas.exceptions.VMSchedulingException;
 
 public class Master extends Process {
 	public Master(Host host, String name, String[] args) {
@@ -65,8 +66,14 @@ public class Master extends Process {
 		}
 		
 		// Run one instance per slave on myCloud
-		Collection<Instance> instances = compute.runInstances("myImage", "small", slavesCount);
-  
+		Collection<Instance> instances = null;
+		try {
+			instances = compute.runInstances("myImage", "small", slavesCount);
+		} catch (VMSchedulingException e) {
+			Msg.info("Some instances have not been scheduled because: "+e.getMessage());
+		}
+		
+		
 		// Check how many instances have been accepted and retrieve them into an array
 		// (One can actually use the Collection "instances", that's just to fit the legacy simgrid syntax)
 		slavesCount = compute.describeInstances().size();
@@ -76,7 +83,7 @@ public class Master extends Process {
 		
 		for (int i=0; i<slavesCount; i++) {
 			Msg.info("waiting for boot");
-			while (slaveInstances[i].isRunning() == 0) {
+			while (!slaveInstances[i].isRunning()) {
 				waitFor(10);
 			}
 			
@@ -189,7 +196,11 @@ public class Master extends Process {
 		 */
 		Msg.info("Sequential offloading of "+computeHost1.getHost().getName());
 		Msg.info(" - Number of hosted instances  "+ computeHost1.getHostedInstances().size());
-		ComputeTools.offLoad(computeEngine, computeHost1);
+		try {
+			ComputeTools.offLoad(computeEngine, computeHost1);
+		} catch (VMSchedulingException e) {
+			Msg.info("The offload failed because: "+e.getMessage());
+		}
 		Msg.info("Offloading "+computeHost1.getHost().getName()+" complete.");
 		Msg.info(" - Number of hosted instances  "+ computeHost1.getHostedInstances().size());
 		
@@ -203,7 +214,12 @@ public class Master extends Process {
 		 */
 		Msg.info("Parallel offloading of "+computeHost2.getHost().getName() + " (might take some time due to network bottleneck)");
 		Msg.info(" - Number of hosted instances  "+ computeHost2.getHostedInstances().size());
-		ComputeTools.parallelOffLoad(computeEngine, computeHost2);
+		try {
+			ComputeTools.parallelOffLoad(computeEngine, computeHost2);
+		} catch (VMSchedulingException e) {
+			Msg.info("The offload failed because: "+e.getMessage());
+			e.printStackTrace();
+		}
 
 		while (computeHost2.getHostedInstances().size() != 0) {
 			Msg.info("Still " + computeHost2.getHostedInstances().size() + " instances running on " + computeHost1 );

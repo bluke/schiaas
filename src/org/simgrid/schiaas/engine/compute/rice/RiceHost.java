@@ -82,7 +82,7 @@ public class RiceHost implements ComputeHost {
 		trace.addProperty("cores",""+freeCores);
 		trace.addProperty("ram_size",""+ramSize);
 		trace.addProperty("diskSize",""+diskSize);
-		trace.addEvent("free_cores", ""+freeCores);
+		trace.addEvent("used_cores", ""+(host.getCoreNumber()-freeCores));
 	}
 
 	/**
@@ -109,7 +109,7 @@ public class RiceHost implements ComputeHost {
 		this.instances.add(riceInstance);
 		freeCores -= riceInstance.vm().getCoreNumber();
 		riceInstance.getTrace().addEvent("schedule", this.host.getName());
-		trace.addEvent("free_cores", ""+freeCores);
+		trace.addEvent("used_cores", ""+(host.getCoreNumber()-freeCores));
 	}
 
 	/**
@@ -120,7 +120,7 @@ public class RiceHost implements ComputeHost {
 	public void removeInstance(RiceInstance riceInstance) {
 		this.instances.remove(riceInstance);
 		freeCores += riceInstance.vm().getCoreNumber();
-		trace.addEvent("free_cores", ""+freeCores);
+		trace.addEvent("used_cores", ""+(host.getCoreNumber()-freeCores));
 	}
 
 	

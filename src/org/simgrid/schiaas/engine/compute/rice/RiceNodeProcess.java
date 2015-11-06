@@ -68,7 +68,7 @@ public class RiceNodeProcess extends Process {
 			// Boot
 			riceHost.lastBootDate=Msg.getClock();
 			Msg.verb(riceInstance.getId()+" is booting");
-			riceInstance.vm().start();
+			riceInstance.start();
 			
 			waitFor(rice.interBootDelay);
 			riceHost.bootMutex.release();
@@ -77,7 +77,12 @@ public class RiceNodeProcess extends Process {
 		case SHUTDOWN:
 			// TODO: May be an issue when the slot is reused immediately and there is penalty for start/shutdown
 			riceHost.removeInstance(riceInstance);
-			riceInstance.vm().shutdown();
+			while(riceInstance.isPending() || riceInstance.vm().isMigrating() == 1) { 
+				waitFor(1);
+			}
+			if (riceInstance.vm().isRunning() == 1) {
+				riceInstance.vm().shutdown();
+			}
 			break;
 		case SUSPEND:
 			riceInstance.vm().suspend();

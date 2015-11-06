@@ -20,6 +20,7 @@ import org.simgrid.schiaas.Compute;
 import org.simgrid.schiaas.Instance;
 import org.simgrid.schiaas.InstanceType;
 import org.simgrid.schiaas.SchIaaS;
+import org.simgrid.schiaas.exceptions.VMSchedulingException;
 
 public class Master extends Process {
 	public Master(Host host, String name, String[] args) {
@@ -67,14 +68,19 @@ public class Master extends Process {
 			
 			
 			// Run one instance per slave on myCloud
-			Collection<Instance> slaveInstances = myCompute.runInstances("myImage", "small", slavesCount);
+			Collection<Instance> slaveInstances = null;
+			try {
+				slaveInstances = myCompute.runInstances("myImage", "small", slavesCount);
+			} catch (VMSchedulingException e) {
+				Msg.info("Some instances have not been scheduled.");
+			}
 			
 			
 			// Wait for the instances to boot
 			int h = 0;
 			for (Instance instance : slaveInstances) {
 				Msg.info("waiting for boot");
-				while (instance.isRunning() == 0) {
+				while (!instance.isRunning()) {
 					waitFor(10);
 				}
 

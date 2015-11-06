@@ -6,6 +6,7 @@ import org.simgrid.msg.Msg;
 import org.simgrid.schiaas.InstanceType;
 import org.simgrid.schiaas.engine.compute.ComputeEngine;
 import org.simgrid.schiaas.exceptions.MissingConfigException;
+import org.simgrid.schiaas.exceptions.VMSchedulingException;
 import org.simgrid.schiaas.tools.Trace;
 
 /**
@@ -65,13 +66,12 @@ public abstract class ComputeScheduler {
 
 	
 	/**
-	 * 
-	 * @param instanceType the type of the instance to be scheduled
+	 * @param instanceType the type of the instance to be scheduled.
 	 * @return the ComputeHost to host the instance, null if no host is available.
+	 * @throws VMSchedulingException whenever the instance can not be scheduled.
 	 */
-	public abstract ComputeHost schedule(InstanceType instanceType);
+	public abstract ComputeHost schedule(InstanceType instanceType) throws VMSchedulingException;
 
-	
     /**
      * Load a scheduler class 
      * @param schedulerName the name of the class

@@ -8,6 +8,7 @@ import org.simgrid.msg.Host;
 import org.simgrid.msg.HostFailureException;
 import org.simgrid.msg.HostNotFoundException;
 import org.simgrid.msg.Msg;
+import org.simgrid.msg.Process;
 import org.simgrid.schiaas.Compute;
 import org.simgrid.schiaas.Data;
 import org.simgrid.schiaas.Image;
@@ -18,6 +19,7 @@ import org.simgrid.schiaas.engine.compute.ComputeEngine;
 import org.simgrid.schiaas.engine.compute.ComputeHost;
 import org.simgrid.schiaas.engine.compute.rice.RiceHost;
 import org.simgrid.schiaas.exceptions.MissingConfigException;
+import org.simgrid.schiaas.exceptions.VMSchedulingException;
 
 /**
  * Reduced Implementation of Compute Engine.
@@ -180,7 +182,6 @@ public class Rice extends ComputeEngine {
 	 */
 	@Override
 	public void liveMigration(Instance instance, ComputeHost destination) throws  HostFailureException {
-		
 		RiceInstance riceInstance = (RiceInstance) instance;		
 		
 		Msg.verb("live migration: "+riceInstance.getId()+" to "+destination.getHost().getName());
@@ -196,10 +197,11 @@ public class Rice extends ComputeEngine {
 	 * 
 	 * @param instanceId The id of the instance to migrate
 	 * @return the host choosen by RICE, or null whenever there was no suitable host available.
+	 * @throws VMSchedulingException when the scheduler fails
 	 * @throws MigrationException when the migration fails at the simgrid level
 	 */
 	@Override
-	public ComputeHost liveMigration(Instance instance) throws HostFailureException {
+	public ComputeHost liveMigration(Instance instance) throws HostFailureException, VMSchedulingException {
 		RiceInstance riceInstance = (RiceInstance) instance;
 		
 		ComputeHost riceHost = (RiceHost) computeScheduler.schedule(riceInstance.getInstanceType());
@@ -213,9 +215,10 @@ public class Rice extends ComputeEngine {
 	/**
 	 * Selects one physical host and creates a new instance.
 	 * @return The newly created instance, or null if no suitable physical host can be found.
+	 * @throws VMSchedulingException When the scheduler fails to schedule the instance
 	 */
 	@Override
-	public Instance newInstance(String id, Image image, InstanceType instanceType) {
+	public Instance newInstance(String id, Image image, InstanceType instanceType) throws VMSchedulingException {
 		RiceHost riceHost = (RiceHost) computeScheduler.schedule(instanceType);
 		
 		if (riceHost == null) return null;
@@ -225,5 +228,11 @@ public class Rice extends ComputeEngine {
 	@Override
 	public ComputeHost getComputeHostOf(Instance instance) {
 		return ((RiceInstance)instance).riceHost;
-	}		
+	}
+	
+	@Override
+	public void terminate() {
+		super.terminate();
+	}
+	
 }

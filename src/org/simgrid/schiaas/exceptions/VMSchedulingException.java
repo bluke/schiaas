@@ -2,6 +2,8 @@ package org.simgrid.schiaas.exceptions;
 
 import org.simgrid.schiaas.Cloud;
 import org.simgrid.schiaas.InstanceType;
+import org.simgrid.schiaas.engine.compute.ComputeEngine;
+import org.simgrid.schiaas.engine.compute.ComputeScheduler;
 
 /**
  * Exception for failure in VM scheduling, for instance when the plateform is full 
@@ -10,45 +12,38 @@ import org.simgrid.schiaas.InstanceType;
  */
 public class VMSchedulingException extends Exception{
 	
-	/** The cloud where the error happens */
-	private Cloud cloud;
+	/** Scheduler throwing the error*/ 
+	private ComputeScheduler scheduler;
 	
-	/** Name of the scheduler throwing the error*/ 
-	private String scheduler;
-	
-	/** instance type of the VM */
+	/** Instance type of the VM */
 	private InstanceType instanceType;
-	
+
+	/** The reason because the VM was not scheduled */
+	private String reason;
+
 	/**
-	 * 
-	 * @param cloud
-	 * 			ID of the cloud in which the error happens
-	 * @param scheduler
+	 * @param computeScheduler
 	 * 			Scheduler in which the error happened
 	 * @param instanceType
 	 * 			Instance type for which the error happened
+	 * @param reason
+	 * 			The reason for which the error happened
 	 */
-	public VMSchedulingException(Cloud cloud, String scheduler, InstanceType instanceType) {
-		super("In cloud "+cloud.getId()+", the scheduler "+scheduler+" did not schedule the instance of type "+instanceType);
+	public VMSchedulingException(ComputeScheduler scheduler, InstanceType instanceType, String reason) {
+		super("The scheduler "+scheduler.getClass() 
+				+" did not schedule the instance of type "+instanceType.getId()
+				+" because "+reason);
 		
-		this.cloud = cloud;
 		this.scheduler = scheduler;
 		this.instanceType = instanceType;
+		this.reason = reason;
 	}
 	
 	/**
-	 *  Get faulty cloud name
-	 * @return this.cloud
-	 */
-	public Cloud getCloud(){
-		return this.cloud;
-	}
-
-	/**
-	 * Get name of the scheduler
+	 * Get the scheduler
 	 * @return this.scheduler
 	 */
-	public String getScheduler(){
+	public ComputeScheduler getScheduler(){
 		return this.scheduler;
 	}
 	
@@ -59,10 +54,15 @@ public class VMSchedulingException extends Exception{
 	public InstanceType getInstanceType(){
 		return this.instanceType;
 	}
-	
+
 	/**
-	 * 
+	 * Get the reason
+	 * @return this.reason
 	 */
+	public String getReason(){
+		return this.reason;
+	}
+
 	private static final long serialVersionUID = 1L;
 
 }

@@ -25,6 +25,7 @@ import org.simgrid.msg.Msg;
 import org.simgrid.msg.MsgException;
 import org.simgrid.msg.Mutex;
 import org.simgrid.schiaas.SchIaaS;
+import org.simgrid.schiaas.exceptions.VMSchedulingException;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
@@ -156,12 +157,11 @@ public class SchloudController extends org.simgrid.msg.Process {
 	/**
 	 * Starts a new VM node
 	 * @return the newly created object reference
+	 * @throws VMSchedulingException 
 	 */
-	public static SchloudNode startNewNode() {
+	public static SchloudNode startNewNode() throws VMSchedulingException {
 		SchloudNode node = SchloudNode.startNewNode(SchloudController.schloudCloud);
-		
-		if (node == null) return null;
-				
+
 		SchloudController.nodes.add(node);
 		
 		SchloudController.schloudCloud.incrementBootCount();

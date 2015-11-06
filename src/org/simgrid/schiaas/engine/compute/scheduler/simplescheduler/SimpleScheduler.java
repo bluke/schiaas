@@ -8,6 +8,7 @@ import org.simgrid.schiaas.InstanceType;
 import org.simgrid.schiaas.engine.compute.ComputeScheduler;
 import org.simgrid.schiaas.engine.compute.ComputeEngine;
 import org.simgrid.schiaas.engine.compute.ComputeHost;
+import org.simgrid.schiaas.exceptions.VMSchedulingException;
 
 
 /**
@@ -58,9 +59,10 @@ public class SimpleScheduler extends ComputeScheduler {
 	 * Simply compute a weight for each PMs, and select the greatest one.
 	 * Only check for cores availability.
 	 * Return null if the selected host is not suitable for the instanceType.  
+	 * @throws VMSchedulingException whenever no suitable host is found
 	 */
 	@Override
-	public ComputeHost schedule(InstanceType instanceType) {
+	public ComputeHost schedule(InstanceType instanceType) throws VMSchedulingException {
 		Collection<ComputeHost> computeHosts = computeEngine.getComputeHosts();
 		
 		ComputeHost result = null;
@@ -76,6 +78,10 @@ public class SimpleScheduler extends ComputeScheduler {
 					resultWeight = weight;
 				}
 			}
+		}
+		
+		if (result == null) {
+			throw(new VMSchedulingException(this, instanceType, "no suitable host was found")); 
 		}
 
 		return result;

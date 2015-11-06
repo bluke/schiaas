@@ -38,4 +38,11 @@ public class RiceInstance extends Instance {
 	public Host getHost() {
 		return this.riceHost.host;
 	}
+
+	/**
+	 * Start this RiceInstance by calling the super method 
+	 */
+	protected void start() {
+		super.start();
+	}
 }

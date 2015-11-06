@@ -3,7 +3,6 @@ package org.simgrid.schiaas.loadinjector;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.simgrid.msg.HostFailureException;
 import org.simgrid.msg.Msg;
 import org.simgrid.schiaas.Cloud;
 import org.simgrid.schiaas.SchIaaS;

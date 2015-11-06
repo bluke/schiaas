@@ -135,68 +135,50 @@ public class Instance {
 	/**
 	 * @return true if this instance is running.
 	 */
-	public int isRunning() {
-		return vm.isRunning();
+	public boolean isRunning() {
+		return (vm.isRunning() == 1 && !isTerminating);
 	}
 
+	/**
+	 * Start the vm of this instance.
+	 * Protected because it cannot be used directly by the user,
+	 * only by the compute engine.
+	 */
+	protected void start() {
+		this.vm().start();
+		isPending = false;
+	}
+	
 	/**
 	 * Suspend this instance.
 	 */
 	public void suspend() {
-		this.trace.addEvent("command", "suspend");
-		this.compute.computeEngine.doCommand(ComputeEngine.COMMAND.SUSPEND,this);
+		this.compute.suspendInstance(this);
 	}
 
 	/**
 	 * Resume this instance.
 	 */
 	public void resume() {
-		this.trace.addEvent("command", "resume");
-		this.compute.computeEngine.doCommand(ComputeEngine.COMMAND.RESUME,this);
+		this.compute.resumeInstance(this);
 	}
-	
-	/**
-	 * Save this instance.
-	 * Currently handled as suspend() and will be implemented whenever it is supported by simgrid.
-	 */
-	public void save() {
-		this.trace.addEvent("command", "save");
-		//TODO create save whenever it is supported by simgrid
-		Msg.warn("Instance.save() is currently handled as Instance.suspend()");
-		this.suspend();
-	}
-
-	/**
-	 * Restore this instance.
-	 * Currently handled as resume() and will be implemented whenever it is supported by simgrid.
-	 */
-	public void restore() {
-		this.trace.addEvent("command", "restore");
-		//TODO create restore whenever it is supported by simgrid
-		Msg.warn("Instance.restore() is currently handled as Instance.resume()");
-		this.resume();
-	}
-	
+		
 	/**
 	 * Reboot this instance.
 	 */
 	public void reboot() {
-		this.trace.addEvent("command", "reboot");
-		this.compute.computeEngine.doCommand(ComputeEngine.COMMAND.REBOOT,this);
+		this.compute.rebootInstance(this);
 	}
 
 	/**
 	 * Terminate this instance.
 	 */
 	public void terminate() {
-		this.trace.addEvent("command", "terminate");
-		this.isTerminating = true;
-		this.compute.computeEngine.doCommand(ComputeEngine.COMMAND.SHUTDOWN,this);
+		this.compute.terminateInstance(this);
 	}
 
 	/**
-	 * of course.
-	 * 
+	 * Of course.
 	 * @return A string containing the name of the instance and its host.
 	 */
 	public String toString() {

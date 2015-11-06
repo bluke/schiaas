@@ -31,6 +31,8 @@ public class Trace {
 	public static char entitySep = ':';
 	public static char replacement = '_';
 
+	public static final String filename = "schiaas.trace";
+	
 	protected Trace parent;
 	protected String category;
 	protected String name;
@@ -96,16 +98,12 @@ public class Trace {
     }
 
     
-    public static void init() {
-    	init("schiaas.trace");
-    }
-    
-    public static void init(String filename, String description) {
-    	init(filename);
+    public static void init(String description) {
+    	init();
     	root.addProperty("description", description);
     }
     
-    public static void init(String filename) {
+    public static void init() {
     	 try {
 			fstream = new FileWriter(filename, false);
 		} catch (IOException e) {

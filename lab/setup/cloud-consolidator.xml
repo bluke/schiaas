@@ -12,11 +12,11 @@
 			<config controller="controller" 
 					image_storage="myStorage" image_caching="PRE"
 					inter_boot_delay="10"/>
-					
-			<scheduler name="org.simgrid.schiaas.engine.compute.scheduler.simplescheduler.SimpleReconfigurator"
-					   type="consolidator"
-					   controller="controller"
-					   delay="1"/>
+										
+			<scheduler name="org.simgrid.schiaas.engine.compute.scheduler.simplescheduler.SimpleScheduler"
+					type="consolidator"
+					controller="controller"
+					delay="10"/>
 			
 			<instance_type id="small" core="1" memory="1000" disk="1690" />				
 			<instance_type id="medium" core="2" memory="1000" disk="1690"/>

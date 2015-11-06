@@ -20,6 +20,7 @@ import org.simgrid.msg.TimeoutException;
 import org.simgrid.msg.TransferFailureException;
 import org.simgrid.msg.Process;
 import org.simgrid.schiaas.Instance;
+import org.simgrid.schiaas.exceptions.VMSchedulingException;
 
 import simschlouder.util.SimSchlouderException;
 
@@ -127,7 +128,7 @@ public class SchloudNode extends Process implements Comparable<SchloudNode>{
 				// Wait for at least the predicted boottime. Can be optimized.
 				Msg.verb(instance.getId()+" waits for boot: "+bootTime);
 				Process.getCurrentProcess().waitFor(bootTime);				
-				while(instance.isRunning() == 0)
+				while(!instance.isRunning())
 				{
 					Msg.verb(instance.getId()+" boot delayed");
 					Process.getCurrentProcess().waitFor(1);
@@ -184,10 +185,10 @@ public class SchloudNode extends Process implements Comparable<SchloudNode>{
 	 * Start a new node.
 	 * @param cloud the cloud to start the new node.
 	 * @return a new worker node.
+	 * @throws VMSchedulingException 
 	 */
-	public static SchloudNode startNewNode(SchloudCloud cloud) {
+	public static SchloudNode startNewNode(SchloudCloud cloud) throws VMSchedulingException {
 		Instance instance = cloud.compute.runInstance(SchloudController.imageId, SchloudController.instanceTypeId);
-		if (instance == null) return null;
 		
 		SchloudNode schloudNode = new SchloudNode(instance,cloud);
 

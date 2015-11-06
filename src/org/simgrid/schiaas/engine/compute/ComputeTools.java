@@ -6,6 +6,7 @@ import org.simgrid.msg.Msg;
 import org.simgrid.msg.MsgException;
 import org.simgrid.msg.Process;
 import org.simgrid.schiaas.Instance;
+import org.simgrid.schiaas.exceptions.VMSchedulingException;
 
 /**
  * Gather all tools that are independent from the engine implementation.  
@@ -20,11 +21,13 @@ public class ComputeTools {
 	private static class LiveMigrationProcess extends Process {
 		private Instance instance;
 		private ComputeEngine computeEngine;
+		private VMSchedulingException vmSchedulingException;
 		
 		protected LiveMigrationProcess(ComputeEngine computeEngine, ComputeHost computeHost, Instance instance) {
 			super(computeHost.getHost(), "LiveMigrationProcess:"+computeHost);
 			this.computeEngine = computeEngine;
 			this.instance = instance;
+			this.vmSchedulingException = null;
 			
 			try {
 				this.start();
@@ -34,7 +37,11 @@ public class ComputeTools {
 		}
 
 		public void main(String[] arg0) throws MsgException {
-			computeEngine.liveMigration(instance);
+			try {
+				computeEngine.liveMigration(instance);
+			} catch (VMSchedulingException e) {
+				this.vmSchedulingException = e;
+			}
 		}
 	}
 
@@ -48,8 +55,9 @@ public class ComputeTools {
 	 *            The engine to use
 	 * @param computeHost
 	 *            The host to offload
+	 * @throws VMSchedulingException whenever the scheduling of one instance is not possible. Stops the offload.
 	 */
-	public static void offLoad(ComputeEngine computeEngine, ComputeHost computeHost) {
+	public static void offLoad(ComputeEngine computeEngine, ComputeHost computeHost) throws VMSchedulingException {
 		
 		computeHost.setAvailability(false);
 		
@@ -70,13 +78,17 @@ public class ComputeTools {
 	 * 
 	 * @param computeHost
 	 *            The host to offload
+	 * @throws VMSchedulingException whenever the scheduling of one instance is not possible. Stops the offload.
 	 */
-	public static void parallelOffLoad(ComputeEngine computeEngine, ComputeHost computeHost) {
+	public static void parallelOffLoad(ComputeEngine computeEngine, ComputeHost computeHost) throws VMSchedulingException {
 
 		computeHost.setAvailability(false);
 		
 		for (Instance instance: computeHost.getHostedInstances()) {
-			new LiveMigrationProcess(computeEngine, computeHost, instance);			
+			LiveMigrationProcess lmp = new LiveMigrationProcess(computeEngine, computeHost, instance);
+			if (lmp.vmSchedulingException != null) {
+				throw lmp.vmSchedulingException;
+			}
 		}
 	}
 	
@@ -96,7 +108,8 @@ public class ComputeTools {
 			}
 			@Override
 			public void main(String[] arg0) throws MsgException {
-				while(instance.isRunning() == 0) {
+				while(instance.vm().isRunning() == 0 ) {
+					if (instance.isTerminating()) return;
 					waitFor(1);
 				}
 				try {

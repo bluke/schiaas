@@ -8,6 +8,7 @@ import org.simgrid.msg.Task;
 import org.simgrid.schiaas.Compute;
 import org.simgrid.schiaas.Instance;
 import org.simgrid.schiaas.engine.compute.ComputeTools;
+import org.simgrid.schiaas.exceptions.VMSchedulingException;
 
 public class LoadedInstance {
 	
@@ -15,11 +16,19 @@ public class LoadedInstance {
 	protected Instance instance;
 	protected LoadedInstanceProcess loadedInstanceProcess;
 
-	public LoadedInstance(Compute compute, String imageId, String instanceTypeId) {
+	/**
+	 * This instance has a CPU load
+	 * @param compute the compute managing this instance
+	 * @param imageId the image of this instance
+	 * @param instanceTypeId the type if this instance
+	 * @throws VMSchedulingException whenever the instance can not be scheduled
+	 */
+	public LoadedInstance(Compute compute, String imageId, String instanceTypeId) throws VMSchedulingException {
 		this.compute = compute;
 		this.instance = compute.runInstance(imageId, instanceTypeId);
+		
 		this.loadedInstanceProcess = new LoadedInstanceProcess(this);
-
+		
 		try {
 			ComputeTools.waitForRunningAndStart(compute.getComputeEngine(), instance, this.loadedInstanceProcess);
 		} catch (HostNotFoundException e) {

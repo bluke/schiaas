@@ -14,6 +14,7 @@ import org.simgrid.msg.MsgException;
 import org.simgrid.msg.Process;
 import org.simgrid.schiaas.Compute;
 import org.simgrid.schiaas.SchIaaS;
+import org.simgrid.schiaas.exceptions.VMSchedulingException;
 /**
  * This Process allows to Schiaas to receive instructions on the fly via a socket.
  *  Instructions are executed in the simulations at times that map the real time.
@@ -81,8 +82,11 @@ public abstract class Stepper extends Process {
 						}
 							
 					}
-				}catch(IOException e){
+				} catch(IOException e){
 					
+				} catch (VMSchedulingException e) {
+					//TODO: check if this is the right thing to do
+					Msg.info("Some instances failed to started because: "+e.getMessage());
 				}finally{
 					in.close();
 					out.close();
@@ -120,7 +124,7 @@ public abstract class Stepper extends Process {
 		double now = System.currentTimeMillis();
 		this.waitFor(((now-this.startDate)/1000)-Msg.getClock());
 	}
-	
+
 	/**
 	 * Receives the message send by the client and execute the corresponding command
 	 * @param input
@@ -128,8 +132,9 @@ public abstract class Stepper extends Process {
 	 * @return
 	 * 			The response to send to the client
 	 * @throws HostFailureException
+	 * @throws VMSchedulingException 
 	 */
-	protected abstract String execute(String input) throws HostFailureException;
-	
+	protected abstract String execute(String input) throws HostFailureException, VMSchedulingException;
+
 	
 }

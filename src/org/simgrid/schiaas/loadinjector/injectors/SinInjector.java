@@ -7,6 +7,7 @@ import org.simgrid.msg.HostFailureException;
 import org.simgrid.msg.Msg;
 import org.simgrid.msg.Process;
 import org.simgrid.schiaas.Cloud;
+import org.simgrid.schiaas.exceptions.VMSchedulingException;
 import org.simgrid.schiaas.loadinjector.AbstractInjector;
 import org.simgrid.schiaas.loadinjector.LoadedInstance;
 
@@ -38,7 +39,7 @@ public class SinInjector extends AbstractInjector {
 	}
 
 	private double sinusoid(double t, double period, double min, double max) {
-		return (Math.sin(Math.PI * ((t/period) % 2.0)) + 1) * (max-min)/2 + min;  
+		return (Math.sin(Math.PI * 2 * ((t/period) % 1.0)) + 1) * (max-min)/2 + min;  
 	}
 	
 	@Override
@@ -64,6 +65,8 @@ public class SinInjector extends AbstractInjector {
 			// Adjusting the number of instances 
 			int targetInstance = (int) sinusoid(t, instancePeriod, instanceMin, instanceMax);
 			this.trace.addEvent("instances_count", ""+targetInstance);
+			//Msg.info("intances count :"+targetInstance+" "+cloud.getCompute().describeAvailability(instanceTypeId)
+			//		+" "+cloud.getCompute().describeInstances().size());
 			int dInstance = targetInstance-loadedInstances.size();
 			if (dInstance < 0) {
 				for (int i=0; i<-dInstance; i++) {
@@ -71,8 +74,12 @@ public class SinInjector extends AbstractInjector {
 						.terminate();
 				}
 			} else {
-				for (int i=0; i<dInstance; i++) {
-					loadedInstances.add(new LoadedInstance(cloud.getCompute(), imageId, instanceTypeId) );
+				try {
+					for (int i=0; i<dInstance; i++) {
+						loadedInstances.add(new LoadedInstance(cloud.getCompute(), imageId, instanceTypeId) );
+					}
+				} catch (VMSchedulingException e) {
+					Msg.info("The injector failed to start some instances because: "+e.getMessage());
 				}
 			}
 			
@@ -84,5 +91,6 @@ public class SinInjector extends AbstractInjector {
 			
 			Process.getCurrentProcess().waitFor((int)this.period);
 		}
+		Process.getCurrentProcess().waitFor((int)this.period);
 	}
 }

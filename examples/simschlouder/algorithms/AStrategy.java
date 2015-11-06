@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.TreeMap;
 
 import org.simgrid.msg.Msg;
+import org.simgrid.schiaas.exceptions.VMSchedulingException;
 
 import simschlouder.SchloudController;
 import simschlouder.SchloudNode;
@@ -80,15 +81,14 @@ public abstract class AStrategy {
 				node = this.applyStrategy(task);
 				
 				if (node == null && SchloudController.schloudCloud.describeAvailability(SchloudController.instanceTypeId)>0 ) {
-					node = SchloudController.startNewNode();
-				}
-				
-				if (node != null) {
-					Msg.info(task.getName() + " selected node: " + node.instance.getId());
-					SchloudController.setTaskToNode(tasks.get(l).remove(iTask), node);
-					SchloudController.mainQueue.remove(task);
-				} else {
-					iTask++;
+					try {
+						node = SchloudController.startNewNode();
+						Msg.info(task.getName() + " selected node: " + node.instance.getId());
+						SchloudController.setTaskToNode(tasks.get(l).remove(iTask), node);
+						SchloudController.mainQueue.remove(task);	
+					} catch (VMSchedulingException e) {
+						iTask++;
+					}
 				}
 			}
 		}
