@@ -40,7 +40,7 @@ public class Masterslave {
 		
 		/* construct the cloud and deploy the associated processes */
 		Msg.info("Cloud Initialization");
-		Trace.init("masterslave.trace", "Example of MasterSlavec on cloud");
+		Trace.init("Example of MasterSlavec on cloud");
 		SchIaaS.init(args[2]);
 
 		/* execute the simulation */

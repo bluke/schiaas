@@ -103,11 +103,12 @@ do
 			echo "JAVA_END_ARGS=$JAVA_END_ARGS"
 		fi
 	else
-		while [ `ps --no-header -C java | wc -l` -ge $PARALLEL_SIMS ] ; do
+		while [ `ps -Af | grep -c "$JAVA_START_ARGS"` -ge $(( PARALLEL_SIMS +1)) ] ; do
 			sleep 1
 		done
 
 		XP_ID=${line%%:*}; XP_ID=${XP_ID/ /_}
+		XP_ID_LIST="$XP_ID_LIST $XP_ID"
 		JAVA_XP_ARGS="`setupify ${line#*:}`"
 
 		echo "Simulating $XP_ID"
@@ -117,16 +118,28 @@ do
 		mkdir -p $XP_SIMULATION_DIR
 
 		cd $XP_SIMULATION_DIR
-		( java $JAVA_START_ARGS $JAVA_XP_ARGS $JAVA_END_ARGS 2> simgrid.out 1>&2 \
-		; $BIN_DIR/trace-util.py schiaas.trace -f -p $XP_ID -d $DATA_DIR -r $TU_ARGS ) &
-		PIDS_TO_WAIT="$PIDS_TO_WAIT $!"
+		(
+			java $JAVA_START_ARGS $JAVA_XP_ARGS $JAVA_END_ARGS 2> simgrid.out 1>&2
+			$BIN_DIR/trace-util.py schiaas.trace -f -p $XP_ID -d $DATA_DIR -r $TU_ARGS 
+		) &
+		SIM_PIDS="$SIM_PIDS $!"
 
 	fi
 done < $1
 
-wait $PIDS_TO_WAIT
+wait $SIM_PIDS
+
+echo "Gathering results"
+cd $DATA_DIR
+for XP_ID in $XP_ID_LIST
+do
+	echo -e "\n##################################### $XP_ID" >> reads.R
+	cat ${XP_ID}.reads.R >> reads.R
+	echo "##################################### $XP_ID" >> plots.R
+	cat ${XP_ID}.plots.R >> plots.R
+done
 
 if [ -v R_SCRIPT ] ; then 
-	cd $DATA_DIR
+	echo "Plotting results"
 	R --no-save < $R_SCRIPT > R.out
 fi

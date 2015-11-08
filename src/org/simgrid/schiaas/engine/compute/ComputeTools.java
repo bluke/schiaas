@@ -19,30 +19,75 @@ public class ComputeTools {
 	 * @author julien.gossa@unistra.fr
 	 */
 	private static class LiveMigrationProcess extends Process {
-		private Instance instance;
 		private ComputeEngine computeEngine;
+		private Instance instance;
+		private ComputeHost destination;
 		private VMSchedulingException vmSchedulingException;
-		
-		protected LiveMigrationProcess(ComputeEngine computeEngine, ComputeHost computeHost, Instance instance) {
-			super(computeHost.getHost(), "LiveMigrationProcess:"+computeHost);
+
+		/**
+		 * Constructor with destination
+		 * @param computeEngine the engine handling this migration
+		 * @param instance the instance to migrate
+		 * @param destination the destination of the migration
+		 */
+		protected LiveMigrationProcess(ComputeEngine computeEngine, Instance instance, ComputeHost destination) {
+			super(computeEngine.getComputeHostOf(instance).getHost(), "LiveMigrationProcess:"+instance.getId());
 			this.computeEngine = computeEngine;
 			this.instance = instance;
+			this.destination = destination;
 			this.vmSchedulingException = null;
 			
 			try {
 				this.start();
 			} catch(HostNotFoundException e) {
-				Msg.critical("Something bad happend in the OffLoadProcess"+e.getMessage());
+				Msg.critical("Something bad happend in the liveMigrationProcess"+e.getMessage());
 			}
 		}
 
+		/**
+		 * Constructor without destination, to let the scheduler decide
+		 * @param computeEngine the engine handling this migration
+		 * @param instance the instance to migrate
+		 */
+		protected LiveMigrationProcess(ComputeEngine computeEngine, Instance instance) {
+			this(computeEngine, instance, null);
+		}
+				
+		/**
+		 * Simply execute the migration.
+		 */
 		public void main(String[] arg0) throws MsgException {
-			try {
-				computeEngine.liveMigration(instance);
-			} catch (VMSchedulingException e) {
-				this.vmSchedulingException = e;
+			if (destination != null) {
+				computeEngine.liveMigration(instance, destination);
+			}
+			else {
+				try {
+					computeEngine.liveMigration(instance);
+				} catch (VMSchedulingException e) {
+					this.vmSchedulingException = e;
+				}
 			}
 		}
+		
+	}
+
+	/**
+	 * Execute a live migration asynchronously to a given destination
+	 * @param computeEngine the engine handling this migration
+	 * @param instance the instance to migrate
+	 * @param destination the destination of the migration
+	 */
+	public static void asynchroneLiveMigration(ComputeEngine computeEngine, Instance instance, ComputeHost destination) {
+		new LiveMigrationProcess(computeEngine, instance, destination);
+	}
+
+	/**
+	 * Execute a live migration asynchronously, letting the scheduler decide of the destination 
+	 * @param computeEngine the engine handling this migration
+	 * @param instance the instance to migrate
+	 */
+	public static void asynchroneLiveMigration(ComputeEngine computeEngine, Instance instance) {
+		new LiveMigrationProcess(computeEngine, instance);
 	}
 
 	
@@ -85,7 +130,7 @@ public class ComputeTools {
 		computeHost.setAvailability(false);
 		
 		for (Instance instance: computeHost.getHostedInstances()) {
-			LiveMigrationProcess lmp = new LiveMigrationProcess(computeEngine, computeHost, instance);
+			LiveMigrationProcess lmp = new LiveMigrationProcess(computeEngine, instance);
 			if (lmp.vmSchedulingException != null) {
 				throw lmp.vmSchedulingException;
 			}

@@ -11,6 +11,7 @@ import org.simgrid.schiaas.Compute;
 import org.simgrid.schiaas.Instance;
 import org.simgrid.schiaas.engine.compute.ComputeEngine;
 import org.simgrid.schiaas.engine.compute.ComputeHost;
+import org.simgrid.schiaas.engine.compute.ComputeTools;
 import org.simgrid.schiaas.exceptions.VMSchedulingException;
 
 public class SimpleReconfigurator extends SimpleScheduler {
@@ -67,7 +68,11 @@ public class SimpleReconfigurator extends SimpleScheduler {
 			Compute compute = scheduler.computeEngine.getCompute();
 			while(! scheduler.terminating) {
 			
-				waitFor(scheduler.delay); 
+				if (i == 0) {
+					waitFor(10);
+				} else {
+					waitFor(scheduler.delay);
+				}
 				
 				// Scan the instances to find one to migrate
 				Object[] instances = compute.describeInstances().toArray();
@@ -101,7 +106,7 @@ public class SimpleReconfigurator extends SimpleScheduler {
 					//Msg.info("Reconfiguration: "+instance.getId()
 					//		+" from "+ computeEngine.getComputeHostOf(instance).getHost().getName()
 					//		+" to " + bestHost.getHost().getName());
-					computeEngine.liveMigration(instance, bestHost);
+					ComputeTools.asynchroneLiveMigration(computeEngine,instance, bestHost);
 				}
 			}
 		}

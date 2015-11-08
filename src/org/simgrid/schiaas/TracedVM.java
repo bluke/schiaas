@@ -14,13 +14,13 @@ public class TracedVM extends VM {
 		
 		trace = Trace.newCategorizedTrace("VirtualMachines", name);
 		
-		trace.addProperty("nCore", ""+nCore);
-		trace.addProperty("ramSize", ""+ramSize);
-		trace.addProperty("netCap", ""+netCap);
-		trace.addProperty("diskPath", ""+diskPath);
-		trace.addProperty("diskSize", ""+diskSize);
-		trace.addProperty("migNetSpeed", ""+migNetSpeed);
-		trace.addProperty("dpIntensity", ""+dpIntensity);	
+		trace.addProperty("n_cores", ""+nCore);
+		trace.addProperty("ram_size", ""+ramSize);
+		trace.addProperty("net_cap", ""+netCap);
+		trace.addProperty("disk_path", ""+diskPath);
+		trace.addProperty("disk_size", ""+diskSize);
+		trace.addProperty("mig_net_speed", ""+migNetSpeed);
+		trace.addProperty("dp_intensity", ""+dpIntensity);	
 	}
 	
  	public void migrate(Host destination) throws HostFailureException {

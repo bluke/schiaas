@@ -121,14 +121,26 @@ public class Compute {
 				String suffix=nodes.item(i).getAttributes().getNamedItem("suffix").getNodeValue();
 				String[] radical=nodes.item(i).getAttributes().getNamedItem("radical").getNodeValue().split("-");
 				int radStart = Integer.parseInt(radical[0]);
-				int radEnd = Integer.parseInt(radical[1]);
-				for (int radI=radStart; radI<=radEnd; radI++) {
+				int radEnd;
+				if (radical.length>1) {
+					radEnd = Integer.parseInt(radical[1]);
+				} else {
+					radEnd = -1;
+				}
+				for (int radI=radStart; radEnd==-1 || radI<=radEnd; radI++) {
 					String hostId = prefix+radI+suffix;
 					try {
 						hosts.add(Host.getByName(hostId));
 					} catch (HostNotFoundException e) {
-						e.printStackTrace();
+						if (radEnd==-1) {
+							break;
+						} else {
+							Msg.critical("The host "+hostId+" was not found while building compute cluster"+prefix+"-"+suffix);
+							e.printStackTrace();
 					}
+				}
+					
+			
 				}
 			}
 
