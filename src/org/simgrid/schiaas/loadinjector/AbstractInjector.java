@@ -29,7 +29,12 @@ public abstract class AbstractInjector {
 		this.cloud = cloud;
 		this.config = config;
 		
-		long seed = System.currentTimeMillis();
+		long seed;
+		try {
+			seed = Long.parseLong(config.get("random_seed"));
+		} catch(NumberFormatException e) {
+			seed = System.currentTimeMillis();
+		}
 		this.random = new Random(seed);
 		this.trace = Trace.newCategorizedTrace("injector",id);
 		this.trace.addProperty("injector", ""+this.getClass());

@@ -183,9 +183,9 @@ public class Rice extends ComputeEngine {
 	@Override
 	public void liveMigration(Instance instance, ComputeHost destination) throws  HostFailureException {
 		RiceInstance riceInstance = (RiceInstance) instance;		
-		
+	
 		Msg.verb("live migration: "+riceInstance.getId()+" to "+destination.getHost().getName());
-		
+	
 		((RiceHost) destination).addInstance(riceInstance);
 		riceInstance.vm().migrate(destination.getHost());
 		riceInstance.riceHost.removeInstance(riceInstance);
