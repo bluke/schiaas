@@ -4,13 +4,38 @@
 ##
 ## The configuration file format is as follows.
 ## Lines stating by:
-## ~ indicates the R template to call at he end of the simulations
-## % indicates the arguments to pass to the trace_util.py script
-## ^ indicates the common first arguments to pass to the simulator
-## $ indicates the common last arguments to pass to the simulator
+## #SETUP_DIR indicates the directory containing setup files (should be called first)
+## #R_SCRIPT indicates the R script to call at he end of the simulations
+## #TU_ARGS indicates the arguments to pass to the trace_util.py script
+## #JAVA_FIRST_ARGS indicates the common first arguments to pass to the simulator
+## #JAVA_END_ARGS indicates the common last arguments to pass to the simulator
 ## Other lines indicates the specific arguments inbetween for each simulation
 ##
 ## @author julien.gossa@unistra.fr
+##
+## TODO make grep events, and add prop
+
+PARALLEL_SIMS=1
+
+while getopts "kp" option
+do
+	case $option in
+	k)
+		KEEP=true
+		shift
+		(( OPTIND -- ))
+		echo "- Keep previous produced data"
+		;;
+	p)
+		shift
+		PARALLEL_SIMS=$1
+		JAVA_PS_COUNT=`ps --no-header -C java | wc -l`
+		shift
+		(( OPTIND -- ))
+		echo "- Parallel execution: $PARALLEL_SIMS"
+		;;
+	esac
+done
 
 if [ $# -ne 1 ] ; then
 	echo "Takes one argument. Needs to run in the lab directory"
@@ -23,40 +48,67 @@ BIN_DIR=$LAB_DIR/bin
 SETUP_DIR=$LAB_DIR/setup
 SIMULATIONS_DIR=$LAB_DIR/simulations
 DATA_DIR=$LAB_DIR/data
-R_SCRIPT=$SCHED_DIR/template.R
 
 SCHIAAS_BIN_DIR=`readlink -f ../bin`
 
 function setupify {
+	res=""
 	for a in $*
 	do
-		if [ -e $SETUP_DIR/$a ]; then
+		a="${a##*([[:space:]])}"
+		a="${a%%*([[:space:]])}"
+		a=${a//SCHIAAS_BIN_DIR/$SCHIAAS_BIN_DIR}
+
+		if [ -e "$SETUP_DIR/$a" ]; then
 			a="`readlink -f $SETUP_DIR/$a`"
-		elif [ -e $a ]; then
-			a="`readlink -f $a`"
+		elif [ -e "$a" ]; then
+			a="`readlink -f \"$a\"`"
 		fi
-		
-		echo -n "${a//SCHIAAS_BIN_DIR/$SCHIAAS_BIN_DIR} "
+
+		res="$res $a"
 	done
+	echo -n $res
 }
 
+[[ ! -v KEEP ]] && rm -rf $DATA_DIR
 mkdir -p $DATA_DIR
 
 while read line
 do
 	if [ -z "$line" ]; then
 		continue
-	elif [ "${line:0:1}" == "~" ]; then
-		R_SCRIPT="`setupify ${line:1}`"
-	elif [ "${line:0:1}" == "%" ]; then
-		TU_ARGS="${TU_ARGS} ${line:1}"
-	elif [ "${line:0:1}" == "^" ]; then
-		JAVA_START_ARGS="${JAVA_START_ARGS} ${line:1}"
-	elif [ "${line:0:1}" == "$" ]; then
-		JAVA_END_ARGS="${JAVA_END_ARGS} ${line:1}"
+	elif [ "${line:0:1}" == "#" ]
+	then
+		if [ "${line%% *}" == "#SETUP_DIR" ]; then
+			SETUP_DIR="`setupify \"${line#* }\"`"
+			echo "SETUP_DIR='${SETUP_DIR}'"
+			if [ ! -d $SETUP_DIR ] ; then 
+				echo "Error: SETUP_DIR $SETUP_DIR was not found"
+				exit 1
+			fi
+		elif [ "${line%% *}" == "#R_SCRIPT" ]; then
+			R_SCRIPT="`setupify \"${line#* }\"`"
+			echo "R_SCRIPT='$R_SCRIPT'"
+			if [ ! -f $R_SCRIPT ] ; then 
+				echo "Error: R_SCRIPT $R_SCRIPT was not found"
+			fi
+		elif [ "${line%% *}" == "#TU_ARGS" ]; then
+			TU_ARGS="${TU_ARGS} `setupify ${line#* }`"
+			echo "TU_ARGS=$TU_ARGS"
+		elif [ "${line%% *}" == "#JAVA_START_ARGS" ]; then
+			JAVA_START_ARGS="${JAVA_START_ARGS} `setupify ${line#* }`"
+			echo "JAVA_START_ARGS=$JAVA_START_ARGS"
+		elif [ "${line%% *}" == "#JAVA_END_ARGS" ]; then
+			JAVA_END_ARGS="${JAVA_END_ARGS} `setupify ${line#* }`"
+			echo "JAVA_END_ARGS=$JAVA_END_ARGS"
+		fi
 	else
+		while [ `ps --no-header -C java | wc -l` -ge $PARALLEL_SIMS ] ; do
+			sleep 1
+		done
+
 		XP_ID=${line%%:*}; XP_ID=${XP_ID/ /_}
-		JAVA_XP_ARGS=${line#*:}
+		JAVA_XP_ARGS="`setupify ${line#*:}`"
 
 		echo "Simulating $XP_ID"
 
@@ -64,18 +116,17 @@ do
 		rm -rf $XP_SIMULATION_DIR 2> /dev/null
 		mkdir -p $XP_SIMULATION_DIR
 
-		JAVA_ARGS=`setupify $JAVA_START_ARGS $JAVA_XP_ARGS $JAVA_END_ARGS`
-
 		cd $XP_SIMULATION_DIR
+		( java $JAVA_START_ARGS $JAVA_XP_ARGS $JAVA_END_ARGS 2> simgrid.out 1>&2 \
+		; $BIN_DIR/trace-util.py schiaas.trace -f -p $XP_ID -d $DATA_DIR -r $TU_ARGS ) &
+		PIDS_TO_WAIT="$PIDS_TO_WAIT $!"
 
-		java $JAVA_ARGS 2> simgrid.out 1>&2
-
-		TU_ARGS=`setupify $TU_ARGS`
-		$BIN_DIR/trace-util.py schiaas.trace -f -p $XP_ID -d $DATA_DIR -r $TU_ARGS 
 	fi
 done < $1
 
+wait $PIDS_TO_WAIT
+
 if [ -v R_SCRIPT ] ; then 
 	cd $DATA_DIR
-	R --no-save < $R_SCRIPT
+	R --no-save < $R_SCRIPT > R.out
 fi
