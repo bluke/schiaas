@@ -1,0 +1,21 @@
+<?xml version='1.0'?>
+ <!DOCTYPE injectors>
+ <injectors>
+	 <injector id="myInjector"
+	 	class="org.simgrid.schiaas.loadinjector.injectors.SinInjector"
+	 	cloud="myCloud">
+	 	
+	 	<config 
+	 	 start_date="0"
+	     duration="10000"
+	     period="10"
+	     instance_period="5000"
+	     instance_min="20"
+	     instance_max="90"
+	     load_period="100"
+	     load_min="20"
+	     load_max="100"
+	     image_id="myImage"
+	     instance_type_id="small"/>     
+	 </injector> 
+</injectors>
