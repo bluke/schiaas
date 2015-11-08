@@ -28,8 +28,8 @@ public class RiceInstance extends Instance {
 	protected RiceInstance(Compute compute, String id, Image image, InstanceType instanceType, RiceHost riceHost) {
 		super(compute, id, image, instanceType, riceHost.host);
 		this.riceHost = riceHost;
-		
 		riceHost.addInstance(this);
+		this.createVM();
 	}
 	
 	/**

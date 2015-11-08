@@ -47,14 +47,7 @@ public class Instance {
 	 * @param instanceType The type of the instance.
 	 */
 	protected Instance(Compute compute, String id, Image image, InstanceType instanceType, Host host) {
-		this.vm = new TracedVM(	host, id+"_VM", 
-				Integer.parseInt(instanceType.getProperty("core")),
-				Integer.parseInt(instanceType.getProperty("ramSize")), 
-				Integer.parseInt(instanceType.getProperty("netCap")),
-				instanceType.getProperty("diskPath"), 
-				Integer.parseInt(instanceType.getProperty("diskSize")),
-				Integer.parseInt(instanceType.getProperty("migNetSpeed")),
-				Integer.parseInt(instanceType.getProperty("dpIntensity")));
+		this.trace = compute.trace.newCategorizedSubTrace("instance", id);
 		
 		this.compute = compute;
 		this.id = id;
@@ -64,7 +57,6 @@ public class Instance {
 		
 		this.isPending = true;
 		
-		this.trace = compute.trace.newCategorizedSubTrace("instance", id);
 		this.trace.addProperty("image", this.image.getId());
 		this.trace.addProperty("instance_type", this.instanceType.getId());
 		this.trace.addEvent("command", "runinstance");
@@ -139,6 +131,22 @@ public class Instance {
 		return (vm.isRunning() == 1 && !isTerminating);
 	}
 
+	/**
+	 * Create the VM of this instance.
+	 * Protected because it cannot be used directly by the user,
+	 * only by the compute engine.
+	 */
+	protected void createVM() {
+		this.vm = new TracedVM(compute.getComputeEngine().getComputeHostOf(this).getHost(), id+"_VM", 
+				Integer.parseInt(instanceType.getProperty("core")),
+				Integer.parseInt(instanceType.getProperty("ramSize")), 
+				Integer.parseInt(instanceType.getProperty("netCap")),
+				instanceType.getProperty("diskPath"), 
+				Integer.parseInt(instanceType.getProperty("diskSize")),
+				Integer.parseInt(instanceType.getProperty("migNetSpeed")),
+				Integer.parseInt(instanceType.getProperty("dpIntensity")));
+	}
+	
 	/**
 	 * Start the vm of this instance.
 	 * Protected because it cannot be used directly by the user,
