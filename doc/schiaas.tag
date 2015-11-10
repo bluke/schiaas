@@ -1,5 +1,20 @@
 <?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
 <tagfile>
+  <compound kind="file">
+    <name>index.doc</name>
+    <path>/home/julien/repo/schiaas/doc/doxygen/</path>
+    <filename>index_8doc</filename>
+  </compound>
+  <compound kind="file">
+    <name>lab.doc</name>
+    <path>/home/julien/repo/schiaas/doc/doxygen/</path>
+    <filename>lab_8doc</filename>
+  </compound>
+  <compound kind="file">
+    <name>simschlouder.doc</name>
+    <path>/home/julien/repo/schiaas/doc/doxygen/</path>
+    <filename>simschlouder_8doc</filename>
+  </compound>
   <compound kind="page">
     <name>simschlouder</name>
     <title>SimSchlouder Documentation</title>
@@ -18,33 +33,20 @@
     <filename>lab_intro</filename>
     <docanchor file="lab_intro" title="Prerequisites">lab_prerequisites</docanchor>
     <docanchor file="lab_intro" title="Lab sub-directories">lab_dirs</docanchor>
-  </compound>
-  <compound kind="dir">
-    <name>/home/julien/repo/schiaas/lab</name>
-    <path>/home/julien/repo/schiaas/lab/</path>
-    <filename>dir_684fa5c5e4cabec14ab59e41caa6242f.html</filename>
-    <file>calibrate.sh</file>
-    <file>compare.sh</file>
-    <file>interval_tree.py</file>
-    <file>json2com.py</file>
-    <file>json2diameter.py</file>
-    <file>json2infos.py</file>
-    <file>json2tasks.py</file>
-    <file>json2tikz.py</file>
-    <file>jsonDiff.py</file>
-    <file>jsonUpdater.py</file>
-    <file>schlouder-btu.py</file>
-    <file>validate.sh</file>
-    <file>validateLod.sh</file>
+    <docanchor file="lab_intro" title="Setting the lab up">lab_setup</docanchor>
+    <docanchor file="lab_intro" title="Basics">lab_setup_basics</docanchor>
+    <docanchor file="lab_intro" title="Analyzing the results">lab_setup_observing</docanchor>
+    <docanchor file="lab_intro" title="How to set your own lab up">lab_howto</docanchor>
   </compound>
   <compound kind="page">
     <name>index</name>
-    <title>SCHIaaS Documentation</title>
+    <title>SchIaaS Documentation</title>
     <filename>index</filename>
-    <docanchor file="index" title="Running SCHIaaS">running</docanchor>
+    <docanchor file="index" title="Running SchIaaS">running</docanchor>
     <docanchor file="index" title="Prerequisite">running_prerequisite</docanchor>
     <docanchor file="index" title="Retrieving and Installing Schiaas">running_retrieving</docanchor>
     <docanchor file="index" title="Tutorial: the master-slave example">tutorial</docanchor>
+    <docanchor file="index" title="Overview of the Example">tutorial_overview</docanchor>
     <docanchor file="index" title="Simulation setup">tutorial_setup</docanchor>
     <docanchor file="index" title="Cloud tag">cloud_tag</docanchor>
     <docanchor file="index" title="Storage tag">storage_tag</docanchor>
@@ -54,6 +56,8 @@
     <docanchor file="index" title="Instances management">tutorial_instance</docanchor>
     <docanchor file="index" title="Data management">tutorial_data</docanchor>
     <docanchor file="index" title="Reports">tutorial_reports</docanchor>
+    <docanchor file="index" title="Compiling and Running the Example">tutorial_compiling_running</docanchor>
+    <docanchor file="index" title="Compiling the cloudmasterslave example">tutorial_compiling</docanchor>
     <docanchor file="index" title="Running the cloudmasterslave example">tutorial_running</docanchor>
   </compound>
 </tagfile>

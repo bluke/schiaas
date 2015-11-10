@@ -36,11 +36,10 @@ public abstract class ComputeEngine {
 	};
 
 	/**
-	 * Constructor with scheduler.
+	 * Constructor without scheduler.
 	 * 
 	 * @param compute The compute of this.
 	 * @param hosts All of the host of this.
-	 * @param computeScheduler The scheduler of this.
 	 */
 	public ComputeEngine(Compute compute, List<Host> hosts) {
 		this.compute = compute;
@@ -55,10 +54,11 @@ public abstract class ComputeEngine {
 	public Compute getCompute() {
 		return this.compute;
 	}
-	
+
 	/**
-	 * Set and start the scheduler 	
-	 * @param computeScheduler the scheduler to use in this compute.
+	 * Set and start the scheduler
+	 * @param schedulerName the class of the scheduler
+	 * @param config the configuration of the scheduler
 	 */
 	public void setComputeScheduler(String schedulerName, Map<String, String> config){		
 		this.computeScheduler = ComputeScheduler.load(schedulerName, this, config);;

@@ -176,8 +176,8 @@ public class Rice extends ComputeEngine {
 	/**
 	 * Migrate an instance to one given host
 	 * 
-	 * @param instanceId The id of the instance to migrate
-	 * @param host The host to migrate the instance to
+	 * @param instance The instance to migrate
+	 * @param destination The compute host to migrate the instance to
 	 * @throws HostFailureException when the migration fails at the simgrid level
 	 */
 	@Override
@@ -195,7 +195,7 @@ public class Rice extends ComputeEngine {
 	/**
 	 * Migrate an instance to one host chosen by RICE.
 	 * 
-	 * @param instanceId The id of the instance to migrate
+	 * @param instance The instance to migrate
 	 * @return the host choosen by RICE, or null whenever there was no suitable host available.
 	 * @throws VMSchedulingException when the scheduler fails
 	 * @throws MigrationException when the migration fails at the simgrid level

@@ -74,6 +74,12 @@ This schiaas.jar is to be added to the list of the java and jar files of your ow
 
 You may also get a pre-compiled schiaas.jar <a href="./schiaas.jar">here</a>. Note that this jar was last updated at the same time has this doc.
 
+@section tracing Tracing
+
+SCHIaaS comes with its own tracing system. It is described in <a hrf="./javadoc/schiaas/org/simgrid/schiaas/tools/Trace.html>the javadoc</a>.
+
+The produced traces can be exploited using the script *trace-util.py*, located in the *lab/bin* directory. Please see its help for details.
+
 
 @section tutorial Tutorial: the master-slave example
 
@@ -378,8 +384,6 @@ Let us make *schiaas/examples* our current working directory.
  $ jar cvf cloudmasterslave.jar cloudmasterslave/*.class 
 @endcode
 
-
-
 @subsubsection tutorial_running Running the cloudmasterslave example
 
 - You are now ready to run the example. 
@@ -388,123 +392,5 @@ Let us make *schiaas/examples* our current working directory.
 $ cp ../examples/cloudmasterslave/companionFiles/{platform,deploy,cloud}.xml .
 $ java -cp $SIMGRID_JAVA_ROOT/simgrid.jar:schiaas.jar:cloudmasterslave.jar cloudmasterslave.Masterslave platform.xml deploy.xml cloud.xml
 @endcode
-
-@subsubsection tutorial_output Output of the Example
-
-The output should be similar to that one:
-
-@code
-[0.000000] [jmsg/INFO] Using regular java threads. Coroutines could speed your simulation up.
-[0.000000] [jmsg/INFO] Cloud Initialization
-[0.000000] [jmsg/INFO] storing images
-[Jacquelin:cloudmasterslave.Master:(1) 0.000000] [jmsg/INFO] Hello! Got 10 slaves and 10 tasks to process
-[Jacquelin:cloudmasterslave.Master:(1) 0.000000] [jmsg/INFO] Instances availability:
-[Jacquelin:cloudmasterslave.Master:(1) 0.000000] [jmsg/INFO] small: 34
-[Jacquelin:cloudmasterslave.Master:(1) 0.000000] [jmsg/INFO] large: 6
-[Jacquelin:cloudmasterslave.Master:(1) 0.000000] [jmsg/INFO] medium: 12
-[0.000000] [surf_vm_workstation/INFO] Create VM(myCloud-000)@PM(Boivin) with 0 mounted disks
-[0.000000] [surf_vm_workstation/INFO] Create VM(myCloud-001)@PM(Jean_Yves) with 0 mounted disks
-[0.000000] [surf_vm_workstation/INFO] Create VM(myCloud-002)@PM(TeX) with 0 mounted disks
-[0.000000] [surf_vm_workstation/INFO] Create VM(myCloud-003)@PM(Geoff) with 0 mounted disks
-[0.000000] [surf_vm_workstation/INFO] Create VM(myCloud-004)@PM(Disney) with 0 mounted disks
-[0.000000] [surf_vm_workstation/INFO] Create VM(myCloud-005)@PM(iRMX) with 0 mounted disks
-[0.000000] [surf_vm_workstation/INFO] Create VM(myCloud-006)@PM(McGee) with 0 mounted disks
-[0.000000] [surf_vm_workstation/INFO] Create VM(myCloud-007)@PM(Gatien) with 0 mounted disks
-[0.000000] [surf_vm_workstation/INFO] Create VM(myCloud-008)@PM(Laroche) with 0 mounted disks
-[0.000000] [surf_vm_workstation/INFO] Create VM(myCloud-009)@PM(Tanguay) with 0 mounted disks
-[Jacquelin:cloudmasterslave.Master:(1) 0.000000] [jmsg/INFO] waiting for boot
-[Jacquelin:cloudmasterslave.Master:(1) 10.000000] [jmsg/INFO] Starting a slave on myCloud-000
-[myCloud-000:slave_0:(22) 10.000000] [jmsg/INFO] Receiving on 'slave_0'
-[Jacquelin:cloudmasterslave.Master:(1) 10.000000] [jmsg/INFO] waiting for boot
-[Jacquelin:cloudmasterslave.Master:(1) 10.000000] [jmsg/INFO] Starting a slave on myCloud-001
-[myCloud-001:slave_1:(23) 10.000000] [jmsg/INFO] Receiving on 'slave_1'
-[Jacquelin:cloudmasterslave.Master:(1) 10.000000] [jmsg/INFO] waiting for boot
-[Jacquelin:cloudmasterslave.Master:(1) 10.000000] [jmsg/INFO] Starting a slave on myCloud-002
-[myCloud-002:slave_2:(24) 10.000000] [jmsg/INFO] Receiving on 'slave_2'
-[Jacquelin:cloudmasterslave.Master:(1) 10.000000] [jmsg/INFO] waiting for boot
-[Jacquelin:cloudmasterslave.Master:(1) 10.000000] [jmsg/INFO] Starting a slave on myCloud-003
-[myCloud-003:slave_3:(25) 10.000000] [jmsg/INFO] Receiving on 'slave_3'
-[Jacquelin:cloudmasterslave.Master:(1) 10.000000] [jmsg/INFO] waiting for boot
-[Jacquelin:cloudmasterslave.Master:(1) 10.000000] [jmsg/INFO] Starting a slave on myCloud-004
-[myCloud-004:slave_4:(26) 10.000000] [jmsg/INFO] Receiving on 'slave_4'
-[Jacquelin:cloudmasterslave.Master:(1) 10.000000] [jmsg/INFO] waiting for boot
-[Jacquelin:cloudmasterslave.Master:(1) 10.000000] [jmsg/INFO] Starting a slave on myCloud-005
-[myCloud-005:slave_5:(27) 10.000000] [jmsg/INFO] Receiving on 'slave_5'
-[Jacquelin:cloudmasterslave.Master:(1) 10.000000] [jmsg/INFO] waiting for boot
-[Jacquelin:cloudmasterslave.Master:(1) 10.000000] [jmsg/INFO] Starting a slave on myCloud-006
-[myCloud-006:slave_6:(28) 10.000000] [jmsg/INFO] Receiving on 'slave_6'
-[Jacquelin:cloudmasterslave.Master:(1) 10.000000] [jmsg/INFO] waiting for boot
-[Jacquelin:cloudmasterslave.Master:(1) 10.000000] [jmsg/INFO] Starting a slave on myCloud-007
-[myCloud-007:slave_7:(29) 10.000000] [jmsg/INFO] Receiving on 'slave_7'
-[Jacquelin:cloudmasterslave.Master:(1) 10.000000] [jmsg/INFO] waiting for boot
-[Jacquelin:cloudmasterslave.Master:(1) 10.000000] [jmsg/INFO] Starting a slave on myCloud-008
-[myCloud-008:slave_8:(30) 10.000000] [jmsg/INFO] Receiving on 'slave_8'
-[Jacquelin:cloudmasterslave.Master:(1) 10.000000] [jmsg/INFO] waiting for boot
-[Jacquelin:cloudmasterslave.Master:(1) 10.000000] [jmsg/INFO] Starting a slave on myCloud-009
-[myCloud-009:slave_9:(31) 10.000000] [jmsg/INFO] Receiving on 'slave_9'
-[Jacquelin:cloudmasterslave.Master:(1) 10.000000] [jmsg/INFO] start sending tasks
-[Jacquelin:cloudmasterslave.Master:(1) 10.000000] [jmsg/INFO] Sending "Task_0" to slave_0
-[Jacquelin:cloudmasterslave.Master:(1) 11.467897] [jmsg/INFO] Sending "Task_1" to slave_1
-[Jacquelin:cloudmasterslave.Master:(1) 16.669426] [jmsg/INFO] Sending "Task_2" to slave_2
-[Jacquelin:cloudmasterslave.Master:(1) 19.982064] [jmsg/INFO] Sending "Task_3" to slave_3
-[Jacquelin:cloudmasterslave.Master:(1) 20.406420] [jmsg/INFO] Sending "Task_4" to slave_4
-[Jacquelin:cloudmasterslave.Master:(1) 22.648973] [jmsg/INFO] Sending "Task_5" to slave_5
-[Jacquelin:cloudmasterslave.Master:(1) 27.481844] [jmsg/INFO] Sending "Task_6" to slave_6
-[Jacquelin:cloudmasterslave.Master:(1) 28.789211] [jmsg/INFO] Sending "Task_7" to slave_7
-[Jacquelin:cloudmasterslave.Master:(1) 31.231838] [jmsg/INFO] Sending "Task_8" to slave_8
-[Jacquelin:cloudmasterslave.Master:(1) 33.451492] [jmsg/INFO] Sending "Task_9" to slave_9
-[Jacquelin:cloudmasterslave.Master:(1) 36.389220] [jmsg/INFO] Store some data
-[Jacquelin:cloudmasterslave.Master:(1) 38.397448] [jmsg/INFO] Check whether the data transfer is complete: true
-[Jacquelin:cloudmasterslave.Master:(1) 38.397448] [jmsg/INFO] Retrieve some stored data
-[Jacquelin:cloudmasterslave.Master:(1) 40.405872] [jmsg/INFO] Retrieve some data that has not been stored
-[Jacquelin:cloudmasterslave.Master:(1) 44.422329] [jmsg/INFO] List the stored data
-[Jacquelin:cloudmasterslave.Master:(1) 44.422723] [jmsg/INFO] /myCloud/myStorage/$ ls
-[Jacquelin:cloudmasterslave.Master:(1) 44.422723] [jmsg/INFO] RICEIMG-myImage 1.073741824E9
-[Jacquelin:cloudmasterslave.Master:(1) 44.422723] [jmsg/INFO] someData 1.0E9
-[Jacquelin:cloudmasterslave.Master:(1) 44.422723] [jmsg/INFO] unstoredData 2.0E9
-[Jacquelin:cloudmasterslave.Master:(1) 44.422723] [jmsg/INFO] Delete some data
-[Jacquelin:cloudmasterslave.Master:(1) 44.422920] [jmsg/INFO] /myCloud/myStorage/$ ls
-[Jacquelin:cloudmasterslave.Master:(1) 44.422920] [jmsg/INFO] RICEIMG-myImage 1.073741824E9
-[Jacquelin:cloudmasterslave.Master:(1) 44.422920] [jmsg/INFO] unstoredData 2.0E9
-[Jacquelin:cloudmasterslave.Master:(1) 194.422920] [jmsg/INFO] Suspending myCloud-000
-[Jacquelin:cloudmasterslave.Master:(1) 194.422920] [jmsg/INFO]  - Instance:myCloud-000 (Boivin)
-[Jacquelin:cloudmasterslave.Master:(1) 194.422920] [jmsg/INFO]  - Instance:myCloud-000 (Boivin)
-[Jacquelin:cloudmasterslave.Master:(1) 394.422920] [jmsg/INFO]  - Instance:myCloud-000 (Boivin)
-[Jacquelin:cloudmasterslave.Master:(1) 394.422920] [jmsg/INFO] Resuming myCloud-000
-[Jacquelin:cloudmasterslave.Master:(1) 394.422920] [jmsg/INFO]  - Instance:myCloud-000 (Boivin)
-[myCloud-004:slave_4:(26) 459.543873] [jmsg/INFO] "Task_4" done in 436.894900562721s.
-[myCloud-007:slave_7:(29) 468.126739] [jmsg/INFO] "Task_7" done in 436.8949005627209s.
-[Jacquelin:cloudmasterslave.Master:(1) 494.422920] [jmsg/INFO] Migrating myCloud-000 to Jean_Yves
-[Jacquelin:cloudmasterslave.Master:(1) 494.422920] [jmsg/INFO]  - Instance:myCloud-000 (Boivin)
-[Jacquelin:cloudmasterslave.Master:(1) 494.422920] [jmsg/INFO] lm : myCloud-000 Jean_Yves
-[Boivin:__pr_mig_tx:myCloud-000(Boivin-Jean_Yves):(42) 494.422920] [msg_vm/INFO] Stage 1: Gonna send 268435456
-[myCloud-000:slave_0:(22) 521.177872] [jmsg/INFO] "Task_0" done in 509.70997502421125s.
-[myCloud-001:slave_1:(23) 526.379401] [jmsg/INFO] "Task_1" done in 509.7099750242113s.
-[myCloud-008:slave_8:(30) 543.161467] [jmsg/INFO] "Task_8" done in 509.7099750242112s.
-[myCloud-002:slave_2:(24) 748.133869] [jmsg/INFO] "Task_2" done in 728.1518050883246s.
-[myCloud-005:slave_5:(27) 755.633649] [jmsg/INFO] "Task_5" done in 728.1518050883247s.
-[myCloud-009:slave_9:(31) 764.541026] [jmsg/INFO] "Task_9" done in 728.1518050883246s.
-[myCloud-003:slave_3:(25) 1185.445914] [jmsg/INFO] "Task_3" done in 1165.0394948388755s.
-[myCloud-006:slave_6:(28) 1193.828706] [jmsg/INFO] "Task_6" done in 1165.0394948388753s.
-[Jacquelin:cloudmasterslave.Master:(1) 2682.311070] [jmsg/INFO] Migration of myCloud-000 to Jean_Yves complete.
-[Jacquelin:cloudmasterslave.Master:(1) 2682.311070] [jmsg/INFO]  - Instance:myCloud-000 (Jean_Yves)
-[Jacquelin:cloudmasterslave.Master:(1) 2682.311070] [jmsg/INFO] Offloading Jean_Yves
-[Jacquelin:cloudmasterslave.Master:(1) 2682.311070] [jmsg/INFO]  - Instance:myCloud-000 (Jean_Yves)
-[Jacquelin:cloudmasterslave.Master:(1) 2682.311070] [jmsg/INFO]  - Instance:myCloud-001 (Jean_Yves)
-[Jacquelin:cloudmasterslave.Master:(1) 2682.311070] [jmsg/INFO]  - Instance:myCloud-002 (TeX)
-[Jacquelin:cloudmasterslave.Master:(1) 2682.311070] [jmsg/INFO]  - Instance:myCloud-003 (Geoff)
-[Jacquelin:cloudmasterslave.Master:(1) 2682.311070] [jmsg/INFO]  - Instance:myCloud-004 (Disney)
-[Jacquelin:cloudmasterslave.Master:(1) 2682.311070] [jmsg/INFO]  - Instance:myCloud-005 (iRMX)
-[Jacquelin:cloudmasterslave.Master:(1) 2682.311070] [jmsg/INFO]  - Instance:myCloud-006 (McGee)
-[Jacquelin:cloudmasterslave.Master:(1) 2682.311070] [jmsg/INFO]  - Instance:myCloud-007 (Gatien)
-[Jacquelin:cloudmasterslave.Master:(1) 2682.311070] [jmsg/INFO]  - Instance:myCloud-008 (Laroche)
-[Jacquelin:cloudmasterslave.Master:(1) 2682.311070] [jmsg/INFO]  - Instance:myCloud-009 (Tanguay)
-[Jacquelin:cloudmasterslave.Master:(1) 2682.311070] [jmsg/INFO] lm : myCloud-000 Morin
-[Jean_Yves:__pr_mig_tx:myCloud-000(Jean_Yves-Morin):(44) 2682.311070] [msg_vm/INFO] Stage 1: Gonna send 268435456
-[Jacquelin:cloudmasterslave.Master:(1) 3844.504989] [jmsg/INFO] lm : myCloud-001 Ethernet
-[Jean_Yves:__pr_mig_tx:myCloud-001(Jean_Yves-Ethernet):(46) 3844.504989] [msg_vm/INFO] Stage 1: Gonna send 268435456
-...
-@endcode
-
 
 */

@@ -22,7 +22,7 @@ public class VMSchedulingException extends Exception{
 	private String reason;
 
 	/**
-	 * @param computeScheduler
+	 * @param scheduler
 	 * 			Scheduler in which the error happened
 	 * @param instanceType
 	 * 			Instance type for which the error happened

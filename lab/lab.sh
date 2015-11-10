@@ -9,11 +9,16 @@
 ## #TU_ARGS indicates the arguments to pass to the trace_util.py script
 ## #JAVA_FIRST_ARGS indicates the common first arguments to pass to the simulator
 ## #JAVA_END_ARGS indicates the common last arguments to pass to the simulator
-## Other lines indicates the specific arguments inbetween for each simulation
+## Other lines indicates the specific arguments inbetween for each simulation 
+## as <simulation_id>: <simulation arguments>
+##
+## Two options are available:
+## -k keeps the data from previous executions
+## -p x run x simulation in parallel
 ##
 ## @author julien.gossa@unistra.fr
 ##
-## TODO make grep events, and add prop
+## TODO make grep events, and add prop, add interval
 
 PARALLEL_SIMS=1
 
@@ -39,7 +44,7 @@ done
 
 if [ $# -ne 1 ] ; then
 	echo "Takes one argument. Needs to run in the lab directory"
-	echo "Usage : $0 config_file" >&2 
+	echo "Usage : $0 [-k] [-p parallel_simulations] config_file" >&2 
 	exit 1
 fi
 

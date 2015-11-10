@@ -163,8 +163,8 @@ public class SchloudNode extends Process implements Comparable<SchloudNode>{
 
 	/**
 	 * A Schlouder Node, basically peeking tasks and executing them.
-	 * @param instanceId
-	 * @param cloud
+	 * @param instance The instance of this node
+	 * @param cloud The cloud of this node
 	 */
 	protected SchloudNode(Instance instance, SchloudCloud cloud) {
 		super(instance.vm(), instance.getId()+"_SchloudNode",null);
