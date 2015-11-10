@@ -76,9 +76,107 @@ You may also get a pre-compiled schiaas.jar <a href="./schiaas.jar">here</a>. No
 
 @section tracing Tracing
 
-SCHIaaS comes with its own tracing system. It is described in <a hrf="./javadoc/schiaas/org/simgrid/schiaas/tools/Trace.html>the javadoc</a>.
+@subsection tracing_description Description
 
-The produced traces can be exploited using the script *trace-util.py*, located in the *lab/bin* directory. Please see its help for details.
+SCHIaaS comes with its own tracing system. It is described in <a href="./javadoc/schiaas/org/simgrid/schiaas/tools/Trace.html">the javadoc</a>.
+
+It handle two kind of information: events (with date) and properties (without date). Each information is realted to one entity.
+
+All lines of the trace are of the form:
+@code
+entity	key	value
+@endcode
+In which *key* being either the date for event, or the name for properties.
+
+For instance, the traces have this form:
+@code
+root    date    Tue Nov 10 16:23:40 CET 2015
+root    description     Example of LoadInjector on cloud
+root:cloud:myCloud:compute:ComputeHost:node-1.me        cores   8.0
+root:cloud:myCloud:compute:ComputeHost:node-1.me:used_cores     0.0     5.0
+@endcode
+Give the following information:
+- (property) *date* and *description* of the simulation;
+- (property) *8.0*, the number of *cores* of the host named *node-1.me* from the cloud *myCloud*;
+- (event) *5.0*, the number of *used_cores* at t=*0.0* 
+
+The trace is sorted by date and can be easily filtred using grep.
+
+It can also be exploited using the script *trace-util.py*, located in the *lab/bin* directory. Please see its help for details.
+
+@subsection tracing_examples Some examples of use of trace-util.py
+
+@subsubsection tracing_examples_json Dumping the whole trace as a json
+@code
+./trace-util.py schiaas.trace --json
+
+{
+  "root": {
+    "date": "Tue Nov 10 16:23:40 CET 2015",
+    "description": "Example of LoadInjector on cloud",
+    "cloud": {
+      "myCloud": {
+        "compute": {
+          "ComputeHost": {
+            "node-1.me": {
+              "cores": "8.0",
+              "used_cores": {
+                "0.0": "0.0,1.0,2.0,3.0,4.0,5.0",
+...
+@endcode
+NB: all the events of the same type and attached to the same entity that occured at the same date are concatenated in the same entry, ordered by occuring date in the simulator.
+
+For instance, this json shows that at *date* 0.0, the *used_cores* of *node-1.me* had its value from 0.0 to 5.0, 5.0 being the last one.
+
+@subsubsection tracing_examples_event Looking at the used_cores values
+@code
+./trace-util.py schiaas.trace --event used_cores
+
+root:cloud:myCloud:compute:ComputeHost:node-2.me:used_cores	0.0	5.0
+root:cloud:myCloud:compute:ComputeHost:node-3.me:used_cores	0.0	5.0
+root:cloud:myCloud:compute:ComputeHost:node-1.me:used_cores	0.0	5.0
+root:cloud:myCloud:compute:ComputeHost:node-2.me:used_cores	180.0	6.0
+root:cloud:myCloud:compute:ComputeHost:node-3.me:used_cores	180.0	6.0
+root:cloud:myCloud:compute:ComputeHost:node-1.me:used_cores	180.0	6.0
+...
+@endcode
+This shows that at date *0.0*, the *used_cores* of *node-1.me*, *node-2.me* and *node-3.me* were *5.0*, while they were *6.0* at date *180.0*
+
+@subsubsection tracing_examples_event2 Looking at the used_cores values of node-1
+@code
+./trace-util.py schiaas.trace --event node-1\.me.*used_cores
+
+root:cloud:myCloud:compute:ComputeHost:node-1.me:used_cores	0.0	5.0
+root:cloud:myCloud:compute:ComputeHost:node-1.me:used_cores	180.0	6.0
+root:cloud:myCloud:compute:ComputeHost:node-1.me:used_cores	410.0	7.0
+root:cloud:myCloud:compute:ComputeHost:node-1.me:used_cores	680.0	8.0
+...
+@endcode
+This shows that the *used_cores* of *node-1.me* goes from *5.0* to *8.0* at the dates *0.0*, *180.0*, *410.0* and *680.0*.
+
+@subsubsection tracing_examples_counting counting the nodes having less than 8 cores used
+@code
+./trace-util.py schiaas.trace --count-if used_cores lt 8
+
+used_cores	0.0	24
+used_cores	2830.0078070824743	23
+used_cores	2920.0078070824743	22
+used_cores	2930.0078070824743	21
+...
+@endcode
+This shows that at date *0.0*, *24* nodes had less than 8 cores used, and the following changes of this value.
+
+@subsubsection tracing_examples_counting2 counting the virtual machines in the migrating state
+@code
+./trace-util.py schiaas.trace --count-if VirtualMachines.*state eq migrating
+
+used_cores	0.0	0
+used_cores	2830.0078070824743	1
+used_cores	2920.0078070824743	2
+used_cores	2930.0078070824743	3
+...
+@endcode
+This shows that at date *0.0*, *0* virtual machines were migrating, and the following changes of this value.
 
 
 @section tutorial Tutorial: the master-slave example

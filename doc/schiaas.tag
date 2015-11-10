@@ -45,6 +45,14 @@
     <docanchor file="index" title="Running SchIaaS">running</docanchor>
     <docanchor file="index" title="Prerequisite">running_prerequisite</docanchor>
     <docanchor file="index" title="Retrieving and Installing Schiaas">running_retrieving</docanchor>
+    <docanchor file="index" title="Tracing">tracing</docanchor>
+    <docanchor file="index" title="Description">tracing_description</docanchor>
+    <docanchor file="index" title="Some examples of use of trace-util.py">tracing_examples</docanchor>
+    <docanchor file="index" title="Dumping the whole trace as a json">tracing_examples_json</docanchor>
+    <docanchor file="index" title="Looking at the used_cores values">tracing_examples_event</docanchor>
+    <docanchor file="index" title="Looking at the used_cores values of node-1">tracing_examples_event2</docanchor>
+    <docanchor file="index" title="counting the nodes having less than 8 cores used">tracing_examples_counting</docanchor>
+    <docanchor file="index" title="counting the virtual machines in the migrating state">tracing_examples_counting2</docanchor>
     <docanchor file="index" title="Tutorial: the master-slave example">tutorial</docanchor>
     <docanchor file="index" title="Overview of the Example">tutorial_overview</docanchor>
     <docanchor file="index" title="Simulation setup">tutorial_setup</docanchor>
