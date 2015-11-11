@@ -48,6 +48,7 @@
     <docanchor file="index" title="Tracing">tracing</docanchor>
     <docanchor file="index" title="Description">tracing_description</docanchor>
     <docanchor file="index" title="Some examples of use of trace-util.py">tracing_examples</docanchor>
+    <docanchor file="index" title="Retrieving the available entities">tracing_examples_info</docanchor>
     <docanchor file="index" title="Dumping the whole trace as a json">tracing_examples_json</docanchor>
     <docanchor file="index" title="Looking at the used_cores values">tracing_examples_event</docanchor>
     <docanchor file="index" title="Looking at the used_cores values of node-1">tracing_examples_event2</docanchor>

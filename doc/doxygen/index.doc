@@ -106,6 +106,76 @@ It can also be exploited using the script *trace-util.py*, located in the *lab/b
 
 @subsection tracing_examples Some examples of use of trace-util.py
 
+@subsubsection tracing_examples_info Retrieving the available entities
+@code
+./trace-util.py schiaas.trace --info
+
+{
+  "root": {
+    "date": "property",
+    "description": "property",
+    "cloud": {
+      "myCloud": {
+        "compute": {
+          "image_caching": "property",
+          "inter_boot_delay": "property",
+          "engine": "property",
+          "image_storage": "property",
+          "controller": "property",
+          "ComputeHost": {
+            "* x24": {
+              "cores": "property",
+              "ram_size": "property",
+              "diskSize": "property",
+              "used_cores": "event"
+            }
+          },
+          "scheduler": {
+            "name": "property",
+            "delay": "property",
+            "controller": "property",
+            "type": "property"
+          },
+          "instance": {
+            "* x465": {
+              "image": "property",
+              "instance_type": "property",
+              "command": "event",
+              "schedule": "event",
+              "load": "event"
+            }
+          }
+        }
+      }
+    },
+    "VirtualMachines": {
+      "* x465": {
+        "n_cores": "property",
+        "ram_size": "property",
+        "net_cap": "property",
+        "disk_path": "property",
+        "disk_size": "property",
+        "mig_net_speed": "property",
+        "dp_intensity": "property",
+        "bound": "event",
+        "state": "event"
+      }
+    },
+    "injector": {
+      "myInjector": {
+        "injector": "property",
+        "random_seed": "property",
+        "instances_count": "event",
+        "instances_load": "event"
+      }
+    }
+  }
+}
+@endcode
+This show every entities, properties, and events available in the trace.
+Entities of the same type are compacted as "* xCOUNT".
+For instance, this trace contains *465* virtual machines and theirs number of cores can be filtered using the regex *VirtualMachines.\*n_cores*.
+
 @subsubsection tracing_examples_json Dumping the whole trace as a json
 @code
 ./trace-util.py schiaas.trace --json
