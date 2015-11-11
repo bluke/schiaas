@@ -17,8 +17,7 @@
 ## -p x run x simulation in parallel
 ##
 ## @author julien.gossa@unistra.fr
-##
-## TODO make grep events, and add prop, add interval
+
 
 PARALLEL_SIMS=1
 
