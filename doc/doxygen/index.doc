@@ -74,35 +74,120 @@ This schiaas.jar is to be added to the list of the java and jar files of your ow
 
 You may also get a pre-compiled schiaas.jar <a href="./schiaas.jar">here</a>. Note that this jar was last updated at the same time has this doc.
 
+
+
+
+
+
 @section tracing Tracing
 
 @subsection tracing_description Description
 
 SCHIaaS comes with its own tracing system. It is described in <a href="./javadoc/schiaas/org/simgrid/schiaas/tools/Trace.html">the javadoc</a>.
 
-It handle two kind of information: events (with date) and properties (without date). Each information is realted to one entity.
+It handle two kind of information: **events** (with date) and **properties** (without date). Each information is related to one entity.
 
 All lines of the trace are of the form:
 @code
 entity	key	value
 @endcode
-In which *key* being either the date for event, or the name for properties.
+In which **key** being either the *date* for **event**, or the *name* for **properties**.
 
 For instance, the traces have this form:
 @code
 root    date    Tue Nov 10 16:23:40 CET 2015
-root    description     Example of LoadInjector on cloud
-root:cloud:myCloud:compute:ComputeHost:node-1.me        cores   8.0
-root:cloud:myCloud:compute:ComputeHost:node-1.me:used_cores     0.0     5.0
+root:cloud:myCloud:compute:compute_host:node-1.me        cores   8.0
+root:cloud:myCloud:compute:compute_host:node-1.me:used_cores     0.0     5.0
 @endcode
 Give the following information:
 - (property) *date* and *description* of the simulation;
-- (property) *8.0*, the number of *cores* of the host named *node-1.me* from the cloud *myCloud*;
-- (event) *5.0*, the number of *used_cores* at t=*0.0* 
+- (property) *8.0*, the number of *cores* of the *compute_host* named *node-1.me* in the *compute* of the *cloud* named *myCloud*;
+- (event) *5.0*, the number of *used_cores* of this host at t=*0.0* 
 
 The trace is sorted by date and can be easily filtred using grep.
 
-It can also be exploited using the script *trace-util.py*, located in the *lab/bin* directory. Please see its help for details.
+It can also be exploited using the script *trace-util.py*, located in the *lab/bin* directory (see \ref tracing_examples).
+
+
+@subsection tracing_tutorial Tracing your own code
+
+Let's say you want to trace something called *mystuff*.
+
+@subsubsection tracing_tutorial_init Intialization and conclusion
+
+If you want to add a description to the whole trace, you can use:
+@code
+Trace.init("description of the whole trace");
+@endcode
+
+This step is optional. However, the conclusion step is mandatory:
+@code
+Trace.close();
+@endcode
+
+
+@subsubsection tracing_tutorial_creation Creating 
+
+First of all, you need to create the trace. 
+- If *mystuff* is unique :
+@code
+Trace trace = Trace.newTrace("mystuff");
+@endcode
+- If *mystuff* is one of a kind:
+@code
+Trace trace = Trace.newCategorizedTrace("kind_of_mystuff","mystuff");
+@endcode
+- If *mystuff* is related to a higher level entity:
+@code
+Trace trace = parentTrace.newSubTrace("mystuff");
+@endcode
+@code
+Trace trace = parentTrace.newCategorizedSubTrace("kind_of_mystuff","mystuff");
+@endcode
+
+
+@subsubsection tracing_tutorial_properties Adding properties
+
+To add one property to *mystuff*, for instance the name, you can use:
+@code
+trace.addProperty("name", "the name of mystuff");
+@endcode
+
+According to the type of trace, this will produce one of the following line (3 fields, separated by tabulations):
+@code
+root:mystuff 	name 	the name of mystuff
+@endcode
+@code
+root:kind_of_mystuff:mystuff 	name 	the name of mystuff
+@endcode
+@code
+root:[parent]:mystuff 	name 	the name of mystuff
+@endcode
+@code
+root:[parent]:kind_of_mystuff:mystuff 	name 	the name of mystuff
+@endcode
+where [parent] is the chain of entities from the parent trace.
+
+You can also add one whole set of properties:
+@code
+trace.addProperties(properties);
+@endcode
+where *properties* is a *Map<String,String>*.
+
+
+@subsubsection tracing_tutorial_events Adding events
+
+To add one event to *mystuff*, for instance the *state* becoming *available*, you can use:
+@code
+trace.addEvent("state", "available")
+@endcode
+This will produce one line (3 fields, separated by tabulations):
+@code
+[prefix]:mystuff:state 	832.0	available
+@endcode
+where *832.0* is the clock of the simulation, and [prefix] depending on the type of trace, like in \ref tracing_tutorial_properties .
+
+
 
 @subsection tracing_examples Some examples of use of trace-util.py
 
@@ -122,7 +207,7 @@ It can also be exploited using the script *trace-util.py*, located in the *lab/b
           "engine": "property",
           "image_storage": "property",
           "controller": "property",
-          "ComputeHost": {
+          "compute_host": {
             "* x24": {
               "cores": "property",
               "ram_size": "property",
@@ -187,7 +272,7 @@ For instance, this trace contains *465* virtual machines and theirs number of co
     "cloud": {
       "myCloud": {
         "compute": {
-          "ComputeHost": {
+          "compute_host": {
             "node-1.me": {
               "cores": "8.0",
               "used_cores": {
@@ -202,12 +287,12 @@ For instance, this json shows that at *date* 0.0, the *used_cores* of *node-1.me
 @code
 ./trace-util.py schiaas.trace --event used_cores
 
-root:cloud:myCloud:compute:ComputeHost:node-2.me:used_cores	0.0	5.0
-root:cloud:myCloud:compute:ComputeHost:node-3.me:used_cores	0.0	5.0
-root:cloud:myCloud:compute:ComputeHost:node-1.me:used_cores	0.0	5.0
-root:cloud:myCloud:compute:ComputeHost:node-2.me:used_cores	180.0	6.0
-root:cloud:myCloud:compute:ComputeHost:node-3.me:used_cores	180.0	6.0
-root:cloud:myCloud:compute:ComputeHost:node-1.me:used_cores	180.0	6.0
+root:cloud:myCloud:compute:compute_host:node-2.me:used_cores	0.0	5.0
+root:cloud:myCloud:compute:compute_host:node-3.me:used_cores	0.0	5.0
+root:cloud:myCloud:compute:compute_host:node-1.me:used_cores	0.0	5.0
+root:cloud:myCloud:compute:compute_host:node-2.me:used_cores	180.0	6.0
+root:cloud:myCloud:compute:compute_host:node-3.me:used_cores	180.0	6.0
+root:cloud:myCloud:compute:compute_host:node-1.me:used_cores	180.0	6.0
 ...
 @endcode
 This shows that at date *0.0*, the *used_cores* of *node-1.me*, *node-2.me* and *node-3.me* were *5.0*, while they were *6.0* at date *180.0*
@@ -216,10 +301,10 @@ This shows that at date *0.0*, the *used_cores* of *node-1.me*, *node-2.me* and 
 @code
 ./trace-util.py schiaas.trace --event node-1\.me.*used_cores
 
-root:cloud:myCloud:compute:ComputeHost:node-1.me:used_cores	0.0	5.0
-root:cloud:myCloud:compute:ComputeHost:node-1.me:used_cores	180.0	6.0
-root:cloud:myCloud:compute:ComputeHost:node-1.me:used_cores	410.0	7.0
-root:cloud:myCloud:compute:ComputeHost:node-1.me:used_cores	680.0	8.0
+root:cloud:myCloud:compute:compute_host:node-1.me:used_cores	0.0	5.0
+root:cloud:myCloud:compute:compute_host:node-1.me:used_cores	180.0	6.0
+root:cloud:myCloud:compute:compute_host:node-1.me:used_cores	410.0	7.0
+root:cloud:myCloud:compute:compute_host:node-1.me:used_cores	680.0	8.0
 ...
 @endcode
 This shows that the *used_cores* of *node-1.me* goes from *5.0* to *8.0* at the dates *0.0*, *180.0*, *410.0* and *680.0*.

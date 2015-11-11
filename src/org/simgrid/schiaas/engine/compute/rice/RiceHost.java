@@ -78,7 +78,7 @@ public class RiceHost implements ComputeHost {
 		
 		availability = true;
 		
-		trace = rice.getCompute().getTrace().newCategorizedSubTrace("ComputeHost", host.getName());
+		trace = rice.getCompute().getTrace().newCategorizedSubTrace("compute_host", host.getName());
 		trace.addProperty("cores",""+freeCores);
 		trace.addProperty("ram_size",""+ramSize);
 		trace.addProperty("diskSize",""+diskSize);

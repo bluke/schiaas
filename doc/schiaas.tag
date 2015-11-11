@@ -47,6 +47,11 @@
     <docanchor file="index" title="Retrieving and Installing Schiaas">running_retrieving</docanchor>
     <docanchor file="index" title="Tracing">tracing</docanchor>
     <docanchor file="index" title="Description">tracing_description</docanchor>
+    <docanchor file="index" title="Tracing your own code">tracing_tutorial</docanchor>
+    <docanchor file="index" title="Intialization and conclusion">tracing_tutorial_init</docanchor>
+    <docanchor file="index" title="Creating">tracing_tutorial_creation</docanchor>
+    <docanchor file="index" title="Adding properties">tracing_tutorial_properties</docanchor>
+    <docanchor file="index" title="Adding events">tracing_tutorial_events</docanchor>
     <docanchor file="index" title="Some examples of use of trace-util.py">tracing_examples</docanchor>
     <docanchor file="index" title="Retrieving the available entities">tracing_examples_info</docanchor>
     <docanchor file="index" title="Dumping the whole trace as a json">tracing_examples_json</docanchor>

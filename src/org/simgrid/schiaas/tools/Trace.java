@@ -175,6 +175,7 @@ public class Trace {
      * Init the trace.
      */
     public static void init() {
+    	if (root != null) return;
     	 try {
 			fstream = new FileWriter(filename, false);
 		} catch (IOException e) {
