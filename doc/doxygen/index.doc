@@ -193,7 +193,7 @@ where *832.0* is the clock of the simulation, and [prefix] depending on the type
 
 @subsubsection tracing_examples_info Retrieving the available entities
 @code
-./trace-util.py schiaas.trace --info
+$ ./trace-util.py schiaas.trace --info
 
 {
   "root": {
@@ -242,7 +242,7 @@ where *832.0* is the clock of the simulation, and [prefix] depending on the type
         "disk_size": "property",
         "mig_net_speed": "property",
         "dp_intensity": "property",
-        "bound": "event",
+        "cpu_bound": "event",
         "state": "event"
       }
     },
@@ -263,7 +263,7 @@ For instance, this trace contains *465* virtual machines and theirs number of co
 
 @subsubsection tracing_examples_json Dumping the whole trace as a json
 @code
-./trace-util.py schiaas.trace --json
+$ ./trace-util.py schiaas.trace --json
 
 {
   "root": {
@@ -285,7 +285,7 @@ For instance, this json shows that at *date* 0.0, the *used_cores* of *node-1.me
 
 @subsubsection tracing_examples_event Looking at the used_cores values
 @code
-./trace-util.py schiaas.trace --event used_cores
+$ ./trace-util.py schiaas.trace --event used_cores
 
 root:cloud:myCloud:compute:compute_host:node-2.me:used_cores	0.0	5.0
 root:cloud:myCloud:compute:compute_host:node-3.me:used_cores	0.0	5.0
@@ -299,7 +299,7 @@ This shows that at date *0.0*, the *used_cores* of *node-1.me*, *node-2.me* and 
 
 @subsubsection tracing_examples_event2 Looking at the used_cores values of node-1
 @code
-./trace-util.py schiaas.trace --event node-1\.me.*used_cores
+$ ./trace-util.py schiaas.trace --event node-1\.me.*used_cores
 
 root:cloud:myCloud:compute:compute_host:node-1.me:used_cores	0.0	5.0
 root:cloud:myCloud:compute:compute_host:node-1.me:used_cores	180.0	6.0
@@ -311,7 +311,7 @@ This shows that the *used_cores* of *node-1.me* goes from *5.0* to *8.0* at the 
 
 @subsubsection tracing_examples_counting counting the nodes having less than 8 cores used
 @code
-./trace-util.py schiaas.trace --count-if used_cores lt 8
+$ ./trace-util.py schiaas.trace --count-if used_cores lt 8
 
 used_cores	0.0	24
 used_cores	2830.0078070824743	23
@@ -323,7 +323,7 @@ This shows that at date *0.0*, *24* nodes had less than 8 cores used, and the fo
 
 @subsubsection tracing_examples_counting2 counting the virtual machines in the migrating state
 @code
-./trace-util.py schiaas.trace --count-if VirtualMachines.*state eq migrating
+$ ./trace-util.py schiaas.trace --count-if VirtualMachines.*state eq migrating
 
 used_cores	0.0	0
 used_cores	2830.0078070824743	1
@@ -332,6 +332,11 @@ used_cores	2930.0078070824743	3
 ...
 @endcode
 This shows that at date *0.0*, *0* virtual machines were migrating, and the following changes of this value.
+
+
+
+
+
 
 
 @section tutorial Tutorial: the master-slave example

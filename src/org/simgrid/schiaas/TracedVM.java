@@ -65,9 +65,9 @@ public class TracedVM extends VM {
  		trace.addEvent("state", "suspended");
  	}
 
- 	public void setBound(int load) {
- 		trace.addEvent("bound", ""+load);
- 		super.setBound(load);
+ 	public void setBound(int bound) {
+ 		trace.addEvent("cpu_bound", ""+bound);
+ 		super.setBound(bound);
  	}
 
 }

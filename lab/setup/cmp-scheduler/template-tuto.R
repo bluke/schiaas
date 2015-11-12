@@ -1,0 +1,75 @@
+
+source('reads.R')
+
+
+
+##################################### loads
+png('instances_count.png')
+plot(balancer.instances_count$date,balancer.instances_count$value, type="p")
+dev.off()
+png('instances_load.png')
+plot(balancer.instances_load$date,balancer.instances_load$value, type="p")
+dev.off()
+png('VM_running.png')
+plot(balancer.VirtualMachines__state_eq_running$date,balancer.VirtualMachines__state_eq_running$value, type="s")
+dev.off()
+png('VM_cpu_bound.png')
+plot(balancer.cpu_bound$date,balancer.cpu_bound$value, type="p")
+dev.off()
+
+##################################### balance
+png('balance-balancer.png')
+plot(balancer.used_cores$date,balancer.used_cores$value, type="p")
+dev.off()
+png('balance-consolidator.png')
+plot(consolidator.used_cores$date,consolidator.used_cores$value, type="p")
+dev.off()
+png('balance-reconsolidator0.png')
+plot(reconsolidator0.used_cores$date,reconsolidator0.used_cores$value, type="p")
+dev.off()
+
+##################################### busy hosts
+png('busy_hosts-balancer.png')
+plot(balancer.used_cores_ne_0$date,balancer.used_cores_ne_0$value, type="s")
+dev.off()
+png('busy_hosts-consolidator.png')
+plot(consolidator.used_cores_ne_0$date,consolidator.used_cores_ne_0$value, type="s")
+dev.off()
+png('busy_hosts-reconsolidator0.png')
+plot(reconsolidator0.used_cores_ne_0$date,reconsolidator0.used_cores_ne_0$value, type="s")
+dev.off()
+png('busy_hosts-reconsolidator10.png')
+plot(reconsolidator10.used_cores_ne_0$date,reconsolidator10.used_cores_ne_0$value, type="s")
+dev.off()
+png('busy_hosts-reconsolidator100.png')
+plot(reconsolidator100.used_cores_ne_0$date,reconsolidator100.used_cores_ne_0$value, type="s")
+dev.off()
+
+##################################### busy hosts
+png('idle_hosts-balancer.png')
+plot(balancer.used_cores_eq_0$date,balancer.used_cores_eq_0$value, type="s")
+dev.off()
+png('idle_hosts-consolidator.png')
+plot(consolidator.used_cores_eq_0$date,consolidator.used_cores_eq_0$value, type="s")
+dev.off()
+png('idle_hosts-reconsolidator0.png')
+plot(reconsolidator0.used_cores_eq_0$date,reconsolidator0.used_cores_eq_0$value, type="s")
+dev.off()
+png('idle_hosts-reconsolidator10.png')
+plot(reconsolidator10.used_cores_eq_0$date,reconsolidator10.used_cores_eq_0$value, type="s")
+dev.off()
+png('idle_hosts-reconsolidator100.png')
+plot(reconsolidator100.used_cores_eq_0$date,reconsolidator100.used_cores_eq_0$value, type="s")
+dev.off()
+
+
+##################################### migrations
+png('migrations-reconsolidator0.png')
+plot(reconsolidator0.used_cores_ne_0$date,reconsolidator0.used_cores_ne_0$value, type="s")
+dev.off()
+png('migrations-reconsolidator10.png')
+plot(reconsolidator10.used_cores_ne_0$date,reconsolidator10.used_cores_ne_0$value, type="s")
+dev.off()
+png('migrations-reconsolidator100.png')
+plot(reconsolidator100.used_cores_ne_0$date,reconsolidator100.used_cores_ne_0$value, type="s")
+dev.off()

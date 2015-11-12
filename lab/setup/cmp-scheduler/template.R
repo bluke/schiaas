@@ -1,7 +1,7 @@
 
 source('reads.R')
 
-pdf('data.pdf')
+pdf('data.png')
 
 source('plots.R')
 

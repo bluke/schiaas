@@ -1,6 +1,11 @@
 <?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
 <tagfile>
   <compound kind="file">
+    <name>howto-schedulers.doc</name>
+    <path>/home/julien/repo/schiaas/doc/doxygen/</path>
+    <filename>howto-schedulers_8doc</filename>
+  </compound>
+  <compound kind="file">
     <name>index.doc</name>
     <path>/home/julien/repo/schiaas/doc/doxygen/</path>
     <filename>index_8doc</filename>
@@ -16,6 +21,35 @@
     <filename>simschlouder_8doc</filename>
   </compound>
   <compound kind="page">
+    <name>lab</name>
+    <title>The lab documentation</title>
+    <filename>lab</filename>
+    <docanchor file="lab" title="Prerequisites">lab_prerequisites</docanchor>
+    <docanchor file="lab" title="Lab sub-directories">lab_dirs</docanchor>
+    <docanchor file="lab" title="Setting the lab up">lab_setup</docanchor>
+    <docanchor file="lab" title="Basics">lab_setup_basics</docanchor>
+    <docanchor file="lab" title="Analyzing the results">lab_setup_observing</docanchor>
+    <docanchor file="lab" title="How to set your own lab up">lab_howto</docanchor>
+  </compound>
+  <compound kind="page">
+    <name>howto_scheduler_intro</name>
+    <title>How to study schedulers</title>
+    <filename>howto_scheduler_intro</filename>
+    <docanchor file="howto_scheduler_intro" title="Building the simulator">howto_scheduler_build</docanchor>
+    <docanchor file="howto_scheduler_intro" title="Implementing the scheduler">howto_scheduler_build_impl</docanchor>
+    <docanchor file="howto_scheduler_intro" title="Load the simulator">howto_scheduler_build_app</docanchor>
+    <docanchor file="howto_scheduler_intro" title="Making the simulator">howto_scheduler_build_jar</docanchor>
+    <docanchor file="howto_scheduler_intro" title="Running the simulations">howto_scheduler_running</docanchor>
+    <docanchor file="howto_scheduler_intro" title="Setting up the lab">howto_scheduler_running_setup</docanchor>
+    <docanchor file="howto_scheduler_intro" title="Configuration of the simulator">howto_scheduler_running_setup_sim</docanchor>
+    <docanchor file="howto_scheduler_intro" title="Configuration of the lab">howto_scheduler_running_setup_cfg</docanchor>
+    <docanchor file="howto_scheduler_intro" title="Observing the simulations">howto_scheduler_observing</docanchor>
+    <docanchor file="howto_scheduler_intro" title="Identifying the observations">howto_scheduler_observing_series</docanchor>
+    <docanchor file="howto_scheduler_intro" title="Observing the loads">howto_scheduler_observing_loads</docanchor>
+    <docanchor file="howto_scheduler_intro" title="Observing the usage of hosts">howto_scheduler_observing_usage</docanchor>
+    <docanchor file="howto_scheduler_intro" title="Observing how many hosts are idle">howto_scheduler_observing_green</docanchor>
+  </compound>
+  <compound kind="page">
     <name>simschlouder</name>
     <title>SimSchlouder Documentation</title>
     <filename>simschlouder</filename>
@@ -26,17 +60,6 @@
     <docanchor file="simschlouder" title="Configuration file">config_file</docanchor>
     <docanchor file="simschlouder" title="Input file format">input_file</docanchor>
     <docanchor file="simschlouder" title="Strategy">strategy</docanchor>
-  </compound>
-  <compound kind="page">
-    <name>lab_intro</name>
-    <title>The lab documentation</title>
-    <filename>lab_intro</filename>
-    <docanchor file="lab_intro" title="Prerequisites">lab_prerequisites</docanchor>
-    <docanchor file="lab_intro" title="Lab sub-directories">lab_dirs</docanchor>
-    <docanchor file="lab_intro" title="Setting the lab up">lab_setup</docanchor>
-    <docanchor file="lab_intro" title="Basics">lab_setup_basics</docanchor>
-    <docanchor file="lab_intro" title="Analyzing the results">lab_setup_observing</docanchor>
-    <docanchor file="lab_intro" title="How to set your own lab up">lab_howto</docanchor>
   </compound>
   <compound kind="page">
     <name>index</name>

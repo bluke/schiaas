@@ -15,8 +15,7 @@
 								
 			<scheduler name="org.simgrid.schiaas.engine.compute.scheduler.simplescheduler.SimpleScheduler"
 					type="balancer"
-					controller="controller"
-					delay="10"/>
+					controller="controller"/>
 						
 			<instance_type id="small" core="1" memory="1000" disk="1690"/>
 			<instance_type id="small-dp30" core="1" memory="1000" disk="1690" dpIntensity="30"/>			

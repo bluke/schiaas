@@ -74,8 +74,8 @@ function setupify {
 	echo -n $res
 }
 
-[[ ! -v KEEP ]] && rm -rf $DATA_DIR
-mkdir -p $DATA_DIR
+[[ ! -v KEEP ]] && rm -rf $DATA_DIR $SIMULATIONS_DIR
+mkdir -p $DATA_DIR $SIMULATIONS_DIR
 
 while read line
 do
@@ -118,12 +118,11 @@ do
 		echo "Simulating $XP_ID"
 
 		XP_SIMULATION_DIR=$SIMULATIONS_DIR/$XP_ID
-		rm -rf $XP_SIMULATION_DIR 2> /dev/null
 		mkdir -p $XP_SIMULATION_DIR
 
 		cd $XP_SIMULATION_DIR
 		(
-			java $JAVA_START_ARGS $JAVA_XP_ARGS $JAVA_END_ARGS 2> simgrid.out 1>&2
+			[[ -e $XP_SIMULATION_DIR/schiaas.trace ]] || java $JAVA_START_ARGS $JAVA_XP_ARGS $JAVA_END_ARGS 2> simgrid.out 1>&2
 			$BIN_DIR/trace-util.py schiaas.trace -f -p $XP_ID -d $DATA_DIR -r $TU_ARGS 
 		) &
 		SIM_PIDS="$SIM_PIDS $!"
@@ -135,6 +134,7 @@ wait $SIM_PIDS
 
 echo "Gathering results"
 cd $DATA_DIR
+rm reads.R plots.R 2>/dev/null
 for XP_ID in $XP_ID_LIST
 do
 	echo -e "\n##################################### $XP_ID" >> reads.R

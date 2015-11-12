@@ -66,6 +66,7 @@ public abstract class ComputeScheduler {
 
 	
 	/**
+	 * Schedule a VM: proposes a physical host to host an instance of instanceType.
 	 * @param instanceType the type of the instance to be scheduled.
 	 * @return the ComputeHost to host the instance, null if no host is available.
 	 * @throws VMSchedulingException whenever the instance can not be scheduled.
@@ -96,5 +97,6 @@ public abstract class ComputeScheduler {
 	/**
 	 * Called at the termination of the cloud
 	 */
-	public abstract void terminate();
+	public void terminate() {
+	}
 }
