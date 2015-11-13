@@ -55,6 +55,8 @@ public class SinInjector extends AbstractInjector {
 			Process.getCurrentProcess().waitFor(startDate-Msg.getClock());
 		}
 
+		Msg.info("starting "+id);
+		
 		// Injections
 		this.startDate = Msg.getClock();
 		double t = 0;
@@ -91,6 +93,11 @@ public class SinInjector extends AbstractInjector {
 			
 			Process.getCurrentProcess().waitFor((int)this.period);
 		}
-		Process.getCurrentProcess().waitFor((int)this.period);
+		
+		// terminating
+		for (LoadedInstance li : loadedInstances) {
+			li.terminate();
+		}
+		this.trace.addEvent("instances_count", ""+0);
 	}
 }

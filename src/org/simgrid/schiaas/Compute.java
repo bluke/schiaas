@@ -316,15 +316,13 @@ public class Compute {
 	 */
 	public Instance runInstance(Image image, InstanceType instanceType) throws VMSchedulingException {
 		Instance instance = this.computeEngine.newInstance(
-				this.getCloud().getId() + "-" + String.format("%03d", instancesId),
+				this.getCloud().getId() + "-" + String.format("%03d", instancesId++),
 				image,
 				instanceType);
-		
-		this.computeEngine.doCommand(ComputeEngine.COMMAND.START, instance);
-
 
 		this.instances.put(instance.id, instance);
-		instancesId++;
+		this.computeEngine.doCommand(ComputeEngine.COMMAND.START, instance);
+
 		return instance;
 	}
 

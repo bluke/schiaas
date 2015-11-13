@@ -69,7 +69,7 @@ public class SimpleReconfigurator extends SimpleScheduler {
 			while(! scheduler.terminating) {
 			
 				if (i == 0) {
-					waitFor(10);
+					waitFor(1);
 				} else {
 					waitFor(scheduler.delay);
 				}

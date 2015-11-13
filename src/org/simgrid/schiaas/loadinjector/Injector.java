@@ -37,6 +37,7 @@ public class Injector {
 	public static AbstractInjector newInjector(Node injectorXMLNode) {
 		String id = injectorXMLNode.getAttributes().getNamedItem("id")
 				.getNodeValue();
+
 		String className = injectorXMLNode.getAttributes().getNamedItem("class")
 				.getNodeValue();
 		Cloud cloud = SchIaaS.getCloud(
