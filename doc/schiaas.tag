@@ -48,6 +48,9 @@
     <docanchor file="howto_scheduler_intro" title="Observing the loads">howto_scheduler_observing_loads</docanchor>
     <docanchor file="howto_scheduler_intro" title="Observing the usage of hosts">howto_scheduler_observing_usage</docanchor>
     <docanchor file="howto_scheduler_intro" title="Observing how many hosts are idle">howto_scheduler_observing_green</docanchor>
+    <docanchor file="howto_scheduler_intro" title="Observing the migrations">howto_scheduler_observing_migrations</docanchor>
+    <docanchor file="howto_scheduler_intro" title="Using two injectors at once.">howto_scheduler_observing_dual_injections</docanchor>
+    <docanchor file="howto_scheduler_intro" title="Conclusion">howto_scheduler_conclusion</docanchor>
   </compound>
   <compound kind="page">
     <name>simschlouder</name>

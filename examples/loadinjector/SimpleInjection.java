@@ -31,6 +31,8 @@ public class SimpleInjection {
 		Msg.createEnvironment(args[0]);
 		SchIaaS.init(args[2]);
 		Injector.init(args[3]);
+		InjectionScheduler.Init();
+		
 		Msg.deployApplication(args[1]);
 		
 		/* execute the simulation */

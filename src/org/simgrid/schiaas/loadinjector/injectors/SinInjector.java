@@ -14,10 +14,24 @@ import org.simgrid.schiaas.loadinjector.LoadedInstance;
 
 public class SinInjector extends AbstractInjector {
 
-	private double startDate;
-	private double duration, period;
-	private double instancePeriod, instanceMin, instanceMax; 
-	private double loadPeriod, loadMin, loadMax;
+	/** Date at which the injection start */
+	protected double startDate;
+	/** Duration of the injection */  
+	protected double duration;
+	/** Period at which the loads change */
+	protected double period;
+	/** Duration of one full sinusoid cycle for instances */
+	protected double instancePeriod;
+	/** Minimum number of instances */
+	protected double instanceMin;
+	/** Maximum number of instances */
+	protected double instanceMax; 
+	/** Duration of one full sinusoid cycle for CPU load */
+	protected double loadPeriod;
+	/** Minimum CPU load */
+	protected double loadMin;
+	/** Maximum CPU load */
+	protected double loadMax;
 	
 	private String imageId, instanceTypeId;
 	

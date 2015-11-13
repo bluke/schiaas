@@ -41,9 +41,15 @@ public abstract class AbstractInjector {
 		this.trace.addProperty("random_seed", ""+seed);
 	}
 
+	/** @return the id of this injector */
+	public String getId() {
+		return id;
+	}
+	
 	/**
 	 * Do the injection. Exits when the injection is finished.
 	 * @throws HostFailureException 
 	 */
 	public abstract void run() throws HostFailureException;
+
 }
