@@ -37,7 +37,7 @@
     <filename>howto_scheduler_intro</filename>
     <docanchor file="howto_scheduler_intro" title="Building the simulator">howto_scheduler_build</docanchor>
     <docanchor file="howto_scheduler_intro" title="Implementing the scheduler">howto_scheduler_build_impl</docanchor>
-    <docanchor file="howto_scheduler_intro" title="Load the simulator">howto_scheduler_build_app</docanchor>
+    <docanchor file="howto_scheduler_intro" title="Simulating the loads">howto_scheduler_build_app</docanchor>
     <docanchor file="howto_scheduler_intro" title="Making the simulator">howto_scheduler_build_jar</docanchor>
     <docanchor file="howto_scheduler_intro" title="Running the simulations">howto_scheduler_running</docanchor>
     <docanchor file="howto_scheduler_intro" title="Setting up the lab">howto_scheduler_running_setup</docanchor>
