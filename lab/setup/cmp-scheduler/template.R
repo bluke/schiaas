@@ -1,16 +1,14 @@
 
 source('reads.R')
 
-pdf('data.png')
-
+pdf('data.pdf')
 source('plots.R')
-
 dev.off()
 
-#valueat <- function(v,d) { return(tail(d[d$date<=v,],1)$value) }
+source('../bin/trace-util.R')
 
-#va_migrations <- function(v) {
-#	return(valueat(v, reconsolidator100.VirtualMachines__state_eq_migrating)[1])
-#}
-
-#integrate(va_migrations, 0, 10000)
+pdf('busy_hosts-integral.pdf')
+uc <-tu_apply(xps,'used_cores_ne_0',tu_integrate)
+barplot(uc$value, names.arg=uc$xp)
+uc
+dev.off()

@@ -71,10 +71,11 @@ public class XMLConfigReader {
 		} catch (IOException e) {
 			Msg.critical("Error while opening XML file "+xmlFilename);
 			e.printStackTrace();
-			System.exit(0);
+			System.exit(134);
 		}  catch (Exception e) {
-			System.exit(0);
+			Msg.critical("Error while reading the XML configuration file "+xmlFilename+": "+e.getMessage());
 			e.printStackTrace();
+			System.exit(1);
 		}
 	}
 

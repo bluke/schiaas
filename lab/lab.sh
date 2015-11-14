@@ -123,10 +123,10 @@ do
 		cd $XP_SIMULATION_DIR
 		(
 			[[ -e $XP_SIMULATION_DIR/schiaas.trace ]] || java $JAVA_START_ARGS $JAVA_XP_ARGS $JAVA_END_ARGS 2> simgrid.out 1>&2
+			if [ $? -ne 0 ]; then echo "Critical error while executing $XP_ID" ; cat $XP_SIMULATION_DIR/simgrid.out ; exit $? ; fi
 			$BIN_DIR/trace-util.py schiaas.trace -f -p $XP_ID -d $DATA_DIR -r $TU_ARGS 
 		) &
 		SIM_PIDS="$SIM_PIDS $!"
-
 	fi
 done < $1
 
@@ -135,6 +135,7 @@ wait $SIM_PIDS
 echo "Gathering results"
 cd $DATA_DIR
 rm reads.R plots.R 2>/dev/null
+
 for XP_ID in $XP_ID_LIST
 do
 	echo -e "\n##################################### $XP_ID" >> reads.R
@@ -142,6 +143,9 @@ do
 	echo "##################################### $XP_ID" >> plots.R
 	cat ${XP_ID}.plots.R >> plots.R
 done
+
+echo -e "\n##################################### GLOBAL " >> reads.R
+echo "xps <- data.frame(xp=c('`echo $XP_ID_LIST | sed "s/ /','/g"`'))" >> reads.R
 
 if [ -v R_SCRIPT ] ; then 
 	echo "Plotting results"

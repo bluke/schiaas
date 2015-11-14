@@ -50,6 +50,7 @@
     <docanchor file="howto_scheduler_intro" title="Observing how many hosts are idle">howto_scheduler_observing_green</docanchor>
     <docanchor file="howto_scheduler_intro" title="Observing the migrations">howto_scheduler_observing_migrations</docanchor>
     <docanchor file="howto_scheduler_intro" title="Using two injectors at once.">howto_scheduler_observing_dual_injections</docanchor>
+    <docanchor file="howto_scheduler_intro" title="Observing more closely">howto_scheduler_observing_closely</docanchor>
     <docanchor file="howto_scheduler_intro" title="Conclusion">howto_scheduler_conclusion</docanchor>
   </compound>
   <compound kind="page">

@@ -5,8 +5,14 @@ import org.simgrid.msg.HostFailureException;
 import org.simgrid.msg.VM;
 import org.simgrid.schiaas.tools.Trace;
 
+/**
+ * This kind of VM only add the tracing system of SCHIaaS to SimGrid's VM
+ * It supports only and all VM methods: please see its documentation for details.
+ * @author julien.gossa@unistra.fr
+ */
 public class TracedVM extends VM {
 	
+	/** The trace of this TracedVM */
 	Trace trace;
 
 	public TracedVM(Host host, String name, int nCore, int ramSize, int netCap, String diskPath, int diskSize, int migNetSpeed, int dpIntensity) {
@@ -69,5 +75,4 @@ public class TracedVM extends VM {
  		trace.addEvent("cpu_bound", ""+bound);
  		super.setBound(bound);
  	}
-
 }

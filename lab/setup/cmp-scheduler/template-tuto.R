@@ -73,3 +73,14 @@ dev.off()
 png('migrations-reconsolidator100.png')
 plot(reconsolidator100.VirtualMachines__state_eq_migrating$date,reconsolidator100.VirtualMachines__state_eq_migrating$value, type="s")
 dev.off()
+
+
+###################################### general
+
+source('../bin/trace-util.R')
+
+png('busy_hosts-integral.png', width=700)
+uc <-tu_apply(xps,'used_cores_ne_0',tu_integrate)
+barplot(uc$value, names.arg=uc$xp)
+uc
+dev.off()

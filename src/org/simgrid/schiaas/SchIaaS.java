@@ -58,7 +58,7 @@ public class SchIaaS {
 			schema = schemaFactory.newSchema(new StreamSource(SchIaaS.class.getResourceAsStream("/org/simgrid/schiaas/cloud.xsd")));
 		} catch (SAXException e1) {
 			Msg.critical("Error loading the XSD schema for the cloud XML file: " + e1.getMessage());
-			System.exit(0);
+			System.exit(1);
 		}
 		
 		DocumentBuilder db;
@@ -75,8 +75,9 @@ public class SchIaaS {
 			validator.validate(new DOMSource(doc));
 			
 			if (!SchIaaS.isXMLValid) {
+				Msg.critical("Cloud xml configuration file is not valid");
 				SchIaaS.terminate();
-				System.exit(0);
+				System.exit(1);
 			}
 			
 			
@@ -91,10 +92,11 @@ public class SchIaaS {
 		} catch (IOException e) {
 			Msg.critical("Cloud config file not found");
 			e.printStackTrace();
-			System.exit(0);
+			System.exit(134);
 		}  catch (Exception e) {
-			System.exit(0);
+			Msg.critical("Something wrong happened while initilizing SCHIaaS: "+e.getMessage());
 			e.printStackTrace();
+			System.exit(1);
 		} 
 
         
