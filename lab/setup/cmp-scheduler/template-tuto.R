@@ -77,7 +77,7 @@ dev.off()
 
 ###################################### general
 
-source('../bin/trace-util.R')
+library(traceutil)
 
 png('busy_hosts-integral.png', width=700)
 uc <-tu_apply(xps,'used_cores_ne_0',tu_integrate)
