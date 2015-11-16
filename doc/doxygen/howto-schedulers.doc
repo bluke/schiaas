@@ -1,0 +1,546 @@
+/*!  
+@page howto_scheduler_intro How to study schedulers
+
+This tutorial presents how to study one or several VM to PM schedulers. 
+Those schedulers decide which physical machine (PM) should host the vitual machines (VM). The objective can be very different: balance the resources usage, keep room for future VMs, or lower the energy consumption. 
+
+Studying schedulers is mandatory, for instance, when:
+- the designer of a new scheduler wants to compare it against other ones;
+- an administrator has to choose a scheduler for a cloud platform;
+- an administrator has to tune one scheduler for a cloud platform...
+
+
+@section howto_scheduler_build Building the simulator
+
+The first step is to build the simulator to support your study.
+
+@subsection howto_scheduler_build_impl Implementing the scheduler
+
+Implementing a scheduler is done by extending the <a href="./javadoc/schiaas/org/simgrid/schiaas/engine/compute/ComputeScheduler.html">ComputeScheduler</a> abstract class. 
+
+Provided in SCHIaaS, there are two basic schedulers, that can be used as examples.
+
+- <a href="./javadoc/schiaas/org/simgrid/schiaas/engine/compute/scheduler/simplescheduler/SimpleScheduler.html">SimpleScheduler</a>, a weight-based scheduler supporting two types of objectives: *balancer* to balance the VM among the PM (default openstack behavior); *consolidator* to concentrate the VM among as few PM as possible.
+
+- <a href="./javadoc/schiaas/org/simgrid/schiaas/engine/compute/scheduler/simplescheduler/SimpleReconfigurator.html">SimpleReconfigurator</a>, does the same as *SimpleScheduler*, but reconfigures the placement along the time by migrating one VM to a better place, every *delay* seconds.
+
+Once the schedulers to be studied are implemented, the simulator needs a cloud application to load the simulated platform (i.e. start and stop VM, and change their loads).
+
+
+@subsection howto_scheduler_build_app Simulating the loads
+
+Any SCHIaaS application can be used to induced loads into the simulation, for instance the basic *MasterSlave* example. If the study concerns scientific computing, looking at \ref simschlouder might be a good idea.
+
+However, the most efficient application might be *loadinjector.SimpleInjection* (that can be found in the examples directory).
+
+Its only purpose is to run injectors, as decribed by the <a href="./javadoc/schiaas/org/simgrid/schiaas/loadinjector/AbstractInjector.html">AbstractInjector</a> abstract class. Injectors are processes that start and stop VM, and change their load along time. 
+
+Provided with SCHIaaS is the *SinInjector*, which injects sinusoïd loads, according to min and max values, and period of the sinusoïd, for both amount of VM and VM CPU load. It is a good example for designing more complex injectors.
+
+The *loadinjector.SimpleInjection* simulator needs four arguments: *platform.xml deploy.xml cloud.xml injector.xml*, that is the same as any SCHIaaS simulator, plus the configuration of the the injector, which looks like this:
+@code
+<?xml version='1.0'?>
+ <!DOCTYPE injectors>
+ <injectors>
+  <injector id="myInjectorSlow"
+   class="org.simgrid.schiaas.loadinjector.injectors.SinInjector"
+   cloud="myCloud">
+	 	
+   <config 
+    start_date="0"
+    duration="2000"
+    period="3"
+    instance_period="1000"
+    instance_min="10"
+    instance_max="192"
+    load_period="100"
+    load_min="90"
+    load_max="100"
+    image_id="myImage"
+    instance_type_id="small-dp30"
+   />
+  </injector> 
+ </injectors>
+@endcode
+
+Please look at <a href="./javadoc/schiaas/index.html">SinInjector javadoc</a> for details.
+
+
+@subsection howto_scheduler_build_jar Making the simulator
+
+A this stage, you should have a simulator, able to use your scheduler as well as any other scheduler, and an application that loads the cloud.
+
+It is recommended to build jar files of your simulator, to ease its executions in the next steps.
+
+
+@section howto_scheduler_running Running the simulations
+
+In the following, we will use *loadinjector.SimpleInjection* and compare 5 schedulers:
+- *SimpleScheduler* whith type *balancer*;
+- *SimpleScheduler* whith type *consolidator*;
+- *SimpleReconfigurator* whith type *consolidator* and delay *0*;
+- *SimpleReconfigurator* whith type *consolidator* and delay *10*;
+- *SimpleReconfigurator* whith type *consolidator* and delay *100*;
+
+NB: The last three schedulers show how this can be used to tune a scheduler. The *delay* is the time (in s.) between two VM migrations.
+
+Please make sure to set the *CLASSPATH* var in order to make the simulator runnable by:
+@code
+$ java loadinjector.SimpleInjection platform.xml deploy.xml cloud.xml injector.xml
+@endcode 
+
+The study will use **the lab** provided with SCHIaaS (see \ref lab).
+
+
+@subsection howto_scheduler_running_setup Setting up the lab
+
+@subsubsection howto_scheduler_running_setup_sim Configuration of the simulator
+
+To setup the lab:
+- create a directory in ./lab/setup, for instance ./lab/setup/cmp-scheduler;
+- put the files needed by the simulator in this directory, that is 
+  - platform.xml deploy.xml injector.xml, that are common to all simulations;
+  - different versions of cloud.xml, to specify the studied schedulers:
+    - cloud-balancer.xml
+@code
+<scheduler name="org.simgrid.schiaas.engine.compute.scheduler.simplescheduler.SimpleScheduler"
+		type="balancer"/>
+@endcode    
+    - cloud-balancer.xml
+@code
+<scheduler name="org.simgrid.schiaas.engine.compute.scheduler.simplescheduler.SimpleScheduler"
+		type="consolidator"/>
+@endcode    
+    - cloud-reconsolidator0.xml
+@code
+<scheduler name="org.simgrid.schiaas.engine.compute.scheduler.simplescheduler.SimpleReconfigurator"
+		type="consolidator"
+		controller="controller"
+		delay="0"/>
+@endcode    
+    - cloud-reconsolidator10.xml
+@code
+<scheduler name="org.simgrid.schiaas.engine.compute.scheduler.simplescheduler.SimpleReconfigurator"
+		type="consolidator"
+		controller="controller"
+		delay="10"/>
+@endcode    
+    - cloud-reconsolidator0.xml
+@code
+<scheduler name="org.simgrid.schiaas.engine.compute.scheduler.simplescheduler.SimpleReconfigurator"
+		type="consolidator"
+		controller="controller"
+		delay="100"/>
+@endcode    
+
+NB: *controller* indicates which host to use to run the scheduler processes.
+
+
+
+@subsubsection howto_scheduler_running_setup_cfg Configuration of the lab
+
+The following file *cmp-schedulers.cfg* describes the simulations to run:
+@code
+#SETUP_DIR ./setup/cmp-scheduler
+#JAVA_START_ARGS loadinjector.SimpleInjection
+#JAVA_START_ARGS platform.xml deploy.xml
+#JAVA_END_ARGS injector.xml
+
+balancer: cloud-balancer.xml
+consolidator: cloud-consolidator.xml
+reconsolidator0: cloud-reconsolidator0.xml
+reconsolidator10: cloud-reconsolidator10.xml
+reconsolidator100: cloud-reconsolidator100.xml
+@endcode
+where:
+- SETUP_DIR is the location of the files;
+- JAVA_*_ARGS are the arguments common to all simulations;
+- [simulation_id]:[arguments] describe one unique simulation by id and specific arguments.
+
+Afterward, the simulations can be ran using:
+@code
+./lab -p 2 setup/cmp-scheduler/cmp-scheduler.cfg 
+@endcode
+
+This will execute:
+@code
+java loadinjector.SimpleInjection platform.xml deploy.xml cloud-balancer.xml injector.xml
+java loadinjector.SimpleInjection platform.xml deploy.xml cloud-consolidator.xml injector.xml
+java loadinjector.SimpleInjection platform.xml deploy.xml cloud-reconsolidator0.xml injector.xml
+java loadinjector.SimpleInjection platform.xml deploy.xml cloud-reconsolidator10.xml injector.xml
+java loadinjector.SimpleInjection platform.xml deploy.xml cloud-reconsolidator100.xml injector.xml
+@endcode
+
+NB: -p 2 makes 2 simulations to run in parallel.
+
+This will then create subdirectories in the directory *simulations*, according to the ids given in the configuration file:
+
+@code
+$ ls -R simulations/
+
+simulations/:
+balancer  consolidator  reconsolidator0  reconsolidator10  reconsolidator100
+
+simulations/balancer:
+schiaas.trace  simgrid.out
+
+simulations/consolidator:
+schiaas.trace  simgrid.out
+
+simulations/reconsolidator0:
+schiaas.trace  simgrid.out
+
+simulations/reconsolidator10:
+schiaas.trace  simgrid.out
+
+simulations/reconsolidator100:
+schiaas.trace  simgrid.out
+@endcode
+
+@section howto_scheduler_observing Observing the simulations
+
+This section shows how the results of these simulations can be observed.
+
+@subsection howto_scheduler_observing_series Identifying the observations
+
+First of all, let's identify what can be observed, using ./bin/trace-util.py.
+
+@code
+$ ./trace-util.py simulations/balancer/schiaas.trace --info
+
+{
+  "root": {
+    "date": "property",
+    "description": "property",
+    "cloud": {
+      "myCloud": {
+        "compute": {
+          "image_caching": "property",
+          "inter_boot_delay": "property",
+          "engine": "property",
+          "image_storage": "property",
+          "controller": "property",
+          "compute_host": {
+            "* x24": {
+              "cores": "property",
+              "ram_size": "property",
+              "diskSize": "property",
+              "used_cores": "event"
+            }
+          },
+          "scheduler": {
+            "name": "property",
+            "delay": "property",
+            "controller": "property",
+            "type": "property"
+          },
+          "instance": {
+            "* x465": {
+              "image": "property",
+              "instance_type": "property",
+              "command": "event",
+              "schedule": "event",
+              "load": "event"
+            }
+          }
+        }
+      }
+    },
+    "VirtualMachines": {
+      "* x465": {
+        "n_cores": "property",
+        "ram_size": "property",
+        "net_cap": "property",
+        "disk_path": "property",
+        "disk_size": "property",
+        "mig_net_speed": "property",
+        "dp_intensity": "property",
+        "cpu_bound": "event",
+        "state": "event"
+      }
+    },
+    "injector": {
+      "myInjector": {
+        "injector": "property",
+        "random_seed": "property",
+        "instances_count": "event",
+        "instances_load": "event"
+      }
+    }
+  }
+}
+@endcode
+
+
+@subsection howto_scheduler_observing_loads Observing the loads
+
+Then, let's observe the loads: these are the events *instances_count* and *instances_load* in the injector section. 
+
+The format is always [entity] [date] [value].
+
+One can simply use grep:
+@code
+$ cat simulations/balancer/schiaas.trace | grep instances_count 
+
+root:injector:myInjector:instances_count	0.0	101
+root:injector:myInjector:instances_count	10.0	102
+root:injector:myInjector:instances_count	20.0	103
+root:injector:myInjector:instances_count	30.0	104
+...
+@endcode
+
+Or trace-util.py:
+@code
+$ ./bin/trace-util.py simulations/balancer/schiaas.trace --event instances_count
+entity	date	value
+
+root:injector:myInjector:instances_count	0.0	101
+root:injector:myInjector:instances_count	10.0	102
+root:injector:myInjector:instances_count	20.0	103
+root:injector:myInjector:instances_count	30.0	104
+...
+@endcode
+
+Such observations can be automatized by adding the following line to *cmp-scheduler.cfg*:
+@code
+#R_SCRIPT template.R
+#TU_ARGS --event instances_count 
+@endcode
+and a file template.R in the setup directory, with this content:
+@code
+source('reads.R')
+pdf('data.pdf')
+source('plots.R')
+dev.off()
+@endcode
+
+Afterward, running the lab
+@code
+./lab -k setup/cmp-scheduler/cmp-scheduler.cfg 
+@endcode
+NB: -k allows to keep the results of previous simulations.
+
+This will create files in the directory ./data: [simulation_id].instances_count.dat and plot their content using R into ./data/data.pdf:
+
+\image html instances_count.png
+
+To check the effect of this injection on the cloud, one can count the virtual machines that are in the running state:
+@code
+#TU_ARGS --count_if VirtualMachines.*state eq running
+@endcode
+
+\image html VM_running.png
+
+@subsection howto_scheduler_observing_usage Observing the usage of hosts
+
+To observe the behavior of the scheduler, let's look at the number of cores used by VM on each host:
+@code
+#TU_ARGS --event used_cores
+@endcode
+
+With balancer, the vm are well spread among the hosts:
+\image html balance-balancer.png
+
+With consolidator, there is some heterogenity in the number of used cores at a given date, especialy when the load change:
+\image html balance-consolidator.png
+
+With reconsolidator, this heterogenity is maximized all along the simulation:
+\image html balance-reconsolidator0.png
+
+
+@subsection howto_scheduler_observing_green Observing how many hosts are idle
+
+For green purpose, many schedulers aim at making idle as many hosts as possible, in order to shut them down. Thus, let's count the number of busy hosts, that is hosts having more than 0 used cores:
+
+@code
+#TU_ARGS --count_if used_cores gt 0
+@endcode
+
+\image html busy_hosts-balancer.png
+\image html busy_hosts-consolidator.png
+\image html busy_hosts-reconsolidator0.png
+\image html busy_hosts-reconsolidator10.png
+\image html busy_hosts-reconsolidator100.png
+
+Or alternatively, the number of idle hosts, those that could be shut down:
+@code
+#TU_ARGS --count_if used_cores eq 0
+@endcode
+
+\image html idle_hosts-balancer.png
+\image html idle_hosts-consolidator.png
+\image html idle_hosts-reconsolidator0.png
+\image html idle_hosts-reconsolidator10.png
+\image html idle_hosts-reconsolidator100.png
+
+All in all, the static schedulers perform poorly when it comes to shut hosts down, and the reconfigurator performs very well, especially with a short delay.
+
+@subsection howto_scheduler_observing_migrations Observing the migrations
+
+However, reconfigurations imply VM migrations, that consume resources as well.
+Let's look at the amount of migrations:
+@code
+#TU_ARGS --count_if VirtualMachines.*state eq migrating
+@endcode
+
+\image html migrations-reconsolidator0.png
+\image html migrations-reconsolidator10.png
+\image html migrations-reconsolidator100.png
+
+As one can see, with a delay of 0 seconds, there are up to 6 concurrent migrations, while with a delay of 10 secondes, no migrations occured concurrently.
+
+
+@subsection howto_scheduler_observing_dual_injections Using two injectors at once.
+
+After the previous observations, the reconsolidator scheduler seems interresting, particularly with a short delay.
+
+Let's look at the results with a different load.
+To do so, one can change the values in *injector.xml*, or create a new injector configuration file and add the simulations in the lab, or combine the two injections into one simulation:
+
+@code 
+<?xml version='1.0'?>
+<!DOCTYPE injectors>
+<injectors>
+ <injector id="myInjectorSlow"
+  class="org.simgrid.schiaas.loadinjector.injectors.SinInjector"
+  cloud="myCloud">
+
+  <config 
+   start_date="0"
+   duration="2000"
+   period="3"
+   instance_period="1000"
+   instance_min="10"
+   instance_max="192"
+   load_period="100"
+   load_min="90"
+   load_max="100"
+   image_id="myImage"
+   instance_type_id="small-dp30"
+  />
+ </injector> 
+  <injector id="myInjectorFast"
+   class="org.simgrid.schiaas.loadinjector.injectors.SinInjector"
+   cloud="myCloud">
+
+  <config 
+   start_date="2000"
+   duration="2000"
+   period="3"
+   instance_period="100"
+   instance_min="10"
+   instance_max="192"
+   load_period="100"
+   load_min="90"
+   load_max="100"
+   image_id="myImage"
+   instance_type_id="small-dp30"
+  />
+ </injector> 
+</injectors>
+@endcode
+
+As one can see, following the previous injection, there is now a second injection with a much more agressive *intance_period*. This simulate a large number of users creating and terminating VM all the time:
+\image html instances_count-dual_injection.png
+
+Now, let's look at the number of busy hosts with the reconsolidator:
+\image html busy_hosts-reconsolidator0-dual_injection.png
+\image html busy_hosts-reconsolidator10-dual_injection.png
+
+Under agressive loads, those actually perform worse than the simple consolidator:
+\image html busy_hosts-consolidator-dual_injection.png
+
+This is explained by the amount of migrations that slow the platform and prevent from shutting the VM down as soon as the user ask for it:
+
+\image html migrations-reconsolidator0-dual_injection.png
+\image html migrations-reconsolidator10-dual_injection.png
+
+
+@subsection howto_scheduler_observing_closely Observing more closely
+
+As raw data from observations are not sufficient, data can be easily imported into R:
+@code
+$ R
+> source('data/reads.R')
+@endcode
+
+Afterward, the observations can be manipulated directly:
+@code 
+> head(balancer.used_cores_ne_0)
+      entity     date value
+1 used_cores   0.0000    24
+2 used_cores 543.0078    23
+3 used_cores 588.0078    22
+4 used_cores 591.0078    21
+5 used_cores 597.0078    20
+6 used_cores 600.0078    19
+@endcode
+
+Some additional functionalities are available in the library traceutil.
+For instance, it allows to integrate values of the observation over time, and apply a given function to all observed XPs at once:
+@code
+> install('bin/traceutil')
+> ??traceutil
+>
+> ?tu_integrate
+> tu_integrate(balancer.used_cores_ne_0)
+[1] 85847.87
+> 
+> xps
+                 xp
+1          balancer
+2      consolidator
+3   reconsolidator0
+4  reconsolidator10
+5 reconsolidator100
+> 
+> ?tu_apply
+> tu_apply(xps,'used_cores_ne_0', tu_integrate)
+                 xp    value
+1          balancer 85847.87
+2      consolidator 72010.85
+3   reconsolidator0 96632.11
+4  reconsolidator10 76073.56
+5 reconsolidator100 70646.12
+@endcode
+
+And everything can be automatized with template.R, as declared in the lab configuration file:
+@code
+source('reads.R')
+
+pdf('data.pdf')
+source('plots.R')
+dev.off()
+
+install.packages('../bin/traceutil_0.0.0.9000.tar.gz')
+library(traceutil)
+
+pdf('busy_hosts-integral.pdf')
+uc <-tu_apply(xps,'used_cores_ne_0',tu_integrate)
+barplot(uc$value, names.arg=uc$xp)
+uc
+dev.off()
+@endcode
+NB: *install.packages* is only required the first time.
+
+After running lab.sh:
+- *data/R.out* will contain the result of the execution of R;
+- *data/data.pdf* will contain the plot of every observation;
+- *data/busy_hosts-integral.pdf* will contain the specific plot:
+
+\image html busy_hosts-integral.png
+
+For more details please see \ref lab and \ref lab_setup_observing.
+
+
+@section howto_scheduler_conclusion Conclusion
+
+All files of this tutorial are available and all results can obtained by
+@code
+./lab.sh -p 2 setup/cmp-scheduler/cmp-schedulers.cfg 
+@endcode
+
+And most importantly: feel free to contact us for any purpose, and you are very welcome to contribute to the project by providing you own schedulers and injectors.
+We will be pleased to include them as a part of the distribution.
+
+*/
