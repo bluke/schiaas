@@ -33,7 +33,7 @@ do
 	p)
 		shift
 		PARALLEL_SIMS=$1
-		JAVA_PS_COUNT=`ps --no-header -C java | wc -l`
+		JAVA_PS_COUNT=`ps aux | grep java | wc -l`
 		shift
 		(( OPTIND -- ))
 		echo "- Parallel execution: $PARALLEL_SIMS"
@@ -53,7 +53,8 @@ SETUP_DIR=$LAB_DIR/setup
 SIMULATIONS_DIR=$LAB_DIR/simulations
 DATA_DIR=$LAB_DIR/data
 
-SCHIAAS_BIN_DIR=`readlink -f ../bin`
+SCHIAAS_DIR="../bin"
+SCHIAAS_BIN_DIR=`echo "$(cd $(dirname $SCHIAAS_DIR); pwd)/$(basename $SCHIAAS_DIR)"`
 
 function setupify {
 	res=""
