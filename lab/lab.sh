@@ -18,6 +18,12 @@
 ##
 ## @author julien.gossa@unistra.fr
 
+# provided to implement a 'readlink -f' on all systems
+function abspath {
+  echo "$(cd $(dirname $1); pwd)/$(basename $1)"
+}
+
+
 
 PARALLEL_SIMS=1
 
@@ -54,7 +60,7 @@ SIMULATIONS_DIR=$LAB_DIR/simulations
 DATA_DIR=$LAB_DIR/data
 
 SCHIAAS_DIR="../bin"
-SCHIAAS_BIN_DIR=`echo "$(cd $(dirname $SCHIAAS_DIR); pwd)/$(basename $SCHIAAS_DIR)"`
+SCHIAAS_BIN_DIR=`abspath $SCHIAAS_DIR`
 
 function setupify {
 	res=""
@@ -65,9 +71,9 @@ function setupify {
 		a=${a//SCHIAAS_BIN_DIR/$SCHIAAS_BIN_DIR}
 
 		if [ -e "$SETUP_DIR/$a" ]; then
-			a="`readlink -f $SETUP_DIR/$a`"
+			a="`abspath $SETUP_DIR/$a`"
 		elif [ -e "$a" ]; then
-			a="`readlink -f \"$a\"`"
+			a="`abspath \"$a\"`"
 		fi
 
 		res="$res $a"
@@ -75,7 +81,7 @@ function setupify {
 	echo -n $res
 }
 
-[[ ! -v KEEP ]] && rm -rf $DATA_DIR $SIMULATIONS_DIR
+[ -n  "$KEEP" ] && rm -rf $DATA_DIR $SIMULATIONS_DIR
 mkdir -p $DATA_DIR $SIMULATIONS_DIR
 
 while read line
@@ -148,7 +154,7 @@ done
 echo -e "\n##################################### GLOBAL " >> reads.R
 echo "xps <- data.frame(xp=c('`echo $XP_ID_LIST | sed "s/ /','/g"`'))" >> reads.R
 
-if [ -v R_SCRIPT ] ; then 
+if [ -n "$R_SCRIPT" ] ; then 
 	echo "Plotting results"
 	R --no-save < $R_SCRIPT > R.out
 fi
