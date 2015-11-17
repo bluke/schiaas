@@ -124,6 +124,7 @@ public class Master extends Process {
 		someData = myStorage.get(unstoredData);
 		
 		Msg.info("List the stored data");
+		@SuppressWarnings("unused")
 		Map <String, Data> storedData = myStorage.list(); 	//1st way
 		myStorage.ls();										//2d way
 		
@@ -166,6 +167,7 @@ public class Master extends Process {
 		List<ComputeHost> computeHosts = computeEngine.getComputeHosts();
 		ComputeHost computeHost1 = computeHosts.get(0);
 		Collection<Instance> instances1 = computeHost1.getHostedInstances();
+		@SuppressWarnings("unused")
 		ComputeHost computeHost = computeEngine.getComputeHostOf(instances1.iterator().next());
 
 		/**

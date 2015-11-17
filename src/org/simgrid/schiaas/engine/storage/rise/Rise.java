@@ -88,6 +88,7 @@ public class Rise extends StorageEngine {
 	public void doRequest(REQUEST request, Data data) 
 			throws TransferFailureException, HostFailureException, TimeoutException {
 		
+		@SuppressWarnings("unused")
 		RiseProcess riseProcess = new RiseProcess(this, request, data);
 		
 		// Send the request
@@ -102,6 +103,7 @@ public class Rise extends StorageEngine {
 		switch (request) {
 		case GET: 
 		case LIST:
+			@SuppressWarnings("unused")
 			RiseTask respTask = (RiseTask) RiseTask.receive(responseMessageBox(reqTask));
 			break;
 		case PUT:

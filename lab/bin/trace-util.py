@@ -15,6 +15,7 @@ import json
 import argparse
 import collections
 import re
+import tempfile
 
 def usage():
 	print >> sys.stderr, 'Usage: src_trace_file command [option] [[command [option]...]'.format(sys.argv[0])
@@ -29,7 +30,9 @@ parser.add_argument('--count-if', dest='count_if_args', metavar=('pattern cmp va
 	help='for each date, count the entities matching the pattern for which the comparison cmp is true between value and val. cmp is bash_like: be eq, ne, gt, ge, lt, le.')
 parser.add_argument('--json', dest='json_dump', action='store_const', const=True, default=False, 
 	help='dump the whole trace in the json format.')
-parser.add_argument('--info', dest='info_dump', action='store_const', const=True, default=False, 
+parser.add_argument('--info', dest='dump_info', action='store_const', const=True, default=False, 
+	help='print the properties and events available in the trace, in the json format.')
+parser.add_argument('--regex', dest='dump_regex', action='store_const', const=True, default=False, 
 	help='print the properties and events available in the trace, in the json format.')
 parser.add_argument('-r', dest='output_r', action='store_const', const=True, default=False, 
 	help='write R script')
@@ -57,6 +60,8 @@ class Trace:
 		else:
 			self.root = self.read_paje(src_filename)
 
+		self.doc = self.read_doc()
+
 	def get_type(self, src_filename):
 		with open(src_filename, errors='ignore') as src_file:
 			first_line = src_file.readline().strip()
@@ -79,9 +84,11 @@ class Trace:
 				traces.append(log.split(self.field_sep))
 		return traces
 
-	def build_obj_from_traces(self):
+	def build_obj_from_traces(self, traces=None):
+		if traces == None: traces = self.traces
+		
 		root = collections.OrderedDict()
-		for [entities, key, val] in self.traces:
+		for [entities, key, val] in traces:
 			e = root
 			val = val.strip()
 			for entity in entities.split(self.entity_sep):
@@ -126,6 +133,18 @@ class Trace:
 
 				line = src_file.readline()
 		return root
+
+	def read_doc(self):
+		doc = []
+		try:
+			with open(os.path.dirname(os.path.realpath(__file__))+'/trace-util.doc') as doc_file:
+				line = doc_file.readline()
+				while line != "":
+					doc.append(line.split(self.field_sep))
+					line = doc_file.readline()
+		except FileNotFoundError:
+			pass
+		return doc
 
 
 	def count_if(self, pattern, test, testval, out_file):
@@ -200,69 +219,52 @@ class Trace:
 		for e,v in last_val.items():
 			out_file.write(e+self.field_sep+str(last_date)+self.field_sep+v)
 
-		return 'p'	
+		return 'p'
 
 
 	def get_info(self, out_file):
-		if self.root is None:
-			self.root = self.build_obj_from_traces()
-		out_file.write(json.dumps(self.sub_get_info(self.root), 
-			indent=2, separators=(',', ': ')))
-		out_file.write('\n')
+		traces = []
+		for (entities, key, val) in self.sub_get_regex():
+			if val == "event": entities.pop()
+			traces.append((self.entity_sep.join(entities),key,val))
 
-	def node_eq(self,node1,node2):
-		try:
-			for k,v in node1.items():
-				if k not in node2:
-					return False
-		except AttributeError: # node is a leaf
-			return node1 == node2
+		obj = self.build_obj_from_traces(traces)
+		out_file.write(json.dumps(obj,indent=2, separators=(',', ': ')))
+		return
 
-		return True
+	def get_regex(self, out_file):
+		regexes = self.sub_get_regex()
 
+		for (entities, key, val) in regexes:
+			out_file.write(self.field_sep.join((entities,key,val))+'\n')
 
-	def sub_get_info(self, node):
-		#print("SDS: ",fields)
+	def sub_get_regex(self):
+		regexes = []
+		for [entities, key, val] in self.traces:
+			entities = entities.split(self.entity_sep)	
+			try: #event
+				float(key)
+				key = entities[-1]
+				val = "event"
+			except ValueError: #prop
+				val = "property"
 
-		info = collections.OrderedDict()
-		subs = {}
-		occurences = {}
+			for (e,k,v) in regexes :
+				if (k==key and v==val and len(e) == len(entities)):
+					for i in range(0, len(e)) :
+						if (e[i] != entities[i]):
+							e[i] = '.*'
+					key = None
+					break
+			if key is not None :
 
-		try: #event
-			k = next(iter(node.keys()))
-			float(k)
-			#print("event")
-			return 'event'
-		except AttributeError: #property
-			#print("property")
-			return 'property'
-		except ValueError: #sub
-			#print("subs")
-			for k,v in node.items():
-				sub = self.sub_get_info(v)
-				if sub == 'event' or sub =='property':
-					info[k] = sub
-				else:
-					for k1,v1 in subs.items():
-						if self.node_eq(v1, sub):
-							occurences[k1]=occurences[k1]+1
-							sub = None
-							break
-					if sub is not None:
-						subs[k]=sub
-						occurences[k]=1
+				regexes.append((entities, key, val))
 
-			i=0
-			for k1,v1 in subs.items():
-				if occurences[k1] == 1:
-					info[k1]=v1
-				else:
-					if i == 0: idi=''
-					else: idi= '('+str(i)+')'
-					info['*'+idi+' x'+str(occurences[k1])] = v1
-					i = i +1
+		res = []
+		for (entities, key, val) in regexes:
+			res.append((self.entity_sep.join(entities),key,val))
 
-		return info
+		return sorted(res, key=lambda e:e[0])
 
 
 	def get_json(self, out_file):
@@ -302,6 +304,8 @@ def exec_and_write(command, serie, output_r=args.output_r):
 
 trace = Trace(args.src_filename)
 
+print (trace.doc)
+
 if args.dump_events is not None:
 	for pattern in args.dump_events:
 		exec_and_write(lambda out_file : trace.grep_event(pattern, out_file), pattern)
@@ -331,8 +335,11 @@ if args.count_if_args is not None:
 				argset[0]+'-'+argset[1]+'-'+argset[2])
 
 
-if (args.info_dump):
+if (args.dump_info):
 	exec_and_write(lambda out_file: trace.get_info(out_file), 'info', False)		
+
+if (args.dump_regex):
+	exec_and_write(lambda out_file: trace.get_regex(out_file), 'regex', False)		
 
 if (args.json_dump):
 	exec_and_write(lambda out_file: trace.get_json(out_file), 'json', False)
