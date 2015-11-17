@@ -147,8 +147,9 @@ public class Rice extends ComputeEngine {
 	public int describeAvailability(InstanceType instanceType) {
 		double core = Double.parseDouble(instanceType.getProperty("core"));
 		int availability = 0;
-		for (int i = 0; i < this.riceHosts.size(); i++)
-			availability += (((RiceHost)this.riceHosts.get(i)).freeCores) / core;
+		for (ComputeHost riceHost : this.riceHosts) {
+			availability += (((RiceHost) riceHost).freeCores) / core;
+		}
 
 		return availability;
 	}
