@@ -4,7 +4,6 @@ import java.util.Map;
 
 import org.simgrid.msg.Msg;
 import org.simgrid.schiaas.InstanceType;
-import org.simgrid.schiaas.engine.compute.ComputeEngine;
 import org.simgrid.schiaas.exceptions.MissingConfigException;
 import org.simgrid.schiaas.exceptions.VMSchedulingException;
 import org.simgrid.schiaas.tools.Trace;

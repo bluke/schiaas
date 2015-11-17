@@ -16,7 +16,6 @@ import org.simgrid.schiaas.InstanceType;
 import org.simgrid.schiaas.Storage;
 import org.simgrid.schiaas.engine.compute.ComputeEngine;
 import org.simgrid.schiaas.engine.compute.ComputeHost;
-import org.simgrid.schiaas.engine.compute.rice.RiceHost;
 import org.simgrid.schiaas.exceptions.MissingConfigException;
 import org.simgrid.schiaas.exceptions.VMSchedulingException;
 
