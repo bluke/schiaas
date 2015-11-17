@@ -41,6 +41,7 @@ public class SimpleScheduler extends ComputeScheduler {
 	 * The greatest one will be selected to host the VMs. 
 	 * @param computeHost the compute host to evaluate
 	 * @param instanceType the type of the instance to be scheduled.
+	 * @return Return the weight of the given host depending on the number of free cores.
 	 */
 	protected double getWeight(ComputeHost computeHost, InstanceType instanceType) {
 		
@@ -58,7 +59,8 @@ public class SimpleScheduler extends ComputeScheduler {
 	/**
 	 * Simply compute a weight for each PMs, and select the greatest one.
 	 * Only check for cores availability.
-	 * Return null if the selected host is not suitable for the instanceType.  
+	 * Return null if the selected host is not suitable for the instanceType.
+	 * @return the ComputeHost onto which the VM will be scheduled.
 	 * @throws VMSchedulingException whenever no suitable host is found
 	 */
 	@Override
@@ -68,7 +70,7 @@ public class SimpleScheduler extends ComputeScheduler {
 		ComputeHost result = null;
 		double resultWeight = -Double.MAX_VALUE;
 		
-		for (ComputeHost ch : computeHosts)  {
+		for (ComputeHost ch : computeHosts) {
 			
 			if ( ch.isAvailable() && ch.canHost(instanceType) > 0 )	{
 				double weight = getWeight(ch, instanceType);

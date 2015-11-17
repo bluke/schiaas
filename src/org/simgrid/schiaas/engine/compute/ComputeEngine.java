@@ -61,7 +61,7 @@ public abstract class ComputeEngine {
 	 * @param config the configuration of the scheduler
 	 */
 	public void setComputeScheduler(String schedulerName, Map<String, String> config){		
-		this.computeScheduler = ComputeScheduler.load(schedulerName, this, config);;
+		this.computeScheduler = ComputeScheduler.load(schedulerName, this, config);
 	}
 	
 	/**
@@ -126,6 +126,7 @@ public abstract class ComputeEngine {
 	 * 
 	 * @param instance The instance to migrate
 	 * @param computeHost The host to migrate the instance to
+	 * @throws HostFailureException
 	 */
 	public abstract void liveMigration(Instance instance, ComputeHost computeHost) throws HostFailureException;
 
@@ -135,6 +136,7 @@ public abstract class ComputeEngine {
 	 * @param instance The instance to migrate
 	 * @return The host to which the instance is migrating
 	 * @throws VMSchedulingException When the scheduler fails to schedule the instance
+	 * @throws HostFailureException
 	 */
 	public abstract ComputeHost liveMigration(Instance instance) throws HostFailureException, VMSchedulingException;
 		

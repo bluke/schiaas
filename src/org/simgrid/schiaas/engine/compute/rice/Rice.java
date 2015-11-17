@@ -66,6 +66,8 @@ public class Rice extends ComputeEngine {
 	/**
 	 * Constructor.
 	 * 
+	 * @param compute The compute of this engine.
+	 * @param hosts All of the host of this engine.
 	 * @throws MissingConfigException Thrown whenever one required configuration parameter is not found.
 	 * @throws HostNotFoundException Thrown whenever one given host is not found. 
 	 * @throws FileNotFoundException 
@@ -91,7 +93,7 @@ public class Rice extends ComputeEngine {
 			Msg.critical("Something bad happened in RISE while trying to locate its controller: "+compute.getConfig("controller"));
 			e.printStackTrace();
 		} catch (Exception e){
-		
+			// TODO Anything clever to do here?
 		}
 
 		// retrieving the hosts
@@ -197,8 +199,8 @@ public class Rice extends ComputeEngine {
 	 * 
 	 * @param instance The instance to migrate
 	 * @return the host choosen by RICE, or null whenever there was no suitable host available.
+	 * @throws HostFailureException
 	 * @throws VMSchedulingException when the scheduler fails
-	 * @throws MigrationException when the migration fails at the simgrid level
 	 */
 	@Override
 	public ComputeHost liveMigration(Instance instance) throws HostFailureException, VMSchedulingException {

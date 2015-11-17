@@ -123,6 +123,7 @@ public class Cloud {
 
 	/**
 	 * Of course
+	 * @return Returns the string "Cloud:" followed by the ID of this cloud.
 	 */
 	@Override
 	public String toString() {

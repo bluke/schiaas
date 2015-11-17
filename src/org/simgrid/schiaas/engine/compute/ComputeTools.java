@@ -122,6 +122,7 @@ public class ComputeTools {
 	 * Asynchrone parallel offloader.
 	 * Set the given host to unavailable and offloads its VMs.
 	 * 
+	 * @param computeEngine The engine handling this migration
 	 * @param computeHost
 	 *            The host to offload
 	 * @throws VMSchedulingException whenever the scheduling of one instance is not possible. Stops the offload.

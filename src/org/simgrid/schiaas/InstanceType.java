@@ -68,6 +68,10 @@ public class InstanceType {
 
 	/**
 	 * Of course.
+	 * @return Returns a string representation of this instance type. It 
+	 * consists of the id followed by a colon. Properties are separated by a 
+	 * space. Each properties are represented as a key followed by equal then 
+	 * the value.
 	 */
 	@Override
 	public String toString() {

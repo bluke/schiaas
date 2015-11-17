@@ -33,6 +33,7 @@ public interface ComputeHost {
 	public abstract boolean isAvailable();
 
 	/**
+	 * @param instanceType test if this host can host an instance of this type.
 	 * @return the number of instances of a type this can host. 
 	 */	
 	public abstract int canHost(InstanceType instanceType);
