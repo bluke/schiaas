@@ -10,13 +10,13 @@ import org.simgrid.schiaas.Cloud;
 public class MissingConfigException extends Exception{
 	
 	/** The cloud where the error happens */
-	private Cloud cloud;
+	private final Cloud cloud;
 	
 	/** Name of the module throwing the error*/ 
-	private String module;
+	private final String module;
 	
 	/** name of the missing parameter */
-	private String param;
+	private final String param;
 	
 	/**
 	 * 

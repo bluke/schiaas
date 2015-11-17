@@ -33,7 +33,7 @@ public class SinInjector extends AbstractInjector {
 	/** Maximum CPU load */
 	protected double loadMax;
 	
-	private String imageId, instanceTypeId;
+	private final String imageId, instanceTypeId;
 	
 	public SinInjector(String id, Cloud cloud, Map<String,String> config) {
 		super(id, cloud, config);

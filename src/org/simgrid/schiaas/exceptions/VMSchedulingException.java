@@ -11,13 +11,13 @@ import org.simgrid.schiaas.engine.compute.ComputeScheduler;
 public class VMSchedulingException extends Exception{
 	
 	/** Scheduler throwing the error*/ 
-	private ComputeScheduler scheduler;
+	private final ComputeScheduler scheduler;
 	
 	/** Instance type of the VM */
-	private InstanceType instanceType;
+	private final InstanceType instanceType;
 
 	/** The reason because the VM was not scheduled */
-	private String reason;
+	private final String reason;
 
 	/**
 	 * @param scheduler
