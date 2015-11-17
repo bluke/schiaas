@@ -42,6 +42,7 @@ public class RiceInstance extends Instance {
 	/**
 	 * Start this RiceInstance by calling the super method 
 	 */
+	@Override
 	protected void start() {
 		super.start();
 	}

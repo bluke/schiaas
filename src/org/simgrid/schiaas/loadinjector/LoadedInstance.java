@@ -60,6 +60,7 @@ public class LoadedInstance {
 		 * MSG's main: 
 		 * execute a task in loop in order to burn the CPU
 		 */
+		@Override
 		public void main(String[] args) throws MsgException {
 			while(true) {
 				Task task = new Task(

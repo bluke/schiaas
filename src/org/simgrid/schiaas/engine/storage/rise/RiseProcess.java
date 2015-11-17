@@ -37,6 +37,7 @@ public class RiseProcess extends Process {
 	/**
 	 * MSG's main: receives and handle one storage request. 
 	 */
+	@Override
 	public void main(String[] args) throws MsgException {
 		
 		// receive the request

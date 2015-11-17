@@ -56,6 +56,7 @@ public class Image {
 	/**
 	 * Of course
 	 */
+	@Override
 	public String toString() {
 		String res = getId() + ": ";
 		for (Map.Entry<String, String> prop : this.properties.entrySet()) {

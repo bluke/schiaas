@@ -29,48 +29,56 @@ public class TracedVM extends VM {
 		trace.addProperty("dp_intensity", ""+dpIntensity);	
 	}
 	
+	@Override
  	public void migrate(Host destination) throws HostFailureException {
  		trace.addEvent("state", "migrating");
  		super.migrate(destination);
  		trace.addEvent("state", "running");
  	}
  	
- 	public void	restore() {
+	@Override
+ 	public void restore() {
  		trace.addEvent("state", "restoring");
  		super.restore();
  		trace.addEvent("state", "running");
  	}
 
- 	public void	resume() {
+	@Override
+ 	public void resume() {
  		trace.addEvent("state", "resuming");
  		super.resume();
  		trace.addEvent("state", "running");
  	}
 
+	@Override
  	public void save() {
  		trace.addEvent("state", "saving");
  		super.save();
  		trace.addEvent("state", "running");
  	}
 
+	@Override
  	public void shutdown() {
  		trace.addEvent("state", "shutingdown");
  		super.shutdown();
  		trace.addEvent("state", "shutdown");
  	}
 
- 	public void	start() {
+	@Override
+ 	public void start() {
  		trace.addEvent("state", "booting");
  		super.start();
  		trace.addEvent("state", "running");
  	}
 
- 	public void	suspend() {
+	@Override
+ 	public void suspend() {
  		trace.addEvent("state", "suspending");
  		super.suspend();
  		trace.addEvent("state", "suspended");
  	}
 
+	@Override
  	public void setBound(int bound) {
  		trace.addEvent("cpu_bound", ""+bound);
  		super.setBound(bound);

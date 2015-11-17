@@ -72,7 +72,7 @@ public class XMLConfigReader {
 			Msg.critical("Error while opening XML file "+xmlFilename);
 			e.printStackTrace();
 			System.exit(134);
-		}  catch (Exception e) {
+		} catch (Exception e) {
 			Msg.critical("Error while reading the XML configuration file "+xmlFilename+": "+e.getMessage());
 			e.printStackTrace();
 			System.exit(1);
@@ -105,15 +105,18 @@ public class XMLConfigReader {
 	 */
 	final class SimpleXMLErrorHandler implements
 			org.xml.sax.ErrorHandler {
+		@Override
 		public void warning(SAXParseException e) throws SAXException {
 			Msg.warn(e.getMessage());
 		}
 
+		@Override
 		public void error(SAXParseException e) throws SAXException {
 			Msg.error(e.getMessage());
 			isValid = false;
 		}
 
+		@Override
 		public void fatalError(SAXParseException e) throws SAXException {
 			Msg.critical(e.getMessage());
 			throw e;

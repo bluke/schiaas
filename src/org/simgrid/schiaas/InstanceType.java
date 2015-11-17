@@ -69,6 +69,7 @@ public class InstanceType {
 	/**
 	 * Of course.
 	 */
+	@Override
 	public String toString() {
 		String res = this.properties.get("id") + ": ";
 		for (Map.Entry<String, String> prop : this.properties.entrySet()) {

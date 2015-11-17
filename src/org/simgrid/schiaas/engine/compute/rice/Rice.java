@@ -96,7 +96,7 @@ public class Rice extends ComputeEngine {
 		}
 
 		// retrieving the hosts
-		this.riceHosts = new Vector<ComputeHost>();
+		this.riceHosts = new Vector<>();
 
 		for (Host host : hosts) {
 			this.riceHosts.add(new RiceHost(this,host));
@@ -142,6 +142,7 @@ public class Rice extends ComputeEngine {
 	 * @param instanceType A type of instance
 	 * @return The amount of instances of this type that can be ran
 	 */
+	@Override
 	public int describeAvailability(InstanceType instanceType) {
 		double core = Double.parseDouble(instanceType.getProperty("core"));
 		int availability = 0;
@@ -156,6 +157,7 @@ public class Rice extends ComputeEngine {
 	 * @param command The command to execute.
 	 * @param instance The instance concerned by the command.
 	 */
+	@Override
 	public void doCommand(COMMAND command, Instance instance) {
 		RiceInstance riceInstance = (RiceInstance) instance;
 

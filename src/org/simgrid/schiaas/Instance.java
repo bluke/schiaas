@@ -187,6 +187,7 @@ public class Instance {
 	 * Of course.
 	 * @return A string containing the name of the instance and its host.
 	 */
+	@Override
 	public String toString() {
 		return "Instance:" + id;
 	}
