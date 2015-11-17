@@ -66,13 +66,13 @@ public class RiceHost implements ComputeHost {
 	protected RiceHost(Rice rice, Host host, int ramSize, int diskSize) {
 		this.host = host;
 		this.lastBootDate = -1e9;
-		this.imagesCache = new HashMap<Image,IMGSTATUS>();
+		this.imagesCache = new HashMap<>();
 		
 		this.freeCores = host.getCoreNumber();
 		this.freeRAM = ramSize;
 		this.freeDisk = diskSize;
 		
-		this.instances = new Vector<Instance>();
+		this.instances = new Vector<>();
 		
 		bootMutex = new Mutex();
 		

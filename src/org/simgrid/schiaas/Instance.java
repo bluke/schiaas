@@ -43,6 +43,7 @@ public class Instance {
 	 * @param id The id of the instance
 	 * @param image The image of the instance.
 	 * @param instanceType The type of the instance.
+	 * @param host 
 	 */
 	protected Instance(Compute compute, String id, Image image, InstanceType instanceType, Host host) {
 		this.trace = compute.trace.newCategorizedSubTrace("instances", id);
@@ -187,6 +188,7 @@ public class Instance {
 	 * Of course.
 	 * @return A string containing the name of the instance and its host.
 	 */
+	@Override
 	public String toString() {
 		return "Instance:" + id;
 	}

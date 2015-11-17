@@ -62,7 +62,9 @@ public class SimpleReconfigurator extends SimpleScheduler {
 		}		
 		/**
 		 * 
+		 * @throws MsgException
 		 */
+		@Override
 		public void main(String[] args) throws MsgException {
 			int i = 0;
 			Compute compute = scheduler.computeEngine.getCompute();

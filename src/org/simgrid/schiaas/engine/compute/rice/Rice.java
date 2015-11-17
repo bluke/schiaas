@@ -16,7 +16,6 @@ import org.simgrid.schiaas.InstanceType;
 import org.simgrid.schiaas.Storage;
 import org.simgrid.schiaas.engine.compute.ComputeEngine;
 import org.simgrid.schiaas.engine.compute.ComputeHost;
-import org.simgrid.schiaas.engine.compute.rice.RiceHost;
 import org.simgrid.schiaas.exceptions.MissingConfigException;
 import org.simgrid.schiaas.exceptions.VMSchedulingException;
 
@@ -67,6 +66,8 @@ public class Rice extends ComputeEngine {
 	/**
 	 * Constructor.
 	 * 
+	 * @param compute The compute of this engine.
+	 * @param hosts All of the host of this engine.
 	 * @throws MissingConfigException Thrown whenever one required configuration parameter is not found.
 	 * @throws HostNotFoundException Thrown whenever one given host is not found. 
 	 * @throws FileNotFoundException 
@@ -92,11 +93,11 @@ public class Rice extends ComputeEngine {
 			Msg.critical("Something bad happened in RISE while trying to locate its controller: "+compute.getConfig("controller"));
 			e.printStackTrace();
 		} catch (Exception e){
-		
+			// TODO Anything clever to do here?
 		}
 
 		// retrieving the hosts
-		this.riceHosts = new Vector<ComputeHost>();
+		this.riceHosts = new Vector<>();
 
 		for (Host host : hosts) {
 			this.riceHosts.add(new RiceHost(this,host));
@@ -142,11 +143,13 @@ public class Rice extends ComputeEngine {
 	 * @param instanceType A type of instance
 	 * @return The amount of instances of this type that can be ran
 	 */
+	@Override
 	public int describeAvailability(InstanceType instanceType) {
 		double core = Double.parseDouble(instanceType.getProperty("core"));
 		int availability = 0;
-		for (int i = 0; i < this.riceHosts.size(); i++)
-			availability += (((RiceHost)this.riceHosts.get(i)).freeCores) / core;
+		for (ComputeHost riceHost : this.riceHosts) {
+			availability += (((RiceHost) riceHost).freeCores) / core;
+		}
 
 		return availability;
 	}
@@ -156,6 +159,7 @@ public class Rice extends ComputeEngine {
 	 * @param command The command to execute.
 	 * @param instance The instance concerned by the command.
 	 */
+	@Override
 	public void doCommand(COMMAND command, Instance instance) {
 		RiceInstance riceInstance = (RiceInstance) instance;
 
@@ -196,8 +200,8 @@ public class Rice extends ComputeEngine {
 	 * 
 	 * @param instance The instance to migrate
 	 * @return the host choosen by RICE, or null whenever there was no suitable host available.
+	 * @throws HostFailureException
 	 * @throws VMSchedulingException when the scheduler fails
-	 * @throws MigrationException when the migration fails at the simgrid level
 	 */
 	@Override
 	public ComputeHost liveMigration(Instance instance) throws HostFailureException, VMSchedulingException {

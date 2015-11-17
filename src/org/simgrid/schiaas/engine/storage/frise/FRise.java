@@ -49,10 +49,7 @@ public class FRise extends StorageEngine {
 		}catch (MissingConfigException e){
 			Msg.critical(e.getMessage());
 			e.printStackTrace();
-		} catch (HostNotFoundException e) {
-			Msg.critical("RISE controller host "+storage.getConfig("controller")+" not found.");
-			e.printStackTrace();
-		} catch (NullPointerException e) {
+		} catch (HostNotFoundException | NullPointerException e) {
 			Msg.critical("RISE controller host "+storage.getConfig("controller")+" not found.");
 			e.printStackTrace();
 		}
@@ -60,6 +57,7 @@ public class FRise extends StorageEngine {
 
 	/**
 	 * Getter of the storage of this 
+	 * @return The Storage of this engine.
 	 */
 	protected Storage getStorage() {
 		return storage;

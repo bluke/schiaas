@@ -29,8 +29,8 @@ import org.simgrid.msg.Msg;
 public class Trace {
 	public static Trace root = null;
 	
-    private static FileWriter fstream;
-    private static BufferedWriter out;
+	private static FileWriter fstream;
+	private static BufferedWriter out;
 
     /** Separate the fields in the trace file */
 	public static char fieldSep = '\t';
@@ -107,17 +107,17 @@ public class Trace {
 	 * Add a set of properties.
 	 * @param prop The set of properties to add.
 	 */
-    public void addProperties(Map<String,String> prop) {
+	public void addProperties(Map<String,String> prop) {
 		for (Entry<String, String> e : prop.entrySet()) {
 			this.addProperty(e.getKey(), e.getValue());
 		}
-    }
+	}
 
-    /**
-     * Add an event to the trace, that is a time-stamped value.
-     * @param type The type of the event.
-     * @param value The value of the event.
-     */
+	/**
+	 * Add an event to the trace, that is a time-stamped value.
+	 * @param type The type of the event.
+	 * @param value The value of the event.
+	 */
 	public void addEvent(String type, String value) {
 		Trace.write(fullname+entitySep+type+fieldSep+Msg.getClock()+fieldSep+format(value));		
 	}
@@ -128,15 +128,15 @@ public class Trace {
 	 * @param name The name of the sub-trace.
 	 * @return The new sub-trace.
 	 */
-    public Trace newCategorizedSubTrace(String category, String name) {
-    	return new Trace(this, category, name);
-    }
+	public Trace newCategorizedSubTrace(String category, String name) {
+		return new Trace(this, category, name);
+	}
 	
-    /**
-     * Create a sub-trace to this trace.
-     * @param name The name of the sub-trace.
-     * @return The new sub-trace.
-     */
+	/**
+	 * Create a sub-trace to this trace.
+	 * @param name The name of the sub-trace.
+	 * @return The new sub-trace.
+	 */
 	public Trace newSubTrace(String name) {
 		return new Trace(this, name);
 	}
@@ -146,52 +146,52 @@ public class Trace {
 	 * @param name The name of this trace.
 	 * @return The new trace.
 	 */
-    public static Trace newTrace(String name) {
-    	if (root == null) init();
-    	return new Trace(root, name);
-    }
+	public static Trace newTrace(String name) {
+		if (root == null) init();
+		return new Trace(root, name);
+	}
 
-    /**
-     * Create a new categorized trace attached to the root trace.
-     * @param category The category of the trace.
-     * @param name The name of the trace.
-     * @return The new categorized trace.
-     */
-    public static Trace newCategorizedTrace(String category, String name) {
-    	if (root == null) init();
-    	return new Trace(root, category, name);
-    }
+	/**
+	 * Create a new categorized trace attached to the root trace.
+	 * @param category The category of the trace.
+	 * @param name The name of the trace.
+	 * @return The new categorized trace.
+	 */
+	public static Trace newCategorizedTrace(String category, String name) {
+		if (root == null) init();
+		return new Trace(root, category, name);
+	}
 
-    /**
-     * Init the trace.
-     * @param description A description of the simulation.
-     */
-    public static void init(String description) {
-    	init();
-    	root.addProperty("description", description);
-    }
+	/**
+	 * Init the trace.
+	 * @param description A description of the simulation.
+	 */
+	public static void init(String description) {
+		init();
+		root.addProperty("description", description);
+	}
 
-    /**
-     * Init the trace.
-     */
-    public static void init() {
-    	if (root != null) return;
-    	 try {
+	/**
+	 * Init the trace.
+	 */
+	public static void init() {
+		if (root != null) return;
+		 try {
 			fstream = new FileWriter(filename, false);
 		} catch (IOException e) {
 			Msg.critical("Error while opening the trace file "+filename);
 			e.printStackTrace();
 		}
-    	out = new BufferedWriter(fstream);
-    	
-    	root = new Trace(null,"root");
-    	root.addProperty("date", (new Date()).toString());
-    }
-    
-    /**
-     * Close the trace file.
-     * Must be called at the end of the simulation.
-     */
+		out = new BufferedWriter(fstream);
+
+		root = new Trace(null,"root");
+		root.addProperty("date", (new Date()).toString());
+	}
+
+	/**
+	 * Close the trace file.
+	 * Must be called at the end of the simulation.
+	 */
 	public static void close() {
 		try {
 			out.close();
@@ -207,12 +207,12 @@ public class Trace {
 	 * Write into the trace
 	 * @param logstr the string to write. 
 	 */
-    private static void write(String logstr) {
-    	try {
+	private static void write(String logstr) {
+		try {
 			out.write(logstr+'\n');
 		} catch (IOException e) {
 			Msg.critical("Writing in the trace file failed.");
 			e.printStackTrace();
 		}
-    }
+	}
 }

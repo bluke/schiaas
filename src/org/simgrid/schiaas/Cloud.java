@@ -49,7 +49,7 @@ public class Cloud {
 	 */
 	public Cloud(Node cloudXMLNode) throws InstantiationException, IllegalAccessException, ClassNotFoundException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 
-		this.storages = new HashMap<String, Storage>();
+		this.storages = new HashMap<>();
 
 		this.id = cloudXMLNode.getAttributes().getNamedItem("id")
 				.getNodeValue();
@@ -123,7 +123,9 @@ public class Cloud {
 
 	/**
 	 * Of course
+	 * @return Returns the string "Cloud:" followed by the ID of this cloud.
 	 */
+	@Override
 	public String toString() {
 		return ("Cloud:" + id);
 	}

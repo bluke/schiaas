@@ -29,7 +29,9 @@ public class RiceNodeProcess extends Process {
 	/**
 	 * MSG's main: receives the task corresponding to the command from the controller 
 	 * and execute this command.
+	 * @throws MsgException
 	 */
+	@Override
 	public void main(String[] args) throws MsgException {
 		
 		RiceTask riceTask = (RiceTask) Task.receive(riceHost.messageBox());

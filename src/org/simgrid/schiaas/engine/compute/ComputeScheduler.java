@@ -4,7 +4,6 @@ import java.util.Map;
 
 import org.simgrid.msg.Msg;
 import org.simgrid.schiaas.InstanceType;
-import org.simgrid.schiaas.engine.compute.ComputeEngine;
 import org.simgrid.schiaas.exceptions.MissingConfigException;
 import org.simgrid.schiaas.exceptions.VMSchedulingException;
 import org.simgrid.schiaas.tools.Trace;
@@ -44,7 +43,7 @@ public abstract class ComputeScheduler {
 	 * @param propId
 	 *            the id of the property, as is the XML config file
 	 * @return the property
-	 * @throws Exception 
+	 * @throws MissingConfigException
 	 */
 	public String getConfig(String propId) throws MissingConfigException {
 		String res = this.config.get(propId);

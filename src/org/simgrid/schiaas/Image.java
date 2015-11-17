@@ -25,7 +25,7 @@ public class Image {
 	 * @author julien.gossa@unistra.fr
 	 */
 	public Image(Node imageXMLNode) {
-		properties = new HashMap<String, String>();
+		properties = new HashMap<>();
 
 		for (int i = 0; i < imageXMLNode.getAttributes().getLength(); i++) {
 			this.properties.put(imageXMLNode.getAttributes().item(i)
@@ -55,7 +55,12 @@ public class Image {
 
 	/**
 	 * Of course
+	 * @return Returns a string representation of this image. It 
+	 * consists of the id followed by a colon. Properties are separated by a 
+	 * space. Each properties are represented as a key followed by equal then 
+	 * the value.
 	 */
+	@Override
 	public String toString() {
 		String res = getId() + ": ";
 		for (Map.Entry<String, String> prop : this.properties.entrySet()) {

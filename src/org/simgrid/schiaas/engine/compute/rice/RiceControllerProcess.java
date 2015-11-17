@@ -30,7 +30,9 @@ public class RiceControllerProcess extends Process {
 	/**
 	 * MSG's main: simply sends the task corresponding to the command 
 	 * from the controller to the concerned node.
+	 * @throws MsgException
 	 */
+	@Override
 	public void main(String[] args) throws MsgException {
 		
 		RiceTask riceTask = new RiceTask(riceInstance, command);

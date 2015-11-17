@@ -15,24 +15,25 @@ public class Injector {
 	private static Map<String, AbstractInjector> injectors;
 	
 	public static void init(String cloudXMLFileName) {
-        Msg.debug("Injectors initialization");
-        
-		injectors = new HashMap<String, AbstractInjector>();
-        
-        XMLConfigReader xmlConfigReader = new XMLConfigReader(cloudXMLFileName);
-        NodeList nodeList = xmlConfigReader.getNodeList();
-       
-        for (int i=0; i<nodeList.getLength(); i++) {
-        	if (nodeList.item(i).getNodeName().compareTo("injector") == 0) {
-	        	AbstractInjector injector = newInjector(nodeList.item(i));
-	        	getInjectors().put(injector.id, injector);
-        	}
-        }
+		Msg.debug("Injectors initialization");
+
+		injectors = new HashMap<>();
+
+		XMLConfigReader xmlConfigReader = new XMLConfigReader(cloudXMLFileName);
+		NodeList nodeList = xmlConfigReader.getNodeList();
+
+		for (int i=0; i<nodeList.getLength(); i++) {
+			if (nodeList.item(i).getNodeName().compareTo("injector") == 0) {
+				AbstractInjector injector = newInjector(nodeList.item(i));
+				getInjectors().put(injector.id, injector);
+			}
+		}
 	}
 	
 	/**
 	 * Create a new injector.
 	 * @param injectorXMLNode XML node describing the injector in the configuration file
+	 * @return 
 	 */
 	public static AbstractInjector newInjector(Node injectorXMLNode) {
 		String id = injectorXMLNode.getAttributes().getNamedItem("id")

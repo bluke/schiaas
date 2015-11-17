@@ -58,20 +58,18 @@ public abstract class Stepper extends Process {
 		this.port = Integer.parseInt(args[0]);
 		this.compute = SchIaaS.getCloud(args[1]).getCompute();
 		
-		try {
-			
-			ServerSocket serverSocket = new ServerSocket(port);
+		
+		try (ServerSocket serverSocket = new ServerSocket(port)) {
 			Msg.info("Listening on port "+port);
-			
-			
+
 			while(listening){
-				Socket clientSocket = serverSocket.accept();
-				this.setStart();
-				PrintWriter out= new PrintWriter(clientSocket.getOutputStream(), true);
-				BufferedReader in= new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));	
-				String received;
-					
-				try{
+				try (
+					Socket clientSocket = serverSocket.accept();
+					PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
+					BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+				) {
+					String received;
+					this.setStart();
 					while ((received = in.readLine()) != null) {
 						this.step();
 						String response = execute(received);
@@ -80,21 +78,12 @@ public abstract class Stepper extends Process {
 						}else{
 							break;
 						}
-							
 					}
-				} catch(IOException e){
-					
 				} catch (VMSchedulingException e) {
 					//TODO: check if this is the right thing to do
 					Msg.info("Some instances failed to started because: "+e.getMessage());
-				}finally{
-					in.close();
-					out.close();
-					clientSocket.close();
 				}
 			}
-			serverSocket.close();
-
 		} catch (IOException e) {
 			Msg.critical("Failled to open socket.");
 			e.printStackTrace();

@@ -56,6 +56,7 @@ public class ComputeTools {
 		/**
 		 * Simply execute the migration.
 		 */
+		@Override
 		public void main(String[] arg0) throws MsgException {
 			if (destination != null) {
 				computeEngine.liveMigration(instance, destination);
@@ -121,6 +122,7 @@ public class ComputeTools {
 	 * Asynchrone parallel offloader.
 	 * Set the given host to unavailable and offloads its VMs.
 	 * 
+	 * @param computeEngine The engine handling this migration
 	 * @param computeHost
 	 *            The host to offload
 	 * @throws VMSchedulingException whenever the scheduling of one instance is not possible. Stops the offload.
