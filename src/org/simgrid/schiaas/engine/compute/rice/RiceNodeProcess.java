@@ -2,7 +2,6 @@ package org.simgrid.schiaas.engine.compute.rice;
 
 import org.simgrid.msg.Msg;
 import org.simgrid.msg.MsgException;
-import org.simgrid.msg.VM;
 import org.simgrid.msg.Process;
 import org.simgrid.msg.Task;
 import org.simgrid.schiaas.engine.compute.rice.RiceHost.IMGSTATUS;

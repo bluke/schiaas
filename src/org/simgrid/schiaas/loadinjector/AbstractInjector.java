@@ -1,17 +1,11 @@
 package org.simgrid.schiaas.loadinjector;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
 import org.simgrid.msg.HostFailureException;
-import org.simgrid.msg.Msg;
 import org.simgrid.schiaas.Cloud;
-import org.simgrid.schiaas.SchIaaS;
 import org.simgrid.schiaas.tools.Trace;
-import org.simgrid.schiaas.tools.XMLConfigReader;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 public abstract class AbstractInjector {
 

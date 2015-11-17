@@ -1,9 +1,7 @@
 package org.simgrid.schiaas;
 
 import org.simgrid.msg.Host;
-import org.simgrid.msg.Msg;
 import org.simgrid.msg.VM;
-import org.simgrid.schiaas.engine.compute.ComputeEngine;
 import org.simgrid.schiaas.tools.Trace;
 
 //TODO : add dpIntensity / function of netBW for migration

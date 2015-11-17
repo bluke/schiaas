@@ -1,8 +1,6 @@
 package org.simgrid.schiaas.exceptions;
 
-import org.simgrid.schiaas.Cloud;
 import org.simgrid.schiaas.InstanceType;
-import org.simgrid.schiaas.engine.compute.ComputeEngine;
 import org.simgrid.schiaas.engine.compute.ComputeScheduler;
 
 /**

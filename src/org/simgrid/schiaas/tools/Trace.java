@@ -188,6 +188,10 @@ public class Trace {
     	root.addProperty("date", (new Date()).toString());
     }
     
+    /**
+     * Close the trace file.
+     * Must be called at the end of the simulation.
+     */
 	public static void close() {
 		try {
 			out.close();
