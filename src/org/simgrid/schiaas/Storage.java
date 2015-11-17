@@ -51,8 +51,8 @@ public class Storage {
 		this.cloud = cloud;
 		this.id = storageXMLNode.getAttributes().getNamedItem("id").getNodeValue();
 		String engine = storageXMLNode.getAttributes().getNamedItem("engine").getNodeValue();
-		this.storedData = new HashMap<String, Data>();
-		this.config = new HashMap<String, String>();
+		this.storedData = new HashMap<>();
+		this.config = new HashMap<>();
 		
 		NodeList nodes = storageXMLNode.getChildNodes();
 		for (int i = 0; i < nodes.getLength(); i++) {
@@ -100,7 +100,7 @@ public class Storage {
 	 * @param propId
 	 *            the id of the property, as is the XML config file
 	 * @return the property
-	 * @throws Exception 
+	 * @throws MissingConfigException
 	 */
 	public String getConfig(String propId) throws MissingConfigException {
 		String res = this.config.get(propId);

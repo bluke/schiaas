@@ -14,7 +14,6 @@ import javax.xml.validation.*;
 
 import org.simgrid.msg.HostFailureException;
 import org.simgrid.msg.Msg;
-import org.simgrid.schiaas.Cloud;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
@@ -41,9 +40,9 @@ public class SchIaaS {
 	 *            The name of the XML config file (e.g. cloud.xml).
 	 */
 	public static void init (String cloudXMLFileName) {
-        Msg.debug("SchIaaS initialization");      
-        
-        SchIaaS.clouds = new HashMap<String, Cloud>();
+		Msg.debug("SchIaaS initialization");      
+
+		SchIaaS.clouds = new HashMap<String, Cloud>();
 		
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		dbf.setValidating(false);

@@ -25,7 +25,7 @@ public class Image {
 	 * @author julien.gossa@unistra.fr
 	 */
 	public Image(Node imageXMLNode) {
-		properties = new HashMap<String, String>();
+		properties = new HashMap<>();
 
 		for (int i = 0; i < imageXMLNode.getAttributes().getLength(); i++) {
 			this.properties.put(imageXMLNode.getAttributes().item(i)

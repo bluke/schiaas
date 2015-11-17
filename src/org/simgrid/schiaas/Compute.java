@@ -72,13 +72,13 @@ public class Compute {
 
 		Msg.debug("Compute initialization of the cloud : " + cloud.getId());
 		
-		this.instances = new HashMap<String, Instance>();
+		this.instances = new HashMap<>();
 		this.instancesId = 0;
 		
-		this.config = new HashMap<String, String>();
+		this.config = new HashMap<>();
 
-		this.instanceTypes = new HashMap<String, InstanceType>();
-		this.images = new HashMap<String, Image>();
+		this.instanceTypes = new HashMap<>();
+		this.images = new HashMap<>();
 
 		this.cloud = cloud;
 		
@@ -89,11 +89,11 @@ public class Compute {
 		this.config.put("engine", engine);
 		Msg.debug("Compute initialization, engine=" + engine);
 		
-		List<Host> hosts = new Vector<Host>();
+		List<Host> hosts = new Vector<>();
 		NodeList nodes = computeXMLNode.getChildNodes();
 
 		String schedulerName = null;
-		HashMap<String, String> schedulerConfig = new HashMap<String, String>();
+		HashMap<String, String> schedulerConfig = new HashMap<>();
 
 		for (int i = 0; i < nodes.getLength(); i++) {
 
@@ -341,7 +341,7 @@ public class Compute {
 	 * 								 Does not attempt to run any more afterward.
 	 */
 	public Collection<Instance> runInstances(String imageId, String instanceTypeId, int nInstances) throws VMSchedulingException {
-		Collection<Instance> instances = new Vector<Instance>();
+		Collection<Instance> instances = new Vector<>();
 		for (int i=0; i<nInstances; i++) {
 			Instance instance = runInstance(imageId, instanceTypeId);
 			if (instance == null) break;

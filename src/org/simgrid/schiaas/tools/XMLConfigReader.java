@@ -87,7 +87,7 @@ public class XMLConfigReader {
 	}
 
 	public static Map<String,String> getConfig(Node node) {
-		HashMap<String, String> config = new HashMap<String, String>();
+		HashMap<String, String> config = new HashMap<>();
 	
 		NamedNodeMap configNNM = node.getAttributes();
 		for (int j = 0; j < configNNM.getLength(); j++) {

@@ -49,7 +49,7 @@ public class Cloud {
 	 */
 	public Cloud(Node cloudXMLNode) throws InstantiationException, IllegalAccessException, ClassNotFoundException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 
-		this.storages = new HashMap<String, Storage>();
+		this.storages = new HashMap<>();
 
 		this.id = cloudXMLNode.getAttributes().getNamedItem("id")
 				.getNodeValue();

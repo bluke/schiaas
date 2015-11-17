@@ -17,7 +17,7 @@ public class Injector {
 	public static void init(String cloudXMLFileName) {
         Msg.debug("Injectors initialization");
         
-		injectors = new HashMap<String, AbstractInjector>();
+		injectors = new HashMap<>();
         
         XMLConfigReader xmlConfigReader = new XMLConfigReader(cloudXMLFileName);
         NodeList nodeList = xmlConfigReader.getNodeList();

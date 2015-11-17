@@ -59,7 +59,7 @@ public class SinInjector extends AbstractInjector {
 	@Override
 	public void run() throws HostFailureException {
 		
-		Vector<LoadedInstance> loadedInstances = new Vector<LoadedInstance>();
+		Vector<LoadedInstance> loadedInstances = new Vector<>();
 		
 		if (Msg.getClock() > this.startDate) {
 			Msg.warn("The injector "+this.id+" is late (as usual): starting at " 
