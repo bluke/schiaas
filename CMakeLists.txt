@@ -22,6 +22,7 @@ set(PROJECT_SOURCE_DIR ${PROJECT_ROOT_DIR}/src)
 set(PROJECT_EXAMPLES_DIR ${PROJECT_ROOT_DIR}/examples)
 set(PROJECT_BINARY_DIR ${PROJECT_ROOT_DIR}/bin)
 set(PROJECT_DOC_DIR ${PROJECT_ROOT_DIR}/doc)
+set(PROJECT_LAB_DIR ${PROJECT_ROOT_DIR}/lab)
 
 
 # add a target to generate API documentation with Doxygen
@@ -76,10 +77,8 @@ add_subdirectory(src)
 add_subdirectory(examples)
 
 #testing
-find_program( TESH_BIN 
-	tesh)
-find_program ( NETCAT_BIN 
-	netcat)
+find_program( TESH_BIN tesh )
+find_program( NETCAT_BIN netcat )
 
 if(NOT ${TESH_BIN} MATCHES TESH_BIN-NOTFOUND)
 	enable_testing()
@@ -97,3 +96,12 @@ elseif( ${TESH_BIN} MATCHES TESH_BIN-NOTFOUND)
 	message( STATUS "Tesh Not Found : no testing will be available. Tesh is part of the simgrid project ")
 endif(NOT ${TESH_BIN} MATCHES TESH_BIN-NOTFOUND)
 
+
+#Installation of traceutil in R
+find_program( R_BIN R )
+if(NOT ${R_BIN} MATCHES R_BIN-NOTFOUND)
+	add_custom_target(r-install ALL)
+	add_custom_command( TARGET r-install
+		COMMAND R CMD INSTALL ${PROJECT_LAB_DIR}/bin/traceutil )
+endif(NOT ${R_BIN} MATCHES R_BIN-NOTFOUND)
+	
