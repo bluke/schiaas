@@ -33,7 +33,7 @@ public class Injector {
 	/**
 	 * Create a new injector.
 	 * @param injectorXMLNode XML node describing the injector in the configuration file
-	 * @return 
+	 * @return a new injector. 
 	 */
 	public static AbstractInjector newInjector(Node injectorXMLNode) {
 		String id = injectorXMLNode.getAttributes().getNamedItem("id")
