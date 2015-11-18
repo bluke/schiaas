@@ -81,7 +81,7 @@ function setupify {
 	echo -n $res
 }
 
-[ -n  "$KEEP" ] && rm -rf $DATA_DIR $SIMULATIONS_DIR
+[ "$KEEP" ] && rm -rf $DATA_DIR $SIMULATIONS_DIR
 mkdir -p $DATA_DIR $SIMULATIONS_DIR
 
 while read line

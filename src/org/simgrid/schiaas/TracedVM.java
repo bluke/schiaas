@@ -18,7 +18,7 @@ public class TracedVM extends VM {
 	public TracedVM(Host host, String name, int nCore, int ramSize, int netCap, String diskPath, int diskSize, int migNetSpeed, int dpIntensity) {
 		super(host, name, nCore, ramSize, netCap, diskPath, diskSize, migNetSpeed, dpIntensity);
 		
-		trace = Trace.newCategorizedTrace("VirtualMachines", name);
+		trace = Trace.newCategorizedTrace("vm", name);
 		
 		trace.addProperty("n_cores", ""+nCore);
 		trace.addProperty("ram_size", ""+ramSize);

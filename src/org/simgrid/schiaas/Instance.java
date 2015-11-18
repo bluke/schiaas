@@ -46,7 +46,7 @@ public class Instance {
 	 * @param host 
 	 */
 	protected Instance(Compute compute, String id, Image image, InstanceType instanceType, Host host) {
-		this.trace = compute.trace.newCategorizedSubTrace("instance", id);
+		this.trace = compute.trace.newCategorizedSubTrace("instances", id);
 		
 		this.compute = compute;
 		this.id = id;

@@ -113,6 +113,7 @@ public class Compute {
 			}
 			
 			if (nodes.item(i).getNodeName().compareTo("cluster") == 0) {
+				@SuppressWarnings("unused")
 				String id=nodes.item(i).getAttributes().getNamedItem("id").getNodeValue();
 				String prefix=nodes.item(i).getAttributes().getNamedItem("prefix").getNodeValue();
 				String suffix=nodes.item(i).getAttributes().getNamedItem("suffix").getNodeValue();
