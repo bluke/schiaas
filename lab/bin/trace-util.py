@@ -1,8 +1,10 @@
 #!/usr/bin/python3 -O
 # -*- coding:utf8 -*-
 
-##	This script gather tools to exploit simgrid traces
-##  Three format are handled: paje, schiaas, and json
+##	This script gather tools to exploit schiaas traces
+##  
+##  The documentation of processed data is done with the file trace_util.doc:
+##  <data_name>\t<description of the data>
 ##
 ##  @author julien.gossa@unistra.fr
 ##
@@ -33,15 +35,15 @@ parser.add_argument('--json', dest='json_dump', action='store_const', const=True
 parser.add_argument('--info', dest='dump_info', action='store_const', const=True, default=False, 
 	help='print the properties and events available in the trace, in the json format.')
 parser.add_argument('--regex', dest='dump_regex', action='store_const', const=True, default=False, 
-	help='print the properties and events available in the trace, in the json format.')
+	help='print the properties and events available in the trace, in the regex format')
+parser.add_argument('-d', dest='print_doc', action='store_const', const=True, default=False, 
+	help='print documentation whenever it is possible')
 parser.add_argument('-r', dest='output_r', action='store_const', const=True, default=False, 
 	help='write R script')
-parser.add_argument('-p', dest='prefix', metavar=('prexif'), nargs=1, 
-	help='add a prefix to file names and R data name')
-parser.add_argument('-f', dest='output_to_file', action='store_const', const=True, default=False, 
+parser.add_argument('-f', dest='prefix', metavar=('prexif'), nargs='*', 
+	help='write the output to file with the given prefix')
+parser.add_argument('-o', dest='output_dir', metavar=('output directory'), nargs='?', default=".", 
 	help='write the output to files')
-parser.add_argument('-d', dest='output_dir', metavar=('directory'), nargs=1, 
-	help='set the output directory')
 
 args = parser.parse_args()
 
@@ -135,12 +137,13 @@ class Trace:
 		return root
 
 	def read_doc(self):
-		doc = []
+		doc = {}
 		try:
 			with open(os.path.dirname(os.path.realpath(__file__))+'/trace-util.doc') as doc_file:
 				line = doc_file.readline()
 				while line != "":
-					doc.append(line.split(self.field_sep))
+					(key,val) = line.strip().split(self.field_sep)
+					doc[key] = val
 					line = doc_file.readline()
 		except FileNotFoundError:
 			pass
@@ -249,6 +252,9 @@ class Trace:
 			except ValueError: #prop
 				val = "property"
 
+			if args.print_doc and key in self.doc:
+				val = val+': '+self.doc[key]
+
 			for (e,k,v) in regexes :
 				if (k==key and v==val and len(e) == len(entities)):
 					for i in range(0, len(e)) :
@@ -278,33 +284,35 @@ class Trace:
 
 tableFilename = str.maketrans("","",".*/\\!%?+%")
 tableR = str.maketrans("+-/\*:","______")
-if args.output_dir is None: output_dir = ''
-else: output_dir = args.output_dir[0].rstrip('/')+'/'
-if args.prefix is None : prefix = ''
-else: prefix = args.prefix[0]+'.'
+
+
+if args.prefix is not None: 
+	try: 
+		prefix = args.output_dir.rstrip('/')+'/'+args.prefix[0]+'.'
+	except IndexError:
+		prefix = args.output_dir.rstrip('/')+'/'
+else: prefix = None
 
 def exec_and_write(command, serie, output_r=args.output_r):
 	serie_fn = serie.translate(tableFilename)
-	if (args.output_to_file):
-		out_file = open(output_dir+prefix+serie_fn+'.dat','w')
+	if (prefix is not None):
+		out_file = open(prefix+serie_fn+'.dat','w')
 	else:
 		out_file = sys.stdout
 
 	r_type=command(out_file)
 
-	if (args.output_to_file): out_file.close()
+	if (prefix is not None): out_file.close()
 
 	if output_r:
 		dataname = (prefix+serie_fn).translate(tableR)
-		with open(output_dir+prefix+'reads.R','a') as r_file:
+		with open(prefix+'reads.R','a') as r_file:
 			r_file.write(dataname+' <<- read.table("'+out_file.name+'",sep="", header=TRUE)\n')
-		with open(output_dir+prefix+'plots.R','a') as r_file:
+		with open(prefix+'plots.R','a') as r_file:
 			r_file.write('plot('+dataname+'$date,'+dataname+'$value, type="'+r_type+'")\n')
 
 
 trace = Trace(args.src_filename)
-
-print (trace.doc)
 
 if args.dump_events is not None:
 	for pattern in args.dump_events:
