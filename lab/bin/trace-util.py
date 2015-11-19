@@ -238,6 +238,7 @@ class Trace:
 	def get_info(self, out_file):
 		traces = []
 		for (entities, key, val) in self.sub_get_regex():
+			entities = entities.split(self.entity_sep)
 			if val == "event": entities.pop()
 			traces.append((self.entity_sep.join(entities),key,val))
 

@@ -64,7 +64,7 @@ tu_intervals <- function(df) {
 
 #' @export
 tu_plot_state <- function(df) {
-	colors <- data.frame(color=c("red", "green", "blue", "black", "orange"))
+	colors <- data.frame(color=c("red", "green", "blue", "black", "orange", "purple", "coral", "seagreen", "gold" ))
 
 	intervals <- tu_intervals(df)
 
@@ -76,8 +76,10 @@ tu_plot_state <- function(df) {
 
 	fdf <- merge(merge(intervals,states),entities)
 
-	ggplot(fdf) + geom_rect(aes(xmin=start_date,xmax=end_date,ymin=index,ymax=index+0.7,fill=color))
-
+	ggplot(fdf) + expand_limits(x=-400) +
+	geom_rect(aes(xmin=start_date,xmax=end_date,ymin=index,ymax=index+0.7,fill=color)) +
+	geom_text(data=entities, aes(x=0, y=index+0.2, hjust=1, vjust=0, label=entity)) +
+	scale_fill_discrete(name="State", breaks=states$color, labels=states$value)
 }
 
 
@@ -101,7 +103,7 @@ tu_integrate <- function(df, per_entity=FALSE) {
 		res[i,2] = sum(head(vals$value,-1) * (tail(vals$date,-1) - head(vals$date,-1)))
 	}
 	if (per_entity) return(res)
-	else return(sum(res$integrate))
+	else return(sum(res$integral))
 }
 
 #' Apply the FUN function to the observation obs for each xp in xps
@@ -121,7 +123,7 @@ tu_integrate <- function(df, per_entity=FALSE) {
 tu_apply <- function(xps, obs, FUN) {
 	res <- cbind(xps, 'value'=apply(
 		xps['xp'],1,
-		function(x) FUN(get(paste(x,'.',obs,sep='')))
+		function(x) FUN(get(paste(x,obs,sep='.')))
 		))
 	return(res)
 }
