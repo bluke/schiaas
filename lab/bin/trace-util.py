@@ -282,21 +282,22 @@ class Trace:
 
 ########################### MAIN ##############################################
 
-tableFilename = str.maketrans("","",".*/\\!%?+%")
+tableFilename = str.maketrans(":","_",".*/\\!%?+%")
 tableR = str.maketrans("+-/\*:","______")
 
 
 if args.prefix is not None: 
+	output_dir=args.output_dir.rstrip('/')+'/'
 	try: 
-		prefix = args.output_dir.rstrip('/')+'/'+args.prefix[0]+'.'
+		prefix = args.prefix[0]+'.'
 	except IndexError:
-		prefix = args.output_dir.rstrip('/')+'/'
+		prfix = ''
 else: prefix = None
 
 def exec_and_write(command, serie, output_r=args.output_r):
 	serie_fn = serie.translate(tableFilename)
 	if (prefix is not None):
-		out_file = open(prefix+serie_fn+'.dat','w')
+		out_file = open(output_dir+prefix+serie_fn+'.dat','w')
 	else:
 		out_file = sys.stdout
 
@@ -306,9 +307,9 @@ def exec_and_write(command, serie, output_r=args.output_r):
 
 	if output_r:
 		dataname = (prefix+serie_fn).translate(tableR)
-		with open(prefix+'reads.R','a') as r_file:
+		with open(output_dir+prefix+'reads.R','a') as r_file:
 			r_file.write(dataname+' <<- read.table("'+out_file.name+'",sep="", header=TRUE)\n')
-		with open(prefix+'plots.R','a') as r_file:
+		with open(output_dir+prefix+'plots.R','a') as r_file:
 			r_file.write('plot('+dataname+'$date,'+dataname+'$value, type="'+r_type+'")\n')
 
 

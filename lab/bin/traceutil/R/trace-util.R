@@ -35,6 +35,42 @@ tu_valueat <- function(df,date) {
 #' @examples
 #' tu_integrate(balancer.used_core)
 #' [1] 402836.8
+tu_intervals <- function(df) {
+	entities <- unique(df['entity'])
+	res <- NULL #data.frame(entity=, value=, start_date=, end_date=, duration=)
+	for(i in 1:nrow(entities)) {
+		edf <- df[df$entity == entities[i,1],]
+		eres <- head(edf,-1)
+		if ("key" %in% names(df)) {
+			eres$start_date <- eres$key
+			eres$key <- NULL
+			eres$end_date <- tail(edf,-1)$key
+
+		} else {
+			eres$start_date <- eres$date
+			eres$date <- NULL
+			eres$end_date <- tail(edf,-1)$date
+		}			
+		eres$duration <- eres$end_date - eres$start_date
+
+		res <- rbind(res, eres)
+	}
+	return(res)
+}
+
+
+#' Return the integrate of the given df over time
+#' for each entity, or for all entities according to per_entity
+#' Works  with numeric events and count-if traces.
+#'
+#' @param df a dataframe having date and value columns
+#' @param per_entity TRUE to return the integral per entity
+#' @return a dataframe having entity and value column
+#' @keywords traceutil
+#' @export
+#' @examples
+#' tu_integrate(balancer.used_core)
+#' [1] 402836.8
 tu_integrate <- function(df, per_entity=FALSE) {
 	res <- unique(df['entity'])
 	res$integrate = 0
@@ -67,3 +103,4 @@ tu_apply <- function(xps, obs, FUN) {
 		))
 	return(res)
 }
+
