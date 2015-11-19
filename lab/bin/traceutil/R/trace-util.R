@@ -61,10 +61,23 @@ tu_intervals <- function(df) {
 	return(res)
 }
 
-tu_plot_state(df) {
+
+#' @export
+tu_plot_state <- function(df) {
+	colors <- data.frame(color=c("red", "green", "blue", "black", "orange"))
+
 	intervals <- tu_intervals(df)
 
-	states = unique(intervals$value)
+	states <- data.frame(value=unique(intervals$value))
+	states <- cbind(states,(head(colors,nrow(states))))
+	
+	entities <- data.frame(entity=unique(intervals$entity))
+	entities$index <- seq_len(nrow(entities))
+
+	fdf <- merge(merge(intervals,states),entities)
+
+	ggplot(fdf) + geom_rect(aes(xmin=start_date,xmax=end_date,ymin=index,ymax=index+0.7,fill=color))
+
 }
 
 
