@@ -199,23 +199,20 @@ class Trace:
 		return 's'
 
 	def grep(self, pattern, out_file):
-		# Make the header according to property or event
-		# Waring: it is not accurate if properties and events are mixed
-		# and the first one is an event.
-		[entities, key, val] = self.traces[0]
-		try :
-			float(key)
-			out_file.write("entity"+self.field_sep+"date"+self.field_sep+"value\n")
-		except ValueError:
-			out_file.write("entity"+self.field_sep+"key"+self.field_sep+"value\n")
-
 		r_type = 'p'
+		header = 'date'
+		res = ''
 
 		for [entities, key, val] in self.traces:
 			if re.search(pattern, entities) is not None:
-				out_file.write(entities+self.field_sep+key+self.field_sep+val)
+				res = res + entities+self.field_sep+key+self.field_sep+val
 				try: float(val)
 				except ValueError: r_type = None
+				try: float(val)
+				except ValueError: header = 'key'
+
+		out_file.write("entity"+self.field_sep+header+self.field_sep+"value\n")
+		out_file.write(res)
 
 		return r_type
 
