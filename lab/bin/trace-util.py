@@ -208,7 +208,7 @@ class Trace:
 				res = res + entities+self.field_sep+key+self.field_sep+val
 				try: float(val)
 				except ValueError: r_type = None
-				try: float(val)
+				try: float(key)
 				except ValueError: header = 'key'
 
 		out_file.write("entity"+self.field_sep+header+self.field_sep+"value\n")
