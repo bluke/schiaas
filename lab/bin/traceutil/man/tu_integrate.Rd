@@ -9,12 +9,12 @@ Works  with numeric events and count-if traces.}
 tu_integrate(df, per_entity = FALSE)
 }
 \arguments{
-\item{df}{a dataframe having date and value columns}
+\item{df}{a dataframe ['entity', 'date', 'value']}
 
 \item{per_entity}{TRUE to return the integral per entity}
 }
 \value{
-a dataframe having entity and value column
+a dataframe ['entity', 'integral'] of just integral according to per_entity
 }
 \description{
 Return the integrate of the given df over time

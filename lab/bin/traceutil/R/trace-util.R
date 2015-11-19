@@ -23,13 +23,71 @@ tu_valueat <- function(df,date) {
 }
 
 
+#' Compute the intervals of a given df.
+#' 
+#' @param df a dataframe ['entity', 'date', 'value']
+#' @return a dataframe ['entity', 'start_date', 'value', 'end_date', 'duration']
+#' @keywords traceutil
+#' @export
+#' @examples
+#' head(tu_intervals(balancer.used_cores))
+#'                                                            entity start_date
+#' 1   root:cloud:myCloud:compute:compute_host:node-20.me:used_cores     0.0000
+#' 38  root:cloud:myCloud:compute:compute_host:node-20.me:used_cores    27.0000
+#' 63  root:cloud:myCloud:compute:compute_host:node-20.me:used_cores    72.0000
+#' 87  root:cloud:myCloud:compute:compute_host:node-20.me:used_cores   123.0000
+#' 111 root:cloud:myCloud:compute:compute_host:node-20.me:used_cores   204.0000
+#' 130 root:cloud:myCloud:compute:compute_host:node-20.me:used_cores   348.0078
+#'     value end_date duration
+#' 1       4  27.0000  27.0000
+#' 38      5  72.0000  45.0000
+#' 63      6 123.0000  51.0000
+#' 87      7 204.0000  81.0000
+#' 111     8 348.0078 144.0078
+#' 130     7 378.0078  30.0000
+
+tu_intervals <- function(df) {
+	entities <- unique(df['entity'])
+	res <- NULL 
+	for(i in 1:nrow(entities)) {
+		edf <- df[df$entity == entities[i,1],]
+		eres <- head(edf,-1)
+		colnames(eres)[2] <- "start_date"
+		eres$end_date <- tail(edf,-1)$date
+		eres$duration <- eres$end_date - eres$start_date
+
+		res <- rbind(res, eres)
+	}
+	return(res)
+}
+
+
+#' @export
+tu_plot_state <- function(df) {
+	colors <- data.frame(color=c("red", "green", "blue", "black", "orange"))
+
+	intervals <- tu_intervals(df)
+
+	states <- data.frame(value=unique(intervals$value))
+	states <- cbind(states,(head(colors,nrow(states))))
+	
+	entities <- data.frame(entity=unique(intervals$entity))
+	entities$index <- seq_len(nrow(entities))
+
+	fdf <- merge(merge(intervals,states),entities)
+
+	ggplot(fdf) + geom_rect(aes(xmin=start_date,xmax=end_date,ymin=index,ymax=index+0.7,fill=color))
+
+}
+
+
 #' Return the integrate of the given df over time
 #' for each entity, or for all entities according to per_entity
 #' Works  with numeric events and count-if traces.
 #'
-#' @param df a dataframe having date and value columns
+#' @param df a dataframe ['entity', 'date', 'value']
 #' @param per_entity TRUE to return the integral per entity
-#' @return a dataframe having entity and value column
+#' @return a dataframe ['entity', 'integral'] of just integral according to per_entity
 #' @keywords traceutil
 #' @export
 #' @examples
@@ -37,7 +95,7 @@ tu_valueat <- function(df,date) {
 #' [1] 402836.8
 tu_integrate <- function(df, per_entity=FALSE) {
 	res <- unique(df['entity'])
-	res$integrate = 0
+	res$integral = 0
 	for(i in 1:nrow(res)) {
 		vals <- df[df$entity == res[i,1],]
 		res[i,2] = sum(head(vals$value,-1) * (tail(vals$date,-1) - head(vals$date,-1)))
@@ -67,3 +125,4 @@ tu_apply <- function(xps, obs, FUN) {
 		))
 	return(res)
 }
+

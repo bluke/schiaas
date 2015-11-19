@@ -133,7 +133,7 @@ do
 		(
 			[[ -e $XP_SIMULATION_DIR/schiaas.trace ]] || java $JAVA_START_ARGS $JAVA_XP_ARGS $JAVA_END_ARGS 2> simgrid.out 1>&2
 			if [ $? -ne 0 ]; then echo "Critical error while executing $XP_ID" ; cat $XP_SIMULATION_DIR/simgrid.out ; exit $? ; fi
-			$BIN_DIR/trace-util.py schiaas.trace -f $DATA_DIR -p $XP_ID  -r $TU_ARGS 
+			$BIN_DIR/trace-util.py schiaas.trace -o $DATA_DIR -f $XP_ID  -r $TU_ARGS 
 		) &
 		SIM_PIDS="$SIM_PIDS $!"
 	fi
