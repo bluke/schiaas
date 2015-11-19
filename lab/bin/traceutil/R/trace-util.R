@@ -23,9 +23,8 @@ tu_valueat <- function(df,date) {
 }
 
 
-#' Return the integrate of the given df over time
-#' for each entity, or for all entities according to per_entity
-#' Works  with numeric events and count-if traces.
+#' Return the intervals og a given df :
+#' 
 #'
 #' @param df a dataframe having date and value columns
 #' @param per_entity TRUE to return the integral per entity
@@ -41,16 +40,8 @@ tu_intervals <- function(df) {
 	for(i in 1:nrow(entities)) {
 		edf <- df[df$entity == entities[i,1],]
 		eres <- head(edf,-1)
-		if ("key" %in% names(df)) {
-			eres$start_date <- eres$key
-			eres$key <- NULL
-			eres$end_date <- tail(edf,-1)$key
-
-		} else {
-			eres$start_date <- eres$date
-			eres$date <- NULL
-			eres$end_date <- tail(edf,-1)$date
-		}			
+		colnames(eres)[2] <- "start_date"
+		eres$end_date <- tail(edf,-1)$date
 		eres$duration <- eres$end_date - eres$start_date
 
 		res <- rbind(res, eres)

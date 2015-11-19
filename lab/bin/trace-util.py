@@ -199,12 +199,25 @@ class Trace:
 		return 's'
 
 	def grep(self, pattern, out_file):
-		out_file.write("entity"+self.field_sep+"key"+self.field_sep+"value\n")
-		for [entities, date, val] in self.traces:
-			if re.search(pattern, entities) is not None:
-				out_file.write(entities+self.field_sep+date+self.field_sep+val)
+		# Make the header according to property or event
+		# Waring: it is not accurate if properties and events are mixed
+		# and the first one is an event.
+		[entities, key, val] = self.traces[0]
+		try :
+			float(key)
+			out_file.write("entity"+self.field_sep+"date"+self.field_sep+"value\n")
+		except ValueError:
+			out_file.write("entity"+self.field_sep+"key"+self.field_sep+"value\n")
 
-		return 'p'
+		r_type = 'p'
+
+		for [entities, key, val] in self.traces:
+			if re.search(pattern, entities) is not None:
+				out_file.write(entities+self.field_sep+key+self.field_sep+val)
+				try: float(val)
+				except ValueError: r_type = None
+
+		return r_type
 
 	def grep_event(self, pattern, out_file):
 		out_file.write("entity"+self.field_sep+"date"+self.field_sep+"value\n")
@@ -309,8 +322,9 @@ def exec_and_write(command, serie, output_r=args.output_r):
 		dataname = (prefix+serie_fn).translate(tableR)
 		with open(output_dir+prefix+'reads.R','a') as r_file:
 			r_file.write(dataname+' <<- read.table("'+out_file.name+'",sep="", header=TRUE)\n')
-		with open(output_dir+prefix+'plots.R','a') as r_file:
-			r_file.write('plot('+dataname+'$date,'+dataname+'$value, type="'+r_type+'")\n')
+		if r_type is not None:
+			with open(output_dir+prefix+'plots.R','a') as r_file:
+				r_file.write('plot('+dataname+'$date,'+dataname+'$value, type="'+r_type+'")\n')
 
 
 trace = Trace(args.src_filename)

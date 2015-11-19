@@ -22,7 +22,7 @@ set(PROJECT_SOURCE_DIR ${PROJECT_ROOT_DIR}/src)
 set(PROJECT_EXAMPLES_DIR ${PROJECT_ROOT_DIR}/examples)
 set(PROJECT_BINARY_DIR ${PROJECT_ROOT_DIR}/bin)
 set(PROJECT_DOC_DIR ${PROJECT_ROOT_DIR}/doc)
-set(PROJECT_LAB_DIR ${PROJECT_ROOT_DIR}/lab)
+set(PROJECT_TRACEUTIL_DIR ${PROJECT_ROOT_DIR}/lab/bin/traceutil)
 
 
 # add a target to generate API documentation with Doxygen
@@ -102,6 +102,7 @@ find_program( R_BIN R )
 if(NOT ${R_BIN} MATCHES R_BIN-NOTFOUND)
 	add_custom_target(r-install ALL)
 	add_custom_command( TARGET r-install
-		COMMAND R CMD INSTALL ${PROJECT_LAB_DIR}/bin/traceutil )
+		COMMAND R CMD INSTALL ${PROJECT_TRACEUTIL_DIR} )
+
 endif(NOT ${R_BIN} MATCHES R_BIN-NOTFOUND)
 	
