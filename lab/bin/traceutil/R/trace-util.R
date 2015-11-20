@@ -7,10 +7,10 @@ tu_reload <- function(dir='./bin') {
 	library(traceutil)
 }
 
-#' Reads all the dat file in a given directory.
-#' Create dataframe for each.
-#' Plot according to plotting.
-#' And create xps with the list of xp.
+#' Reads all the dat file in a given directory,
+#' create one dataframe for each,
+#' plot according to plotting,
+#' and create xps with the list of xp.
 #'
 #' @param dir the directory containing the dat files
 #' @param plotting plot the data if TRUE
@@ -21,12 +21,10 @@ tu_reload <- function(dir='./bin') {
 #' tu_read('./data', TRUE)
 #' will read all dit files inf the data directory and plot everything
 tu_read <- function(dir = '.', plotting=FALSE) { 
-	library(ggplot2)
 	call_dir <- getwd()
 	setwd(dir)
 	datfile <- list.files('.',pattern='*.dat$')
 	for (f in datfile) {
-		print(f)
 		df <- assign(sub('.dat$','',f), read.table(f,sep="", header=TRUE), envir = .GlobalEnv)
 
 		if ( plotting ) tu_plot(df, f)
@@ -203,4 +201,3 @@ tu_apply <- function(xps, obs, FUN) {
 		))
 	return(res)
 }
-
