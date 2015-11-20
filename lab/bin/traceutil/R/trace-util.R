@@ -62,7 +62,14 @@ tu_intervals <- function(df) {
 }
 
 
+#' Plot the state of entities as collored rectangles.
+#' 
+#' @param df a dataframe ['entity', 'date', 'value'] where value is a state
+#' @return a plot 
+#' @keywords traceutil
 #' @export
+#' @examples
+#' tu_plot_state(balancer.vm__state)
 tu_plot_state <- function(df) {
 	colors <- data.frame(color=c("red", "green", "blue", "black", "orange", "purple", "coral", "seagreen", "gold" ))
 
@@ -76,10 +83,10 @@ tu_plot_state <- function(df) {
 
 	fdf <- merge(merge(intervals,states),entities)
 
-	ggplot(fdf) + expand_limits(x=-400) +
+	ggplot(fdf) + expand_limits(x=-100) +
 	geom_rect(aes(xmin=start_date,xmax=end_date,ymin=index,ymax=index+0.7,fill=color)) +
-	geom_text(data=entities, aes(x=0, y=index+0.2, hjust=1, vjust=0, label=entity)) +
-	scale_fill_discrete(name="State", breaks=states$color, labels=states$value)
+	geom_text(data=entities, aes(x=0, y=index+0.2, hjust=1, vjust=0, label=entity), size=3) +
+	scale_fill_discrete(name="State", breaks=states$color, labels=states$value) 
 }
 
 

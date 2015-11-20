@@ -39,6 +39,7 @@ public class RiceNodeProcess extends Process {
 				
 		switch (riceTask.command) {
 		case START:
+			
 			// Image caching management
 			if (riceHost.imagesCache.get(riceInstance.getImage()) == null) {
 				switch (rice.imgCaching) {
@@ -54,7 +55,7 @@ public class RiceNodeProcess extends Process {
 				}				
 			}
 			else while (riceHost.imagesCache.get(riceInstance.getImage()) == IMGSTATUS.TRANSFERRING) {
-				waitFor(rice.interBootDelay);
+				waitFor(1);
 			}
 			
 			// Boot delay management
@@ -64,6 +65,7 @@ public class RiceNodeProcess extends Process {
 				waitFor(riceHost.lastBootDate+rice.interBootDelay-Msg.getClock());
 			}
 			*/
+			//Msg.info("bootmutex "+riceInstance.getId()+" : "+riceHost.getHost().getName());
 			riceHost.bootMutex.acquire();
 			
 			// Boot
