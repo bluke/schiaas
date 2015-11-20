@@ -121,10 +121,9 @@ do
 		done
 
 		XP_ID=${line%%:*}; XP_ID=${XP_ID/ /_}
-		XP_ID_LIST="$XP_ID_LIST $XP_ID"
 		JAVA_XP_ARGS="`setupify ${line#*:}`"
 
-		echo "Simulating $XP_ID"
+		echo "Handling $XP_ID"
 
 		XP_SIMULATION_DIR=$SIMULATIONS_DIR/$XP_ID
 		mkdir -p $XP_SIMULATION_DIR
@@ -133,7 +132,7 @@ do
 		(
 			[[ -e $XP_SIMULATION_DIR/schiaas.trace ]] || java $JAVA_START_ARGS $JAVA_XP_ARGS $JAVA_END_ARGS 2> simgrid.out 1>&2
 			if [ $? -ne 0 ]; then echo "Critical error while executing $XP_ID" ; cat $XP_SIMULATION_DIR/simgrid.out ; exit $? ; fi
-			$BIN_DIR/trace-util.py schiaas.trace -o $DATA_DIR -f $XP_ID  -r $TU_ARGS 
+			$BIN_DIR/trace-util.py schiaas.trace -o $DATA_DIR -f $XP_ID $TU_ARGS 
 		) &
 		SIM_PIDS="$SIM_PIDS $!"
 	fi
@@ -141,22 +140,9 @@ done < $1
 
 wait $SIM_PIDS
 
-echo "Gathering results"
-cd $DATA_DIR
-rm reads.R plots.R 2>/dev/null
-
-for XP_ID in $XP_ID_LIST
-do
-	echo -e "\n##################################### $XP_ID" >> reads.R
-	cat ${XP_ID}.reads.R >> reads.R
-	echo "##################################### $XP_ID" >> plots.R
-	cat ${XP_ID}.plots.R >> plots.R
-done
-
-echo -e "\n##################################### GLOBAL " >> reads.R
-echo "xps <- data.frame(xp=c('`echo $XP_ID_LIST | sed "s/ /','/g"`'))" >> reads.R
-
 if [ -n "$R_SCRIPT" ] ; then 
 	echo "Plotting results"
+	cd $DATA_DIR
 	R --no-save < $R_SCRIPT > R.out
+	cd ..
 fi

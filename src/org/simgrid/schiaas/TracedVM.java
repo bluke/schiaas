@@ -27,6 +27,8 @@ public class TracedVM extends VM {
 		trace.addProperty("disk_size", ""+diskSize);
 		trace.addProperty("mig_net_speed", ""+migNetSpeed);
 		trace.addProperty("dp_intensity", ""+dpIntensity);	
+		
+		trace.addEvent("state", "pending");
 	}
 	
 	@Override

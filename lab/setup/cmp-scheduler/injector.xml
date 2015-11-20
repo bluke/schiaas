@@ -10,13 +10,13 @@
 	     duration="2000"
 	     period="3"
 	     instance_period="1000"
-	     instance_min="10"
-	     instance_max="192"
+	     instance_min="128"
+	     instance_max="170"
 	     load_period="100"
 	     load_min="90"
 	     load_max="100"
 	     image_id="myImage"
-	     instance_type_id="small-dp30"
+	     instance_type_id="small-dp90"
 	     />
 	 </injector> 
 	 <injector id="myInjectorFast"
@@ -28,13 +28,13 @@
 	     duration="2000"
 	     period="3"
 	     instance_period="100"
-	     instance_min="10"
-	     instance_max="192"
+	     instance_min="128"
+	     instance_max="170"
 	     load_period="100"
 	     load_min="90"
 	     load_max="100"
 	     image_id="myImage"
-	     instance_type_id="small-dp30"
+	     instance_type_id="small-dp90"
 	     />
 	 </injector> 
 </injectors>

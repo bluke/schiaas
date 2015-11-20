@@ -1,4 +1,99 @@
 
+#' Bad bad function, used only to debug things
+#' @export
+tu_reload <- function(dir='./bin') {
+	devtools::document(paste(dir,'traceutil', sep='/'))
+	devtools::install(paste(dir,'traceutil', sep='/'))
+	library(traceutil)
+}
+
+#' Reads all the dat file in a given directory.
+#' Create dataframe for each.
+#' Plot according to plotting.
+#' And create xps with the list of xp.
+#'
+#' @param dir the directory containing the dat files
+#' @param plotting plot the data if TRUE
+#' @return the list of dat files
+#' @keywords traceutil
+#' @export
+#' @examples
+#' tu_read('./data', TRUE)
+#' will read all dit files inf the data directory and plot everything
+tu_read <- function(dir = '.', plotting=FALSE) { 
+	library(ggplot2)
+	call_dir <- getwd()
+	setwd(dir)
+	datfile <- list.files('.',pattern='*.dat$')
+	for (f in datfile) {
+		print(f)
+		df <- assign(sub('.dat$','',f), read.table(f,sep="", header=TRUE), envir = .GlobalEnv)
+
+		if ( plotting ) tu_plot(df, f)
+	}
+
+	xps <<- data.frame(xp=unique(sub('\\..*$','',datfile)))
+
+	setwd(call_dir)
+	return(datfile)
+}
+
+
+#' Plot the given dataframe according to its type 
+#' 
+#' @param df a dataframe ['entity', 'date', 'value'] 
+#' @return a plot 
+#' @keywords traceutil
+#' @export
+#' @examples
+#' tu_plot(balancer.vm__state)
+tu_plot <- function(df, title=NA) {
+	if ( colnames(df)[2] == "key" ) return();
+
+	if (is.numeric(df$value)) {
+		if (length(unique(df$entity)) == 1)	{
+			type <- 's'
+		} else {
+			type <- 'p'
+		}
+		plot(df$date,df$value, type=type, main=title, xlab="date", ylab="value")
+	} else {
+		tu_plot_state(df, title)
+	}
+}
+
+
+#' Plot the state of entities as colored rectangles.
+#' 
+#' @param df a dataframe ['entity', 'date', 'value'] where value is a state
+#' @return a plot 
+#' @keywords traceutil
+#' @export
+#' @examples
+#' tu_plot_state(balancer.vm__state)
+tu_plot_state <- function(df, title=NA) {
+	colors <- data.frame(color=c("red", "green", "blue", "black", "orange", "purple", "coral", "seagreen", "gold" ))
+
+	intervals <- tu_intervals(df)
+
+	states <- data.frame(value=unique(intervals$value))
+	states <- cbind(states,(head(colors,nrow(states))))
+	
+	entities <- data.frame(entity=unique(intervals$entity))
+	entities$index <- seq_len(nrow(entities))
+
+	fdf <- merge(merge(intervals,states),entities)
+
+	print(ggplot(fdf) + expand_limits(x=-100) +
+	geom_rect(aes(xmin=start_date,xmax=end_date,ymin=index,ymax=index+0.7,fill=color)) +
+	geom_text(data=entities, aes(x=0, y=index+0.2, hjust=1, vjust=0, label=entity), size=3) +
+	scale_fill_discrete(name="State", breaks=states$color, labels=states$value) +
+	ggtitle(title) + xlab("date") + ylab("entity"))
+}
+
+
+
+
 #' Returns the value of a df at a given date.
 #' Works  with events and count-if traces.
 #'
@@ -62,23 +157,6 @@ tu_intervals <- function(df) {
 }
 
 
-#' @export
-tu_plot_state <- function(df) {
-	colors <- data.frame(color=c("red", "green", "blue", "black", "orange"))
-
-	intervals <- tu_intervals(df)
-
-	states <- data.frame(value=unique(intervals$value))
-	states <- cbind(states,(head(colors,nrow(states))))
-	
-	entities <- data.frame(entity=unique(intervals$entity))
-	entities$index <- seq_len(nrow(entities))
-
-	fdf <- merge(merge(intervals,states),entities)
-
-	ggplot(fdf) + geom_rect(aes(xmin=start_date,xmax=end_date,ymin=index,ymax=index+0.7,fill=color))
-
-}
 
 
 #' Return the integrate of the given df over time
@@ -101,7 +179,7 @@ tu_integrate <- function(df, per_entity=FALSE) {
 		res[i,2] = sum(head(vals$value,-1) * (tail(vals$date,-1) - head(vals$date,-1)))
 	}
 	if (per_entity) return(res)
-	else return(sum(res$integrate))
+	else return(sum(res$integral))
 }
 
 #' Apply the FUN function to the observation obs for each xp in xps
@@ -121,7 +199,7 @@ tu_integrate <- function(df, per_entity=FALSE) {
 tu_apply <- function(xps, obs, FUN) {
 	res <- cbind(xps, 'value'=apply(
 		xps['xp'],1,
-		function(x) FUN(get(paste(x,'.',obs,sep='')))
+		function(x) FUN(get(paste(x,obs,sep='.')))
 		))
 	return(res)
 }
