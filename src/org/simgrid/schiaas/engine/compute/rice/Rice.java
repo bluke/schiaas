@@ -162,12 +162,12 @@ public class Rice extends ComputeEngine {
 	@Override
 	public void doCommand(COMMAND command, Instance instance) {
 		RiceInstance riceInstance = (RiceInstance) instance;
-
+		//Msg.info("command :"+command+":"+instance.getId());
 		RiceControllerProcess rcp = new RiceControllerProcess(this, command, riceInstance);
 		RiceNodeProcess rnp = new RiceNodeProcess(this, riceInstance.riceHost);
 		
 		try {
-			rcp.start();			
+			rcp.start();
 			rnp.start();
 		} catch (HostNotFoundException e) {
 			Msg.critical("Something bad happened in RISE while trying to execute a command");

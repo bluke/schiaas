@@ -1,11 +1,8 @@
-
-source('reads.R')
+library(traceutil)
 
 pdf('data.pdf')
-source('plots.R')
+tu_read('.',TRUE)
 dev.off()
-
-library(traceutil)
 
 pdf('busy_hosts-integral.pdf')
 uc <-tu_apply(xps,'used_cores_eq_0',tu_integrate)

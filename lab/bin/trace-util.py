@@ -38,8 +38,6 @@ parser.add_argument('--regex', dest='dump_regex', action='store_const', const=Tr
 	help='print the properties and events available in the trace, in the regex format')
 parser.add_argument('-d', dest='print_doc', action='store_const', const=True, default=False, 
 	help='print documentation whenever it is possible')
-parser.add_argument('-r', dest='output_r', action='store_const', const=True, default=False, 
-	help='write R script')
 parser.add_argument('-f', dest='prefix', metavar=('prexif'), nargs='*', 
 	help='write the output to file with the given prefix')
 parser.add_argument('-o', dest='output_dir', metavar=('output directory'), nargs='?', default=".", 
@@ -196,25 +194,18 @@ class Trace:
 		if (date != last_date):
 			out_file.write(pattern+self.field_sep+str(date)+self.field_sep+str(count)+'\n')
 
-		return 's'
-
 	def grep(self, pattern, out_file):
-		r_type = 'p'
 		header = 'date'
 		res = ''
 
 		for [entities, key, val] in self.traces:
 			if re.search(pattern, entities) is not None:
 				res = res + entities+self.field_sep+key+self.field_sep+val
-				try: float(val)
-				except ValueError: r_type = None
 				try: float(key)
 				except ValueError: header = 'key'
 
 		out_file.write("entity"+self.field_sep+header+self.field_sep+"value\n")
 		out_file.write(res)
-
-		return r_type
 
 	def grep_event(self, pattern, out_file):
 		out_file.write("entity"+self.field_sep+"date"+self.field_sep+"value\n")
@@ -293,7 +284,7 @@ class Trace:
 
 ########################### MAIN ##############################################
 
-tableFilename = str.maketrans(":","_",".*/\\!%?+%")
+tableFilename = str.maketrans(":-","__",".*/\\!%?+%")
 tableR = str.maketrans("+-/\*:","______")
 
 
@@ -305,25 +296,16 @@ if args.prefix is not None:
 		prfix = ''
 else: prefix = None
 
-def exec_and_write(command, serie, output_r=args.output_r):
+def exec_and_write(command, serie):
 	serie_fn = serie.translate(tableFilename)
 	if (prefix is not None):
 		out_file = open(output_dir+prefix+serie_fn+'.dat','w')
 	else:
 		out_file = sys.stdout
 
-	r_type=command(out_file)
+	command(out_file)
 
 	if (prefix is not None): out_file.close()
-
-	if output_r:
-		dataname = (prefix+serie_fn).translate(tableR)
-		with open(output_dir+prefix+'reads.R','a') as r_file:
-			r_file.write(dataname+' <<- read.table("'+out_file.name+'",sep="", header=TRUE)\n')
-		if r_type is not None:
-			with open(output_dir+prefix+'plots.R','a') as r_file:
-				r_file.write('plot('+dataname+'$date,'+dataname+'$value, type="'+r_type+'")\n')
-
 
 trace = Trace(args.src_filename)
 
