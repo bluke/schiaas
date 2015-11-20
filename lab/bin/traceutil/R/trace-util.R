@@ -21,31 +21,29 @@ tu_reload <- function(dir='./bin') {
 #' tu_read('./data', TRUE)
 #' will read all dit files inf the data directory and plot everything
 tu_read <- function(dir = '.', plotting=FALSE) { 
-	call_dir <- getwd()
-	setwd(dir)
-	datfile <- list.files('.',pattern='*.dat$')
+	datfile <- list.files(dir,pattern='*.dat$')
 	for (f in datfile) {
-		df <- assign(sub('.dat$','',f), read.table(f,sep="", header=TRUE), envir = .GlobalEnv)
+		varname <- sub('.dat$','',f)
+		df <- assign(varname, read.table(paste(dir,f,sep='/'),sep="", header=TRUE), envir = .GlobalEnv)
 
-		if ( plotting ) tu_plot(df, f)
+		if ( plotting ) tu_plot(df, varname)
 	}
 
 	xps <<- data.frame(xp=unique(sub('\\..*$','',datfile)))
 
-	setwd(call_dir)
 	return(datfile)
 }
-
 
 #' Plot the given dataframe according to its type 
 #' 
 #' @param df a dataframe ['entity', 'date', 'value'] 
+#' @param title the main title of the plot
 #' @return a plot 
 #' @keywords traceutil
 #' @export
 #' @examples
-#' tu_plot(balancer.vm__state)
-tu_plot <- function(df, title=NA) {
+#' tu_plot(balancer.vm__state, 'the state of vms in the balancer simulation')
+tu_plot <- function(df, title=deparse(substitute(df))) {
 	if ( colnames(df)[2] == "key" ) return();
 
 	if (is.numeric(df$value)) {
@@ -64,12 +62,13 @@ tu_plot <- function(df, title=NA) {
 #' Plot the state of entities as colored rectangles.
 #' 
 #' @param df a dataframe ['entity', 'date', 'value'] where value is a state
+#' @param title the main title of the plot
 #' @return a plot 
 #' @keywords traceutil
 #' @export
 #' @examples
 #' tu_plot_state(balancer.vm__state)
-tu_plot_state <- function(df, title=NA) {
+tu_plot_state <- function(df, title=deparse(substitute(df))) {
 	colors <- data.frame(color=c("red", "green", "blue", "black", "orange", "purple", "coral", "seagreen", "gold" ))
 
 	intervals <- tu_intervals(df)
@@ -105,7 +104,6 @@ tu_plot_state <- function(df, title=NA) {
 #' 1  root:cloud:myCloud:compute:compute_host:node-2.me:used_cores     5
 #' 2  root:cloud:myCloud:compute:compute_host:node-1.me:used_cores     7
 #' 3  root:cloud:myCloud:compute:compute_host:node-3.me:used_cores     8
-
 tu_valueat <- function(df,date) { 
 	res <- unique(df['entity'])
 	res$value = 0
@@ -135,10 +133,9 @@ tu_valueat <- function(df,date) {
 #' 1       4  27.0000  27.0000
 #' 38      5  72.0000  45.0000
 #' 63      6 123.0000  51.0000
+#' 130     7 378.0078  30.0000
 #' 87      7 204.0000  81.0000
 #' 111     8 348.0078 144.0078
-#' 130     7 378.0078  30.0000
-
 tu_intervals <- function(df) {
 	entities <- unique(df['entity'])
 	res <- NULL 
