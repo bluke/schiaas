@@ -14,24 +14,22 @@ tu_reload <- function(dir='./bin') {
 #'
 #' @param dir the directory containing the dat files
 #' @param plotting plot the data if TRUE
-#' @return the list of dat files
+#' @return the list of read dataframes
 #' @keywords traceutil
 #' @export
 #' @examples
 #' tu_read('./data', TRUE)
 #' will read all dit files inf the data directory and plot everything
 tu_read <- function(dir = '.', plotting=FALSE) { 
-	datfile <- list.files(dir,pattern='*.dat$')
-	for (f in datfile) {
-		varname <- sub('.dat$','',f)
-		df <- assign(varname, read.table(paste(dir,f,sep='/'),sep="", header=TRUE), envir = .GlobalEnv)
-
-		if ( plotting ) tu_plot(df, varname)
+	varnames <- sub('.dat$','',list.files(dir,pattern='*.dat$'))
+	for (v in varnames) {
+		df <- assign(v, read.table(paste(dir,'/',v,'.dat',sep=''),sep="", header=TRUE), envir = .GlobalEnv)
+		if ( plotting ) tu_plot(df, v)
 	}
 
-	xps <<- data.frame(xp=unique(sub('\\..*$','',datfile)))
+	xps <<- data.frame(xp=unique(sub('\\..*$','',varnames)))
 
-	return(datfile)
+	return(varnames)
 }
 
 #' Plot the given dataframe according to its type 
@@ -179,8 +177,9 @@ tu_integrate <- function(df, per_entity=FALSE) {
 
 #' Apply the FUN function to the observation obs for each xp in xps
 #'
-#' @param df a dataframe having date and value columns
-#' @param per_entity TRUE to return the integral per entity
+#' @param xps a list of xp names
+#' @param obs the name of one observation
+#' @param FUN the function to apply to dataframes named xp.obs 
 #' @return a dataframe having xp and value column
 #' @keywords traceutil
 #' @export
@@ -193,7 +192,7 @@ tu_integrate <- function(df, per_entity=FALSE) {
 #' Note that xps can be loaded with source('data/reads.R')
 tu_apply <- function(xps, obs, FUN) {
 	res <- cbind(xps, 'value'=apply(
-		xps['xp'],1,
+		xps,1,
 		function(x) FUN(get(paste(x,obs,sep='.')))
 		))
 	return(res)

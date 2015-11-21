@@ -291,7 +291,7 @@ tableR = str.maketrans("+-/\*:","______")
 if args.prefix is not None: 
 	output_dir=args.output_dir.rstrip('/')+'/'
 	try: 
-		prefix = args.prefix[0]+'.'
+		prefix = args.prefix[0].translate(tableR)+'.'
 	except IndexError:
 		prfix = ''
 else: prefix = None

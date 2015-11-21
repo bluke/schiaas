@@ -116,22 +116,28 @@ do
 			echo "JAVA_END_ARGS=$JAVA_END_ARGS"
 		fi
 	else
-		while [ `ps -Af | grep -c "$JAVA_START_ARGS"` -ge $(( PARALLEL_SIMS +1)) ] ; do
-			sleep 1
-		done
-
 		XP_ID=${line%%:*}; XP_ID=${XP_ID/ /_}
 		JAVA_XP_ARGS="`setupify ${line#*:}`"
-
-		echo "Handling $XP_ID"
 
 		XP_SIMULATION_DIR=$SIMULATIONS_DIR/$XP_ID
 		mkdir -p $XP_SIMULATION_DIR
 
+		while [ `ps -Af | grep -c "$JAVA_START_ARGS"` -ge $(( PARALLEL_SIMS +1)) ] ; do
+			sleep 1
+		done
 		cd $XP_SIMULATION_DIR
 		(
-			[[ -e $XP_SIMULATION_DIR/schiaas.trace ]] || java $JAVA_START_ARGS $JAVA_XP_ARGS $JAVA_END_ARGS 2> simgrid.out 1>&2
-			if [ $? -ne 0 ]; then echo "Critical error while executing $XP_ID" ; cat $XP_SIMULATION_DIR/simgrid.out ; exit $? ; fi
+			if [ ! -e $XP_SIMULATION_DIR/schiaas.trace ] ; then
+				echo "Simulating $XP_ID"
+			 	java $JAVA_START_ARGS $JAVA_XP_ARGS $JAVA_END_ARGS 2> simgrid.out 1>&2
+			 	if [ $? -ne 0 ]; then echo "Critical error while executing $XP_ID" ; cat $XP_SIMULATION_DIR/simgrid.out ; exit $? ; fi
+			fi
+
+			while [ `ps -Af | grep -c "trace-util.py"` -ge $(( PARALLEL_SIMS +1)) ] ; do
+				sleep 1
+			done
+
+			echo "Processing $XP_ID traces"
 			$BIN_DIR/trace-util.py schiaas.trace -o $DATA_DIR -f $XP_ID $TU_ARGS 
 		) &
 		SIM_PIDS="$SIM_PIDS $!"
