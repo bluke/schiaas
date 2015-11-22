@@ -13,8 +13,8 @@
 ## as <simulation_id>: <simulation arguments>
 ##
 ## Two options are available:
-## -k keeps the data from previous executions
-## -p x run x simulation in parallel
+## -k : keeps the data from previous executions
+## -p x : run x simulations and x trace-util.py in parallel,
 ##
 ## @author julien.gossa@unistra.fr
 

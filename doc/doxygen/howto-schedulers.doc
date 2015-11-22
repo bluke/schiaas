@@ -89,7 +89,7 @@ Please make sure to set the *CLASSPATH* var in order to make the simulator runna
 $ java loadinjector.SimpleInjection platform.xml deploy.xml cloud.xml injector.xml
 @endcode 
 
-The study will use **the lab** provided with SCHIaaS (see \ref lab).
+The study will use **the lab** provided with SCHIaaS (see \ref lab_lab).
 
 
 @subsection howto_scheduler_running_setup Setting up the lab
@@ -206,65 +206,64 @@ This section shows how the results of these simulations can be observed.
 First of all, let's identify what can be observed, using ./bin/trace-util.py.
 
 @code
-$ ./trace-util.py simulations/balancer/schiaas.trace --info
+$ ./trace-util.py simulations/balancer/schiaas.trace --info -d
 
 {
   "root": {
-    "date": "property",
-    "description": "property",
+    "date": "property: Clock of the simulation in s",
+    "description": "property: Description if the entity",
     "cloud": {
       "myCloud": {
         "compute": {
-          "image_caching": "property",
-          "inter_boot_delay": "property",
-          "engine": "property",
-          "image_storage": "property",
-          "controller": "property",
+          "image_caching": "property: Type of caching of VM images",
+          "inter_boot_delay": "property: Delay between two VM boots on the same host",
+          "engine": "property: SCHIaaS engine",
+          "image_storage": "property: Storage used for VM images",
+          "controller": "property: Host used as controller for the entity",
           "compute_host": {
-            "* x24": {
-              "cores": "property",
-              "ram_size": "property",
-              "diskSize": "property",
-              "used_cores": "event"
+            ".*": {
+              "cores": "property: Number of cores of the entity",
+              "ram_size": "property: SimGrid's VM property",
+              "diskSize": "property: Size of disk in MB",
+              "used_cores": "event: Number of cores in use"
+            }
+          },
+          "instances": {
+            ".*": {
+              "image": "property: VM image",
+              "instance_type": "property: Type of instance",
+              "command": "event: User command issued regarding the entity",
+              "load": "event: CPU load",
+              "schedule": "event: Host to which the instance is scheduled"
             }
           },
           "scheduler": {
-            "name": "property",
-            "delay": "property",
-            "controller": "property",
-            "type": "property"
-          },
-          "instance": {
-            "* x465": {
-              "image": "property",
-              "instance_type": "property",
-              "command": "event",
-              "schedule": "event",
-              "load": "event"
-            }
+            "name": "property:  Name of the entity",
+            "controller": "property: Host used as controller for the entity",
+            "type": "property:  Type of the entity"
           }
         }
       }
     },
-    "VirtualMachines": {
-      "* x465": {
-        "n_cores": "property",
-        "ram_size": "property",
-        "net_cap": "property",
-        "disk_path": "property",
-        "disk_size": "property",
-        "mig_net_speed": "property",
-        "dp_intensity": "property",
-        "cpu_bound": "event",
-        "state": "event"
+    "injector": {
+      "myInjectorSlow": {
+        "injector": "property:  Class of injector",
+        "random_seed": "property:  Seed used to randomize the entity",
+        "instances_count": "event:  Number of instances",
+        "instances_load": "event:  CPU load"
       }
     },
-    "injector": {
-      "myInjector": {
-        "injector": "property",
-        "random_seed": "property",
-        "instances_count": "event",
-        "instances_load": "event"
+    "vm": {
+      ".*": {
+        "n_cores": "property: SimGrid's VM property",
+        "ram_size": "property: SimGrid's VM property",
+        "net_cap": "property: SimGrid's VM property",
+        "disk_path": "property: SimGrid's VM property",
+        "disk_size": "property: SimGrid's VM property",
+        "mig_net_speed": "property: SimGrid's VM property",
+        "dp_intensity": "property: SimGrid's VM property",
+        "cpu_bound": "event: SimGrid's VM property",
+        "state": "event: State of the entity"
       }
     }
   }
@@ -272,9 +271,9 @@ $ ./trace-util.py simulations/balancer/schiaas.trace --info
 @endcode
 
 
-@subsection howto_scheduler_observing_loads Observing the loads
+@subsection howto_scheduler_observing_loads Observing the injection
 
-Then, let's observe the loads: these are the events *instances_count* and *instances_load* in the injector section. 
+Then, let's observe the injection: these are the events *instances_count* in the injector section. 
 
 The format is always [entity] [date] [value].
 
@@ -322,14 +321,25 @@ NB: -k allows to keep the results of previous simulations.
 
 This will create files in the directory ./data: [simulation_id].instances_count.dat and plot their content using R into ./data/data.pdf:
 
-\image html instances_count.png
+\image html balancer.instances_count.png
 
 To check the effect of this injection on the cloud, one can count the virtual machines that are in the running state:
 @code
-#TU_ARGS --count_if VirtualMachines.*state eq running
+#TU_ARGS --count_if vm.*state eq running
 @endcode
 
-\image html VM_running.png
+\image html balancer.vm__state_eq_running.png
+
+
+Alternatively, one can plot the states of the vms:
+@code
+#TU_ARGS --grep vm.*state
+@endcode
+
+\image html balancer.vm__state.png
+
+Please note the black area at the left of the figure: those are the names of the vms. They are not correctly plotted because of the large number of vms. 
+Be aware that the objective of the lab is not to produce ready-to-publish plots, but only to provide efficient tools to quickly mine simulations data.
 
 @subsection howto_scheduler_observing_usage Observing the usage of hosts
 
@@ -339,39 +349,41 @@ To observe the behavior of the scheduler, let's look at the number of cores used
 @endcode
 
 With balancer, the vm are well spread among the hosts:
-\image html balance-balancer.png
+\image html balancer.used_cores.png
 
 With consolidator, there is some heterogenity in the number of used cores at a given date, especialy when the load change:
-\image html balance-consolidator.png
+\image html consolidator.used_cores.png
 
 With reconsolidator, this heterogenity is maximized all along the simulation:
-\image html balance-reconsolidator0.png
+\image html reconsolidator0.used_cores.png
 
 
 @subsection howto_scheduler_observing_green Observing how many hosts are idle
 
-For green purpose, many schedulers aim at making idle as many hosts as possible, in order to shut them down. Thus, let's count the number of busy hosts, that is hosts having more than 0 used cores:
+For green purpose, one may want to shut hosts down. Thus, many schedulers aim at minimizing the number of busy physical hosts.
+
+Let's count the number of busy hosts, that is hosts not having 0 used cores:
 
 @code
-#TU_ARGS --count_if used_cores gt 0
+#TU_ARGS --count_if used_cores ne 0
 @endcode
 
-\image html busy_hosts-balancer.png
-\image html busy_hosts-consolidator.png
-\image html busy_hosts-reconsolidator0.png
-\image html busy_hosts-reconsolidator10.png
-\image html busy_hosts-reconsolidator100.png
+\image html balancer.used_cores_ne_0.png
+\image html consolidator.used_cores_ne_0.png
+\image html reconsolidator0.used_cores_ne_0.png
+\image html reconsolidator10.used_cores_ne_0.png
+\image html reconsolidator100.used_cores_ne_0.png
 
 Or alternatively, the number of idle hosts, those that could be shut down:
 @code
 #TU_ARGS --count_if used_cores eq 0
 @endcode
 
-\image html idle_hosts-balancer.png
-\image html idle_hosts-consolidator.png
-\image html idle_hosts-reconsolidator0.png
-\image html idle_hosts-reconsolidator10.png
-\image html idle_hosts-reconsolidator100.png
+\image html balancer.used_cores_eq_0.png
+\image html consolidator.used_cores_eq_0.png
+\image html reconsolidator0.used_cores_eq_0.png
+\image html reconsolidator10.used_cores_eq_0.png
+\image html reconsolidator100.used_cores_eq_0.png
 
 All in all, the static schedulers perform poorly when it comes to shut hosts down, and the reconfigurator performs very well, especially with a short delay.
 
@@ -380,14 +392,14 @@ All in all, the static schedulers perform poorly when it comes to shut hosts dow
 However, reconfigurations imply VM migrations, that consume resources as well.
 Let's look at the amount of migrations:
 @code
-#TU_ARGS --count_if VirtualMachines.*state eq migrating
+#TU_ARGS --count_if vm.*state eq migrating
 @endcode
 
-\image html migrations-reconsolidator0.png
-\image html migrations-reconsolidator10.png
-\image html migrations-reconsolidator100.png
+\image html reconsolidator0.vm__state_eq_migrating.png
+\image html reconsolidator10.vm__state_eq_migrating.png
+\image html reconsolidator100.vm__state_eq_migrating.png
 
-As one can see, with a delay of 0 seconds, there are up to 6 concurrent migrations, while with a delay of 10 secondes, no migrations occured concurrently.
+As one can see, with a delay of 0 seconds, there are up to 6 concurrent migrations, while with a delay of 10 secondes, only two migrations occured concurrently.
 
 
 @subsection howto_scheduler_observing_dual_injections Using two injectors at once.
@@ -395,16 +407,57 @@ As one can see, with a delay of 0 seconds, there are up to 6 concurrent migratio
 After the previous observations, the reconsolidator scheduler seems interresting, particularly with a short delay.
 
 Let's look at the results with a different load.
-To do so, one can change the values in *injector.xml*, or create a new injector configuration file and add the simulations in the lab, or combine the two injections into one simulation:
+To do so, one can add another injector configuration file *injector-fast.xml* and add the simulations in the lab
 
 @code 
 <?xml version='1.0'?>
 <!DOCTYPE injectors>
 <injectors>
+ </injector> 
+  <injector id="myInjectorFast"
+   class="org.simgrid.schiaas.loadinjector.injectors.SinInjector"
+   cloud="myCloud">
+  <config 
+   start_date="0"
+   duration="2000"
+   period="3"
+   instance_period="60"
+   instance_min="128"
+   instance_max="192"
+   load_period="100"
+   load_min="90"
+   load_max="100"
+   image_id="myImage"
+   instance_type_id="small-dp30"
+  />
+ </injector> 
+</injectors>
+@endcode
+
+@code
+balancer: cloud-balancer.xml injector.xml
+consolidator: cloud-consolidator.xml injector.xml
+reconsolidator0: cloud-reconsolidator0.xml injector.xml
+reconsolidator10: cloud-reconsolidator10.xml injector.xml
+reconsolidator100: cloud-reconsolidator100.xml injector.xml
+balancer-fast: cloud-balancer.xml injector-fast.xml
+consolidator-fast: cloud-consolidator.xml injector-fast.xml
+reconsolidator0-fast: cloud-reconsolidator0.xml injector-fast.xml
+reconsolidator10-fast: cloud-reconsolidator10.xml injector-fast.xml
+reconsolidator100-fast: cloud-reconsolidator100.xml injector-fast.xml
+@endcode
+
+
+Or alternatively, one can combine the two injections into one simulation with *injector-slowfast.xml*.
+
+@code 
+<?xml version='1.0'?>
+<!DOCTYPE injectors>
+<injectors>
+
  <injector id="myInjectorSlow"
   class="org.simgrid.schiaas.loadinjector.injectors.SinInjector"
   cloud="myCloud">
-
   <config 
    start_date="0"
    duration="2000"
@@ -419,16 +472,16 @@ To do so, one can change the values in *injector.xml*, or create a new injector 
    instance_type_id="small-dp30"
   />
  </injector> 
-  <injector id="myInjectorFast"
+
+ <injector id="myInjectorFast"
    class="org.simgrid.schiaas.loadinjector.injectors.SinInjector"
    cloud="myCloud">
-
   <config 
    start_date="2000"
    duration="2000"
    period="3"
-   instance_period="100"
-   instance_min="10"
+   instance_period="60"
+   instance_min="128"
    instance_max="192"
    load_period="100"
    load_min="90"
@@ -437,23 +490,38 @@ To do so, one can change the values in *injector.xml*, or create a new injector 
    instance_type_id="small-dp30"
   />
  </injector> 
+
 </injectors>
 @endcode
 
-As one can see, following the previous injection, there is now a second injection with a much more agressive *intance_period*. This simulate a large number of users creating and terminating VM all the time:
-\image html instances_count-dual_injection.png
+@code
+balancer-slowfast: cloud-balancer.xml injector-slowfast.xml
+consolidator-slowfast: cloud-consolidator.xml injector-slowfast.xml
+reconsolidator0-slowfast: cloud-reconsolidator0.xml injector-slowfast.xml
+reconsolidator10-slowfast: cloud-reconsolidator10.xml injector-slowfast.xml
+reconsolidator100-slowfast: cloud-reconsolidator100.xml injector-slowfast.xml
+@endcode
 
-Now, let's look at the number of busy hosts with the reconsolidator:
-\image html busy_hosts-reconsolidator0-dual_injection.png
-\image html busy_hosts-reconsolidator10-dual_injection.png
+As one can see, following the previous injection, there is now a second injection with a much more agressive *intance_period*. This simulate a large number of users creating and terminating VM all the time:
+\image html balancer_slowfast.instances_count.png
+
+Now, let's look at the number of busy hosts with reconsolidator 0 and 10 :
+\image html reconsolidator0_slowfast.used_cores_ne_0.png
+\image html reconsolidator10_slowfast.used_cores_ne_0.png
 
 Under agressive loads, those actually perform worse than the simple consolidator:
-\image html busy_hosts-consolidator-dual_injection.png
+\image html consolidator_slowfast.used_cores_ne_0.png
+
+This is confirmed by the integrals of the number of busy hosts over time:
+\image html busy_hosts-integral-slow.png
+\image html busy_hosts-integral-fast.png
+
 
 This is explained by the amount of migrations that slow the platform and prevent from shutting the VM down as soon as the user ask for it:
 
-\image html migrations-reconsolidator0-dual_injection.png
-\image html migrations-reconsolidator10-dual_injection.png
+\image html reconsolidator0_slowfast.vm__state_eq_migrating.png
+\image html reconsolidator10_slowfast.vm__state_eq_migrating.png
+\image html reconsolidator100_slowfast.vm__state_eq_migrating.png
 
 
 @subsection howto_scheduler_observing_closely Observing more closely
@@ -496,24 +564,32 @@ For instance, it allows to integrate values of the observation over time, and ap
 > 
 > ?tu_apply
 > tu_apply(xps,'used_cores_ne_0', tu_integrate)
-                 xp    value
-1          balancer 85847.87
-2      consolidator 72010.85
-3   reconsolidator0 96632.11
-4  reconsolidator10 76073.56
-5 reconsolidator100 70646.12
+                           xp
+1                    balancer
+2               balancer_fast
+3           balancer_slowfast
+4                consolidator
+5           consolidator_fast
+6       consolidator_slowfast
+7             reconsolidator0
+8        reconsolidator0_fast
+9    reconsolidator0_slowfast
+10          reconsolidator100
+11     reconsolidator100_fast
+12 reconsolidator100_slowfast
+13           reconsolidator10
+14      reconsolidator10_fast
+15  reconsolidator10_slowfast
 @endcode
 
 And everything can be automatized with template.R, as declared in the lab configuration file:
 @code
-source('reads.R')
+library(traceutil)
 
 pdf('data.pdf')
-source('plots.R')
+tu_read(plotting=TRUE)
 dev.off()
 
-install.packages('../bin/traceutil_0.0.0.9000.tar.gz')
-library(traceutil)
 
 pdf('busy_hosts-integral.pdf')
 uc <-tu_apply(xps,'used_cores_ne_0',tu_integrate)
@@ -521,14 +597,12 @@ barplot(uc$value, names.arg=uc$xp)
 uc
 dev.off()
 @endcode
-NB: *install.packages* is only required the first time.
 
 After running lab.sh:
 - *data/R.out* will contain the result of the execution of R;
 - *data/data.pdf* will contain the plot of every observation;
 - *data/busy_hosts-integral.pdf* will contain the specific plot:
 
-\image html busy_hosts-integral.png
 
 For more details please see \ref lab and \ref lab_setup_observing.
 

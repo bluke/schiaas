@@ -230,7 +230,7 @@ class Trace:
 		traces = []
 		for (entities, key, val) in self.sub_get_regex():
 			entities = entities.split(self.entity_sep)
-			if val == "event": entities.pop()
+			if re.search("^event", val) is not None: entities.pop()
 			traces.append((self.entity_sep.join(entities),key,val))
 
 		obj = self.build_obj_from_traces(traces)
@@ -339,10 +339,10 @@ if args.count_if_args is not None:
 
 
 if (args.dump_info):
-	exec_and_write(lambda out_file: trace.get_info(out_file), 'info', False)		
+	exec_and_write(lambda out_file: trace.get_info(out_file), 'info')
 
 if (args.dump_regex):
-	exec_and_write(lambda out_file: trace.get_regex(out_file), 'regex', False)		
+	exec_and_write(lambda out_file: trace.get_regex(out_file), 'regex')
 
 if (args.json_dump):
-	exec_and_write(lambda out_file: trace.get_json(out_file), 'json', False)
+	exec_and_write(lambda out_file: trace.get_json(out_file), 'json')
