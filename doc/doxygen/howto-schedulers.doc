@@ -9,7 +9,9 @@ Studying schedulers is mandatory, for instance, when:
 - an administrator has to choose a scheduler for a cloud platform;
 - an administrator has to tune one scheduler for a cloud platform...
 
+
 @section howto_scheduler_5min Everything in five minutes
+
 Providing that you have simgrid java installed and apt:
 @code
 # Installing python3, R and ggplot2
@@ -34,6 +36,7 @@ cat setup/cmp-scheduler/cmp-scheduler.cfg
 cd data
 ls
 open data.pdf
+cat R.out
 R
 library(traceutil)
 ??traceutil
@@ -42,12 +45,13 @@ tu_read()
 ls()
 tu_plot(reconsolidator0.used_cores_ne_0)
 tu_integrate(reconsolidator0.used_cores_ne_0)
+xps
 tu_apply(xps,'used_cores_ne_0', tu_integrate)
 tu_plot(reconsolidator0.vm__state)
 @endcode
 
 
-
+To understand the details, please take your time in the following.
 
 
 

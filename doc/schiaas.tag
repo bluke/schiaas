@@ -57,6 +57,7 @@
     <name>howto_scheduler_intro</name>
     <title>How to study schedulers</title>
     <filename>howto_scheduler_intro</filename>
+    <docanchor file="howto_scheduler_intro" title="Everything in five minutes">howto_scheduler_5min</docanchor>
     <docanchor file="howto_scheduler_intro" title="Building the simulator">howto_scheduler_build</docanchor>
     <docanchor file="howto_scheduler_intro" title="Implementing the scheduler">howto_scheduler_build_impl</docanchor>
     <docanchor file="howto_scheduler_intro" title="Simulating the loads">howto_scheduler_build_app</docanchor>
