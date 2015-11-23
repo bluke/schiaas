@@ -5,11 +5,15 @@ dfs <- tu_read('.',FALSE)
 
 ##################################### all
 
-#for (x in dfs) {
-#	png(paste(x,'png', sep='.'))
-#	tu_plot(get(x), x)
-#	dev.off()
-#}
+for (x in dfs) {
+	png(paste(x,'png', sep='.'))
+	tu_plot(get(x), x)
+	dev.off()
+}
+
+png('balancer_slowfast.instances_count.png')
+plot(balancer_slowfast.instances_count$date,balancer_slowfast.instances_count$value, type='s', main=title, xlab="date", ylab="value")
+dev.off()
 
 ###################################### specific
 
