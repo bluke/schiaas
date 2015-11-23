@@ -9,6 +9,47 @@ Studying schedulers is mandatory, for instance, when:
 - an administrator has to choose a scheduler for a cloud platform;
 - an administrator has to tune one scheduler for a cloud platform...
 
+@section howto_scheduler_5min Everything in five minutes
+Providing that you have simgrid java installed and apt:
+@code
+# Installing python3, R and ggplot2
+sudo apt-get install python3 r-base
+sudo R -e "install.packages('ggplot2', repos='https://cran.rstudio.com/')"
+
+# Building the simulator
+export SIMGRID_JAR_PATH=/usr/local/java/
+git clone https://scm.gforge.inria.fr/anonscm/git/schiaas/schiaas.git 
+cd schiaas
+cmake .
+make
+
+# Running the experiments
+export CLASSPATH=$SIMGRID_JAR_PATH/simgrid.jar:$PWD/bin/schiaas.jar:$PWD/bin/loadinjector/loadinjector.jar
+cd lab
+ls setup/cmp-scheduler
+cat setup/cmp-scheduler/cmp-scheduler.cfg
+./lab.sh -p 2 setup/cmp-scheduler/cmp-scheduler.cfg
+
+# Contemplating the results
+cd data
+ls
+open data.pdf
+R
+library(traceutil)
+??traceutil
+?tu_read
+tu_read()
+ls()
+tu_plot(reconsolidator0.used_cores_ne_0)
+tu_integrate(reconsolidator0.used_cores_ne_0)
+tu_apply(xps,'used_cores_ne_0', tu_integrate)
+tu_plot(reconsolidator0.vm__state)
+@endcode
+
+
+
+
+
 
 @section howto_scheduler_build Building the simulator
 
@@ -536,12 +577,8 @@ Afterward, the observations can be manipulated directly:
 @code 
 > head(balancer.used_cores_ne_0)
       entity     date value
-1 used_cores   0.0000    24
-2 used_cores 543.0078    23
-3 used_cores 588.0078    22
-4 used_cores 591.0078    21
-5 used_cores 597.0078    20
-6 used_cores 600.0078    19
+1 used_cores    0.000    24
+2 used_cores 2004.008     0
 @endcode
 
 Some additional functionalities are available in the library traceutil.
@@ -555,15 +592,6 @@ For instance, it allows to integrate values of the observation over time, and ap
 [1] 85847.87
 > 
 > xps
-                 xp
-1          balancer
-2      consolidator
-3   reconsolidator0
-4  reconsolidator10
-5 reconsolidator100
-> 
-> ?tu_apply
-> tu_apply(xps,'used_cores_ne_0', tu_integrate)
                            xp
 1                    balancer
 2               balancer_fast
@@ -580,6 +608,25 @@ For instance, it allows to integrate values of the observation over time, and ap
 13           reconsolidator10
 14      reconsolidator10_fast
 15  reconsolidator10_slowfast
+> 
+> ?tu_apply
+> tu_apply(xps,'used_cores_ne_0', tu_integrate)
+                           xp    value
+1                    balancer 48096.19
+2               balancer_fast 48087.20
+3           balancer_slowfast 96094.20
+4                consolidator 47808.19
+5           consolidator_fast 48048.20
+6       consolidator_slowfast 95773.32
+7             reconsolidator0 41697.16
+8        reconsolidator0_fast 49146.56
+9    reconsolidator0_slowfast 92569.66
+10          reconsolidator100 47549.26
+11     reconsolidator100_fast 48048.20
+12 reconsolidator100_slowfast 95773.32
+13           reconsolidator10 43144.24
+14      reconsolidator10_fast 48457.26
+15  reconsolidator10_slowfast 91338.56
 @endcode
 
 And everything can be automatized with template.R, as declared in the lab configuration file:
