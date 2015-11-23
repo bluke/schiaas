@@ -22,9 +22,31 @@
   </compound>
   <compound kind="page">
     <name>lab</name>
-    <title>The lab documentation</title>
+    <title>Analyzing the simulation</title>
     <filename>lab</filename>
     <docanchor file="lab" title="Prerequisites">lab_prerequisites</docanchor>
+    <docanchor file="lab" title="Tracing">tracing</docanchor>
+    <docanchor file="lab" title="Description">tracing_description</docanchor>
+    <docanchor file="lab" title="Tracing your own code">tracing_tutorial</docanchor>
+    <docanchor file="lab" title="Intialization and conclusion">tracing_tutorial_init</docanchor>
+    <docanchor file="lab" title="Creating">tracing_tutorial_creation</docanchor>
+    <docanchor file="lab" title="Adding properties">tracing_tutorial_properties</docanchor>
+    <docanchor file="lab" title="Adding events">tracing_tutorial_events</docanchor>
+    <docanchor file="lab" title="Extracting observations">extracting</docanchor>
+    <docanchor file="lab" title="Some examples of use of trace-util.py">extracting_examples</docanchor>
+    <docanchor file="lab" title="Retrieving the structure of the traces">extracting_examples_info</docanchor>
+    <docanchor file="lab" title="Retrieving the relevant regexes">extracting_examples_regex</docanchor>
+    <docanchor file="lab" title="Dumping the whole trace as a json">extracting_examples_json</docanchor>
+    <docanchor file="lab" title="Looking at the used_cores values">extracting_examples_event</docanchor>
+    <docanchor file="lab" title="Looking at the used_cores values of node-1">extracting_examples_event2</docanchor>
+    <docanchor file="lab" title="counting the nodes having less than 8 cores used">extracting_examples_counting</docanchor>
+    <docanchor file="lab" title="counting the virtual machines in the migrating state">extracting_examples_counting2</docanchor>
+    <docanchor file="lab" title="Outputting the data for further analyzis.">extracting_outputting</docanchor>
+    <docanchor file="lab" title="Analyzing and plotting observations">analyzing</docanchor>
+    <docanchor file="lab" title="Reading the data">analyzing_reading</docanchor>
+    <docanchor file="lab" title="Plotting the data">analyzing_plotting</docanchor>
+    <docanchor file="lab" title="Further analyzis">analyzing_further</docanchor>
+    <docanchor file="lab" title="The lab">lab_lab</docanchor>
     <docanchor file="lab" title="Lab sub-directories">lab_dirs</docanchor>
     <docanchor file="lab" title="Setting the lab up">lab_setup</docanchor>
     <docanchor file="lab" title="Basics">lab_setup_basics</docanchor>
@@ -45,7 +67,7 @@
     <docanchor file="howto_scheduler_intro" title="Configuration of the lab">howto_scheduler_running_setup_cfg</docanchor>
     <docanchor file="howto_scheduler_intro" title="Observing the simulations">howto_scheduler_observing</docanchor>
     <docanchor file="howto_scheduler_intro" title="Identifying the observations">howto_scheduler_observing_series</docanchor>
-    <docanchor file="howto_scheduler_intro" title="Observing the loads">howto_scheduler_observing_loads</docanchor>
+    <docanchor file="howto_scheduler_intro" title="Observing the injection">howto_scheduler_observing_loads</docanchor>
     <docanchor file="howto_scheduler_intro" title="Observing the usage of hosts">howto_scheduler_observing_usage</docanchor>
     <docanchor file="howto_scheduler_intro" title="Observing how many hosts are idle">howto_scheduler_observing_green</docanchor>
     <docanchor file="howto_scheduler_intro" title="Observing the migrations">howto_scheduler_observing_migrations</docanchor>
@@ -72,20 +94,6 @@
     <docanchor file="index" title="Running SchIaaS">running</docanchor>
     <docanchor file="index" title="Prerequisite">running_prerequisite</docanchor>
     <docanchor file="index" title="Retrieving and Installing Schiaas">running_retrieving</docanchor>
-    <docanchor file="index" title="Tracing">tracing</docanchor>
-    <docanchor file="index" title="Description">tracing_description</docanchor>
-    <docanchor file="index" title="Tracing your own code">tracing_tutorial</docanchor>
-    <docanchor file="index" title="Intialization and conclusion">tracing_tutorial_init</docanchor>
-    <docanchor file="index" title="Creating">tracing_tutorial_creation</docanchor>
-    <docanchor file="index" title="Adding properties">tracing_tutorial_properties</docanchor>
-    <docanchor file="index" title="Adding events">tracing_tutorial_events</docanchor>
-    <docanchor file="index" title="Some examples of use of trace-util.py">tracing_examples</docanchor>
-    <docanchor file="index" title="Retrieving the available entities">tracing_examples_info</docanchor>
-    <docanchor file="index" title="Dumping the whole trace as a json">tracing_examples_json</docanchor>
-    <docanchor file="index" title="Looking at the used_cores values">tracing_examples_event</docanchor>
-    <docanchor file="index" title="Looking at the used_cores values of node-1">tracing_examples_event2</docanchor>
-    <docanchor file="index" title="counting the nodes having less than 8 cores used">tracing_examples_counting</docanchor>
-    <docanchor file="index" title="counting the virtual machines in the migrating state">tracing_examples_counting2</docanchor>
     <docanchor file="index" title="Tutorial: the master-slave example">tutorial</docanchor>
     <docanchor file="index" title="Overview of the Example">tutorial_overview</docanchor>
     <docanchor file="index" title="Simulation setup">tutorial_setup</docanchor>

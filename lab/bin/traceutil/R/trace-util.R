@@ -7,47 +7,41 @@ tu_reload <- function(dir='./bin') {
 	library(traceutil)
 }
 
-#' Reads all the dat file in a given directory.
-#' Create dataframe for each.
-#' Plot according to plotting.
-#' And create xps with the list of xp.
+#' Reads all the dat file in a given directory,
+#' create one dataframe for each,
+#' plot according to plotting,
+#' and create xps with the list of xp.
 #'
 #' @param dir the directory containing the dat files
 #' @param plotting plot the data if TRUE
-#' @return the list of dat files
+#' @return the list of read dataframes
 #' @keywords traceutil
 #' @export
 #' @examples
 #' tu_read('./data', TRUE)
 #' will read all dit files inf the data directory and plot everything
 tu_read <- function(dir = '.', plotting=FALSE) { 
-	library(ggplot2)
-	call_dir <- getwd()
-	setwd(dir)
-	datfile <- list.files('.',pattern='*.dat$')
-	for (f in datfile) {
-		print(f)
-		df <- assign(sub('.dat$','',f), read.table(f,sep="", header=TRUE), envir = .GlobalEnv)
-
-		if ( plotting ) tu_plot(df, f)
+	varnames <- sub('.dat$','',list.files(dir,pattern='*.dat$'))
+	for (v in varnames) {
+		df <- assign(v, read.table(paste(dir,'/',v,'.dat',sep=''),sep="", header=TRUE), envir = .GlobalEnv)
+		if ( plotting ) tu_plot(df, v)
 	}
 
-	xps <<- data.frame(xp=unique(sub('\\..*$','',datfile)))
+	xps <<- data.frame(xp=unique(sub('\\..*$','',varnames)))
 
-	setwd(call_dir)
-	return(datfile)
+	return(varnames)
 }
-
 
 #' Plot the given dataframe according to its type 
 #' 
 #' @param df a dataframe ['entity', 'date', 'value'] 
+#' @param title the main title of the plot
 #' @return a plot 
 #' @keywords traceutil
 #' @export
 #' @examples
-#' tu_plot(balancer.vm__state)
-tu_plot <- function(df, title=NA) {
+#' tu_plot(balancer.vm__state, 'the state of vms in the balancer simulation')
+tu_plot <- function(df, title=deparse(substitute(df))) {
 	if ( colnames(df)[2] == "key" ) return();
 
 	if (is.numeric(df$value)) {
@@ -66,12 +60,13 @@ tu_plot <- function(df, title=NA) {
 #' Plot the state of entities as colored rectangles.
 #' 
 #' @param df a dataframe ['entity', 'date', 'value'] where value is a state
+#' @param title the main title of the plot
 #' @return a plot 
 #' @keywords traceutil
 #' @export
 #' @examples
 #' tu_plot_state(balancer.vm__state)
-tu_plot_state <- function(df, title=NA) {
+tu_plot_state <- function(df, title=deparse(substitute(df))) {
 	colors <- data.frame(color=c("red", "green", "blue", "black", "orange", "purple", "coral", "seagreen", "gold" ))
 
 	intervals <- tu_intervals(df)
@@ -107,7 +102,6 @@ tu_plot_state <- function(df, title=NA) {
 #' 1  root:cloud:myCloud:compute:compute_host:node-2.me:used_cores     5
 #' 2  root:cloud:myCloud:compute:compute_host:node-1.me:used_cores     7
 #' 3  root:cloud:myCloud:compute:compute_host:node-3.me:used_cores     8
-
 tu_valueat <- function(df,date) { 
 	res <- unique(df['entity'])
 	res$value = 0
@@ -137,10 +131,9 @@ tu_valueat <- function(df,date) {
 #' 1       4  27.0000  27.0000
 #' 38      5  72.0000  45.0000
 #' 63      6 123.0000  51.0000
+#' 130     7 378.0078  30.0000
 #' 87      7 204.0000  81.0000
 #' 111     8 348.0078 144.0078
-#' 130     7 378.0078  30.0000
-
 tu_intervals <- function(df) {
 	entities <- unique(df['entity'])
 	res <- NULL 
@@ -184,8 +177,9 @@ tu_integrate <- function(df, per_entity=FALSE) {
 
 #' Apply the FUN function to the observation obs for each xp in xps
 #'
-#' @param df a dataframe having date and value columns
-#' @param per_entity TRUE to return the integral per entity
+#' @param xps a list of xp names
+#' @param obs the name of one observation
+#' @param FUN the function to apply to dataframes named xp.obs 
 #' @return a dataframe having xp and value column
 #' @keywords traceutil
 #' @export
@@ -198,9 +192,8 @@ tu_integrate <- function(df, per_entity=FALSE) {
 #' Note that xps can be loaded with source('data/reads.R')
 tu_apply <- function(xps, obs, FUN) {
 	res <- cbind(xps, 'value'=apply(
-		xps['xp'],1,
+		xps,1,
 		function(x) FUN(get(paste(x,obs,sep='.')))
 		))
 	return(res)
 }
-

@@ -1,0 +1,508 @@
+/*!  
+@page lab Analyzing the simulation
+
+Analyzing the results of the simulation is a three steps operation:
+- tracing observations into the simulator;
+- extracting observations from the traces of the simulation (trace-util.py);
+- analyzing and plotting observations (R library traceutil).
+
+@section lab_prerequisites Prerequisites
+
+To be fully functional, the lab needs the following supports:
+- python3
+- r-base with library ggplot2
+
+# TODO: check that:
+@code
+sudo apt-get install python3 r-base
+sudo R -e "install.packages(ggplot2)
+@endcode
+
+@section tracing Tracing
+
+@subsection tracing_description Description
+
+SCHIaaS comes with its own tracing system. It is described in <a href="./javadoc/schiaas/org/simgrid/schiaas/tools/Trace.html">the javadoc</a>.
+
+It handles two kinds of information: **events** (with date) and **properties** (without date). Each information is related to one entity.
+
+All lines of the trace are of the form:
+@code
+entity	key	value
+@endcode
+In which **key** being either the *date* for **event**, or the *name* for **properties**.
+
+For instance, the traces have this form:
+@code
+root    date    Tue Nov 10 16:23:40 CET 2015
+root:cloud:myCloud:compute:compute_host:node-1.me        cores   8.0
+root:cloud:myCloud:compute:compute_host:node-1.me:used_cores     0.0     5.0
+@endcode
+Give the following information:
+- (property) *date* and *description* of the simulation;
+- (property) *8.0*, the number of *cores* of the *compute_host* named *node-1.me* in the *compute* of the *cloud* named *myCloud*;
+- (event) *5.0*, the number of *used_cores* of this host at t=*0.0* 
+
+The trace is sorted by date and can be easily filtred using grep.
+
+It can also be exploited using the script *trace-util.py*, located in the *lab/bin* directory (see \ref extracting_examples).
+
+
+@subsection tracing_tutorial Tracing your own code
+
+Let's say you want to observe something called *mystuff*.
+
+@subsubsection tracing_tutorial_init Intialization and conclusion
+
+If you want to add a description to the whole trace, you can use:
+@code
+Trace.init("description of the whole trace");
+@endcode
+
+This step is optional. However, the conclusion step is mandatory:
+@code
+Trace.close();
+@endcode
+
+
+@subsubsection tracing_tutorial_creation Creating 
+
+First of all, you need to create the trace. 
+- If *mystuff* is unique :
+@code
+Trace trace = Trace.newTrace("mystuff");
+@endcode
+- If *mystuff* is one of a kind:
+@code
+Trace trace = Trace.newCategorizedTrace("kind_of_mystuff","mystuff");
+@endcode
+- If *mystuff* is related to one higher level entity:
+@code
+Trace trace = parentTrace.newSubTrace("mystuff");
+@endcode
+@code
+Trace trace = parentTrace.newCategorizedSubTrace("kind_of_mystuff","mystuff");
+@endcode
+
+
+@subsubsection tracing_tutorial_properties Adding properties
+
+To add one property to *mystuff*, for instance its name, you can use:
+@code
+trace.addProperty("name", "the name of mystuff");
+@endcode
+
+According to the type of trace, this will produce one of the following line (3 fields, separated by tabulations):
+@code
+root:mystuff 	name 	the name of mystuff
+@endcode
+@code
+root:kind_of_mystuff:mystuff 	name 	the name of mystuff
+@endcode
+@code
+root:[parent]:mystuff 	name 	the name of mystuff
+@endcode
+@code
+root:[parent]:kind_of_mystuff:mystuff 	name 	the name of mystuff
+@endcode
+where [parent] is the chain of entities from the parent trace.
+
+You can also add one whole set of properties:
+@code
+trace.addProperties(properties);
+@endcode
+where *properties* is a *Map<String,String>*.
+
+
+@subsubsection tracing_tutorial_events Adding events
+
+To add one event to *mystuff*, for instance the *state* becoming *available*, you can use:
+@code
+trace.addEvent("state", "available")
+@endcode
+This will produce one line (3 fields, separated by tabulations):
+@code
+[prefix]:mystuff:state 	832.0	available
+@endcode
+where *832.0* is the clock of the simulation, and [prefix] depending on the type of trace, like in \ref tracing_tutorial_properties .
+
+That's all you need to do in the simulator. 
+
+If you intend to distribute your simulator, you can also add a description of the traced things in *lab/bin/trace-util.doc*.
+
+
+
+@section extracting Extracting observations
+
+At the end of the simulation, a file schiaas.trace will be produced. 
+It contains all of the observations. Those can be easily filtered using grep/cut.
+
+However, the script **lab/bin/trace-util.py** might come handy for more advanced processings. 
+
+In addition to the following examples, please open the script or use *trace-util.py --help* more complete details.
+
+@subsection extracting_examples Some examples of use of trace-util.py
+
+@subsubsection extracting_examples_info Retrieving the structure of the traces
+@code
+$ ./trace-util.py schiaas.trace --info -d
+
+{
+  "root": {
+    "date": "property: Clock of the simulation in s",
+    "description": "property: Description if the entity",
+    "cloud": {
+      "myCloud": {
+        "compute": {
+          "image_caching": "property: Type of caching of VM images",
+          "inter_boot_delay": "property: Delay between two VM boots on the same host",
+          "engine": "property: SCHIaaS engine",
+          "image_storage": "property: Storage used for VM images",
+          "controller": "property: Host used as controller for the entity",
+          "compute_host": {
+            ".*": {
+              "cores": "property: Number of cores of the entity",
+              "ram_size": "property: SimGrid's VM property",
+              "diskSize": "property: Size of disk in MB",
+              "used_cores": {
+                "used_cores": "event: Number of cores in use"
+              }
+            }
+          },
+          "instances": {
+            ".*": {
+              "image": "property: VM image",
+              "instance_type": "property: Type of instance",
+              "command": {
+                "command": "event: User command issued regarding the entity"
+              },
+              "load": {
+                "load": "event: CPU load"
+              },
+              "schedule": {
+                "schedule": "event: Host to which the instance is scheduled"
+              }
+            }
+          },
+          "scheduler": {
+            "name": "property:  Name of the entity",
+            "controller": "property: Host used as controller for the entity",
+            "type": "property:  Type of the entity"
+          }
+        }
+      }
+    },
+    "injector": {
+      "myInjectorSlow": {
+        "injector": "property:  Class of injector",
+        "random_seed": "property:  Seed used to randomize the entity",
+        "instances_count": {
+          "instances_count": "event:  Number of instances"
+        },
+        "instances_load": {
+          "instances_load": "event:  CPU load"
+        }
+      }
+    },
+    "vm": {
+      ".*": {
+        "n_cores": "property: SimGrid's VM property",
+        "ram_size": "property: SimGrid's VM property",
+        "net_cap": "property: SimGrid's VM property",
+        "disk_path": "property: SimGrid's VM property",
+        "disk_size": "property: SimGrid's VM property",
+        "mig_net_speed": "property: SimGrid's VM property",
+        "dp_intensity": "property: SimGrid's VM property",
+        "cpu_bound": {
+          "cpu_bound": "event: SimGrid's VM property"
+        },
+        "state": {
+          "state": "event: State of the entity"
+        }
+      }
+    }
+  }
+}
+@endcode
+This show every entities, properties, and events available in the trace. 
+The *-d* argument tells to add descriptions whenever they are available in *lab/bin/trace-util.doc*
+
+
+@subsubsection extracting_examples_regex Retrieving the relevant regexes
+@code
+$ ./trace-util.py schiaas.trace --regex
+
+root	date	property
+root	description	property
+root:cloud:myCloud:compute	image_caching	property
+root:cloud:myCloud:compute	inter_boot_delay	property
+root:cloud:myCloud:compute	engine	property
+root:cloud:myCloud:compute	image_storage	property
+root:cloud:myCloud:compute	controller	property
+root:cloud:myCloud:compute:compute_host:.*	cores	property
+root:cloud:myCloud:compute:compute_host:.*	ram_size	property
+root:cloud:myCloud:compute:compute_host:.*	diskSize	property
+root:cloud:myCloud:compute:compute_host:.*:used_cores	used_cores	event
+root:cloud:myCloud:compute:instances:.*	image	property
+root:cloud:myCloud:compute:instances:.*	instance_type	property
+root:cloud:myCloud:compute:instances:.*:command	command	event
+root:cloud:myCloud:compute:instances:.*:load	load	event
+root:cloud:myCloud:compute:instances:.*:schedule	schedule	event
+root:cloud:myCloud:compute:scheduler	name	property
+root:cloud:myCloud:compute:scheduler	controller	property
+root:cloud:myCloud:compute:scheduler	type	property
+root:injector:myInjectorSlow	injector	property
+root:injector:myInjectorSlow	random_seed	property
+root:injector:myInjectorSlow:instances_count	instances_count	event
+root:injector:myInjectorSlow:instances_load	instances_load	event
+root:vm:.*	n_cores	property
+root:vm:.*	ram_size	property
+root:vm:.*	net_cap	property
+root:vm:.*	disk_path	property
+root:vm:.*	disk_size	property
+root:vm:.*	mig_net_speed	property
+root:vm:.*	dp_intensity	property
+root:vm:.*:cpu_bound	cpu_bound	event
+root:vm:.*:state	state	event
+@endcode
+This shows which regex can be used to retrieve every properties and events.
+
+For instance, to retrieve the state of the vm, one can use:
+@code
+$ trace-util.py --grep root:vm:.*:state
+@endcode
+Or, as soon as the entity is unique, simply:
+@code
+$ trace-util.py --grep vm:.*:state
+$ trace-util.py --grep state
+@endcode
+
+
+@subsubsection extracting_examples_json Dumping the whole trace as a json
+@code
+$ ./trace-util.py schiaas.trace --json
+
+{
+  "root": {
+    "date": "Tue Nov 10 16:23:40 CET 2015",
+    "description": "Example of LoadInjector on cloud",
+    "cloud": {
+      "myCloud": {
+        "compute": {
+          "compute_host": {
+            "node-1.me": {
+              "cores": "8.0",
+              "used_cores": {
+                "0.0": "0.0,1.0,2.0,3.0,4.0,5.0",
+...
+@endcode
+NB: all the events of the same type and attached to the same entity that occured at the same date are concatenated in the same entry, ordered by occuring date in the simulator.
+
+For instance, this json shows that at *date* 0.0, the *used_cores* of *node-1.me* had its value from 0.0 to 5.0, 5.0 being the last one.
+
+@subsubsection extracting_examples_event Looking at the used_cores values
+@code
+$ ./trace-util.py schiaas.trace --event used_cores
+
+root:cloud:myCloud:compute:compute_host:node-2.me:used_cores	0.0	5.0
+root:cloud:myCloud:compute:compute_host:node-3.me:used_cores	0.0	5.0
+root:cloud:myCloud:compute:compute_host:node-1.me:used_cores	0.0	5.0
+root:cloud:myCloud:compute:compute_host:node-2.me:used_cores	180.0	6.0
+root:cloud:myCloud:compute:compute_host:node-3.me:used_cores	180.0	6.0
+root:cloud:myCloud:compute:compute_host:node-1.me:used_cores	180.0	6.0
+...
+@endcode
+This shows that at date *0.0*, the *used_cores* of *node-1.me*, *node-2.me* and *node-3.me* were *5.0*, while they were *6.0* at date *180.0*
+
+@subsubsection extracting_examples_event2 Looking at the used_cores values of node-1
+@code
+$ ./trace-util.py schiaas.trace --event node-1\.me.*used_cores
+
+root:cloud:myCloud:compute:compute_host:node-1.me:used_cores	0.0	5.0
+root:cloud:myCloud:compute:compute_host:node-1.me:used_cores	180.0	6.0
+root:cloud:myCloud:compute:compute_host:node-1.me:used_cores	410.0	7.0
+root:cloud:myCloud:compute:compute_host:node-1.me:used_cores	680.0	8.0
+...
+@endcode
+This shows that the *used_cores* of *node-1.me* goes from *5.0* to *8.0* at the dates *0.0*, *180.0*, *410.0* and *680.0*.
+
+@subsubsection extracting_examples_counting counting the nodes having less than 8 cores used
+@code
+$ ./trace-util.py schiaas.trace --count-if used_cores lt 8
+
+used_cores	0.0	24
+used_cores	2830.0078070824743	23
+used_cores	2920.0078070824743	22
+used_cores	2930.0078070824743	21
+...
+@endcode
+This shows that at date *0.0*, *24* nodes had less than 8 cores used, and the following changes of this value.
+
+@subsubsection extracting_examples_counting2 counting the virtual machines in the migrating state
+@code
+$ ./trace-util.py schiaas.trace --count-if vm.*state eq migrating
+
+used_cores	0.0	0
+used_cores	2830.0078070824743	1
+used_cores	2920.0078070824743	2
+used_cores	2930.0078070824743	3
+...
+@endcode
+This shows that at date *0.0*, *0* virtual machines were migrating, and the following changes of this value.
+
+@subsubsection extracting_outputting Outputting the data for further analyzis.
+
+Adding the argument *-f* will output the results to files, and a prefix can be added. 
+
+For intance:
+@code 
+$ ./trace-util.py schiaas.trace -f myxp --count-if used_cores lt 8 vm.*state eq migrating 
+@endcode
+will produce 2 files, *myxp.used_cores_lt_8.dat* and *myxp.vm__state_eq_migrating.dat*, that can be reused for further analysis.
+
+
+
+@section analyzing Analyzing and plotting observations
+
+Once the observations are extracted, using the R library **lab/bin/traceutil** might help to analyze and plot them.
+
+@subsection analyzing_reading Reading the data
+
+You can import all of the data produced by *trace-util.py* in R using:
+@code
+> library(traceutil)
+> tu_read()
+@code
+This will read all of the .dat files in the working directory and create corresponding data frames.
+
+You can also use:
+@code
+> tu_read('./data')
+@endcode
+
+To read the files into the directory ./data.
+
+@subsection analyzing_plotting Plotting the data
+
+@code
+> pdf('data.pdf')
+> tu_read('./data', plotting=TRUE)
+> dev.off()
+@endcode
+This will read the files into the directory ./data and plot all of the observations into data.pdf.
+
+But you can also plot one given data:
+@code
+> tu_plot(myxp.vm__state_eq_migrating)
+@endcode
+
+@subsection analyzing_further Further analyzis
+
+To go further, the library include a bunch of useful functions.
+For instance, a common need is to integrate one observation over time:
+@code 
+> tu_integrate(myxp.vm__state_eq_migrating)
+
+[1] 2189.489
+@endcode
+This compute the integral of the given data. In this cas, this means that during the simulation, migrating vms took 2189.489 seconds.
+
+Please see the integrated help for more functions and details:
+@code
+??traceutil
+@endcode
+
+
+@section lab_lab The lab
+
+This three steps can be automatized using *the lab*.
+The lab is a set of script designed to quickly setup batches of simulations, followed by extraction and analysis of observations.
+
+@subsection lab_dirs Lab sub-directories
+
+- *lab/bin* contains the set of scripts of the lab;
+- *lab/sources* contains traces used as sources, such as batch scheduler logs and platform usage logs;
+- *lab/setup* contains the file used to set the similations up.
+
+After the batch execution, the following directories are used:
+- *lab/simulations* contains the results of the simulations, that is all files outputted by the simulator, and its stdin and stderr in simgrid.out. It is organized in subdirectories according to the simulation ids (see \ref lab_setup);
+- *lab/data* gather all the data resulting in the observation of the simulation, together with R scripts allowing to quickly analyze them.
+
+
+@section lab_setup Setting the lab up
+
+@subsection lab_setup_basics Basics
+
+The lab is mainly set up through one config files.
+The lines staring with *#* describe the options common to all simulations.
+The other lines describe eache simulations, as: 
+@code
+<simulation_id>: <simulations arguments>
+@endcode
+
+The simulation will be run as:
+@code
+$ java JAVA_START_ARGS <simulations arguments> JAVA_END_ARGS
+@endcode
+
+For instance, *lab.cfg*:
+@code
+#SETUP_DIR ./setup/cmp-scheduler
+#JAVA_START_ARGS loadinjector.SimpleInjection
+#JAVA_START_ARGS platform.xml deploy.xml
+#JAVA_END_ARGS injector.xml
+
+balancer: cloud-balancer.xml
+consolidator: cloud-consolidator.xml
+@endcode
+
+@code
+$ /lab.sh lab.cfg
+@endcode 
+will execute two simulations using files in the *./setup/cmp-scheduler* directory:
+@code
+$ java loadinjector.SimpleInjection platform.xml deploy.xml cloud-balancer.xml injector.xml
+$ java loadinjector.SimpleInjection platform.xml deploy.xml cloud-consolidator.xml injector.xml
+@endcode
+
+NB: **Make sure to set the *CLASSPATH* environnement variable to allow the execution of the main class.**
+
+Two directories will be created containing the results of the simulations: *./simulations/balancer* and *./simulations/consolidator*.
+
+
+@subsection lab_setup_observing Analyzing the results
+
+Observations can be automized using *R_SCRIPT* and *TU_ARGS*
+For instance, adding the following lines in *lab.cfg*
+@code
+#R_SCRIPT template.R
+#TU_ARGS --event instances_count
+@endcode
+
+will:
+- call *bin/trace-util.py --event instances_count* on the results of both simulations
+- call *R --no-save < SETUP_DIR/template.R* 
+
+Then, the results of these commands will be available in the *./data* directory, as:
+- simulation_id.observation.dat (e.g. *balancer.instances_count.dat* and *consolidator.instances_count.dat*);
+- *data.pdf*, the R plots of these data;
+- *reads.R*, the R script that allows to easily reads these data in R (using *source('reads.R')*);
+- *plots.R*, the R script that allows to easily plot these data in R (using *source('plots.R')*).
+
+One can then analyze the data directly using R.
+
+@subsection lab_howto How to set your own lab up
+
+To set your own lab up (for instance *myownlab*), you need to:
+- Build your simulator, using SCHIaaS;
+- Set the java *CLASSPATH*;
+- Create the subdirectory *setup/myownlab*;
+- Put every files that your simulator needs in this subdirectory;
+- Write the lab configuration file *myownlab.cfg*;
+- Run *./lab.sh myownlab.cfg*.
+
+Some options can used with *./lab.sh*, to parallelize the simulations or keep existing data. Please see the help of the script for details.
+
+A tutorial is available at \ref howto_scheduler_intro.
+
+*/

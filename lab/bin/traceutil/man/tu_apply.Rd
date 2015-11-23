@@ -7,9 +7,11 @@
 tu_apply(xps, obs, FUN)
 }
 \arguments{
-\item{df}{a dataframe having date and value columns}
+\item{xps}{a list of xp names}
 
-\item{per_entity}{TRUE to return the integral per entity}
+\item{obs}{the name of one observation}
+
+\item{FUN}{the function to apply to dataframes named xp.obs}
 }
 \value{
 a dataframe having xp and value column
