@@ -86,63 +86,93 @@ function setupify {
 [ ! "$KEEP" ] && rm -rf $DATA_DIR $SIMULATIONS_DIR
 mkdir -p $DATA_DIR $SIMULATIONS_DIR
 
+SIM_ARG_FILE=$SIMULATIONS_DIR/simulations.args
+echo "xp " > $SIM_ARG_FILE
+SIM_ARG_TMP_FILE=`tempfile`
+
+declare -A TU_ARGS
+
+#Reading the configuration file
 while read line
 do
-	if [ -z "$line" ]; then
+	if [ -z "$line"  ]; then
 		continue
-	elif [ "${line:0:1}" == "#" ]
-	then
-		if [ "${line%% *}" == "#SETUP_DIR" ]; then
-			SETUP_DIR="`setupify \"${line#* }\"`"
-			echo "SETUP_DIR='${SETUP_DIR}'"
-			if [ ! -d $SETUP_DIR ] ; then 
-				echo "Error: SETUP_DIR $SETUP_DIR was not found"
-				exit 1
-			fi
-		elif [ "${line%% *}" == "#R_SCRIPT" ]; then
-			R_SCRIPT="`setupify \"${line#* }\"`"
-			echo "R_SCRIPT='$R_SCRIPT'"
-			if [ ! -f $R_SCRIPT ] ; then 
-				echo "Error: R_SCRIPT $R_SCRIPT was not found"
-			fi
-		elif [ "${line%% *}" == "#TU_ARGS" ]; then
-			TU_ARGS="${TU_ARGS} `setupify ${line#* }`"
-			echo "TU_ARGS=$TU_ARGS"
-		elif [ "${line%% *}" == "#JAVA_START_ARGS" ]; then
-			JAVA_START_ARGS="${JAVA_START_ARGS} `setupify ${line#* }`"
-			echo "JAVA_START_ARGS=$JAVA_START_ARGS"
-		elif [ "${line%% *}" == "#JAVA_END_ARGS" ]; then
-			JAVA_END_ARGS="${JAVA_END_ARGS} `setupify ${line#* }`"
-			echo "JAVA_END_ARGS=$JAVA_END_ARGS"
+	fi
+	COMMAND="${line%% *}"
+	ARGS="`setupify \"${line#* }\"`"
+
+	if [ "$COMMAND" == "SETUP_DIR" ]; then
+		SETUP_DIR="$ARGS"
+		if [ ! -d $SETUP_DIR ] ; then 
+			echo "Error: SETUP_DIR $SETUP_DIR was not found"
+			exit 1
 		fi
-	else
-		XP_ID=${line%%:*}; XP_ID=${XP_ID/ /_}
-		JAVA_XP_ARGS="`setupify ${line#*:}`"
 
-		XP_SIMULATION_DIR=$SIMULATIONS_DIR/$XP_ID
-		mkdir -p $XP_SIMULATION_DIR
+	elif [ "$COMMAND" == "R_SCRIPT" ]; then
+		R_SCRIPT="$ARGS"
+		if [ ! -f $R_SCRIPT ] ; then 
+			echo "Error: R_SCRIPT $R_SCRIPT was not found"
+		fi
 
-		while [ `ps -Af | grep -c "$JAVA_START_ARGS"` -ge $(( PARALLEL_SIMS +1)) ] ; do
+	elif [ "$COMMAND" == "TU_ARG" ]; then
+		TU_COMMAND=${ARGS%% *}
+		TU_COMMAND_ARGS=${ARGS#* }
+		
+		if [ -z "${TU_ARGS[$TU_COMMAND]}" ]; then
+			TU_ARGS[$TU_COMMAND]="$TU_COMMAND"
+		fi
+		TU_ARGS[$TU_COMMAND]="${TU_ARGS[$TU_COMMAND]} $TU_COMMAND_ARGS"
+	
+	elif [ "$COMMAND" == "SIM_ARG" ]; then
+		SIM_ARG=($ARGS)
+		if [ "${SIM_ARG[0]}" != "$SIM_ARG_NUM" ] ; then
+			mv $SIM_ARG_FILE $SIM_ARG_TMP_FILE
+			SIM_ARG_NUM="${SIM_ARG[0]}"
+		fi
+		cat $SIM_ARG_TMP_FILE \
+			| sed "s/$/ ${SIM_ARG[1]//\//\\\/}/" \
+			| sed "s/ /_${SIM_ARG[2]} /" \
+			| tr -s "_"  \
+			>> $SIM_ARG_FILE
+	fi
+
+done < $1
+
+echo "SETUP_DIR='${SETUP_DIR}'"
+echo "R_SCRIPT='$R_SCRIPT'"
+echo "TU_ARGS=${TU_ARGS[@]}"
+
+#Doing the simulations
+JAVA_THREADS="`ps -Af | grep -c java`"
+while read line
+do
+	XP_ID=${line%% *}
+	JAVA_XP_ARGS=${line#* }
+
+	XP_SIMULATION_DIR=$SIMULATIONS_DIR/$XP_ID
+	mkdir -p $XP_SIMULATION_DIR
+
+	while [ `ps -Af | grep -c java` -ge $(( PARALLEL_SIMS + JAVA_THREADS )) ] ; do
+		sleep 1
+	done
+	cd $XP_SIMULATION_DIR
+	(
+		if [ ! -e $XP_SIMULATION_DIR/schiaas.trace ] ; then
+			echo "Simulating $XP_ID"
+		 	java $JAVA_XP_ARGS 2> simgrid.out 1>&2
+		 	if [ $? -ne 0 ]; then echo "Critical error while executing $XP_ID" ; cat $XP_SIMULATION_DIR/simgrid.out ; exit $? ; fi
+		fi
+
+		while [ `ps -Af | grep -c "trace-util.py"` -ge $(( PARALLEL_SIMS +1)) ] ; do
 			sleep 1
 		done
-		cd $XP_SIMULATION_DIR
-		(
-			if [ ! -e $XP_SIMULATION_DIR/schiaas.trace ] ; then
-				echo "Simulating $XP_ID"
-			 	java $JAVA_START_ARGS $JAVA_XP_ARGS $JAVA_END_ARGS 2> simgrid.out 1>&2
-			 	if [ $? -ne 0 ]; then echo "Critical error while executing $XP_ID" ; cat $XP_SIMULATION_DIR/simgrid.out ; exit $? ; fi
-			fi
 
-			while [ `ps -Af | grep -c "trace-util.py"` -ge $(( PARALLEL_SIMS +1)) ] ; do
-				sleep 1
-			done
+		echo "Processing $XP_ID traces"
+		$BIN_DIR/trace-util.py schiaas.trace -o $DATA_DIR -f $XP_ID ${TU_ARGS[@]}
+	) &
+	SIM_PIDS="$SIM_PIDS $!"
+done < $SIM_ARG_FILE
 
-			echo "Processing $XP_ID traces"
-			$BIN_DIR/trace-util.py schiaas.trace -o $DATA_DIR -f $XP_ID $TU_ARGS 
-		) &
-		SIM_PIDS="$SIM_PIDS $!"
-	fi
-done < $1
 
 wait $SIM_PIDS
 
