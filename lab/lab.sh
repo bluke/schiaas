@@ -2,15 +2,16 @@
 ## It takes the configuration file as argument.
 ## It needs the java classpath to be set.
 ##
-## The configuration file format is as follows.
-## Lines stating by:
-## #SETUP_DIR indicates the directory containing setup files (should be called first)
-## #R_SCRIPT indicates the R script to call at he end of the simulations
-## #TU_ARGS indicates the arguments to pass to the trace_util.py script
-## #JAVA_FIRST_ARGS indicates the common first arguments to pass to the simulator
-## #JAVA_END_ARGS indicates the common last arguments to pass to the simulator
-## Other lines indicates the specific arguments inbetween for each simulation 
-## as <simulation_id>: <simulation arguments>
+## The configuration file format is as follows:
+## SETUP_DIR indicates the directory containing setup files (should be called first)
+## R_SCRIPT indicates the R script to call at he end of the simulations
+## TU_ARG indicates the arguments to pass to the trace_util.py script
+## SIM_ARG x arg [id] indicates the argument of the simulation
+##  - *x*: the number of the argument;
+##  - *arg*: the argument;
+##  - *id*: the id of the simulations using this argument. 
+## 
+## see lab/setup/cmp-scheduler/cmp-scheduler.cfg for example
 ##
 ## Two options are available:
 ## -k : keeps the data from previous executions
