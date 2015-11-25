@@ -356,9 +356,9 @@ Adding the argument *-f* will output the results to files, and a prefix can be a
 
 For intance:
 @code 
-$ ./trace-util.py schiaas.trace -f myxp --count-if used_cores lt 8 vm.*state eq migrating 
+$ ./trace-util.py schiaas.trace -f myxp -o ./data --count-if used_cores lt 8 vm.*state eq migrating 
 @endcode
-will produce 2 files, *myxp.used_cores_lt_8.dat* and *myxp.vm__state_eq_migrating.dat*, that can be reused for further analysis.
+will produce 2 files in the ./data directory, *myxp.used_cores_lt_8.dat* and *myxp.vm__state_eq_migrating.dat*, that can be reused for further analysis.
 
 
 
@@ -447,13 +447,25 @@ $ java JAVA_START_ARGS <simulations arguments> JAVA_END_ARGS
 
 For instance, *lab.cfg*:
 @code
-#SETUP_DIR ./setup/cmp-scheduler
-#JAVA_START_ARGS loadinjector.SimpleInjection
-#JAVA_START_ARGS platform.xml deploy.xml
-#JAVA_END_ARGS injector.xml
+SETUP_DIR ./setup/cmp-scheduler
+R_SCRIPT template.R
 
-balancer: cloud-balancer.xml
-consolidator: cloud-consolidator.xml
+TU_ARG --grep vm:.*:state
+TU_ARG --event instances_count 
+TU_ARG --event used_cores
+TU_ARG --event instances_load 
+TU_ARG --event cpu_bound
+TU_ARG --count-if used_cores ne 0
+TU_ARG --count-if used_cores eq 0
+TU_ARG --count-if vm:.*:state eq migrating
+TU_ARG --count-if vm:.*:state eq running
+
+SIM_ARG 1 loadinjector.SimpleInjection
+SIM_ARG 2 platform.xml 
+SIM_ARG 3 deploy.xml
+SIM_ARG 4 cloud-balancer.xml balancer
+SIM_ARG 4 cloud-consolidator.xml consolidator
+SIM_ARG 5 injector-slowfast.xml
 @endcode
 
 @code
@@ -467,7 +479,7 @@ $ java loadinjector.SimpleInjection platform.xml deploy.xml cloud-consolidator.x
 
 NB: **Make sure to set the *CLASSPATH* environnement variable to allow the execution of the main class.**
 
-Two directories will be created containing the results of the simulations: *./simulations/balancer* and *./simulations/consolidator*.
+Two directories will be created containing the results of the simulations: *./simulations/xp_balancer* and *./simulations/xp_consolidator*.
 
 
 @subsection lab_setup_observing Analyzing the results
@@ -475,19 +487,17 @@ Two directories will be created containing the results of the simulations: *./si
 Observations can be automized using *R_SCRIPT* and *TU_ARGS*
 For instance, adding the following lines in *lab.cfg*
 @code
-#R_SCRIPT template.R
-#TU_ARGS --event instances_count
+R_SCRIPT template.R
+TU_ARG --event instances_count
 @endcode
 
 will:
 - call *bin/trace-util.py --event instances_count* on the results of both simulations
-- call *R --no-save < SETUP_DIR/template.R* 
+- call *R -f SETUP_DIR/template.R* 
 
 Then, the results of these commands will be available in the *./data* directory, as:
-- simulation_id.observation.dat (e.g. *balancer.instances_count.dat* and *consolidator.instances_count.dat*);
-- *data.pdf*, the R plots of these data;
-- *reads.R*, the R script that allows to easily reads these data in R (using *source('reads.R')*);
-- *plots.R*, the R script that allows to easily plot these data in R (using *source('plots.R')*).
+- simulation_id.observation.dat (e.g. *xp_balancer.instances_count.dat* and *xp_consolidator.instances_count.dat*);
+- any file resulting of the execution of the R script.
 
 One can then analyze the data directly using R.
 

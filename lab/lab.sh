@@ -179,6 +179,6 @@ wait $SIM_PIDS
 if [ -n "$R_SCRIPT" ] ; then 
 	echo "Plotting results"
 	cd $DATA_DIR
-	R --no-save < $R_SCRIPT > R.out
+	R -f $R_SCRIPT > R.out
 	cd ..
 fi

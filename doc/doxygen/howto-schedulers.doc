@@ -25,7 +25,7 @@ cd schiaas
 cmake .
 make
 
-# Running the experiments
+# Running the experiments (make sure of the existence of SIMGRID_JAR_PATH)
 export CLASSPATH=$SIMGRID_JAR_PATH/simgrid.jar:$PWD/bin/schiaas.jar:$PWD/bin/loadinjector/loadinjector.jar
 cd lab
 ls setup/cmp-scheduler
@@ -48,6 +48,7 @@ tu_integrate(reconsolidator0.used_cores_ne_0)
 xps
 tu_apply(xps,'used_cores_ne_0', tu_integrate)
 tu_plot(reconsolidator0.vm__state)
+
 @endcode
 
 
@@ -186,21 +187,24 @@ NB: *controller* indicates which host to use to run the scheduler processes.
 
 The following file *cmp-schedulers.cfg* describes the simulations to run:
 @code
-#SETUP_DIR ./setup/cmp-scheduler
-#JAVA_START_ARGS loadinjector.SimpleInjection
-#JAVA_START_ARGS platform.xml deploy.xml
-#JAVA_END_ARGS injector.xml
+SETUP_DIR ./setup/cmp-scheduler
 
-balancer: cloud-balancer.xml
-consolidator: cloud-consolidator.xml
-reconsolidator0: cloud-reconsolidator0.xml
-reconsolidator10: cloud-reconsolidator10.xml
-reconsolidator100: cloud-reconsolidator100.xml
+SIM_ARG 1 loadinjector.SimpleInjection
+SIM_ARG 2 platform.xml 
+SIM_ARG 3 deploy.xml
+SIM_ARG 4 cloud-balancer.xml balancer
+SIM_ARG 4 cloud-consolidator.xml consolidator
+SIM_ARG 4 cloud-reconsolidator0.xml reconsolidator0
+SIM_ARG 4 cloud-reconsolidator10.xml reconsolidator10
+SIM_ARG 4 cloud-reconsolidator100.xml reconsolidator100
+SIM_ARG 5 injector-slow.xml slow
 @endcode
 where:
-- SETUP_DIR is the location of the files;
-- JAVA_*_ARGS are the arguments common to all simulations;
-- [simulation_id]:[arguments] describe one unique simulation by id and specific arguments.
+- *SETUP_DIR* is the location of the files;
+- *SIM_ARG x arg id* describe an argument of the simulation as 
+  - *x*: the number of the argument;
+  - *arg*: the argument;
+  - *id*: the id of the simulations using this argument. 
 
 Afterward, the simulations can be ran using:
 @code
@@ -223,24 +227,27 @@ This will then create subdirectories in the directory *simulations*, according t
 @code
 $ ls -R simulations/
 
-simulations/:
-balancer  consolidator  reconsolidator0  reconsolidator10  reconsolidator100
+simulations.args      xp_consolidator_slow     xp_reconsolidator100_slow
+xp_balancer_slow  xp_reconsolidator0_slow  xp_reconsolidator10_slow
 
-simulations/balancer:
+../simulations/xp_balancer_slow:
 schiaas.trace  simgrid.out
 
-simulations/consolidator:
+../simulations/xp_consolidator_slow:
 schiaas.trace  simgrid.out
 
-simulations/reconsolidator0:
+../simulations/xp_reconsolidator0_slow:
 schiaas.trace  simgrid.out
 
-simulations/reconsolidator10:
+../simulations/xp_reconsolidator100_slow:
 schiaas.trace  simgrid.out
 
-simulations/reconsolidator100:
+../simulations/xp_reconsolidator10_slow:
 schiaas.trace  simgrid.out
 @endcode
+
+
+
 
 @section howto_scheduler_observing Observing the simulations
 
@@ -251,7 +258,7 @@ This section shows how the results of these simulations can be observed.
 First of all, let's identify what can be observed, using ./bin/trace-util.py.
 
 @code
-$ ./trace-util.py simulations/balancer/schiaas.trace --info -d
+$ ./trace-util.py simulations/xp_balancer_slow/schiaas.trace --info -d
 
 {
   "root": {
@@ -324,7 +331,7 @@ The format is always [entity] [date] [value].
 
 One can simply use grep:
 @code
-$ cat simulations/balancer/schiaas.trace | grep instances_count 
+$ cat simulations/xp_balancer_slow/schiaas.trace | grep instances_count 
 
 root:injector:myInjector:instances_count	0.0	101
 root:injector:myInjector:instances_count	10.0	102
@@ -335,7 +342,7 @@ root:injector:myInjector:instances_count	30.0	104
 
 Or trace-util.py:
 @code
-$ ./bin/trace-util.py simulations/balancer/schiaas.trace --event instances_count
+$ ./bin/trace-util.py simulations/xp_balancer_slow/schiaas.trace --event instances_count
 entity	date	value
 
 root:injector:myInjector:instances_count	0.0	101
@@ -347,8 +354,8 @@ root:injector:myInjector:instances_count	30.0	104
 
 Such observations can be automatized by adding the following line to *cmp-scheduler.cfg*:
 @code
-#R_SCRIPT template.R
-#TU_ARGS --event instances_count 
+R_SCRIPT template.R
+TU_ARG --event instances_count 
 @endcode
 and a file template.R in the setup directory, with this content:
 @code
@@ -366,22 +373,22 @@ NB: -k allows to keep the results of previous simulations.
 
 This will create files in the directory ./data: [simulation_id].instances_count.dat and plot their content using R into ./data/data.pdf:
 
-\image html balancer.instances_count.png
+\image html xp_balancer_slow.instances_count.png
 
 To check the effect of this injection on the cloud, one can count the virtual machines that are in the running state:
 @code
-#TU_ARGS --count_if vm.*state eq running
+TU_ARG --count_if vm.*state eq running
 @endcode
 
-\image html balancer.vm__state_eq_running.png
+\image html xp_balancer_slow.vm__state_eq_running.png
 
 
 Alternatively, one can plot the states of the vms:
 @code
-#TU_ARGS --grep vm.*state
+TU_ARG --grep vm.*state
 @endcode
 
-\image html balancer.vm__state.png
+\image html xp_balancer_slow.vm__state.png
 
 Please note the black area at the left of the figure: those are the names of the vms. They are not correctly plotted because of the large number of vms. 
 Be aware that the objective of the lab is not to produce ready-to-publish plots, but only to provide efficient tools to quickly mine simulations data.
@@ -390,17 +397,17 @@ Be aware that the objective of the lab is not to produce ready-to-publish plots,
 
 To observe the behavior of the scheduler, let's look at the number of cores used by VM on each host:
 @code
-#TU_ARGS --event used_cores
+TU_ARG --event used_cores
 @endcode
 
 With balancer, the vm are well spread among the hosts:
-\image html balancer.used_cores.png
+\image html xp_balancer_slow.used_cores.png
 
 With consolidator, there is some heterogenity in the number of used cores at a given date, especialy when the load change:
-\image html consolidator.used_cores.png
+\image html xp_consolidator_slow.used_cores.png
 
 With reconsolidator, this heterogenity is maximized all along the simulation:
-\image html reconsolidator0.used_cores.png
+\image html xp_reconsolidator0_slow.used_cores.png
 
 
 @subsection howto_scheduler_observing_green Observing how many hosts are idle
@@ -410,25 +417,25 @@ For green purpose, one may want to shut hosts down. Thus, many schedulers aim at
 Let's count the number of busy hosts, that is hosts not having 0 used cores:
 
 @code
-#TU_ARGS --count_if used_cores ne 0
+TU_ARG --count_if used_cores ne 0
 @endcode
 
-\image html balancer.used_cores_ne_0.png
-\image html consolidator.used_cores_ne_0.png
-\image html reconsolidator0.used_cores_ne_0.png
-\image html reconsolidator10.used_cores_ne_0.png
-\image html reconsolidator100.used_cores_ne_0.png
+\image html xp_balancer_slow.used_cores_ne_0.png
+\image html xp_consolidator_slow.used_cores_ne_0.png
+\image html xp_reconsolidator0_slow.used_cores_ne_0.png
+\image html xp_reconsolidator10_slow.used_cores_ne_0.png
+\image html xp_reconsolidator100_slow.used_cores_ne_0.png
 
 Or alternatively, the number of idle hosts, those that could be shut down:
 @code
-#TU_ARGS --count_if used_cores eq 0
+TU_ARG --count_if used_cores eq 0
 @endcode
 
-\image html balancer.used_cores_eq_0.png
-\image html consolidator.used_cores_eq_0.png
-\image html reconsolidator0.used_cores_eq_0.png
-\image html reconsolidator10.used_cores_eq_0.png
-\image html reconsolidator100.used_cores_eq_0.png
+\image html xp_balancer_slow.used_cores_eq_0.png
+\image html xp_consolidator_slow.used_cores_eq_0.png
+\image html xp_reconsolidator0_slow.used_cores_eq_0.png
+\image html xp_reconsolidator10_slow.used_cores_eq_0.png
+\image html xp_reconsolidator100_slow.used_cores_eq_0.png
 
 All in all, the static schedulers perform poorly when it comes to shut hosts down, and the reconfigurator performs very well, especially with a short delay.
 
@@ -437,12 +444,12 @@ All in all, the static schedulers perform poorly when it comes to shut hosts dow
 However, reconfigurations imply VM migrations, that consume resources as well.
 Let's look at the amount of migrations:
 @code
-#TU_ARGS --count_if vm.*state eq migrating
+TU_ARG --count_if vm.*state eq migrating
 @endcode
 
-\image html reconsolidator0.vm__state_eq_migrating.png
-\image html reconsolidator10.vm__state_eq_migrating.png
-\image html reconsolidator100.vm__state_eq_migrating.png
+\image html xp_reconsolidator0_slow.vm__state_eq_migrating.png
+\image html xp_reconsolidator10_slow.vm__state_eq_migrating.png
+\image html xp_reconsolidator100_slow.vm__state_eq_migrating.png
 
 As one can see, with a delay of 0 seconds, there are up to 6 concurrent migrations, while with a delay of 10 secondes, only two migrations occured concurrently.
 
@@ -480,16 +487,16 @@ To do so, one can add another injector configuration file *injector-fast.xml* an
 @endcode
 
 @code
-balancer: cloud-balancer.xml injector.xml
-consolidator: cloud-consolidator.xml injector.xml
-reconsolidator0: cloud-reconsolidator0.xml injector.xml
-reconsolidator10: cloud-reconsolidator10.xml injector.xml
-reconsolidator100: cloud-reconsolidator100.xml injector.xml
-balancer-fast: cloud-balancer.xml injector-fast.xml
-consolidator-fast: cloud-consolidator.xml injector-fast.xml
-reconsolidator0-fast: cloud-reconsolidator0.xml injector-fast.xml
-reconsolidator10-fast: cloud-reconsolidator10.xml injector-fast.xml
-reconsolidator100-fast: cloud-reconsolidator100.xml injector-fast.xml
+SIM_ARG 1 loadinjector.SimpleInjection
+SIM_ARG 2 platform.xml 
+SIM_ARG 3 deploy.xml
+SIM_ARG 4 cloud-balancer.xml balancer
+SIM_ARG 4 cloud-consolidator.xml consolidator
+SIM_ARG 4 cloud-reconsolidator0.xml reconsolidator0
+SIM_ARG 4 cloud-reconsolidator10.xml reconsolidator10
+SIM_ARG 4 cloud-reconsolidator100.xml reconsolidator100
+SIM_ARG 5 injector-slow.xml slow
+SIM_ARG 5 injector-fast.xml fast
 @endcode
 
 
@@ -540,33 +547,40 @@ Or alternatively, one can combine the two injections into one simulation with *i
 @endcode
 
 @code
-balancer-slowfast: cloud-balancer.xml injector-slowfast.xml
-consolidator-slowfast: cloud-consolidator.xml injector-slowfast.xml
-reconsolidator0-slowfast: cloud-reconsolidator0.xml injector-slowfast.xml
-reconsolidator10-slowfast: cloud-reconsolidator10.xml injector-slowfast.xml
-reconsolidator100-slowfast: cloud-reconsolidator100.xml injector-slowfast.xml
+SIM_ARG 1 loadinjector.SimpleInjection
+SIM_ARG 2 platform.xml 
+SIM_ARG 3 deploy.xml
+SIM_ARG 4 cloud-balancer.xml balancer
+SIM_ARG 4 cloud-consolidator.xml consolidator
+SIM_ARG 4 cloud-reconsolidator0.xml reconsolidator0
+SIM_ARG 4 cloud-reconsolidator10.xml reconsolidator10
+SIM_ARG 4 cloud-reconsolidator100.xml reconsolidator100
+SIM_ARG 5 injector-slowfast.xml slowfast
 @endcode
 
 As one can see, following the previous injection, there is now a second injection with a much more agressive *intance_period*. This simulate a large number of users creating and terminating VM all the time:
-\image html balancer_slowfast.instances_count.png
+\image html xp_balancer_slowfast.instances_count.png
 
 Now, let's look at the number of busy hosts with reconsolidator 0 and 10 :
-\image html reconsolidator0_slowfast.used_cores_ne_0.png
-\image html reconsolidator10_slowfast.used_cores_ne_0.png
+\image html xp_reconsolidator0_slowfast.used_cores_ne_0.png
+\image html xp_reconsolidator10_slowfast.used_cores_ne_0.png
 
 Under agressive loads, those actually perform worse than the simple consolidator:
-\image html consolidator_slowfast.used_cores_ne_0.png
+\image html xp_consolidator_slowfast.used_cores_ne_0.png
 
 This is confirmed by the integrals of the number of busy hosts over time:
 \image html busy_hosts-integral-slow.png
 \image html busy_hosts-integral-fast.png
 
 
-This is explained by the amount of migrations that slow the platform and prevent from shutting the VM down as soon as the user ask for it:
+This is explained by the amount of migrations that slow the platform down:
 
-\image html reconsolidator0_slowfast.vm__state_eq_migrating.png
-\image html reconsolidator10_slowfast.vm__state_eq_migrating.png
-\image html reconsolidator100_slowfast.vm__state_eq_migrating.png
+\image html xp_reconsolidator0_slowfast.vm__state_eq_migrating.png
+\image html xp_reconsolidator10_slowfast.vm__state_eq_migrating.png
+\image html xp_reconsolidator100_slowfast.vm__state_eq_migrating.png
+
+Actually, with a delay of 0, there are so many migrations that some vms can not be ran:
+\image html xp_reconsolidator0_slowfast.vm__state_eq_running.png
 
 
 @subsection howto_scheduler_observing_closely Observing more closely
@@ -574,12 +588,13 @@ This is explained by the amount of migrations that slow the platform and prevent
 As raw data from observations are not sufficient, data can be easily imported into R:
 @code
 $ R
-> source('data/reads.R')
+> library(traceutil)
+> tu_read('./data')
 @endcode
 
 Afterward, the observations can be manipulated directly:
 @code 
-> head(balancer.used_cores_ne_0)
+> head(xp_balancer_slow.used_cores_ne_0)
       entity     date value
 1 used_cores    0.000    24
 2 used_cores 2004.008     0
@@ -588,49 +603,48 @@ Afterward, the observations can be manipulated directly:
 Some additional functionalities are available in the library traceutil.
 For instance, it allows to integrate values of the observation over time, and apply a given function to all observed XPs at once:
 @code
-> install('bin/traceutil')
 > ??traceutil
 >
 > ?tu_integrate
-> tu_integrate(balancer.used_cores_ne_0)
+> tu_integrate(xp_balancer_slow.used_cores_ne_0)
 [1] 85847.87
 > 
 > xps
-                           xp
-1                    balancer
-2               balancer_fast
-3           balancer_slowfast
-4                consolidator
-5           consolidator_fast
-6       consolidator_slowfast
-7             reconsolidator0
-8        reconsolidator0_fast
-9    reconsolidator0_slowfast
-10          reconsolidator100
-11     reconsolidator100_fast
-12 reconsolidator100_slowfast
-13           reconsolidator10
-14      reconsolidator10_fast
-15  reconsolidator10_slowfast
+                              xp
+1               xp_balancer_fast
+2               xp_balancer_slow
+3           xp_balancer_slowfast
+4           xp_consolidator_fast
+5           xp_consolidator_slow
+6       xp_consolidator_slowfast
+7        xp_reconsilidator0_fast
+8        xp_reconsilidator0_slow
+9    xp_reconsilidator0_slowfast
+10     xp_reconsolidator100_fast
+11     xp_reconsolidator100_slow
+12 xp_reconsolidator100_slowfast
+13      xp_reconsolidator10_fast
+14      xp_reconsolidator10_slow
+15  xp_reconsolidator10_slowfast
 > 
 > ?tu_apply
 > tu_apply(xps,'used_cores_ne_0', tu_integrate)
-                           xp    value
-1                    balancer 48096.19
-2               balancer_fast 48087.20
-3           balancer_slowfast 96094.20
-4                consolidator 47808.19
-5           consolidator_fast 48048.20
-6       consolidator_slowfast 95773.32
-7             reconsolidator0 41697.16
-8        reconsolidator0_fast 49146.56
-9    reconsolidator0_slowfast 92569.66
-10          reconsolidator100 47549.26
-11     reconsolidator100_fast 48048.20
-12 reconsolidator100_slowfast 95773.32
-13           reconsolidator10 43144.24
-14      reconsolidator10_fast 48457.26
-15  reconsolidator10_slowfast 91338.56
+                              xp    value
+1               xp_balancer_fast 48096.19
+2               xp_balancer_slow 48096.19
+3           xp_balancer_slowfast 96092.21
+4           xp_consolidator_fast 48075.19
+5           xp_consolidator_slow 47808.19
+6       xp_consolidator_slowfast 95773.32
+7        xp_reconsilidator0_fast 48982.97
+8        xp_reconsilidator0_slow 40894.30
+9    xp_reconsilidator0_slowfast 90712.37
+10     xp_reconsolidator100_fast 48151.19
+11     xp_reconsolidator100_slow 47808.19
+12 xp_reconsolidator100_slowfast 95753.40
+13      xp_reconsolidator10_fast 48303.19
+14      xp_reconsolidator10_slow 44756.03
+15  xp_reconsolidator10_slowfast 92271.30
 @endcode
 
 And everything can be automatized with template.R, as declared in the lab configuration file:
