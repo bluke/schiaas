@@ -1,11 +1,15 @@
+
 library(traceutil)
 
+
 pdf('data.pdf')
-tu_read('.',TRUE)
+dfs <- tu_read('.', plotting=TRUE)
 dev.off()
 
-pdf('busy_hosts-integral.pdf')
-uc <-tu_apply(xps,'used_cores_eq_0',tu_integrate)
-barplot(uc$value, names.arg=uc$xp)
-uc
+###################################### specific
+
+pdf('busy_hosts-integral-fast.pdf', width=700)
+uc <-tu_apply(xps,'used_cores_ne_0',tu_integrate)
+barplot(uc$value, names.arg=uc$xp, las=2)
+print(uc)
 dev.off()
