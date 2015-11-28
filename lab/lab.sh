@@ -6,10 +6,10 @@
 ## SETUP_DIR indicates the directory containing setup files (should be called first)
 ## R_SCRIPT indicates the R script to call at he end of the simulations
 ## TU_ARG indicates the arguments to pass to the trace_util.py script
-## SIM_ARG x arg [id] indicates the argument of the simulation
-##  - *x*: the number of the argument;
-##  - *arg*: the argument;
-##  - *id*: the id of the simulations using this argument. 
+## SIM_ARG x[:id] arg indicates the argument of the simulation
+##  - x: the id of the argument (must be grouped);
+##  - id: the id of the simulations using this argument;
+##  - arg: the argument.
 ## 
 ## see lab/setup/cmp-scheduler/cmp-scheduler.cfg for example
 ##
@@ -125,14 +125,19 @@ do
 		TU_ARGS[$TU_COMMAND]="${TU_ARGS[$TU_COMMAND]} $TU_COMMAND_ARGS"
 	
 	elif [ "$COMMAND" == "SIM_ARG" ]; then
-		SIM_ARG=($ARGS)
-		if [ "${SIM_ARG[0]}" != "$SIM_ARG_NUM" ] ; then
+		SIM_ARG_ID=${ARGS%% *}
+		SIM_ARG_ARG=${ARGS#* }
+		s=(${SIM_ARG_ID/:/ })
+		SIM_ARG_ID_NUM=${s[0]}
+		SIM_ARG_ID_ID=${s[1]}
+		echo "TEST $ARGS : $SIM_ARG_ID : $SIM_ARG_ARG : $SIM_ARG_ID_NUM : $SIM_ARG_ID_ID"
+		if [ "$SIM_ARG_ID_NUM" != "$OLD_SIM_ARG_ID_NUM" ] ; then
 			mv $SIM_ARG_FILE $SIM_ARG_TMP_FILE
-			SIM_ARG_NUM="${SIM_ARG[0]}"
+			OLD_SIM_ARG_ID_NUM="$SIM_ARG_ID_NUM"
 		fi
 		cat $SIM_ARG_TMP_FILE \
-			| sed "s/$/ ${SIM_ARG[1]//\//\\\/}/" \
-			| sed "s/ /_${SIM_ARG[2]} /" \
+			| sed "s/$/ ${SIM_ARG_ARG//\//\\\/}/" \
+			| sed "s/ /_${SIM_ARG_ID_ID} /" \
 			| tr -s "_"  \
 			>> $SIM_ARG_FILE
 	fi

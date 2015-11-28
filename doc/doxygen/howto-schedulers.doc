@@ -15,8 +15,7 @@ Studying schedulers is mandatory, for instance, when:
 Providing that you have simgrid java installed and apt:
 @code
 # Installing python3, R and ggplot2
-sudo apt-get install python3 r-base
-sudo R -e "install.packages('ggplot2', repos='https://cran.rstudio.com/')"
+sudo apt-get install python3 r-base r-cran-ggplot2 
 
 # Building the simulator
 export SIMGRID_JAR_PATH=/usr/local/java/
@@ -43,11 +42,11 @@ library(traceutil)
 ?tu_read
 tu_read()
 ls()
-tu_plot(reconsolidator0.used_cores_ne_0)
-tu_integrate(reconsolidator0.used_cores_ne_0)
+tu_plot(xp_reconsolidator0.used_cores_ne_0)
+tu_integrate(xp_reconsolidator0.used_cores_ne_0)
 xps
 tu_apply(xps,'used_cores_ne_0', tu_integrate)
-tu_plot(reconsolidator0.vm__state)
+tu_plot(xp_reconsolidator0.vm__state)
 
 @endcode
 
@@ -192,19 +191,19 @@ SETUP_DIR ./setup/cmp-scheduler
 SIM_ARG 1 loadinjector.SimpleInjection
 SIM_ARG 2 platform.xml 
 SIM_ARG 3 deploy.xml
-SIM_ARG 4 cloud-balancer.xml balancer
-SIM_ARG 4 cloud-consolidator.xml consolidator
-SIM_ARG 4 cloud-reconsolidator0.xml reconsolidator0
-SIM_ARG 4 cloud-reconsolidator10.xml reconsolidator10
-SIM_ARG 4 cloud-reconsolidator100.xml reconsolidator100
-SIM_ARG 5 injector-slow.xml slow
+SIM_ARG 4:balancer cloud-balancer.xml
+SIM_ARG 4:consolidator cloud-consolidator.xml
+SIM_ARG 4:reconsolidator0 cloud-reconsolidator0.xml
+SIM_ARG 4:reconsolidator10 cloud-reconsolidator10.xml 
+SIM_ARG 4:reconsolidator100 cloud-reconsolidator100.xml
+SIM_ARG 5:slow injector-slow.xml 
 @endcode
 where:
 - *SETUP_DIR* is the location of the files;
-- *SIM_ARG x arg id* describe an argument of the simulation as 
-  - *x*: the number of the argument;
-  - *arg*: the argument;
-  - *id*: the id of the simulations using this argument. 
+- *SIM_ARG x[:id] arg* indicates the argument of the simulation 
+  - *x*: the id of the argument (must be grouped);
+  - *id*: the id of the simulations using this argument;
+  - *arg*: the argument.
 
 Afterward, the simulations can be ran using:
 @code
@@ -490,13 +489,13 @@ To do so, one can add another injector configuration file *injector-fast.xml* an
 SIM_ARG 1 loadinjector.SimpleInjection
 SIM_ARG 2 platform.xml 
 SIM_ARG 3 deploy.xml
-SIM_ARG 4 cloud-balancer.xml balancer
-SIM_ARG 4 cloud-consolidator.xml consolidator
-SIM_ARG 4 cloud-reconsolidator0.xml reconsolidator0
-SIM_ARG 4 cloud-reconsolidator10.xml reconsolidator10
-SIM_ARG 4 cloud-reconsolidator100.xml reconsolidator100
-SIM_ARG 5 injector-slow.xml slow
-SIM_ARG 5 injector-fast.xml fast
+SIM_ARG 4:balancer cloud-balancer.xml
+SIM_ARG 4:consolidator cloud-consolidator.xml
+SIM_ARG 4:reconsolidator0 cloud-reconsolidator0.xml
+SIM_ARG 4:reconsolidator10 cloud-reconsolidator10.xml 
+SIM_ARG 4:reconsolidator100 cloud-reconsolidator100.xml
+SIM_ARG 5:slow injector-slow.xml 
+SIM_ARG 5:fast injector-fast.xml 
 @endcode
 
 
@@ -550,12 +549,12 @@ Or alternatively, one can combine the two injections into one simulation with *i
 SIM_ARG 1 loadinjector.SimpleInjection
 SIM_ARG 2 platform.xml 
 SIM_ARG 3 deploy.xml
-SIM_ARG 4 cloud-balancer.xml balancer
-SIM_ARG 4 cloud-consolidator.xml consolidator
-SIM_ARG 4 cloud-reconsolidator0.xml reconsolidator0
-SIM_ARG 4 cloud-reconsolidator10.xml reconsolidator10
-SIM_ARG 4 cloud-reconsolidator100.xml reconsolidator100
-SIM_ARG 5 injector-slowfast.xml slowfast
+SIM_ARG 4:balancer cloud-balancer.xml
+SIM_ARG 4:consolidator cloud-consolidator.xml
+SIM_ARG 4:reconsolidator0 cloud-reconsolidator0.xml
+SIM_ARG 4:reconsolidator10 cloud-reconsolidator10.xml 
+SIM_ARG 4:reconsolidator100 cloud-reconsolidator100.xml
+SIM_ARG 5:slowfast injector-slowfast.xml 
 @endcode
 
 As one can see, following the previous injection, there is now a second injection with a much more agressive *intance_period*. This simulate a large number of users creating and terminating VM all the time:

@@ -463,9 +463,9 @@ TU_ARG --count-if vm:.*:state eq running
 SIM_ARG 1 loadinjector.SimpleInjection
 SIM_ARG 2 platform.xml 
 SIM_ARG 3 deploy.xml
-SIM_ARG 4 cloud-balancer.xml balancer
-SIM_ARG 4 cloud-consolidator.xml consolidator
-SIM_ARG 5 injector-slowfast.xml
+SIM_ARG 4:balancer cloud-balancer.xml
+SIM_ARG 4:consolidator cloud-consolidator.xml
+SIM_ARG 5 injector-slow.xml 
 @endcode
 
 @code
@@ -473,8 +473,8 @@ $ /lab.sh lab.cfg
 @endcode 
 will execute two simulations using files in the *./setup/cmp-scheduler* directory:
 @code
-$ java loadinjector.SimpleInjection platform.xml deploy.xml cloud-balancer.xml injector.xml
-$ java loadinjector.SimpleInjection platform.xml deploy.xml cloud-consolidator.xml injector.xml
+$ java loadinjector.SimpleInjection platform.xml deploy.xml cloud-balancer.xml injector-slow.xml
+$ java loadinjector.SimpleInjection platform.xml deploy.xml cloud-consolidator.xml injector-slow.xml
 @endcode
 
 NB: **Make sure to set the *CLASSPATH* environnement variable to allow the execution of the main class.**
