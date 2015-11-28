@@ -1,4 +1,4 @@
-#!/usr/bin/python3 -O
+#!/usr/bin/env python3
 # -*- coding:utf8 -*-
 
 ##	This script gather tools to exploit schiaas traces
