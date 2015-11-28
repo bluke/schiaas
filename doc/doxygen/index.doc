@@ -274,7 +274,7 @@ Then, you can bind the slave process to the running instance:
 @code
 for (int i=0; i<slavesCount; i++) {
 	Msg.info("waiting for boot");
-	while (myCompute.describeInstance(slaveInstancesId[i]).isRunning() == 0) {
+	while (myCompute.describeInstance(slaveInstancesId[i]).isRunning()) {
 		waitFor(10);
 	}
 	
