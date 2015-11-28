@@ -89,9 +89,7 @@ mkdir -p $DATA_DIR $SIMULATIONS_DIR
 
 SIM_ARG_FILE=$SIMULATIONS_DIR/simulations.args
 echo "xp " > $SIM_ARG_FILE
-SIM_ARG_TMP_FILE=`tempfile`
-
-declare -A TU_ARGS
+SIM_ARG_TMP_FILE=`mktemp`
 
 #Reading the configuration file
 while read line
@@ -119,10 +117,12 @@ do
 		TU_COMMAND=${ARGS%% *}
 		TU_COMMAND_ARGS=${ARGS#* }
 		
-		if [ -z "${TU_ARGS[$TU_COMMAND]}" ]; then
-			TU_ARGS[$TU_COMMAND]="$TU_COMMAND"
+		tv=TU_ARGS_${TU_COMMAND//-/_}
+		if [ -z "${!tv}" ]; then
+			eval TU_ARGS_${TU_COMMAND//-/_}="$TU_COMMAND"
+			tv=TU_ARGS_${TU_COMMAND//-/_}
 		fi
-		TU_ARGS[$TU_COMMAND]="${TU_ARGS[$TU_COMMAND]} $TU_COMMAND_ARGS"
+		eval TU_ARGS_${TU_COMMAND//-/_}="\"${!tv} $TU_COMMAND_ARGS\""
 	
 	elif [ "$COMMAND" == "SIM_ARG" ]; then
 		SIM_ARG_ID=${ARGS%% *}
@@ -130,7 +130,6 @@ do
 		s=(${SIM_ARG_ID/:/ })
 		SIM_ARG_ID_NUM=${s[0]}
 		SIM_ARG_ID_ID=${s[1]}
-		echo "TEST $ARGS : $SIM_ARG_ID : $SIM_ARG_ARG : $SIM_ARG_ID_NUM : $SIM_ARG_ID_ID"
 		if [ "$SIM_ARG_ID_NUM" != "$OLD_SIM_ARG_ID_NUM" ] ; then
 			mv $SIM_ARG_FILE $SIM_ARG_TMP_FILE
 			OLD_SIM_ARG_ID_NUM="$SIM_ARG_ID_NUM"
@@ -144,9 +143,11 @@ do
 
 done < $1
 
+for tua in ${!TU_ARGS_*} ; do TU_ARGS="$TU_ARGS ${!tua} "; done
+
 echo "SETUP_DIR='${SETUP_DIR}'"
 echo "R_SCRIPT='$R_SCRIPT'"
-echo "TU_ARGS=${TU_ARGS[@]}"
+echo "TU_ARGS='$TU_ARGS'"
 
 #Doing the simulations
 JAVA_THREADS="`ps -Af | grep -c java`"
