@@ -113,7 +113,7 @@ Please look at <a href="./javadoc/schiaas/index.html">SinInjector javadoc</a> fo
 
 @subsection howto_scheduler_build_jar Making the simulator
 
-A this stage, you should have a simulator, able to use your scheduler as well as any other scheduler, and an application that loads the cloud.
+At this stage, you should have a simulator, able to use your scheduler as well as any other scheduler, and an application that loads the cloud.
 
 It is recommended to build jar files of your simulator, to ease its executions in the next steps.
 
@@ -394,7 +394,7 @@ Be aware that the objective of the lab is not to produce ready-to-publish plots,
 
 @subsection howto_scheduler_observing_usage Observing the usage of hosts
 
-To observe the behavior of the scheduler, let's look at the number of cores used by VM on each host:
+To observe the behavior of the scheduler, let's look at the number of cores used by VMs on each host:
 @code
 TU_ARG --event used_cores
 @endcode
@@ -673,7 +673,7 @@ For more details please see \ref lab and \ref lab_setup_observing.
 
 @section howto_scheduler_conclusion Conclusion
 
-All files of this tutorial are available and all results can obtained by
+All files of this tutorial are available and all results can be obtained by
 @code
 ./lab.sh -p 2 setup/cmp-scheduler/cmp-schedulers.cfg 
 @endcode
