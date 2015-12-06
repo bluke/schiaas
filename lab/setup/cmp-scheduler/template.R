@@ -3,7 +3,7 @@ library(traceutil)
 
 
 pdf('data.pdf')
-dfs <- tu_read('.', plotting=FALSE)
+dfs <- tu_read('.', plotting=TRUE, plotting_state=FALSE)
 dev.off()
 
 ###################################### specific

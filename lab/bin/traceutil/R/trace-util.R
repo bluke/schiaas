@@ -14,17 +14,20 @@ tu_reload <- function(dir='./bin') {
 #'
 #' @param dir the directory containing the dat files
 #' @param plotting plot the data if TRUE
+#' @param plotting_states plot the states as well if TRUE (might be long)
 #' @return the list of read dataframes
 #' @keywords traceutil
 #' @export
 #' @examples
 #' tu_read('./data', TRUE)
 #' will read all dit files inf the data directory and plot everything
-tu_read <- function(dir = '.', plotting=FALSE) { 
+tu_read <- function(dir = '.', plotting=FALSE, plotting_states=FALSE) { 
 	varnames <- sub('.dat$','',list.files(dir,pattern='*.dat$'))
 	for (v in varnames) {
 		df <- assign(v, read.table(paste(dir,'/',v,'.dat',sep=''),sep="", header=TRUE), envir = .GlobalEnv)
-		if ( plotting ) tu_plot(df, v)
+		 if (is.numeric(df$value) || plotting_states) {
+			if ( plotting ) tu_plot(df, v)
+		 }
 	}
 
 	xps <<- data.frame(xp=unique(sub('\\..*$','',varnames)))

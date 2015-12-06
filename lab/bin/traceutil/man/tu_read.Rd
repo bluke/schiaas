@@ -7,12 +7,14 @@ create one dataframe for each,
 plot according to plotting,
 and create xps with the list of xp.}
 \usage{
-tu_read(dir = ".", plotting = FALSE)
+tu_read(dir = ".", plotting = FALSE, plotting_states = FALSE)
 }
 \arguments{
 \item{dir}{the directory containing the dat files}
 
 \item{plotting}{plot the data if TRUE}
+
+\item{plotting_states}{plot the states as well if TRUE (might be long)}
 }
 \value{
 the list of read dataframes
