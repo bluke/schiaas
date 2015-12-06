@@ -79,11 +79,17 @@ tu_plot_state <- function(df, title=deparse(substitute(df))) {
 
 	fdf <- merge(merge(intervals,states),entities)
 
-	print(ggplot(fdf) + expand_limits(x=-100) +
-	geom_rect(aes(xmin=start_date,xmax=end_date,ymin=index,ymax=index+0.7,fill=color)) +
+	gg <- ggplot(fdf) + expand_limits(x=-500) +
+	geom_rect(aes(xmin=start_date,xmax=end_date,ymin=index,ymax=index+0.7,fill=color),color="black") +
 	geom_text(data=entities, aes(x=0, y=index+0.2, hjust=1, vjust=0, label=entity), size=3) +
 	scale_fill_discrete(name="State", breaks=states$color, labels=states$value) +
-	ggtitle(title) + xlab("date") + ylab("entity"))
+	ggtitle(title) + xlab("date") + ylab("entity") +
+	theme(plot.margin = unit(c(1, 1, 1, 5), "lines"))
+	
+	gb <- ggplot_build(gg)
+	gt <- ggplot_gtable(gb) 
+	gt$layout$clip[gt$layout$name=="panel"] <- "off"
+	grid.draw(gt)
 }
 
 

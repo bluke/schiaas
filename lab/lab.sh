@@ -4,7 +4,7 @@
 ##
 ## The configuration file format is as follows:
 ## SETUP_DIR indicates the directory containing setup files (should be called first)
-## R_SCRIPT indicates the R script to call at he end of the simulations
+## COMMAND_DATA indicates a command to run in the data directory (should be stated at the end of the configuration file)
 ## TU_ARG indicates the arguments to pass to the trace_util.py script
 ## SIM_ARG x[:id] arg indicates the argument of the simulation
 ##  - x: the id of the argument (must be grouped);
@@ -61,6 +61,8 @@ BIN_DIR=$LAB_DIR/bin
 SETUP_DIR=$LAB_DIR/setup
 SIMULATIONS_DIR=$LAB_DIR/simulations
 DATA_DIR=$LAB_DIR/data
+POST_COMMAND_DATA=""
+PRE_COMMAND_SETUP=""
 
 SCHIAAS_DIR="../bin"
 SCHIAAS_BIN_DIR=`abspath $SCHIAAS_DIR`
@@ -92,9 +94,9 @@ echo "xp " > $SIM_ARG_FILE
 SIM_ARG_TMP_FILE=`mktemp`
 
 #Reading the configuration file
-while read line
+while read line || [ -n "$line" ]
 do
-	if [ -z "$line"  ]; then
+	if [ -z "$line" -o "${line:0:1}" == "#" ]; then
 		continue
 	fi
 	COMMAND="${line%% *}"
@@ -107,11 +109,8 @@ do
 			exit 1
 		fi
 
-	elif [ "$COMMAND" == "R_SCRIPT" ]; then
-		R_SCRIPT="$ARGS"
-		if [ ! -f $R_SCRIPT ] ; then 
-			echo "Error: R_SCRIPT $R_SCRIPT was not found"
-		fi
+	elif [ "$COMMAND" == "POST_COMMAND_DATA" ]; then
+		POST_COMMAND_DATA="$POST_COMMAND_DATA $ARGS ;"
 
 	elif [ "$COMMAND" == "TU_ARG" ]; then
 		TU_COMMAND=${ARGS%% *}
@@ -146,8 +145,8 @@ done < $1
 for tua in ${!TU_ARGS_*} ; do TU_ARGS="$TU_ARGS ${!tua} "; done
 
 echo "SETUP_DIR='${SETUP_DIR}'"
-echo "R_SCRIPT='$R_SCRIPT'"
 echo "TU_ARGS='$TU_ARGS'"
+echo "POST_COMMAND_DATA='$POST_COMMAND_DATA'"
 
 #Doing the simulations
 JAVA_THREADS="`ps -Af | grep -c java`"
@@ -183,9 +182,7 @@ done < $SIM_ARG_FILE
 
 wait $SIM_PIDS
 
-if [ -n "$R_SCRIPT" ] ; then 
-	echo "Plotting results"
-	cd $DATA_DIR
-	R -f $R_SCRIPT > R.out
-	cd ..
+if [ -n "$POST_COMMAND_DATA" ] ; then 
+	echo "Executing post commands" $POST_COMMAND_DATA
+	( cd $DATA_DIR ; eval $POST_COMMAND_DATA )
 fi

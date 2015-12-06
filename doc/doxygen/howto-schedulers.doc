@@ -15,7 +15,7 @@ Studying schedulers is mandatory, for instance, when:
 Providing that you have simgrid java installed and apt:
 @code
 # Installing python3, R and ggplot2
-sudo apt-get install python3 r-base r-cran-ggplot2 
+sudo apt-get install python3 r-base r-cran-ggplot2 r-cran-gridextra
 
 # Building the simulator
 export SIMGRID_JAR_PATH=/usr/local/java/
