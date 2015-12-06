@@ -1,10 +1,12 @@
 ## This script executes simulations according to one config file.
-## It takes the configuration file as argument.
+## It takes at least one configuration file as argument.
 ## It needs the java classpath to be set.
 ##
 ## The configuration file format is as follows:
 ## SETUP_DIR indicates the directory containing setup files (should be called first)
-## COMMAND_DATA indicates a command to run in the data directory (should be stated at the end of the configuration file)
+## INCLUDE indicates a file to read as addtional configuration file
+## PRE_COMMAND_SETUP indicates a command to run before the simulation in the setup directory
+## POST_COMMAND_DATA indicates a command to run in the data directory
 ## TU_ARG indicates the arguments to pass to the trace_util.py script
 ## SIM_ARG x[:id] arg indicates the argument of the simulation
 ##  - x: the id of the argument (must be grouped);
@@ -93,60 +95,77 @@ SIM_ARG_FILE=$SIMULATIONS_DIR/simulations.args
 echo "xp " > $SIM_ARG_FILE
 SIM_ARG_TMP_FILE=`mktemp`
 
-#Reading the configuration file
-while read line || [ -n "$line" ]
-do
-	if [ -z "$line" -o "${line:0:1}" == "#" ]; then
-		continue
-	fi
-	COMMAND="${line%% *}"
-	ARGS="`setupify \"${line#* }\"`"
-
-	if [ "$COMMAND" == "SETUP_DIR" ]; then
-		SETUP_DIR="$ARGS"
-		if [ ! -d $SETUP_DIR ] ; then 
-			echo "Error: SETUP_DIR $SETUP_DIR was not found"
-			exit 1
+#Reading the configuration files
+while [ -n "$1" ]
+do 
+	while read line || [ -n "$line" ]
+	do
+		if [ -z "$line" -o "${line:0:1}" == "#" ]; then
+			continue
 		fi
+		COMMAND="${line%% *}"
+		ARGS="`setupify \"${line#* }\"`"
 
-	elif [ "$COMMAND" == "POST_COMMAND_DATA" ]; then
-		POST_COMMAND_DATA="$POST_COMMAND_DATA $ARGS ;"
+		if [ "$COMMAND" == "SETUP_DIR" ]; then
+			SETUP_DIR="$ARGS"
+			if [ ! -d $SETUP_DIR ] ; then 
+				echo "Error: SETUP_DIR $SETUP_DIR was not found"
+				exit 1
+			fi
 
-	elif [ "$COMMAND" == "TU_ARG" ]; then
-		TU_COMMAND=${ARGS%% *}
-		TU_COMMAND_ARGS=${ARGS#* }
-		
-		tv=TU_ARGS_${TU_COMMAND//-/_}
-		if [ -z "${!tv}" ]; then
-			eval TU_ARGS_${TU_COMMAND//-/_}="$TU_COMMAND"
+		elif [ "$COMMAND" == "POST_COMMAND_DATA" ]; then
+			POST_COMMAND_DATA="$POST_COMMAND_DATA $ARGS ;"
+
+		elif [ "$COMMAND" == "PRE_COMMAND_SETUP" ]; then
+			PRE_COMMAND_SETUP="$PRE_COMMAND_SETUP $ARGS ;"
+
+		elif [ "$COMMAND" == "INCLUDE" ]; then
+			set $* $ARGS
+			echo $ARGS
+
+		elif [ "$COMMAND" == "TU_ARG" ]; then
+			TU_COMMAND=${ARGS%% *}
+			TU_COMMAND_ARGS=${ARGS#* }
+			
 			tv=TU_ARGS_${TU_COMMAND//-/_}
+			if [ -z "${!tv}" ]; then
+				eval TU_ARGS_${TU_COMMAND//-/_}="$TU_COMMAND"
+				tv=TU_ARGS_${TU_COMMAND//-/_}
+			fi
+			eval TU_ARGS_${TU_COMMAND//-/_}="\"${!tv} $TU_COMMAND_ARGS\""
+		
+		elif [ "$COMMAND" == "SIM_ARG" ]; then
+			SIM_ARG_ID=${ARGS%% *}
+			SIM_ARG_ARG=${ARGS#* }
+			s=(${SIM_ARG_ID/:/ })
+			SIM_ARG_ID_NUM=${s[0]}
+			SIM_ARG_ID_ID=${s[1]}
+			if [ "$SIM_ARG_ID_NUM" != "$OLD_SIM_ARG_ID_NUM" ] ; then
+				mv $SIM_ARG_FILE $SIM_ARG_TMP_FILE
+				OLD_SIM_ARG_ID_NUM="$SIM_ARG_ID_NUM"
+			fi
+			cat $SIM_ARG_TMP_FILE \
+				| sed "s/$/ ${SIM_ARG_ARG//\//\\\/}/" \
+				| sed "s/ /_${SIM_ARG_ID_ID} /" \
+				| tr -s "_"  \
+				>> $SIM_ARG_FILE
 		fi
-		eval TU_ARGS_${TU_COMMAND//-/_}="\"${!tv} $TU_COMMAND_ARGS\""
-	
-	elif [ "$COMMAND" == "SIM_ARG" ]; then
-		SIM_ARG_ID=${ARGS%% *}
-		SIM_ARG_ARG=${ARGS#* }
-		s=(${SIM_ARG_ID/:/ })
-		SIM_ARG_ID_NUM=${s[0]}
-		SIM_ARG_ID_ID=${s[1]}
-		if [ "$SIM_ARG_ID_NUM" != "$OLD_SIM_ARG_ID_NUM" ] ; then
-			mv $SIM_ARG_FILE $SIM_ARG_TMP_FILE
-			OLD_SIM_ARG_ID_NUM="$SIM_ARG_ID_NUM"
-		fi
-		cat $SIM_ARG_TMP_FILE \
-			| sed "s/$/ ${SIM_ARG_ARG//\//\\\/}/" \
-			| sed "s/ /_${SIM_ARG_ID_ID} /" \
-			| tr -s "_"  \
-			>> $SIM_ARG_FILE
-	fi
 
-done < $1
+	done < $1
+	shift
+done
 
 for tua in ${!TU_ARGS_*} ; do TU_ARGS="$TU_ARGS ${!tua} "; done
 
 echo "SETUP_DIR='${SETUP_DIR}'"
 echo "TU_ARGS='$TU_ARGS'"
+echo "PRE_COMMAND_SETUP='$PRE_COMMAND_SETUP'"
 echo "POST_COMMAND_DATA='$POST_COMMAND_DATA'"
+
+
+# Pre command
+( cd $SETUP_DIR ; eval $PRE_COMMAND_SETUP )
+
 
 #Doing the simulations
 JAVA_THREADS="`ps -Af | grep -c java`"
@@ -182,6 +201,7 @@ done < $SIM_ARG_FILE
 
 wait $SIM_PIDS
 
+# Post command
 if [ -n "$POST_COMMAND_DATA" ] ; then 
 	echo "Executing post commands" $POST_COMMAND_DATA
 	( cd $DATA_DIR ; eval $POST_COMMAND_DATA )
