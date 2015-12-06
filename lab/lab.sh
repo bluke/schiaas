@@ -27,7 +27,6 @@ function abspath {
 }
 
 
-
 PARALLEL_SIMS=1
 
 while getopts "kp" option
@@ -50,9 +49,9 @@ do
 	esac
 done
 
-if [ $# -ne 1 ] ; then
-	echo "Takes one argument. Needs to run in the lab directory"
-	echo "Usage : $0 [-k] [-p parallel_simulations] config_file" >&2 
+if [ $# -lt 1 ] ; then
+	echo "Takes at least one argument. Needs to run in the lab directory"
+	echo "Usage : $0 [-k] [-p parallel_simulations] config_file [config_files...]" >&2 
 	exit 1
 fi
 
@@ -87,6 +86,8 @@ function setupify {
 	done
 	echo -n $res
 }
+
+
 
 [ ! "$KEEP" ] && rm -rf $DATA_DIR $SIMULATIONS_DIR
 mkdir -p $DATA_DIR $SIMULATIONS_DIR
