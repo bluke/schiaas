@@ -90,7 +90,7 @@ public class SimpleScheduler extends ComputeScheduler {
 	}
 	
 	@Override
-	public void terminate() {	
+	public void terminate() {
 	}
 	
 }

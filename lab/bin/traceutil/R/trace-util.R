@@ -14,17 +14,20 @@ tu_reload <- function(dir='./bin') {
 #'
 #' @param dir the directory containing the dat files
 #' @param plotting plot the data if TRUE
+#' @param plotting_states plot the states as well if TRUE (might be long)
 #' @return the list of read dataframes
 #' @keywords traceutil
 #' @export
 #' @examples
 #' tu_read('./data', TRUE)
 #' will read all dit files inf the data directory and plot everything
-tu_read <- function(dir = '.', plotting=FALSE) { 
+tu_read <- function(dir = '.', plotting=FALSE, plotting_states=FALSE) { 
 	varnames <- sub('.dat$','',list.files(dir,pattern='*.dat$'))
 	for (v in varnames) {
 		df <- assign(v, read.table(paste(dir,'/',v,'.dat',sep=''),sep="", header=TRUE), envir = .GlobalEnv)
-		if ( plotting ) tu_plot(df, v)
+		 if (is.numeric(df$value) || plotting_states) {
+			if ( plotting ) tu_plot(df, v)
+		 }
 	}
 
 	xps <<- data.frame(xp=unique(sub('\\..*$','',varnames)))
@@ -79,11 +82,17 @@ tu_plot_state <- function(df, title=deparse(substitute(df))) {
 
 	fdf <- merge(merge(intervals,states),entities)
 
-	print(ggplot(fdf) + expand_limits(x=-100) +
-	geom_rect(aes(xmin=start_date,xmax=end_date,ymin=index,ymax=index+0.7,fill=color)) +
+	gg <- ggplot(fdf) + expand_limits(x=-500) +
+	geom_rect(aes(xmin=start_date,xmax=end_date,ymin=index,ymax=index+0.7,fill=color),color="black") +
 	geom_text(data=entities, aes(x=0, y=index+0.2, hjust=1, vjust=0, label=entity), size=3) +
 	scale_fill_discrete(name="State", breaks=states$color, labels=states$value) +
-	ggtitle(title) + xlab("date") + ylab("entity"))
+	ggtitle(title) + xlab("date") + ylab("entity") +
+	theme(plot.margin = unit(c(1, 1, 1, 5), "lines"))
+	
+	gb <- ggplot_build(gg)
+	gt <- ggplot_gtable(gb) 
+	gt$layout$clip[gt$layout$name=="panel"] <- "off"
+	grid.draw(gt)
 }
 
 

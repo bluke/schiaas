@@ -1,4 +1,4 @@
-#!/usr/bin/python3 -O
+#!/usr/bin/env python3
 # -*- coding:utf8 -*-
 
 ##	This script gather tools to exploit schiaas traces
@@ -16,6 +16,7 @@ import os
 import json
 import argparse
 import collections
+from collections import OrderedDict
 import re
 import tempfile
 
@@ -32,6 +33,8 @@ parser.add_argument('--count-if', dest='count_if_args', metavar=('pattern cmp va
 	help='for each date, count the entities matching the pattern for which the comparison cmp is true between value and val. cmp is bash_like: be eq, ne, gt, ge, lt, le.')
 parser.add_argument('--json', dest='json_dump', action='store_const', const=True, default=False, 
 	help='dump the whole trace in the json format.')
+parser.add_argument('--schiaas', dest='traces_dump', action='store_const', const=True, default=False, 
+	help='dump the whole trace in the schiaas format.')
 parser.add_argument('--info', dest='dump_info', action='store_const', const=True, default=False, 
 	help='print the properties and events available in the trace, in the json format.')
 parser.add_argument('--regex', dest='dump_regex', action='store_const', const=True, default=False, 
@@ -55,6 +58,7 @@ class Trace:
 		src_type = self.get_type(src_filename)
 		if src_type == 'json':
 			self.root = self.read_json(src_filename)
+			self.traces = self.build_traces_from_obj()
 		elif src_type == 'schiaas':
 			self.traces = self.read_schiaas(src_filename)
 		else:
@@ -74,7 +78,7 @@ class Trace:
 
 	def read_json(self, json_filename):
 		with open(json_filename) as src_file:
-			root = json.load(src_file)
+			root = json.load(src_file, object_pairs_hook=collections.OrderedDict)
 		return root
 
 	def read_schiaas(self, schiaas_filename):
@@ -100,6 +104,39 @@ class Trace:
 			else:
 				e[key] = val
 		return root
+
+	def trace_key(self, trace):
+		try:
+			return float(trace[1])
+		except:
+			return 0
+
+
+	def build_traces_from_obj(self, root=None):
+		if root == None: root = self.root
+		traces = []
+		
+		self.sub_build_traces_from_obj(root, "", "root", traces)
+
+		return sorted(traces, key=self.trace_key)
+
+	def sub_build_traces_from_obj(self, node, entities, entity, traces):
+		if type(node) is OrderedDict:
+			for k,v in node.items():
+				self.sub_build_traces_from_obj(v, entities+':'+entity, k, traces)
+		elif type(node) is list:
+			for i in range(len(node)):
+				try: item_id=str(node[i]['name'])
+				except:
+					try: item_id="id-"+str(node[i]['id'])
+					except:
+						try: item_id=str(node[i]['host'])
+						except :
+							item_id="item-"+str(i)
+				self.sub_build_traces_from_obj(node[i], entities+':'+entity, item_id, traces)
+		elif type(node) is str:
+			traces.append([entities[1:], entity, node])
+
 
 	# Portable, complete, but really messy:
 	# information should be gathered by entity instead of event types.
@@ -185,14 +222,14 @@ class Trace:
 				#print(entities,date,val,count)
 				if last_date != date and  last_count != last_printed_count:
 					#print(last_date,last_count)
-					out_file.write(pattern+self.field_sep+str(last_date)+self.field_sep+str(last_count)+'\n')
+					out_file.write(pattern.translate(tableR)+self.field_sep+str(last_date)+self.field_sep+str(last_count)+'\n')
 					last_printed_count = last_count
 				last_count = count
 				last_date = date
 
-		out_file.write(pattern+self.field_sep+str(last_date)+self.field_sep+str(last_count)+'\n')
+		out_file.write(pattern.translate(tableR)+self.field_sep+str(last_date)+self.field_sep+str(last_count)+'\n')
 		if (date != last_date):
-			out_file.write(pattern+self.field_sep+str(date)+self.field_sep+str(count)+'\n')
+			out_file.write(pattern.translate(tableR)+self.field_sep+str(date)+self.field_sep+str(count)+'\n')
 
 	def grep(self, pattern, out_file):
 		header = 'date'
@@ -200,7 +237,7 @@ class Trace:
 
 		for [entities, key, val] in self.traces:
 			if re.search(pattern, entities) is not None:
-				res = res + entities+self.field_sep+key+self.field_sep+val
+				res = res + entities+self.field_sep+key+self.field_sep+val+'\n'
 				try: float(key)
 				except ValueError: header = 'key'
 
@@ -281,11 +318,17 @@ class Trace:
 		out_file.write(json.dumps(self.root, indent=2, separators=(',', ': ')))
 
 
+	def get_traces(self, out_file):
+		if self.traces is None:
+			self.traces = self.build_traces_from_obj()
+		for [e,k,v] in self.traces:
+			out_file.write(e+self.field_sep+k+self.field_sep+v+'\n')
+
 
 ########################### MAIN ##############################################
 
-tableFilename = str.maketrans(":-","__",".*/\\!%?+%")
-tableR = str.maketrans("+-/\*:","______")
+tableFilename = str.maketrans(":-","__",".*/\\!%?+%\$$")
+tableR = str.maketrans("+-/\*:","______",'\$$')
 
 
 if args.prefix is not None: 
@@ -346,3 +389,6 @@ if (args.dump_regex):
 
 if (args.json_dump):
 	exec_and_write(lambda out_file: trace.get_json(out_file), 'json')
+
+if (args.traces_dump):
+	exec_and_write(lambda out_file: trace.get_traces(out_file), 'schiaas')

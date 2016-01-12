@@ -9,7 +9,7 @@ import org.simgrid.schiaas.exceptions.VMSchedulingException;
 import org.simgrid.schiaas.tools.Trace;
 
 /**
- * Describes a abstract scheduler, to decide where new instances must be run, and enforce reconfiguration plans.
+ * Describes an abstract scheduler, to decide where new instances must be run, and enforce reconfiguration plans.
  * @author julien.gossa@unistra.fr
  *
  */
@@ -72,13 +72,13 @@ public abstract class ComputeScheduler {
 	 */
 	public abstract ComputeHost schedule(InstanceType instanceType) throws VMSchedulingException;
 
-    /**
-     * Load a scheduler class 
-     * @param schedulerName the name of the class
-     * @param computeEngine the engine of the compute using this scheduler.
-	 * @param config the configuration of this scheduler 
-     * @return an <i>ComputeScheduler</i> object
-     */
+	/**
+	 * Load a scheduler class 
+	 * @param schedulerName the name of the class
+	 * @param computeEngine the engine of the compute using this scheduler.
+		 * @param config the configuration of this scheduler 
+	 * @return an <i>ComputeScheduler</i> object
+	 */
 	public static ComputeScheduler load(String schedulerName, ComputeEngine computeEngine, Map<String, String> config) {
 		ComputeScheduler computeScheduler = null;
 		
@@ -91,7 +91,7 @@ public abstract class ComputeScheduler {
 		}	
 		
 		return computeScheduler;
-    }	
+	}
 	
 	/**
 	 * Called at the termination of the cloud
