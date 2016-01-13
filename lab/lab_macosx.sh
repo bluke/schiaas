@@ -149,7 +149,7 @@ do
 				OLD_SIM_ARG_ID_NUM="$SIM_ARG_ID_NUM"
 			fi
 			cat $SIM_ARG_TMP_FILE \
-				| ${SED} "s@\$@${SIM_ARG_ARG}@"\
+				| ${SED} "s@\$@${SIM_ARG_ARG} @"\
 				| ${SED} "s@ @_${SIM_ARG_ID_ID} @"\
 				| tr -s "_"\
 				>> $SIM_ARG_FILE
@@ -188,6 +188,7 @@ do
 	(
 		if [ ! -e $XP_SIMULATION_DIR/schiaas.trace ] ; then
 			echo "Simulating $XP_ID"
+			echo "=====args: $JAVA_XP_ARGS====="
 		 	java $JAVA_XP_ARGS 2> simgrid.out 1>&2
 		 	if [ $? -ne 0 ]; then echo "Critical error while executing $XP_ID" ; cat $XP_SIMULATION_DIR/simgrid.out ; exit $? ; fi
 		fi
