@@ -188,7 +188,6 @@ do
 	(
 		if [ ! -e $XP_SIMULATION_DIR/schiaas.trace ] ; then
 			echo "Simulating $XP_ID"
-			echo "=====args: $JAVA_XP_ARGS====="
 		 	java $JAVA_XP_ARGS 2> simgrid.out 1>&2
 		 	if [ $? -ne 0 ]; then echo "Critical error while executing $XP_ID" ; cat $XP_SIMULATION_DIR/simgrid.out ; exit $? ; fi
 		fi
