@@ -41,7 +41,7 @@ root:cloud:myCloud:compute:compute_host:node-1.me:used_cores     0.0     5.0
 Give the following information:
 - (property) *date* and *description* of the simulation;
 - (property) *8.0*, the number of *cores* of the *compute_host* named *node-1.me* in the *compute* of the *cloud* named *myCloud*;
-- (event) *5.0*, the number of *used_cores* of this host at t=*0.0* 
+- (event) *5.0*, the number of *used_cores* of this host at t= *0.0* 
 
 The trace is sorted by date and can be easily filtred using grep.
 

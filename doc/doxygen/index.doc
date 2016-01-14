@@ -10,13 +10,13 @@ It supports main VM management functions:
 - run, terminate, suspend, resume and describe instances;
 - description of available resources;
 - image and instance types management;
-- automatic VM placement on the clusters (in a round-robin way);
+- VM placement on the clusters;
 - boot and other VM life-cycle processes;
 - cloud storage management.
 
 For now, it does not support other cloud functionalities, such as network management.
 
-SchIaaS is an improved interface: every operation is actually handle by an engine. 
+SchIaaS is a place-holder interface: every operation is actually handle by an engine, and new engines can be developped and plugged in. 
 This allows SchIaaS applications to be compatible with any cloud internals, or even use different internals together in a multi-cloud context.
 
 For now, two engines are available and fully functional:
@@ -113,7 +113,7 @@ An example platform file is <a href="../../examples/cloudmasterslave/companionFi
 
  
 For a schiaas simulation, the platform file is the one you would normally use for a SimGrid simulation. 
-The deployment file is also similar excepted that it does not need to include the placement of slave processes anymore, as slaves processes will be binded to instances at runtime.
+The deployment file is also similar excepted that it does not need to include the placement of slave processes anymore, as slaves processes will be bound to instances at runtime.
 Below is an example of deployment description, where we specify that the *Master* process runs on host *Jacquelin*.
 @code
 <?xml version='1.0'?>
@@ -131,7 +131,7 @@ Below is an example of deployment description, where we specify that the *Master
 </platform>
 @endcode
 
-Last, a new configuration file is introduced to declare cloud configuration, cloud.xml:
+Last, a new configuration file is introduced to declare the cloud configuration, cloud.xml:
 @code
 <?xml version='1.0'?>
  <!DOCTYPE clouds>
@@ -193,7 +193,7 @@ The storage tag must have the following attributes:
 - id: the id of the storage;
 - engine: the engine of the storage;
 
-It also must include one config tag, giving any information needed by this engine. For instance, RICE only needs one controller, which will store and distribute the data.
+It must also include one config tag, giving any information needed by this engine. For instance, RICE only needs one controller, which will store and distribute the data.
 
 As many storages as needed can be declared, and they must be declared before the compute tag. 
 
@@ -237,6 +237,7 @@ import org.simgrid.schiaas.SchIaaS;
 	/* construct the cloud and deploy the associated processes */
 	SchIaaS.init(args[2]);
 
+
 	/*  execute the simulation. */
 	Msg.run();
 @endcode
@@ -269,7 +270,7 @@ for (InstanceType instanceType : myCompute.describeInstanceTypes()) {
 @endcode
 
 Before using theses instances, you must wait for the end of their boot process,
-otherwise, the binded processes will start immediately and concurrently to the boot process, mistaking both your process running date and the boot duration.
+otherwise, the bound processes will start immediately and concurrently to the boot process, mistaking both your process running date and the boot duration.
 Then, you can bind the slave process to the running instance:
 @code
 for (int i=0; i<slavesCount; i++) {
