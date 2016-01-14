@@ -40,7 +40,7 @@ You can also get the Simgrid jar from the <a href="http://simgrid.gforge.inria.f
 Make sure to have at least version 3.11
 
 
-@subsection running_retrieving Retrieving and Installing Schiaas
+@subsection running_retrieving Retrieving and Installing SchIaaS
 
 The last version of SchIaaS can be retrieved from the git repository :
 @code
@@ -96,7 +96,7 @@ Recall that setting up this example requires :
 - Java programs to describe the behavior of the processes: 
 	- **Masterslave.java** is the orchestrator: it reads the configuration files and runs the simulation
 	- **Master.java** describes the Master process's behavior: 
-   it creates a number of slave processes specified in the deployement configuration file, and do clever things with slave processes.
+   it creates a number of slave processes specified in the deployment configuration file, and do clever things with slave processes.
    In the SimGrid Masterslave example, the master is just sending data to slaves, while we demonstrate additional cloud-related features like 
    migration of VM in this SchIaaS example.
 	- **Slave.java**: the Slave behavior (unchanged from simGrid example) which simply receives data from the Master.
@@ -175,14 +175,14 @@ Last, a new configuration file is introduced to declare the cloud configuration,
 </clouds> 
 @endcode
 
-Cloud files are validated using <a href="./cloud.xsd">cloud.xsd</a> found in the schiaas sources.
+Cloud files are validated using <a href="./cloud.xsd">cloud.xsd</a> found in the SchIaaS sources.
 
 @subsubsection cloud_tag Cloud tag
 
 The cloud tag must have the following attributes:
 - id: the id of the cloud or of the region;
 
-You can declare as many clouds as needed, and clouds can also used to model regions.
+You can declare as many clouds as needed, and clouds can also be used to model regions.
 
 Inside the cloud element, you must define storage and compute.
 
@@ -210,7 +210,7 @@ It must also include the following tags:
   - an image_storage; an image_caching strategy, that can be ON, OFF, or PRE; 
   - an inter_boot_delay, that is the delay between two consecutive VM boots on one given host.
 
-- instance_type, having some attributes discribing the type of instance;
+- instance_type, having some attributes describing the type of instance;
 
 - image, having two attributes:
   - id;
@@ -259,7 +259,7 @@ import org.simgrid.schiaas.*;
 	// Run one instance per slave on myCloud
 	String[] slaveInstancesId = myCompute.runInstances("myImage", "small", slavesCount);
 @endcode
-Afterwards, slaveInstancesId constains instances' id, which are the name of SimGrid's VMs and can be used just like any SimGrid host.
+Afterwards, slaveInstancesId contains instances' id, which are the name of SimGrid's VMs and can be used just like any SimGrid host.
 
 Please note that if you ask for more instances than your cloud can provide, runInstances and runInstance will return null. Careful users will check how many instances can be ran:
 @code
@@ -362,10 +362,10 @@ for (Cloud cloud : SchIaaS.getClouds())  {
 @subsubsection tutorial_compiling Compiling the cloudmasterslave example
 
 - First, make sure you can access *simgrid.jar*. 
-  We advise to set $SIMGRID_JAVA_ROOT to the directory where *simgrid.jar* has been installed.
+  We advise to set $SIMGRID_JAR_PATH to the directory where *simgrid.jar* has been installed.
   We assume here 
   @code
-  $ export SIMGRID_JAVA_ROOT=/usr/local/simgrid/java
+  $ export SIMGRID_JAR_PATH=/usr/local/simgrid/java
   @endcode
 
 - Second, let us compile the source files and direct the resulting class files to the *bin/* directory. 
@@ -373,7 +373,7 @@ The source Java files are located in *schiaas/examples/cloudmasterslave*
 Let us make *schiaas/examples* our current working directory.
 @code
  $ cd examples
- $ javac -d ../bin/ -cp /usr/local/simgrid/java/simgrid.jar:../bin/schiaas.jar cloudmasterslave/*.java
+ $ javac -d ../bin/ -cp ${SIMGRID_JAR_PATH}/simgrid.jar:../bin/schiaas.jar cloudmasterslave/*.java
 @endcode
 
 - Then make a jar of the class files:
@@ -388,7 +388,7 @@ Let us make *schiaas/examples* our current working directory.
   For convenience, you can copy the configuration files to the current directory.
 @code
 $ cp ../examples/cloudmasterslave/companionFiles/{platform,deploy,cloud}.xml .
-$ java -cp $SIMGRID_JAVA_ROOT/simgrid.jar:schiaas.jar:cloudmasterslave.jar cloudmasterslave.Masterslave platform.xml deploy.xml cloud.xml
+$ java -cp ${SIMGRID_JAR_PATH}/simgrid.jar:schiaas.jar:cloudmasterslave.jar cloudmasterslave.Masterslave platform.xml deploy.xml cloud.xml
 @endcode
 
 */

@@ -5,7 +5,7 @@ SimSchlouder allows to simulate <a href="http://schlouder.gforge.inria.fr/">Schl
 
 It supports main cloud broker management functions for scientific computation:
 - Bag-of-Tasks and workflows execution;
-- Extensible provisioning and scheduling policices.
+- Extensible provisioning and scheduling policies.
 
 @section Running SimSchlouder
 
@@ -67,15 +67,15 @@ The config tag has the following attributes:
   - deployment (OPTIONAL) : the Simgrid file, default none
 
 The broker tag must contain the following attributes : 
-  - id : the id of the host on wich to deploy the Cloud Controller
+  - id : the id of the host on which to deploy the Cloud Controller
 
 The cloud tag must has the following attributes:
   - id: the id of the cloud or of the region to use (as in the cloud configuration file)
   - B0: the time to boot a first instance
   - B1: the delay between two consecutive boots
   - BTU: the Billing Time Unit (e.g. 1 hour for amazon EC2)
-  - shutdown_margin: the delay before the end of one BTU when an instance shloud be stopped
-  - max_instances_per_user (OPTIONAL) : max instance number allowed simultanusly on the cloud. Default is unlimited, noted "0"
+  - shutdown_margin: the delay before the end of one BTU when an instance should be stopped
+  - max_instances_per_user (OPTIONAL) : max instance number allowed simultaneously on the cloud. Default is unlimited, noted "0"
 
 The provisioning tag must have the information needed specifically by the strategy.
 

@@ -15,7 +15,7 @@ To be fully functional, the lab needs the following supports:
 # TODO: check that:
 @code
 sudo apt-get install python3 r-base
-sudo R -e "install.packages(ggplot2)
+sudo R -e "install.packages('ggplot2')"
 @endcode
 
 @section tracing Tracing
@@ -43,7 +43,7 @@ Give the following information:
 - (property) *8.0*, the number of *cores* of the *compute_host* named *node-1.me* in the *compute* of the *cloud* named *myCloud*;
 - (event) *5.0*, the number of *used_cores* of this host at t= *0.0* 
 
-The trace is sorted by date and can be easily filtred using grep.
+The trace is sorted by date and can be easily filtered using grep.
 
 It can also be exploited using the script *trace-util.py*, located in the *lab/bin* directory (see \ref extracting_examples).
 
@@ -52,7 +52,7 @@ It can also be exploited using the script *trace-util.py*, located in the *lab/b
 
 Let's say you want to observe something called *mystuff*.
 
-@subsubsection tracing_tutorial_init Intialization and conclusion
+@subsubsection tracing_tutorial_init Initialization and conclusion
 
 If you want to add a description to the whole trace, you can use:
 @code
@@ -137,7 +137,7 @@ If you intend to distribute your simulator, you can also add a description of th
 At the end of the simulation, a file schiaas.trace will be produced. 
 It contains all of the observations. Those can be easily filtered using grep/cut.
 
-However, the script **lab/bin/trace-util.py** might come handy for more advanced processings. 
+However, the script **lab/bin/trace-util.py** might come handy for more advanced processing. 
 
 In addition to the following examples, please open the script or use *trace-util.py --help* more complete details.
 
@@ -224,7 +224,7 @@ $ ./trace-util.py schiaas.trace --info -d
   }
 }
 @endcode
-This show every entities, properties, and events available in the trace. 
+This example shows every entities, properties, and events available in the trace. 
 The *-d* argument tells to add descriptions whenever they are available in *lab/bin/trace-util.doc*
 
 
@@ -267,7 +267,7 @@ root:vm:.*:state	state	event
 @endcode
 This shows which regex can be used to retrieve every properties and events.
 
-For instance, to retrieve the state of the vm, one can use:
+For instance, to retrieve the state of the VM, one can use:
 @code
 $ trace-util.py --grep root:vm:.*:state
 @endcode
@@ -296,7 +296,7 @@ $ ./trace-util.py schiaas.trace --json
                 "0.0": "0.0,1.0,2.0,3.0,4.0,5.0",
 ...
 @endcode
-NB: all the events of the same type and attached to the same entity that occured at the same date are concatenated in the same entry, ordered by occuring date in the simulator.
+NB: all the events of the same type and attached to the same entity that occurred at the same date are concatenated in the same entry, ordered by occurring date in the simulator.
 
 For instance, this json shows that at *date* 0.0, the *used_cores* of *node-1.me* had its value from 0.0 to 5.0, 5.0 being the last one.
 
@@ -350,7 +350,7 @@ used_cores	2930.0078070824743	3
 @endcode
 This shows that at date *0.0*, *0* virtual machines were migrating, and the following changes of this value.
 
-@subsubsection extracting_outputting Outputting the data for further analyzis.
+@subsubsection extracting_outputting Outputting the data for further analysis.
 
 Adding the argument *-f* will output the results to files, and a prefix can be added. 
 
@@ -372,7 +372,7 @@ You can import all of the data produced by *trace-util.py* in R using:
 @code
 > library(traceutil)
 > tu_read()
-@code
+@endcode
 This will read all of the .dat files in the working directory and create corresponding data frames.
 
 You can also use:
@@ -380,7 +380,7 @@ You can also use:
 > tu_read('./data')
 @endcode
 
-To read the files into the directory ./data.
+To read the files from the directory ./data.
 
 @subsection analyzing_plotting Plotting the data
 
@@ -389,14 +389,14 @@ To read the files into the directory ./data.
 > tu_read('./data', plotting=TRUE)
 > dev.off()
 @endcode
-This will read the files into the directory ./data and plot all of the observations into data.pdf.
+This will read the files from the directory ./data and plot all of the observations into data.pdf.
 
 But you can also plot one given data:
 @code
 > tu_plot(myxp.vm__state_eq_migrating)
 @endcode
 
-@subsection analyzing_further Further analyzis
+@subsection analyzing_further Further analysis
 
 To go further, the library include a bunch of useful functions.
 For instance, a common need is to integrate one observation over time:
@@ -405,7 +405,7 @@ For instance, a common need is to integrate one observation over time:
 
 [1] 2189.489
 @endcode
-This compute the integral of the given data. In this cas, this means that during the simulation, migrating vms took 2189.489 seconds.
+This compute the integral of the given data. In this case, this means that during the simulation, migrating VMs took 2189.489 seconds.
 
 Please see the integrated help for more functions and details:
 @code
@@ -415,14 +415,14 @@ Please see the integrated help for more functions and details:
 
 @section lab_lab The lab
 
-This three steps can be automatized using *the lab*.
+These three steps can be automatized using *the lab*.
 The lab is a set of script designed to quickly setup batches of simulations, followed by extraction and analysis of observations.
 
 @subsection lab_dirs Lab sub-directories
 
 - *lab/bin* contains the set of scripts of the lab;
 - *lab/sources* contains traces used as sources, such as batch scheduler logs and platform usage logs;
-- *lab/setup* contains the file used to set the similations up.
+- *lab/setup* contains the files used to set the simulations up.
 
 After the batch execution, the following directories are used:
 - *lab/simulations* contains the results of the simulations, that is all files outputted by the simulator, and its stdin and stderr in simgrid.out. It is organized in subdirectories according to the simulation ids (see \ref lab_setup);
@@ -435,7 +435,7 @@ After the batch execution, the following directories are used:
 
 The lab is mainly set up through one config files.
 The lines staring with *#* describe the options common to all simulations.
-The other lines describe eache simulations, as: 
+The other lines describe each simulations, as: 
 @code
 <simulation_id>: <simulations arguments>
 @endcode
@@ -477,14 +477,14 @@ $ java loadinjector.SimpleInjection platform.xml deploy.xml cloud-balancer.xml i
 $ java loadinjector.SimpleInjection platform.xml deploy.xml cloud-consolidator.xml injector-slow.xml
 @endcode
 
-NB: **Make sure to set the *CLASSPATH* environnement variable to allow the execution of the main class.**
+NB: **Make sure to set the *CLASSPATH* environment variable to allow the execution of the main class.**
 
 Two directories will be created containing the results of the simulations: *./simulations/xp_balancer* and *./simulations/xp_consolidator*.
 
 
 @subsection lab_setup_observing Analyzing the results
 
-Observations can be automized using *R_SCRIPT* and *TU_ARG*
+Observations can be automatized using *R_SCRIPT* and *TU_ARG*
 For instance, adding the following lines in *lab.cfg*
 @code
 R_SCRIPT template.R
