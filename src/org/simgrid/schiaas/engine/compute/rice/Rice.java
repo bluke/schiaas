@@ -74,7 +74,6 @@ public class Rice extends ComputeEngine {
 	 */
 	public Rice(Compute compute, List<Host> hosts) throws MissingConfigException, HostNotFoundException, FileNotFoundException {
 		super(compute, hosts);
-		
 		try{
 			compute.getConfig("controller");
 			compute.getConfig("image_storage");
@@ -90,19 +89,21 @@ public class Rice extends ComputeEngine {
 		try {
 			this.controller = Host.getByName((String) compute.getConfig("controller"));
 		} catch (HostNotFoundException e) {
-			Msg.critical("Something bad happened in RISE while trying to locate its controller: "+compute.getConfig("controller"));
+			Msg.critical("Something bad happened in RICE while trying to locate its controller: "+compute.getConfig("controller"));
 			e.printStackTrace();
 		} catch (Exception e){
 			// TODO Anything clever to do here?
 		}
-
+		
+		
 		// retrieving the hosts
-		this.riceHosts = new Vector<>();
-
+		this.riceHosts = new Vector<ComputeHost>();
+		
 		for (Host host : hosts) {
+			Msg.info("host "+host.getName());
 			this.riceHosts.add(new RiceHost(this,host));
 		}
-		
+				
 		// retrieving the images
 		Msg.verb("RICE: storing images");
 		imgStorage = compute.getCloud().getStorage(compute.getConfig("image_storage"));

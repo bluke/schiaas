@@ -169,6 +169,7 @@ public class SchloudNode extends Process implements Comparable<SchloudNode>{
 	protected SchloudNode(Instance instance, SchloudCloud cloud) {
 		super(instance.vm(), instance.getId()+"_SchloudNode",null);
 		this.index = currentIndex++;
+		this.instance = instance;
 		this.cloud=cloud;
 		
 		speed = instance.vm().getSpeed();

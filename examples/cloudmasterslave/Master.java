@@ -39,7 +39,10 @@ public class Master extends Process {
 			Msg.info("Master needs 4 arguments");
 			System.exit(1);
 		}
+		
+		Msg.info("Test : "+Host.all().length+" "+Host.all()[0]);
 
+		
 		int tasksCount = Integer.valueOf(args[0]).intValue();
 		double taskComputeSize = Double.valueOf(args[1]).doubleValue();
 		double taskCommunicateSize = Double.valueOf(args[2]).doubleValue();

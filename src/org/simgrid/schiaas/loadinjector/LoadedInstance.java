@@ -11,24 +11,23 @@ import org.simgrid.schiaas.engine.compute.ComputeTools;
 import org.simgrid.schiaas.exceptions.VMSchedulingException;
 
 public class LoadedInstance {
-	
+
 	protected Compute compute;
 	protected Instance instance;
 	protected LoadedInstanceProcess loadedInstanceProcess;
 
+
 	/**
-	 * This instance has a CPU load
-	 * @param compute the compute managing this instance
-	 * @param imageId the image of this instance
-	 * @param instanceTypeId the type if this instance
-	 * @throws VMSchedulingException whenever the instance can not be scheduled
+	 * Loads the CPU of an exiting instance 
+	 * @param compute the compute of the instance
+	 * @param instance the instance to load
 	 */
-	public LoadedInstance(Compute compute, String imageId, String instanceTypeId) throws VMSchedulingException {
+	public LoadedInstance(Compute compute, Instance instance) {
 		this.compute = compute;
-		this.instance = compute.runInstance(imageId, instanceTypeId);
-		
+		this.instance = instance;
+
 		this.loadedInstanceProcess = new LoadedInstanceProcess(this);
-		
+
 		try {
 			ComputeTools.waitForRunningAndStart(compute.getComputeEngine(), instance, this.loadedInstanceProcess);
 		} catch (HostNotFoundException e) {
@@ -36,7 +35,31 @@ public class LoadedInstance {
 			e.printStackTrace();
 		}
 	}
+
 	
+	/**
+	 * Run an instance and load its CPU
+	 * @param compute the compute managing this instance
+	 * @param imageId the image of this instance
+	 * @param instanceTypeId the type if this instance
+	 * @throws VMSchedulingException whenever the instance can not be scheduled
+	 */
+	public LoadedInstance(Compute compute, String imageId, String instanceTypeId) throws VMSchedulingException {
+		this(compute, compute.runInstance(imageId, instanceTypeId));
+	}
+	
+	/**
+	 * Run an instance and load its CPU
+	 * @param compute the compute managing this instance
+	 * @param imageId the image of this instance
+	 * @param CPURequest the requested CPU (in core/second/second)
+	 * @param RAMRequest the requested RAM
+	 * @param diskRequest the requested disk
+	 */
+	public LoadedInstance(Compute compute, String imageId, double CPURequest, double RAMRequest, double diskRequest) {
+		
+	}
+
 	public void terminate() {
 		this.instance.terminate();
 	}
@@ -47,7 +70,7 @@ public class LoadedInstance {
 	}
 
 	private class LoadedInstanceProcess extends Process	{
-		
+
 		LoadedInstance loadedInstance;
 		private static final double taskFlops = 1e100;
 		

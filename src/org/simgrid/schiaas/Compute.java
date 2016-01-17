@@ -172,6 +172,8 @@ public class Compute {
 		}
 		if (schedulerName != null) {
 			this.computeEngine.setComputeScheduler(schedulerName, schedulerConfig);
+		} else {
+			Msg.warn("No scheduler is configured for the compute "+this.getId());
 		}
 		
 		trace.addProperties(config);
@@ -299,8 +301,8 @@ public class Compute {
 		if (instanceType == null) Msg.critical("InstanceType "+instanceTypeId+" was not found");
 		
 		return runInstance(image, instanceType);
-	}
-
+	}	
+	
 	/**
 	 * Run a new instance, using a simple round-robin scheduling
 	 * 

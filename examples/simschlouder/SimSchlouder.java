@@ -54,21 +54,21 @@ public class SimSchlouder {
 	 * @author julien.gossa@unistra.fr
 	 */
 	public static enum StorageType {CLOUD, CLIENT, INSTANCE};
-	
+
 	/** The type of storage - use at your own risk */
 	public static StorageType storageType;
-	
+
 	/** The json output file name. */
 	public static String outJsonFile = "simschlouder.json";
 	
 	/** Flag to indicate if the simulator is used to validation purpose */
 	public static Boolean validation = false;
-	
+
 	/** The process to read the taskfile */
 	public static TaskFileReaderProcess taskFileReaderProcess;
 
-	
-	
+
+
 	/**
 	 * Read the task file.
 	 * The format of this file is:
