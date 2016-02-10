@@ -1,15 +1,17 @@
 <?xml version='1.0'?>
- <!DOCTYPE platform SYSTEM "http://simgrid.gforge.inria.fr/simgrid.dtd">
- <platform version="3">
+<!DOCTYPE platform SYSTEM "http://simgrid.gforge.inria.fr/simgrid/simgrid.dtd">
+<platform version="4">
+ 
+ 
  
  <AS  id="AS0" routing="Full">
  
 	 <AS  id="AS_OPST"  routing="Full">
-	   <host id="icps-opst-cc" power="1e9" core="2"/> 
+	   <host id="icps-opst-cc" speed="1e9" core="2"/> 
 	   
-	   <host id="icps-gc-1" power="10e9" core="24"/> 
-	   <host id="icps-gc-2" power="10e9" core="24"/>
-	   <host id="icps-gc-3" power="10e9" core="24"/>
+	   <host id="icps-gc-1" speed="10e9" core="24"/> 
+	   <host id="icps-gc-2" speed="10e9" core="24"/>
+	   <host id="icps-gc-3" speed="10e9" core="24"/>
 	      
 	   <link id="1" bandwidth="120e6" latency="0.0001"/>
 	   <link id="2" bandwidth="120e6" latency="0.0001"/>
@@ -27,10 +29,10 @@
 	 
 	 
 	 <AS  id="AS_EUCA"  routing="Full">
-	   <host id="icps-euca-cc" power="1e9" core="2"/> 
+	   <host id="icps-euca-cc" speed="1e9" core="2"/> 
 
 	   
-	   <host id="icps-gc-4" power="10e9" core="24"/>
+	   <host id="icps-gc-4" speed="10e9" core="24"/>
 	      
 	   
 	   <link id="4" bandwidth="120e6" latency="0.0001"/>
@@ -43,7 +45,7 @@
 	 </AS>
 	 
 	 <AS  id="AS_Client"  routing="Full">
-	   <host id="client" power="120e6" core="2"> <prop id="cloudid" value="none"/> </host>
+	   <host id="client" speed="120e6" core="2"> <prop id="cloudid" value="none"/> </host>
 	 </AS>
 	
 	<link id="client2opst" bandwidth="120e6" latency="0.0001"/> 

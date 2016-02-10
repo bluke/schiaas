@@ -100,7 +100,7 @@ public class Rice extends ComputeEngine {
 		this.riceHosts = new Vector<ComputeHost>();
 		
 		for (Host host : hosts) {
-			Msg.info("host "+host.getName());
+			//Msg.info("host "+host.getName());
 			this.riceHosts.add(new RiceHost(this,host));
 		}
 				

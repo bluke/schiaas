@@ -7,6 +7,7 @@ import org.simgrid.msg.Process;
 import org.simgrid.msg.Task;
 import org.simgrid.schiaas.Compute;
 import org.simgrid.schiaas.Instance;
+import org.simgrid.schiaas.InstanceType;
 import org.simgrid.schiaas.engine.compute.ComputeTools;
 import org.simgrid.schiaas.exceptions.VMSchedulingException;
 
@@ -14,7 +15,8 @@ public class LoadedInstance {
 
 	protected Compute compute;
 	protected Instance instance;
-	protected LoadedInstanceProcess loadedInstanceProcess;
+	protected int core;
+	protected LoadedInstanceProcess[] loadedInstanceProcesses;
 
 
 	/**
@@ -25,17 +27,23 @@ public class LoadedInstance {
 	public LoadedInstance(Compute compute, Instance instance) {
 		this.compute = compute;
 		this.instance = instance;
+		this.core = (int) Math.ceil(Double.parseDouble(
+				this.instance.getInstanceType().getProperty("core"))) ;
+	
+		
+		this.loadedInstanceProcesses = new LoadedInstanceProcess[this.core];
+		
+		for (int i=0; i<this.core; i++) {
+			this.loadedInstanceProcesses[i]= new LoadedInstanceProcess(this);
 
-		this.loadedInstanceProcess = new LoadedInstanceProcess(this);
-
-		try {
-			ComputeTools.waitForRunningAndStart(compute.getComputeEngine(), instance, this.loadedInstanceProcess);
-		} catch (HostNotFoundException e) {
-			Msg.critical("Something went wrong while trying to start the loading process "+this.loadedInstanceProcess.getName());
-			e.printStackTrace();
+			try {
+				ComputeTools.waitForRunningAndStart(compute.getComputeEngine(), instance, this.loadedInstanceProcesses[i]);
+			} catch (HostNotFoundException e) {
+				Msg.critical("Something went wrong while trying to start the loading process "+this.loadedInstanceProcesses[i].getName());
+				e.printStackTrace();
+			}
 		}
 	}
-
 	
 	/**
 	 * Run an instance and load its CPU
@@ -55,20 +63,52 @@ public class LoadedInstance {
 	 * @param CPURequest the requested CPU (in core/second/second)
 	 * @param RAMRequest the requested RAM
 	 * @param diskRequest the requested disk
+	 * @throws VMSchedulingException 
 	 */
-	public LoadedInstance(Compute compute, String imageId, double CPURequest, double RAMRequest, double diskRequest) {
+	public LoadedInstance(Compute compute, String imageId, double CPURequest, int RAMRequest, int diskRequest) throws VMSchedulingException {
+		this(compute, compute.runInstance(
+						compute.describeImage(imageId),
+						new InstanceType(CPURequest, RAMRequest, diskRequest)));
 		
 	}
 
+	/**
+	 * 
+	 * @return The instance that is loaded
+	 */
+	public Instance getInstance() {
+		return this.instance;
+	}
+	
+	/**
+	 * 
+	 * @return The number of cores of this loaded instance
+	 */
+	public int getCore() {
+		return this.core;
+	}
+	
+	/**
+	 * Terminate this loaded instance
+	 */
 	public void terminate() {
 		this.instance.terminate();
 	}
 	
+	/**
+	 * Set the CPU load of this instance
+	 * @param load the load (as defined in SimGrid, that is a percentage)
+	 */
 	public void setLoad(double load) {
 		instance.vm().setBound((int)load);
 		instance.getTrace().addEvent("load", ""+load);
 	}
 
+	/**
+	 * The process to load this instance
+	 * @author julien.gossa@unistra.fr
+	 *
+	 */
 	private class LoadedInstanceProcess extends Process	{
 
 		LoadedInstance loadedInstance;

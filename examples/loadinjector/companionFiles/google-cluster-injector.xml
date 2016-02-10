@@ -1,0 +1,18 @@
+<?xml version='1.0'?>
+ <!DOCTYPE injectors>
+ <injectors>
+	 <injector id="myGoogleClusterInjector"
+	 	class="org.simgrid.schiaas.loadinjector.injectors.GoogleClusterInjector"
+	 	cloud="myCloud">
+	 	
+	 	<config 
+	     date_decal="0"
+	     task_events_filename="task_events.6251321534.csv"
+	     task_usage_filename="task_usage.6251321534.csv"
+	     image_id="myImage"
+	     CPURequestMax="8"
+	     RAMRequestMax="8192"
+	     diskRequestMax="8192"
+	     />
+	 </injector> 
+</injectors>

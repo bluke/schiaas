@@ -16,20 +16,18 @@ public class InstanceType {
 	 * A list of properties attached to this instance type
 	 */
 	protected Map<String, String> properties;
-	
+
 	/**
-	 * Unique constructor from XML config file, setting default values.
+	 * Default constructor.
 	 * 
-	 * @param instanceTypeXMLNode
-	 *            A node pointing out one InstanceType tag in the XML config
-	 *            file.
 	 * @author julien.gossa@unistra.fr
 	 */
-	public InstanceType(Node instanceTypeXMLNode) {
-
+	public InstanceType() {
+	
 		this.properties = new HashMap<>();
-
+		
 		// default properties
+		this.properties.put("id","anon");
 		this.properties.put("core", "1");
 		this.properties.put("ramSize", "256");
 		this.properties.put("netCap", "125");
@@ -37,7 +35,35 @@ public class InstanceType {
 		this.properties.put("diskSize", "1000");
 		this.properties.put("migNetSpeed", "125");
 		this.properties.put("dpIntensity", "60");
+	}
 
+	/**
+	 * Constructor with basic info.
+	 * @param CPURequest The amount of core the instance needs (in core/second/second)
+	 * @param RAMRequest The amount of RAM the instance needs (in MB)
+	 * @param diskRequest The amount of disk the instance needs (in MB)
+	 */
+	public InstanceType(double CPURequest, int RAMRequest, int diskRequest) {
+		this();
+	
+		this.properties.put("core", ""+CPURequest);
+		this.properties.put("ramSize", ""+RAMRequest);
+		this.properties.put("diskSize", ""+diskRequest);
+	}
+
+	
+	
+	/**
+	 * Constructor from XML config file, setting default values.
+	 * 
+	 * @param instanceTypeXMLNode
+	 *            A node pointing out one InstanceType tag in the XML config
+	 *            file.
+	 * @author julien.gossa@unistra.fr
+	 */
+	public InstanceType(Node instanceTypeXMLNode) {
+		this();
+		
 		// properties from XML config file
 		for (int i = 0; i < instanceTypeXMLNode.getAttributes().getLength(); i++) {
 			this.properties.put(instanceTypeXMLNode.getAttributes().item(i)

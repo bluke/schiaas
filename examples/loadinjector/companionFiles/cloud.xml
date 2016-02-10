@@ -13,7 +13,7 @@
 					image_storage="myStorage" image_caching="PRE"
 					inter_boot_delay="10"/>
 					
-			<scheduler name="org.simgrid.schiaas.engine.compute.scheduler.simplescheduler.SimpleReconfigurator"
+			<scheduler name="org.simgrid.schiaas.engine.compute.scheduler.simplescheduler.SimpleScheduler"
 					   type="consolidator"
 					   controller="controller"
 					   delay="1"/>

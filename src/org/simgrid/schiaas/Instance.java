@@ -137,7 +137,7 @@ public class Instance {
 	 */
 	protected void createVM() {
 		this.vm = new TracedVM(compute.getComputeEngine().getComputeHostOf(this).getHost(), id+"_VM", 
-				Integer.parseInt(instanceType.getProperty("core")),
+				Double.parseDouble(instanceType.getProperty("core")),
 				Integer.parseInt(instanceType.getProperty("ramSize")), 
 				Integer.parseInt(instanceType.getProperty("netCap")),
 				instanceType.getProperty("diskPath"), 

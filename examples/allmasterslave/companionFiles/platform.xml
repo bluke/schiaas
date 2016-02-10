@@ -1,15 +1,17 @@
 <?xml version='1.0'?>
- <!DOCTYPE platform SYSTEM "http://simgrid.gforge.inria.fr/simgrid.dtd">
- <platform version="3">
+<!DOCTYPE platform SYSTEM "http://simgrid.gforge.inria.fr/simgrid/simgrid.dtd">
+<platform version="4">
+ 
+ 
  
  <AS  id="AS0" routing="Full">
 	
 	<cluster id="my_cluster" prefix="node-" suffix=".me" radical="1-1000" 
-         power="1e9" core="1000" bw="1e9" lat="5E-5"
+         speed="1e9" core="1000" bw="1e9" lat="5E-5"
     	 bb_bw="10e9" bb_lat="5E-4" />
  
  	 <AS id="AS_Controller" routing="Full">
-	   <host id="controller" power="1e9" core="2" />
+	   <host id="controller" speed="1e9" core="2" />
 	 </AS>
 	
 	<link id="controller2cluster" bandwidth="1e9" latency="5E-5"/> 

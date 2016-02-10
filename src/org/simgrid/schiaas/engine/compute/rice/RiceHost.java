@@ -160,7 +160,7 @@ public class RiceHost implements ComputeHost {
 	 */
 	@Override
 	public int canHost(InstanceType instanceType) {
-		return (int) (freeCores / Integer.parseInt(instanceType.getProperty("core")));
+		return (int) (freeCores / Double.parseDouble(instanceType.getProperty("core")));
 	}
 
 	

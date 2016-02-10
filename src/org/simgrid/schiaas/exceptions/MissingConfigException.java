@@ -8,15 +8,12 @@ import org.simgrid.schiaas.Cloud;
  *
  */
 public class MissingConfigException extends Exception{
-	
-	/** The cloud where the error happens */
-	private final Cloud cloud;
-	
+		
 	/** Name of the module throwing the error*/ 
 	private final String module;
 	
-	/** name of the missing parameter */
-	private final String param;
+	/** ID of the missing parameter(s) */
+	private final String missingPropID;
 	
 	/**
 	 * 
@@ -30,19 +27,23 @@ public class MissingConfigException extends Exception{
 	public MissingConfigException(Cloud cloud, String type, String propID) {
 		super("In cloud "+cloud.getId()+", the "+type+"-engine configuration parameter "+propID+" was not found.");
 		
-		this.cloud = cloud;
-		this.module = type;
-		this.param = propID;
+		this.module = cloud.getId()+"/"+type;
+		this.missingPropID = propID;
 	}
 	
 	/**
-	 *  Get faulty cloud name
-	 * @return this.cloud
+	 * 
+	 * 
+	 * @param module
+	 * @param missingPropID
 	 */
-	public Cloud getCloud(){
-		return this.cloud;
+	public MissingConfigException(String module, String missingPropID) {
+		super(module+" require the following configured properties: "+missingPropID);
+	
+		this.module = module;
+		this.missingPropID = missingPropID;
 	}
-
+	
 	/**
 	 * Get name of faulty module
 	 * @return this.module
@@ -56,7 +57,7 @@ public class MissingConfigException extends Exception{
 	 * @return this.param
 	 */
 	public String getParameter(){
-		return this.param;
+		return this.missingPropID;
 	}
 	
 	/**

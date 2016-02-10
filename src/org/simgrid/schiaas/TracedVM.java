@@ -15,8 +15,8 @@ public class TracedVM extends VM {
 	/** The trace of this TracedVM */
 	Trace trace;
 
-	public TracedVM(Host host, String name, int nCore, int ramSize, int netCap, String diskPath, int diskSize, int migNetSpeed, int dpIntensity) {
-		super(host, name, nCore, ramSize, netCap, diskPath, diskSize, migNetSpeed, dpIntensity);
+	public TracedVM(Host host, String name, double nCore, int ramSize, int netCap, String diskPath, int diskSize, int migNetSpeed, int dpIntensity) {
+		super(host, name, (int)nCore, ramSize, netCap, diskPath, diskSize, migNetSpeed, dpIntensity);
 		
 		trace = Trace.newCategorizedTrace("vm", name);
 		
