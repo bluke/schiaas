@@ -33,13 +33,8 @@ public class AFAP extends AStrategy {
 		for (SchloudNode node : SchloudController.nodes) {
 
 			// Look for the first instance to become available
-			if (task.getName().equals("2mass_pleiades_j_2x2_diff_0")) {  
-				Msg.verb("sooner "+node.instance.getId()+":"+node.getIdleDate()+" - "+finishSooner.instance.getId()+":"+finishSooner.getIdleDate());
-				if (candidate != null)
-					Msg.verb("afap "+node.instance.getId()+":"+node.getRemainingIdleTime()+" "+node.getRemainingIdleTime(task)+" - "+candidate.instance.getId()+":"+candidatePredictedIdleTime);
-			}
 			
-				if (node.getIdleDate() <= finishSooner.getIdleDate()) {
+			if (node.getIdleDate() <= finishSooner.getIdleDate()) {
 			//if (node.getUpTimeToIdle() <= finishSooner.getUpTimeToIdle()) {
 				//Msg.info("sooner");
 				finishSooner = node;

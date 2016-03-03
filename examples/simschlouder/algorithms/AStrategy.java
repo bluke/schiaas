@@ -80,15 +80,23 @@ public abstract class AStrategy {
 				//apply strategy
 				node = this.applyStrategy(task);
 				
-				if (node == null && SchloudController.schloudCloud.describeAvailability(SchloudController.instanceTypeId)>0 ) {
+				// If no node is suitable, try to start a new one
+				if (node == null) {
 					try {
 						node = SchloudController.startNewNode();
-						Msg.info(task.getName() + " selected node: " + node.instance.getId());
-						SchloudController.setTaskToNode(tasks.get(l).remove(iTask), node);
-						SchloudController.mainQueue.remove(task);	
 					} catch (VMSchedulingException e) {
-						iTask++;
 					}
+				}
+				
+				// If a node is suitable
+				if (node != null) {
+					Msg.info(task.getName() + " selected node: " + node.instance.getId());
+					SchloudController.setTaskToNode(tasks.get(l).remove(iTask), node);
+					SchloudController.mainQueue.remove(task);	
+				}
+				// If no node is suitable, keep the task and handle the next one
+				else {
+					iTask++;
 				}
 			}
 		}
