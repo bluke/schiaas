@@ -5,14 +5,14 @@
  <AS  id="AS0" routing="Full">
 	
 	<cluster id="my_cluster" prefix="node-" suffix=".me" radical="1-4" 
-         power="1e9" core="24" bw="1e9" lat="5E-5"
-    	 bb_bw="10e9" bb_lat="5E-4" />
+         speed="1e9f" core="24" bw="1e9Bps" lat="5E-5s"
+    	 bb_bw="10e9Bps" bb_lat="5E-4s" />
  
  	 <AS id="AS_Controller" routing="Full">
-	   <host id="controller" power="1e9" core="2" />
+	   <host id="controller" speed="1e9f" core="2" />
 	 </AS>
 	
-	<link id="controller2cluster" bandwidth="1e9" latency="5E-5"/> 
+	<link id="controller2cluster" bandwidth="1e9Bps" latency="5E-5s"/> 
 	
 	<ASroute src="AS_Controller" dst="my_cluster" gw_src="controller" gw_dst="node-my_cluster_router.me" symmetrical="YES">
 		<link_ctn id="controller2cluster"/>
