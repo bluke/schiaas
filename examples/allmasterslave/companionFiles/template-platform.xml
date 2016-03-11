@@ -7,11 +7,11 @@
  <AS  id="AS0" routing="Full">
 	
 	<cluster id="my_cluster" prefix="node-" suffix=".me" radical="1-%NHOST" 
-         speed="1e9" core="%NCORE" bw="1e9" lat="5E-5"
-    	 bb_bw="10e9" bb_lat="5E-4" />
+         speed="1e9f" core="%NCORE" bw="1e9Bps" lat="5E-5s"
+    	 bb_bw="10e9f" bb_lat="5E-4Bps" />
  
  	 <AS id="AS_Controller" routing="Full">
-	   <host id="controller" speed="1e9" core="2" />
+	   <host id="controller" speed="1e9f" core="2" />
 	 </AS>
 	
 	<link id="controller2cluster" bandwidth="1e9" latency="5E-5"/> 
