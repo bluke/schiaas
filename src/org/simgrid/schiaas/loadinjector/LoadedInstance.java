@@ -11,12 +11,15 @@ import org.simgrid.schiaas.InstanceType;
 import org.simgrid.schiaas.engine.compute.ComputeTools;
 import org.simgrid.schiaas.exceptions.VMSchedulingException;
 
+/**
+ * This class represents instances that have their CPU loaded.
+ * It works only with instances that use only one core. 
+ */
 public class LoadedInstance {
 
 	protected Compute compute;
 	protected Instance instance;
-	protected int core;
-	protected LoadedInstanceProcess[] loadedInstanceProcesses;
+	protected LoadedInstanceProcess loadedInstanceProcess;
 
 
 	/**
@@ -27,19 +30,14 @@ public class LoadedInstance {
 	public LoadedInstance(Compute compute, Instance instance) {
 		this.compute = compute;
 		this.instance = instance;
-		this.core = (int) Math.ceil(Double.parseDouble(
-				this.instance.getInstanceType().getProperty("core"))) ;
-	
 		
-		this.loadedInstanceProcesses = new LoadedInstanceProcess[this.core];
-		
-		for (int i=0; i<this.core; i++) {
-			this.loadedInstanceProcesses[i]= new LoadedInstanceProcess(this);
+		for (int i=0; i<1; i++) {
+			this.loadedInstanceProcess = new LoadedInstanceProcess(this);
 
 			try {
-				ComputeTools.waitForRunningAndStart(compute.getComputeEngine(), instance, this.loadedInstanceProcesses[i]);
+				ComputeTools.waitForRunningAndStart(compute.getComputeEngine(), instance, this.loadedInstanceProcess);
 			} catch (HostNotFoundException e) {
-				Msg.critical("Something went wrong while trying to start the loading process "+this.loadedInstanceProcesses[i].getName());
+				Msg.critical("Something went wrong while trying to start the loading process "+this.loadedInstanceProcess.getName());
 				e.printStackTrace();
 			}
 		}
@@ -79,15 +77,7 @@ public class LoadedInstance {
 	public Instance getInstance() {
 		return this.instance;
 	}
-	
-	/**
-	 * 
-	 * @return The number of cores of this loaded instance
-	 */
-	public int getCore() {
-		return this.core;
-	}
-	
+		
 	/**
 	 * Terminate this loaded instance
 	 */
@@ -97,11 +87,11 @@ public class LoadedInstance {
 	
 	/**
 	 * Set the CPU load of this instance
-	 * @param load the load (as defined in SimGrid, that is a percentage)
+	 * @param load the load of the VM, ratio of the cloud standard_power
 	 */
 	public void setLoad(double load) {
-		instance.vm().setBound((int)load);
-		instance.getTrace().addEvent("load", ""+load);
+		this.instance.vm().setBound(load * compute.getStandardPower()); 
+		instance.getTrace().addEvent("cpu_load", ""+load);
 	}
 
 	/**

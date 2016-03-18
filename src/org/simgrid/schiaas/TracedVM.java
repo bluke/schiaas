@@ -81,7 +81,7 @@ public class TracedVM extends VM {
  	}
 
 	@Override
- 	public void setBound(int bound) {
+ 	public void setBound(double bound) {
  		trace.addEvent("cpu_bound", ""+bound);
  		super.setBound(bound);
  	}

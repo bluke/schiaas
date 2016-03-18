@@ -21,7 +21,7 @@ import org.simgrid.schiaas.exceptions.VMSchedulingException;
 
 /**
  * Reduced Implementation of Compute Engine.
- * Simple management of the instances lifecycle.
+ * Simple management of <the instances lifecycle.
  * 
  * @author julien.gossa@unistra.fr
  */

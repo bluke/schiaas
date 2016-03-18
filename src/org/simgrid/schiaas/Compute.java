@@ -203,6 +203,13 @@ public class Compute {
 	}
 
 	/**
+	 * @return the standard_power 
+	 */
+	public double getStandardPower() {
+		return this.standardPower;
+	}
+	
+	/**
 	 * @return the trace of this
 	 */
 	public Trace getTrace() {

@@ -89,7 +89,7 @@ public class GoogleClusterInjector extends AbstractInjector {
 		double taskEventDate;
 
 		try {
-							
+
 			while ((taskEventLine = taskEventsBR.readLine()) != null) {
 				taskEventLog = taskEventLine.split(",");
 				taskEventDate = Double.parseDouble(taskEventLog[0]);
@@ -138,10 +138,14 @@ public class GoogleClusterInjector extends AbstractInjector {
 		}
 		
 		// terminating
+		if (this.taskUsageInjectorProcess != null) {
+			this.taskUsageInjectorProcess.kill();
+		}
 		for (LoadedInstance li : loadedInstances.values()) {
 			li.terminate();
 		}
 		this.trace.addEvent("instances_count", ""+0);
+		
 	}
 	
 	private class TaskUsageInjectorProcess extends Process {
@@ -185,7 +189,8 @@ public class GoogleClusterInjector extends AbstractInjector {
 					
 					LoadedInstance li = loadedInstances.get(taskId);
 					try {
-						li.setLoad(GCCPURate / li.getCore() * 100);
+						// TODO: pas bon
+						li.setLoad(GCCPURate /  100);
 					} catch (NullPointerException e) {
 						Msg.warn("The instance "+taskId+" was not found to change the resource usage. It might have already been terminated");
 					}
