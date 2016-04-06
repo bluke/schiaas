@@ -75,7 +75,7 @@ public class SimSchlouder {
 	 * [boots] (optional section)
 	 * vm_boottime [vm_provisioning_date [vm_future_date]]
 	 * [tasks] 
-	 * task_name submission_date walltie_prediction [~ real_walltime] [-> dependencies]
+	 * task_name submission_date walltime_prediction [~ real_runtime/walltime] [input data_size output_data_size] [-> dependencies]
 	 * @author julien.gossa@unistra.fr
 	 */
 	public static class TaskFileReaderProcess extends  org.simgrid.msg.Process {
@@ -131,10 +131,11 @@ public class SimSchlouder {
 				if (sc.hasNext("~")) {
 					sc.next();
 					runtime = sc.nextDouble();
-					if (sc.hasNextDouble()) {
-						inputSize = sc.nextDouble()*1e6;
-						outputSize = sc.nextDouble()*1e6;
-					}
+				}
+
+				if (sc.hasNextDouble()) {
+					inputSize = sc.nextDouble()*1e6;
+					outputSize = sc.nextDouble()*1e6;
 				}
 				
 				Vector<SchloudTask> dependencies = new Vector<SchloudTask>();

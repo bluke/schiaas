@@ -45,7 +45,7 @@
 	 </AS>
 	 
 	 <AS  id="AS_Client"  routing="Full">
-	   <host id="client" speed="120e6s" core="2"> <prop id="cloudid" value="none"/> </host>
+	   <host id="client" speed="120e6f" core="2"> <prop id="cloudid" value="none"/> </host>
 	 </AS>
 	
 	<link id="client2opst" bandwidth="120e6Bps" latency="0.0001s"/> 
