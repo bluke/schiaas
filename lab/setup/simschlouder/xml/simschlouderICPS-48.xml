@@ -1,0 +1,12 @@
+<?xml version='1.0'?>
+ <!DOCTYPE simschlouder>
+ <simschlouder version="1">
+	<config platform="platformICPS.xml" cloud="cloudICPS.xml" />
+	<broker id="controller" />
+	<!-- original values of BO:41.6, B1:6 -->
+	<cloud  id="icps-opst" B0="48.5" B1="5.98" BTU="3600" shutdown_margin="50" max_instances_per_user="25" standard_power="10e9" />
+	<provisioning>
+		<config cloud="icps-opst" storage="myStorage" image="opst-image" instance_type="small" validation="true"/>
+	</provisioning>
+</simschlouder> 
+ 

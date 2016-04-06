@@ -27,6 +27,7 @@ import org.simgrid.msg.Msg;
 import org.simgrid.msg.MsgException;
 import org.simgrid.msg.NativeException;
 import org.simgrid.schiaas.SchIaaS;
+import org.simgrid.schiaas.tools.Trace;
 import org.xml.sax.SAXException;
 
 import simschlouder.algorithms.AStrategy;
@@ -75,7 +76,7 @@ public class SimSchlouder {
 	 * [boots] (optional section)
 	 * vm_boottime [vm_provisioning_date [vm_future_date]]
 	 * [tasks] 
-	 * task_name submission_date walltime_prediction [~ real_runtime/walltime] [input data_size output_data_size] [-> dependencies]
+	 * task_name submission_date walltime_prediction [~ real_runtime/walltime] [input data_size output_data_size in MB] [-> dependencies]
 	 * @author julien.gossa@unistra.fr
 	 */
 	public static class TaskFileReaderProcess extends  org.simgrid.msg.Process {
@@ -223,7 +224,7 @@ public class SimSchlouder {
             System.exit(1);
         }
 		
-		
+		Trace.init("Example of LoadInjector on cloud");
 		SchloudController.init(args[0]);
 		
 		Msg.verb("Reading the task file: "+args[1]);
@@ -249,6 +250,8 @@ public class SimSchlouder {
         System.out.println("Outcomes:\n"+SchloudController.getOutcome());
         
         SchloudController.writeJSON("simschlouder");
+        Trace.close();
+
     }
     
     

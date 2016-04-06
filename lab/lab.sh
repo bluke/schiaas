@@ -5,6 +5,7 @@
 ## The configuration file format is as follows:
 ## SETUP_DIR indicates the directory containing setup files (should be called first)
 ## INCLUDE indicates a file to read as addtional configuration file
+## NEEDED indicates files that are to be in the simuation directory
 ## PRE_COMMAND_SETUP indicates a command to run before the simulation in the setup directory
 ## POST_COMMAND_DATA indicates a command to run in the data directory
 ## TU_ARG indicates the arguments to pass to the trace_util.py script
@@ -62,6 +63,7 @@ BIN_DIR=$LAB_DIR/bin
 SETUP_DIR=$LAB_DIR/setup
 SIMULATIONS_DIR=$LAB_DIR/simulations
 DATA_DIR=$LAB_DIR/data
+NEEDED=""
 POST_COMMAND_DATA=""
 PRE_COMMAND_SETUP=""
 
@@ -113,6 +115,9 @@ do
 				echo "Error: SETUP_DIR $SETUP_DIR was not found"
 				exit 1
 			fi
+
+		elif [ "$COMMAND" == "NEEDED" ]; then
+			NEEDED="$NEEDED $ARGS"
 
 		elif [ "$COMMAND" == "POST_COMMAND_DATA" ]; then
 			POST_COMMAND_DATA="$POST_COMMAND_DATA $ARGS ;"
@@ -177,6 +182,9 @@ do
 
 	XP_SIMULATION_DIR=$SIMULATIONS_DIR/$XP_ID
 	mkdir -p $XP_SIMULATION_DIR
+
+	#Add the needed file
+	cp $NEEDED $XP_SIMULATION_DIR
 
 	while [ `ps -Af | grep -c java` -ge $(( PARALLEL_SIMS + JAVA_THREADS )) ] ; do
 		sleep 1
