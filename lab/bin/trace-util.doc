@@ -1,0 +1,31 @@
+date	Clock of the simulation in s
+description	Description if the entity
+controller	Host used as controller for the entity
+engine	SCHIaaS engine 
+image_caching	Type of caching of VM images
+image_storage	Storage used for VM images
+inter_boot_delay	Delay between two VM boots on the same host
+cores	Number of cores of the entity
+diskSize	Size of disk in MB
+ram_size	Size of RAM in MB
+used_cores	Number of cores in use
+command	User command issued regarding the entity
+image	VM image
+instance_type	Type of instance
+load	CPU load
+schedule	Host to which the instance is scheduled
+name	 Name of the entity
+type	 Type of the entity
+injector	 Class of injector
+random_seed	 Seed used to randomize the entity
+instances_count	 Number of instances 
+instances_load	 CPU load
+disk_path	SimGrid's VM property 
+disk_size	SimGrid's VM property
+dp_intensity	SimGrid's VM property
+mig_net_speed	SimGrid's VM property
+n_cores	SimGrid's VM property
+net_cap	SimGrid's VM property
+ram_size	SimGrid's VM property
+cpu_bound	SimGrid's VM property
+state	State of the entity
