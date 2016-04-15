@@ -123,7 +123,7 @@ do
 			POST_COMMAND_DATA="$POST_COMMAND_DATA $ARGS ;"
 
 		elif [ "$COMMAND" == "PRE_COMMAND_SETUP" ]; then
-			PRE_COMMAND_SETUP="$PRE_COMMAND_SETUP $ARGS ;"
+			( cd $SETUP_DIR ; eval $ARGS )
 
 		elif [ "$COMMAND" == "INCLUDE" ]; then
 			set $* $ARGS
@@ -167,10 +167,6 @@ echo "SETUP_DIR='${SETUP_DIR}'"
 echo "TU_ARGS='$TU_ARGS'"
 echo "PRE_COMMAND_SETUP='$PRE_COMMAND_SETUP'"
 echo "POST_COMMAND_DATA='$POST_COMMAND_DATA'"
-
-
-# Pre command
-( cd $SETUP_DIR ; eval $PRE_COMMAND_SETUP )
 
 
 #Doing the simulations

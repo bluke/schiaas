@@ -223,7 +223,13 @@ public class Rice extends ComputeEngine {
 	 */
 	@Override
 	public Instance newInstance(String id, Image image, InstanceType instanceType) throws VMSchedulingException {
-		RiceHost riceHost = (RiceHost) computeScheduler.schedule(instanceType);
+		RiceHost riceHost = null;
+		
+		try {
+			 riceHost = (RiceHost) computeScheduler.schedule(instanceType);
+		} catch(NullPointerException e) {
+			Msg.critical("The RICE engine needs one declared scheduler in cloud.xml");
+		}
 		
 		if (riceHost == null) return null;
 		return new RiceInstance(compute, id, image, instanceType, riceHost);
