@@ -180,7 +180,7 @@ do
 	mkdir -p $XP_SIMULATION_DIR
 
 	#Add the needed file
-	cp $NEEDED $XP_SIMULATION_DIR
+	( cd ${SETUP_DIR} ; cp ${NEEDED} $XP_SIMULATION_DIR )
 
 	while [ `ps -Af | grep -c java` -ge $(( PARALLEL_SIMS + JAVA_THREADS )) ] ; do
 		sleep 1
