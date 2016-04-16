@@ -86,6 +86,7 @@ public class RiceNodeProcess extends Process {
 			if (riceInstance.vm().isRunning() == 1) {
 				riceInstance.vm().shutdown();
 			}
+			riceInstance.vm().finalize();
 			break;
 		case SUSPEND:
 			riceInstance.vm().suspend();
