@@ -92,7 +92,7 @@ def generateTaskfile(inData,itr,args):
     outData = updateData(copy.deepcopy(inData),rVals,args.treatment,args.expect)
     fileName = "{0}_{1}_{2}-{3}-{4}_{5}".format(os.path.splitext(os.path.basename(args.inputFile))[0],args.treatment,args.drawFunc,args.expect,args.shape,itr)
     writeFile(args.path+"/"+fileName+".tasks",outData)
-    return fileName
+    print "SIM_ARG 3:{0} {1}/{0}.tasks".format(fileName,args.path)
 
 
 def main():
@@ -118,16 +118,10 @@ def main():
     inData = loadFile(args.inputFile)
     fileList = []
     for i in range(args.num):
-        fileName = generateTaskfile(inData,i,args)
-        fileList.append(fileName)
-    
-    with open("taskfiles.cfg",'w') as f:
-        for fileName in fileList:
-            line = "SIM_ARG 3:{0} {1}/{0}.tasks\n".format(fileName,args.path)
-            f.write(line)
+        generateTaskfile(inData,i,args)
 
-        
+
+
 if __name__ == '__main__':
     main()
-
 
