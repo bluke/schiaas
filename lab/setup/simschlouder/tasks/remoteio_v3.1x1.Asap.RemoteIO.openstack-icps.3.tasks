@@ -1,0 +1,43 @@
+2mass_pleiades_h_1x1_project_0_9 0 70 ~ 379.471829891205
+2mass_pleiades_h_1x1_project_10_19 0 70 ~ 399.653101921082
+2mass_pleiades_h_1x1_project_20_29 0 70 ~ 401.693172931671
+2mass_pleiades_h_1x1_project_30_39 0 70 ~ 417.813071012497
+2mass_pleiades_h_1x1_project_40_49 0 70 ~ 274.756407022476
+2mass_pleiades_h_1x1_project_50_59 0 70 ~ 387.583890914917
+2mass_pleiades_h_1x1_project_60_69 0 70 ~ 85.4117770195007
+2mass_pleiades_h_1x1_overlaps 0 6 ~ 6.14724206924438 -> 2mass_pleiades_h_1x1_project_0_9 2mass_pleiades_h_1x1_project_10_19 2mass_pleiades_h_1x1_project_20_29 2mass_pleiades_h_1x1_project_30_39 2mass_pleiades_h_1x1_project_40_49 2mass_pleiades_h_1x1_project_50_59 2mass_pleiades_h_1x1_project_60_69 
+2mass_pleiades_h_1x1_diff_0_49 0 350 ~ 2411.22649502754 -> 2mass_pleiades_h_1x1_overlaps 
+2mass_pleiades_h_1x1_diff_50_99 0 350 ~ 2344.54939889908 -> 2mass_pleiades_h_1x1_overlaps 
+2mass_pleiades_h_1x1_diff_100_149 0 350 ~ 1755.74079608917 -> 2mass_pleiades_h_1x1_overlaps 
+2mass_pleiades_h_1x1_bgmodel 0 50 ~ 8.5846381187439 -> 2mass_pleiades_h_1x1_diff_0_49 2mass_pleiades_h_1x1_diff_50_99 2mass_pleiades_h_1x1_diff_100_149 
+2mass_pleiades_h_1x1_background 0 50 ~ 1502.37990307808 -> 2mass_pleiades_h_1x1_bgmodel 
+2mass_pleiades_h_1x1_add 1 50 ~ 968.21866106987 -> 2mass_pleiades_h_1x1_background 
+2mass_pleiades_j_1x1_project_0_9 1 70 ~ 399.708534002304
+2mass_pleiades_j_1x1_project_10_19 1 70 ~ 393.639935016632
+2mass_pleiades_j_1x1_project_20_29 1 70 ~ 309.032603025436
+2mass_pleiades_j_1x1_project_30_39 1 70 ~ 181.663880109787
+2mass_pleiades_j_1x1_project_40_49 1 70 ~ 256.196046113968
+2mass_pleiades_j_1x1_project_50_59 1 70 ~ 228.072302103043
+2mass_pleiades_j_1x1_project_60_69 1 70 ~ 45.1194539070129
+2mass_pleiades_j_1x1_overlaps 1 6 ~ 6.26052904129028 -> 2mass_pleiades_j_1x1_project_0_9 2mass_pleiades_j_1x1_project_10_19 2mass_pleiades_j_1x1_project_20_29 2mass_pleiades_j_1x1_project_30_39 2mass_pleiades_j_1x1_project_40_49 2mass_pleiades_j_1x1_project_50_59 2mass_pleiades_j_1x1_project_60_69 
+2mass_pleiades_j_1x1_diff_0_49 1 350 ~ 2362.68205094337 -> 2mass_pleiades_j_1x1_overlaps 
+2mass_pleiades_j_1x1_diff_50_99 1 350 ~ 2262.40890192986 -> 2mass_pleiades_j_1x1_overlaps 
+2mass_pleiades_j_1x1_diff_100_149 1 350 ~ 1814.16016101837 -> 2mass_pleiades_j_1x1_overlaps 
+2mass_pleiades_j_1x1_bgmodel 1 50 ~ 6.7243320941925 -> 2mass_pleiades_j_1x1_diff_0_49 2mass_pleiades_j_1x1_diff_50_99 2mass_pleiades_j_1x1_diff_100_149 
+2mass_pleiades_j_1x1_background 1 50 ~ 1518.49291110039 -> 2mass_pleiades_j_1x1_bgmodel 
+2mass_pleiades_j_1x1_add 1 50 ~ 512.761986970901 -> 2mass_pleiades_j_1x1_background 
+2mass_pleiades_k_1x1_project_0_9 1 70 ~ 186.098910093307
+2mass_pleiades_k_1x1_project_10_19 1 70 ~ 238.056379079819
+2mass_pleiades_k_1x1_project_20_29 1 70 ~ 316.729487895966
+2mass_pleiades_k_1x1_project_30_39 1 70 ~ 207.973886013031
+2mass_pleiades_k_1x1_project_40_49 1 70 ~ 232.067447900772
+2mass_pleiades_k_1x1_project_50_59 1 70 ~ 151.139224052429
+2mass_pleiades_k_1x1_project_60_69 1 70 ~ 48.9467849731445
+2mass_pleiades_k_1x1_overlaps 1 6 ~ 8.11464190483093 -> 2mass_pleiades_k_1x1_project_0_9 2mass_pleiades_k_1x1_project_10_19 2mass_pleiades_k_1x1_project_20_29 2mass_pleiades_k_1x1_project_30_39 2mass_pleiades_k_1x1_project_40_49 2mass_pleiades_k_1x1_project_50_59 2mass_pleiades_k_1x1_project_60_69 
+2mass_pleiades_k_1x1_diff_0_49 1 350 ~ 2320.51588392258 -> 2mass_pleiades_k_1x1_overlaps 
+2mass_pleiades_k_1x1_diff_50_99 1 350 ~ 2338.60037994385 -> 2mass_pleiades_k_1x1_overlaps 
+2mass_pleiades_k_1x1_diff_100_149 2 350 ~ 1701.39925098419 -> 2mass_pleiades_k_1x1_overlaps 
+2mass_pleiades_k_1x1_bgmodel 2 50 ~ 6.71234893798828 -> 2mass_pleiades_k_1x1_diff_0_49 2mass_pleiades_k_1x1_diff_50_99 2mass_pleiades_k_1x1_diff_100_149 
+2mass_pleiades_k_1x1_background 2 50 ~ 1526.49809503555 -> 2mass_pleiades_k_1x1_bgmodel 
+2mass_pleiades_k_1x1_add 2 50 ~ 966.232011079788 -> 2mass_pleiades_k_1x1_background 
+2mass_pleiades_1x1_gather 2 350 ~ 869.669624090195 -> 2mass_pleiades_h_1x1_add 2mass_pleiades_j_1x1_add 2mass_pleiades_k_1x1_add 
