@@ -76,7 +76,7 @@ public class SimSchlouder {
 	 * [boots] (optional section)
 	 * vm_boottime [vm_provisioning_date [vm_future_date]]
 	 * [tasks] 
-	 * task_name submission_date walltime_prediction [~ real_runtime/walltime] [input data_size output_data_size in MB] [-> dependencies]
+	 * task_name submission_date walltime_prediction [~ real_runtime/walltime] [input_data_size output_data_size in MB] [-> dependencies]
 	 * @author julien.gossa@unistra.fr
 	 */
 	public static class TaskFileReaderProcess extends  org.simgrid.msg.Process {
@@ -85,8 +85,14 @@ public class SimSchlouder {
 			super(host,name,args);
 		}
 		
+		
 		// TODO: Errors
-		public void readTaskFile(String fileName) throws FileNotFoundException, HostFailureException {
+		public void readTaskFile(String fileName,
+				boolean real_runtimes,
+				boolean communications,
+				boolean real_boottimes,
+				boolean real_threads
+				) throws FileNotFoundException, HostFailureException {
 			
 		    Locale.setDefault(new Locale("en", "US"));
 			
@@ -94,17 +100,24 @@ public class SimSchlouder {
 			HashMap<String, SchloudTask> taskMap = new HashMap<String, SchloudTask>();
 			
 			double oldSubmissionDate = 0;
+			int i;
+			double d1, d2;
 			
 			Scanner sc = new Scanner(scf.nextLine());			
 			if (sc.hasNext("\\[boots\\]")) {
 				sc.close();
 				sc = new Scanner(scf.nextLine());
 				do {
-					SchloudController.schloudCloud.bootTimes.add(sc.nextInt());
-					if (sc.hasNextInt())
-						SchloudController.schloudCloud.provisioningDates.add(sc.nextInt());
-					if (sc.hasNextInt())
-						SchloudController.schloudCloud.lagTimes.add(sc.nextInt());
+					i = sc.nextInt();
+					if(real_boottimes) SchloudController.schloudCloud.bootTimes.add(i);
+					if (sc.hasNextInt()) {
+						i = sc.nextInt();
+						if (real_threads) SchloudController.schloudCloud.provisioningDates.add(i); 
+					}
+					if (sc.hasNextInt()) {
+						i = sc.nextInt();
+						if (real_threads) SchloudController.schloudCloud.lagTimes.add(i);
+					}
 					sc = new Scanner(scf.nextLine());
 				} while (sc.hasNextInt());				
 			} else {
@@ -131,12 +144,17 @@ public class SimSchlouder {
 
 				if (sc.hasNext("~")) {
 					sc.next();
-					runtime = sc.nextDouble();
+					d1 = sc.nextDouble();
+					if (real_runtimes) runtime = d1; 
 				}
 
 				if (sc.hasNextDouble()) {
-					inputSize = sc.nextDouble()*1e6;
-					outputSize = sc.nextDouble()*1e6;
+					d1 = sc.nextDouble();
+					d2 = sc.nextDouble();
+					if (communications) {
+						inputSize = d1;
+						outputSize = d2;
+					}
 				}
 				
 				Vector<SchloudTask> dependencies = new Vector<SchloudTask>();
@@ -171,7 +189,19 @@ public class SimSchlouder {
 		@Override
 		public void main(String[] args) throws MsgException {
 			try {
-				readTaskFile(args[0]);
+				boolean real_runtimes = false;
+				boolean communications = false;
+				boolean real_boottimes = false;
+				boolean real_threads = false;
+				
+				for (int i=1; i<args.length; i++) {
+					if (args[i].equals("real_runtimes")) real_runtimes = true;
+					if (args[i].equals("communications")) communications = true;
+					if (args[i].equals("real_boottimes")) real_boottimes = true;
+					if (args[i].equals("real_threads")) real_threads = true;
+				}
+				
+				readTaskFile(args[0], real_runtimes, communications, real_boottimes, real_threads);
 			} catch (FileNotFoundException e) {
 				Msg.critical("Task file "+args[0]+" not found.");
 				e.printStackTrace();
@@ -192,7 +222,7 @@ public class SimSchlouder {
 	    Msg.init(args);
 	
 	    if (args.length < 3) {
-			Msg.info("Usage   : SimSchlouder simschlouder_file tasks_file strategyClass [output json file]");
+			Msg.info("Usage   : SimSchlouder simschlouder_file tasks_file strategyClass [");
 			Msg.info("example : SimSchlouder simschlouder.xml workload.tasks ASAP");
 			System.exit(1);	
 		}
@@ -224,20 +254,20 @@ public class SimSchlouder {
             System.exit(1);
         }
 		
-		Trace.init("Example of LoadInjector on cloud");
+		Trace.init("SimSchlouder");
 		SchloudController.init(args[0]);
-		
-		Msg.verb("Reading the task file: "+args[1]);
-		String[] tfrpargs = {args[1]};
-		taskFileReaderProcess = new TaskFileReaderProcess(Host.getByName(SchloudController.broker),"TaskFileReader",tfrpargs);
-		taskFileReaderProcess.start();
-		
-		Msg.verb("Loading the strategy: "+args[2]);
+				
+		Msg.verb("Loading the strategy: "+args[1]);
 		//SchloudController.strategy=SchloudController.STRATEGY.valueOf(args[2].toUpperCase());
 		SchloudController.strategy = SimSchlouder.loadStrategy(args[2].trim());
 		Msg.info("Strategy set to "+SchloudController.strategy.getName());
 		
-		
+		Msg.verb("Reading the task file: "+args[2]);
+		String[] tfrpargs = new String[args.length-2];
+		for (int i=2; i<args.length; i++) tfrpargs[i-2] = args[i]; 
+		taskFileReaderProcess = new TaskFileReaderProcess(Host.getByName(SchloudController.broker),"TaskFileReader",tfrpargs);
+		taskFileReaderProcess.start();
+
 		
 		Msg.verb("Running the simulation...");
 		/*  execute the simulation. */
