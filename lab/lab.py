@@ -192,14 +192,18 @@ def setup_simulation(in_queue, out_queue, config):
         exp = in_queue.get()
         if exp is None:
             break
-        print("Setting up simulation {0}".format(exp[0]))
+        
         exp_dir = os.path.join(config['simdir'], exp[0])
-        os.makedirs(exp_dir)
+        if config['keep'] and os.path.exists(exp_dir):
+            print("Setting up simulation {0} [kept]".format(exp[0]))
+        else :
+            print("Setting up simulation {0}".format(exp[0]))
+            os.makedirs(exp_dir)
 
-        # make ymbolic link to needed files
-        for need in config['NEEDED']:
-            for file in glob.glob(need):
-                os.symlink(file,os.path.join(exp_dir,os.path.basename(file)))
+            # make ymbolic link to needed files
+            for need in config['NEEDED']:
+                for file in glob.glob(need):
+                    os.symlink(file,os.path.join(exp_dir,os.path.basename(file)))
 
         out_queue.put(exp)
     out_queue.put(None)
@@ -216,13 +220,19 @@ def run_simulation(in_queue, out_queue, config):
         command = ['java']
         for e in exp[1]:
             command += e.split()
-        print("Run simulation {0}".format(exp[0]))
-        with open(os.path.join(exp_dir, "simgrid.out"), 'w') as out_file:
-            process = subprocess.Popen(command, stdout=out_file, stderr=out_file, cwd=exp_dir)
-            process.wait()
+        
+        if config['keep'] and os.path.exists(os.path.join(exp_dir,'simgrid.out')):
+            print("Skipping simulation {0}".format(exp[0]))
+        else :
+            print("Running simulation {0}".format(exp[0]))
+            with open(os.path.join(exp_dir, "simgrid.out"), 'w') as out_file:
+                process = subprocess.Popen(command, stdout=out_file, stderr=out_file, cwd=exp_dir)
+                process.wait()
+            if process.returncode != 0:
+                print("WARNING: simulation {0} returns error {1}".format(exp[0],process.returncode))
 
-        if process.returncode == 0:
-            out_queue.put(exp)
+        
+        out_queue.put(exp)
 
     out_queue.put(None)
 
@@ -311,7 +321,7 @@ def main():
 
     config = {'SETUP_DIR':'.', 'NEEDED':[], 'NEEDED_POST':[],
               'precommandsetup':[], 'POST_COMMAND_DATA':[],
-              'TU_ARG':{}, 'SIM_ARG':[]}
+              'TU_ARG':{}, 'SIM_ARG':[], 'keep':(args.keep is not None)}
 
     # set minimal config
     set_dirs(config)
@@ -348,20 +358,18 @@ def main():
     tracers = []
 
     # Run workers if not keep
-    if not args.keep:
-        for _ in range(args.numParal):
-            setters.append(threading.Thread(target=setup_simulation, args=(set_simspace_queue, run_sim_queue, config)))
-            runners.append(threading.Thread(target=run_simulation, args=(run_sim_queue, trace_output_queue, config)))
-        for setter in setters:
-            setter.start()
-        for runner in runners:
-            runner.start()
 
-        # waiting for setter
-        for setter in setters:
-            setter.join()
-    else:
-        trace_output_queue = set_simspace_queue
+    for _ in range(args.numParal):
+        setters.append(threading.Thread(target=setup_simulation, args=(set_simspace_queue, run_sim_queue, config)))
+        runners.append(threading.Thread(target=run_simulation, args=(run_sim_queue, trace_output_queue, config)))
+    for setter in setters:
+        setter.start()
+    for runner in runners:
+        runner.start()
+
+    # waiting for setter
+    for setter in setters:
+        setter.join()
 
     # launching analysers
     for i in range(args.numParal):
