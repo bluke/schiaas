@@ -129,7 +129,7 @@ def read_cfg_file(filename, config):
 
             elif line[0] == 'INCLUDE':
                 for arg in line[1:]:
-                    config = read_cfg_file(arg, config)
+                    read_cfg_file(arg, config)
 
             elif line[0] == 'POST_COMMAND_DATA':
                 config[line[0]].append(' '.join(line[1:]))
@@ -138,10 +138,16 @@ def read_cfg_file(filename, config):
                 config[line[0]].append(parse_SIM_ARG(' '.join(line[1:])))
 
             elif line[0] == 'TU_ARG':
-                config[line[0]]+=' '+' '.join(line[1:])
+                try:
+                    config[line[0]][line[1]]+=line[2:]
+                except KeyError:
+                    config[line[0]][line[1]]=line[2:]
 
             elif line[0] == 'NEEDED' or line[0] == 'NEEDED_POST':
                 config[line[0]]+=line[1:]
+
+            else:
+                print("WARNING: config not recognized {0}".format(' '.join(line)))
 
 def set_dirs(config):
     """
@@ -152,7 +158,6 @@ def set_dirs(config):
     config['bindir'] = os.path.join(config['scriptdir'], "bin")
     config['simdir'] = os.path.join(config['cdir'], "simulations")
     config['datadir'] = os.path.join(config['cdir'], "data")
-    config['archdir'] = os.path.join(config['cdir'], "archive")
 
 def plan_experiments(config):
     """
@@ -211,7 +216,7 @@ def run_simulation(in_queue, out_queue, config):
         command = ['java']
         for e in exp[1]:
             command += e.split()
-        print("Run simulation {0}\n{1}\n".format(exp[0], command))
+        print("Run simulation {0}".format(exp[0]))
         with open(os.path.join(exp_dir, "simgrid.out"), 'w') as out_file:
             process = subprocess.Popen(command, stdout=out_file, stderr=out_file, cwd=exp_dir)
             process.wait()
@@ -237,25 +242,18 @@ def extract_trace(in_queue, config):
             break
         exp_dir = os.path.join(config['simdir'], exp[0])
         print("Processing traces for {0}".format(exp[0]))
-        command = [util, "schiaas.trace", "-o", config['datadir'], "-f", exp[0]]+config['TU_ARG'].split()
+        command = [util, "schiaas.trace", "-o", config['datadir'], "-f", exp[0]]
+        for k in config['TU_ARG']:
+            command.append(k)
+            command+=config['TU_ARG'][k]
+        #print(' '.join(command))
         process = subprocess.Popen(" ".join(command), shell=True, cwd=exp_dir)
         process.wait()
 
-
-def clean_simdir(keep, config):
+def clean_simdir(config):
     """
     cleans the simdir
-
-    keep : bool whether to keep prevous results
     """
-    if keep:
-        if os.path.exists(os.path.join(config['simdir'], 'simulations.args')):
-            with open(os.path.join(config['simdir'], 'simulations.args'), 'r') as SIM_ARGs_file:
-                archname = SIM_ARGs_file.readline().strip()
-            if not os.path.exists(config['archdir']):
-                os.makedirs(config['archdir'])
-            shutil.copytree(config['simdir'], os.path.join(config['archdir'], archname))
-
     if os.path.exists(config['simdir']):
         shutil.rmtree(config['simdir'])
     if os.path.exists(config['datadir']):
@@ -278,28 +276,19 @@ def run_post_commands(config):
     """
     Runs post commands in the data dir
     """
+
+    # make symbolic links to needed files
     for need in config['NEEDED_POST']:
-        src_path = get_path(need, config)
-        dst_path = os.path.join(config['datadir'], need)
-        if src_path is None:
-            print("ERROR NEEDED_POST object '{0}' has not been found".format(need), file=sys.stderr)
-            return
-        elif os.path.isdir(src_path):
-            if not os.path.exists(dst_path):
-                shutil.copytree(src_path, dst_path)
-        elif os.path.isfile(src_path):
-            if not os.path.exists(os.path.dirname(dst_path)):
-                os.makedirs(os.path.dirname(dst_path))
-            shutil.copy(src_path, dst_path)
-        else:
-            print("ERROR NEEDED_POST object '{0}' is not a file or a directory".format(need), file=sys.stderr)
-            return
+        for file in glob.glob(need):
+            try:
+                os.symlink(file,os.path.join(config['datadir'],os.path.basename(file)))
+            except FileExistsError:
+                pass
 
     for command in config['POST_COMMAND_DATA']:
         print("Running post-command {0} in {1}".format(command, config['datadir']))
         process = subprocess.Popen(command, shell=True, cwd=config['datadir'])
         process.wait()
-
 
 
 
@@ -322,20 +311,20 @@ def main():
 
     config = {'SETUP_DIR':'.', 'NEEDED':[], 'NEEDED_POST':[],
               'precommandsetup':[], 'POST_COMMAND_DATA':[],
-              'TU_ARG':'', 'SIM_ARG':[]}
+              'TU_ARG':{}, 'SIM_ARG':[]}
 
     # set minimal config
     set_dirs(config)
 
     # cleanup previous configuration
-    clean_simdir(args.keep, config)
+    if not args.keep:
+        clean_simdir(config)
 
     # load configuration file
     if not os.path.isfile(args.confFile):
         print("ERROR: the config file '{0}' was not found.".format(args.confFile), file=sys.stderr)
         sys.exit(1)
     read_cfg_file(args.confFile, config)
-    #print(config)
 
     # check CLASSPATH
     print("CLASSPATH="+os.environ.get('CLASSPATH'))
@@ -354,21 +343,25 @@ def main():
     for _ in range(args.numParal):
         set_simspace_queue.put(None)
 
-    # Run workers
     setters = []
     runners = []
     tracers = []
-    for _ in range(args.numParal):
-        setters.append(threading.Thread(target=setup_simulation, args=(set_simspace_queue, run_sim_queue, config)))
-        runners.append(threading.Thread(target=run_simulation, args=(run_sim_queue, trace_output_queue, config)))
-    for setter in setters:
-        setter.start()
-    for runner in runners:
-        runner.start()
 
-    # waiting for setter
-    for setter in setters:
-        setter.join()
+    # Run workers if not keep
+    if not args.keep:
+        for _ in range(args.numParal):
+            setters.append(threading.Thread(target=setup_simulation, args=(set_simspace_queue, run_sim_queue, config)))
+            runners.append(threading.Thread(target=run_simulation, args=(run_sim_queue, trace_output_queue, config)))
+        for setter in setters:
+            setter.start()
+        for runner in runners:
+            runner.start()
+
+        # waiting for setter
+        for setter in setters:
+            setter.join()
+    else:
+        trace_output_queue = set_simspace_queue
 
     # launching analysers
     for i in range(args.numParal):
