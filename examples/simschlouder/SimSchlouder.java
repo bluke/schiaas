@@ -222,12 +222,10 @@ public class SimSchlouder {
 	    Msg.init(args);
 	
 	    if (args.length < 3) {
-			Msg.info("Usage   : SimSchlouder simschlouder_file tasks_file strategyClass [");
+			Msg.info("Usage   : SimSchlouder simschlouder_file tasks_file strategyClass [real_runtimes] [communications] [real_boottimes] [real_threads]");
 			Msg.info("example : SimSchlouder simschlouder.xml workload.tasks ASAP");
 			System.exit(1);	
 		}
-		
-	    if (args.length==4) outJsonFile=args[3];
 	    
 	    SchemaFactory schemaFactory = SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
 		Schema schema = null;
@@ -258,8 +256,8 @@ public class SimSchlouder {
 		SchloudController.init(args[0]);
 				
 		Msg.verb("Loading the strategy: "+args[1]);
-		//SchloudController.strategy=SchloudController.STRATEGY.valueOf(args[2].toUpperCase());
-		SchloudController.strategy = SimSchlouder.loadStrategy(args[2].trim());
+		//SchloudController.strategy=SchloudController.STRATEGY.valueOf(args[1].toUpperCase());
+		SchloudController.strategy = SimSchlouder.loadStrategy(args[1].trim());
 		Msg.info("Strategy set to "+SchloudController.strategy.getName());
 		
 		Msg.verb("Reading the task file: "+args[2]);

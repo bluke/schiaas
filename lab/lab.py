@@ -8,8 +8,8 @@ It needs the java classpath to be set.
 The configuration file format is as follows:
 SETUP_DIR indicates the directory containing setup files (should be called first)
 INCLUDE indicates a file to read as addtional configuration file
-NEEDED indicates file or directory that are to be in the simuation directory
-NEEDED_POST indicates file or directory that are to be in the data directory
+NEEDED indicates file or directory that are to be in the simuation directory (make symbolic links)
+NEEDED_POST indicates file or directory that are to be in the data directory (make symbolic links)
 PRE_COMMAND_SETUP indicates a command to run before the simulation in the setup directory
 POST_COMMAND_DATA indicates a command to run in the data directory
 TU_ARG indicates the arguments to pass to the trace_util.py script
@@ -36,6 +36,7 @@ Error exit codes
 
 import argparse
 import datetime
+import glob
 import itertools
 import os
 import queue
@@ -48,32 +49,36 @@ except ImportError:
     print("Threading module missing using dummy threading.", file=sys.stderr)
     import dummy_threading as threading
 
-def get_path(path, config):
-    """
-    Gets the absolute path corresponding to a given path.
 
-    This function searches relative to the setupdir, the cwd, or the script file.
+supported_commands=['SETUP_DIR', 'INCLUDE', 'NEEDED', 'NEEDED_POST', 'PRE_COMMAND_SETUP', 'POST_COMMAND_DATA', 'TU_ARG', 'SIM_ARG' ]
+
+def labspath(path, config):
+    """
+    Return the absolute path corresponding to a given path,
+    searching relative to the SETUP_DIR, the cwd, or the script file.
+    If not found return the given path.
 
     Args:
         path: the path to look for
-        config: configuration containing the setupdir
+        config: configuration containing the SETUP_DIR
 
     Returns: the absolute path of the file found or None
     """
-    if not config['setupdir'] is None and os.path.exists(os.path.join(config['setupdir'], path)):
-        return os.path.abspath(os.path.join(config['setupdir'], path))
-    elif os.path.exists(path):
-        return os.path.abspath(path)
-    elif os.path.exists(os.path.join(os.path.dirname(os.path.realpath(__file__)), path)):
-        return os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), path))
-    else:
-        return None
+    for prefix in [ config['SETUP_DIR'], "", os.path.dirname(sys.argv[0]) ]:
+        try:
+            fullpath = os.path.abspath(os.path.join(prefix, path))
+            if len(glob.glob(fullpath)) != 0:
+                return fullpath
+        except TypeError:
+            pass
 
-def parse_simarg(line):
+    return path
+
+def parse_SIM_ARG(line):
     """
-    Parse a SIMARG line form the config file
-    Arg: the tail of a SIMARG line from the cfg file
-    Returns: a SimArg dictionnary
+    Parse a SIM_ARG line form the config file
+    Arg: the tail of a SIM_ARG line from the cfg file
+    Returns: a SIM_ARG dictionnary
     """
     res = {}
     lst = line.split(maxsplit=1)
@@ -82,7 +87,7 @@ def parse_simarg(line):
     try:
         res['index'] = int(order[0])
     #pylint: disable=undefined-variable
-    except ValueERROR:
+    except ValueError:
         print("Error : in SIM_ARG order '{0}' is not a digit".format(order[0]), file=sys.stderr)
         sys.exit(2)
     if len(order) == 2:
@@ -98,50 +103,45 @@ def read_cfg_file(filename, config):
         filename : path to file to parse
         config : lab configuration dictionnary
     """
-    included = []
-    precommandsetup = []
     print("Parsing {0}".format(filename), file=sys.stderr)
     with open(filename, 'r') as cfg:
         for readline in cfg:
-            line = readline.split(maxsplit=1)
-            if len(line) == 0:
+            line = readline.rstrip().split()
+
+            if len(line) == 0 or line[0][0] == "#":
                 continue
-            elif line[0] == 'SETUP_DIR' and config['setupdir'] is None:
-                givenpath = line[1].rstrip()
-                setdpath = get_path(givenpath, config)
-                if not setdpath is None and os.path.isdir(setdpath):
-                    config['setupdir'] = setdpath
-                else:
+
+            for i in range(1,len(line)):
+                line[i]=labspath(line[i], config)
+
+            if line[0] == 'SETUP_DIR':
+                config['SETUP_DIR'] = line[1]
+                if not os.path.isdir(config['SETUP_DIR']):
                     print("Error : the SETUP_DIR '{0}' was not found.".format(givenpath),
                           file=sys.stderr)
                     sys.exit(3)
-            elif line[0] == 'NEEDED':
-                config['needed'] += line[1].split()
-            elif line[0] == 'NEEDED_POST':
-                config['neededpost'] += line[1].split()
+
             elif line[0] == 'PRE_COMMAND_SETUP':
-                precommandsetup.append(line[1].rstrip())
-            elif line[0] == 'POST_COMMAND_DATA':
-                config['postcommanddata'].append(line[1].rstrip())
-            elif line[0] == 'TU_ARG':
-                config['tuarg'].append(line[1].rstrip())
-            elif line[0] == 'SIM_ARG':
-                config['simarg'].append(parse_simarg(line[1].rstrip()))
+                command = ' '.join(line[1:])
+                print("Running pre-command '{0}' in '{1}'".format(command, config['SETUP_DIR']))
+                process = subprocess.Popen(command, shell=True, cwd=config['SETUP_DIR'])
+                process.wait()
+
             elif line[0] == 'INCLUDE':
-                included.append(line[1].rstrip())
-    for command in precommandsetup:
-        print("Running pre-command '{0}' in '{1}'".format(command, "." if config['setupdir'] is None else config['setupdir']))
-        process = subprocess.Popen(command, shell=True, cwd=config['setupdir'])
-        process.wait()
-    config['precommandsetup'] += precommandsetup
-    for inc in included:
-        includepath = get_path(inc, config)
-        if not includepath is None and os.path.isfile(includepath):
-            print("Including config file '{0}'".format(inc))
-            read_cfg_file(get_path(inc, config), config)
-        else:
-            print("Error : the INCLUDE file {0} can not be found".format(inc), file=sys.stderr)
-            sys.exit(4)
+                for arg in line[1:]:
+                    config = read_cfg_file(arg, config)
+
+            elif line[0] == 'POST_COMMAND_DATA':
+                config[line[0]].append(' '.join(line[1:]))
+
+            elif line[0] == 'SIM_ARG':
+                config[line[0]].append(parse_SIM_ARG(' '.join(line[1:])))
+
+            elif line[0] == 'TU_ARG':
+                config[line[0]]+=' '+' '.join(line[1:])
+
+            elif line[0] == 'NEEDED' or line[0] == 'NEEDED_POST':
+                config[line[0]]+=line[1:]
 
 def set_dirs(config):
     """
@@ -159,8 +159,8 @@ def plan_experiments(config):
     Prepares all possible combinations of experiements.
     """
     sort = []
-    for i in range(1, max(config['simarg'], key=lambda x: x['index'])['index']+1):
-        sort.append([x for x in config['simarg'] if x['index'] == i])
+    for i in range(1, max(config['SIM_ARG'], key=lambda x: x['index'])['index']+1):
+        sort.append([x for x in config['SIM_ARG'] if x['index'] == i])
     planner = list(itertools.product(*sort))
     res = []
     for i in planner:
@@ -190,37 +190,11 @@ def setup_simulation(in_queue, out_queue, config):
         print("Setting up simulation {0}".format(exp[0]))
         exp_dir = os.path.join(config['simdir'], exp[0])
         os.makedirs(exp_dir)
-        for need in config['needed']:
-            src_path = get_path(need, config)
-            dst_path = os.path.join(exp_dir, need)
-            if src_path is None:
-                print("Error NEEDED object '{0}' has not been found".format(need), file=sys.stderr)
-                out_queue.put(None)
-                return
-            elif os.path.isdir(src_path):
-                if not os.path.exists(dst_path):
-                    shutil.copytree(src_path, dst_path)
-            elif os.path.isfile(src_path):
-                if not os.path.exists(os.path.dirname(dst_path)):
-                    os.makedirs(os.path.dirname(dst_path))
-                shutil.copy(src_path, dst_path)
-            else:
-                print("Error NEEDED object '{0}' is not a file or a directory".format(need), file=sys.stderr)
-                out_queue.put(None)
-                return
 
-        for arg in exp[1]:
-            src_path = get_path(arg, config)
-            dst_path = os.path.join(exp_dir, arg)
-            if src_path is None:
-                pass
-            elif os.path.isdir(src_path):
-                if not os.path.exists(dst_path):
-                    shutil.copytree(src_path, dst_path)
-            elif os.path.isfile(src_path):
-                if not os.path.exists(os.path.dirname(dst_path)):
-                    os.makedirs(os.path.dirname(dst_path))
-                shutil.copy(src_path, dst_path)
+        # make ymbolic link to needed files
+        for need in config['NEEDED']:
+            for file in glob.glob(need):
+                os.symlink(file,os.path.join(exp_dir,os.path.basename(file)))
 
         out_queue.put(exp)
     out_queue.put(None)
@@ -235,8 +209,9 @@ def run_simulation(in_queue, out_queue, config):
             break
         exp_dir = os.path.join(config['simdir'], exp[0])
         command = ['java']
-        command += exp[1]
-        print("Run simulation {0}".format(exp[0]))
+        for e in exp[1]:
+            command += e.split()
+        print("Run simulation {0}\n{1}\n".format(exp[0], command))
         with open(os.path.join(exp_dir, "simgrid.out"), 'w') as out_file:
             process = subprocess.Popen(command, stdout=out_file, stderr=out_file, cwd=exp_dir)
             process.wait()
@@ -251,6 +226,10 @@ def extract_trace(in_queue, config):
     """
     Runs trace utils on experiments from queue
     """
+
+    if len(config['TU_ARG']) == 0:
+        return
+
     util = os.path.join(config['bindir'], "trace-util.py")
     while True:
         exp = in_queue.get()
@@ -258,10 +237,9 @@ def extract_trace(in_queue, config):
             break
         exp_dir = os.path.join(config['simdir'], exp[0])
         print("Processing traces for {0}".format(exp[0]))
-        for tuarg in config['tuarg']:
-            command = [util, "schiaas.trace", "-o", config['datadir'], "-f", exp[0], tuarg]
-            process = subprocess.Popen(" ".join(command), shell=True, cwd=exp_dir)
-            process.wait()
+        command = [util, "schiaas.trace", "-o", config['datadir'], "-f", exp[0]]+config['TU_ARG'].split()
+        process = subprocess.Popen(" ".join(command), shell=True, cwd=exp_dir)
+        process.wait()
 
 
 def clean_simdir(keep, config):
@@ -272,8 +250,8 @@ def clean_simdir(keep, config):
     """
     if keep:
         if os.path.exists(os.path.join(config['simdir'], 'simulations.args')):
-            with open(os.path.join(config['simdir'], 'simulations.args'), 'r') as simargs_file:
-                archname = simargs_file.readline().strip()
+            with open(os.path.join(config['simdir'], 'simulations.args'), 'r') as SIM_ARGs_file:
+                archname = SIM_ARGs_file.readline().strip()
             if not os.path.exists(config['archdir']):
                 os.makedirs(config['archdir'])
             shutil.copytree(config['simdir'], os.path.join(config['archdir'], archname))
@@ -291,20 +269,20 @@ def print_plan(plan, config):
     """
     now = datetime.datetime.now()
     file_path = os.path.join(config['simdir'], 'simulations.args')
-    with open(file_path, 'w') as simargs_file:
-        print("{}-{}-{}_{}{}".format(now.year, now.month, now.day, now.hour, now.minute), file=simargs_file)
+    with open(file_path, 'w') as SIM_ARGs_file:
+        print("{}-{}-{}_{}{}".format(now.year, now.month, now.day, now.hour, now.minute), file=SIM_ARGs_file)
         for exp in plan:
-            print(exp[0], " ".join(exp[1]), file=simargs_file)
+            print(exp[0], " ".join(exp[1]), file=SIM_ARGs_file)
 
 def run_post_commands(config):
     """
     Runs post commands in the data dir
     """
-    for need in config['neededpost']:
+    for need in config['NEEDED_POST']:
         src_path = get_path(need, config)
         dst_path = os.path.join(config['datadir'], need)
         if src_path is None:
-            print("Error NEEDED_POST object '{0}' has not been found".format(need), file=sys.stderr)
+            print("ERROR NEEDED_POST object '{0}' has not been found".format(need), file=sys.stderr)
             return
         elif os.path.isdir(src_path):
             if not os.path.exists(dst_path):
@@ -314,10 +292,10 @@ def run_post_commands(config):
                 os.makedirs(os.path.dirname(dst_path))
             shutil.copy(src_path, dst_path)
         else:
-            print("Error NEEDED_POST object '{0}' is not a file or a directory".format(need), file=sys.stderr)
+            print("ERROR NEEDED_POST object '{0}' is not a file or a directory".format(need), file=sys.stderr)
             return
 
-    for command in config['postcommanddata']:
+    for command in config['POST_COMMAND_DATA']:
         print("Running post-command {0} in {1}".format(command, config['datadir']))
         process = subprocess.Popen(command, shell=True, cwd=config['datadir'])
         process.wait()
@@ -342,9 +320,9 @@ def main():
                         help="Config file describing the experiment")
     args = parser.parse_args()
 
-    config = {'setupdir':None, 'needed':[], 'neededpost':[],
-              'precommandsetup':[], 'postcommanddata':[],
-              'tuarg':[], 'simarg':[]}
+    config = {'SETUP_DIR':'.', 'NEEDED':[], 'NEEDED_POST':[],
+              'precommandsetup':[], 'POST_COMMAND_DATA':[],
+              'TU_ARG':'', 'SIM_ARG':[]}
 
     # set minimal config
     set_dirs(config)
@@ -354,10 +332,13 @@ def main():
 
     # load configuration file
     if not os.path.isfile(args.confFile):
-        print("Error : the config file '{0}' was not found.".format(args.confFile), file=sys.stderr)
+        print("ERROR: the config file '{0}' was not found.".format(args.confFile), file=sys.stderr)
         sys.exit(1)
-    else:
-        read_cfg_file(args.confFile, config)
+    read_cfg_file(args.confFile, config)
+    #print(config)
+
+    # check CLASSPATH
+    print("CLASSPATH="+os.environ.get('CLASSPATH'))
 
     # plan simulations
     plan = plan_experiments(config)
