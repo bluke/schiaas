@@ -103,7 +103,7 @@ def read_cfg_file(filename, config):
         filename : path to file to parse
         config : lab configuration dictionnary
     """
-    print("Parsing {0}".format(filename), file=sys.stderr)
+    #print("Parsing {0}".format(filename), file=sys.stderr)
     with open(filename, 'r') as cfg:
         for readline in cfg:
             line = readline.rstrip().split()
@@ -178,36 +178,6 @@ def plan_experiments(config):
         res.append((name, command))
     return res
 
-def setup_simulation(in_queue, out_queue, config):
-    """
-    Sets up simulations dir of sims taken from queue
-
-    Args :
-        in_queue : queue from where to read simulation
-        out_queue : where to ouptput prepared experiment
-        config : the configuration object including the NEEDED files
-                and the simulation directory
-    """
-    while True:
-        exp = in_queue.get()
-        if exp is None:
-            break
-        
-        exp_dir = os.path.join(config['simdir'], exp[0])
-        if config['keep'] and os.path.exists(exp_dir):
-            print("Setting up simulation {0} [kept]".format(exp[0]))
-        else :
-            print("Setting up simulation {0}".format(exp[0]))
-            os.makedirs(exp_dir)
-
-            # make ymbolic link to needed files
-            for need in config['NEEDED']:
-                for file in glob.glob(need):
-                    os.symlink(file,os.path.join(exp_dir,os.path.basename(file)))
-
-        out_queue.put(exp)
-    out_queue.put(None)
-
 def run_simulation(in_queue, out_queue, config):
     """
     Runs simulations from queue
@@ -215,23 +185,37 @@ def run_simulation(in_queue, out_queue, config):
     while True:
         exp = in_queue.get()
         if exp is None:
+            print("fuck")
             break
+
         exp_dir = os.path.join(config['simdir'], exp[0])
-        command = ['java']
-        for e in exp[1]:
-            command += e.split()
-        
+
         if config['keep'] and os.path.exists(os.path.join(exp_dir,'simgrid.out')):
             print("Skipping simulation {0}".format(exp[0]))
         else :
             print("Running simulation {0}".format(exp[0]))
+    
+            # make the directory
+            if os.path.exists(exp_dir):
+                os.rmdirs(exp_dir)
+            os.makedirs(exp_dir)
+
+            # make symbolic link to needed files
+            for need in config['NEEDED']:
+                for file in glob.glob(need):
+                    os.symlink(file,os.path.join(exp_dir,os.path.basename(file)))
+
+            # run the simulation
+            command = ['java']
+            for e in exp[1]:
+                command += e.split()
+            
             with open(os.path.join(exp_dir, "simgrid.out"), 'w') as out_file:
                 process = subprocess.Popen(command, stdout=out_file, stderr=out_file, cwd=exp_dir)
                 process.wait()
             if process.returncode != 0:
-                print("WARNING: simulation {0} returns error {1}".format(exp[0],process.returncode))
-
-        
+                print("WARNING simulation {0} returns error {1}".format(exp[0],process.returncode))
+            
         out_queue.put(exp)
 
     out_queue.put(None)
@@ -330,22 +314,24 @@ def main():
     if not args.keep:
         clean_simdir(config)
 
+    # check CLASSPATH
+    print("CLASSPATH="+os.environ.get('CLASSPATH'))
+
     # load configuration file
+    print("Loading configuration")
     if not os.path.isfile(args.confFile):
         print("ERROR: the config file '{0}' was not found.".format(args.confFile), file=sys.stderr)
         sys.exit(1)
     read_cfg_file(args.confFile, config)
 
-    # check CLASSPATH
-    print("CLASSPATH="+os.environ.get('CLASSPATH'))
-
     # plan simulations
+    print("Planning experiments")
     plan = plan_experiments(config)
     print_plan(plan, config)
 
     # prepare pipelines
+    print("Preparing pipeline")
     set_simspace_queue = queue.Queue(len(plan)+args.numParal+1)
-    run_sim_queue = queue.Queue(len(plan)+args.numParal+1)
     trace_output_queue = queue.Queue(len(plan)+args.numParal+1)
 
     for exp in plan:
@@ -353,23 +339,16 @@ def main():
     for _ in range(args.numParal):
         set_simspace_queue.put(None)
 
-    setters = []
     runners = []
     tracers = []
 
     # Run workers if not keep
-
+    print("Running the simulations")
     for _ in range(args.numParal):
-        setters.append(threading.Thread(target=setup_simulation, args=(set_simspace_queue, run_sim_queue, config)))
-        runners.append(threading.Thread(target=run_simulation, args=(run_sim_queue, trace_output_queue, config)))
-    for setter in setters:
-        setter.start()
+        runners.append(threading.Thread(target=run_simulation, args=(set_simspace_queue, trace_output_queue, config)))
+
     for runner in runners:
         runner.start()
-
-    # waiting for setter
-    for setter in setters:
-        setter.join()
 
     # launching analysers
     for i in range(args.numParal):
