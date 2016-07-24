@@ -108,20 +108,18 @@ public class SimSchlouder {
 				sc.close();
 				sc = new Scanner(scf.nextLine());
 				do {
-					i = sc.nextInt();
-					if(real_boottimes) SchloudController.schloudCloud.bootTimes.add(i);
-					if (sc.hasNextInt()) {
-						i = sc.nextInt();
-						if (real_threads) SchloudController.schloudCloud.provisioningDates.add(i); 
+					d1 = sc.nextDouble();
+					if(real_boottimes) SchloudController.schloudCloud.bootTimes.add(d1);
+					if (sc.hasNextDouble()) {
+						d1 = sc.nextDouble();
+						if (real_threads) SchloudController.schloudCloud.provisioningDates.add(d1); 
 					}
-					if (sc.hasNextInt()) {
-						i = sc.nextInt();
-						if (real_threads) SchloudController.schloudCloud.lagTimes.add(i);
+					if (sc.hasNextDouble()) {
+						d1 = sc.nextDouble();
+						if (real_threads) SchloudController.schloudCloud.lagTimes.add(d1);
 					}
 					sc = new Scanner(scf.nextLine());
-				} while (sc.hasNextInt());				
-			} else {
-				scf = new Scanner(new File(fileName));
+				} while (sc.hasNextDouble());
 			}
 	
 			while (scf.hasNext()) {
@@ -129,11 +127,16 @@ public class SimSchlouder {
 				sc.useLocale(Locale.US);
 				
 				String jid = sc.next();
+				Msg.info("bob"+jid);
 				double submissionDate = sc.nextDouble();
-				
-				if (submissionDate != oldSubmissionDate) {
-					Msg.verb("Waiting for next bag of tasks");
-					waitFor(submissionDate-oldSubmissionDate);
+
+				double d=submissionDate-oldSubmissionDate;
+				if (d>0) {
+					Msg.verb("Waiting "+d+"s for next bag of tasks");
+					waitFor(d);
+				}
+				if (d<0) {
+					Msg.warn("The next bag of tasks is "+d+"s early");
 				}
 
 				double walltimePrediction = sc.nextDouble();
@@ -205,6 +208,11 @@ public class SimSchlouder {
 			} catch (FileNotFoundException e) {
 				Msg.critical("Task file "+args[0]+" not found.");
 				e.printStackTrace();
+				System.exit(5);
+			} catch (Exception e) {
+				Msg.critical("Something went wrong while reading the Task file "+args[0]);
+				e.printStackTrace();
+				System.exit(6);
 			}
 		}
 	}
@@ -235,7 +243,7 @@ public class SimSchlouder {
 		} catch (SAXException e1) {
 			Msg.info("Schema factory failed :");
 			Msg.info(e1.toString());
-			System.exit(1);
+			System.exit(2);
 		}
 	    
 		Validator validator = schema.newValidator();
@@ -249,7 +257,7 @@ public class SimSchlouder {
         	Msg.info(args[0]+" is NOT valid");
         	Msg.info("Reason: " + e.getLocalizedMessage());
         	Msg.debug(e.toString());
-            System.exit(1);
+            System.exit(3);
         }
 		
 		Trace.init("SimSchlouder");
@@ -280,6 +288,7 @@ public class SimSchlouder {
         SchloudController.writeJSON("simschlouder");
         Trace.close();
 
+        System.exit(0);
     }
     
     
@@ -294,11 +303,11 @@ public class SimSchlouder {
     		return (AStrategy)Class.forName("simschlouder.algorithms."+alg).newInstance();
     	} catch (ClassNotFoundException ex) {
     		Msg.error("Could not locate class: " + alg);
-    		System.exit(1);
+    		System.exit(4);
     	} 
 		catch (Exception e) {
 			Msg.error("Unexpected exception when instanciating strategy");
-			System.exit(1);
+			System.exit(4);
 		}
 		return null;
     }

@@ -35,13 +35,13 @@ public class SchloudCloud {
 	protected int bootCount;
 	
 	/** List of bootTimes, as exactly observed in real experiments */
-	protected LinkedList<Integer> bootTimes;
+	protected LinkedList<Double> bootTimes;
 	
 	/** List of provisioning dates, as exactly observed in real experiments */
-	protected LinkedList<Integer> provisioningDates;
+	protected LinkedList<Double> provisioningDates;
 
 	/** List of lag time (after boot date, before first task start), as exactly observed in real experiments */
-	protected LinkedList<Integer> lagTimes;
+	protected LinkedList<Double> lagTimes;
 
 	
 	/** The compute to use. */
@@ -83,9 +83,9 @@ public class SchloudCloud {
 		
 		this.standardPower= standardPower;
 		
-		bootTimes = new LinkedList<Integer>();
-		provisioningDates = new LinkedList<Integer>();
-		lagTimes = new LinkedList<Integer>();
+		bootTimes = new LinkedList<Double>();
+		provisioningDates = new LinkedList<Double>();
+		lagTimes = new LinkedList<Double>();
 	}
 		
 	
