@@ -22,6 +22,7 @@ see lab/setup/cmp-scheduler/cmp-scheduler.cfg for example
 Two options are available:
 -k : keeps the data from previous executions
 -p x : run x simulations and x trace-util.py in parallel,
+-t x : set the timeout x for the simulations,
 
 @author julien.gossa@unistra.fr
 @author lbertot@unistra.fr
@@ -147,7 +148,7 @@ def read_cfg_file(filename, config):
                 config[line[0]]+=line[1:]
 
             else:
-                print("WARNING: config not recognized {0}".format(' '.join(line)))
+                print("WARNING: config not recognized {0}".format(' '.join(line)), file=sys.stderr)
 
 def set_dirs(config):
     """
@@ -185,13 +186,13 @@ def run_simulation(in_queue, out_queue, config):
     while True:
         exp = in_queue.get()
         if exp is None:
-            print("fuck")
             break
 
         exp_dir = os.path.join(config['simdir'], exp[0])
 
         if config['keep'] and os.path.exists(os.path.join(exp_dir,'simgrid.out')):
             print("Skipping simulation {0}".format(exp[0]))
+            out_queue.put(exp)
         else :
             print("Running simulation {0}".format(exp[0]))
     
@@ -212,11 +213,15 @@ def run_simulation(in_queue, out_queue, config):
             
             with open(os.path.join(exp_dir, "simgrid.out"), 'w') as out_file:
                 process = subprocess.Popen(command, stdout=out_file, stderr=out_file, cwd=exp_dir)
-                process.wait()
-            if process.returncode != 0:
-                print("WARNING simulation {0} returns error {1}".format(exp[0],process.returncode))
-            
-        out_queue.put(exp)
+                try:
+                    process.wait(timeout=config['timeout'])
+                except:
+                    process.kill()
+                    process.returncode="timeout expired"
+            if process.returncode == 0:
+                out_queue.put(exp)
+            else:
+                print("WARNING simulation {0} exits with code {1}".format(exp[0],process.returncode), file=sys.stderr)        
 
     out_queue.put(None)
 
@@ -299,13 +304,19 @@ def main():
     parser.add_argument("-p", action="store", required=False,
                         default=1, dest="numParal", type=int,
                         help="Number of parallel simulations")
+    parser.add_argument("-t", action="store", required=False,
+                        default=None, dest="timeout", type=int,
+                        help="Timeout for the simulations")
     parser.add_argument("confFile", action="store", type=str,
                         help="Config file describing the experiment")
     args = parser.parse_args()
 
     config = {'SETUP_DIR':'.', 'NEEDED':[], 'NEEDED_POST':[],
               'precommandsetup':[], 'POST_COMMAND_DATA':[],
-              'TU_ARG':{}, 'SIM_ARG':[], 'keep':(args.keep is not None)}
+              'TU_ARG':{}, 'SIM_ARG':[], 
+              'keep':args.keep, 'timeout':args.timeout}
+
+    print(args.keep)
 
     # set minimal config
     set_dirs(config)

@@ -4,13 +4,13 @@
     <AS id="0" routing="Full">
         <AS id="BonFIRE" routing="Full">
             <AS id="fr-inria" routing="Full">
-                <cluster id="bonfire-project-fr-inria" suffix=".eu" prefix="bonfire-blade-" radical="1-4" core="24" speed="9.27114e8" bw="938e6" lat="270us" sharing_policy="FULLDUPLEX" bb_bw="" bb_lat="" bb_sharing_policy="SHARED" availability_file="" state_file="" router_id="" limiter_link="" loopback_bw="" loopback_lat="" />
-                <link id="link_bonfire-project-fr-inria" bandwidth="938e6" latency="270us" bandwidth_file="" latency_file="" state="ON" state_file="" sharing_policy="SHARED" />
+                <cluster id="bonfire-project-fr-inria" suffix=".eu" prefix="bonfire-blade-" radical="1-4" core="24" speed="9.27114e8f" bw="938e6Bps" lat="270us" sharing_policy="FULLDUPLEX" bb_bw="" bb_lat="" bb_sharing_policy="SHARED" router_id="" limiter_link="" loopback_bw="" loopback_lat="" />
+                <link id="link_bonfire-project-fr-inria" bandwidth="938e6Bps" latency="270us" bandwidth_file="" latency_file="" sharing_policy="SHARED" />
                 <AS id="bonfire-project-fr-inria-controller" routing="Full">
-                    <host id="bonfire-blade-bonfire-project-fr-inria_controller.eu" speed="1e9" core="2" availability="1.0" availability_file="" state="ON" state_file="" coordinates="" pstate="0.0" />
+                    <host id="bonfire-blade-bonfire-project-fr-inria_controller.eu" speed="1e9f" core="2" coordinates="" pstate="0.0" />
                     <!-- TODO Quelle puissance pour les controlleurs ? -->
                 </AS>
-                <link id="link_bonfire-project-fr-inria-controller" bandwidth="938e6" latency="270us" bandwidth_file="" latency_file="" state="ON" state_file="" sharing_policy="SHARED" />
+                <link id="link_bonfire-project-fr-inria-controller" bandwidth="938e6Bps" latency="270us" bandwidth_file="" latency_file="" sharing_policy="SHARED" />
                 <!-- Entrance router to access the site -->
                 <AS id="bonfire-project-fr-inria-entrance" routing="Full">
                     <router id="bonfire-project-fr-inria-entrance_router.eu" coordinates="" />
@@ -30,15 +30,15 @@
             </AS>
 
             <AS id="uk-epcc" routing="Full">
-                <cluster id="bonfire-project-uk-epcc-1" suffix=".eu" prefix="vmhost" radical="0-1" core="48" speed="1.292798e9" bw="942e6" lat="267us" sharing_policy="FULLDUPLEX" bb_bw="" bb_lat="" bb_sharing_policy="SHARED" availability_file="" state_file="" router_id="" limiter_link="" loopback_bw="" loopback_lat="" />
-                <link id="link_bonfire-project-uk-epcc-1" bandwidth="942e6" latency="267us" bandwidth_file="" latency_file="" state="ON" state_file="" sharing_policy="SHARED" />
-                <cluster id="bonfire-project-uk-epcc-2" suffix=".eu" prefix="vmhost" radical="2-6" core="16" speed="1.540562e9" bw="942e6" lat="267us" sharing_policy="FULLDUPLEX" bb_bw="" bb_lat="" bb_sharing_policy="SHARED" availability_file="" state_file="" router_id="" limiter_link="" loopback_bw="" loopback_lat="" />
-                <link id="link_bonfire-project-uk-epcc-2" bandwidth="942e6" latency="267us" bandwidth_file="" latency_file="" state="ON" state_file="" sharing_policy="SHARED" />
+                <cluster id="bonfire-project-uk-epcc-1" suffix=".eu" prefix="vmhost" radical="0-1" core="48" speed="1.292798e9f" bw="942e6Bps" lat="267us" sharing_policy="FULLDUPLEX" bb_bw="" bb_lat="" bb_sharing_policy="SHARED" router_id="" limiter_link="" loopback_bw="" loopback_lat="" />
+                <link id="link_bonfire-project-uk-epcc-1" bandwidth="942e6Bps" latency="267us" bandwidth_file="" latency_file="" sharing_policy="SHARED" />
+                <cluster id="bonfire-project-uk-epcc-2" suffix=".eu" prefix="vmhost" radical="2-6" core="16" speed="1.540562e9f" bw="942e6Bps" lat="267us" sharing_policy="FULLDUPLEX" bb_bw="" bb_lat="" bb_sharing_policy="SHARED" router_id="" limiter_link="" loopback_bw="" loopback_lat="" />
+                <link id="link_bonfire-project-uk-epcc-2" bandwidth="942e6Bps" latency="267us" bandwidth_file="" latency_file="" sharing_policy="SHARED" />
                 <AS id="bonfire-project-uk-epcc-controller" routing="Full">
-                    <host id="vmhostbonfire-project-uk-epcc_controller.eu" speed="1e9" core="2" availability="1.0" availability_file="" state="ON" state_file="" coordinates="" pstate="0.0" />
+                    <host id="vmhostbonfire-project-uk-epcc_controller.eu" speed="1e9f" core="2" coordinates="" pstate="0.0" />
                     <!-- TODO Quelle puissance pour les controlleurs ? -->
                 </AS>
-                <link id="link_bonfire-project-uk-epcc-controller" bandwidth="942e6" latency="267us" bandwidth_file="" latency_file="" state="ON" state_file="" sharing_policy="SHARED" />
+                <link id="link_bonfire-project-uk-epcc-controller" bandwidth="942e6Bps" latency="267us" bandwidth_file="" latency_file="" sharing_policy="SHARED" />
                 <!-- Entrance router to access the site -->
                 <AS id="bonfire-project-uk-epcc-entrance" routing="Full">
                     <router id="bonfire-project-uk-epcc-entrance_router.eu" coordinates="" />
@@ -70,24 +70,24 @@
 
             <AS id="de-hlrs" routing="Full">
 
-                <cluster id="bonfire-project-de-hlrs-1" suffix=".eu" prefix="node01" radical="01-14" speed="1.787138e9" bw="940e6" lat="170us" core="24" sharing_policy="FULLDUPLEX" bb_bw="" bb_lat="" bb_sharing_policy="SHARED" availability_file="" state_file="" router_id="" limiter_link="" loopback_bw="" loopback_lat="" />
+                <cluster id="bonfire-project-de-hlrs-1" suffix=".eu" prefix="node01" radical="01-14" speed="1.787138e9f" bw="940e6Bps" lat="170us" core="24" sharing_policy="FULLDUPLEX" bb_bw="" bb_lat="" bb_sharing_policy="SHARED" router_id="" limiter_link="" loopback_bw="" loopback_lat="" />
 
-                <link id="link_bonfire-project-de-hlrs-1" bandwidth="940e6" latency="170us" bandwidth_file="" latency_file="" state="ON" state_file="" sharing_policy="SHARED" />
+                <link id="link_bonfire-project-de-hlrs-1" bandwidth="940e6Bps" latency="170us" bandwidth_file="" latency_file="" sharing_policy="SHARED" />
 
-                <cluster id="bonfire-project-de-hlrs-2" suffix=".eu" prefix="node02" radical="01-14" speed="1.763400e9" bw="940e6" lat="170us" core="24" sharing_policy="FULLDUPLEX" bb_bw="" bb_lat="" bb_sharing_policy="SHARED" availability_file="" state_file="" router_id="" limiter_link="" loopback_bw="" loopback_lat="" />
-                <link id="link_bonfire-project-de-hlrs-2" bandwidth="940e6" latency="170us" bandwidth_file="" latency_file="" state="ON" state_file="" sharing_policy="SHARED" />
+                <cluster id="bonfire-project-de-hlrs-2" suffix=".eu" prefix="node02" radical="01-14" speed="1.763400e9f" bw="940e6Bps" lat="170us" core="24" sharing_policy="FULLDUPLEX" bb_bw="" bb_lat="" bb_sharing_policy="SHARED" router_id="" limiter_link="" loopback_bw="" loopback_lat="" />
+                <link id="link_bonfire-project-de-hlrs-2" bandwidth="940e6Bps" latency="170us" bandwidth_file="" latency_file="" sharing_policy="SHARED" />
 
-                <cluster id="bonfire-project-de-hlrs-3" suffix=".eu" prefix="floccus0" radical="1-6" speed="3.40429e8" bw="940e6" lat="170us" core="24" sharing_policy="FULLDUPLEX" bb_bw="" bb_lat="" bb_sharing_policy="SHARED" availability_file="" state_file="" router_id="" limiter_link="" loopback_bw="" loopback_lat="" />
-                <link id="link_bonfire-project-de-hlrs-3" bandwidth="940e6" latency="170us" bandwidth_file="" latency_file="" state="ON" state_file="" sharing_policy="SHARED" />
+                <cluster id="bonfire-project-de-hlrs-3" suffix=".eu" prefix="floccus0" radical="1-6" speed="3.40429e8f" bw="940e6Bps" lat="170us" core="24" sharing_policy="FULLDUPLEX" bb_bw="" bb_lat="" bb_sharing_policy="SHARED" router_id="" limiter_link="" loopback_bw="" loopback_lat="" />
+                <link id="link_bonfire-project-de-hlrs-3" bandwidth="940e6Bps" latency="170us" bandwidth_file="" latency_file="" sharing_policy="SHARED" />
 
-                <cluster id="bonfire-project-de-hlrs-4" suffix=".eu" prefix="floccus1" radical="5-6" speed="1.646871e9" bw="940e6" lat="170us" core="24" sharing_policy="FULLDUPLEX" bb_bw="" bb_lat="" bb_sharing_policy="SHARED" availability_file="" state_file="" router_id="" limiter_link="" loopback_bw="" loopback_lat="" />
-                <link id="link_bonfire-project-de-hlrs-4" bandwidth="940e6" latency="170us" bandwidth_file="" latency_file="" state="ON" state_file="" sharing_policy="SHARED" />
+                <cluster id="bonfire-project-de-hlrs-4" suffix=".eu" prefix="floccus1" radical="5-6" speed="1.646871e9f" bw="940e6Bps" lat="170us" core="24" sharing_policy="FULLDUPLEX" bb_bw="" bb_lat="" bb_sharing_policy="SHARED" router_id="" limiter_link="" loopback_bw="" loopback_lat="" />
+                <link id="link_bonfire-project-de-hlrs-4" bandwidth="940e6Bps" latency="170us" bandwidth_file="" latency_file="" sharing_policy="SHARED" />
 
                 <AS id="bonfire-project-de-hlrs-controller" routing="Full">
-                    <host id="bonfire-project-de-hlrs_controller.eu" speed="1e9" core="2" availability="1.0" availability_file="" state="ON" state_file="" coordinates="" pstate="0.0" />
+                    <host id="bonfire-project-de-hlrs_controller.eu" speed="1e9f" core="2" coordinates="" pstate="0.0" />
                     <!-- TODO Quelle puissance pour les controlleurs ? -->
                 </AS>
-                <link id="link_bonfire-project-de-hlrs-controller" bandwidth="940e6" latency="170us" bandwidth_file="" latency_file="" state="ON" state_file="" sharing_policy="SHARED" />
+                <link id="link_bonfire-project-de-hlrs-controller" bandwidth="940e6Bps" latency="170us" bandwidth_file="" latency_file="" sharing_policy="SHARED" />
                 <!-- Entrance router to access the site -->
                 <AS id="bonfire-project-de-hlrs-entrance" routing="Full">
                     <router id="bonfire-project-de-hlrs-entrance_router.eu" coordinates="" />
@@ -154,9 +154,9 @@
             </AS>
 
             <AS id="be-ibbt" routing="Full">
-                <host id="bonfire-project-nfs.eu" speed="1e9" core="2" availability="1.0" availability_file="" state="ON" state_file="" coordinates="" pstate="0.0" />
+                <host id="bonfire-project-nfs.eu" speed="1e9f" core="2" coordinates="" pstate="0.0" />
                 <!-- TODO Quelle puissance ? -->
-                <link id="link_bonfire-project-nfs" bandwidth="940e6" latency="200us" bandwidth_file="" latency_file="" state="ON" state_file="" sharing_policy="SHARED" />
+                <link id="link_bonfire-project-nfs" bandwidth="940e6Bps" latency="200us" bandwidth_file="" latency_file="" sharing_policy="SHARED" />
                 <!-- Entrance router to access the site -->
                 <router id="bonfire-project-be-ibbt-entrance_router.eu" coordinates="" />
                 <!-- Routes from hosts to router -->
@@ -171,7 +171,7 @@
             <!-- Inria <-> EPCC: lat=80ms. bw=11Mbits/sec -->
             <!-- Inria <-> HLRS: lat=40ms. bw=32Mbits/sec -->
             <!-- EPCC <-> HLRS: lat=50ms. bw=15Mbits/sec -->
-            <link id="backbone" bandwidth="1.25GBps" latency="500us" bandwidth_file="" latency_file="" state="ON" state_file="" sharing_policy="SHARED" />
+            <link id="backbone" bandwidth="1.25GBps" latency="500us" bandwidth_file="" latency_file="" sharing_policy="SHARED" />
             <!-- Link between every AS -->
             <ASroute src="fr-inria" dst="uk-epcc" gw_src="bonfire-project-fr-inria-entrance_router.eu" gw_dst="bonfire-project-uk-epcc-entrance_router.eu" symmetrical="YES">
                 <link_ctn id="backbone" direction="NONE" />
@@ -220,11 +220,11 @@
 		Client <- HLRS: bw=300Mbits/sec -->
         <AS id="Client" routing="Full">
             <!-- on which Schlouder is installed -->
-			<host id="lemans.u-strasbg.fr" speed="1e9" core="2" availability="1.0" availability_file="" state="ON" state_file="" coordinates="" pstate="0.0" />
+			<host id="lemans.u-strasbg.fr" speed="1e9f" core="2" coordinates="" pstate="0.0" />
             <!-- TODO Quelle puissance ? -->
         </AS>
 
-        <link id="internet" bandwidth="1.25GBps" latency="500us" bandwidth_file="" latency_file="" state="ON" state_file="" sharing_policy="SHARED" />
+        <link id="internet" bandwidth="1.25GBps" latency="500us" bandwidth_file="" latency_file="" sharing_policy="SHARED" />
         <!-- Link between every AS -->
 		<ASroute src="Client" dst="BonFIRE" gw_dst="bonfire-project-entrance_router.eu" gw_src="lemans.u-strasbg.fr" symmetrical="YES">
             <link_ctn id="internet" />
