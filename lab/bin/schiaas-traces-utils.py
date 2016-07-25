@@ -174,7 +174,7 @@ class Trace:
 	def read_doc(self):
 		doc = {}
 		try:
-			with open(os.path.dirname(os.path.realpath(__file__))+'/trace-util.doc') as doc_file:
+			with open(os.path.dirname(os.path.realpath(__file__))+'/schiaas-traces-utils.doc') as doc_file:
 				line = doc_file.readline()
 				while line != "":
 					(key,val) = line.strip().split(self.field_sep)
