@@ -260,7 +260,7 @@ public class SchloudTask {
 	public void writeJSON(BufferedWriter out) throws IOException, SimSchlouderException {
 		// TODO: add scheduling_strategy
 		// TODO: check walltime/runtime
-		out.write("\t\t\t\t\"id\": \""+id+"\",\n");
+		out.write("\t\t\t\t\"id\": "+id+",\n");
 		out.write("\t\t\t\t\"index\": "+id+",\n");
 		out.write("\t\t\t\t\"name\": \""+name+"\",\n");
 		out.write("\t\t\t\t\"provisioning_strategy\": \""+SchloudController.strategy.getName()+"\",\n"); // NOT THE PREDICTION USED ACTUALLY

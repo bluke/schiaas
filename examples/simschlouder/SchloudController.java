@@ -335,17 +335,36 @@ public class SchloudController extends org.simgrid.msg.Process {
 	/**
 	 * Writes a JSON file for use in later processing.
 	 * Unfortunately handmade, because no standard lib was found at the time.
-	 * @param description the ID of the version
+	 * @param args The arguments of the simulation
 	 * @throws IOException
 	 * @throws SimSchlouderException 
 	 */
-	public static void writeJSON(String description) throws IOException, SimSchlouderException {
-	    FileWriter fstream = new FileWriter(SimSchlouder.outJsonFile, false);
+	public static void writeJSON(String args[]) throws IOException, SimSchlouderException {
+		boolean real_runtimes = false;
+		boolean communications = false;
+		boolean real_boottimes = false;
+		boolean real_threads = false;
+		
+		for (int i=1; i<args.length; i++) {
+			if (args[i].equals("real_runtimes")) real_runtimes = true;
+			if (args[i].equals("communications")) communications = true;
+			if (args[i].equals("real_boottimes")) real_boottimes = true;
+			if (args[i].equals("real_threads")) real_threads = true;
+		}
+		String description="SimSchlouder simulation trace";
+		
+		FileWriter fstream = new FileWriter(SimSchlouder.outJsonFile, false);
 	    BufferedWriter out = new BufferedWriter(fstream);
 		
 		out.write("{\n");
 		out.write("\t\"info\": {\n");
 		out.write("\t\t\"version\": \"SimSchlouder\",\n");
+		out.write("\t\t\"simschlouder_file\": \""+args[0]+"\",\n");
+		out.write("\t\t\"tasks_file\": \""+args[2]+"\",\n");
+		out.write("\t\t\"real_runtimes\": \""+real_runtimes+"\",\n");
+		out.write("\t\t\"communications\": \""+communications+"\",\n");
+		out.write("\t\t\"real_boottimes\": \""+real_boottimes+"\",\n");
+		out.write("\t\t\"real_threads\": \""+real_threads+"\",\n");
 		out.write("\t\t\"storage\": {\n");
 		out.write("\t\t\t\"type\": \"n/a\",\n");
 		out.write("\t\t\t\"location\": \"n/a\"\n");

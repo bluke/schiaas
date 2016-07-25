@@ -268,9 +268,9 @@ public class SimSchlouder {
 		SchloudController.strategy = SimSchlouder.loadStrategy(args[1].trim());
 		Msg.info("Strategy set to "+SchloudController.strategy.getName());
 		
-		Msg.verb("Reading the task file: "+args[2]);
 		String[] tfrpargs = new String[args.length-2];
-		for (int i=2; i<args.length; i++) tfrpargs[i-2] = args[i]; 
+		for (int i=2; i<args.length; i++) tfrpargs[i-2] = args[i];
+		Msg.verb("Reading the task file: "+tfrpargs[0]);
 		taskFileReaderProcess = new TaskFileReaderProcess(Host.getByName(SchloudController.broker),"TaskFileReader",tfrpargs);
 		taskFileReaderProcess.start();
 
@@ -285,7 +285,7 @@ public class SimSchlouder {
         //Msg.info("Instances description\n"+Compute.getInstancesDescription());
         System.out.println("Outcomes:\n"+SchloudController.getOutcome());
         
-        SchloudController.writeJSON("simschlouder");
+        SchloudController.writeJSON(args);
         Trace.close();
 
         System.exit(0);

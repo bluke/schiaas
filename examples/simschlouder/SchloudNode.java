@@ -490,7 +490,7 @@ public class SchloudNode extends Process implements Comparable<SchloudNode>{
 	 */
 	public void writeJSON(BufferedWriter out) throws IOException, SimSchlouderException {
 		out.write("\t\t\"instance_id\": \""+getName()+"\",\n");
-		out.write("\t\t\"index\": \""+index+"\",\n");
+		out.write("\t\t\"index\": "+index+",\n");
 		out.write("\t\t\"host\": \""+getHost().getName()+"\",\n");
 		out.write("\t\t\"start_date\": "+pendingDate+",\n");
 		out.write("\t\t\"stop_date\": "+terminatedDate+",\n"); // TERMINATED AND NOT SHUTTINGDOWN
