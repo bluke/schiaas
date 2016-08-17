@@ -179,7 +179,7 @@ public class SchloudTask {
 		for (int i=0; i<stateLog.size(); i++)
 			if (stateLog.get(i).state == state)
 				return stateLog.get(i).date;
-		throw new SimSchlouderException("task " +this.name+ " never has state :" +state);
+		throw new SimSchlouderException("task " +this.name+ " never had state: " +state);
 	}
 
 	/**

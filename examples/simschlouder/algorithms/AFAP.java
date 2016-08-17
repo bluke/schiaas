@@ -5,6 +5,7 @@ import org.simgrid.msg.Msg;
 import simschlouder.SchloudController;
 import simschlouder.SchloudNode;
 import simschlouder.SchloudTask;
+import simschlouder.SimSchlouder;
 
 /**
  * The As Full As Possible strategy.
@@ -33,7 +34,6 @@ public class AFAP extends AStrategy {
 		for (SchloudNode node : SchloudController.nodes) {
 
 			// Look for the first instance to become available
-			
 			if (node.getIdleDate() <= finishSooner.getIdleDate()) {
 			//if (node.getUpTimeToIdle() <= finishSooner.getUpTimeToIdle()) {
 				//Msg.info("sooner");
@@ -42,22 +42,22 @@ public class AFAP extends AStrategy {
 
 			double currentIdleTime = node.getRemainingIdleTime();
 			double predictedIdleTime = node.getRemainingIdleTime(task);
-			
-			//Msg.info(predictedIdleTime+"<"+currentidleTime+" && "+predictedIdleTime+"<"+candidatePredictedIdleTime);
+			Msg.verb(predictedIdleTime+"<"+currentIdleTime+" && "+predictedIdleTime+"<"+candidatePredictedIdleTime);
 			//  <= After bugfix
-			if ( predictedIdleTime <= currentIdleTime )
+			if ( ( SimSchlouder.validation && predictedIdleTime < currentIdleTime ) 
+				|| ( !SimSchlouder.validation && predictedIdleTime <= currentIdleTime ) )
 				if ( candidate == null ||  predictedIdleTime < candidatePredictedIdleTime ) {
 					candidate = node;
 					candidatePredictedIdleTime = predictedIdleTime;
 				} 
 			
-			Msg.verb("AFAP "+node.instance.getId()+"("+node.getState()+"): "+currentIdleTime+" >= "+predictedIdleTime
-					+" < "+candidatePredictedIdleTime
+			Msg.verb("AFAP "+node.instance.getId()+"("+node.getState()+"): "
+					+ currentIdleTime+" >= "+predictedIdleTime +" < "+candidatePredictedIdleTime
 					+" - "+finishSooner.instance.getId()+"\t"+((candidate!=null)?candidate.instance.getId():"null"));
 
 		}
 		
-		//Msg.info("Candidate for "+task.getName()+" is "+candidate+" ("+finishSooner+")");
+		Msg.verb("Candidate for "+task.getName()+" is "+candidate+" ("+finishSooner+")");
 		
 		if( candidate==null && SchloudController.schloudCloud.describeAvailability(SchloudController.instanceTypeId)<=0){
 			// we choose the VM with the closest IdleTime.

@@ -1,0 +1,32 @@
+<?xml version='1.0'?>
+ <!DOCTYPE clouds>
+ <clouds version="1">
+		
+	<cloud id="icps-opst">		
+		<storage id="myStorage" engine="org.simgrid.schiaas.engine.rise.Rise">
+			<config controller="icps-opst-cc"/>
+		</storage>
+
+		<compute engine="org.simgrid.schiaas.engine.rice.Rice"> 
+		
+			<config controller="icps-opst-cc" 
+					image_storage="myStorage" image_caching="PRE"
+					inter_boot_delay="10"
+					standard_power="9.5e9"
+					offloads_file="offloads.ol" 
+					offload_type="PARALLEL" />
+			
+			<instance_type id="small" core="1" memory="1000" disk="1690"/>		
+			<instance_type id="medium" core="2" memory="1000" disk="1690"/>
+			<instance_type id="large" core="4" memory="1000" disk="1690"/>
+			
+			<image id="opst-image" size="2e9"/>
+		
+			<host id="icps-gc-1"/>
+			<host id="icps-gc-2"/>
+			<host id="icps-gc-3"/>
+		</compute>
+	</cloud>
+	
+</clouds> 
+ 

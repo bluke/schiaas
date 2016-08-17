@@ -9,6 +9,7 @@ package simschlouder;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.LinkedList;
+import java.util.Vector;
 
 import org.simgrid.msg.HostFailureException;
 import org.simgrid.msg.HostNotFoundException;
@@ -22,6 +23,7 @@ import org.simgrid.msg.Process;
 import org.simgrid.schiaas.Instance;
 import org.simgrid.schiaas.exceptions.VMSchedulingException;
 
+import simschlouder.SchloudTask.STATE;
 import simschlouder.util.SimSchlouderException;
 
 
@@ -86,64 +88,92 @@ public class SchloudNode extends Process implements Comparable<SchloudNode>{
 	protected class SchloudNodeController extends Process {
 		private SchloudNode schloudNode;
 		private double bootTimePrediction;
-		private double bootTime;
-		private double provisioningDate;
-		private double lagTime;
+		private SchloudBootInfos schloudBootInfos;
+
 		protected SchloudNodeController(SchloudNode schloudNode) {
 			super(SchloudController.host,schloudNode.getName()+"_SchloudNodeController");
 			this.schloudNode = schloudNode;
 			this.bootTimePrediction = SchloudController.schloudCloud.getBootTimePrediction();
-			this.bootTime = this.bootTimePrediction;
-			this.provisioningDate = Msg.getClock();
+
+			//TODO: check that
+			this.schloudNode.futureDate = Msg.getClock();
 			
-			// Whenever there are some boot times to be forced
-			if (!SchloudController.schloudCloud.bootTimes.isEmpty()) {
-				this.bootTime = SchloudController.schloudCloud.bootTimes.removeFirst();
+			// Whenever there are some boot infos to be forced
+			if (!SchloudController.schloudCloud.schloudBootInfos.isEmpty()) {
+				this.schloudBootInfos = SchloudController.schloudCloud.schloudBootInfos.removeFirst();				
+			} else {
+				this.schloudBootInfos = new SchloudBootInfos();
 			}
-			// Whenever there are some provisioning dates to be forced
-			//Msg.info("remove prov date: "+SchloudController.schloudCloud.provisioningDates.peekFirst()+ " " + SchloudController.schloudCloud.provisioningDates.size());
-			if (!SchloudController.schloudCloud.provisioningDates.isEmpty()) 			
-				this.provisioningDate = SchloudController.schloudCloud.provisioningDates.removeFirst();
-			if (!SchloudController.schloudCloud.lagTimes.isEmpty()) 			
-				this.lagTime = SchloudController.schloudCloud.lagTimes.removeFirst();
+			
+			if (this.schloudBootInfos.bootTime == null)
+				this.schloudBootInfos.bootTime = this.bootTimePrediction;
+			if (this.schloudBootInfos.monitoringTime == null)
+				this.schloudBootInfos.monitoringTime = SchloudController.schloudCloud.monitoringPrevisionTime;
+			
+			//TODO: check that
+			if (this.schloudBootInfos.provisioningDate != null )
+				this.schloudNode.futureDate = schloudBootInfos.provisioningDate;
+			
+			// Adding the monitoring task 
+			//TODO: simulate the communications
+			if (cloud.monitoringPrevisionTime != null) {
+				SchloudTask task = new SchloudTask(
+						"monitoring-"+instance.getId(), 
+						cloud.monitoringPrevisionTime, 
+						this.schloudBootInfos.monitoringTime, 
+						0, 0, 
+						new Vector<SchloudTask>());
+				task.setState(SchloudTask.STATE.SCHEDULED);
+				SchloudController.setTaskToNode(task, this.schloudNode);
+			}
+
 		}
 		
 		public void main(String[] args) throws TransferFailureException, HostFailureException, TimeoutException {
 			try {
 				schloudNode.setState(STATE.FUTURE);
 				idleDate = Msg.getClock()+bootTimePrediction;
+				double provisioningDelay = 0;
 				
 				// Wait for the provisioning date
-				double provisioningDelay = provisioningDate-Msg.getClock();
-				if (provisioningDelay < 0) provisioningDelay = 0;
-				Msg.verb(instance.getId()+" waits for provisioning: "+provisioningDelay);
-				Process.getCurrentProcess().waitFor(provisioningDelay);
+				if (schloudBootInfos.provisioningDate != null) {
+					provisioningDelay = schloudBootInfos.provisioningDate-Msg.getClock();
+					if (provisioningDelay < 0) {
+						Msg.warn("The provisioning date of "+schloudNode.instance.getId()+" is in the past.");
+						provisioningDelay = 0;
+					}
+				
+					Msg.verb(instance.getId()+" waits for provisioning: "+provisioningDelay);
+					Process.getCurrentProcess().waitFor(provisioningDelay);
+				}
 				
 				schloudNode.setState(STATE.PENDING);
 				//idleDate += provisioningDelay;
-				
-				// This imitates a Schlouder bug
-				if (SimSchlouder.validation) SchloudController.schloudCloud.resetBootCount();
-				
+								
 				// Wait for at least the predicted boottime. Can be optimized.
-				Msg.verb(instance.getId()+" waits for boot: "+bootTime);
-				Process.getCurrentProcess().waitFor(bootTime);				
+				Msg.verb(instance.getId()+" waits for boot: "+schloudBootInfos.bootTime );
+				Process.getCurrentProcess().waitFor(schloudBootInfos.bootTime);	
 				while(!instance.isRunning())
 				{
 					Msg.verb(instance.getId()+" boot delayed");
 					Process.getCurrentProcess().waitFor(1);
 				}
+				
+				
 				// Should be IDLE if no job are enqueued at this time
 				schloudNode.setState(STATE.CLAIMED);
-				idleDate += provisioningDelay + bootTime - bootTimePrediction;
+				idleDate += provisioningDelay + schloudBootInfos.bootTime - bootTimePrediction;
 				
 				Msg.verb(instance.getId()+" booted ");
 				bootDate=Msg.getClock();
-				if (!SimSchlouder.validation) SchloudController.schloudCloud.decrementBootCount();
+				//if (!SimSchlouder.validation) 
+				SchloudController.schloudCloud.decrementBootCount();
 				
 				// Wait for the lag time
-				Msg.info(instance.getId()+" wait for lag time "+lagTime);
-				waitFor(lagTime);
+				if ( schloudBootInfos.lagTime != null ) {
+					Msg.verb(instance.getId()+" wait for lag time "+schloudBootInfos.lagTime);
+					waitFor(schloudBootInfos.lagTime);
+				}
 				
 				
 			} catch (HostFailureException e) {
@@ -189,6 +219,7 @@ public class SchloudNode extends Process implements Comparable<SchloudNode>{
 	 * @throws VMSchedulingException 
 	 */
 	public static SchloudNode startNewNode(SchloudCloud cloud) throws VMSchedulingException {
+		
 		Instance instance = cloud.compute.runInstance(SchloudController.imageId, SchloudController.instanceTypeId);
 		
 		SchloudNode schloudNode = new SchloudNode(instance,cloud);
@@ -242,7 +273,7 @@ public class SchloudNode extends Process implements Comparable<SchloudNode>{
 		}
 		
 		switch (state) {
-		case FUTURE: pendingDate=futureDate=Msg.getClock();
+		case FUTURE: pendingDate=Msg.getClock();
 			break;
 		case PENDING: pendingDate=Msg.getClock();
 			break;
@@ -338,6 +369,7 @@ public class SchloudNode extends Process implements Comparable<SchloudNode>{
 	 * if the task is assigned to this node 
 	 */
 	public double getRemainingIdleTime(SchloudTask task){
+		// -0.1 to simulate the strict equality as in schlouder
 		return (  (SchloudController.time2BTU(getUpTimeToIdle() + cloud.getShutdownMargin() + task.walltimePrediction) * cloud.getBtuTime()) 
 				- (getUpTimeToIdle() + cloud.getShutdownMargin() + task.walltimePrediction ) );
 	}

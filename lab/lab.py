@@ -10,8 +10,9 @@ SETUP_DIR indicates the directory containing setup files (should be called first
 INCLUDE indicates a file to read as addtional configuration file
 NEEDED indicates file or directory that are to be in the simuation directory (make symbolic links)
 NEEDED_POST indicates file or directory that are to be in the data directory (make symbolic links)
-PRE_COMMAND_SETUP indicates a command to run before the simulation in the setup directory
-POST_COMMAND_DATA indicates a command to run in the data directory
+PRE_COMMAND_SETUP indicates a command to run before the simulations in the setup directory
+POST_COMMAND_SETUP indicates a command to run after the simulations in the setup directory
+POST_COMMAND_DATA indicates a command to run after the simulations in the data directory
 TU_ARG indicates the arguments to pass to the trace_util.py script
 SIM_ARG x[:id] arg indicates the argument of the simulation
  - x: the id of the argument (must be grouped);
@@ -50,9 +51,6 @@ except ImportError:
     print("Threading module missing using dummy threading.", file=sys.stderr)
     import dummy_threading as threading
 
-
-supported_commands=['SETUP_DIR', 'INCLUDE', 'NEEDED', 'NEEDED_POST', 'PRE_COMMAND_SETUP', 'POST_COMMAND_DATA', 'TU_ARG', 'SIM_ARG' ]
-
 def labspath(path, config):
     """
     Return the absolute path corresponding to a given path,
@@ -83,7 +81,10 @@ def parse_SIM_ARG(line):
     """
     res = {}
     lst = line.split(maxsplit=1)
-    res['argument'] = lst[1]
+    try:
+        res['argument'] = lst[1]
+    except IndexError:
+        res['argument'] = "" #foir void arguement
     order = lst[0].split(':', maxsplit=1)
     try:
         res['index'] = int(order[0])
@@ -118,7 +119,7 @@ def read_cfg_file(filename, config):
             if line[0] == 'SETUP_DIR':
                 config['SETUP_DIR'] = line[1]
                 if not os.path.isdir(config['SETUP_DIR']):
-                    print("Error : the SETUP_DIR '{0}' was not found.".format(givenpath),
+                    print("Error : the SETUP_DIR '{0}' was not found.".format(config['SETUP_DIR']),
                           file=sys.stderr)
                     sys.exit(3)
 
@@ -133,6 +134,9 @@ def read_cfg_file(filename, config):
                     read_cfg_file(arg, config)
 
             elif line[0] == 'POST_COMMAND_DATA':
+                config[line[0]].append(' '.join(line[1:]))
+
+            elif line[0] == 'POST_COMMAND_SETUP':
                 config[line[0]].append(' '.join(line[1:]))
 
             elif line[0] == 'SIM_ARG':
@@ -159,6 +163,16 @@ def set_dirs(config):
     config['bindir'] = os.path.join(config['scriptdir'], "bin")
     config['simdir'] = os.path.join(config['cdir'], "simulations")
     config['datadir'] = os.path.join(config['cdir'], "data")
+
+    # making dirs
+    try:
+        os.mkdir(config['simdir'])
+    except FileExistsError:
+        pass
+    try:
+        os.mkdir(config['datadir'])
+    except FileExistsError:
+        pass
 
 def plan_experiments(config):
     """
@@ -198,8 +212,8 @@ def run_simulation(in_queue, out_queue, config):
     
             # make the directory
             if os.path.exists(exp_dir):
-                os.rmdirs(exp_dir)
-            os.makedirs(exp_dir)
+                shutil.rmtree(exp_dir)
+            os.mkdir(exp_dir)
 
             # make symbolic link to needed files
             for need in config['NEEDED']:
@@ -221,7 +235,7 @@ def run_simulation(in_queue, out_queue, config):
             if process.returncode == 0:
                 out_queue.put(exp)
             else:
-                print("WARNING simulation {0} exits with code {1}".format(exp[0],process.returncode), file=sys.stderr)        
+                print("WARNING simulation {0} exits with code {1}".format(exp[0],process.returncode), file=sys.stderr)
 
     out_queue.put(None)
 
@@ -248,17 +262,6 @@ def extract_trace(in_queue, config):
         #print(' '.join(command))
         process = subprocess.Popen(" ".join(command), shell=True, cwd=exp_dir)
         process.wait()
-
-def clean_simdir(config):
-    """
-    cleans the simdir
-    """
-    if os.path.exists(config['simdir']):
-        shutil.rmtree(config['simdir'])
-    if os.path.exists(config['datadir']):
-        shutil.rmtree(config['datadir'])
-    os.mkdir(config['simdir'])
-    os.mkdir(config['datadir'])
 
 def print_plan(plan, config):
     """
@@ -289,6 +292,10 @@ def run_post_commands(config):
         process = subprocess.Popen(command, shell=True, cwd=config['datadir'])
         process.wait()
 
+    for command in config['POST_COMMAND_SETUP']:
+        print("Running post-command {0} in {1}".format(command, config['SETUP_DIR']))
+        process = subprocess.Popen(command, shell=True, cwd=config['SETUP_DIR'])
+        process.wait()
 
 
 #pylint: disable=too-many-locals
@@ -312,7 +319,7 @@ def main():
     args = parser.parse_args()
 
     config = {'SETUP_DIR':'.', 'NEEDED':[], 'NEEDED_POST':[],
-              'precommandsetup':[], 'POST_COMMAND_DATA':[],
+              'POST_COMMAND_SETUP':[], 'POST_COMMAND_DATA':[],
               'TU_ARG':{}, 'SIM_ARG':[], 
               'keep':args.keep, 'timeout':args.timeout}
 
@@ -320,10 +327,6 @@ def main():
 
     # set minimal config
     set_dirs(config)
-
-    # cleanup previous configuration
-    if not args.keep:
-        clean_simdir(config)
 
     # check CLASSPATH
     print("CLASSPATH="+os.environ.get('CLASSPATH'))

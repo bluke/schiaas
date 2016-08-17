@@ -1,0 +1,232 @@
+{
+	"info": {
+		"version": "SimSchlouder",
+		"simschlouder_file": "simschlouder.xml",
+		"tasks_file": "/tmp/test.tasks",
+		"real_runtimes": "false",
+		"communications": "false",
+		"real_boottimes": "false",
+		"real_threads": "false",
+		"storage": {
+			"type": "n/a",
+			"location": "n/a"
+		},
+		"start_date": 0,
+		"description": "SimSchlouder simulation trace"
+	},
+	"nodes": [
+		{
+		"instance_id": "icps-opst-000_SchloudNode",
+		"index": 0,
+		"host": "icps-opst-000_VM",
+		"start_date": 1.0,
+		"stop_date": 3586.0,
+		"boot_time": 48.0,
+		"boot_time_prediction": 48.0,
+		"instance_type": "standard",
+		"cloud": "icps-opst",
+		"jobs": [
+			{
+				"id": 0,
+				"index": 0,
+				"name": "2mass_pleiades_h_2x2_project_0_9",
+				"provisioning_strategy": "AFAP",
+				"submission_date": 0.0,
+				"scheduled_date": 1.0,
+				"start_date": 49.00391212061856,
+				"walltime_prediction": 14.0,
+				"standard_walltime": 14.0,
+				"walltime": 14.003920453951892,
+				"runtime": 14.0,
+				"input_size": 0.0,
+				"input_time": 0.0,
+				"output_time": 0.0,
+				"output_size": 0.0,
+				"management_time": 0.003920453951892,
+				"dependencies": [
+				],
+				"PSM_data": {
+					"runtime_prediction": "14.0",
+					"data_in": "0.0",
+					"data_out": "0.0"
+				}
+			},
+			{
+				"id": 1,
+				"index": 1,
+				"name": "2mass_pleiades_h_2x2_project_10_19",
+				"provisioning_strategy": "AFAP",
+				"submission_date": 0.0,
+				"scheduled_date": 1.0,
+				"start_date": 63.01174459518901,
+				"walltime_prediction": 14.0,
+				"standard_walltime": 14.0,
+				"walltime": 14.003920453951892,
+				"runtime": 14.000000000000007,
+				"input_size": 0.0,
+				"input_time": 0.0,
+				"output_time": 0.0,
+				"output_size": 0.0,
+				"management_time": 0.003920453951884895,
+				"dependencies": [
+				],
+				"PSM_data": {
+					"runtime_prediction": "14.0",
+					"data_in": "0.0",
+					"data_out": "0.0"
+				}
+			},
+			{
+				"id": 2,
+				"index": 2,
+				"name": "2mass_pleiades_h_2x2_project_20_29",
+				"provisioning_strategy": "AFAP",
+				"submission_date": 0.0,
+				"scheduled_date": 1.0,
+				"start_date": 77.01957706975945,
+				"walltime_prediction": 14.0,
+				"standard_walltime": 14.0,
+				"walltime": 14.003920453951878,
+				"runtime": 14.0,
+				"input_size": 0.0,
+				"input_time": 0.0,
+				"output_time": 0.0,
+				"output_size": 0.0,
+				"management_time": 0.003920453951877789,
+				"dependencies": [
+				],
+				"PSM_data": {
+					"runtime_prediction": "14.0",
+					"data_in": "0.0",
+					"data_out": "0.0"
+				}
+			},
+			{
+				"id": 3,
+				"index": 3,
+				"name": "2mass_pleiades_h_2x2_project_30_39",
+				"provisioning_strategy": "AFAP",
+				"submission_date": 0.0,
+				"scheduled_date": 1.0,
+				"start_date": 91.02740954432988,
+				"walltime_prediction": 14.0,
+				"standard_walltime": 14.0,
+				"walltime": 14.003920453951878,
+				"runtime": 14.0,
+				"input_size": 0.0,
+				"input_time": 0.0,
+				"output_time": 0.0,
+				"output_size": 0.0,
+				"management_time": 0.003920453951877789,
+				"dependencies": [
+				],
+				"PSM_data": {
+					"runtime_prediction": "14.0",
+					"data_in": "0.0",
+					"data_out": "0.0"
+				}
+			},
+			{
+				"id": 4,
+				"index": 4,
+				"name": "2mass_pleiades_h_2x2_project_40_49",
+				"provisioning_strategy": "AFAP",
+				"submission_date": 0.0,
+				"scheduled_date": 1.0,
+				"start_date": 105.03524201890032,
+				"walltime_prediction": 14.0,
+				"standard_walltime": 14.0,
+				"walltime": 14.003920453951878,
+				"runtime": 14.0,
+				"input_size": 0.0,
+				"input_time": 0.0,
+				"output_time": 0.0,
+				"output_size": 0.0,
+				"management_time": 0.003920453951877789,
+				"dependencies": [
+				],
+				"PSM_data": {
+					"runtime_prediction": "14.0",
+					"data_in": "0.0",
+					"data_out": "0.0"
+				}
+			},
+			{
+				"id": 5,
+				"index": 5,
+				"name": "2mass_pleiades_h_2x2_project_50_59",
+				"provisioning_strategy": "AFAP",
+				"submission_date": 0.0,
+				"scheduled_date": 1.0,
+				"start_date": 119.04307449347075,
+				"walltime_prediction": 14.0,
+				"standard_walltime": 14.0,
+				"walltime": 14.003920453951906,
+				"runtime": 14.0,
+				"input_size": 0.0,
+				"input_time": 0.0,
+				"output_time": 0.0,
+				"output_size": 0.0,
+				"management_time": 0.003920453951906211,
+				"dependencies": [
+				],
+				"PSM_data": {
+					"runtime_prediction": "14.0",
+					"data_in": "0.0",
+					"data_out": "0.0"
+				}
+			},
+			{
+				"id": 6,
+				"index": 6,
+				"name": "2mass_pleiades_h_2x2_project_60_69",
+				"provisioning_strategy": "AFAP",
+				"submission_date": 0.0,
+				"scheduled_date": 1.0,
+				"start_date": 133.05090696804123,
+				"walltime_prediction": 14.0,
+				"standard_walltime": 14.0,
+				"walltime": 14.003920453951906,
+				"runtime": 14.0,
+				"input_size": 0.0,
+				"input_time": 0.0,
+				"output_time": 0.0,
+				"output_size": 0.0,
+				"management_time": 0.003920453951906211,
+				"dependencies": [
+				],
+				"PSM_data": {
+					"runtime_prediction": "14.0",
+					"data_in": "0.0",
+					"data_out": "0.0"
+				}
+			},
+			{
+				"id": 7,
+				"index": 7,
+				"name": "2mass_pleiades_h_2x2_project_70_79",
+				"provisioning_strategy": "AFAP",
+				"submission_date": 0.0,
+				"scheduled_date": 1.0,
+				"start_date": 147.0587394426117,
+				"walltime_prediction": 14.0,
+				"standard_walltime": 14.0,
+				"walltime": 14.003920453951906,
+				"runtime": 14.0,
+				"input_size": 0.0,
+				"input_time": 0.0,
+				"output_time": 0.0,
+				"output_size": 0.0,
+				"management_time": 0.003920453951906211,
+				"dependencies": [
+				],
+				"PSM_data": {
+					"runtime_prediction": "14.0",
+					"data_in": "0.0",
+					"data_out": "0.0"
+				}
+			}
+		]
+		}
+	]
+}

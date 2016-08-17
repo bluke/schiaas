@@ -76,7 +76,7 @@ public class SimSchlouder {
 	 * [boots] (optional section)
 	 * vm_boottime [vm_provisioning_date [vm_future_date]]
 	 * [tasks] 
-	 * task_name submission_date walltime_prediction [~ real_runtime/walltime] [input_data_size output_data_size in MB] [-> dependencies]
+	 * task_name submission_date walltime_prediction [~ real_walltime] [real_runtime] [input_data_size output_data_size in B] [-> dependencies]
 	 * @author julien.gossa@unistra.fr
 	 */
 	public static class TaskFileReaderProcess extends  org.simgrid.msg.Process {
@@ -88,7 +88,7 @@ public class SimSchlouder {
 		
 		// TODO: Errors
 		public void readTaskFile(String fileName,
-				boolean real_runtimes,
+				boolean real_walltimes,
 				boolean communications,
 				boolean real_boottimes,
 				boolean real_threads
@@ -101,23 +101,28 @@ public class SimSchlouder {
 			
 			double oldSubmissionDate = 0;
 			int i;
-			double d1, d2;
-			
-			Scanner sc = new Scanner(scf.nextLine());			
+			double d1, d2, d3;
+			Scanner sc = new Scanner(scf.nextLine());
 			if (sc.hasNext("\\[boots\\]")) {
 				sc.close();
 				sc = new Scanner(scf.nextLine());
 				do {
+					SchloudBootInfos sbi = new SchloudBootInfos();
 					d1 = sc.nextDouble();
-					if(real_boottimes) SchloudController.schloudCloud.bootTimes.add(d1);
+					if(real_boottimes) sbi.bootTime = d1;
 					if (sc.hasNextDouble()) {
 						d1 = sc.nextDouble();
-						if (real_threads) SchloudController.schloudCloud.provisioningDates.add(d1); 
+						if (real_threads) sbi.provisioningDate = d1; 
 					}
 					if (sc.hasNextDouble()) {
 						d1 = sc.nextDouble();
-						if (real_threads) SchloudController.schloudCloud.lagTimes.add(d1);
+						if (real_threads) sbi.lagTime = d1;
 					}
+					if (sc.hasNextDouble()) {
+						d1 = sc.nextDouble();
+						if (real_walltimes) sbi.monitoringTime = d1;
+					}
+					SchloudController.schloudCloud.schloudBootInfos.add(sbi);
 					sc = new Scanner(scf.nextLine());
 				} while (sc.hasNextDouble());
 			}
@@ -127,8 +132,8 @@ public class SimSchlouder {
 				sc.useLocale(Locale.US);
 				
 				String jid = sc.next();
-				Msg.info("bob"+jid);
-				double submissionDate = sc.nextDouble();
+				// -0.001 to ensure jobs are submitted before scheduling loops
+				double submissionDate = sc.nextDouble()-0.001;
 
 				double d=submissionDate-oldSubmissionDate;
 				if (d>0) {
@@ -148,12 +153,17 @@ public class SimSchlouder {
 				if (sc.hasNext("~")) {
 					sc.next();
 					d1 = sc.nextDouble();
-					if (real_runtimes) runtime = d1; 
+					if (real_walltimes) runtime = d1; 
 				}
 
 				if (sc.hasNextDouble()) {
 					d1 = sc.nextDouble();
 					d2 = sc.nextDouble();
+					if (sc.hasNextDouble()) {
+						if (communications) runtime = d1;
+						d1 = d2;
+						d2 = sc.nextDouble();
+					}
 					if (communications) {
 						inputSize = d1;
 						outputSize = d2;
@@ -192,19 +202,19 @@ public class SimSchlouder {
 		@Override
 		public void main(String[] args) throws MsgException {
 			try {
-				boolean real_runtimes = false;
+				boolean real_walltimes = false;
 				boolean communications = false;
 				boolean real_boottimes = false;
 				boolean real_threads = false;
 				
 				for (int i=1; i<args.length; i++) {
-					if (args[i].equals("real_runtimes")) real_runtimes = true;
+					if (args[i].equals("real_walltimes")) real_walltimes = true;
 					if (args[i].equals("communications")) communications = true;
 					if (args[i].equals("real_boottimes")) real_boottimes = true;
 					if (args[i].equals("real_threads")) real_threads = true;
 				}
 				
-				readTaskFile(args[0], real_runtimes, communications, real_boottimes, real_threads);
+				readTaskFile(args[0], real_walltimes, communications, real_boottimes, real_threads);
 			} catch (FileNotFoundException e) {
 				Msg.critical("Task file "+args[0]+" not found.");
 				e.printStackTrace();
@@ -262,7 +272,7 @@ public class SimSchlouder {
 		
 		Trace.init("SimSchlouder");
 		SchloudController.init(args[0]);
-				
+		
 		Msg.verb("Loading the strategy: "+args[1]);
 		//SchloudController.strategy=SchloudController.STRATEGY.valueOf(args[1].toUpperCase());
 		SchloudController.strategy = SimSchlouder.loadStrategy(args[1].trim());

@@ -35,6 +35,7 @@ xmlns:xs="http://www.w3.org/2001/XMLSchema">
 		<xs:attribute name="shutdown_margin" type="xs:integer" use="required"/>
 		<xs:attribute name="standard_power" use="required"/>
 		<xs:attribute name="max_instances_per_user" type="xs:integer" default="0"/>
+		<xs:attribute name="monitoring_time" type="xs:integer"/>
 </xs:complexType>
 
 

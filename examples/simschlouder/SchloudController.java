@@ -116,7 +116,7 @@ public class SchloudController extends org.simgrid.msg.Process {
 		while (!(mainQueue.isEmpty() && nodes.isEmpty() && allTasksSubmitted)) {
 			Msg.verb("main loop : main queue="+ mainQueue.size() 
 				+ ", idle nodes=" +idleNodesCount+"/("+ nodes.size()+"+"+schloudCloud.describeAvailability(instanceTypeId)+")");
-						
+
 			terminateIdleNodes();
 			
 			// if (idleNodesCount!=0 || schloudCloud.describeAvailability(instanceTypeId)>0) {
@@ -129,6 +129,8 @@ public class SchloudController extends org.simgrid.msg.Process {
 					System.exit(1);
 				}
 			}
+			
+			//if(SimSchlouder.validation) schloudCloud.resetBootCount();
 			
 			if ( allTasksSubmitted ) 
 			//	|| ((!mainQueue.isEmpty() 
@@ -165,6 +167,14 @@ public class SchloudController extends org.simgrid.msg.Process {
 		SchloudController.nodes.add(node);
 		
 		SchloudController.schloudCloud.incrementBootCount();
+		
+		// To imitate schlouder bugs
+		try {
+			if (SimSchlouder.validation && node.futureDate != schloudCloud.schloudBootInfos.peek().provisioningDate)
+				schloudCloud.resetBootCount();
+		} catch (Exception e) {
+		}
+		
 		return node;
 	}
 	
@@ -193,7 +203,7 @@ public class SchloudController extends org.simgrid.msg.Process {
 	 */
 	public static int time2BTU(double time) {
 		// time-1 in order to consider a full BTU (i.e. 3600s) as one BTU
-		if (time>1) time--;
+		if (time>1) time-=1;
 		return (1+((int)((time)/schloudCloud.getBtuTime())));
 	}
 
@@ -248,7 +258,7 @@ public class SchloudController extends org.simgrid.msg.Process {
 		Document doc;
 		
 		String provisioningCloud=null;
-		
+	
 		try {
 			db = dbf.newDocumentBuilder();
 			doc = db.parse(new File(filename));
@@ -281,6 +291,7 @@ public class SchloudController extends org.simgrid.msg.Process {
 					}
 				}
 				else if (nodes.item(i).getNodeName().compareTo("cloud") == 0) {
+					
 					String name = nodes.item(i).getAttributes().getNamedItem("id").getNodeValue();
 					double B0 = Double.parseDouble(nodes.item(i).getAttributes().getNamedItem("B0").getNodeValue());
 					double B1 = Double.parseDouble(nodes.item(i).getAttributes().getNamedItem("B1").getNodeValue());
@@ -291,7 +302,12 @@ public class SchloudController extends org.simgrid.msg.Process {
 					if(nodes.item(i).getAttributes().getNamedItem("max_instances_per_user")!=null){
 						maxInstances = Integer.parseInt(nodes.item(i).getAttributes().getNamedItem("max_instances_per_user").getNodeValue());
 					}
-					schloudClouds.put(name, new simschlouder.SchloudCloud(name,B0,B1,BTU, shutdownMargin, standardPower ,maxInstances));
+					Double monitoringTimePrediction = null;
+					if(nodes.item(i).getAttributes().getNamedItem("monitoring_time")!=null){
+						monitoringTimePrediction = Double.parseDouble(nodes.item(i).getAttributes().getNamedItem("monitoring_time").getNodeValue());
+					}
+	
+					schloudClouds.put(name, new simschlouder.SchloudCloud(name,B0,B1,BTU, shutdownMargin, standardPower, maxInstances, monitoringTimePrediction));
 				}
 				else if (nodes.item(i).getNodeName().compareTo("provisioning") == 0) {
 					NodeList provNodes = nodes.item(i).getChildNodes(); 
@@ -340,17 +356,18 @@ public class SchloudController extends org.simgrid.msg.Process {
 	 * @throws SimSchlouderException 
 	 */
 	public static void writeJSON(String args[]) throws IOException, SimSchlouderException {
-		boolean real_runtimes = false;
+		boolean real_walltimes = false;
 		boolean communications = false;
 		boolean real_boottimes = false;
 		boolean real_threads = false;
 		
 		for (int i=1; i<args.length; i++) {
-			if (args[i].equals("real_runtimes")) real_runtimes = true;
+			if (args[i].equals("real_walltimes")) real_walltimes = true;
 			if (args[i].equals("communications")) communications = true;
 			if (args[i].equals("real_boottimes")) real_boottimes = true;
 			if (args[i].equals("real_threads")) real_threads = true;
 		}
+		
 		String description="SimSchlouder simulation trace";
 		
 		FileWriter fstream = new FileWriter(SimSchlouder.outJsonFile, false);
@@ -361,13 +378,13 @@ public class SchloudController extends org.simgrid.msg.Process {
 		out.write("\t\t\"version\": \"SimSchlouder\",\n");
 		out.write("\t\t\"simschlouder_file\": \""+args[0]+"\",\n");
 		out.write("\t\t\"tasks_file\": \""+args[2]+"\",\n");
-		out.write("\t\t\"real_runtimes\": \""+real_runtimes+"\",\n");
+		out.write("\t\t\"real_walltimes\": \""+real_walltimes+"\",\n");
 		out.write("\t\t\"communications\": \""+communications+"\",\n");
 		out.write("\t\t\"real_boottimes\": \""+real_boottimes+"\",\n");
 		out.write("\t\t\"real_threads\": \""+real_threads+"\",\n");
 		out.write("\t\t\"storage\": {\n");
-		out.write("\t\t\t\"type\": \"n/a\",\n");
-		out.write("\t\t\t\"location\": \"n/a\"\n");
+		out.write("\t\t\t\"type\": \"NA\",\n");
+		out.write("\t\t\t\"location\": \"NA\"\n");
 		out.write("\t\t},\n");
 		out.write("\t\t\"start_date\": 0,\n");
 		out.write("\t\t\"description\": \""+description+"\"\n");

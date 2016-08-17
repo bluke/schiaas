@@ -40,11 +40,11 @@ public class ASAP extends AStrategy {
 				if ( candidate == null || node.getRemainingIdleTime(task) < candidate.getRemainingIdleTime(task) )
 					candidate = node;
 
-			// Track one given task
-			//if (task.getName().equals("F025743DA_1.mgf"))  
-				Msg.verb("ASAP "+node.instance.getId()+"("+node.getState()+"): "+node.getIdleDate()+"<"+(Msg.getClock()+SchloudController.schloudCloud.getBootTimePrediction())
-					+" / "+node.getRemainingIdleTime(task)
-					+" - "+finishSooner.instance.getId()+"\t"+((candidate!=null)?candidate.instance.getId():"null"));
+			//Msg.verb(""+SchloudController.schloudCloud.getBootTimePrediction());
+			Msg.verb("ASAP "+node.instance.getId()+"("+node.getState()+"): "
+				+node.getIdleDate()+"<"+(Msg.getClock()+SchloudController.schloudCloud.getBootTimePrediction())
+				+" / "+node.getRemainingIdleTime(task)
+				+" - "+finishSooner.instance.getId()+"\t"+((candidate!=null)?candidate.instance.getId():"null"));
 		}
 		
 		// If no new instance can be started

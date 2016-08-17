@@ -7,18 +7,54 @@
  <AS  id="AS0" routing="Full">
 	
 	<cluster id="icps" prefix="icps-gc-" suffix=".me" radical="1-2" 
-         speed="10e9f" core="24" bw="120e6Bps" lat="0.0001s"
-    	 bb_bw="120e6Bps" bb_lat="0.0001s" />
+         speed="10e9f" core="24" bw="10Gbps" lat="0.0001s"
+    	 bb_bw="10Gbps" bb_lat="0.0001s" />
  
  	 <AS id="AS_Controller" routing="Full">
 	   <host id="controller" speed="1e9f" core="2" />
 	 </AS>
+
+ 	 <AS id="AS_RemoteController" routing="Full">
+	   <host id="remote_controller" speed="1e9f" core="2" />
+	 </AS>
+
+ 	 <AS id="AS_Eucalyptus" routing="Full">
+	   <host id="eucalyptus" speed="1e9f" core="2" />
+	 </AS>
+
+
+	<link id="controller2icps_up" bandwidth="36MBps" latency="1ms"/> 
+	<link id="controller2icps_down" bandwidth="17MBps" latency="1ms"/> 
 	
-	<link id="controller2icps" bandwidth="1e9Bps" latency="5E-5s"/> 
+	<link id="eucalyptus2icps_up" bandwidth="1MBps" latency="1ms"/>
+	<link id="eucalyptus2icps_down" bandwidth="6MBps" latency="1ms"/> 
+
+	<link id="remote_controller2icps_up" bandwidth="0.75MBps" latency="10ms"/>
+	<link id="remote_controller2icps_down" bandwidth="2.79MBps" latency="10ms"/> 
+
+
 	
-	<ASroute src="AS_Controller" dst="icps" gw_src="controller" gw_dst="icps-gc-icps_router.me" symmetrical="YES">
-		<link_ctn id="controller2icps"/>
+	<ASroute src="AS_Controller" dst="icps" gw_src="controller" gw_dst="icps-gc-icps_router.me" symmetrical="NO">
+		<link_ctn id="controller2icps_up"/>
 	</ASroute>
+	<ASroute src="icps" dst="AS_Controller" gw_src="icps-gc-icps_router.me" gw_dst="controller" symmetrical="NO">
+		<link_ctn id="controller2icps_down"/>
+	</ASroute>
+
+	<ASroute src="AS_RemoteController" dst="icps" gw_src="remote_controller" gw_dst="icps-gc-icps_router.me" symmetrical="NO">
+		<link_ctn id="remote_controller2icps_up"/>
+	</ASroute>
+	<ASroute src="icps" dst="AS_RemoteController" gw_src="icps-gc-icps_router.me" gw_dst="remote_controller" symmetrical="NO">
+		<link_ctn id="remote_controller2icps_down"/>
+	</ASroute>
+
+	<ASroute src="AS_Eucalyptus" dst="icps" gw_src="eucalyptus" gw_dst="icps-gc-icps_router.me" symmetrical="NO">
+		<link_ctn id="eucalyptus2icps_up"/>
+	</ASroute>
+	<ASroute src="icps" dst="AS_Eucalyptus" gw_src="icps-gc-icps_router.me" gw_dst="eucalyptus" symmetrical="NO">
+		<link_ctn id="eucalyptus2icps_down"/>
+	</ASroute>
+
 	
 </AS> 
  

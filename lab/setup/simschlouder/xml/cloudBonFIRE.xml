@@ -7,7 +7,7 @@
 			<config controller="bonfire-project-nfs.eu"/>
 	</storage>
 	<storage id="bonfire-fr-inria-image_repo" engine="org.simgrid.schiaas.engine.storage.rise.Rise">
-			<config controller="bonfire-blade-bonfire-project-fr-inria_controller.eu" />
+			<config controller="bonfire-project-nfs.eu" />
 	</storage>
 	<compute engine="org.simgrid.schiaas.engine.compute.rice.Rice">
 		<!-- inter_boot_delay: On one PM, time between 2 boot -->
@@ -28,13 +28,13 @@
 			<config controller="bonfire-project-nfs.eu"/>
 	</storage>
 	<storage id="bonfire-uk-epcc-image_repo" engine="org.simgrid.schiaas.engine.storage.rise.Rise">
-			<config controller="vmhostbonfire-project-uk-epcc_controller.eu" />
+			<config controller="bonfire-project-nfs.eu" />
 	</storage>
 	<compute engine="org.simgrid.schiaas.engine.compute.rice.Rice">
 		<config controller="vmhostbonfire-project-uk-epcc_controller.eu"
 			image_storage="bonfire-uk-epcc-image_repo"
 			image_caching="PRE"
-			inter_boot_delay="42.44"
+			inter_boot_delay="25"
 			standard_power="1.228312e9"/>
 		<scheduler name="org.simgrid.schiaas.engine.compute.scheduler.simplescheduler.SimpleScheduler"
 			type="balancer"
@@ -54,7 +54,7 @@
 			<config controller="bonfire-project-nfs.eu"/>
 	</storage>
 	<storage id="bonfire-de-hlrs-image_repo" engine="org.simgrid.schiaas.engine.storage.rise.Rise">
-			<config controller="bonfire-project-de-hlrs_controller.eu" />
+			<config controller="bonfire-project-nfs.eu" />
 	</storage>
 	<compute engine="org.simgrid.schiaas.engine.compute.rice.Rice">
 		<config controller="bonfire-project-de-hlrs_controller.eu"

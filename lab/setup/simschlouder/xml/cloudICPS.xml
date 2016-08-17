@@ -7,6 +7,14 @@
 			<config controller="controller"/>
 		</storage>
 
+		<storage id="myRemoteStorage" engine="org.simgrid.schiaas.engine.storage.rise.Rise">
+			<config controller="remote_controller"/>
+		</storage>
+
+		<storage id="EucalyptusStorage" engine="org.simgrid.schiaas.engine.storage.rise.Rise">
+			<config controller="eucalyptus"/>
+		</storage>
+
 		<compute engine="org.simgrid.schiaas.engine.compute.rice.Rice"> 
 		
 			<config controller="controller" 

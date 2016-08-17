@@ -166,7 +166,7 @@ public class Rice extends ComputeEngine {
 		//Msg.info("command :"+command+":"+instance.getId());
 		RiceControllerProcess rcp = new RiceControllerProcess(this, command, riceInstance);
 		RiceNodeProcess rnp = new RiceNodeProcess(this, riceInstance.riceHost);
-		
+
 		try {
 			rcp.start();
 			rnp.start();

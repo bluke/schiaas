@@ -34,7 +34,6 @@ public class RiceControllerProcess extends Process {
 	 */
 	@Override
 	public void main(String[] args) throws MsgException {
-		
 		RiceTask riceTask = new RiceTask(riceInstance, command);
 		
 		riceTask.send(riceInstance.riceHost.messageBox());
