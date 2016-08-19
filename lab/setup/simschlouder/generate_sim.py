@@ -90,7 +90,7 @@ def updateData(inData, rVals, treat, expect):
 def generateTaskfile(inData, itr, args):
     rVals = getRandomValues(len(inData), args.drawFunc, args.expect, args.shape)
     outData = updateData(copy.deepcopy(inData), rVals, args.treatment, args.expect)
-    fileName = "{0}_{1}_{2}-{3}-{4}_{5}".format(os.path.splitext(os.path.basename(args.inputFile))[0], args.treatment, args.drawFunc, args.expect, args.shape, itr)
+    fileName = "{0}_{1}_{2}-{3}-{4}_{5}".format(os.path.splitext(os.path.basename(args.inputFile))[0], args.treatment, args.drawFunc, args.expect, args.shape, itr).replace(".",",")
     writeFile(args.path+"/"+fileName+".tasks", outData)
     print("SIM_ARG 3:{0} {1}/{0}.tasks".format(fileName, args.path))
 
