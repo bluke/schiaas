@@ -162,10 +162,10 @@
       <!-- EPCC <-> HLRS: lat=50ms. bw=15Mbits/sec -->
       <link id="backbone" bandwidth="1.25GBps" latency="500us" bandwidth_file="" latency_file="" sharing_policy="SHARED"/>
 
-      <link id="ibbt_fr-inria_up" bandwidth="4MBps" latency="2ms" bandwidth_file="" latency_file="" sharing_policy="SHARED"/>
+      <link id="ibbt_fr-inria_up" bandwidth="4.5MBps" latency="2ms" bandwidth_file="" latency_file="" sharing_policy="SHARED"/>
       <link id="ibbt_fr-inria_down" bandwidth="4MBps" latency="20ms" bandwidth_file="" latency_file="" sharing_policy="SHARED"/>
 
-      <link id="ibbt_uk-epcc_up" bandwidth="4MBps" latency="2ms" bandwidth_file="" latency_file="" sharing_policy="SHARED"/>
+      <link id="ibbt_uk-epcc_up" bandwidth="4.5MBps" latency="2ms" bandwidth_file="" latency_file="" sharing_policy="SHARED"/>
       <link id="ibbt_uk-epcc_down" bandwidth="4MBps" latency="40ms" bandwidth_file="" latency_file="" sharing_policy="SHARED"/>
 
       <link id="ibbt_de-hlrs_up" bandwidth="2.5MBps" latency="3ms" bandwidth_file="" latency_file="" sharing_policy="SHARED"/>

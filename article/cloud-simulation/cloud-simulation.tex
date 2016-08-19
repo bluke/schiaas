@@ -23,6 +23,7 @@ Assessment of the impact of different metrics.
 
 Recommendations for using cloud simulators.
 
+WARNING: figures in text might not be up to date.
 
 \end{abstract}
 
@@ -140,9 +141,9 @@ leading to differences between simulation and reality.
 \begin{figure}
   \centering
 
-  \includegraphics[width=\textwidth]{best-4metrics.pdf}
+  \includegraphics[width=\textwidth]{sim_best-4metrics.pdf}
   
-  \input{\vrpath best-4metrics.mmmm.latex}
+  \input{\vrpath sim_best-4metrics-mmmm.latex}
   
 \caption{Frequencies and statistics about absolute error of best simulations (274 xp)}
 \end{figure} 
@@ -184,7 +185,7 @@ any error leads to several others.
 
 
 \begin{figure}
-  \includegraphics[width=\textwidth]{best-4metrics-platform-app.pdf}
+  \includegraphics[width=\textwidth]{sim_best-4metrics-platform-app.pdf}
 \caption{Absolute error frequencies of best simulations according to platforms 
 and applications}
 \end{figure} 
@@ -192,7 +193,7 @@ and applications}
 \begin{itemize}
  \item openstack-icps / omssa (107 xp): 
  
-      \input{\vrpath best-openstack-icps-omssa-4metrics.mmmm.latex}
+      \input{\vrpath sim_best-openstack-icps-omssa-4metrics-mmmm.latex}
  
       All metrics are almost perfectly assessed (mean AR from $0.001$ to $0.002$)
       except scheduling error 
@@ -221,11 +222,11 @@ and applications}
 
       
 \begin{figure}  
-  \includegraphics[width=\textwidth]{best-openstack-icps-omssa-noschederror-4metrics.pdf}
+  \includegraphics[width=\textwidth]{sim_best-openstack-icps-omssa-noschederror-4metrics.pdf}
 
-  \input{\vrpath best-openstack-icps-omssa-noschederror-4metrics.mmmm.latex}
+  \input{\vrpath sim_best-openstack-icps-omssa-noschederror-4metrics-mmmm.latex}
       
-  \input{\vrpath best-openstack-icps-omssa-noschederror-4metrics.mmmm.cmp.latex}
+  \input{\vrpath sim_best-openstack-icps-omssa-noschederror-4metrics-mmmm-cmp.latex}
 
 \caption{Frequencies and statistics about absolute error of best simulations for openstack-icps / 
 ommssa, without scheduling error cases (91 xps)}
@@ -248,9 +249,9 @@ ommssa, without scheduling error cases (91 xps)}
       
  \item openstack-icps / montage (36 xps): 
  
-      \input{\vrpath best-openstack-icps-montage-4metrics.mmmm.latex}
+      \input{\vrpath sim_best-openstack-icps-montage-4metrics-mmmm.latex}
 
-      \input{\vrpath best-openstack-icps-montage-4metrics.mmmm.cmp.latex}
+      \input{\vrpath sim_best-openstack-icps-montage-4metrics-mmmm-cmp.latex}
 
       With a work-flow, scheduling errors are more numerous 
       (AR mean of $0.24$ for a max of $0.79$), leading to less accurate assessments
@@ -266,6 +267,11 @@ ommssa, without scheduling error cases (91 xps)}
       Those decisions rely on the system state (predicted end date of nodes for 
       instance). Consequently, divergences between simulation and reality have
       more important impacts.
+      
+      %Worst case: v3.standard.2x2.asap.regular.openstack-icps.1 
+      %first proverror: 2mass_pleiades_2x2_gather
+      %Log of schlouder shows that all solutions are elligible, 
+      %but it shouldn't be this one (which is in the middle of the queue)... Mystery!
       
       For instance, the worst case shows a very large amount of scheduling errors 
       (0.954). A close examination of this case shown that the simulation behave
@@ -292,9 +298,9 @@ ommssa, without scheduling error cases (91 xps)}
  
  \item bonfire / omssa (75 xp): 
  
-      \input{\vrpath best-bonfire-omssa-4metrics.mmmm.latex}
+      \input{\vrpath sim_best-bonfire-omssa-4metrics-mmmm.latex}
       
-      \input{\vrpath best-bonfire-omssa-4metrics.mmmm.cmp.latex}
+      \input{\vrpath sim_best-bonfire-omssa-4metrics-mmmm-cmp.latex}
       
       On a public shared heterogeneous cloud, scheduling errors are more numerous 
       (AR mean of $0.03$ for a max of $0.86$), leading to less accurate assessments
@@ -312,9 +318,9 @@ ommssa, without scheduling error cases (91 xps)}
  
  \item bonfire / montage (56 xp): 
  
-      \input{\vrpath best-bonfire-montage-4metrics.mmmm.latex}
+      \input{\vrpath sim_best-bonfire-montage-4metrics-mmmm.latex}
       
-      \input{\vrpath best-bonfire-omssa-4metrics.mmmm.cmp.latex}
+      \input{\vrpath sim_best-bonfire-omssa-4metrics-mmmm-cmp.latex}
  
       On a public shared heterogeneous cloud, scheduling errors are even more numerous 
       (AR mean of $0.48$ for a max of $0.96$), leading to less accurate assessments
@@ -336,18 +342,44 @@ observed boottimes.
 
 \begin{figure}
   \centering
-  \includegraphics[width=\textwidth]{sim_no-boottimes-4metrics-compare.pdf}
+  \includegraphics[width=\textwidth]{sim_no-boottimes-4metrics-cmp.pdf}
 
-  \input{\vrpath sim_no-boottimes-4metrics.mmmm.latex}
+  \input{\vrpath sim_no-boottimes-4metrics-mmmm.latex}
 
-  \input{\vrpath sim_no-boottimes-4metrics.mmmm.cmp.latex}
+  \input{\vrpath sim_no-boottimes-4metrics-mmmm-cmp.latex}
 
-  \input{\vrpath sim_no-boottimes-4metrics.mmmm.twobytwo.latex}
+  \input{\vrpath sim_no-boottimes-4metrics-mmmm-twobytwo.latex}
 
   \caption{Frequencies, statistics, and comparison with best of simulations with no real boot times 
   injection}
 
 \end{figure} 
+
+%worst case: v3.standard.2x2.asap.regular.fr-inria.2 
+The worst case show a makespan ae of $0.816$ (3141s instead of 17076s). 
+This is due to boottimes on BonFire that were completely of charts: 
+5 boots were normal (ranging from 232s to 311s), 
+the 17 others ranged from 3281s to 11084s.
+Whereas BonFire were intended to deliver 22 simultaneous VMs, only 5 were available
+at the time of the experiment. Instead of refusing the following 17 VMs, the
+provisioning system of BonFire put them in pending state, waiting for the delivered
+ones to stop. The VMs being provisioned for one hour, following the 5 normal boots, 
+5 boots took approximatively 1 hour, then 5 other boots took 2 hours,
+and 5 another more took 3 hours. Finally, 2 boots took 1 hour after the last 
+dependencies were satsified.
+
+This illustrates that defective clouds can not be efficiently simulated without 
+proper information capture. However, once captured, this kind of defection is
+perfectly simulated by SchIaaS. Consequently, it can be used to assess behavior 
+and robustness of solutions facing these defections.
+
+%Best case: v3.standard.3x3.afap.regular.de-hlrs.2
+Some case are surprisingly improved without the real boot times injection:
+For instance, one xp shows a real makespan of 25788s, for 35106s with boot times
+injection and 24266s without. 
+
+
+
 
 \subsubsection{No-threads}
 
@@ -358,13 +390,13 @@ Assess the impact of efficient internal threads simulation
 
 \begin{figure}
   \centering
-  \includegraphics[width=\textwidth]{sim_no-threads-4metrics-compare.pdf}
+  \includegraphics[width=\textwidth]{sim_no-threads-4metrics-cmp.pdf}
   
-  \input{\vrpath sim_no-threads-4metrics.mmmm.latex}
+  \input{\vrpath sim_no-threads-4metrics-mmmm.latex}
 
-  \input{\vrpath sim_no-threads-4metrics.mmmm.cmp.latex}
+  \input{\vrpath sim_no-threads-4metrics-mmmm-cmp.latex}
 
-  \input{\vrpath sim_no-threads-4metrics.mmmm.twobytwo.latex}
+  \input{\vrpath sim_no-threads-4metrics-mmmm-twobytwo.latex}
     
   \caption{Frequencies, statistics, and comparison with best of simulations with no real thread times
   injection}
@@ -382,13 +414,13 @@ Assess the impact of efficient communications
 
 \begin{figure}
   \centering
-  \includegraphics[width=\textwidth]{sim_communications-4metrics-compare.pdf}
+  \includegraphics[width=\textwidth]{sim_communications-4metrics-cmp.pdf}
   
-  \input{\vrpath sim_communications-4metrics.mmmm.latex}
+  \input{\vrpath sim_communications-4metrics-mmmm.latex}
 
-  \input{\vrpath sim_communications-4metrics.mmmm.cmp.latex}
+  \input{\vrpath sim_communications-4metrics-mmmm-cmp.latex}
 
-  \input{\vrpath sim_communications-4metrics.mmmm.twobytwo.latex}
+  \input{\vrpath sim_communications-4metrics-mmmm-twobytwo.latex}
 
   \caption{Frequencies, statistics, and comparison with best of simulations with simulation of communications}
 \end{figure} 
@@ -420,13 +452,13 @@ Assess the efficiency of using a simulator as a predictor of a cloud.
 
 \begin{figure}
   \centering
-  \includegraphics[width=\textwidth]{sim_predictions-4metrics-compare.pdf}
+  \includegraphics[width=\textwidth]{sim_predictions-4metrics-cmp.pdf}
   
-  \input{\vrpath sim_predictions-4metrics.mmmm.latex}
+  \input{\vrpath sim_predictions-4metrics-mmmm.latex}
 
-  \input{\vrpath sim_predictions-4metrics.mmmm.cmp.latex}
+  \input{\vrpath sim_predictions-4metrics-mmmm-cmp.latex}
 
-  \input{\vrpath sim_communications-4metrics.mmmm.twobytwo.latex}
+  \input{\vrpath sim_communications-4metrics-mmmm-twobytwo.latex}
 
   
   \caption{Frequencies, statistics, and comparison with best of simulations with no injection}
