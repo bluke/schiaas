@@ -4,15 +4,15 @@
 		
 	<cloud id="icps-opst">		
 		<storage id="myStorage" engine="org.simgrid.schiaas.engine.storage.rise.Rise">
-			<config controller="controller"/>
+			<config controller="storage"/>
 		</storage>
 
 		<storage id="myRemoteStorage" engine="org.simgrid.schiaas.engine.storage.rise.Rise">
-			<config controller="remote_controller"/>
+			<config controller="remote_storage"/>
 		</storage>
 
-		<storage id="EucalyptusStorage" engine="org.simgrid.schiaas.engine.storage.rise.Rise">
-			<config controller="eucalyptus"/>
+		<storage id="WalrusStorage" engine="org.simgrid.schiaas.engine.storage.rise.Rise">
+			<config controller="walrus"/>
 		</storage>
 
 		<compute engine="org.simgrid.schiaas.engine.compute.rice.Rice"> 

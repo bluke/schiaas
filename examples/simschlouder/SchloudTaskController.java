@@ -1,10 +1,14 @@
 package simschlouder;
 
 
+import org.simgrid.msg.Msg;
 import org.simgrid.msg.MsgException;
 import org.simgrid.msg.Process;
 import org.simgrid.msg.Task;
 import org.simgrid.msg.TaskCancelledException;
+
+import simschlouder.SchloudTask.STATE;
+import simschlouder.util.SimSchlouderException;
 
 /**
  * Represents a controller of SchloudTasks
@@ -17,10 +21,10 @@ public class SchloudTaskController extends Process {
 
 	/**
 	 * Constructor
-	 * @param node the node to run this controller.
+	 * @param host the host to run this controller.
 	 */
 	protected SchloudTaskController(SchloudNode node) {
-		super(SchloudController.host, "SchloudTaskController:"+node.instance);
+		super(SchloudController.controller, "SchloudTaskController:"+node.instance);
 		
 		this.node = node;
 	}
@@ -42,10 +46,10 @@ public class SchloudTaskController extends Process {
 			SchloudTask schloudTask=node.queue.peek();
 			node.currentSchloudTask = schloudTask;
 			
-			schloudTask.getCommandTask().send(node.getMessageBox());
-			
-			schloudTask.setState(SchloudTask.STATE.SUBMITTED);			
+			schloudTask.setState(SchloudTask.STATE.SUBMITTED);
 			node.setState(SchloudNode.STATE.BUSY);
+			
+			schloudTask.getCommandTask().send(node.getMessageBox());
 			
 			//Msg.info("waiting for complete " + schloudTask.name);
 			Task rt = Task.receive(node.getMessageBox());
@@ -55,16 +59,34 @@ public class SchloudTaskController extends Process {
 			} catch (TaskCancelledException e) {
 			}
 			
-			node.completedQueue.add(node.queue.poll());
+			// handle the management time
+			if (schloudTask.managementTime != 0) {
+				double adjustment = 0;
+				if (schloudTask.inputSize==0 && schloudTask.outputSize==0) {
+					try {
+						adjustment = schloudTask.managementTime 
+								- (schloudTask.getDateOfFirst(STATE.INPUTTING) - schloudTask.getDateOfFirst(STATE.SUBMITTED))
+								- (Msg.getClock() - schloudTask.getDateOfFirst(STATE.FINISHED));
+					} catch (SimSchlouderException e) {
+						Msg.warn("Something went wrong while computing the adjustement for management time.");
+						e.printStackTrace();
+					}
+					
+					if (adjustment<0) {
+						Msg.warn("Can't go back in time for the adjustement of the management time of "+schloudTask.name+": "+adjustment);
+					} else {
+						Msg.verb("Adjusting the management time of "+schloudTask.name+": "+adjustment);
+						waitFor(adjustment);
+					}
+				}
+			}
 			
+			node.completedQueue.add(node.queue.poll());
 			schloudTask.setState(SchloudTask.STATE.COMPLETE);
 			// correct the idleDate
 			node.idleDate+=schloudTask.getWalltime()-schloudTask.getWalltimePrediction();
 		}
 		
 		node.setState(SchloudNode.STATE.IDLE);
-
-		//Msg.info("SchloudTaskController "+name+" finished");
-		//node.handleNextTask();
 	}
 }

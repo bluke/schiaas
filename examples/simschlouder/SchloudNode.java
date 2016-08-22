@@ -23,7 +23,6 @@ import org.simgrid.msg.Process;
 import org.simgrid.schiaas.Instance;
 import org.simgrid.schiaas.exceptions.VMSchedulingException;
 
-import simschlouder.SchloudTask.STATE;
 import simschlouder.util.SimSchlouderException;
 
 
@@ -91,7 +90,7 @@ public class SchloudNode extends Process implements Comparable<SchloudNode>{
 		private SchloudBootInfos schloudBootInfos;
 
 		protected SchloudNodeController(SchloudNode schloudNode) {
-			super(SchloudController.host,schloudNode.getName()+"_SchloudNodeController");
+			super(SchloudController.controller,schloudNode.getName()+"_SchloudNodeController");
 			this.schloudNode = schloudNode;
 			this.bootTimePrediction = SchloudController.schloudCloud.getBootTimePrediction();
 
@@ -159,9 +158,6 @@ public class SchloudNode extends Process implements Comparable<SchloudNode>{
 					Process.getCurrentProcess().waitFor(1);
 				}
 				
-				
-				// Should be IDLE if no job are enqueued at this time
-				schloudNode.setState(STATE.CLAIMED);
 				idleDate += provisioningDelay + schloudBootInfos.bootTime - bootTimePrediction;
 				
 				Msg.verb(instance.getId()+" booted ");
@@ -393,6 +389,7 @@ public class SchloudNode extends Process implements Comparable<SchloudNode>{
 		if ( state == STATE.IDLE ) {
 			idleDate = Msg.getClock();
 			setState(STATE.CLAIMED);
+			this.processQueue();
 		}
 		idleDate+=task.getWalltimePrediction();
 		//Msg.info("idledate "+instanceId+" "+idleDate+" "+(idleDate-23));
@@ -430,7 +427,9 @@ public class SchloudNode extends Process implements Comparable<SchloudNode>{
 	 * Receives tasks and processes them.
 	 */
 	public void main(String[] args) throws TransferFailureException, HostFailureException, TimeoutException {
-		 
+		
+		this.processQueue();
+		
 		while(true) {
 			// Receiving the command
 			Task task = Task.receive(getMessageBox());

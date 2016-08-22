@@ -55,7 +55,6 @@ public class SchloudTask {
 
 	/** The standard walltime of the task (with standard power)*/
 	protected double standardWalltime;
-
 	
 	/** MSG's duration of the task */
 	protected double duration;
@@ -63,6 +62,9 @@ public class SchloudTask {
 	protected double inputSize;
 	/** Size of the output data of the task */
 	protected double outputSize;
+
+	/** The management time of the task*/
+	protected double managementTime;
 	
 	/** Runtime, as Schlouder gave to the PSM */
 	protected double PSMRuntime;
@@ -92,9 +94,10 @@ public class SchloudTask {
 	 * @param runtime runtime of this task
 	 * @param inputSize size of the input data
 	 * @param outputSize size of the output data
+	 * @param managementTime management time of this task
 	 * @param dependencies set of dependencies of this task
 	 */
-	public SchloudTask(String name, double walltimePrediction, double runtime, double inputSize,  double outputSize, Vector<SchloudTask> dependencies) {
+	public SchloudTask(String name, double walltimePrediction, double runtime, double inputSize, double outputSize, double managementTime, Vector<SchloudTask> dependencies) {
 		this.name = name;
 		this.id = currentId++;
 		
@@ -104,6 +107,7 @@ public class SchloudTask {
 		this.duration = SimSchlouder.timeToDuration(runtime);
 		this.inputSize = inputSize;
 		this.outputSize = outputSize;
+		this.managementTime = managementTime;
 		
 		this.PSMRuntime = runtime;
 		this.PSMDataIn = inputSize;
@@ -114,6 +118,21 @@ public class SchloudTask {
 		stateLog = new Vector<StateDate>();
 		setState(STATE.PENDING);
 	}
+
+	/**
+	 * Constructor without management time
+	 * @param name name of this task
+	 * @param walltimePrediction prediction of the walltime of this task
+	 * @param runtime runtime of this task
+	 * @param inputSize size of the input data
+	 * @param outputSize size of the output data
+	 * @param managementTime management time of this task
+	 * @param dependencies set of dependencies of this task
+	 */
+	public SchloudTask(String name, double walltimePrediction, double runtime, double inputSize, double outputSize, Vector<SchloudTask> dependencies) {
+		this (name, runtime, runtime, inputSize, outputSize, 0, new Vector<SchloudTask>());
+	}
+
 	
 	/**
 	 * Constructor without walltime prediction
@@ -406,10 +425,6 @@ public class SchloudTask {
 		return walltimePrediction;
 	}
 
-	/*private double getWalltime() {
-		return getDateOfFirst(STATE.COMPLETE) - getDateOfFirst(STATE.SUBMITTED);
-	}*/
-
 	/**
 	 * @return the start date of this task
 	 * @throws SimSchlouderException whenever this time can not be retrieved
@@ -446,7 +461,7 @@ public class SchloudTask {
 	 * @return the ToString
 	 */	
 	public String toString() {
-		return "Task["+name+","+walltimePrediction+","+duration+"("+PSMRuntime+" s),"+inputSize+","+outputSize+","+state+"]";
+		return "Task["+name+","+walltimePrediction+","+duration+","+inputSize+","+outputSize+","+managementTime+","+state+"]";
 	}
 		
 }

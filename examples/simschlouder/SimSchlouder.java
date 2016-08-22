@@ -149,6 +149,7 @@ public class SimSchlouder {
 				double runtime = walltimePrediction;
 				double inputSize = 0;
 				double outputSize = 0;
+				double managementTime = 0;
 
 				if (sc.hasNext("~")) {
 					sc.next();
@@ -163,11 +164,19 @@ public class SimSchlouder {
 						if (communications) runtime = d1;
 						d1 = d2;
 						d2 = sc.nextDouble();
+						if (sc.hasNextDouble()) {
+							d3 = sc.nextDouble();
+							if (real_threads) {
+								managementTime = d3;
+								if (!communications) runtime -= managementTime;
+							}
+						}
 					}
 					if (communications) {
 						inputSize = d1;
 						outputSize = d2;
 					}
+
 				}
 				
 				Vector<SchloudTask> dependencies = new Vector<SchloudTask>();
@@ -186,7 +195,8 @@ public class SimSchlouder {
 				}
 
 				//Msg.verb(Dependencies:" : "+dependencies.size());
-				SchloudTask task = new SchloudTask(jid, walltimePrediction, runtime, inputSize, outputSize, dependencies); 
+				SchloudTask task = new SchloudTask(jid, walltimePrediction, runtime, 
+						inputSize, outputSize, managementTime, dependencies); 
 				taskMap.put(task.name, task);
 				
 				Msg.info("Enqueuing " + task);
@@ -281,7 +291,7 @@ public class SimSchlouder {
 		String[] tfrpargs = new String[args.length-2];
 		for (int i=2; i<args.length; i++) tfrpargs[i-2] = args[i];
 		Msg.verb("Reading the task file: "+tfrpargs[0]);
-		taskFileReaderProcess = new TaskFileReaderProcess(Host.getByName(SchloudController.broker),"TaskFileReader",tfrpargs);
+		taskFileReaderProcess = new TaskFileReaderProcess(SchloudController.controller,"TaskFileReader",tfrpargs);
 		taskFileReaderProcess.start();
 
 		

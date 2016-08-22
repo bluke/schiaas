@@ -52,24 +52,24 @@ vr.check.communications <- function(platforms = c("openstack-icps","fr-inria",'u
 
 	agg.in.lat <- aggregate(
 		cbind(input_size.x, input_time.x, input_time.y) ~  storage + platform, 
-		data = jobs.com[jobs.com$input_size.x <= 1500,], mean)
+		data = jobs.com[jobs.com$input_time.x > 0,], min)
 	agg.in.lat$ae <- ( agg.in.lat$input_time.x - agg.in.lat$input_time.y) / agg.in.lat$input_time.y
 
 	agg.in.bw <- aggregate( 
 		cbind(input_size.x, input_time.x, input_time.y) ~  storage + platform, 
-		data = jobs.com[jobs.com$input_size.x > 1500,], sum)
+		data = jobs.com[jobs.com$input_size.x > 1500,], max)
 	agg.in.bw$bw.x <- agg.in.bw$input_size.x / agg.in.bw$input_time.x
 	agg.in.bw$bw.y <- agg.in.bw$input_size.x / agg.in.bw$input_time.y
 	agg.in.bw$ae <- ( agg.in.bw$bw.x - agg.in.bw$bw.y ) / agg.in.bw$bw.y
 
 	agg.out.lat <- aggregate( 
 		cbind(output_size.x, output_time.x, output_time.y) ~  storage + platform, 
-		data = jobs.com[jobs.com$output_size.x <= 1500,], mean)
+		data = jobs.com[jobs.com$output_time.x > 0,], min)
 	agg.out.lat$ae <- ( agg.out.lat$output_time.x - agg.out.lat$output_time.y) / agg.out.lat$output_time.y
 
 	agg.out.bw <- aggregate( 
 		cbind(output_size.x, output_time.x, output_time.y) ~  storage + platform, 
-		data = jobs.com[jobs.com$output_size.x > 1500,], sum)
+		data = jobs.com[jobs.com$output_size.x > 1500,], max)
 	agg.out.bw$bw.x <- agg.out.bw$output_size.x / agg.out.bw$output_time.x
 	agg.out.bw$bw.y <- agg.out.bw$output_size.x / agg.out.bw$output_time.y
 	agg.out.bw$ae <- ( agg.out.bw$bw.x - agg.out.bw$bw.y ) / agg.out.bw$bw.y
@@ -146,50 +146,53 @@ vr.check.walltimes <- function() {
 	}
 }
 
-vr.check.scheduling <- function(serie = 'sim_best') {
+
+vr.check.management <- function(serie = 'sim_no-threads') {
 	
 	jobs.serie <- vr.read.colmerge('jobs', serie)
+	jobs.serie <- jobs.serie[jobs.serie$management_time.x != 0,]
+	jobs.serie$management_time.d <- jobs.serie$management_time.y - jobs.serie$management_time.x
 
-	jobs.serie$schederror <- ifelse(jobs.serie$node_index.x != jobs.serie$node_index.y,1,0)
-	agg.xp.schederror <- aggregate(schederror ~ xp_id  + platform + application + trace_type.y, data = jobs.serie, sum)
-	agg.xp.schederror$iserror <- ifelse(agg.xp.schederror$schederror == 0,0,1)
-	agg.xp.schederror$count <- ifelse(agg.xp.schederror$schederror == 0,1,1)
-	agg.schederror <- aggregate(cbind(iserror,count) ~  trace_type.y + application + platform , data = agg.xp.schederror, sum)
-	print(agg.schederror)
-}
 
-vr.check.first.proverror <- function() {
-	metrics.all <- vr.metrics.all()
-	print("Sum of schedederrors")
-	print(sum(metrics.all$schederror))
-	print(sum(metrics.all$schederror.ae))
+	print(aggregate(
+		cbind(management_time.x, management_time.d) ~ platform + storage,
+		data = jobs.serie, 
+		FUN = function(x) c(mean=round(mean(x),3),min=round(min(x),3),max=round(max(x),3))))
 
-	a <- aggregate( cbind(as.character(name),node_index.x,node_index.y) ~ xp_id, 
-		data = jobs[jobs$schederror != 0 ,c("xp_id","name","node_index.x","node_index.y")],
-		function(x){return(head(x,n=1))})
-
-	return(a)
+	print(aggregate(
+		cbind(management_time.x, management_time.y, as.character(name), as.character(xp_id)) ~ platform + storage,
+		data = jobs.serie[order(abs(jobs.serie$management_time.d)),], 
+		FUN = function(x) tail(x,1)))
 }
 
 
-vr.metrics.all <- function(serie = 'sim_best') {
+vr.metrics.all <- function(serie = 'sim_best', outfile = NA) {
 	metrics <- vr.read.colmerge('metrics',serie)
 
 	#add scheduling error
-	jobs <- vr.read.colmerge('jobs',serie)
+	jobs <<- vr.read.colmerge('jobs',serie)
 
-	jobs$schederror <- ifelse(jobs$node_index.x != jobs$node_index.y,1,0)
+	jobs$schederror <<- ifelse(jobs$node_index.x != jobs$node_index.y,1,0)
 	jobs$jobs_count <- 1
 	agg.xp.schederror <- aggregate(cbind(schederror,jobs_count) ~ xp_id + trace_type.y, data = jobs, sum)
 	agg.xp.schederror$schederror.ae <- agg.xp.schederror$schederror / agg.xp.schederror$jobs_count
 
-	metrics <- merge(metrics,agg.xp.schederror)
+	agg.xp.firstschederror <- aggregate( cbind(as.character(name) ) ~ xp_id, 
+		data = jobs[jobs$schederror != 0 ,c("xp_id","name")],
+		function(x){return(head(x,n=1))})
+	colnames(agg.xp.firstschederror)[2] <- "first_schederror"
+	agg.xp <- merge(agg.xp.schederror,agg.xp.firstschederror, all.x = TRUE)
+
+	metrics <- merge(metrics,agg.xp)
 
 	#metrics
 	metrics$makespan.ae <- abs(metrics$makespan.x - metrics$makespan.y) / metrics$makespan.x
 	metrics$uptime.ae <- abs(metrics$uptime.x - metrics$uptime.y) / metrics$uptime.x
 	metrics$usage.ae <- abs(metrics$usage.x - metrics$usage.y) / metrics$usage.x
 
+	if(!is.na(outfile)) {
+		write.table(metrics,outfile,sep='\t')
+	}
 
 	return(metrics)
 }
@@ -242,14 +245,24 @@ vr.mmmm.cmp <- function(mmmm1,mmmm2) {
 	return(mc)
 }
 
-vr.mmmm.cmp.series <- function(metrics.1,metrics.2) {
+vr.mmmm.cmp.series <- function(metrics.1,metrics.2, outfile = NA) {
 	metrics <- c('uptime.ae', 'makespan.ae','usage.ae', 'schederror.ae')
-	df1 <- metrics.1[, metrics]
-	df2 <- metrics.2[, metrics]
+	df1 <- metrics.1[, c('xp_id','first_schederror',metrics)]
+	df2 <- metrics.2[, c('xp_id','first_schederror',metrics)]
 
-	df <- (df2 - df1)
+	df <- merge(df1,df2,by='xp_id')
+	df$uptime.ae 	<- df$uptime.ae.y - df$uptime.ae.x
+	df$makespan.ae 	<- df$makespan.ae.y - df$makespan.ae.x
+	df$usage.ae 	<- df$usage.ae.y - df$usage.ae.x
+	df$schederror.ae <- df$schederror.ae.y - df$schederror.ae.x
 
-	m <- sapply(df, function(x) c(min(x),mean(x),median(x),max(x)))
+	if(!is.na(outfile)) {
+		write.table(
+			df[order(df$makespan.ae),],
+			outfile, sep='\t')
+	}
+
+	m <- sapply(df[,metrics], function(x) c(min(x),mean(x),median(x),max(x)))
 
 	rownames(m) <- c('min','mean','median','max')
 	colnames(m) <- paste('$\\Delta_{',colnames(m),'}$',sep='')
@@ -262,13 +275,13 @@ vr.write.freqs.mmmm <- function(prefix, freqs=NA, mmmm=NA, mmmm.cmp=NA, twobytwo
 
 	if(!is.na(freqs)) {
 		write.table(
-			freqs,paste(prefix,'freqs.dat',sep='.'),
+			freqs,paste(prefix,'freqs.dat',sep='-'),
 			sep='\t',row.names=FALSE)
 	}
 	if(!is.na(mmmm)) {
 		print.xtable(
 			xtable(mmmm, digits=3),
-			file = paste(prefix,'mmmm.latex',sep='.'),
+			file = paste(prefix,'mmmm.latex',sep='-'),
 			floating=FALSE)
 	}
 	if (!is.na(mmmm.cmp)) {
@@ -278,14 +291,14 @@ vr.write.freqs.mmmm <- function(prefix, freqs=NA, mmmm=NA, mmmm.cmp=NA, twobytwo
 			#latex.environments = "center",
 			#size = "\\tiny",
 			rotate.colnames = TRUE,
-			file = paste(prefix,'mmmm.cmp.latex',sep='.'),
+			file = paste(prefix,'mmmm-cmp.latex',sep='-'),
 			sanitize.text.function = identity,
 			floating=FALSE)
 	}
 	if(!is.na(twobytwo)) {
 		print.xtable(
 			xtable(vr.add.sign(twobytwo), digits=3),
-			file = paste(prefix,'mmmm.twobytwo.latex',sep='.'),
+			file = paste(prefix,'mmmm-twobytwo.latex',sep='-'),
 			sanitize.text.function = identity,
 			floating=FALSE)
 	}
@@ -333,6 +346,7 @@ vr.article.umus <- function(df,xl=1,yl=1,merged=FALSE,compare=NA) {
 			freqs <- f
 			mmmm <- m
 		}
+
 	}
 	
 	if (merged != FALSE) {
@@ -346,16 +360,16 @@ vr.article.umus <- function(df,xl=1,yl=1,merged=FALSE,compare=NA) {
 
 vr.article <- function() {
 
-	metrics.best <- vr.metrics.all('sim_best')
+	metrics.best <- vr.metrics.all('sim_best','sim_best.metrics.dat')
 
 	#best global
 	l <- vr.article.umus(metrics.best)
 
-	vr.write.freqs.mmmm('best-4metrics',
+	vr.write.freqs.mmmm('sim_best-4metrics',
 		l[['freqs']],l[['mmmm']])
 	mmmm.best <- l[['mmmm']]
 
-	pdf('best-4metrics.pdf')
+	pdf('sim_best-4metrics.pdf')
 	do.call("grid.arrange", c(l[['plots']], ncol=2))
 	dev.off()
 
@@ -365,7 +379,7 @@ vr.article <- function() {
 		metrics.best$platform == 'openstack-icps' &
 		metrics.best$application == 'omssa',],
 		merged = "openstack-icps / omssa")
-	vr.write.freqs.mmmm('best-openstack-icps-omssa-4metrics',
+	vr.write.freqs.mmmm('sim_best-openstack-icps-omssa-4metrics',
 		l[['freqs']],l[['mmmm']])
 	mmmm.openstack.omsssa <- l[['mmmm']]
 	plots <- append(plots,l[['plots']])
@@ -374,7 +388,7 @@ vr.article <- function() {
 		metrics.best$platform == 'openstack-icps' &
 		metrics.best$application == 'montage',],
 		merged = "openstack-icps / montage")
-	vr.write.freqs.mmmm('best-openstack-icps-montage-4metrics',
+	vr.write.freqs.mmmm('sim_best-openstack-icps-montage-4metrics',
 		l[['freqs']],l[['mmmm']],mmmm.openstack.omsssa)
 	plots <- append(plots,l[['plots']])
 
@@ -382,7 +396,7 @@ vr.article <- function() {
 		metrics.best$platform != 'openstack-icps' &
 		metrics.best$application == 'omssa',],
 		merged = "bonfire / omssa")
-	vr.write.freqs.mmmm('best-bonfire-omssa-4metrics',
+	vr.write.freqs.mmmm('sim_best-bonfire-omssa-4metrics',
 		l[['freqs']],l[['mmmm']],mmmm.openstack.omsssa)
 	plots <- append(plots,l[['plots']])
 
@@ -390,11 +404,11 @@ vr.article <- function() {
 		metrics.best$platform != 'openstack-icps' &
 		metrics.best$application == 'montage',],
 		merged = "bonfire / montage")
-	vr.write.freqs.mmmm('best-bonfire-montage-4metrics',
+	vr.write.freqs.mmmm('sim_best-bonfire-montage-4metrics',
 		l[['freqs']],l[['mmmm']],mmmm.openstack.omsssa)
 	plots <- append(plots,l[['plots']])
 
-	pdf('best-4metrics-platform-app.pdf')
+	pdf('sim_best-4metrics-platform-app.pdf')
 	do.call("grid.arrange", c(plots, ncol=2))
 	dev.off()
 
@@ -404,10 +418,10 @@ vr.article <- function() {
 		metrics.best$platform == 'openstack-icps' &
 		metrics.best$application == 'omssa' &
 		metrics.best$schederror == 0,])
-	vr.write.freqs.mmmm('best-openstack-icps-omssa-noschederror-4metrics',
+	vr.write.freqs.mmmm('sim_best-openstack-icps-omssa-noschederror-4metrics',
 		l[['freqs']],l[['mmmm']],mmmm.openstack.omsssa)
 
-	pdf('best-openstack-icps-omssa-noschederror-4metrics.pdf')
+	pdf('sim_best-openstack-icps-omssa-noschederror-4metrics.pdf')
 	do.call("grid.arrange", c(l[['plots']], ncol=2))
 	dev.off()
 
@@ -415,14 +429,14 @@ vr.article <- function() {
 	# all sims
 	for(sim in c('sim_no-boottimes','sim_no-threads','sim_communications','sim_predictions')) {
 		
-		metrics.sim <- vr.metrics.all(sim)
-		mmmm.cmp <- vr.mmmm.cmp.series(metrics.best,metrics.sim)
+		metrics.sim <- vr.metrics.all(sim, paste(sim,'metrics.dat',sep='-'))
+		mmmm.cmp <- vr.mmmm.cmp.series(metrics.best,metrics.sim, paste(sim,'4metrics-cmp.dat',sep='-'))
 
 		l <- vr.article.umus(metrics.sim,compare=metrics.best)
 		vr.write.freqs.mmmm(paste(sim,'4metrics',sep='-'),
 			l[['freqs']],l[['mmmm']], mmmm.best, mmmm.cmp)
 
-		pdf(paste(sim,'4metrics-compare.pdf',sep='-'))
+		pdf(paste(sim,'4metrics-cmp.pdf',sep='-'))
 		do.call("grid.arrange", c(l[['plots']], ncol=2))
 		dev.off()
 	}

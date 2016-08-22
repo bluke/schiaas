@@ -51,13 +51,9 @@ public class SchloudController extends org.simgrid.msg.Process {
 	
 	/** Amount of idle worker nodes */
 	public static int idleNodesCount;
-	
-	/** Id of the host of the SimSchlouder controller */
-	/** TODO: check whether necessary */
-	public static String broker;
-	
+		
 	/** Host of the SimSchloder controller */
-	public static Host host;
+	public static Host controller;
 	
 	/** Provisioning strategy */
 	public static AStrategy strategy;
@@ -89,10 +85,9 @@ public class SchloudController extends org.simgrid.msg.Process {
 	 * and for starting/stopping VMs
 	 * The VMs are represented by <i>SchloudNode</i> processes
 	 * @param host the host
-	 * @param name the name of the controller
 	 * @param args useless
 	 */
-	public SchloudController(Host host, String name, String [] args) {
+	public SchloudController(Host host, String [] args) {
 		super(host,"SchloudController",args);
 		
 		nodes = new Vector<SchloudNode>();
@@ -103,7 +98,7 @@ public class SchloudController extends org.simgrid.msg.Process {
 		
 		emptyQueueMutex = new Mutex();
 		
-		SchloudController.host = host;
+		SchloudController.controller = host;
 	}
 
 	/**
@@ -193,7 +188,6 @@ public class SchloudController extends org.simgrid.msg.Process {
 	 */
 	public static void setTaskToNode(SchloudTask st, SchloudNode node) {
 		node.enqueue(st);
-		if (node.queue.size()==1) node.processQueue();
 	}
 
 	/**
@@ -281,13 +275,13 @@ public class SchloudController extends org.simgrid.msg.Process {
 					
 					SchIaaS.init(cloud);
 				}else if (nodes.item(i).getNodeName().compareTo("broker") == 0) {
-					broker = nodes.item(i).getAttributes().getNamedItem("id").getNodeValue();
-					String[] arg ={};
 					try {
-						SchloudController process = new SchloudController(Host.getByName(broker),broker,arg);
+						String[] arg ={};
+						Host controller = Host.getByName(nodes.item(i).getAttributes().getNamedItem("id").getNodeValue());
+						SchloudController process = new SchloudController(controller,arg);
 						process.start();
 					} catch (HostNotFoundException e) {
-						Msg.critical("Pinning fail : broker \""+ broker +"\" not found");
+						Msg.critical("Pinning of SimSchlouder controller failed: host \""+ nodes.item(i).getAttributes().getNamedItem("id").getNodeValue() +"\" not found");
 					}
 				}
 				else if (nodes.item(i).getNodeName().compareTo("cloud") == 0) {
