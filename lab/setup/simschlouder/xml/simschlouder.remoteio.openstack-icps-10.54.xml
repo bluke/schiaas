@@ -2,7 +2,7 @@
  <!DOCTYPE simschlouder>
  <simschlouder version="1">
 	<config platform="platformICPS.xml" cloud="cloudICPS.xml" />
-	<broker id="remote_storage" />
+	<broker id="controller" />
 	<!-- original values of BO:41.6, B1:6 -->
 	<cloud  id="icps-opst" B0="48" B1="6" BTU="3600" shutdown_margin="50" max_instances_per_user="10" standard_power="10e9" />
 	<provisioning>

@@ -73,7 +73,9 @@ public class SchloudTaskController extends Process {
 					}
 					
 					if (adjustment<0) {
-						Msg.warn("Can't go back in time for the adjustement of the management time of "+schloudTask.name+": "+adjustment);
+						Msg.warn("Can't go back in time for the adjustement of the management time of "
+								+schloudTask.name+": "+adjustment
+								+" ("+(schloudTask.managementTime-adjustment)+" instead of "+ schloudTask.managementTime);
 					} else {
 						Msg.verb("Adjusting the management time of "+schloudTask.name+": "+adjustment);
 						waitFor(adjustment);

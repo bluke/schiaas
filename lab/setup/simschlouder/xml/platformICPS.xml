@@ -27,7 +27,7 @@
 	 </AS>
 
 
-	<link id="controller2icps" bandwidth="1e9Bps" latency="5ms"/>
+	<link id="controller2icps" bandwidth="1e9Bps" latency="1ms"/>
 
 	<link id="storage2icps_up" bandwidth="36MBps" latency="25ms"/> 
 	<link id="storage2icps_down" bandwidth="17MBps" latency="25ms"/> 
@@ -35,7 +35,7 @@
 	<link id="walrus2icps_up" bandwidth="30MBps" latency="120ms"/>
 	<link id="walrus2icps_down" bandwidth="15MBps" latency="100ms"/> 
 
-	<link id="remote_storage2icps_up" bandwidth="0.7MBps" latency="220ms"/>
+	<link id="remote_storage2icps_up" bandwidth="0.7MBps" latency="120ms"/>
 	<link id="remote_storage2icps_down" bandwidth="2.9MBps" latency="200ms"/> 
 
 	<ASroute src="AS_Controller" dst="icps" gw_src="controller" gw_dst="icps-gc-icps_router.me" symmetrical="YES">
