@@ -320,7 +320,7 @@ public class SchloudTask {
 		this.state=state;
 		stateLog.add(new StateDate(state,Msg.getClock()));
 				
-		Msg.verb("Task "+name+" state set to "+state);
+		Msg.info("Task "+name+" state set to "+state);
 	}
 	
 	/**

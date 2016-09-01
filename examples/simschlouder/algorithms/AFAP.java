@@ -28,8 +28,6 @@ public class AFAP extends AStrategy {
 			finishSooner = SchloudController.nodes.firstElement();
 		
 		double candidatePredictedIdleTime = SchloudController.schloudCloud.getBtuTime();
-		
-		Msg.info("AFAP Strategy for "+task);
 	
 		for (SchloudNode node : SchloudController.nodes) {
 

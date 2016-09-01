@@ -84,7 +84,7 @@ vr.check.communications <- function(platforms = c("openstack-icps","fr-inria",'u
 	print(agg.out.bw[,c('storage','platform','bw.x','bw.y','ae')])
 }
 
-vr.plot.communications <- function(platforms = c("openstack-icps","fr-inria",'uk-epcc',"de-hlrs"))
+vr.plot.communications <- function(platforms = c("openstack-icps","fr-inria",'uk-epcc',"de-hlrs"), storages=NA)
 {
 	jobs <<- read.table("jobs.dat", header=TRUE, na.strings=c("NA"))
 
@@ -95,9 +95,13 @@ vr.plot.communications <- function(platforms = c("openstack-icps","fr-inria",'uk
 			c('input_time','input_size','output_time','output_size',colmerge.jobs)],
 		by = colmerge.jobs))
 
+	if(is.na(storages)) {
+		storages <- unique(jobs.com$storage)
+	}
+
 	plots <- list()
 	for(platform in platforms) {
-		for(storage in unique(jobs.com$storage)) {
+		for(storage in storages) {
 			j <- jobs.com[jobs.com$platform==platform & jobs.com$storage==storage,]
 			if (nrow(j) != 0) {
 				p <- ggplot(j) +
@@ -136,14 +140,10 @@ vr.check.walltimes <- function() {
 	
 	jobs.best$walltime.ae = ( jobs.best$walltime.x - jobs.best$walltime.y ) / jobs.best$walltime.y
 
-	for(platform in platforms) {
-		j <- jobs.best[jobs.best$platform==platform & is.finite(jobs.best$walltime.ae),]
+	a <- aggregate(walltime.ae ~ platform + storage, data = jobs.best, 
+		FUN = function(x) c(min=min(x),mean=mean(x),max=max(x)))
 
-		print(platform)
-		print(min(j$walltime.ae))
-		print(mean(j$walltime.ae))
-		print(max(j$walltime.ae))
-	}
+	return(a)
 }
 
 
@@ -164,7 +164,6 @@ vr.check.management <- function(serie = 'sim_no-threads') {
 		data = jobs.serie[order(abs(jobs.serie$management_time.d)),], 
 		FUN = function(x) tail(x,1)))
 }
-
 
 vr.metrics.all <- function(serie = 'sim_best', outfile = NA) {
 	metrics <- vr.read.colmerge('metrics',serie)
@@ -190,6 +189,13 @@ vr.metrics.all <- function(serie = 'sim_best', outfile = NA) {
 	metrics$uptime.ae <- abs(metrics$uptime.x - metrics$uptime.y) / metrics$uptime.x
 	metrics$usage.ae <- abs(metrics$usage.x - metrics$usage.y) / metrics$usage.x
 
+	# weights for histogram
+	metrics$cloud <- ifelse(metrics$platform == 'openstack-icps', 'openstack-icps', 'bonfire')
+	weights <- aggregate(xp_id ~ cloud + application, data = m, 
+		FUN = function(x) 0.25/length(x))
+	colnames(weights)[3] <- 'weight'
+	metrics <- merge(metrics,weights)
+
 	if(!is.na(outfile)) {
 		write.table(metrics,outfile,sep='\t')
 	}
@@ -200,12 +206,14 @@ vr.metrics.all <- function(serie = 'sim_best', outfile = NA) {
 
 vr.binwidth <<- 0.05
 
-vr.freq <- function(d,name="m") {
-	f <- data.frame(table(cut(d, seq(0,1,vr.binwidth), right=FALSE) ))
-	f$prob <- round(f$Freq / sum(f$Freq),2)
+vr.freq <- function(df,name) {
+#	f <- data.frame(table(cut(df[[m]], seq(0,1,vr.binwidth), right=FALSE) ))
+#	f$prob <- round(f$Freq / sum(f$Freq),2)
 
-	colnames(f)[2] <- paste(name,'f',sep='_')
-	colnames(f)[3] <- paste(name,'p',sep='_')
+	df$fc <- cut(df[[name]], seq(0,1,vr.binwidth), right=FALSE)
+	f <- aggregate( weight ~ fc, df, function(x) c(freq=sum(x),count=length(x)) )
+
+	colnames(f)[2] <- name
 
 	return(f)
 }
@@ -319,12 +327,12 @@ vr.article.umus <- function(df,xl=1,yl=1,merged=FALSE,compare=NA) {
 	for(metric in c('uptime.ae', 'makespan.ae','usage.ae', 'schederror.ae')) {
 		if (merged == FALSE) {
 			p <- ggplot(df,aes_string(x=metric)) + 
-				geom_histogram(aes(y = (..count..)/sum(..count..)), binwidth=vr.binwidth) +
-				geom_freqpoly(aes(y = (..count..)/sum(..count..)), binwidth=vr.binwidth, col=vr.colors[[metric]]) +
+				geom_histogram(aes(y = (..count..)/sum(..count..), weight=weight), binwidth=vr.binwidth) +
+				geom_freqpoly(aes(y = (..count..)/sum(..count..), weight=weight), binwidth=vr.binwidth, col=vr.colors[[metric]]) +
 				xlim(0,xl) + ylim(0,yl) + ylab('ratio of xp')
 
 			if (!is.na(compare)) {
-				p <- p + geom_freqpoly(aes(y = (..count..)/sum(..count..)), 
+				p <- p + geom_freqpoly(aes(y = (..count..)/sum(..count..), weight=weight), 
 					data = compare,
 					binwidth=vr.binwidth, col='grey')
 			}
@@ -333,14 +341,14 @@ vr.article.umus <- function(df,xl=1,yl=1,merged=FALSE,compare=NA) {
 		} else {
 			plot <- plot +
 				geom_freqpoly(
-					aes_string(x=metric, y="(..count..)/sum(..count..)"), 
+					aes_string(x=metric, y="(..count..)/sum(..count..)", weight="weight"), 
 					binwidth=vr.binwidth, col=vr.colors[[metric]])
 		}
 
-		f <- vr.freq(df[[metric]],metric)
+		f <- vr.freq(df,metric)
 		m <- vr.mmmm(df[[metric]],metric)
 		if(exists('freqs')) {
-			freqs <- merge(freqs,f)
+			freqs <- merge(freqs,f, all=TRUE)
 			mmmm <- cbind(mmmm,m)
 		} else {
 			freqs <- f

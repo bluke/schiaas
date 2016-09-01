@@ -7,6 +7,10 @@
 			<config controller="storage"/>
 		</storage>
 
+		<storage id="my1GbStorage" engine="org.simgrid.schiaas.engine.storage.rise.Rise">
+			<config controller="1gbstorage"/>
+		</storage>
+
 		<storage id="myRemoteStorage" engine="org.simgrid.schiaas.engine.storage.rise.Rise">
 			<config controller="remote_storage"/>
 		</storage>
