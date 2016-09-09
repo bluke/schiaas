@@ -165,8 +165,9 @@ vr.check.management <- function(serie = 'sim_no-threads') {
 		FUN = function(x) tail(x,1)))
 }
 
-vr.metrics.all <- function(serie = 'sim_best', outfile = NA) {
+vr.metrics.all <- function(serie = 'sim_best', outfile = NA, buglist = c()) {
 	metrics <- vr.read.colmerge('metrics',serie)
+	metrics <- metrics[!metrics$xp_id %in% buglist,]
 
 	#add scheduling error
 	jobs <<- vr.read.colmerge('jobs',serie)
@@ -191,7 +192,7 @@ vr.metrics.all <- function(serie = 'sim_best', outfile = NA) {
 
 	# weights for histogram
 	metrics$cloud <- ifelse(metrics$platform == 'openstack-icps', 'openstack-icps', 'bonfire')
-	weights <- aggregate(xp_id ~ cloud + application, data = m, 
+	weights <- aggregate(xp_id ~ cloud + application, data = metrics, 
 		FUN = function(x) 0.25/length(x))
 	colnames(weights)[3] <- 'weight'
 	metrics <- merge(metrics,weights)
@@ -368,7 +369,9 @@ vr.article.umus <- function(df,xl=1,yl=1,merged=FALSE,compare=NA) {
 
 vr.article <- function() {
 
-	metrics.best <- vr.metrics.all('sim_best','sim_best.metrics.dat')
+	buglist <- read.table("stopdate.bug")$V1
+
+	metrics.best <- vr.metrics.all('sim_best','sim_best.metrics.dat',buglist)
 
 	#best global
 	l <- vr.article.umus(metrics.best)
@@ -437,7 +440,7 @@ vr.article <- function() {
 	# all sims
 	for(sim in c('sim_no-boottimes','sim_no-threads','sim_communications','sim_predictions')) {
 		
-		metrics.sim <- vr.metrics.all(sim, paste(sim,'metrics.dat',sep='-'))
+		metrics.sim <- vr.metrics.all(sim, paste(sim,'metrics.dat',sep='-'),buglist)
 		mmmm.cmp <- vr.mmmm.cmp.series(metrics.best,metrics.sim, paste(sim,'4metrics-cmp.dat',sep='-'))
 
 		l <- vr.article.umus(metrics.sim,compare=metrics.best)

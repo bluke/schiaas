@@ -30,6 +30,7 @@ WARNING: figures in text might not be up to date.
 
 \section{Setup}
 
+
 \subsection{Xp traces}
 
 274 xps
@@ -86,34 +87,91 @@ management time
  \item Close analysis of each outlier to understand the differences. 
 \end{enumerate}
 
+\subsubsection{life-cycles and observed times}
+
+\begin{itemize}
+ \item Execution: $e \in E$
+ \item Node of execution $e$: $n \in N_e$
+ \item Task of execution $e$: $t \in T_e$
+ \item Task handled by node $n$: $t \in T_n$
+ \item The node running the task $t$ is denoted $n_t \in N$
+ \item $v^R$ denotes the value $v$ in the rality
+ \item $v^S$ denotes the value $v$ in the simulation
+ \item 
+\end{itemize}
+
+During the execution, the node are in the following states:
+\begin{enumerate}
+ \item Future: Once the decision to start the node is made;
+ \item Pending: Once the node is requested to the cloud-kit;
+ \item Booting: Once the cloud-kit aknowledge the satisfaction of the request;
+ \item Idle: Once the node is ready to run tasks;
+ \item Busy: Once the node is running one task;
+ \item ShuttingDown: Once the termination of the node is aked to the cloud-kit;
+ \item Terminated: Once the node is terminated.
+\end{enumerate}
+
+The observed times are:
+\begin{itemize}
+ \item $uptime(n) = terminated_n - booting_n$ 
+ \item $boottime(n) = idle_n - booting_n$ 
+\end{itemize}
 
 
+During the execution, the task are in the following states, each corresponding to one date:
+\begin{enumerate}
+ \item Pending: Once they are subitted to the system;
+ \item Scheduled: Once the system decided on which node the taks should be executed;
+ \item Submitted: Once the task is sent to the worker node;
+ \item Inputting: Once the task begin to download its data;
+ \item Running: Once the task begin to computed;
+ \item Outputting: Once the task begin to upload its result;
+ \item Finished: Once the task is finished;
+ \item Complete: Once the system aknowledge the completion of the task.;
+\end{enumerate}
+
+The observed times are:
+\begin{itemize}
+ \item $walltime(t) = complete_t - submitted_t$ 
+ \item $inputtime(t) = running_t - inputting_t$
+ \item $runtime(t) = outputting_t - running_t$
+ \item $outputtime(t) = finished_t - outputting_t$
+ \item $managementtime(t) = walltime_t - (inputtime_t+runtime_t+outputtime_t)$
+ \item or $managementtime(t) = (inputting_t - submitted_t) + (complete_t - finished_t)$
+\end{itemize}
 
 
 
 \section{Results}
 
-4 metrics:
+4 metrics $m \in M$ for each execution $e \in E$:
 \begin{itemize}
- \item uptime: amount of rented resources, cost
+ \item uptime: amount of rented resources, cost 
+  $$uptime(e) = \sum_{n \in N_e} uptime_n$$
  \item makespan: duration of the xp from the submission of the first task to 
-the end of the last task, user experience
- \item usage: busytime / uptime, efficiency of the provisioning
+the end of the last task, user experience 
+  $$makespan(e) = max_{t \in T_e} complete_t$$
+ \item usage: runtime / uptime, efficiency of the provisioning 
+  $$usage(e) = \frac{\sum_{t \in T_e} walltime_t}{\sum_{n \in N_e} uptime_n}$$
  \item schederror: number of tasks that are not assigned to the same node in 
 the simulation compared to the reality, accuracy of the scheduling decisions
+  $$schederror(e) = |t \forall t \in T / t_n^R \neq t_n^S|$$
+
 \end{itemize}
 
-Absolute errors are computed for each metric: $metric.ae = \frac{| metric_{simulation} 
-- metric_{real} |}{metric_{real}}$
+Absolute errors are computed for each metric $m \in M$: 
+$$m.ae(e) = \frac{| m^S(e) - m^R(e) |}{m^R(e)}$$
 
-Results are shown as frequencies and statistics (stat = min, mean, median, max) of absolute errors occurrences.
+Results are shown as frequencies and statistics (stat = min, mean, median, max) 
+of absolute errors occurrences. Frequencies are weighted so that the two applications
+weigth the same, and the two platforms weigth alos the same 
+(i.e. each couple application $\times$ platform represents 1/4th of the frequencies).
 
-To compare absolute errors between set of simulations $S$ and $R$, 
-$R$ being the reference, 
-$(R,S)$ being the set of couple $(r,s)$ for which $r$ and $s$ concern the same xp:
+To compare absolute errors between set of simulations $S$ and $S'$
+$S$ being the reference:
 \begin{itemize}
- \item $\delta_{metric.ae} = stat(metric.ae_{R}) - stat(metric.ae_{S})$
- \item $\Delta_{metric.ae} = stat(metric.ae_{r} - metric.ae_{s} \forall (r,s) \in (R,S)$
+ \item $\delta stat(m.ae(E)) = stat_{e \in E} ( m.ae^{S'}(e) ) - stat_{e \in E}( m.ae^S(e) )$
+ \item $\Delta stat(m.ae(E)) = stat_{e \in E} ( m.ae^{S'}(e) - m.ae^S(e) )$
 \end{itemize}
 
 
@@ -233,16 +291,14 @@ ommssa, without scheduling error cases (91 xps)}
 \end{figure}       
 
       Filtering the xps showing clocks-related issues (16 xps), the results are perfect:
-      all metrics present a mean AR of $0.001$, and a max of $0.003$ for uptimes, 
-      $0.011$ for makespan, and $0.002$ for usage.
+      all metrics present a mean ae of at most $0.001$.
       
-      The less accurate simulation actually shows a makespan of 381s instead of 380s
-      as in the real xp. This is due to an imperfection of our simulator:
-      While task management latencies are included into the walltimes in real traces,
-      they come in addition of this walltimes in the simulator.
-      This is a problem only when comparing simulations to real traces, but allows
-      regular usage of the simulator to assess task management latencies.
-
+      %Worst-case: v3.standard.hrt.asap.regular.openstack-icps.2
+      The less accurate simulation shows a makespan absolute error of $0.010$. 
+      Actually, the makespan of the simulation is $94s$, whereas it is $95s$ in reality.
+      This small difference is due to one lag between two consecutive tasks 
+      in the middle of the simulation. Such lags are not injected in our simulations.
+      
       This shows that, providing that one can inject the right information, 
       the only limitation of our simulator are micro clock-related hazards.
       
@@ -254,21 +310,21 @@ ommssa, without scheduling error cases (91 xps)}
       \input{\vrpath sim_best-openstack-icps-montage-4metrics-mmmm-cmp.latex}
 
       With a work-flow, scheduling errors are more numerous 
-      (AR mean of $0.24$ for a max of $0.79$), leading to less accurate assessments
-      of uptime, makespan and usage (mean AR of $0.01$, $0.05$, and $0.01$), that
+      (ae mean of $0.24$ for a max of $0.79$), leading to less accurate assessments
+      of uptime, makespan and usage (mean ae of $0.01$, $0.05$, and $0.01$), that
       is ten times more than with a BoT.
       
       First, montage has much more tasks (from 43 to 1672) than omssa (from 33 to 223).
       Consequently, queues are much longer, which increases the clock-related issues.
       
-      BoT scheduling are actually made offline (i.e. scheduling decisions are taken
+      Second, BoT scheduling are actually made offline (i.e. scheduling decisions are taken
       before any actual execution), while WF scheduling implies decisions during 
       the execution, every time dependencies are satisfied. 
       Those decisions rely on the system state (predicted end date of nodes for 
       instance). Consequently, divergences between simulation and reality have
-      more important impacts.
+      more important impacts with WF than with BoTs.
       
-      %Worst case: v3.standard.2x2.asap.regular.openstack-icps.1 
+      %Worst case: v3.standard.3x3.afap.regular.openstack-icps.1 
       %first proverror: 2mass_pleiades_2x2_gather
       %Log of schlouder shows that all solutions are elligible, 
       %but it shouldn't be this one (which is in the middle of the queue)... Mystery!
