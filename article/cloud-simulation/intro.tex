@@ -1,0 +1,75 @@
+
+
+
+
+The  problem   of  allocating   cloud  resources   in  performant,   robust  and
+energy-efficient ways is  of paramount importance in today's  usage of computing
+infrastructures, and a number of research papers have contributed new allocation
+techniques to address this issue.  However, the impact of these new ideas on the
+design of the  production systems operated by the major  cloud providers remains
+questionable.   A pitfall  of research  on IaaS  lies in  the validation  of the
+models  and  algorithms  proposed,   which  requires  infrastructures  that  are
+difficult  to  set  up  for  individual  researchers.  As  a  consequence,  many
+researchers evaluate their work through simulation.
+
+The quality  of the  simulation system  is therefore central  to the  studies of
+cloud allocation  systems. We advocate  that a precise assessment  of simulation
+should be  carried out against real  results to better understand  the limits of
+simulation applicability. In this paper, we study the simulation accuracy of
+on several use cases ran on an IaaS clouds.
+
+
+We assume an automated process  making the provisioning and scheduling decisions
+on  behalf  the  user on  the  real  infrastructure.  To  that purpose,  we  use
+Schlouder, a client-side  cloud resource broker. These  scheduling algorithms of
+Schlouder  have  been  reimplemented  in  a  simulation  system,  based  on  the
+simulation toolkit SimGrid.  Our study aims to isolate  the different parameters
+that influence  the simulation  accuracy and what  degree of  divergence between
+real execution and simulation might be expected in each case.
+
+
+
+
+[9] R. N. Calheiros, R. Ranjan, A. Beloglazov, C. A. D. Rose, and R. Buyya, “CloudSim: a toolkit for modeling and simulation of cloud computing environments and evaluation of resource provisioning algo- rithms,” Software: Practice and Experience, vol. 41, no. 1, pp. 23–50,
+2011.
+[10] D. Kliazovich, P. Bouvry, and S. U. Khan, “GreenCloud: a packet-level simulator of energy-aware cloud computing data centers,” The Journal
+of Supercomputing, vol. 62, no. 3, pp. 1263–1283, 2012.
+[11] B. Wickremasinghe, R. N. Calheiros, and R. Buyya, “Cloudanalyst: A CloudSim-based visual modeller for analysing cloud computing environments and applications,” in Advanced Information Networking
+and Applications (AINA), 2010 24th IEEE International Conference on.
+IEEE, 2010, pp. 446–452.
+[12] S. K. Garg and R. Buyya, “Networkcloudsim: Modelling parallel applications in cloud simulations,” in Utility and Cloud Computing
+(UCC), 2011 Fourth IEEE International Conference on. IEEE, 2011,
+pp. 105–113.
+[13] M. Tighe, G. Keller, M. Bauer, and H. Lutfiyya, “DCSim: A data centre simulation tool for evaluating dynamic virtualized resource management,” in Network and service management (cnsm), 2012 8th
+international conference and 2012 workshop on systems virtualiztion
+management (svm), Oct 2012, pp. 385–392.
+[14] S. K. S. Gupta, R. Gilbert, A. Banerjee, Z. Abbasi, T. Mukherjee, and G. Varsamopoulos, “GDCSim: A tool for analyzing Green Data Center design and resource management techniques,” in Green Computing
+Conference and Workshops (IGCC), 2011 International, July 2011, pp.
+1–8.
+
+
+In order to test the techniques contributed by researchers, many simulation  systems  
+have  been  proposed 
+
+
+ to  study the techniques for  allocating  cloud  resources. in  more  robust,  efficient,  and
+ecologically  sustainable  ways. Unfortunately,  the  wide-spread  use of  these
+techniques in production systems has, to  date, remained elusive. One reason for
+this is that the  state of the art for investigating  these innovations at scale
+often  relies solely  on model-driven  simulation.
+
+
+ Production-grade  cloud software,  however, demands  certainty and  precision for  development and  business
+planning  that   only  comes   from  validating  simulation   against  empirical
+observation.   In this  work, we  take an  alternative approach  to facilitating
+cloud research and engineering in  order to transition innovations to production
+deployment faster.  In particular, we present a new methodology that complements
+existing  model-driven  simulation   with  platform-specific  and  statistically
+trustworthy results.  We simulate systems at  scales and on time frames that are
+testable, and  then, based on  the statistical validation of  these simulations,
+investigate  scenarios   beyond  those  feasibly  observable   in  practice.  We
+demonstrate  the approach  by  developing an  energy-aware  cloud scheduler  and
+evaluating it  using production and synthetic  traces in faster than  real time.
+Our results show that we can  accurately simulate a production IaaS system, ease
+capacity planning, and  expedite the reliable development of  its components and
+extensions.
