@@ -5,15 +5,32 @@
 The  problem   of  allocating   cloud  resources   in  performant,   robust  and
 energy-efficient ways is  of paramount importance in today's  usage of computing
 infrastructures, and a number of research papers have contributed new allocation
-techniques to address this issue.  However, the impact of these new ideas on the
-design of the  production systems operated by the major  cloud providers remains
-questionable.   A pitfall  of research  on IaaS  lies in  the validation  of the
-models  and  algorithms  proposed,   which  requires  infrastructures  that  are
-difficult  to  set  up  for  individual  researchers.  As  a  consequence,  many
-researchers evaluate their work through simulation.
+techniques to  address this issue.   A pitfall of research  on IaaS lies  in the
+validation of the models and algorithms proposed, which requires infrastructures
+that are difficult to set up for individual researchers.  As a consequence, many
+researchers evaluate their work through  simulation. A number of simulators have
+been  developed for  that purpose  (\cite{9-14}).  They  are typically  based on
+discrete-event simulation,  using models  for each  elementary component  of the
+infrastructure,  which  are then  composed  to  simulate  the whole  system  and
+applications running on it.  This approach is attractive from the infrastructure
+provider since the simulated system can  be finely customized.  However, such an
+\textit{ab initio} construction poses a  significant problem for the calibration
+and validation of  the composed model against  real-world measurements.  Another
+approach  is  the   simulation  from  the  client-side   (from  the  application
+perspective), which can specifically focus on the prediction of the makespan and
+the cost  of the  application.  It  is noticeable that  the research  adopting a
+client-side  view generally  evaluate  the accuracy  of  the simulation  through
+experimental  studies,  while  such  an  evaluation  is  generally  missing  for
+infrastructure-wide simulator proposal. 
 
-The quality  of the  simulation system  is therefore central  to the  studies of
-cloud allocation  systems. We advocate  that a precise assessment  of simulation
+Altough much  fewer works  address the simulation  from the  client perspective,
+several very  different methods have  been proposed  to reach this  goal. EMUSIM
+\cite{CalheirosNRB13} uses emulation, PICS uses stochastic pertubation ....
+
+...
+
+
+We advocate  that a precise assessment  of simulation
 should be  carried out against real  execution figures to better  understand the
 limits  of simulation  applicability. In  this  paper, we  study the  simulation
 accuracy on several use cases ran on  an IaaS clouds. The use cases comprise two
@@ -26,7 +43,7 @@ We assume an automated process  making the provisioning and scheduling decisions
 on  behalf  the user  on  the  real infrastructure.   To  that  purpose, we  use
 \emph{Schlouder} \cite{}, a client-side cloud resource broker.  These scheduling
 algorithms of Schlouder have been reimplemented in a simulation system, based on
-the simulation toolkit SimGrid \cite{simgrid08}.   Our study aims to isolate the
+the simulation toolkit SimGrid~\cite{simgrid08}.   Our study aims to isolate the
 different parameters that  influence the simulation accuracy and  what degree of
 divergence between real execution and simulation might be expected in each case.
 
@@ -38,17 +55,20 @@ divergence between real execution and simulation might be expected in each case.
 \begin{comment}
 [9] R. N. Calheiros, R. Ranjan, A. Beloglazov, C. A. D. Rose, and R. Buyya, “CloudSim: a toolkit for modeling and simulation of cloud computing environments and evaluation of resource provisioning algo- rithms,” Software: Practice and Experience, vol. 41, no. 1, pp. 23–50,
 2011.
-[10] D. Kliazovich, P. Bouvry, and S. U. Khan, “GreenCloud: a packet-level simulator of energy-aware cloud computing data centers,” The Journal
-of Supercomputing, vol. 62, no. 3, pp. 1263–1283, 2012.
+[10] D. Kliazovich, P. Bouvry, and S. U. Khan, “GreenCloud: a packet-level simulator of energy-aware cloud computing data centers,” The Journal of Supercomputing, vol. 62, no. 3, pp. 1263–1283, 2012.
+
 [11] B. Wickremasinghe, R. N. Calheiros, and R. Buyya, “Cloudanalyst: A CloudSim-based visual modeller for analysing cloud computing environments and applications,” in Advanced Information Networking
 and Applications (AINA), 2010 24th IEEE International Conference on.
 IEEE, 2010, pp. 446–452.
+
 [12] S. K. Garg and R. Buyya, “Networkcloudsim: Modelling parallel applications in cloud simulations,” in Utility and Cloud Computing
 (UCC), 2011 Fourth IEEE International Conference on. IEEE, 2011,
 pp. 105–113.
+
 [13] M. Tighe, G. Keller, M. Bauer, and H. Lutfiyya, “DCSim: A data centre simulation tool for evaluating dynamic virtualized resource management,” in Network and service management (cnsm), 2012 8th
 international conference and 2012 workshop on systems virtualiztion
 management (svm), Oct 2012, pp. 385–392.
+
 [14] S. K. S. Gupta, R. Gilbert, A. Banerjee, Z. Abbasi, T. Mukherjee, and G. Varsamopoulos, “GDCSim: A tool for analyzing Green Data Center design and resource management techniques,” in Green Computing
 Conference and Workshops (IGCC), 2011 International, July 2011, pp.
 1–8.
