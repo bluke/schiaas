@@ -13,19 +13,23 @@ been  developed for  that purpose  (\cite{9-14}).  They  are typically  based on
 discrete-event simulation,  using models  for each  elementary component  of the
 infrastructure,  which  are then  composed  to  simulate  the whole  system  and
 applications running on it.  This approach is attractive from the infrastructure
-provider since the simulated system can  be finely customized.  However, such an
-\textit{ab initio} construction poses a  significant problem for the calibration
-and validation of  the composed model against  real-world measurements.  Another
-approach  is  the   simulation  from  the  client-side   (from  the  application
-perspective), which can specifically focus on the prediction of the makespan and
-the cost  of the  application.  It  is noticeable that  the research  adopting a
-client-side  view generally  evaluate  the accuracy  of  the simulation  through
-experimental  studies,  while  such  an  evaluation  is  generally  missing  for
-infrastructure-wide simulator proposal. 
+provider  perspective  since the  simulated  system  can be  finely  customized.
+However, such  an \textit{ab  initio} construction  poses a  significant problem
+regarding  the  calibration  and  validation   of  the  composed  model  against
+real-world  measurements.    Another  approach   is  the  simulation   from  the
+client-side (from the application perspective),  which can specifically focus on
+the prediction of a couple of metrics, such  as the makespan and the cost of the
+application.  It  is noticeable  that the research  adopting a  client-side view
+generally evaluate the  accuracy of their simulation  model through experimental
+studies, while such  an evaluation is generally  missing for infrastructure-wide
+simulators.
 
 Altough much  fewer works  address the simulation  from the  client perspective,
-several very  different methods have  been proposed  to reach this  goal. EMUSIM
-\cite{CalheirosNRB13} uses emulation, PICS uses stochastic pertubation ....
+several very  different methods have  been proposed  to reach this  goal.  Among
+these    works,     detailed    in    the    related     work    section,    are
+EMUSIM~\cite{CalheirosNRB13}  that  use   emulation,  PICS~\cite{KimWH15}  which
+implemens  a simplified  discrete  event  simulator, and~\cite{PucherGWK15}  who
+build a statistical model from observations.
 
 ...
 
@@ -74,25 +78,5 @@ Conference and Workshops (IGCC), 2011 International, July 2011, pp.
 1–8.
 \end{comment}
 
-
- to  study the techniques for  allocating  cloud  resources. in  more  robust,  efficient,  and
-ecologically  sustainable  ways. Unfortunately,  the  wide-spread  use of  these
-techniques in production systems has, to  date, remained elusive. One reason for
-this is that the  state of the art for investigating  these innovations at scale
-often  relies solely  on model-driven  simulation.
-
-
- Production-grade  cloud software,  however, demands  certainty and  precision for  development and  business
-planning  that   only  comes   from  validating  simulation   against  empirical
-observation.   In this  work, we  take an  alternative approach  to facilitating
-cloud research and engineering in  order to transition innovations to production
-deployment faster.  In particular, we present a new methodology that complements
-existing  model-driven  simulation   with  platform-specific  and  statistically
-trustworthy results.  We simulate systems at  scales and on time frames that are
-testable, and  then, based on  the statistical validation of  these simulations,
-investigate  scenarios   beyond  those  feasibly  observable   in  practice.  We
-demonstrate  the approach  by  developing an  energy-aware  cloud scheduler  and
-evaluating it  using production and synthetic  traces in faster than  real time.
-Our results show that we can  accurately simulate a production IaaS system, ease
-capacity planning, and  expedite the reliable development of  its components and
-extensions.
+ 
+  
