@@ -19,8 +19,8 @@ regarding  the  calibration  and  validation   of  the  composed  model  against
 real-world  measurements.    Another  approach   is  the  simulation   from  the
 client-side (from the application perspective),  which can specifically focus on
 the prediction of a couple of metrics, such  as the makespan and the cost of the
-application.  It  is noticeable  that the research  adopting a  client-side view
-generally evaluate the  accuracy of their simulation  model through experimental
+application.  It is  noticeable that the research papers  adopting a client-side
+view  generally include  an evaluation  of the  simulation through  experimental
 studies, while such  an evaluation is generally  missing for infrastructure-wide
 simulators.
 
@@ -31,26 +31,42 @@ EMUSIM~\cite{CalheirosNRB13}  that  use   emulation,  PICS~\cite{KimWH15}  which
 implemens  a simplified  discrete  event  simulator, and~\cite{PucherGWK15}  who
 build a statistical model from observations.
 
-...
 
-
-We advocate  that a precise assessment  of simulation
-should be  carried out against real  execution figures to better  understand the
-limits  of simulation  applicability. In  this  paper, we  study the  simulation
-accuracy on several use cases ran on  an IaaS clouds. The use cases comprise two
+In this  paper, we study the  simulation also from the  application perspective,
+using  the   discrete  event  simulation  toolkit   SimGrid~\cite{simgrid08}  to
+implement our model. We assume an  automated process making the provisioning and
+scheduling decisions  on behalf the  user on  the real infrastructure.   To that
+purpose,  we   use  \emph{Schlouder}  \cite{},  a   client-side  cloud  resource
+broker. This  paper's contribution  is twofold:
+\begin{itemize}
+\item We propose a simulation tool
+\item We make an  in-depth analysis  of the
+factors that impact the simulation accuracy,  and in this regard go further than
+the related works. We analyze the sensitivity of several parameters, among which
+the  impact  of   the  job  submission  management  overheads,   the  effect  of
+inaccuracies in the job execution times specified  by the user, or the boot time
+of  VMs.  The  study is  carried out  on several  use cases  which comprise  two
 different type  of applications (workflow  and bag-of-tasks), with  several size
 instances for  each of them, and  each application is operated  on two different
 type of infrastructure (private and public).
+\end{itemize}
+
+....
+
+We advocate  that a precise assessment  of simulation
+should be  carried out against real  execution figures to better  understand the
+limits  of simulation  applicability. 
+
+The paper is organized as follows : ....
 
 
-We assume an automated process  making the provisioning and scheduling decisions
-on  behalf  the user  on  the  real infrastructure.   To  that  purpose, we  use
-\emph{Schlouder} \cite{}, a client-side cloud resource broker.  These scheduling
-algorithms of Schlouder have been reimplemented in a simulation system, based on
-the simulation toolkit SimGrid~\cite{simgrid08}.   Our study aims to isolate the
-different parameters that  influence the simulation accuracy and  what degree of
-divergence between real execution and simulation might be expected in each case.
-
+\begin{comment}
+These scheduling algorithms of Schlouder have been reimplemented in a simulation
+system,  based on  the simulation  toolkit SimGrid~\cite{simgrid08}.   Our study
+aims to isolate the different  parameters that influence the simulation accuracy
+and what  degree of divergence  between real  execution and simulation  might be
+expected in each case.
+\end{comment}
 
 
 
@@ -79,4 +95,17 @@ Conference and Workshops (IGCC), 2011 International, July 2011, pp.
 \end{comment}
 
  
-  
+
+
+\section{Related Work}
+
+EMUSIM combines  emulation and  simulation to extract  information automatically
+from  the application  behavior (via  emulation)  and uses  this information  to
+generate the  corresponding simulation  model. Such a  simulation model  is then
+used  to  build  a simulated  scenario  that  is  closer  to the  actual  target
+production  environment   in  terms   computing  resources  available   for  the
+application and request patterns.
+- EMUSIM operates uniquely with information that is available for customers of public IaaS providers
+- Automated Emulation Framework (AEF) [2] for emulation and CloudSim [3] for simulation
+- emulation : run the actual software on a subset of the hardware (=hardware model)
+- application BoT
