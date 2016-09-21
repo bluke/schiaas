@@ -109,71 +109,19 @@ These files can be found in the distribution under *examples/cloudmasterslave/*
 
 Recall that SimGrid uses a *platform file* to describe the set of all hardware devices available,
 and a *deployment file* to tell onto which of these devices the different processes run. 
-An example platform file is <a href="../../examples/cloudmasterslave/companionFiles/platform.xml">here</a>.
-
  
 For a schiaas simulation, the platform file is the one you would normally use for a SimGrid simulation. 
+
+\verbinclude "cloudmasterslave/companionFiles/platform.xml"
+
 The deployment file is also similar excepted that it does not need to include the placement of slave processes anymore, as slaves processes will be bound to instances at runtime.
-Below is an example of deployment description, where we specify that the *Master* process runs on host *Jacquelin*.
-@code
-<?xml version='1.0'?>
-<!DOCTYPE platform SYSTEM "http://simgrid.gforge.inria.fr/simgrid.dtd">
-<platform version="3">
-  <!-- The master process (with some arguments) -->
 
-  <process host="Jacquelin" function="cloudmasterslave.Master">
-     <argument value="10"/>       <!-- Number of tasks -->
-     <argument value="5e10"/>  <!-- Computation size of tasks -->
-     <argument value="1000000"/>   <!-- Communication size of tasks -->
-     <argument value="10"/>  <!-- Number of masterslave.Slaves -->
-  </process>
+\verbinclude "cloudmasterslave/companionFiles/deploy.xml"
 
-</platform>
-@endcode
 
 Last, a new configuration file is introduced to declare the cloud configuration, cloud.xml:
-@code
-<?xml version='1.0'?>
- <!DOCTYPE clouds>
- <clouds version="1">
-	<cloud  id="myCloud">
-		
-		<storage id="myStorage" engine="org.simgrid.schiaas.engine.rise.Rise">
-			<config controller="Jacquelin"/>
-		</storage>
 
-		<compute engine="org.simgrid.schiaas.engine.rice.Rice"> 
-		
-			<config controller="Jacquelin" 
-					image_storage="myStorage" image_caching="PRE"
-					inter_boot_delay="10"/>
-			
-			<instance_type id="small" core="1" memory="1000" disk="1690"/>				
-			<instance_type id="medium" core="2" memory="1000" disk="1690"/>
-			<instance_type id="large" core="4" memory="1000" disk="1690"/>
-			
-			<image id="myImage" size="1073741824"/>
-		
-			<host id="Boivin"/>
-			<host id="Jean_Yves"/>
-			<host id="TeX"/>
-			<host id="Geoff"/>
-			<host id="Disney"/>
-			<host id="iRMX"/>
-			<host id="McGee"/>
-			<host id="Gatien"/>
-			<host id="Laroche"/>
-			<host id="Tanguay"/>
-			<host id="Morin"/>
-			<host id="Ethernet"/>
-			<host id="Bellemarre"/>
-			<host id="Kuenning"/>
-			<host id="Gaston"/>
-			<host id="Harry"/>
-		</compute>
-	</cloud>
-</clouds> 
-@endcode
+\verbinclude "cloudmasterslave/companionFiles/cloud.xml"
 
 Cloud files are validated using <a href="./cloud.xsd">cloud.xsd</a> found in the SchIaaS sources.
 
