@@ -8,9 +8,9 @@ from rpy2.robjects.packages import importr
 from numpy import arange
 
 def loadDict(args, data):
-    if os.path.isfile(args.dict):
+    if args.dict is not None:
         baseVals = {}
-        if args.dict is not None:
+        if os.path.isfile(args.dict):
             with open(args.dict) as dictFile:
                 for line in dictFile:
                     array = line.split()
