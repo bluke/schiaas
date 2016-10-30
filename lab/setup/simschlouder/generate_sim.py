@@ -43,7 +43,7 @@ def loadLine(lineArray):
     if len(lineArray) >= 3:
         itr = iter(lineArray)
         res['id'] = next(itr)
-        res['subDate'] = int(next(itr))
+        res['subDate'] = float(next(itr))
         res['predicted'] = float(next(itr))
         if len(lineArray) >= 3:
             for v in itr:
@@ -133,13 +133,13 @@ def generateDrawTaskfile(inData, itr, args, baseData):
     outData = updateDrawData(copy.deepcopy(inData), rVals, args.treatment, baseData)
     fileName = "{0}_{1}_{2}-{3}-{4}_{5}".format(os.path.splitext(os.path.basename(args.inputFile))[0], args.treatment, args.drawFunc, args.drawExpect, args.drawDeviation, itr)
     writeFile(args.path+"/"+fileName+".tasks", outData)
-    print("SIM_ARG 4:{0} {1}/{0}.tasks".format(fileName, args.path))
+    print("{1}/{0}.tasks".format(fileName, args.path))
 
 def generateRangeTaskfile(inData, value, args, baseData):
     outData = updateRangeData(copy.deepcopy(inData), value, args.treatment, baseData)
     fileName = "{0}_{1}_{2}".format(os.path.splitext(os.path.basename(args.inputFile))[0], args.treatment, value)
     writeFile(args.path+"/"+fileName+".tasks", outData)
-    print("SIM_ARG 4:{0} {1}/{0}.tasks".format(fileName, args.path))
+    print("{1}/{0}.tasks".format(fileName, args.path))
 
 
 def main():
