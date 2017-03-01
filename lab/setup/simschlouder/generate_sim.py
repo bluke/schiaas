@@ -3,6 +3,7 @@
 import argparse
 import copy
 import os
+import sys
 from rpy2.robjects.packages import importr
 
 def writeFile(fileName, data):
@@ -20,33 +21,27 @@ def writeFile(fileName, data):
             out += "\n"
             out_file.write(out)
 
-def loadLine(lineArray):
-    res = {}
-    if len(lineArray) >= 3:
-        itr = iter(lineArray)
-        res['id'] = next(itr)
-        res['subDate'] = int(next(itr))
-        res['predicted'] = float(next(itr))
-        if len(lineArray) >= 3:
-            for v in itr:
-                if v == '~':
-                    res['runtime'] = float(next(itr))
-                elif v == '->':
-                    deps = []
-                    for d in itr:
-                        deps.append(d)
-                    res['dependencies'] = deps
-                else:
-                    res['inbound'] = float(v)
-                    res['outbound'] = float(next(itr))
+def loadDict(dictFile):
+    res = None
+    if dictFile is not None:
+        res = {}
+        if os.path.isfile(dictFile):
+            with open(dictFile, 'r') as fileDesc:
+                for line in fileDesc:
+                    lineArray = line.split()
+                    res[lineArray[0]] = float(lineArray[1])
+        else:
+            print("Dictionnary file not found", file=sys.stderr)
+            sys.exit(1)
     return res
+
 
 def loadFile(fileName):
     data = []
     if os.path.isfile(fileName):
         with open(fileName, 'r') as f:
             for line in f:
-                dic = loadLine(line.split())
+                dic = line.split()
                 data.append(dic)
     return data
 
@@ -66,28 +61,37 @@ def getRandomValues(size, func, expect, shape):
 
     return res
 
-def base(dic):
-    if 'runtime' in dic:
-        return dic['runtime']
+def base(line, baseDict):
+    if baseDict is not None:
+        return baseDict[line[0]]
+    elif line[4] is not None:
+        return float(line[4])
     else:
-        return dic['predicted']
+        return float(line[2])
 
-def updateData(inData, rVals, treat, expect):
+def checkRuntime(line):
+    if line[3] != '~':
+        line.insert(3, '~')
+        line.insert(4, 'None')
+
+
+def updateData(inData, rVals, treat, expect, baseDict):
     res = []
     r = iter(rVals)
     for line in inData:
+        checkRuntime(line)
         if treat == 'add':
-            line['runtime'] = base(line)+next(r)
+            line[4] = base(line, baseDict)+next(r)
         elif treat == 'norm':
-            line['runtime'] = base(line)*(expect/next(r))
+            line[4] = base(line, baseDict)*(expect/next(r))
         else:
-            line['runtime'] = next(r)
-        if line['runtime'] < 0:
-            line['runtime'] = 0
+            line[4] = next(r)
+        if line[4] < 0:
+            line[4] = 0
         res.append(line)
     return res
 
-def generateTaskfile(inData, itr, args):
+def generateTaskfile(inData, itr, args, baseDict):
     rVals = getRandomValues(len(inData), args.drawFunc, args.expect, args.shape)
     outData = updateData(copy.deepcopy(inData), rVals, args.treatment, args.expect)
     fileName = "{0}_{1}_{2}-{3}-{4}_{5}".format(os.path.splitext(os.path.basename(args.inputFile))[0], args.treatment, args.drawFunc, args.expect, args.shape, itr).replace(".",",")
@@ -102,6 +106,8 @@ def main():
     parser.add_argument("-g", "--genrator", action="store", required=True, type=str, dest="drawFunc",
                         choices=["weibull", "normal"],
                         help="The type of random generator to use : weibull,or normal")
+    parser.add_argument("-b", "--base", action='store', required=False, type=str, dest="dictionary",
+                        help="A file containing base values for every jobs")
     parser.add_argument("-e", "--expectation", action="store", required=True, type=float, dest="expect",
                         help="Expectation or scale of the random process")
     parser.add_argument("-s", "--shape", "--sd", action="store", required=True, type=float, dest="shape",
@@ -116,8 +122,9 @@ def main():
     args = parser.parse_args()
 
     inData = loadFile(args.inputFile)
+    baseDict = loadDict(args.dictionay)
     for i in range(args.num):
-        generateTaskfile(inData, i, args)
+        generateTaskfile(inData, i, args, baseDict)
 
 
 
