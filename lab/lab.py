@@ -248,7 +248,7 @@ def extract_trace(in_queue, config):
     if len(config['TU_ARG']) == 0:
         return
 
-    util = os.path.join(config['bindir'], "trace-util.py")
+    util = os.path.join(config['bindir'], "schiaas-traces-utils.py")
     while True:
         exp = in_queue.get()
         if exp is None:

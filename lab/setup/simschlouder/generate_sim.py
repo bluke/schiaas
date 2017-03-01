@@ -5,9 +5,26 @@ import copy
 import os
 import sys
 from rpy2.robjects.packages import importr
+from numpy import arange
 
-def writeFile(fileName, data):
+def loadDict(args, data):
+    if args.dict is not None:
+        baseVals = {}
+        if os.path.isfile(args.dict):
+            with open(args.dict) as dictFile:
+                for line in dictFile:
+                    array = line.split()
+                    baseVals[array[0]] = float(array[1])
+        for entry in data:
+            if not entry['id'] in baseVals:
+                print("Dictionary does no contain any reference for job {0}".format(entry['id']), file=sys.stderr)
+        return baseVals
+    else:
+        return None
+
+def writeFile(fileName, outlist):
     with open(fileName, 'w') as out_file:
+        data = sorted(outlist, key=lambda k: k['index'])
         for line in data:
             out = "{0}\t{1}\t{2}".format(line['id'], line['subDate'], line['predicted'])
             if 'runtime' in line:
@@ -21,27 +38,37 @@ def writeFile(fileName, data):
             out += "\n"
             out_file.write(out)
 
-def loadDict(dictFile):
-    res = None
-    if dictFile is not None:
-        res = {}
-        if os.path.isfile(dictFile):
-            with open(dictFile, 'r') as fileDesc:
-                for line in fileDesc:
-                    lineArray = line.split()
-                    res[lineArray[0]] = float(lineArray[1])
-        else:
-            print("Dictionnary file not found", file=sys.stderr)
-            sys.exit(1)
+def loadLine(lineArray):
+    res = {}
+    if len(lineArray) >= 3:
+        itr = iter(lineArray)
+        res['id'] = next(itr)
+        res['subDate'] = float(next(itr))
+        res['predicted'] = float(next(itr))
+        if len(lineArray) >= 3:
+            for v in itr:
+                if v == '~':
+                    res['runtime'] = float(next(itr))
+                elif v == '->':
+                    deps = []
+                    for d in itr:
+                        deps.append(d)
+                    res['dependencies'] = deps
     return res
-
 
 def loadFile(fileName):
     data = []
     if os.path.isfile(fileName):
         with open(fileName, 'r') as f:
+            line = f.readline()
+            if "[boots]" in line:
+                while not '[tasks]' in line:
+                    line = f.readline() 
+            else:
+                f.seek(0)
             for line in f:
-                dic = line.split()
+                dic = loadLine(line.split())
+                dic["index"] = len(data)
                 data.append(dic)
     return data
 
@@ -61,70 +88,117 @@ def getRandomValues(size, func, expect, shape):
 
     return res
 
-def base(line, baseDict):
-    if baseDict is not None:
-        return baseDict[line[0]]
-    elif line[4] is not None:
-        return float(line[4])
+def base(dic, baseData):
+    if baseData is not None:
+        return baseData[dic['id']]
+    #elif 'runtime' in dic:
+    #    return dic['runtime']
     else:
-        return float(line[2])
+        return dic['predicted']
 
-def checkRuntime(line):
-    if line[3] != '~':
-        line.insert(3, '~')
-        line.insert(4, 'None')
-
-
-def updateData(inData, rVals, treat, expect, baseDict):
+def updateDrawData(inData, rVals, treat, baseData):
     res = []
     r = iter(rVals)
     for line in inData:
-        checkRuntime(line)
         if treat == 'add':
-            line[4] = base(line, baseDict)+next(r)
-        elif treat == 'norm':
-            line[4] = base(line, baseDict)*(expect/next(r))
+            line['runtime'] = base(line, baseData)+next(r)
+        elif treat == 'multiply':
+            line['runtime'] = base(line, baseData)*next(r)
         else:
-            line[4] = next(r)
-        if line[4] < 0:
-            line[4] = 0
+            line['runtime'] = next(r)
+        if line['runtime'] < 0:
+            line['runtime'] = 0
         res.append(line)
     return res
 
-def generateTaskfile(inData, itr, args, baseDict):
-    rVals = getRandomValues(len(inData), args.drawFunc, args.expect, args.shape)
-    outData = updateData(copy.deepcopy(inData), rVals, args.treatment, args.expect)
-    fileName = "{0}_{1}_{2}-{3}-{4}_{5}".format(os.path.splitext(os.path.basename(args.inputFile))[0], args.treatment, args.drawFunc, args.expect, args.shape, itr).replace(".",",")
+def updateRangeData(inData, value, treat, baseData):
+    res = []
+    for line in inData:
+        if treat == 'add':
+            line['runtime'] = base(line, baseData)+value
+        elif treat == 'multiply':
+            line['runtime'] = base(line, baseData)*value
+        else:
+            line['runtime'] = value
+        res.append(line)
+    return res
+
+def zeroSubs(inData):
+    for ent in inData:
+        ent['subDate']=0
+
+
+def generateDrawTaskfile(inData, itr, args, baseData):
+    rVals = getRandomValues(len(inData), args.drawFunc, args.drawExpect, args.drawDeviation)
+    outData = updateDrawData(copy.deepcopy(inData), rVals, args.treatment, baseData)
+    fileName = "{0}_{1}_{2}-{3}-{4}_{5}".format(os.path.splitext(os.path.basename(args.inputFile))[0], args.treatment, args.drawFunc, args.drawExpect, args.drawDeviation, itr)
     writeFile(args.path+"/"+fileName+".tasks", outData)
-    print("SIM_ARG 3:{0} {1}/{0}.tasks".format(fileName, args.path))
+    print("{1}/{0}.tasks".format(fileName, args.path))
+
+def generateRangeTaskfile(inData, value, args, baseData):
+    outData = updateRangeData(copy.deepcopy(inData), value, args.treatment, baseData)
+    fileName = "{0}_{1}_{2}".format(os.path.splitext(os.path.basename(args.inputFile))[0], args.treatment, value)
+    writeFile(args.path+"/"+fileName+".tasks", outData)
+    print("{1}/{0}.tasks".format(fileName, args.path))
 
 
 def main():
     parser = argparse.ArgumentParser(description="Generates Simschlouder job files and the corresponding lab file")
     parser.add_argument("-f", "--file", action='store', required=True, type=str, dest='inputFile',
                         help="The source simschlouder jobfile")
-    parser.add_argument("-g", "--genrator", action="store", required=True, type=str, dest="drawFunc",
-                        choices=["weibull", "normal"],
+    parser.add_argument("-z", "--zero", action='store_true', required=False, dest='zero',
+                        help="bring all sub dates to 0, but preserve sub order")
+    parser.add_argument("-d", "-dict", action='store', required=False, type=str, dest='dict',
+                        default=None, help="A dictonary of base values.")
+    parser.add_argument("-m", "--method", action="store", required=True, type=str, dest="method",
+                        choices=["draw", "range"])
+    parser.add_argument("--draw_function", action="store", required=False, type=str, dest="drawFunc",
+                        choices=["weibull", "normal", "uniform"],
                         help="The type of random generator to use : weibull,or normal")
-    parser.add_argument("-b", "--base", action='store', required=False, type=str, dest="dictionary",
-                        help="A file containing base values for every jobs")
-    parser.add_argument("-e", "--expectation", action="store", required=True, type=float, dest="expect",
+    parser.add_argument("--draw_expectation", action="store", required=False, type=float, dest="drawExpect",
                         help="Expectation or scale of the random process")
-    parser.add_argument("-s", "--shape", "--sd", action="store", required=True, type=float, dest="shape",
+    parser.add_argument("--draw_deviation", action="store", required=False, type=float, dest="drawDeviation",
                         help="Shape/Standard Deviation or otherwise second moment of the random process")
+    parser.add_argument("--min", action="store", required=False, type=float, dest="range_min",
+                        help="Lowest point for range method")
+    parser.add_argument("--max", action="store", required=False, type=float, dest="range_max",
+                        help="highest point for range method")
+    parser.add_argument("--step", action="store", required=False, type=float, dest="range_step",
+                        help="step for range method")
     parser.add_argument("-t", "--treatment", action="store", required=True, type=str, dest="treatment",
-                        choices=["raw", "add", "norm"],
-                        help="Way the random values are used : RAW, ADDed to the prevision, or \"NORMalized\" (prevision*(expect/rand_val))")
-    parser.add_argument("-n", "--number", action="store", required=False, type=int, dest="num", default=1,
-                        help="Number of taskfile to generate")
+                        choices=["raw", "add", "multiply"],
+                        help="Way the random values are used")
+    parser.add_argument("-r", "--repetitions", action="store", required=False, type=int, dest="num", default=1,
+                        help="Number of taskfile to generate for draw or interval modes")
     parser.add_argument("-p", "--path", action="store", required=False, type=str, dest="path", default="./",
                         help="Path to store taskfiles")
     args = parser.parse_args()
 
+
+    if args.method == "draw":
+        if "drawFunc" is None or "drawExpect" is None or "drawDeviation" is None:
+            print("With draw method user must provide --draw_function, --draw_expectation and, --draw_deviation", file=sys.stderr)
+            sys.exit(1)
+    elif args.method == "range":
+        if "range_min" is None or "range_max" is None or "range_step" is None:
+            print("With range method user mus provide --min, --max and, --step", file=sys.stderr)
+            sys.exit(0)
+
+
     inData = loadFile(args.inputFile)
-    baseDict = loadDict(args.dictionay)
-    for i in range(args.num):
-        generateTaskfile(inData, i, args, baseDict)
+    
+    if args.zero:
+        zeroSubs(inData)
+    
+    baseData = loadDict(args, inData)
+
+    if args.method == "draw":
+        for i in range(args.num):
+            generateDrawTaskfile(inData, i, args, baseData)
+    if args.method == "range":
+        for i in arange(args.range_min, args.range_max, args.range_step):
+            generateRangeTaskfile(inData, i, args, baseData)
+
 
 
 
