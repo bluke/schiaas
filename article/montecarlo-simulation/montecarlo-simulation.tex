@@ -3,19 +3,19 @@
 \usepackage[utf8]{inputenc}
 \usepackage{url}
 
-
-
 \usepackage{acronym}
 \acrodef{IaaS}{Infrastructure as a Service}
 \acrodef{SaaS}{Software as a Service}
 \acrodef{PaaS}{Platform as a Service}
-\acrodef{VM}{Virtual machine}
-\acrodef{VMs}{Virtual machines}
-\acrodef{PMs}{Physical machines}
+\acrodef{VM}{Virtual Machine}
+\acrodef{PM}{Physical Machine}
 \acrodef{BTU}{billing time unit}
 \acrodef{EC2CU}{EC2 Compute Unit}
 \acrodef{HPC}{High Performance Computing}
 \acrodef{unistra}{University of Strasbourg}
+\acrodef{rv}[RV]{random variable}
+\acrodef{pdf}[PDF]{probability density function}
+\acrodef{cdf}[CDF]{cumulative distribution function}
 
 
 \title{Modeling the accuracy of Monte-Carlo approach for Cloud based workflow simulations.}
@@ -45,7 +45,7 @@
   simulations. In this paper we study  the limits of the Monte-Carlo approach by
   characterising the relationship  between the precision of  the input variables
   and the simulations results, as well as the impact of the number of iterations
-  for each level of input precision. We show ...
+  for each level of input precision. We show.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -78,7 +78,7 @@ is  used for  scientific and  industrial  workload with  a clear  end and  where
 runtime is heavily dependent on computing power.  This approach is made possible
 by   the   pricing   model   of  cloud   infrastructure,   as   popularized   by
 AWS\footnote{Amazon  Web  Services},  in  which  payment  for  computing  power,
-provided  as  \ac{VMs},  happens  in  increment of  arbitrary  length  of  time,
+provided  as  \acp{VM},  happens  in  increment of  arbitrary  length  of  time,
 \ac{BTU}, usually of one hour. Running two \ac{VM} side by side for one \ac{BTU}
 each costs  the same  as running  one \ac{VM}  for two  \ac{BTU}, but  every BTU
 started is  owed in full.  As  such within a  workflow a slowed job  forcing the
@@ -94,10 +94,68 @@ of the underlying platforms are unknown and extremely heterogeneous as operators
 complete   their   data-centers   over   the  years   with   new   servers   and
 equipment.  Secondly  cloud  systems  are   multi-tenant  by  nature  which  ads
 uncertainty due to  contention on network and memory accesses,  depending on how
-\ac{VM}  are scheduled  and  the activity  of  your \emph{neighbors}.  \ac{IaaS}
-operators attempt  to mask these  irregularities in computing power  and network
-access by guaranteeing a minimum performance.
+\ac{VM}  are scheduled  and  the activity  of  your \emph{neighbors}.  Even when
+\ac{IaaS} operators attempt to mask these irregularities in computing power and
+network access by guaranteeing a minimum performance, variability occurs in
+presence of \emph{less-than-noisy-neighbors} as it is not in the interest of the
+\ac{IaaS} operators to limit power when available over the guaranteed minimums.
+These factor add to the already hight difficulty of modeling job exaction times
+on Networks of Computers as shown by Lastovetsky and Twamley in
+\cite{Lastovetsky05}.
 
+To deal with the inherent unpredictability introduced by opaque heterogeneous
+girds, the standard approach is to consider jobs runtimes to be stochastic.
+Every jobs is modeled by a \ac{rv} that models the whole spectrum of possible
+runtimes incurred by the heterogeneity of the platform or the noisy neighbors,
+or even the slight variation on the number of cache misses incurred during the
+execution of the application. Stochastic simulations are quite harder than
+deterministic ones, where deterministic simulation give a single numerical
+result, stochastic simulation results in \ac{rv} whose parameters are defined by
+the \ac{rv}. It as been shown in \cite{Li97} and \cite{Ludwig01} that assuming
+\acp{rv} are independent, the \ac{pdf} of the \ac{rv} resulting from to job
+following each other is the convolution of the job's \acp{pdf}, whereas in the
+cases of jobs merging the \ac{cdf} of the final \ac{rv} is the product of the
+merging \acp{rv} \acp{cdf}.  The constant switching between \ac{pdf} and
+\ac{cdf} makes computation of such \acp{rv} impractical. And methods to solve
+rapidly such simulation are heavily reliant on simplification.
+
+Monte Carlo simulations rely on repeated sampling of input \acp{rv} to compute a
+sufficient number of outcomes to obtain a good approximation of the output
+\ac{rv}. This method sidesteps the computational complexity of pure stochastic
+methods replacing it by sheer number repeated deterministic simulations. In our
+case we create multiple realisations by drawing a walltime for each jobs using
+it's respective \ac{rv}, each realisation is then passed on to a simulator
+computing the makespan of that realisation, the makespans are finally aggregated
+in an makespan \ac{rv} that is the result of the simulation. This final \acl{rv}
+can be used to derive confidence intervals of the time or number of BTU taken by
+the execution of the workflow.
+
+Monte Carlo methods well studied from a mathematics stand point, accuracy of the
+method can be bounded and in some case improved upon using quasi-random series.
+
+\texttt{TODO move the last 3 paragraph elsewhere}
+
+\section{Related Works}
+
+Monte Carlo have been suggested as a work around for stochastic workflow
+resolutions as far as 1963 in \cite{beenhaker63} and for computer science as far
+as 1971 for network analysis by \emph{Burt et al.} in \cite{burt71}. In
+\cite{Canon10}, \emph{Canon} and \emph{Jeannot} choose to use Monet Carlo
+simulations to try optimize DAG schedules for heterogeneous environments. {DAG}
+scheduling is also the problem at the core \emph{Zheng} and \emph{Sakellariou}
+in \cite{Zheng13}. ElasticSim\cite{cai16} is an \ac{IaaS} Monte Carlo simulator
+created as an extension to the CloudSim\cite{cloudsim} simulator. In this paper
+we will work on workflows executed by the \emph{Schlouder}\cite{Michon17} cloud
+broker by \emph{Michon et al.}. Our simulator \emph{SimSchlouder}\cite{?}  is
+based on SimGrid \cite{simgrid} platform developed by \emph{Quinson et al.}.
+
+\texttt{TODO Should explaintions of stochastic sims be here with thier quotes, should
+more details be given to each ref content?}
+
+\section{Problem description}
+
+\bibliographystyle{IEEEtran}
+\bibliography{montecarlo-simulation}
 
 \newpage
 \begin{verbatim}
@@ -141,5 +199,6 @@ access by guaranteeing a minimum performance.
 
 ! Results
 \end{verbatim}
+
 
 \end{document}
