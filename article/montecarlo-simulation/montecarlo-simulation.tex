@@ -7,6 +7,7 @@
 \acrodef{IaaS}{Infrastructure as a Service}
 \acrodef{SaaS}{Software as a Service}
 \acrodef{PaaS}{Platform as a Service}
+\acrodef{dag}[DAG]{directed acyclic graph}
 \acrodef{VM}{Virtual Machine}
 \acrodef{PM}{Physical Machine}
 \acrodef{BTU}{billing time unit}
@@ -17,6 +18,8 @@
 \acrodef{pdf}[PDF]{probability density function}
 \acrodef{cdf}[CDF]{cumulative distribution function}
 
+
+\newcommand{\etal}[1]{\emph{#1 et al.}}
 
 \title{Modeling the accuracy of Monte-Carlo approach for Cloud based workflow simulations.}
 \author{\IEEEauthorblockN{Luke~Bertot 
@@ -52,7 +55,7 @@
 cloud computing, infrastructure as a service, simulation, montecarlo.
 \end{IEEEkeywords}
 
-\section{Introduction}
+\section{Introduction.}
 
 Whether to  model impractical  experiments or extract  information out  of large
 quantities of data, large scale computing is central to scientific, and sometime
@@ -64,7 +67,7 @@ higher computing power.  These resources are made available freely to members of
 the institutions within the constraints  of time sharing and available computing
 power.
 
-Over the  last decade the advancement  of virtualization techniques has  lead to
+Over the  last decade the advancement  of virtiualization techniques has  lead to
 the emergence of new economic and exploitation approach of computer resources in
 the form of \ac{IaaS}. In this model, all computing resources are made available
 on demand  by third-party operators  and payed based  on usage.  The  ability to
@@ -105,52 +108,44 @@ on Networks of Computers as shown by Lastovetsky and Twamley in
 
 To deal with the inherent unpredictability introduced by opaque heterogeneous
 girds, the standard approach is to consider jobs runtimes to be stochastic.
-Every jobs is modeled by a \ac{rv} that models the whole spectrum of possible
-runtimes incurred by the heterogeneity of the platform or the noisy neighbors,
-or even the slight variation on the number of cache misses incurred during the
-execution of the application. Stochastic simulations are quite harder than
-deterministic ones, where deterministic simulation give a single numerical
-result, stochastic simulation results in \ac{rv} whose parameters are defined by
-the \ac{rv}. It as been shown in \cite{Li97} and \cite{Ludwig01} that assuming
-\acp{rv} are independent, the \ac{pdf} of the \ac{rv} resulting from to job
-following each other is the convolution of the job's \acp{pdf}, whereas in the
-cases of jobs merging the \ac{cdf} of the final \ac{rv} is the product of the
-merging \acp{rv} \acp{cdf}.  The constant switching between \ac{pdf} and
-\ac{cdf} makes computation of such \acp{rv} impractical. And methods to solve
-rapidly such simulation are heavily reliant on simplification.
+Every jobs can be modeled by a \ac{rv} that models the whole spectrum of
+possible runtimes. These \ac{rv} are de basis required for a stochastic
+simulations.  Such simulations output a random variable of the observed
+phenomenon (\emph{makespan} or \emph{\ac{BTU}}) which in turn can be used to
+create intervals of possible results with their assorted confidence. In this
+paper we will evaluate the precision of Monte Carlo method based stochastic
+simulators in the context of cloud scheduling.
 
-Monte Carlo simulations rely on repeated sampling of input \acp{rv} to compute a
-sufficient number of outcomes to obtain a good approximation of the output
-\ac{rv}. This method sidesteps the computational complexity of pure stochastic
-methods replacing it by sheer number repeated deterministic simulations. In our
-case we create multiple realisations by drawing a walltime for each jobs using
-it's respective \ac{rv}, each realisation is then passed on to a simulator
-computing the makespan of that realisation, the makespans are finally aggregated
-in an makespan \ac{rv} that is the result of the simulation. This final \acl{rv}
-can be used to derive confidence intervals of the time or number of BTU taken by
-the execution of the workflow.
+\section{Related Works.}
 
-Monte Carlo methods well studied from a mathematics stand point, accuracy of the
-method can be bounded and in some case improved upon using quasi-random series.
+Computing the resulting \ac{rv} of a stochastic simulation a non-trivial
+process.  \acp{rv} are defined through their \ac{pdf} and \ac{cdf} where $CDF(x)
+= \int_{-\infty}^{x} PDF(y) dy$. Works by \etal{Li}\cite{Li97} and
+\etal{Ludwig}\cite{Ludwig01} show that in the context of task \ac{dag} with
+independent \acp{rv} the \ac{rv} representing successive tasks is a convolution
+product of their respective \acp{pdf} whereas the \ac{rv} of parallel tasks
+joining is the product of their respective \acp{cdf}. Solving stochastic
+\ac{dag} numerically is therefore extremely computationally intensive even when
+the initial constraint of independence of the \acp{rv} can be fulfilled. In the
+general cases solving the \ac{rv} for a \ac{dag} is deemed a \#P-complete
+problem, though some approximation can be used to attempt and solve it
+numerically as in \cite{dodin85}.
 
-\texttt{TODO move the last 3 paragraph elsewhere}
-
-\section{Related Works}
-
-Monte Carlo have been suggested as a work around for stochastic workflow
-resolutions as far as 1963 in \cite{beenhaker63} and for computer science as far
-as 1971 for network analysis by \emph{Burt et al.} in \cite{burt71}. In
-\cite{Canon10}, \emph{Canon} and \emph{Jeannot} choose to use Monet Carlo
-simulations to try optimize DAG schedules for heterogeneous environments. {DAG}
-scheduling is also the problem at the core \emph{Zheng} and \emph{Sakellariou}
-in \cite{Zheng13}. ElasticSim\cite{cai16} is an \ac{IaaS} Monte Carlo simulator
-created as an extension to the CloudSim\cite{cloudsim} simulator. In this paper
-we will work on workflows executed by the \emph{Schlouder}\cite{Michon17} cloud
-broker by \emph{Michon et al.}. Our simulator \emph{SimSchlouder}\cite{?}  is
-based on SimGrid \cite{simgrid} platform developed by \emph{Quinson et al.}.
-
-\texttt{TODO Should explaintions of stochastic sims be here with thier quotes, should
-more details be given to each ref content?}
+To sidestep the computational difficulty \emph{Beenhakker} suggests in
+1963\cite{beenhakker63} the use of Monte Carlo methods. In Monte Carlo
+simulations the random inputs are repeatedly sampled to compute multiple
+results, those results are used to compute the process overall \acl{rv}. Because
+it is based on a repetition of a deterministic simulation using samples drawn
+for the input \ac{rv}, this method does not use complex operations la
+convolution or the repeated integration need to switch from an \ac{rv}'s
+\ac{pdf} to it's \ac{cdf}. This approach was used in 1971 by \etal{Burt} for
+network analysis\cite{burt71} and in the context of task scheduling by
+\etal{Canon}, to compare the robustness of \ac{dag} schedules\cite{Canon10}, and
+\etal{Zheng}, to optimise schedules stochastic \acp{dag}. \etal{Cai} have worked
+to extend CloudSim\cite{cloudsim} with ElasticSim a Monte Carlo
+simulator\cite{cai16}. As Monte Carlo simulations gain in traction we want to
+evaluate the quality of this approach relative to the precision of the tasks
+models.
 
 \section{Problem description}
 
