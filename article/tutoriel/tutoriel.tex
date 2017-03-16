@@ -6,7 +6,7 @@
 \documentclass[parallelisme]{compas2017}
 \usepackage{rotating}
 \usepackage{comment}
-
+\usepackage{multirow}
 \usepackage{graphicx}
 
 \newcommand\vrpath{../../lab/setup/simschlouder/validation-results/}
@@ -97,19 +97,28 @@ peux être une trace d'execution, une représentation abstraite de suite
 d'opérations, ou un programme appelant une bibliothéque de simulation au lieu
 d'executé des opération réeles.
 
-
-
-
-EMUSIM combines  emulation and  simulation to extract  information automatically
-from  the application  behavior (via  emulation)  and uses  this information  to
-generate the  corresponding simulation  model. Such a  simulation model  is then
-used  to  build  a simulated  scenario  that  is  closer  to the  actual  target
-production  environment   in  terms   computing  resources  available   for  the
-application and request patterns.
-- EMUSIM operates uniquely with information that is available for customers of public IaaS providers
-- Automated Emulation Framework (AEF) [2] for emulation and CloudSim [3] for simulation
-- emulation : run the actual software on a subset of the hardware (=hardware model)
-- application BoT
+\begin{tabular}{|c||c|c|c||c|c|c|c||c|}
+	\hline
+	%% line 1
+	& \multicolumn{3}{c|}{Application} &
+	\multicolumn{2}{c|}{CPU}&Réseau&Disque&Platforme\\
+	\cline{2-9}
+	%%line 2
+	Simulator &\rotatebox{90}{trace d'execution\,}&\rotatebox{90}{representation
+	abstraite\,}&\rotatebox{90}{simulation programmée\,}&
+	\rotatebox{90}{delai mesuré\,}& \rotatebox{90}{délai utilisateur\,}&
+	type & precision max&granularité\\
+	\hline
+	%%line 3
+	CloudSim & & & \bf X &&\bf
+	X&store/forward&seek+transfert&structure<->equipment\\ \hline
+	ICanCloud & & & \bf X &&\bf X&packet& block& equipment \\ \hline
+	GroudSim & & & \bf X &&\bf X&flot& n/a & equipment \\\hline
+	GreenCloud & & \bf X &&&\bf X&packet& n/a & equipement\\ \hline
+	SimGrid & \bf X & \bf X & \bf X &\bf X&\bf X& flot/packet &
+	seek+transfert & equipment\\
+	\hline
+\end{tabular}
 
 %=========================================================
 \section{Présentation du \textit{framework}}
