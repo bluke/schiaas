@@ -147,11 +147,62 @@ SimGrid avec celles disponibles dans un cloud.
 
 Cependant, deux applications sont fournies par défaut: \emph{LoadInjector} et \emph{SimSchlouder}.
 
-\subsection{LoadInjector}
+\subsubsection{LoadInjector}
 
-L'application \emph{LoadInjector} permet le prototypage rapide de simulateur pour évaluer les 
+L'application \emph{LoadInjector} permet le prototypage rapide de simulateurs pour évaluer les 
 algorithmes du niveau \textit{cloud-kit}. Dans ces cas là, seule compte la charge en terme de nombre 
 de VMs et de CPU de ces VMs, peu importe les applications qui y sont exécutées.
+
+L'exemple typique est celui de l'étude d'algorithme de placement de VM sur PM, il est développé section ???
+
+\subsection{SimSchlouder}
+
+L'application \emph{SimSchlouder} permet le prototypage rapide de simulateurs pour évaluer les 
+algorithmes d'ordonnancement de VM et de tâches au niveau utilisateurs du cloud. 
+Dans ces cas là, l'état de l'infrastructure interne du cloud importe peu, seule compte le service 
+rendu à l'utilisateur, isolé sur sa propre plateforme virtuelle. 
+
+Schlouder citation??? est un courtier de ressources virtuelles. Il prend en entrée la description 
+d'une charge de travail, au format slurm citation??? étendu de quelques informations permettant 
+d'adapter le courtage aux besoins utilisateurs. Ensuite, Schlouder anaylse la charge de travail 
+soumise, et décide à l'aide d'algorithmes de dimensionnement (\textit{provisioning}) de déployer 
+un certains nombres de VM, puis ordonnance les tâches sur ces VMs, et étend les VMs lorsqu'elles
+sont devenues inutiles.
+
+SimSchlouder est l'alter-égo de Schlouder, dont l'architecture, les fonctionnalités, le comportement
+et les entrées/sorties sont entièrement reproduite dans SCHIaaS. La description d'une charge de 
+travail peut donc être soumise indifférement à Schlouder pour une exécution réelle, ou à SimSchlouder
+pour une évaluation des choix de courtage par la simulation. Une option de Schlouder permet 
+d'ailleurs d'appeler directement SimSchlouder, et d'obtenir le temps de completion et le prix 
+de l'exécution demandée en fonction de la plateforme de cloud cible et de la stratégie de réservation
+de VM choisie.
+
+Les stratégies d'évaluation des réservations de ressources de cloud ont été intensivement étudiées 
+ces dernières années. Cependant, elles sont rarement comparées entre elles, et leur évaluation 
+est souvent basée sur des simulations ad-hoc ou inadaptées, et des charges de travail purement artificielles.
+SimSchlouder permet de rapidement développer de telles stratégies, et de comparer leurs performances 
+à celles fournies par défaut, à savoir ASAP (\textit{As Soon As Possible}, qui vise à minimiser le temps de 
+complétion) et AFAP (\textit{As Full As Possible}, qui vise à minimiser les réservations de ressources,
+et donc le coût). De plus, cette comparaison peut s'appuyer sur les traces récupérées lors de l'utilisation 
+de l'application réelle Schlouder. Pour l'instant, nous mettons à disposition 481 traces d'exécutions
+sur deux plateformes : notre cloud privé, homogène, stable et non partagé, et BonFire qui est un cloud 
+public hétérogène, instable et partagé, dont les différents sites ont des comportements et des matériels 
+assez différents pour qu'on les considère ocmme des clouds différents.
+Les charges de travail sont issues de deux applications : OMSSA, qui est un sac de tâches assez courtes 
+en protéomique, et MONTAGE, qui est un \textit{workflow} en astronomie ayant des tâches plus imposantes. 
+
+Ainsi, l'utilisation de SimSchlouder permet de ne développer que le coeur d'un stratégie de résevation 
+de resources, simplement en implémentant une interface abstraite très simple, pour pouvoir comparer cette 
+stratégie aux autres dans des contextes applicatifs et matériels nombreux, représentatifs, et réellement 
+éprouvés.
+
+Ces comparaisons nécessitent de très nombreuses simulations, c'est pourquoi nous avons conçu \emph{le lab}.
+
+\subsection{Le Lab}
+
+Le lab est un ensemble de scripts permettant d'automatiser l'exécution des simulations, la collecte des
+observations, ainsi que leur analyse. Il permet donc d'exécuter de bout-en-bout l'étude par simulation,
+de la définition des différentes simulations, à la production des graphiques.
 
 
 %=========================================================
