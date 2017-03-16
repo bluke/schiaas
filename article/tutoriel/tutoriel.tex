@@ -65,26 +65,16 @@ ce \textit{framework}, puis les résultats des expériences de validation.
 Les  clouds  sont  devenus  ces  dernières  années  une  brique  essentielle  de
 l'informatique,   omni-présents  dans   les   architectures   de  nos   systèmes
 d'information. La compréhension de leurs  comportements est donc un enjeu majeur
-qui  a   incité  les   chercheurs  à  proposer   des  modèles   qui  s'expriment
-essentiellement  sous  la  forme  de  simulateurs. Ces simulateurs reposent sur
-une modélisation qu'on peut qualifier de bottom-up : les ressources matérielles
-sont d'abord modélisées, puis le comportement des machines virtuelles sur ces
-ressources matérielles, 
-  On  peut  citer  les  projets
-CloudSim, EmuSim, ... Cependant, 
-
-
-
-
-%=========================================================
-\section{Etat de l'Art}
-%=========================================================
-
-La simulation de clouds, et par extention celle de grilles, ce base generalement
-sur trois composant :
+qui a incité les chercheurs à proposer des simulateurs de cloud, essentiellement
+pour les clouds de type \textit{Infrastructure-as-a-Service} (IaaS) . Ces
+simulateurs   reposent   sur   une   modélisation  qu'on   peut   qualifier   de
+\textit{bottom-up} : les ressources matérielles sont d'abord modélisées, puis le
+comportement des  machines virtuelles sur  ces ressources matérielles,  puis les
+applications s'exécutant dans cet environnement. On peut donc distinguer dans 
+de nombreux outils de simulation trois composants : 
 \begin{itemize}
-		\item une spécifcation de platforme
-		\item une spécification de l'appication.
+		\item une spécification de platforme
+		\item une spécification de l'application.
 		\item un modèle de simulation
 \end{itemize}
 
