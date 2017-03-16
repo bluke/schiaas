@@ -76,7 +76,7 @@ public class SimSchlouder {
 	 * [boots] (optional section)
 	 * vm_boottime [vm_provisioning_date [vm_future_date]]
 	 * [tasks] 
-	 * task_name submission_date walltime_prediction [~ real_walltime] [real_runtime] [input_data_size output_data_size in B] [-> dependencies]
+	 * task_name submission_date walltime_prediction [~ real_walltime] [real_runtime] [input_data_size output_data_size (in B) [management_time]] [-> dependencies]
 	 * @author julien.gossa@unistra.fr
 	 */
 	public static class TaskFileReaderProcess extends  org.simgrid.msg.Process {
@@ -250,7 +250,7 @@ public class SimSchlouder {
 	    Msg.init(args);
 	
 	    if (args.length < 3) {
-			Msg.info("Usage   : SimSchlouder simschlouder_file tasks_file strategyClass [real_runtimes] [communications] [real_boottimes] [real_threads]");
+			Msg.info("Usage   : SimSchlouder simschlouder_file tasks_file strategyClass [real_walltimes] [communications] [real_boottimes] [real_threads]");
 			Msg.info("example : SimSchlouder simschlouder.xml workload.tasks ASAP");
 			System.exit(1);	
 		}

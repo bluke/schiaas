@@ -40,7 +40,7 @@ if [ ! $ST_DIR ] ; then
 fi
 
 if [ ! -f $ST_DIR/schlouder-traces-utils.py ] ; then
-	echo "schlouder-traces-utilswas not found at $ST_DIR."
+	echo "schlouder-traces-utils was not found at $ST_DIR."
 	echo "Make sure to export ST_DIR='path/to/schlouder-traces'"
 	exit 2
 fi

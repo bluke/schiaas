@@ -1,4 +1,4 @@
-root	date	Sun Jul 24 14:07:17 CEST 2016
+root	date	Wed Sep 21 15:35:16 CEST 2016
 root	description	Example of MasterSlavec on cloud
 root:cloud:myCloud:compute:compute_host:node-1.me	cores	24.0
 root:cloud:myCloud:compute:compute_host:node-1.me	ram_size	98304
@@ -16,15 +16,15 @@ root:cloud:myCloud:compute:compute_host:node-4.me	cores	24.0
 root:cloud:myCloud:compute:compute_host:node-4.me	ram_size	98304
 root:cloud:myCloud:compute:compute_host:node-4.me	diskSize	98304
 root:cloud:myCloud:compute:compute_host:node-4.me:used_cores	0.0	0.0
-root:cloud:myCloud:compute:scheduler	name	org.simgrid.schiaas.engine.compute.scheduler.simplescheduler.SimpleScheduler
-root:cloud:myCloud:compute:scheduler	delay	100
 root:cloud:myCloud:compute:scheduler	controller	controller
+root:cloud:myCloud:compute:scheduler	delay	100
+root:cloud:myCloud:compute:scheduler	name	org.simgrid.schiaas.engine.compute.scheduler.simplescheduler.SimpleScheduler
 root:cloud:myCloud:compute:scheduler	type	balancer
-root:cloud:myCloud:compute	image_caching	PRE
-root:cloud:myCloud:compute	inter_boot_delay	10
-root:cloud:myCloud:compute	engine	org.simgrid.schiaas.engine.compute.rice.Rice
-root:cloud:myCloud:compute	image_storage	myStorage
 root:cloud:myCloud:compute	controller	controller
+root:cloud:myCloud:compute	image_storage	myStorage
+root:cloud:myCloud:compute	engine	org.simgrid.schiaas.engine.compute.rice.Rice
+root:cloud:myCloud:compute	inter_boot_delay	10
+root:cloud:myCloud:compute	image_caching	PRE
 root:cloud:myCloud:compute:instances:myCloud-000	image	myImage
 root:cloud:myCloud:compute:instances:myCloud-000	instance_type	small
 root:cloud:myCloud:compute:instances:myCloud-000:command	0.0	runinstance

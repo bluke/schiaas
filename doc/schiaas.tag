@@ -1,25 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
 <tagfile>
-  <compound kind="file">
-    <name>howto-schedulers.doc</name>
-    <path>/home/julien/repo/schiaas/doc/doxygen/</path>
-    <filename>howto-schedulers_8doc</filename>
-  </compound>
-  <compound kind="file">
-    <name>index.doc</name>
-    <path>/home/julien/repo/schiaas/doc/doxygen/</path>
-    <filename>index_8doc</filename>
-  </compound>
-  <compound kind="file">
-    <name>lab.doc</name>
-    <path>/home/julien/repo/schiaas/doc/doxygen/</path>
-    <filename>lab_8doc</filename>
-  </compound>
-  <compound kind="file">
-    <name>simschlouder.doc</name>
-    <path>/home/julien/repo/schiaas/doc/doxygen/</path>
-    <filename>simschlouder_8doc</filename>
-  </compound>
   <compound kind="page">
     <name>lab</name>
     <title>Analyzing the simulation</title>
@@ -28,7 +8,7 @@
     <docanchor file="lab" title="Tracing">tracing</docanchor>
     <docanchor file="lab" title="Description">tracing_description</docanchor>
     <docanchor file="lab" title="Tracing your own code">tracing_tutorial</docanchor>
-    <docanchor file="lab" title="Intialization and conclusion">tracing_tutorial_init</docanchor>
+    <docanchor file="lab" title="Initialization and conclusion">tracing_tutorial_init</docanchor>
     <docanchor file="lab" title="Creating">tracing_tutorial_creation</docanchor>
     <docanchor file="lab" title="Adding properties">tracing_tutorial_properties</docanchor>
     <docanchor file="lab" title="Adding events">tracing_tutorial_events</docanchor>
@@ -41,11 +21,11 @@
     <docanchor file="lab" title="Looking at the used_cores values of node-1">extracting_examples_event2</docanchor>
     <docanchor file="lab" title="counting the nodes having less than 8 cores used">extracting_examples_counting</docanchor>
     <docanchor file="lab" title="counting the virtual machines in the migrating state">extracting_examples_counting2</docanchor>
-    <docanchor file="lab" title="Outputting the data for further analyzis.">extracting_outputting</docanchor>
+    <docanchor file="lab" title="Outputting the data for further analysis.">extracting_outputting</docanchor>
     <docanchor file="lab" title="Analyzing and plotting observations">analyzing</docanchor>
     <docanchor file="lab" title="Reading the data">analyzing_reading</docanchor>
     <docanchor file="lab" title="Plotting the data">analyzing_plotting</docanchor>
-    <docanchor file="lab" title="Further analyzis">analyzing_further</docanchor>
+    <docanchor file="lab" title="Further analysis">analyzing_further</docanchor>
     <docanchor file="lab" title="The lab">lab_lab</docanchor>
     <docanchor file="lab" title="Lab sub-directories">lab_dirs</docanchor>
     <docanchor file="lab" title="Setting the lab up">lab_setup</docanchor>
@@ -94,7 +74,7 @@
     <filename>index</filename>
     <docanchor file="index" title="Running SchIaaS">running</docanchor>
     <docanchor file="index" title="Prerequisite">running_prerequisite</docanchor>
-    <docanchor file="index" title="Retrieving and Installing Schiaas">running_retrieving</docanchor>
+    <docanchor file="index" title="Retrieving and Installing SchIaaS">running_retrieving</docanchor>
     <docanchor file="index" title="Tutorial: the master-slave example">tutorial</docanchor>
     <docanchor file="index" title="Overview of the Example">tutorial_overview</docanchor>
     <docanchor file="index" title="Simulation setup">tutorial_setup</docanchor>

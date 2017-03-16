@@ -29,7 +29,7 @@ export CLASSPATH=$SIMGRID_JAR_PATH/simgrid.jar:$PWD/bin/schiaas.jar:$PWD/bin/loa
 cd lab
 ls setup/cmp-scheduler
 cat setup/cmp-scheduler/cmp-scheduler.cfg
-./lab.sh -p 2 setup/cmp-scheduler/cmp-scheduler.cfg
+./lab.py -p 2 setup/cmp-scheduler/cmp-scheduler.cfg
 
 # Contemplating the results
 cd data
@@ -42,11 +42,11 @@ library(traceutil)
 ?tu_read
 tu_read()
 ls()
-tu_plot(xp_reconsolidator0.used_cores_ne_0)
-tu_integrate(xp_reconsolidator0.used_cores_ne_0)
+tu_plot(xp_reconsolidator0_slowfast.used_cores_ne_0)
+tu_integrate(xp_reconsolidator0_slowfast.used_cores_ne_0)
 xps
 tu_apply(xps,'used_cores_ne_0', tu_integrate)
-tu_plot(xp_reconsolidator0.vm__state)
+tu_plot(xp_reconsolidator0_slowfast.vm__state)
 
 @endcode
 

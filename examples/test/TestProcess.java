@@ -46,9 +46,9 @@ public class TestProcess extends Process {
 		vm1.shutdown();
 		vm2.shutdown();
 		
-		vm1.finalize();
-		vm2.finalize();
-		
+		vm1.destroy();
+		vm2.destroy();
+				
 		Msg.info("Goodbye now!");
 	}
 }

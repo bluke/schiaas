@@ -460,3 +460,5 @@ vr.article <- function() {
 	vr.plot.communications(c('fr-inria','uk-epcc','de-hlrs'))
 	dev.off()
 }
+
+vr.article()

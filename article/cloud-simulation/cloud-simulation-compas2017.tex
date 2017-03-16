@@ -1,0 +1,681 @@
+%===========================================================
+%                              Choix de track
+%===========================================================
+% Une des trois options 'parallelisme', 'architecture', 'systeme' 
+% doit être utilisée avec le style compas2017
+\documentclass[parallelisme]{compas2017}
+\usepackage{rotating}
+\usepackage{comment}
+
+\usepackage{graphicx}
+
+\newcommand\vrpath{../../lab/setup/simschlouder/validation-results/}
+\graphicspath{{\vrpath}}
+
+%===========================================================
+%                               Title
+%===========================================================
+
+\toappear{1} % Conserver cette ligne pour la version finale
+
+\begin{document}
+
+\title{Simuler les clouds du point de vue client : architecture logicielle, validation expérimentale et limites.}
+\shorttitle{Simuler les clouds}
+
+\author{Julien Gossa, Stéphane Genaud, Luke Bertot}% A voir l'ordre.
+
+\address{Université De Strasbourg,\\
+Laboratoire ICube - Pôle API - 300 Bd Sébastien Brant\\
+67400 Illkirch-Graffenstaden - France\\
+julien.gossa@unistra.fr genaud@unistra.fr lbertot@unistra.fr}
+
+\date{\today}
+
+\maketitle
+
+%===========================================================         %
+%R\'esum\'e
+%===========================================================  
+\begin{abstract}
+
+Simulating the cloud from the client point of view.
+
+Assessment of the impact of different metrics.
+
+Recommendations for using cloud simulators.
+
+WARNING: figures in text might not be up to date.
+
+  \MotsCles{un maximum de 5 mots significatifs, en français, doivent être 
+    isolés sous forme de mots-clés.}
+\end{abstract}
+
+
+%=========================================================
+\section{Introduction}
+%=========================================================
+
+The  problem   of  allocating   cloud  resources   in  performant,   robust  and
+energy-efficient ways is  of paramount importance in today's  usage of computing
+infrastructures, and a number of research papers have contributed new allocation
+techniques to  address this issue.   A pitfall of research  on IaaS lies  in the
+validation of the models and algorithms proposed, which requires infrastructures
+that are difficult to set up for individual researchers.  As a consequence, many
+researchers evaluate their work through  simulation. A number of simulators have
+been  developed for  that purpose  (\cite{CalheirosRBRB11,KliazovichBK12}).  They  are typically  based on
+discrete-event simulation,  using models  for each  elementary component  of the
+infrastructure,  which  are then  composed  to  simulate  the whole  system  and
+applications running on it.  This approach is attractive from the infrastructure
+provider  perspective  since the  simulated  system  can be  finely  customized.
+However, such  an \textit{ab  initio} construction  poses a  significant problem
+regarding  the  calibration  and  validation   of  the  composed  model  against
+real-world  measurements.    Another  approach   is  the  simulation   from  the
+client-side (from the application perspective),  which can specifically focus on
+the prediction of a couple of metrics, such  as the makespan and the cost of the
+application.  It is  noticeable that the research papers  adopting a client-side
+view  generally include  an evaluation  of the  simulation through  experimental
+studies, while such  an evaluation is generally  missing for infrastructure-wide
+simulators.
+
+Altough much  fewer works  address the simulation  from the  client perspective,
+several very  different methods have  been proposed  to reach this  goal.  Among
+these    works,     detailed    in    the    related     work    section,    are
+EMUSIM~\cite{CalheirosNRB13}  that  use   emulation,  PICS~\cite{KimWH15}  which
+implemens  a simplified  discrete  event  simulator, and~\cite{PucherGWK15}  who
+build a statistical model from observations.
+
+
+In this  paper, we study the  simulation also from the  application perspective,
+using  the   discrete  event  simulation  toolkit   SimGrid~\cite{simgrid08}  to
+implement our model. We assume an  automated process making the provisioning and
+scheduling decisions  on behalf the  user on  the real infrastructure.   To that
+purpose,  we   use  \emph{Schlouder}  \cite{},  a   client-side  cloud  resource
+broker. This  paper's contribution  is twofold:
+\begin{itemize}
+\item We propose a simulation tool
+\item We make an  in-depth analysis  of the
+factors that impact the simulation accuracy,  and in this regard go further than
+the related works. We analyze the sensitivity of several parameters, among which
+the  impact  of   the  job  submission  management  overheads,   the  effect  of
+inaccuracies in the job execution times specified  by the user, or the boot time
+of  VMs.  The  study is  carried out  on several  use cases  which comprise  two
+different type  of applications (workflow  and bag-of-tasks), with  several size
+instances for  each of them, and  each application is operated  on two different
+type of infrastructure (private and public).
+\end{itemize}
+
+....
+
+We advocate  that a precise assessment  of simulation
+should be  carried out against real  execution figures to better  understand the
+limits  of simulation  applicability. 
+
+The paper is organized as follows : ....
+
+
+\begin{comment}
+These scheduling algorithms of Schlouder have been reimplemented in a simulation
+system,  based on  the simulation  toolkit SimGrid~\cite{simgrid08}.   Our study
+aims to isolate the different  parameters that influence the simulation accuracy
+and what  degree of divergence  between real  execution and simulation  might be
+expected in each case.
+\end{comment}
+
+
+
+
+
+\begin{comment}
+[9] R. N. Calheiros, R. Ranjan, A. Beloglazov, C. A. D. Rose, and R. Buyya, “CloudSim: a toolkit for modeling and simulation of cloud computing environments and evaluation of resource provisioning algo- rithms,” Software: Practice and Experience, vol. 41, no. 1, pp. 23–50,
+2011.
+[10] D. Kliazovich, P. Bouvry, and S. U. Khan, “GreenCloud: a packet-level simulator of energy-aware cloud computing data centers,” The Journal of Supercomputing, vol. 62, no. 3, pp. 1263–1283, 2012.
+
+[11] B. Wickremasinghe, R. N. Calheiros, and R. Buyya, “Cloudanalyst: A CloudSim-based visual modeller for analysing cloud computing environments and applications,” in Advanced Information Networking
+and Applications (AINA), 2010 24th IEEE International Conference on.
+IEEE, 2010, pp. 446–452.
+
+[12] S. K. Garg and R. Buyya, “Networkcloudsim: Modelling parallel applications in cloud simulations,” in Utility and Cloud Computing
+(UCC), 2011 Fourth IEEE International Conference on. IEEE, 2011,
+pp. 105–113.
+
+[13] M. Tighe, G. Keller, M. Bauer, and H. Lutfiyya, “DCSim: A data centre simulation tool for evaluating dynamic virtualized resource management,” in Network and service management (cnsm), 2012 8th
+international conference and 2012 workshop on systems virtualiztion
+management (svm), Oct 2012, pp. 385–392.
+
+[14] S. K. S. Gupta, R. Gilbert, A. Banerjee, Z. Abbasi, T. Mukherjee, and G. Varsamopoulos, “GDCSim: A tool for analyzing Green Data Center design and resource management techniques,” in Green Computing
+Conference and Workshops (IGCC), 2011 International, July 2011, pp.
+1–8.
+\end{comment}
+
+ 
+
+
+\section{Related Work}
+
+EMUSIM combines  emulation and  simulation to extract  information automatically
+from  the application  behavior (via  emulation)  and uses  this information  to
+generate the  corresponding simulation  model. Such a  simulation model  is then
+used  to  build  a simulated  scenario  that  is  closer  to the  actual  target
+production  environment   in  terms   computing  resources  available   for  the
+application and request patterns.
+- EMUSIM operates uniquely with information that is available for customers of public IaaS providers
+- Automated Emulation Framework (AEF) [2] for emulation and CloudSim [3] for simulation
+- emulation : run the actual software on a subset of the hardware (=hardware model)
+- application BoT
+
+
+\section{Setup / Context}
+
+
+\subsection{Real Environment}
+
+274 xps
+
+\subsubsection{Schlouder}
+
+
+\subsubsection{Use cases: Applications characteristics}
+
+OMSSA (BoT CPU-intensive) and Montage (WF data-intensive). 3 usecases each.
+
+Two differents provisioning Strategies: AFAP and ASAP.
+
+\subsubsection{Test beds}
+
+Openstack-ICPS (private, homogeneous) 
+
+BonFire (public, heterogeneous)
+
+
+\subsection{Simulations}
+
+\subsubsection{Simulator}
+
+SimSchlouder/SCHIaaS/Simgrid
+
+SimSchlouder reproducing Schlouder runs. Same input/output file.
+
+\subsubsection{Lab}
+
+\subsubsection{Procedural Analysis}
+
+\begin{enumerate}
+ \item Real executions (xp) to test Schlouder and provisioning/scheduling 
+strategies.
+  Schlouder/SimSchlouder input:
+  \begin{itemize}
+   \item Nodes: boottime prediction, amount limit, standard power
+   \item Tasks: walltime prediction
+  \end{itemize}
+ 
+ \item Normalization of xp traces (4 versions of schlouder, missing data)
+ \item Extraction of information about each xp:
+  \begin{itemize}
+   \item Nodes: provisioning date, start date, end date, boottimes, instance 
+type
+   \item Tasks: submission date, scheduling date, start date, end date, 
+	  walltime, input time and size, runtime, output time and size, 
+management time
+  \end{itemize}
+ \item Simulation of each xp, injecting different information from real xps
+ \item Comparison of Schlouder and SimSchlouder outputs (python)
+ \item Statistical analysis of all traces (R)
+ \item Close analysis of each outlier to understand the differences. 
+\end{enumerate}
+
+\subsubsection{life-cycles and observed times}
+
+\begin{itemize}
+ \item Execution: $e \in E$
+ \item Node of execution $e$: $n \in N_e$
+ \item Task of execution $e$: $t \in T_e$
+ \item Task handled by node $n$: $t \in T_n$
+ \item The node running the task $t$ is denoted $n_t \in N$
+ \item $v^R$ denotes the value $v$ in the rality
+ \item $v^S$ denotes the value $v$ in the simulation
+ \item 
+\end{itemize}
+
+During the execution, the node are in the following states:
+\begin{enumerate}
+ \item Future: Once the decision to start the node is made;
+ \item Pending: Once the node is requested to the cloud-kit;
+ \item Booting: Once the cloud-kit aknowledge the satisfaction of the request;
+ \item Idle: Once the node is ready to run tasks;
+ \item Busy: Once the node is running one task;
+ \item ShuttingDown: Once the termination of the node is aked to the cloud-kit;
+ \item Terminated: Once the node is terminated.
+\end{enumerate}
+
+The observed times are:
+\begin{itemize}
+ \item $uptime(n) = terminated_n - booting_n$ 
+ \item $boottime(n) = idle_n - booting_n$ 
+\end{itemize}
+
+
+During the execution, the task are in the following states, each corresponding to one date:
+\begin{enumerate}
+ \item Pending: Once they are subitted to the system;
+ \item Scheduled: Once the system decided on which node the taks should be executed;
+ \item Submitted: Once the task is sent to the worker node;
+ \item Inputting: Once the task begin to download its data;
+ \item Running: Once the task begin to computed;
+ \item Outputting: Once the task begin to upload its result;
+ \item Finished: Once the task is finished;
+ \item Complete: Once the system aknowledge the completion of the task.;
+\end{enumerate}
+
+The observed times are:
+\begin{itemize}
+ \item $walltime(t) = complete_t - submitted_t$ 
+ \item $inputtime(t) = running_t - inputting_t$
+ \item $runtime(t) = outputting_t - running_t$
+ \item $outputtime(t) = finished_t - outputting_t$
+ \item $managementtime(t) = walltime_t - (inputtime_t+runtime_t+outputtime_t)$
+ \item or $managementtime(t) = (inputting_t - submitted_t) + (complete_t - finished_t)$
+\end{itemize}
+
+
+
+\section{Results}
+
+\subsection{Definitions}
+4 metrics $m \in M$ for each execution $e \in E$:
+\begin{itemize}
+ \item uptime: amount of rented resources, cost 
+  $$uptime(e) = \sum_{n \in N_e} uptime_n$$
+ \item makespan: duration of the xp from the submission of the first task to 
+the end of the last task, user experience 
+  $$makespan(e) = max_{t \in T_e} complete_t$$
+ \item usage: runtime / uptime, efficiency of the provisioning 
+  $$usage(e) = \frac{\sum_{t \in T_e} walltime_t}{\sum_{n \in N_e} uptime_n}$$
+ \item schederror: number of tasks that are not assigned to the same node in 
+the simulation compared to the reality, accuracy of the scheduling decisions
+  $$schederror(e) = |t \forall t \in T / t_n^R \neq t_n^S|$$
+
+\end{itemize}
+
+Absolute errors are computed for each metric $m \in M$: 
+$$m.ae(e) = \frac{| m^S(e) - m^R(e) |}{m^R(e)}$$
+
+Results are shown as frequencies and statistics (stat = min, mean, median, max) 
+of absolute errors occurrences. Frequencies are weighted so that the two applications
+weigth the same, and the two platforms weigth alos the same 
+(i.e. each couple application $\times$ platform represents 1/4th of the frequencies).
+
+To compare absolute errors between set of simulations $S$ and $S'$
+$S$ being the reference:
+\begin{itemize}
+ \item $\delta stat(m.ae(E)) = stat_{e \in E} ( m.ae^{S'}(e) ) - stat_{e \in E}( m.ae^S(e) )$
+ \item $\Delta stat(m.ae(E)) = stat_{e \in E} ( m.ae^{S'}(e) - m.ae^S(e) )$
+\end{itemize}
+
+
+
+
+\subsection{Simulator accuracy}
+
+Best simulation we can do.
+
+Assess the raw simulator accuracy, injecting all real-life hazards that can be 
+captured :
+boottimes, walltimes and scheduling dates.
+
+Scheduling dates allow to simulate some internal threaded mechanisms of 
+Schlouder.
+Schlouder uses two threads: the node manager and the task manager.
+At settled intervals, the node manager interrupts the task manager to start and 
+stop new nodes.
+This changes the state of nodes, which influence provisioning and scheduling 
+decisions.
+However, simulating the exact moment of this interruption is utterly difficult, 
+leading to differences between simulation and reality.
+
+
+\begin{figure}
+  \centering
+
+  \includegraphics[width=\textwidth]{sim_best-4metrics.pdf}
+  
+  \input{\vrpath sim_best-4metrics-mmmm.latex}
+  
+\caption{Frequencies and statistics about absolute error of best simulations (274 xp)}
+\end{figure} 
+
+ 
+
+
+% see schiass/lab/setup/simschlouder/validation-results/best-4metrics.dat
+\begin{itemize}
+ \item uptime: 
+      86\% show less than $0.05$ of absolute error, 
+      92\% less than $0.10$, 
+      2 simulations exceed $0.30$,
+      ranging from $0.00$ to $0.50$, for a mean of $0.025$ and a median of $0.001$
+ \item makespan: 
+      76\% show less than $0.05$ of absolute error, 
+      90\% less than $0.10$, 
+      0 simulations exceed $0.30$,
+      ranging from $0.00$ to $0.62$, for a mean of $0.042$ and a median of $0.018$
+ \item usage: 
+      59\% show less than $0.05$ of absolute error, 
+      91\% less than $0.10$, 
+      2 simulations exceed $0.30$,
+      ranging from $0.00$ to $0.60$, for a mean of $0.043$ and a median of $0.002$
+ \item schederror: 
+      70\% show less than $0.05$ of absolute error, 
+      72\% less than $0.10$, 
+      59 simulations exceed $0.30$,
+      ranging from $0.00$ to $0.965$, for a mean of $0.155$ and a median of $0.000$
+\end{itemize}
+
+If global metrics are quite accurately assessed by the simulator, 
+the scheduling decisions can be very different between simulation and reality. 
+One part of the explanation is that scheduling decisions are interdependent: 
+any error leads to several others.
+
+
+\subsection{Simulator accuracy according to platforms and applications}
+
+
+\begin{figure}
+  \includegraphics[width=\textwidth]{sim_best-4metrics-platform-app.pdf}
+\caption{Absolute error frequencies of best simulations according to platforms 
+and applications}
+\end{figure} 
+
+\begin{itemize}
+ \item openstack-icps / omssa (107 xp): 
+ 
+      \input{\vrpath sim_best-openstack-icps-omssa-4metrics-mmmm.latex}
+ 
+      All metrics are almost perfectly assessed (mean AR from $0.001$ to $0.002$)
+      except scheduling error 
+      (mean $0.04$ and max $0.75$, 13\% of xp show at least one error), 
+      leading to small makespan and usage errors. 
+      
+      We looked at each single case of scheduling error and all those errors 
+      comes from ambiguities in the scheduling algorithms.
+      
+      This is a first limitation of simulation:
+      Whenever heuristics lead to several equivalent solutions, 
+      the decision is made by the implementation and relies on data structures 
+      (e.g. selection of the first encountered suitable solution) or clocks 
+      (e.g. the solution differs from a second to the next, which depends 
+      on threads activations and timers). While we made sure to use the same 
+      structures and timers, some clocks-related events can not be captured nor 
+      simulated: Processing the nodes and tasks queues for scheduling and 
+      provisioning decisions take time. Consequently, if those decisions rely on
+      clock, they change during the decision process in reality, as clocks advance 
+      by itself, but not in simulation, as clocks advance only explicitly.
+      
+      Thus, the simulation is not mistaken, but only different from reality.
+      Actually, the decisions made by the simulator are exactly those that one 
+      can expect, while the decisions made by the real scheduler are sometimes
+      difficult to understand.
+
+      
+\begin{figure}  
+  \includegraphics[width=\textwidth]{sim_best-openstack-icps-omssa-noschederror-4metrics.pdf}
+
+  \input{\vrpath sim_best-openstack-icps-omssa-noschederror-4metrics-mmmm.latex}
+      
+  \input{\vrpath sim_best-openstack-icps-omssa-noschederror-4metrics-mmmm-cmp.latex}
+
+\caption{Frequencies and statistics about absolute error of best simulations for openstack-icps / 
+ommssa, without scheduling error cases (91 xps)}
+\end{figure}       
+
+      Filtering the xps showing clocks-related issues (16 xps), the results are perfect:
+      all metrics present a mean ae of at most $0.001$.
+      
+      %Worst-case: v3.standard.hrt.asap.regular.openstack-icps.2
+      The less accurate simulation shows a makespan absolute error of $0.010$. 
+      Actually, the makespan of the simulation is $94s$, whereas it is $95s$ in reality.
+      This small difference is due to one lag between two consecutive tasks 
+      in the middle of the simulation. Such lags are not injected in our simulations.
+      
+      This shows that, providing that one can inject the right information, 
+      the only limitation of our simulator are micro clock-related hazards.
+      
+      
+ \item openstack-icps / montage (36 xps): 
+ 
+      \input{\vrpath sim_best-openstack-icps-montage-4metrics-mmmm.latex}
+
+      \input{\vrpath sim_best-openstack-icps-montage-4metrics-mmmm-cmp.latex}
+
+      With a work-flow, scheduling errors are more numerous 
+      (ae mean of $0.24$ for a max of $0.79$), leading to less accurate assessments
+      of uptime, makespan and usage (mean ae of $0.01$, $0.05$, and $0.01$), that
+      is ten times more than with a BoT.
+      
+      First, montage has much more tasks (from 43 to 1672) than omssa (from 33 to 223).
+      Consequently, queues are much longer, which increases the clock-related issues.
+      
+      Second, BoT scheduling are actually made offline (i.e. scheduling decisions are taken
+      before any actual execution), while WF scheduling implies decisions during 
+      the execution, every time dependencies are satisfied. 
+      Those decisions rely on the system state (predicted end date of nodes for 
+      instance). Consequently, divergences between simulation and reality have
+      more important impacts with WF than with BoTs.
+      
+      %Worst case: v3.standard.3x3.afap.regular.openstack-icps.1 
+      %first proverror: 2mass_pleiades_2x2_gather
+      %Log of schlouder shows that all solutions are elligible, 
+      %but it shouldn't be this one (which is in the middle of the queue)... Mystery!
+      
+      For instance, the worst case shows a very large amount of scheduling errors 
+      (0.954). A close examination of this case shown that the simulation behave
+      as expected : After the first dependencies were satisfied,
+      three newly ready tasks $t1$, $t2$, and $t3$ were scheduled on the node $n$.
+      However in reality, scheduling takes time. During this time, the last task
+      scheduled to node $n$ was completed between the scheduling of $t2$ and $t3$, 
+      but before $t1$ were actually submitted to $n$. This lead to mistakingly 
+      set the state of node $n$ to idle, impacting the scheduling decision of $t3$.
+      
+      Those kind of complex and unforeseeable events are actually frequent 
+      when confronted to reality. However, they are utterly difficult to detect
+      (1672 jobs were scheduled for the presented case).
+      Comparing real execution with simulation allow the detection of such case, 
+      without having to look at each scheduling decision.
+      
+      the last task assigned to node $n$ was 
+      completed during the scheduling of the tasks which dependencies were satisfied 
+      first. But those tasks were intended to 
+      This completion lead 
+      Schlouder to mistake the state of the 
+      
+      
+ 
+ \item bonfire / omssa (75 xp): 
+ 
+      \input{\vrpath sim_best-bonfire-omssa-4metrics-mmmm.latex}
+      
+      \input{\vrpath sim_best-bonfire-omssa-4metrics-mmmm-cmp.latex}
+      
+      On a public shared heterogeneous cloud, scheduling errors are more numerous 
+      (AR mean of $0.03$ for a max of $0.86$), leading to less accurate assessments
+      of uptime, makespan and usage (mean AR of $0.005$, $0.045$, and $0.053$).
+
+      More interesting, usage are never perfectly assessed: 
+      16\% of xp show less than $0.05$ of AR, 
+      while 86\% show an AR between $0.05$ and $0.10$
+      
+      This show the impacts of public heterogeneous platforms on simulation
+      accuracy: 
+      It is not possible to precisely simulate the vm-to-pm scheduling algorithm of 
+      public cloud, as they are generally not public, and their decisions impacts 
+      performances, as one can not predict the power of the VM one get.
+ 
+ \item bonfire / montage (56 xp): 
+ 
+      \input{\vrpath sim_best-bonfire-montage-4metrics-mmmm.latex}
+      
+      \input{\vrpath sim_best-bonfire-omssa-4metrics-mmmm-cmp.latex}
+ 
+      On a public shared heterogeneous cloud, scheduling errors are even more numerous 
+      (AR mean of $0.48$ for a max of $0.96$), leading to less accurate assessments
+      of uptime, makespan and usage (mean AR of $0.10$, $0.115$, and $0.48$).
+      
+      This is simply explained by the cumulation of inaccuracies from 
+      both platform and applications. 
+\end{itemize}
+
+
+
+\subsection{Boottime impacts}
+
+Assessing the impact of efficient boottimes simulation.
+
+Same simulations, without injecting the boottimes observations. 
+Thus, boottimes are only predictions, based on linear regressions of previously
+observed boottimes.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\textwidth]{sim_no-boottimes-4metrics-cmp.pdf}
+
+  \input{\vrpath sim_no-boottimes-4metrics-mmmm.latex}
+
+  \input{\vrpath sim_no-boottimes-4metrics-mmmm-cmp.latex}
+
+  \input{\vrpath sim_no-boottimes-4metrics-mmmm-twobytwo.latex}
+
+  \caption{Frequencies, statistics, and comparison with best of simulations with no real boot times 
+  injection}
+
+\end{figure} 
+
+%worst case: v3.standard.2x2.asap.regular.fr-inria.2 
+The worst case show a makespan ae of $0.816$ (3141s instead of 17076s). 
+This is due to boottimes on BonFire that were completely of charts: 
+5 boots were normal (ranging from 232s to 311s), 
+the 17 others ranged from 3281s to 11084s.
+Whereas BonFire were intended to deliver 22 simultaneous VMs, only 5 were available
+at the time of the experiment. Instead of refusing the following 17 VMs, the
+provisioning system of BonFire put them in pending state, waiting for the delivered
+ones to stop. The VMs being provisioned for one hour, following the 5 normal boots, 
+5 boots took approximatively 1 hour, then 5 other boots took 2 hours,
+and 5 another more took 3 hours. Finally, 2 boots took 1 hour after the last 
+dependencies were satsified.
+
+This illustrates that defective clouds can not be efficiently simulated without 
+proper information capture. However, once captured, this kind of defection is
+perfectly simulated by SchIaaS. Consequently, it can be used to assess behavior 
+and robustness of solutions facing these defections.
+
+%Best case: v3.standard.3x3.afap.regular.de-hlrs.2
+Some case are surprisingly improved without the real boot times injection:
+For instance, one xp shows a real makespan of 25788s, for 35106s with boot times
+injection and 24266s without. 
+
+
+
+
+\subsubsection{No-threads}
+
+Injection of: real boot times and some times due to Schlouder internal threads, 
+such as lapses after a node become ready and the start of the first job.
+
+Assess the impact of efficient internal threads simulation
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\textwidth]{sim_no-threads-4metrics-cmp.pdf}
+  
+  \input{\vrpath sim_no-threads-4metrics-mmmm.latex}
+
+  \input{\vrpath sim_no-threads-4metrics-mmmm-cmp.latex}
+
+  \input{\vrpath sim_no-threads-4metrics-mmmm-twobytwo.latex}
+    
+  \caption{Frequencies, statistics, and comparison with best of simulations with no real thread times
+  injection}
+\end{figure} 
+
+
+
+\subsubsection{Communications}
+
+Injection of: real boot times, some times due to Schlouder internal threads, 
+such as lapses after a node become ready and the start of the first job, 
+and, real runtimes and real data size for jobs input and output communications.
+
+Assess the impact of efficient communications 
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\textwidth]{sim_communications-4metrics-cmp.pdf}
+  
+  \input{\vrpath sim_communications-4metrics-mmmm.latex}
+
+  \input{\vrpath sim_communications-4metrics-mmmm-cmp.latex}
+
+  \input{\vrpath sim_communications-4metrics-mmmm-twobytwo.latex}
+
+  \caption{Frequencies, statistics, and comparison with best of simulations with simulation of communications}
+\end{figure} 
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\textwidth]{communications-openstack-icps.pdf}
+  
+  \caption{Linear regressions of communication times vs. data size, 
+    according to platform, storage, and communication direction on openstack-icps}
+\end{figure} 
+
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\textwidth]{communications-bonfire.pdf}
+  
+  \caption{Linear regressions of communication times vs. data size, 
+    according to platform, storage, and communication direction on BonFire}
+\end{figure} 
+
+
+\subsubsection{Prediction}
+
+Injection of nothing from the real xp, except the xp description as submitted 
+to schlouder.
+
+Assess the efficiency of using a simulator as a predictor of a cloud.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\textwidth]{sim_predictions-4metrics-cmp.pdf}
+  
+  \input{\vrpath sim_predictions-4metrics-mmmm.latex}
+
+  \input{\vrpath sim_predictions-4metrics-mmmm-cmp.latex}
+
+  \input{\vrpath sim_communications-4metrics-mmmm-twobytwo.latex}
+
+  
+  \caption{Frequencies, statistics, and comparison with best of simulations with no injection}
+\end{figure} 
+
+\section{Open-science}
+
+\begin{verbatim}
+git clone https://git.unistra.fr/gossa/schlouder-traces.git
+git clone https://scm.gforge.inria.fr/anonscm/git/schiaas/schiaas.git 
+cd schiaas
+cmake .
+make
+cd lab
+./lap.py -p2 setup/simschlouder/validation.cfg
+cd setup/simschlouder/validation-results
+ls
+\end{verbatim}
+
+
+\bibliography{biblio}
+
+\end{document}
+
+
+
