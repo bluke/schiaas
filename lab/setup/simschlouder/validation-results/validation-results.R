@@ -369,7 +369,7 @@ vr.article.umus <- function(df,xl=1,yl=1,merged=FALSE,compare=NA) {
 
 vr.article <- function() {
 
-	buglist <- read.table("stopdate.bug")$V1
+	buglist <- rbind(read.table("stopdate.bug"),read.table("nodes_count.bug"))$V1
 
 	metrics.best <- vr.metrics.all('sim_best','sim_best.metrics.dat',buglist)
 
@@ -460,5 +460,3 @@ vr.article <- function() {
 	vr.plot.communications(c('fr-inria','uk-epcc','de-hlrs'))
 	dev.off()
 }
-
-vr.article()

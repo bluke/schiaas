@@ -20,7 +20,7 @@
 
 \begin{document}
 
-\title{Simuler les clouds du point de vue client : architecture logicielle, validation expérimentale et limites.}
+\title{SCHIaaS : Un laboratoire d'études d'algorithmes par la simulation des clouds.}
 \shorttitle{Simuler les clouds}
 
 \author{Julien Gossa, Stéphane Genaud, Luke Bertot}% A voir l'ordre.
@@ -39,13 +39,18 @@ julien.gossa@unistra.fr genaud@unistra.fr lbertot@unistra.fr}
 %===========================================================  
 \begin{abstract}
 
-Simulating the cloud from the client point of view.
-
-Assessment of the impact of different metrics.
-
-Recommendations for using cloud simulators.
-
-WARNING: figures in text might not be up to date.
+Les clouds ont été intensivement étudiés les dernières années, que ce soit du 
+point de vue de l'administrateur qui doit par exemple décider de l'emplacement
+des machines virtuelles sur l'infrastructure matérielle, ou du client qui doit 
+décider du dimentionnement de sa plateforme virtuelle. Pour ce faire, de nombreux
+simulateurs ont vu le jour. Malheureusement, ces derniers se limitent souvent à 
+mimer les fonctionnalités d'un cloud. Ils ne proposent pas un cadre complet d'étude
+des résultats obtenus, pourtant indispensable à la reproductibiltié des expériences
+et la comparaison de solutions différentes. De plus, ils manquent d'ancrage dans la 
+réalité, en raison d'une part d'une absence de comparaison à des exécutions réelles, 
+et d'autre part d'un ensemble de traces réelles injectables dans les simulations.
+Le projet SCHIaaS vise à combler ces deux manques. Nous montrons l'architecture de 
+ce \textit{framework}, puis les résultats des expériences de validation.
 
   \MotsCles{un maximum de 5 mots significatifs, en français, doivent être 
     isolés sous forme de mots-clés.}
