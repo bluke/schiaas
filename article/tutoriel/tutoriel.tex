@@ -1,0 +1,145 @@
+%===========================================================
+%                              Choix de track
+%===========================================================
+% Une des trois options 'parallelisme', 'architecture', 'systeme' 
+% doit être utilisée avec le style compas2017
+\documentclass[parallelisme]{compas2017}
+\usepackage{rotating}
+\usepackage{comment}
+
+\usepackage{graphicx}
+
+\newcommand\vrpath{../../lab/setup/simschlouder/validation-results/}
+\graphicspath{{\vrpath}}
+
+%===========================================================
+%                               Title
+%===========================================================
+
+\toappear{1} % Conserver cette ligne pour la version finale
+
+\begin{document}
+
+\title{SCHIaaS : Un laboratoire d'études d'algorithmes par la simulation des clouds.}
+\shorttitle{Simuler les clouds}
+
+\author{Julien Gossa, Stéphane Genaud, Luke Bertot}% A voir l'ordre.
+
+\address{Université De Strasbourg,\\
+Laboratoire ICube - Pôle API - 300 Bd Sébastien Brant\\
+67400 Illkirch-Graffenstaden - France\\
+julien.gossa@unistra.fr genaud@unistra.fr lbertot@unistra.fr}
+
+\date{\today}
+
+\maketitle
+
+%===========================================================         %
+%R\'esum\'e
+%===========================================================  
+\begin{abstract}
+
+Les clouds ont été intensivement étudiés les dernières années, que ce soit du 
+point de vue de l'administrateur qui doit par exemple décider de l'emplacement
+des machines virtuelles sur l'infrastructure matérielle, ou du client qui doit 
+décider du dimentionnement de sa plateforme virtuelle. Pour ce faire, de nombreux
+simulateurs ont vu le jour. Malheureusement, ces derniers se limitent souvent à 
+mimer les fonctionnalités d'un cloud. Ils ne proposent pas un cadre complet d'étude
+des résultats obtenus, pourtant indispensable à la reproductibiltié des expériences
+et la comparaison de solutions différentes. De plus, ils manquent d'ancrage dans la 
+réalité, en raison d'une part d'une absence de comparaison à des exécutions réelles, 
+et d'autre part d'un ensemble de traces réelles injectables dans les simulations.
+Le projet SCHIaaS vise à combler ces deux manques. Nous montrons l'architecture de 
+ce \textit{framework}, puis les résultats des expériences de validation.
+
+  \MotsCles{un maximum de 5 mots significatifs, en français, doivent être 
+    isolés sous forme de mots-clés.}
+\end{abstract}
+
+
+%=========================================================
+\section{Introduction}
+%=========================================================
+
+
+
+
+%=========================================================
+\section{Etat de l'Art}
+%=========================================================
+
+EMUSIM combines  emulation and  simulation to extract  information automatically
+from  the application  behavior (via  emulation)  and uses  this information  to
+generate the  corresponding simulation  model. Such a  simulation model  is then
+used  to  build  a simulated  scenario  that  is  closer  to the  actual  target
+production  environment   in  terms   computing  resources  available   for  the
+application and request patterns.
+- EMUSIM operates uniquely with information that is available for customers of public IaaS providers
+- Automated Emulation Framework (AEF) [2] for emulation and CloudSim [3] for simulation
+- emulation : run the actual software on a subset of the hardware (=hardware model)
+- application BoT
+
+%=========================================================
+\section{Présentation du \textit{framework}}
+%=========================================================
+
+SCHIaaS est un \textit{framework} permettant le développement rapide de simulateurs 
+de cloud pour l'évaluation d'algorithmes au niveau du \textit{cloud-kit} et au dessus.
+Il est basé sur SimGrid et est développé en JAVA, ce qui permet la spécialisation 
+rapide d'un ensemble de classes permettant de greffer les travaux de l'utilisateur au 
+niveau qui lui convient, le reste étant assuré par défaut.
+Le tout est facilement instrumentable par un ensemble de scripts, appelée \emph{lab},
+qui permet d'automatiser l'exécution des simulations, leurs observations, et l'analyse
+des résultats.
+
+Schema :
+
+lab (lab.py + schiaas-trace-utils.py )
+
+schiaas (engines + apps)
+
+simgrid (vm + msg)
+
+
+\subsection{SchIaaS}
+
+SCHIaaS est la sur-couche de SimGrid, qui ajoute par dessus l'interface MSG toutes les 
+fonctionnalités d'un cloud. 
+Le niveau \textit{cloud-kit} est assuré par mes moteurs, exposant les fonctionnalités 
+abstraites des clouds au niveau administrateur :
+\begin{itemize}
+ \item Compute : moteur d'instanciation et de gestion des VM;
+ \item Storage : moteur de gestion des stockages;
+ \item Network : moteur de gestion de la virtualisation du réseau (à l'état purement abstrait pour l'instant).
+\end{itemize}
+
+
+%=========================================================
+\section{Exemples}
+%=========================================================
+
+\subsection{Comparaison d'algorithmes de placement de VM sur PM}
+
+\subsection{Comparaison d'algorithmes d'ordonnancement de tâches sur VM}
+
+\section{Open-science}
+
+\begin{verbatim}
+git clone https://git.unistra.fr/gossa/schlouder-traces.git
+git clone https://scm.gforge.inria.fr/anonscm/git/schiaas/schiaas.git 
+cd schiaas
+cmake .
+make
+cd lab
+./lap.py -p2 setup/simschlouder/validation.cfg
+cd setup/simschlouder/validation-results
+ls
+\end{verbatim}
+
+
+\bibliography{biblio}
+
+\end{document}
+
+
+
