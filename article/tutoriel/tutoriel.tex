@@ -96,22 +96,62 @@ Schema :
 
 lab (lab.py + schiaas-trace-utils.py )
 
+applications (simschlouder, loadinjector, ...)
+
 schiaas (engines + apps)
 
 simgrid (vm + msg)
 
 
-\subsection{SchIaaS}
+\subsection{SCHIaaS}
 
 SCHIaaS est la sur-couche de SimGrid, qui ajoute par dessus l'interface MSG toutes les 
 fonctionnalités d'un cloud. 
 Le niveau \textit{cloud-kit} est assuré par mes moteurs, exposant les fonctionnalités 
-abstraites des clouds au niveau administrateur :
+des clouds au niveau administrateur :
 \begin{itemize}
  \item Compute : moteur d'instanciation et de gestion des VM;
  \item Storage : moteur de gestion des stockages;
  \item Network : moteur de gestion de la virtualisation du réseau (à l'état purement abstrait pour l'instant).
 \end{itemize}
+
+Chacun de ces moteurs est une interface abstraite, qui assure l'interopérabilité entre eux, 
+ainsi qu'avec les autres niveaux du \textit{framework}. Des implémentations sont fournies, qui 
+permettent d'obtenir un simulateur par défaut pleinement fonctionnel. Ces implémentations 
+imitent le comportement d'openstack. Un développeur de fonctionnalités administrateur n'a donc 
+qu'à se concentrer sur la partie qui l'intéresse, par exemple différent systèmes de stockages.
+
+De plus, les ordonanceurs de VM, qui décident sur quelle PM seront déployées les VM demandées
+par l'utilisateur, ont également leur interface abstraite. Plusieurs ordonnanceurs par défaut
+sont fournis, sur l'exemple d'Openstack qui permet au choix d'équilibrer ou de consolider les 
+charges des machines physiques au moyen d'un poids calculé pour chacune d'elles. 
+Tout moteur compute peut donc réutiliser tout algorithme d'ordonnancement.
+
+Un système abstrait d'injection de charge est également fourni. Ce dernier permet de contrôler 
+un nombre de VM déployées et les charges de ces VM, en particulier CPU, afin de faciliter 
+l'évaluation des algorithmes. 
+Deux injecteurs par défaut sont fournis. Le premier est un simple injecteur de charges sinusoidales
+entièrement paramétrables. Le second injecte les charges observées sur l'infrastructure de Google,
+et rendue disponible dans le google-cluster-traces.
+
+Ainsi, SCHIaaS fourni, de façon modulaire, tous mes composant d'un \textit{cloud-kit}. 
+Chaque module peut être remplacé, étendu, ou utilisé en l'état, ce qui permet le prototypage
+rapide de simulateur de cloud adapté à l'étude de l'utilisateur.
+
+\subsection{Applications}
+
+SCHIaaS ne peut s'exécuter seul. Dans la philosophie SimGrid, un simulateur est une application
+exploitant les fonctionnalités fournies, mais qui doit être développée et compilée.
+Cette philosophie est conservée avec SCHIaaS, qui ne fait qu'étendre les fonctionnalités de 
+SimGrid avec celles disponibles dans un cloud.
+
+Cependant, deux applications sont fournies par défaut: \emph{LoadInjector} et \emph{SimSchlouder}.
+
+\subsection{LoadInjector}
+
+L'application \emph{LoadInjector} permet le prototypage rapide de simulateur pour évaluer les 
+algorithmes du niveau \textit{cloud-kit}. Dans ces cas là, seule compte la charge en terme de nombre 
+de VMs et de CPU de ces VMs, peu importe les applications qui y sont exécutées.
 
 
 %=========================================================
