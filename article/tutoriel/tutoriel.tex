@@ -6,7 +6,7 @@
 \documentclass[parallelisme]{compas2017}
 \usepackage{rotating}
 \usepackage{comment}
-
+\usepackage{multirow}
 \usepackage{graphicx}
 
 \newcommand\vrpath{../../lab/setup/simschlouder/validation-results/}
@@ -80,16 +80,57 @@ CloudSim, EmuSim, ... Cependant,
 \section{Etat de l'Art}
 %=========================================================
 
-EMUSIM combines  emulation and  simulation to extract  information automatically
-from  the application  behavior (via  emulation)  and uses  this information  to
-generate the  corresponding simulation  model. Such a  simulation model  is then
-used  to  build  a simulated  scenario  that  is  closer  to the  actual  target
-production  environment   in  terms   computing  resources  available   for  the
-application and request patterns.
-- EMUSIM operates uniquely with information that is available for customers of public IaaS providers
-- Automated Emulation Framework (AEF) [2] for emulation and CloudSim [3] for simulation
-- emulation : run the actual software on a subset of the hardware (=hardware model)
-- application BoT
+La simulation de clouds, et par extention celle de grilles, ce base generalement
+sur trois composant :
+\begin{itemize}
+		\item une spécifcation de platforme
+		\item une spécification de l'appication.
+		\item un modèle de simulation
+\end{itemize}
+
+Le modèle de simulation forme le coeur d'un simulateur, il s'agit
+l'implementation de l'évolution de l'état des objets simulé en fonction du temps
+et des évènement. C'est principalement ce qui différencie les simulateur les un
+des autres, la précision de la simulation en dépend et l'utilisateur d'un
+simulateur n'interviens généralement pas dessus.
+
+La spécification de plateforme décrit l'environement simulé. Elle est fournie
+par l'utilisateur et contient un descriptif de la platform sous forme d'objet de
+modèle de simulation. Elle est instancié au début de la simulation et évolue en
+fonction de son contenu. Suivant le simulateur la plateform sera plus ou moins
+abstraite, certain auron un objet "\emph{Datacenter}" ou d'autre necessiterons
+d'instancier separement chaque machine et cables ethernet. La granularité de
+spécification de plateforme va généralement de paire avec la précision du
+simulateur.
+
+La spécification de l'application, fournie par l'utilisateur est une description
+de la séquence des evenements à simuler. Suivant les capacité du simulateur elle
+peux être une trace d'execution, une représentation abstraite de suite
+d'opérations, ou un programme appelant une bibliothéque de simulation au lieu
+d'executé des opération réeles.
+
+\begin{tabular}{|c||c|c|c||c|c|c|c||c|}
+	\hline
+	%% line 1
+	& \multicolumn{3}{c|}{Application} &
+	\multicolumn{2}{c|}{CPU}&Réseau&Disque&Platforme\\
+	\cline{2-9}
+	%%line 2
+	Simulator &\rotatebox{90}{trace d'execution\,}&\rotatebox{90}{representation
+	abstraite\,}&\rotatebox{90}{simulation programmée\,}&
+	\rotatebox{90}{delai mesuré\,}& \rotatebox{90}{délai utilisateur\,}&
+	type & precision max&granularité\\
+	\hline
+	%%line 3
+	CloudSim & & & \bf X &&\bf
+	X&store/forward&seek+transfert&structure<->equipment\\ \hline
+	ICanCloud & & & \bf X &&\bf X&packet& block& equipment \\ \hline
+	GroudSim & & & \bf X &&\bf X&flot& n/a & equipment \\\hline
+	GreenCloud & & \bf X &&&\bf X&packet& n/a & equipement\\ \hline
+	SimGrid & \bf X & \bf X & \bf X &\bf X&\bf X& flot/packet &
+	seek+transfert & equipment\\
+	\hline
+\end{tabular}
 
 %=========================================================
 \section{Présentation du \textit{framework}}
@@ -159,11 +200,74 @@ SimGrid avec celles disponibles dans un cloud.
 
 Cependant, deux applications sont fournies par défaut: \emph{LoadInjector} et \emph{SimSchlouder}.
 
-\subsection{LoadInjector}
+\subsubsection{LoadInjector}
 
-L'application \emph{LoadInjector} permet le prototypage rapide de simulateur pour évaluer les 
+L'application \emph{LoadInjector} permet le prototypage rapide de simulateurs pour évaluer les 
 algorithmes du niveau \textit{cloud-kit}. Dans ces cas là, seule compte la charge en terme de nombre 
 de VMs et de CPU de ces VMs, peu importe les applications qui y sont exécutées.
+
+L'exemple typique est celui de l'étude d'algorithme de placement de VM sur PM, il est développé section ???
+
+\subsection{SimSchlouder}
+
+L'application \emph{SimSchlouder} permet le prototypage rapide de simulateurs pour évaluer les 
+algorithmes d'ordonnancement de VM et de tâches au niveau utilisateurs du cloud. 
+Dans ces cas là, l'état de l'infrastructure interne du cloud importe peu, seule compte le service 
+rendu à l'utilisateur, isolé sur sa propre plateforme virtuelle. 
+
+Schlouder citation??? est un courtier de ressources virtuelles. Il prend en entrée la description 
+d'une charge de travail, au format slurm citation??? étendu de quelques informations permettant 
+d'adapter le courtage aux besoins utilisateurs. Ensuite, Schlouder anaylse la charge de travail 
+soumise, et décide à l'aide d'algorithmes de dimensionnement (\textit{provisioning}) de déployer 
+un certains nombres de VM, puis ordonnance les tâches sur ces VMs, et étend les VMs lorsqu'elles
+sont devenues inutiles.
+
+SimSchlouder est l'alter-égo de Schlouder, dont l'architecture, les fonctionnalités, le comportement
+et les entrées/sorties sont entièrement reproduite dans SCHIaaS. La description d'une charge de 
+travail peut donc être soumise indifférement à Schlouder pour une exécution réelle, ou à SimSchlouder
+pour une évaluation des choix de courtage par la simulation. Une option de Schlouder permet 
+d'ailleurs d'appeler directement SimSchlouder, et d'obtenir le temps de completion et le prix 
+de l'exécution demandée en fonction de la plateforme de cloud cible et de la stratégie de réservation
+de VM choisie.
+
+Les stratégies d'évaluation des réservations de ressources de cloud ont été intensivement étudiées 
+ces dernières années. Cependant, elles sont rarement comparées entre elles, et leur évaluation 
+est souvent basée sur des simulations ad-hoc ou inadaptées, et des charges de travail purement artificielles.
+SimSchlouder permet de rapidement développer de telles stratégies, et de comparer leurs performances 
+à celles fournies par défaut, à savoir ASAP (\textit{As Soon As Possible}, qui vise à minimiser le temps de 
+complétion) et AFAP (\textit{As Full As Possible}, qui vise à minimiser les réservations de ressources,
+et donc le coût). De plus, cette comparaison peut s'appuyer sur les traces récupérées lors de l'utilisation 
+de l'application réelle Schlouder. Pour l'instant, nous mettons à disposition 481 traces d'exécutions
+sur deux plateformes : notre cloud privé, homogène, stable et non partagé, et BonFire qui est un cloud 
+public hétérogène, instable et partagé, dont les différents sites ont des comportements et des matériels 
+assez différents pour qu'on les considère ocmme des clouds différents.
+Les charges de travail sont issues de deux applications : OMSSA, qui est un sac de tâches assez courtes 
+en protéomique, et MONTAGE, qui est un \textit{workflow} en astronomie ayant des tâches plus imposantes. 
+
+Ainsi, l'utilisation de SimSchlouder permet de ne développer que le coeur d'un stratégie de résevation 
+de resources, simplement en implémentant une interface abstraite très simple, pour pouvoir comparer cette 
+stratégie aux autres dans des contextes applicatifs et matériels nombreux, représentatifs, et réellement 
+éprouvés.
+
+Ces comparaisons nécessitent de très nombreuses simulations, c'est pourquoi nous avons conçu \emph{le lab}.
+
+\subsection{Le Lab}
+
+Le lab est un ensemble de scripts permettant d'automatiser l'exécution des simulations, la collecte des
+observations, ainsi que leur analyse. Il permet donc d'exécuter de bout-en-bout l'étude par simulation,
+de la définition des différentes simulations, à la production des graphiques.
+
+Au delà de l'aspect pratique et du gain de temps de mise en oeuvre de l'étude, le lab a pour vocation
+de ``standardiser'' l'étude. Cette standardisation assure sa reproductibilité, ainsi qu'une comparaison
+équitable avec d'autres solutions au même problème.
+
+Mais le lab permet également une approche systématique permetant à l'expérimentateur de ne pas rater 
+de phénomène. En effet, il est fréquent de faire un grand lot de simulations, plus d'observer plus
+finement celles qui présentent des particularités. Ce faisant, l'expérimentateur exclu les autres 
+simulation de ces observations plus précises, à moins de les refaire entièrement. En rendant plus 
+pratique la définition des observations directement au niveau du \textit{worflow} de simulations, 
+le lab assure que tous les cas seront observés de la même manière, ce qui évite de rater un phénomène,
+ou de différencier le traitement des simulations au risque d'arriver à des conclusions abusives.
 
 
 %=========================================================
