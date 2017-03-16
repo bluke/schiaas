@@ -68,6 +68,38 @@ ce \textit{framework}, puis les résultats des expériences de validation.
 \section{Etat de l'Art}
 %=========================================================
 
+La simulation de clouds, et par extention celle de grilles, ce base generalement
+sur trois composant :
+\begin{itemize}
+		\item une spécifcation de platforme
+		\item une spécification de l'appication.
+		\item un modèle de simulation
+\end{itemize}
+
+Le modèle de simulation forme le coeur d'un simulateur, il s'agit
+l'implementation de l'évolution de l'état des objets simulé en fonction du temps
+et des évènement. C'est principalement ce qui différencie les simulateur les un
+des autres, la précision de la simulation en dépend et l'utilisateur d'un
+simulateur n'interviens généralement pas dessus.
+
+La spécification de plateforme décrit l'environement simulé. Elle est fournie
+par l'utilisateur et contient un descriptif de la platform sous forme d'objet de
+modèle de simulation. Elle est instancié au début de la simulation et évolue en
+fonction de son contenu. Suivant le simulateur la plateform sera plus ou moins
+abstraite, certain auron un objet "\emph{Datacenter}" ou d'autre necessiterons
+d'instancier separement chaque machine et cables ethernet. La granularité de
+spécification de plateforme va généralement de paire avec la précision du
+simulateur.
+
+La spécification de l'application, fournie par l'utilisateur est une description
+de la séquence des evenements à simuler. Suivant les capacité du simulateur elle
+peux être une trace d'execution, une représentation abstraite de suite
+d'opérations, ou un programme appelant une bibliothéque de simulation au lieu
+d'executé des opération réeles.
+
+
+
+
 EMUSIM combines  emulation and  simulation to extract  information automatically
 from  the application  behavior (via  emulation)  and uses  this information  to
 generate the  corresponding simulation  model. Such a  simulation model  is then
