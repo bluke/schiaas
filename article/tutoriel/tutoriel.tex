@@ -313,21 +313,53 @@ SIM_ARG 4:consolidator cloud-consolidator.xml
 SIM_ARG 4:reconsolidator0 cloud-reconsolidator0.xml
 SIM_ARG 4:reconsolidator10 cloud-reconsolidator10.xml 
 SIM_ARG 4:reconsolidator100 cloud-reconsolidator100.xml
+SIM_ARG 5:slow injector-slow.xml
+SIM_ARG 5:fast injector-fast.xml
 SIM_ARG 5:slowfast injector-slowfast.xml 
 \end{verbatim}
 
+\begin{enumerate}
+	\item Mise en place
+		\begin{description}
+			\item[SETUP\_DIR] dossier où se trouve tout les fichiers
+			\item[POST\_COMMAND\_DATA] commande a exécuter sur les
+				observations
+			\item[NEEDED\_POST] fichiers requit par POST\_COMMAND\_DATA 
+		\end{description}
+		Il est possible d'exécuter des commandes avant simulation
+		(PRE\_COMMAND\_SETUP), ou d'injecter d'autre fichier de commande
+		(INCLUDE) eventuelement eux même écrit par la précommande.
+	\item Simulations
+		\begin{description}
+			\item[SIM\_ARG $n$:nom] ensemble des argument a
+				passer au simulateur indexé par leur position
+				$n$. Le \emph{lab} entreprendra une simulation
+				pour chaque combinaison d'argument possible.
+				Pour que index ou plusieurs argument sont
+				possible un nom et requit pour différencié les
+				simulations.
+		\end{description}
+		Les l'ensemble des fichiers écrit par chaque simulation sont placé
+		dans un dossier nommé d'après les argument de la simulation.
+	\item Observation
+		\begin{description}
+			\item[TU\_ARG] ensemble de filtre a appliquer au traces
+				de simulation.
+		\end{description}
+		Les fichier obtenu grâce a TU\_ARGS permettent d'observer les
+		variables pertinente de la simulation sans avoir a fouiller
+		l'ensemble des traces verbeuses de SCHIaaS. Cette étape est
+		cruciale pour l'exploitation automatique des résultats
+\end{enumerate}
 
+La commande \texttt{./lab.py -p 4 [-k] cmp-scheduler.cfg} permet d'exécuter cet
+expérience. L'option \texttt{p} indique le nombre de simulation a mené en
+parallèle et l'option \texttt{k} permet de sauter la simulation pour faire les
+observations sur les trace d'un simulation précédente.
 
-
-present available load injector
-present lab cfg (verbatim cfg et command)
-	explain sim seq 
-	explain systematic log filtering
-Show postprocessing with graphs
-	all graphs are in pdf
-
-
-
+\begin{verbatim}
+TODO present postprocessing directly to pdf
+\end{verbatim}
 
 \subsection{SimSchlouder}
 
