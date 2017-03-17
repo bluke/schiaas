@@ -218,11 +218,116 @@ Cependant, deux applications sont fournies par défaut: \emph{LoadInjector} et \
 
 \subsubsection{LoadInjector}
 
-L'application \emph{LoadInjector} permet le prototypage rapide de simulateurs pour évaluer les 
-algorithmes du niveau \textit{cloud-kit}. Dans ces cas là, seule compte la charge en terme de nombre 
-de VMs et de CPU de ces VMs, peu importe les applications qui y sont exécutées.
+L'application \emph{LoadInjector} permet le prototypage rapide de simulateurs
+pour évaluer les algorithmes du niveau \textit{cloud-kit}. Dans ces cas là,
+seule compte la charge en terme de nombre de VMs et de CPU de ces VMs, peu
+importe les applications qui y sont exécutées.
 
-L'exemple typique est celui de l'étude d'algorithme de placement de VM sur PM, il est développé section ???
+Le conception d'un systeme systeme d'ordonnancement ce fait par l'extention de
+la classe \emph{ComputeScheduler}. N'importe quel classe satifessant l'interface
+peut etre chargé a l'initialisation de SCHIaaS ce qui permet de prototypé
+facilement de nouveaus ordonnanceurs. De base SCHIaaS fournit : 
+\begin{description}
+	\item[SimpleScheduler], un ordonanceur pondéré pouvant être configuré de
+		manière a répartir (\emph{balancer}) ou concentré
+		(\emph{consolidator}) les VMs sur les PMs
+	\item[SimpleReconfigurator], ce base sur \emph{SimpleScheduler} tente
+		régulièrement d'optimiser le placement des VMs en procédant à
+		des migration.
+\end{description}
+
+Pour mettre nos ordonnanceurs à l'épreuve notre ordonnanceur il va être
+nécessaire de provisionner des VMs dans notre simulation. Comme la charge
+applicative ne fait pas partie du cadre de cette expérience on utilisera
+\emph{LoadInjector}. La classe \emph{loadinjector.SimpleInjection} permet de
+lancer des simulation autour d'injecteurs implémentant la classe
+\emph{AsbstractInjector}. Les injecteurs allume des VMs, leur assigne des
+charges de calcul et les éteignes. SCHIaaS fournit \textbf{SinInjector} qui
+injecte une charge de calcul sinusoïdale sur un nombre de VM suivant aussi une
+sinusoïde. L'exécution d'une simulation ce fait avec la commande suivante : 
+\begin{verbatim}
+$ java  loadinjector.SimpleInjection platform.xml deploy.xml cloud.xml
+injector.xml
+\end{verbatim}
+\begin{description}
+	\item[platform.xml] décrit les PMs pour SimGrid
+	\item[deploy.xml] instancie les processus SimGrid
+	\item[cloud.xml] décrit le cloud, en particulier l'ordonnanceur a
+		utiliser pour SCHIaaS
+	\item[injector.xml] sélectionne et paramètre les injecteurs a utiliser
+\end{description}
+
+\subsubsection{Cas d'usage}
+
+Dans ce cas d'usage on imagine que l'on cherche a optimiser la configuration d'un
+ordonnanceur cherchant a limiter le nombre de PM utilisé. Pour ce faire on va
+comparer la performance des ordonnanceur suivant : 
+\begin{description}
+	\item[SimpleScheduler : balancer] : cas témoin
+	\item[SimpleScheduler : consolidator] : cas témoin
+	\item[SimpleReconsolidator : 0 ] : ???
+	\item[SimpleReconsolidator : 10] : cherche a optimisé l'ordonnancement
+		en migrant une VM toute les 10 secondes.
+	\item[SimpleReconsolidator : 100] : cherche a optimisé l'ordonnancement
+		en migrant une VM toutes les 100 secondes
+\end{description}
+
+Pour couvrir un maximum de cas possible on modèle 3 profils d'injection, un
+variant lentement, un variant rapidement, et commençant lentement avant de
+varier rapidement.
+
+Tous les ordonnanceurs et tous les injecteur sont décrit dans des fichier
+\emph{cloud} et \emph{injection} respectivement. Il existe 15 combinaison
+ordonnanceur/injecteur à simuler et à comparer. Le \emph{lab} va entièrement
+automatisé les étapes de simulation et d'analyse.
+
+\subsubsection{Configuration du lab}
+
+Toutes les expérience du \emph{lab} sont guidée par un fichier de configuration.
+Celui ci contient l'ensemble des information nécessaire aux simulations, les
+variables à observer, et si nécessaire les pré- ou post- traitement requis. 
+
+\begin{verbatim}
+# setup
+SETUP_DIR ./setup/cmp-scheduler
+NEEDED_POST template.R
+POST_COMMAND_DATA R -f template.R > R.out
+
+# observations
+TU_ARG --grep vm:.*:state
+TU_ARG --event instances_count 
+TU_ARG --event used_cores
+TU_ARG --event instances_load 
+TU_ARG --event cpu_bound
+TU_ARG --count-if used_cores ne 0
+TU_ARG --count-if used_cores eq 0
+TU_ARG --count-if vm:.*:state eq migrating
+TU_ARG --count-if vm:.*:state eq running
+
+# simulations
+SIM_ARG 1 loadinjector.SimpleInjection
+SIM_ARG 2 platform.xml 
+SIM_ARG 3 deploy.xml
+SIM_ARG 4:balancer cloud-balancer.xml
+SIM_ARG 4:consolidator cloud-consolidator.xml
+SIM_ARG 4:reconsolidator0 cloud-reconsolidator0.xml
+SIM_ARG 4:reconsolidator10 cloud-reconsolidator10.xml 
+SIM_ARG 4:reconsolidator100 cloud-reconsolidator100.xml
+SIM_ARG 5:slowfast injector-slowfast.xml 
+\end{verbatim}
+
+
+
+
+present available load injector
+present lab cfg (verbatim cfg et command)
+	explain sim seq 
+	explain systematic log filtering
+Show postprocessing with graphs
+	all graphs are in pdf
+
+
+
 
 \subsection{SimSchlouder}
 
@@ -231,12 +336,13 @@ algorithmes d'ordonnancement de VM et de tâches au niveau utilisateurs du cloud
 Dans ces cas là, l'état de l'infrastructure interne du cloud importe peu, seule compte le service 
 rendu à l'utilisateur, isolé sur sa propre plateforme virtuelle. 
 
-Schlouder citation??? est un courtier de ressources virtuelles. Il prend en entrée la description 
-d'une charge de travail, au format slurm citation??? étendu de quelques informations permettant 
-d'adapter le courtage aux besoins utilisateurs. Ensuite, Schlouder anaylse la charge de travail 
-soumise, et décide à l'aide d'algorithmes de dimensionnement (\textit{provisioning}) de déployer 
-un certains nombres de VM, puis ordonnance les tâches sur ces VMs, et étend les VMs lorsqu'elles
-sont devenues inutiles.
+Schlouder\cite{Michon2017} est un courtier de ressources virtuelles. Il prend en
+entrée la description d'une charge de travail, au format slurm citation???
+étendu de quelques informations permettant d'adapter le courtage aux besoins
+utilisateurs. Ensuite, Schlouder anaylse la charge de travail soumise, et décide
+à l'aide d'algorithmes de dimensionnement (\textit{provisioning}) de déployer un
+certains nombres de VM, puis ordonnance les tâches sur ces VMs, et étend les VMs
+lorsqu'elles sont devenues inutiles.
 
 SimSchlouder est l'alter-égo de Schlouder, dont l'architecture, les fonctionnalités, le comportement
 et les entrées/sorties sont entièrement reproduite dans SCHIaaS. La description d'une charge de 
