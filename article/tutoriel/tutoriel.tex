@@ -89,43 +89,51 @@ entre simulateurs, l'utilisateur  n'ayant généralement que peu de  prise sur c
 aspect%
 \footnote{SimGrid  permet  néanmoins de  choisir  différents  modèles pour le réseau}.
 
-La spécification de plateforme décrit l'environement simulé. Elle est fournie
-par l'utilisateur et contient un descriptif de la platform sous forme d'objet de
-modèle de simulation. Elle est instanciée au début de la simulation et évolue en
-fonction de son contenu. Suivant le simulateur la plateform sera plus ou moins
-abstraite, certains auron un objet "\emph{Datacenter}" ou d'autre necessiterons
-d'instancier séparement chaque machine et câbles ethernet. La granularité de la
-spécification de plateforme va généralement de paire avec la précision du
-simulateur.
+La spécification de plateforme décrit  l'environnement simulé.  Elle est fournie
+par l'utilisateur et décrit les caractéristiques techniques de l'infrastructure,
+comme la topologie  d'interconnexion, la puissance des  processeurs, la capacité
+des liens  réseaux, etc.  Le niveau  de détail  de cette  description, différent
+selon les simulateurs, influence la précision de la simulation.
 
-La spécification de l'application, fournie par l'utilisateur est une description
-de la séquence des evenements à simuler. Suivant les capacité du simulateur elle
-peux être une trace d'execution, une représentation abstraite de suite
-d'opérations, ou un programme appelant une bibliothéque de simulation au lieu
-d'executé des opération réeles.
+La  spécification   de  l'application,   fournie  par  l'utilisateur,   est  une
+description de la  séquence des évènements à simuler.  Les simulateurs existants
+priviligient cette  description sous la forme  d'un programme qui, à  l'aide des
+primitives  de  la  bibliothéque  de  simulation,  décrit  le  comportement  des
+opération  réelles simulées.   Mais d'autres  mode de  description peuvent  être
+proposés,   comme   l'injection  d'une   trace   d'exécution   réelle,  ou   une
+représentation abstraite de suite d'opérations. La figure~\ref{fig:sim-features}
+donne un aperçu des possibilités de différents simulateurs.
 
-\begin{tabular}{|c||c|c|c||c|c|c|c||c|}
+
+\begin{figure}[hbt]
+\begin{tabular}{|c||c|c|c||c|c|c|c|}
 	\hline
 	%% line 1
 	& \multicolumn{3}{c|}{Application} &
-	\multicolumn{2}{c|}{CPU}&Réseau&Disque&Platforme\\
-	\cline{2-9}
+	\multicolumn{2}{c|}{CPU}&Réseau&Disque\\
+	\cline{2-8}
 	%%line 2
-	Simulator &\rotatebox{90}{trace d'execution\,}&\rotatebox{90}{representation
-	abstraite\,}&\rotatebox{90}{simulation programmée\,}&
-	\rotatebox{90}{delai mesuré\,}& \rotatebox{90}{délai utilisateur\,}&
-	type & precision max&granularité\\
+	Simulator &(a) 
+                  &(b)
+                  &(c)
+                  &(d)
+                  &(e)&
+	type & precision max\\
 	\hline
 	%%line 3
 	CloudSim & & & \bf X &&\bf
-	X&store/forward&seek+transfert&structure<->equipment\\ \hline
-	ICanCloud & & & \bf X &&\bf X&packet& block& equipment \\ \hline
-	GroudSim & & & \bf X &&\bf X&flot& n/a & equipment \\\hline
-	GreenCloud & & \bf X &&&\bf X&packet& n/a & equipement\\ \hline
+	X&store/forward&seek+transfert\\ \hline
+	ICanCloud & & & \bf X &&\bf X&packet& bloc \\ \hline
+	GroudSim & & & \bf X &&\bf X&flot& n/a\\\hline
+	GreenCloud & & \bf X &&&\bf X&packet& n/a\\ \hline
 	SimGrid & \bf X & \bf X & \bf X &\bf X&\bf X& flot/packet &
-	seek+transfert & equipment\\
+	seek+transfert \\
 	\hline
 \end{tabular}
+\caption{Les simulateurs existants: (a) trace d'execution, (b) representation abstraite, (c) simulation
+  programmée, (d) delai mesuré, (e) délai utilisateur.}
+\label{fig:sim-features}
+\end{figure}
 
 SimGrid~\cite{simgrid}  est un  simulateur à  évenements discrets  qui permet  à
 l'utilisateur d'exprimer la modélisation  d'une application distribuée à travers
