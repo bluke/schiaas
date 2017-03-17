@@ -81,18 +81,19 @@ de nombreux outils de simulation trois composants :
 Le modèle de simulation forme le coeur d'un simulateur. Il décrit l'évolution de
 l'état de tous  les constituants du système  simulé en fonction du  temps et des
 évènements.   Il  repose  sur  des   modèles  individuels  pour  chacun  de  ces
-constituants  (réseau,   processeur,  \ldots).    Etant  donné  la   complexité  du
+constituants  (réseau,  processeur,  \ldots).   Etant  donné  la  complexité  du
 comportement   des   constituants,  les   modèles   actuels   procèdent  à   des
 simplifications  générant  des  erreurs,   accentuées  par  la  combinaison  des
 modèles. La précision des modèles utilisés est le principal élément discriminant
 entre simulateurs, l'utilisateur  n'ayant généralement que peu de  prise sur cet
 aspect%
-\footnote{SimGrid  permet  néanmoins de  choisir  différents  modèles pour le réseau}.
+\footnote{SimGrid  permet  néanmoins  de  choisir  différents  modèles  pour  le
+  réseau}.
 
 La spécification de plateforme décrit  l'environnement simulé.  Elle est fournie
 par l'utilisateur et décrit les caractéristiques techniques de l'infrastructure,
 comme la topologie  d'interconnexion, la puissance des  processeurs, la capacité
-des liens  réseaux, etc.  Le niveau  de détail  de cette  description, différent
+des liens réseaux,  etc.  Le niveau de détail de  cette description, qui différe
 selon les simulateurs, influence la précision de la simulation.
 
 La  spécification   de  l'application,   fournie  par  l'utilisateur,   est  une
@@ -122,7 +123,7 @@ donne un aperçu des possibilités de différents simulateurs.
 	\hline
 	%%line 3
 	CloudSim & & & \bf X &&\bf
-	X&store/forward&seek+transfert\\ \hline
+	X&store\&forward&seek+transfert\\ \hline
 	ICanCloud & & & \bf X &&\bf X&packet& bloc \\ \hline
 	GroudSim & & & \bf X &&\bf X&flot& n/a\\\hline
 	GreenCloud & & \bf X &&&\bf X&packet& n/a\\ \hline
@@ -130,10 +131,33 @@ donne un aperçu des possibilités de différents simulateurs.
 	seek+transfert \\
 	\hline
 \end{tabular}
-\caption{Les simulateurs existants: (a) trace d'execution, (b) representation abstraite, (c) simulation
-  programmée, (d) delai mesuré, (e) délai utilisateur.}
+\caption{Principaux simulateurs du domaine et les possibilités de décrire
+  l'application : (a) trace d'execution, (b) representation abstraite, (c) simulation
+  programmée, ou la performance CPU : (d) delai mesuré, (e) délai
+  utilisateur. Le réseau peut être simulé analytiquement (flow) ou avec un
+  simulateur externe dédié (packet)}
 \label{fig:sim-features}
 \end{figure}
+
+Cette description générale montre que la simulation d'une application exécutée
+sur un cloud repose sur une combinaison de modèles qui par définition génèrent
+une part d'erreur. La quantification de cette erreur est une tâche expérimentale
+extrêmement fastidieuse, ce qui explique qu'elle est rarement menée. L'objet
+de notre travail est ici de présenter un outil, le \emph{lab}, qui facilite
+le travail d'analyse des résultats de simulation. Nous montrons comment cet 
+outil peut être utilisé dans le cadre de la simulation d'application cloud
+avec le \textit{framework} SCHIaaS qui repose sur SimGrid. Nous présentons 
+d'abord cette interface dans la section~\ref{sec:schiaas}, puis blah blah.
+
+
+
+
+
+%=========================================================
+\section{Présentation du \textit{framework}}
+%=========================================================
+
+\subsection{SimGrid}
 
 SimGrid~\cite{simgrid}  est un  simulateur à  évenements discrets  qui permet  à
 l'utilisateur d'exprimer la modélisation  d'une application distribuée à travers
@@ -148,16 +172,12 @@ sur l'interface MSG.
 
 
 
-%=========================================================
-\section{Présentation du \textit{framework}}
-%=========================================================
-
 SCHIaaS est un \textit{framework} permettant le développement rapide de simulateurs 
 de cloud pour l'évaluation d'algorithmes au niveau du \textit{cloud-kit} et au dessus.
 Il est basé sur SimGrid et est développé en JAVA, ce qui permet la spécialisation 
 rapide d'un ensemble de classes permettant de greffer les travaux de l'utilisateur au 
 niveau qui lui convient, le reste étant assuré par défaut.
-Le tout est facilement instrumentable par un ensemble de scripts, appelée \emph{lab},
+Le tout est facilement instrumentable par un ensemble de scripts, appelé \emph{lab},
 qui permet d'automatiser l'exécution des simulations, leurs observations, et l'analyse
 des résultats.
 
