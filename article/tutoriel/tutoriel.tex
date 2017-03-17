@@ -9,6 +9,9 @@
 \usepackage{multirow}
 \usepackage{graphicx}
 
+\usepackage{acronym}
+\acrodef{psg}[$p_{SG}$]{processus SimGrid}
+
 \newcommand\vrpath{../../lab/setup/simschlouder/validation-results/}
 \graphicspath{{\vrpath}}
 
@@ -66,7 +69,7 @@ Les  clouds  sont  devenus  ces  dernières  années  une  brique  essentielle  
 l'informatique,   omni-présents  dans   les   architectures   de  nos   systèmes
 d'information. La compréhension de leurs  comportements est donc un enjeu majeur
 qui a incité les chercheurs à proposer des simulateurs de cloud, essentiellement
-pour les clouds de type \textit{Infrastructure-as-a-Service} (IaaS) . Ces
+pour les clouds de type \textit{Infrastructure-as-a-Service} (IaaS). Ces
 simulateurs   reposent   sur   une   modélisation  qu'on   peut   qualifier   de
 \textit{bottom-up} : les ressources matérielles sont d'abord modélisées, puis le
 comportement des  machines virtuelles sur  ces ressources matérielles,  puis les
@@ -81,7 +84,7 @@ de nombreux outils de simulation trois composants :
 Le modèle de simulation forme le coeur d'un simulateur. Il décrit l'évolution de
 l'état de tous  les constituants du système  simulé en fonction du  temps et des
 évènements.   Il  repose  sur  des   modèles  individuels  pour  chacun  de  ces
-constituants  (réseau,   processeur,  ...).    Etant  donné  la   complexité  du
+constituants  (réseau,   processeur,  \ldots).    Etant  donné  la   complexité  du
 comportement   des   constituants,  les   modèles   actuels   procèdent  à   des
 simplifications  générant  des  erreurs,   accentuées  par  la  combinaison  des
 modèles. La précision des modèles utilisés est le principal élément discriminant
@@ -144,12 +147,42 @@ Schema :
 
 lab (lab.py + schiaas-trace-utils.py )
 
-applications (simschlouder, loadinjector, ...)
+applications (simschlouder, loadinjector, \ldots)
 
 schiaas (engines + apps)
 
 simgrid (vm + msg)
 
+\subsection{SimGrid}
+
+SimGrid\cite{simgrid} est une plateforme de simulation conçu pour l'étude de système distribué
+a grande échelle telle que les Grille, Clouds ou HPC. SimGrid est capable de
+lancer des simulation a partir de traces d'exécution MPI, a partir de Diagrammes
+Orientés Acycliques (DAG) ou dans le cas de l'interface MSG de contrôler la
+simulation de manière programmée.
+
+Dans le cadre d'un simulation programmée SimGrid est initialisé avec la
+spécification de la plateforme simulée. Ensuite des \ac{psg} sont crées et
+assignés a aux machines de la plateforme. Un \ac{psg} est un morceau de code
+écrit par l'utilisateur explicitant la logique derrière la suite d'évènements
+simulés. Un événement simulé peux être un transfert de donnée, l'execution d'une
+tache sur un CPU, une lecture disque, ou une simple mise en attente du
+processus. Pour ordonner la simulation un évènement un \ac{psg} appelle la
+fonction SimGrid correspondante, ces fonctions sont bloquante, le processus est
+alors suspendu par le noyau SimGrid. Quand l'ensemble des \ac{psg} sont
+suspendu calcule les date de réalisation des différent évènements déclenchés
+puis avance l'horloge de la simulation à la date de réalisation la plus proche,
+le \ac{psg} responsable de l'appel est alors débloqué et continue son exécution
+jusqu'au prochain appel à une fonction bloquante. La simulation avance ainsi de
+date en date, les \ac{psg} n'étant exécuté que lorsque leur tâche simulée sont
+terminée, jusqu'à ce que tout les \acl{psg} aient terminé.
+
+Il est important de noter que, bien que d'un point de vue extérieur le
+simulateur passe l'intégralité de son temps a exécuté les processus et avance
+instantanément à la date du prochain réveil d'un processus, du point de vue la
+simulation l'exécution du code des processus est instantané et seul les appel
+SimGrid font avancer l'horloge. Les \acl{psg} guident la simulation sans pour
+autant être l'objet simulé.
 
 \subsection{SCHIaaS}
 
