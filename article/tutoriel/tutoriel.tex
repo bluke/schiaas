@@ -9,9 +9,6 @@
 \usepackage{multirow}
 \usepackage{graphicx}
 
-\usepackage{acronym}
-\acrodef{psg}[$p_{SG}$]{processus SimGrid}
-
 \newcommand\vrpath{../../lab/setup/simschlouder/validation-results/}
 \graphicspath{{\vrpath}}
 
@@ -130,6 +127,19 @@ d'executé des opération réeles.
 	\hline
 \end{tabular}
 
+SimGrid~\cite{simgrid}  est un  simulateur à  évenements discrets  qui permet  à
+l'utilisateur d'exprimer la modélisation  d'une application distribuée à travers
+un  programme utilisant  les  primitives  SimGrid qui  décrivent  les phases  de
+communications et de calcul des différents processus applicatifs. Ces primitives
+sont disponibles à travers différentes interfaces, adaptées aux systèmes étudiés
+; il  existe par exemple  des interface  pour les applications  pair-à-pair, MPI
+(SMPI),  les workflows  sous forme  de DAG  (SimDAG), \ldots,  ou les  processus
+communiquants de type  CSP (MSG). Dans cet article nous  présentons une nouvelle
+interface, SCHIaaS,  dédiée à la simulation  de clouds IaaS. Celle-ci  est basée
+sur l'interface MSG.
+
+
+
 %=========================================================
 \section{Présentation du \textit{framework}}
 %=========================================================
@@ -153,36 +163,6 @@ schiaas (engines + apps)
 
 simgrid (vm + msg)
 
-\subsection{SimGrid}
-
-SimGrid\cite{simgrid} est une plateforme de simulation conçu pour l'étude de système distribué
-a grande échelle telle que les Grille, Clouds ou HPC. SimGrid est capable de
-lancer des simulation a partir de traces d'exécution MPI, a partir de Diagrammes
-Orientés Acycliques (DAG) ou dans le cas de l'interface MSG de contrôler la
-simulation de manière programmée.
-
-Dans le cadre d'un simulation programmée SimGrid est initialisé avec la
-spécification de la plateforme simulée. Ensuite des \ac{psg} sont crées et
-assignés a aux machines de la plateforme. Un \ac{psg} est un morceau de code
-écrit par l'utilisateur explicitant la logique derrière la suite d'évènements
-simulés. Un événement simulé peux être un transfert de donnée, l'execution d'une
-tache sur un CPU, une lecture disque, ou une simple mise en attente du
-processus. Pour ordonner la simulation un évènement un \ac{psg} appelle la
-fonction SimGrid correspondante, ces fonctions sont bloquante, le processus est
-alors suspendu par le noyau SimGrid. Quand l'ensemble des \ac{psg} sont
-suspendu calcule les date de réalisation des différent évènements déclenchés
-puis avance l'horloge de la simulation à la date de réalisation la plus proche,
-le \ac{psg} responsable de l'appel est alors débloqué et continue son exécution
-jusqu'au prochain appel à une fonction bloquante. La simulation avance ainsi de
-date en date, les \ac{psg} n'étant exécuté que lorsque leur tâche simulée sont
-terminée, jusqu'à ce que tout les \acl{psg} aient terminé.
-
-Il est important de noter que, bien que d'un point de vue extérieur le
-simulateur passe l'intégralité de son temps a exécuté les processus et avance
-instantanément à la date du prochain réveil d'un processus, du point de vue la
-simulation l'exécution du code des processus est instantané et seul les appel
-SimGrid font avancer l'horloge. Les \acl{psg} guident la simulation sans pour
-autant être l'objet simulé.
 
 \subsection{SCHIaaS}
 
