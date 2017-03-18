@@ -180,15 +180,16 @@ Le tout est facilement instrumentable par un ensemble de scripts, appelé \emph{
 qui permet d'automatiser l'exécution des simulations, leurs observations, et l'analyse
 des résultats.
 
-Schema :
+\begin{figure}[hbt]
+\includegraphics[scale=0.8]{gfx/framework.png}
+\caption{ ... Couches Pampers ....}
+\label{sec:framework}
+\end{figure}
 
-lab (lab.py + schiaas-trace-utils.py )
+% Voir gfx/framework.txt pour le code source
+% Généré avec 
+% java -jar /opt/local/share/java/ditaa0_9.jar framework.txt 
 
-applications (simschlouder, loadinjector, \ldots)
-
-schiaas (engines + apps)
-
-simgrid (vm + msg)
 
 
 \subsection{SCHIaaS}
