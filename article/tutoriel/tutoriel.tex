@@ -9,8 +9,7 @@
 \usepackage{multirow}
 \usepackage{graphicx}
 
-\newcommand\vrpath{../../lab/setup/simschlouder/validation-results/}
-\graphicspath{{\vrpath}}
+\graphicspath{{gfx/}}
 
 %===========================================================
 %                               Title
@@ -121,12 +120,12 @@ donne un aperçu des possibilités de différents simulateurs.
 	type & precision max\\
 	\hline
 	%%line 3
-	CloudSim & & & \bf X &&\bf
+	CloudSim\cite{cloudsim} & & & \bf X &&\bf
 	X&store/forward&seek+transfert\\ \hline
-	ICanCloud & & & \bf X &&\bf X&packet& bloc \\ \hline
-	GroudSim & & & \bf X &&\bf X&flot& n/a\\\hline
-	GreenCloud & & \bf X &&&\bf X&packet& n/a\\ \hline
-	SimGrid & \bf X & \bf X & \bf X &\bf X&\bf X& flot/packet &
+	ICanCloud\cite{icancloud} & & & \bf X &&\bf X&packet& bloc \\ \hline
+	GroudSim\cite{groudsim} & & & \bf X &&\bf X&flot& n/a\\\hline
+	GreenCloud\cite{greencloud} & & \bf X &&&\bf X&packet& n/a\\ \hline
+	SimGrid\cite{simgrid}& \bf X & \bf X & \bf X &\bf X&\bf X& flot/packet &
 	seek+transfert \\
 	\hline
 \end{tabular}
@@ -265,7 +264,6 @@ comparer la performance des ordonnanceur suivant :
 \begin{description}
 	\item[SimpleScheduler : balancer] : cas témoin
 	\item[SimpleScheduler : consolidator] : cas témoin
-	\item[SimpleReconsolidator : 0 ] : ???
 	\item[SimpleReconsolidator : 10] : cherche a optimisé l'ordonnancement
 		en migrant une VM toute les 10 secondes.
 	\item[SimpleReconsolidator : 100] : cherche a optimisé l'ordonnancement
@@ -310,7 +308,6 @@ SIM_ARG 2 platform.xml
 SIM_ARG 3 deploy.xml
 SIM_ARG 4:balancer cloud-balancer.xml
 SIM_ARG 4:consolidator cloud-consolidator.xml
-SIM_ARG 4:reconsolidator0 cloud-reconsolidator0.xml
 SIM_ARG 4:reconsolidator10 cloud-reconsolidator10.xml 
 SIM_ARG 4:reconsolidator100 cloud-reconsolidator100.xml
 SIM_ARG 5:slow injector-slow.xml
@@ -357,9 +354,47 @@ expérience. L'option \texttt{p} indique le nombre de simulation a mené en
 parallèle et l'option \texttt{k} permet de sauter la simulation pour faire les
 observations sur les trace d'un simulation précédente.
 
+\subsubsection{Analyse des résultats}
+
+Le \emph{lab} a exécuté toute les simulation et extrait les informations utiles
+de chacune des trace.Ces observation sont disponible dans le dossier
+\texttt{data} en tant que fichiers de la forme:
 \begin{verbatim}
-TODO present postprocessing directly to pdf
+xp[_nom1[_nom2[...]]].observ.dat
 \end{verbatim}
+Avec \texttt{nom$n$} sont les noms donnés au SIM\_ARG utilisé pour cette
+simulation et \texttt{observ} le filtre TU\_ARG utiliser pour obtenir ce
+fichier. Le \emph{lab} n'integre pas plus de traitement pour ces données, mais
+permet au utilisateur de lancer de manière systématique une commande
+supplémentaire dans le fichier \texttt{data}. Dans notre cas il s'agit d'un
+script R utilisant une bibliothèque fournie avec le \emph{lab} pour tracer les
+variables observé dans un graphe approprié et d'écrire tout les graphe dans PDF.
+
+\begin{figure}[h]
+	\label{output}
+	\caption{Exemple de graphe obtenu par le TU\_ARGS :
+	\texttt{instances\_count}(event), \texttt{vm:.*:state eq running}(count-if)
+	et, \texttt{vm:.*:state}(grep)}
+	\begin{tabular}{ccc}
+		\includegraphics[scale=0.30]{xp_balancer_slow-instances_count}&
+		\includegraphics[scale=0.30]{xp_balancer_slow-vm__state_eq_running}&
+		\includegraphics[scale=0.30]{xp_balancer_slow-vm__state}\\
+	\end{tabular}
+\end{figure}
+
+\section{Conclusion}
+
+Le \emph{lab} est un outil pour l'automatisation d'exécution d'expériences
+\emph{in silico} qui permet chainé facilement de multiple simulation en faisant
+varié les entrées. L'automatisation des simulation et des observation permet non
+seulement de s'assurer que rien n'échappe a l'utilisateur mais rend aussi
+l'expérience trivialement reproductible. Le \emph{lab} est déjà utilisé au seins
+de notre équipes pour la validation de SCHIaaS, en simulant automatiquement
+l'ensemble d'une archive de 273 exécution réelle, et pour des simulation de
+Monte Carlo, en procédant de manière répétée a 500 simulations d'une même
+plateforme avec des taches généré aléatoirement. ???
+
+
 
 \subsection{SimSchlouder}
 
