@@ -209,22 +209,23 @@ permettent d'obtenir un simulateur par défaut pleinement fonctionnel. Ces impl�
 imitent le comportement d'openstack. Un développeur de fonctionnalités administrateur n'a donc 
 qu'à se concentrer sur la partie qui l'intéresse, par exemple différent systèmes de stockages.
 
-De plus, les ordonanceurs de VM, qui décident sur quelle PM seront déployées les VM demandées
+Les ordonnanceurs de VM, qui décident sur quelle PM seront déployées les VM demandées
 par l'utilisateur, ont également leur interface abstraite. Plusieurs ordonnanceurs par défaut
 sont fournis, sur l'exemple d'Openstack qui permet au choix d'équilibrer ou de consolider les 
 charges des machines physiques au moyen d'un poids calculé pour chacune d'elles. 
-Tout moteur compute peut donc réutiliser tout algorithme d'ordonnancement.
 
 Un système abstrait d'injection de charge est également fourni. Ce dernier permet de contrôler 
 un nombre de VM déployées et les charges de ces VM, en particulier CPU, afin de faciliter 
-l'évaluation des algorithmes. 
+l'évaluation des algorithmes.
 Deux injecteurs par défaut sont fournis. Le premier est un simple injecteur de charges sinusoidales
 entièrement paramétrables. Le second injecte les charges observées sur l'infrastructure de Google,
 et rendue disponible dans le google-cluster-traces.
 
-Ainsi, SCHIaaS fourni, de façon modulaire, tous mes composant d'un \textit{cloud-kit}. 
+Ces interfaces ne sont que celles utilisées dans la suite de l'article à titre d'illustration.
+De la même manière, SCHIaaS fourni de façon modulaire tous les composant d'un \textit{cloud-kit}. 
 Chaque module peut être remplacé, étendu, ou utilisé en l'état, ce qui permet le prototypage
-rapide de simulateur de cloud adapté à l'étude de l'utilisateur.
+rapide de simulateurs de cloud adaptés à l'étude de l'utilisateur, sans qu'il ait à développer 
+plus que ce qui l'intéresse.
 
 \subsection{Applications}
 
@@ -233,9 +234,46 @@ exploitant les fonctionnalités fournies, mais qui doit être développée et co
 Cette philosophie est conservée avec SCHIaaS, qui ne fait qu'étendre les fonctionnalités de 
 SimGrid avec celles disponibles dans un cloud.
 
-Cependant, deux applications sont fournies par défaut: \emph{LoadInjector} et \emph{SimSchlouder}.
+Cependant, deux applications sont fournies par défaut: 
+\begin{itemize}
+ \item \emph{LoadInjector}, qui permet d'injecter une charge utilisateur sans se préoccuper
+ des applications qui s'exécutent dans les VM. Il est utile pour mener des études au niveau 
+ administrateur.
+ \item \emph{SimSchlouder}, qui est la version simulée du système réel Schlouder\cite{Michon2017}.
+ Il s'agit d'un courtier de ressources virtuelles capable de piloter de concert un ordonnanceur de tâches 
+ et un \textit{cloud-kit} pour exécuter des calculs scientifiques sur clouds. 
+ Schlouder et SimSchlouder ont exactement les mêmes entrées/sorties, excepté le résulat 
+ des calculs effectués, ce qui permet de mener des études au niveau utilisateur de cloud,
+ sans se préoccuper du niveau administrateur. De plus, ceci permet de confronter les 
+ performances simulées aux performances réelles, et donc de valider la précision de 
+ la simulation. Cela a été fait sur la base de 273 exécution réelles, incluant 8 cas applicatifs
+ représentatifs et 4 plateformes de cloud représentatives. Cette validation est en cours 
+ de publication. Les traces d'exécution réelles sont inclues dans SimSchlouder afin de 
+ pouvoir servir à la validation des travaux sur le calcul scientifique sur cloud.
+\end{itemize}
 
-\subsubsection{LoadInjector}
+\subsection{Le Lab}
+
+Le lab est un ensemble de scripts permettant d'automatiser l'exécution des simulations, la collecte des
+observations, ainsi que leur analyse. Il permet donc d'exécuter de bout-en-bout l'étude par simulation,
+de la définition des différentes simulations, à la production des graphiques.
+
+Au delà de l'aspect pratique et du gain de temps de mise en oeuvre de l'étude, le lab a pour vocation
+de ``standardiser'' l'étude. Cette standardisation assure sa reproductibilité, ainsi qu'une comparaison
+équitable entre solutions à un même problème.
+
+Mais le lab permet également une approche systématique permetant à l'expérimentateur de ne pas rater 
+de phénomène. En effet, il est fréquent de faire un grand lot de simulations, plus d'observer plus
+finement celles qui présentent des particularités. Ce faisant, l'expérimentateur exclu les autres 
+simulation de ces observations plus précises, à moins de les refaire entièrement. En rendant plus 
+pratique la définition des observations directement au niveau du \textit{workflow} de simulations, 
+le lab assure que tous les cas seront observés de la même manière, ce qui évite de rater un phénomène,
+ou de différencier le traitement des simulations au risque d'arriver à des conclusions abusives.
+
+
+\section{Cas d'usage concret}
+
+Afin d'illustrer 
 
 L'application \emph{LoadInjector} permet le prototypage rapide de simulateurs
 pour évaluer les algorithmes du niveau \textit{cloud-kit}. Dans ces cas là,
@@ -416,6 +454,38 @@ plateforme avec des taches généré aléatoirement. ???
 
 
 
+
+
+
+%=========================================================
+\section{Exemples}
+%=========================================================
+
+\subsection{Comparaison d'algorithmes de placement de VM sur PM}
+
+\subsection{Comparaison d'algorithmes d'ordonnancement de tâches sur VM}
+
+\section{Open-science}
+
+\begin{verbatim}
+git clone https://git.unistra.fr/gossa/schlouder-traces.git
+git clone https://scm.gforge.inria.fr/anonscm/git/schiaas/schiaas.git 
+cd schiaas
+cmake .
+make
+cd lab
+./lap.py -p2 setup/simschlouder/validation.cfg
+cd setup/simschlouder/validation-results
+ls
+\end{verbatim}
+
+
+\bibliography{biblio}
+
+\end{document}
+
+
+
 \subsection{SimSchlouder}
 
 L'application \emph{SimSchlouder} permet le prototypage rapide de simulateurs pour évaluer les 
@@ -459,52 +529,3 @@ stratégie aux autres dans des contextes applicatifs et matériels nombreux, rep
 éprouvés.
 
 Ces comparaisons nécessitent de très nombreuses simulations, c'est pourquoi nous avons conçu \emph{le lab}.
-
-\subsection{Le Lab}
-
-Le lab est un ensemble de scripts permettant d'automatiser l'exécution des simulations, la collecte des
-observations, ainsi que leur analyse. Il permet donc d'exécuter de bout-en-bout l'étude par simulation,
-de la définition des différentes simulations, à la production des graphiques.
-
-Au delà de l'aspect pratique et du gain de temps de mise en oeuvre de l'étude, le lab a pour vocation
-de ``standardiser'' l'étude. Cette standardisation assure sa reproductibilité, ainsi qu'une comparaison
-équitable avec d'autres solutions au même problème.
-
-Mais le lab permet également une approche systématique permetant à l'expérimentateur de ne pas rater 
-de phénomène. En effet, il est fréquent de faire un grand lot de simulations, plus d'observer plus
-finement celles qui présentent des particularités. Ce faisant, l'expérimentateur exclu les autres 
-simulation de ces observations plus précises, à moins de les refaire entièrement. En rendant plus 
-pratique la définition des observations directement au niveau du \textit{worflow} de simulations, 
-le lab assure que tous les cas seront observés de la même manière, ce qui évite de rater un phénomène,
-ou de différencier le traitement des simulations au risque d'arriver à des conclusions abusives.
-
-
-%=========================================================
-\section{Exemples}
-%=========================================================
-
-\subsection{Comparaison d'algorithmes de placement de VM sur PM}
-
-\subsection{Comparaison d'algorithmes d'ordonnancement de tâches sur VM}
-
-\section{Open-science}
-
-\begin{verbatim}
-git clone https://git.unistra.fr/gossa/schlouder-traces.git
-git clone https://scm.gforge.inria.fr/anonscm/git/schiaas/schiaas.git 
-cd schiaas
-cmake .
-make
-cd lab
-./lap.py -p2 setup/simschlouder/validation.cfg
-cd setup/simschlouder/validation-results
-ls
-\end{verbatim}
-
-
-\bibliography{biblio}
-
-\end{document}
-
-
-
