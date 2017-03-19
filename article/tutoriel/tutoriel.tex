@@ -238,7 +238,7 @@ observations};
 
 SimGrid~\cite{simgrid}  est un  simulateur à  évenements discrets  qui permet  à
 l'utilisateur d'exprimer la modélisation  d'une application distribuée à travers
-un  programme utilisant  les  primitives  SimGrid qui  décrivent  les phases  de
+un  programme utilisant  des  primitives  qui  décrivent  les phases  de
 communications et de calcul des différents processus applicatifs. Ces primitives
 sont disponibles à travers différentes interfaces, adaptées aux systèmes étudiés
 ; il  existe par exemple  des interface  pour les applications  pair-à-pair, MPI
@@ -246,19 +246,19 @@ sont disponibles à travers différentes interfaces, adaptées aux systèmes ét
 de type CSP (MSG).
 
 Le  travail présenté  dans  cet article  repose sur  une  nouvelle interface  de
-SimGrid,  nommée SCHIaaS,  dédiée  à  la simulation  de  clouds  IaaS.  Nous  ne
+SimGrid,  nommée SCHIaaS pour \textit{Simulation of Cloud, Hypervisor and 
+IaaS}.  Nous  ne
 présentons ici que quelques éléments saillants de SCHIaaS mais le lecteur pourra
 trouver  une  description  détaillée  sur  le  site  dédié~\cite{schiaas-gforge}.
 SCHIaaS  est  un  \textit{framework}   permettant  le  développement  rapide  de
-simulateurs de cloud. Il peut être utilisé évaluer des algorithmes au niveau du 
-gestionnaire de cloud (appelée aussi \textit{cloud-kit},  par exemple
+simulateurs de cloud. Il peut être utilisé pour évaluer des algorithmes au 
+niveau du gestionnaire de cloud (appelée aussi \textit{cloud-kit},  par exemple
 OpenStack), mais aussi au niveau d'applications clientes d'un cloud.
 
 Développé en JAVA, il offre un ensemble de classes prédéfinies représentant tous
 les composants d'un cloud kit. L'utilisateur qui souhaite insérer sa description
 du  comportement d'un  ou plusieurs  composants, peut  rapidement greffer  cette
-descritpion sous  la forme  d'un programme  qui vient  spécialiser l'une  de ces
-classes.  
+description sous d'une spécialisation de l'une  de ces classes.  
 % ----- inutile maintenant -----
 % Le tout  est facilement  instrumentable par  un ensemble  de scripts,
 %appelé \emph{lab},  qui permet d'automatiser l'exécution  des simulations, leurs
@@ -269,7 +269,7 @@ moteurs, exposant les fonctionnalités des clouds au niveau administrateur :
 \begin{itemize}
  \item Compute : moteur d'instanciation et de gestion des VM;
  \item Storage : moteur de gestion des stockages;
- \item Network : moteur de gestion de la virtualisation du réseau (à l'état purement abstrait pour l'instant).
+ \item Network : moteur de gestion de la virtualisation du réseau.
 \end{itemize}
 
 Chacun de  ces moteurs est  une interface abstraite  assurant l'interopérabilité
@@ -289,11 +289,7 @@ chacune d'elles.
 
 Un  système abstrait  d'injection de  charge  est également  fourni. Ce  dernier
 permet de  contrôler un  nombre de  VM déployées et  les charges  de ces  VM, en
-particulier  CPU,   afin  de  faciliter  l'évaluation   des  algorithmes.   Deux
-injecteurs  par défaut  sont  fournis. Le  premier est  un  simple injecteur  de
-charges sinusoidales  entièrement paramétrables.  Le second injecte  les charges
-observées  sur  l'infrastructure  de  Google,   et  rendue  disponible  dans  le
-google-cluster-traces.
+particulier  CPU.   
 
 Ces interfaces ne sont  que celles utilisées dans la suite  de l'article à titre
 d'illustration, mais tous les composant d'un \textit{cloud-kit} sont présents
@@ -317,6 +313,10 @@ Cependant, deux applications sont fournies par défaut:
 \item \emph{LoadInjector}, qui permet d'injecter  une charge utilisateur sans se
   préoccuper des  applications qui s'exécutent  dans les  VM. Il est  utile pour
   mener des études au niveau administrateur.
+  Deux injecteurs  par défaut  sont  fournis. Le  premier est  un  simple 
+injecteur  de charges sinusoidales  entièrement paramétrables.  Le second 
+injecte  les charges observées  sur  l'infrastructure  de  Google,   et  rendue 
+ disponible  dans  le google cluster-data\cite{gcd}.
 \item  \emph{SimSchlouder},  qui   est  la  version  simulée   du  système  réel
   Schlouder\cite{Michon2017}.  Il s'agit d'un  courtier de ressources virtuelles
   capable   de  piloter   de   concert   un  ordonnanceur   de   tâches  et   un
