@@ -9,7 +9,8 @@
 \usepackage{multirow}
 \usepackage{graphicx}
 \usepackage{listings}
-
+\usepackage{tikz}
+\usetikzlibrary{positioning}
 
 \graphicspath{{gfx/}}
 
@@ -286,7 +287,8 @@ Supposons que l'on dispose d'un algorithme visant à reconsolider
 régulièrement les VMs, c'est à dire à les concentrer sur le moins de PMs 
 possibles en les migrant, et que l'on souhaite étudier l'impact du \emph{délais}
 entre de ces reconsolidations sur le \emph{nombre de PMs utilisées} et sur le 
-\emph{nombre de migrations} nécessaires. 
+\emph{nombre de migrations} nécessaires, lorsque le cloud est soumis à une 
+charge sinusoïdale.
 
 Pour mener cette étude, les différentes étapes sont :
 \begin{enumerate}
