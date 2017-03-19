@@ -280,61 +280,85 @@ ou de différencier le traitement des simulations au risque d'arriver à des con
 
 \section{Cas d'usage concret}
 
-Afin d'illustrer concrètement le fonctionnement de notre \textit{framework},
-nous utiliserons l'exemple d'une étude de différentes stratégies de placement de VM sur PM.
-Ce problème, parfois appelé \textit{VM Packing}, peut poursuivre plusieurs objectifs.
-Un des plus populaires est de réduire le nombre de machines physiques utilisées 
-dans un soucis de réduction de la consommation électrique. 
-Pour ce faire, de nombreux algorithmes permettent d'établir 
-des plans de migration reconsolidant les VM sur moins de PM.
-Pour un administrateur, le problème est pragmatiquement de configurer la fréquence 
-de ces reconsolidation pour éviter de surcharger sa plateforme avec trop de migrations.
+Plaçons-nous dans le cas du problème, parfois appelé \textit{VM Packing}, de 
+l'ordonnancement des VMs sur les machines physiques. 
+Supposons que l'on dispose d'un algorithme visant à reconsolider 
+régulièrement les VMs, c'est à dire à les concentrer sur le moins de PMs 
+possibles en les migrant, et que l'on souhaite étudier l'impact du \emph{délais}
+entre de ces reconsolidations sur le \emph{nombre de PMs utilisées} et sur le 
+\emph{nombre de migrations} nécessaires. 
 
-Nous allons montrer comment notre solution permet de facilement évaluer
-le gain et l'impact des reconsolidations en fonction de leur 
-fréquence. 
+Pour mener cette étude, les différentes étapes sont :
+\begin{enumerate}
+ \item la conception du simulateur ;
+ \item la description du contexte expérimental des simulations ;
+ \item la description et l'exécution les simulations à faire ;
+ \item l'analyse les résultats.
+\end{enumerate}
 
-\subsection{Setup}
 
-Le conception d'un systeme systeme d'ordonnancement se fait par l'implementation de
-l'interface \texttt{ComputeScheduler}, et de la méthode \texttt{schedule} qui indique
-l'hôte à utiliser pour déployer une VM d'un type donné. C'est le seul 
-développement que devra faire un expérimentateur souhaitant tester son propre 
-algorithme.
-Nous utiliserons \texttt{SimpleReconfigurator} qui tente d'optimiser 
-le placement des VMs en migrant une VM toutes les $x$ secondes.
-Nous allons comparer les résultats avec $x=0$, $x=10$ et $x=100$.
+\subsection{Conception du simulateur}
 
-Ce problème est purement administrateur, seule compte la charge en terme de 
-nombre de VMs et de CPU de ces VMs, peu importe les applications qui y sont exécutées.
-Nous allons donc utiliser l'application \emph{LoadInjector}, dont la fonction 
-principale est \texttt{loadinjector.SimpleInjection} et qui charge 
+Notre \textit{framework} permet de partir sur la base d'un simulateur pleinement 
+fonctionnel en sélectionnant les modules par défaut pertinents pour l'études. 
+Les développements se limitent alors strictement aux parties spécifiques à 
+l'étude.
+
+Dans le contexte de cette étude, le développement concernera seulement 
+l'interface \texttt{ComputeScheduler}, qu'il faudra implanter avec l'algorithme 
+étudié. Des implantations génériques fournies par défaut facilitent ce 
+développement. En l'occurence, il suffira de spécialiser 
+\texttt{SimpleReconfigurator}, qui reconfigure le placement des VMs avec un 
+\emph{délais} configurable.
+
+Tous les autres modules sont ceux par défaut, et ne nécessitent même pas d'être 
+maîtrisés.
+
+Le problème étudié est purement administrateur, seule compte la charge en terme 
+de nombre de VMs et de CPU de ces VMs, peu importe les applications qui y sont 
+exécutées.Nous allons donc utiliser l'application \emph{LoadInjector}, dont la 
+fonction principale est \texttt{loadinjector.SimpleInjection} et qui charge 
 simplement un injecteur dans la simulation.
-Nous allons utiliser \texttt{SinInjector} qui injecte une charge de calcul 
-sinusoïdale sur un nombre de VMs suivant également une sinusoïde.
 
-\subsection{Exécution des simulations}
+\subsection{Description du contexte expérimental des simulations}
+
+La description du contexte expérimental des simulations se fait au travers de 
+fichiers xml, respectant le format standard de SimGrid :
+
+\begin{description}
+	\item[platform.xml] décrit l'infrastructure matérielle : machines 
+physiques et réseau.
+	\item[deploy.xml] décrit les processus.
+	\item[cloud.xml] décrit la plateforme de cloud : hôtes pour les VMS,
+types d'instance, et ordonnanceurs.
+	\item[injector.xml] décrit les injecteurs à utiliser.
+\end{description}
+
+Dans notre cas, \texttt{deploy.xml} est inutile, mais il faudra produire 
+\texttt{platform.xml} et \texttt{cloud.xml}, ou utiliser les exemples fournis.
+
+Nous allons comparer les résultats avec des délais de reconsolidation de $0$, 
+$10$ et $100$. Il faudra donc décliner le fichier de configuration du cloud 
+pour ces trois cas : \texttt{cloud-reconsolidator0.xml}, 
+\texttt{cloud-reconsolidator10.xml} et \texttt{cloud-reconsolidator100.xml}. 
+
+De plus, il faudra configurer l'injecteur, par exemple en utilisant 
+\texttt{SinInjector} qui injecte une charge de calcul sinusoïdale sur un nombre 
+de VMs suivant également une sinusoïde.
+
+
+\subsection{Description et l'exécution les simulations à faire}
 
 L'exécution d'une simulation se fait avec la commande suivante : 
 \begin{verbatim}
 $ java  loadinjector.SimpleInjection platform.xml deploy.xml cloud.xml
 injector.xml
 \end{verbatim}
-\begin{description}
-	\item[platform.xml] décrit l'infrastructure matérielle pour SimGrid
-	\item[deploy.xml] instancie les processus SimGrid (typiquement vide 
-dans notre cas)
-	\item[cloud.xml] décrit le cloud, en particulier l'ordonnanceur 
-	\item[injector.xml] sélectionne et paramètre les injecteurs à utiliser
-\end{description}
- 
-Dans notre cas, il y aura donc trois fichiers de configuration du cloud, 
-correspondant aux trois intervales testés :\texttt{cloud-reconsolidator0.xml}, 
-\texttt{cloud-reconsolidator10.xml} et \texttt{cloud-reconsolidator100.xml}. 
 
-Toutes les expérience du \emph{lab} sont guidée par un fichier de configuration.
-Celui ci contient l'ensemble des information nécessaire aux simulations, les
-variables à observer, et si nécessaire les pré- ou post- traitements requis. 
+Toutes les expérience du \emph{lab} sont guidées par un fichier de 
+configuration. Celui ci contient l'ensemble des information nécessaire aux 
+simulations, les variables à observer, et si nécessaire les pré- ou post- 
+traitements requis. 
 
 \begin{lstlisting}
 # setup
