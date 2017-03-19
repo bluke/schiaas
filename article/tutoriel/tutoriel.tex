@@ -15,6 +15,7 @@
 \pgfdeclarelayer{background}
 \pgfsetlayers{background,main}
 
+\newcommand\smalltt[1]{\texttt{\small #1}}
 
 \graphicspath{{gfx/}}
 
@@ -29,7 +30,7 @@
 \title{SCHIaaS : Un laboratoire d'études d'algorithmes par la simulation des clouds.}
 \shorttitle{Simuler les clouds}
 
-\author{Julien Gossa, Stéphane Genaud, Luke Bertot}% A voir l'ordre. 
+\author{Julien Gossa, Luke Bertot, Stéphane Genaud, Stéphane Genaud}% A voir l'ordre. 
 % - Stéphane: moi en dernier.
 
 \address{Université De Strasbourg,\\
@@ -158,15 +159,12 @@ sur l'instant. Ce processus artisanal est source d'erreur dans la compréhension
 des phénomènes simulés : n'appliquant pas les mêmes observations à toutes les 
 simuations, certaines choses peuvent échapper à l'expérimentateur.
 
-L'objet de cet article est de présenter le \textit{framework} SCHIaaS,
-qui repose sur SimGrid, et qui grâce à un outil appelé \emph{le lab} permet 
-de standardiser les études par simulation afin d'éviter ces travers.
-
-Nous présentons d'abord ce \textit{framework} dans la 
-section~\ref{sec:framework}, puis un cas d'utilisation concret en 
-section~\ref{sec:usecase} et enfin une conclusion en 
-section~\ref{sec:conclusion}.
-
+L'objet  de cet  article est  de  présenter le  \textit{framework} SCHIaaS,  qui
+repose sur  SimGrid, et  qui grâce  à un  outil appelé  \emph{le lab}  permet de
+standardiser  les  études  par  simulation  afin  d'éviter  ces  travers.   Nous
+présentons  d'abord ce  \textit{framework} dans  la section~\ref{sec:framework},
+puis  un cas  d'utilisation concret  en section~\ref{sec:usecase}  et enfin  une
+conclusion en section~\ref{sec:conclusion}.
 
 
 
@@ -258,7 +256,10 @@ OpenStack), mais aussi au niveau d'applications clientes d'un cloud.
 Développé en JAVA, il offre un ensemble de classes prédéfinies représentant tous
 les composants d'un cloud kit. L'utilisateur qui souhaite insérer sa description
 du  comportement d'un  ou plusieurs  composants, peut  rapidement greffer  cette
-description sous d'une spécialisation de l'une  de ces classes.  
+descritpion sous la forme d'un programme  qui vient spécialiser l'une ou l'autre
+de ces classes.
+
+
 % ----- inutile maintenant -----
 % Le tout  est facilement  instrumentable par  un ensemble  de scripts,
 %appelé \emph{lab},  qui permet d'automatiser l'exécution  des simulations, leurs
@@ -362,7 +363,7 @@ l'ordonnancement des VMs sur les machines physiques.
 Supposons que l'on dispose d'un algorithme visant à reconsolider 
 régulièrement les VMs, c'est à dire à les concentrer sur le moins de PMs 
 possibles en les migrant, et que l'on souhaite étudier l'impact du \emph{délais}
-entre de ces reconsolidations sur le \emph{nombre de PMs utilisées} et sur le 
+entre ces reconsolidations sur le \emph{nombre de PMs utilisées} et sur le 
 \emph{nombre de migrations} nécessaires, lorsque le cloud est soumis à une 
 charge sinusoïdale.
 
@@ -383,11 +384,11 @@ Les développements se limitent alors strictement aux parties spécifiques à
 l'étude.
 
 Dans le contexte de cette étude, le développement concernera seulement 
-l'interface \texttt{ComputeScheduler}, qu'il faudra implanter avec l'algorithme 
+l'interface \smalltt{ComputeScheduler}, qu'il faudra implanter avec l'algorithme 
 étudié. Des implantations génériques fournies par défaut facilitent ce 
 développement. En l'occurence, il suffira de spécialiser 
-\texttt{SimpleReconfigurator}, qui reconfigure le placement des VMs avec un 
-\emph{délais} configurable.
+\smalltt{SimpleReconfigurator}, qui reconfigure le placement des VMs avec un 
+\emph{délai} configurable.
 
 Tous les autres modules sont ceux par défaut, et ne nécessitent même pas d'être 
 maîtrisés.
@@ -395,7 +396,7 @@ maîtrisés.
 Le problème étudié est purement administrateur, seule compte la charge en terme 
 de nombre de VMs et de CPU de ces VMs, peu importe les applications qui y sont 
 exécutées.Nous allons donc utiliser l'application \emph{LoadInjector}, dont la 
-fonction principale est \texttt{loadinjector.SimpleInjection} et qui charge 
+fonction principale est \smalltt{loadinjector.SimpleInjection} et qui charge 
 simplement un injecteur dans la simulation.
 
 \subsection{Description du contexte expérimental des simulations}
@@ -407,21 +408,21 @@ fichiers xml, respectant le format standard de SimGrid :
 	\item[platform.xml] décrit l'infrastructure matérielle : machines 
 physiques et réseau.
 	\item[deploy.xml] décrit les processus.
-	\item[cloud.xml] décrit la plateforme de cloud : hôtes pour les VMS,
+	\item[cloud.xml] décrit la plateforme de cloud : hôtes pour les VMs,
 types d'instance, et ordonnanceurs.
 	\item[injector.xml] décrit les injecteurs à utiliser.
 \end{description}
 
-Dans notre cas, \texttt{deploy.xml} est inutile, mais il faudra produire 
-\texttt{platform.xml} et \texttt{cloud.xml}, ou utiliser les exemples fournis.
+Dans notre cas, \smalltt{deploy.xml} est inutile, mais il faudra produire 
+\smalltt{platform.xml} et \smalltt{cloud.xml}, ou utiliser les exemples fournis.
 
 Nous allons comparer les résultats avec des délais de reconsolidation de $0$, 
 $10$ et $100$. Il faudra donc décliner le fichier de configuration du cloud 
-pour ces trois cas : \texttt{cloud-reconsolidator0.xml}, 
-\texttt{cloud-reconsolidator10.xml} et \texttt{cloud-reconsolidator100.xml}. 
+pour ces trois cas : \smalltt{cloud-reconsolidator0.xml}, 
+\smalltt{cloud-reconsolidator10.xml} et \smalltt{cloud-reconsolidator100.xml}. 
 
 De plus, il faudra configurer l'injecteur, par exemple en utilisant 
-\texttt{SinInjector} qui injecte une charge de calcul sinusoïdale sur un nombre 
+\smalltt{SinInjector} qui injecte une charge de calcul sinusoïdale sur un nombre 
 de VMs suivant également une sinusoïde.
 
 
@@ -434,7 +435,7 @@ injector.xml
 \end{verbatim}
 
 Toutes les expérience du \emph{lab} sont guidées par un fichier de 
-configuration. Celui ci contient l'ensemble des information nécessaire aux 
+configuration. Celui ci contient l'ensemble des informations nécessaires aux 
 simulations, les variables à observer, et si nécessaire les pré- ou post- 
 traitements requis. 
 
@@ -460,24 +461,24 @@ SIM_ARG 5 injector.xml
 
 Les lignes \texttt{$TU\_ARG$} permettent de définir les observations que nous 
 souhaitons faire, en l'occurence le nombre de machines dont le nombre de coeurs 
-utilisé n'est pas nul, ainsi que le nombre de VM en état de migration.
+utilisés n'est pas nul, ainsi que le nombre de VM en état de migration.
 
 Les lignes \texttt{$SIM\_ARG$} donnent les arguments des simulations à faire. 
 En l'occurence, le quatrième argument doit prendre successivement les trois 
-fichiers de configuration correspondant au trois ordonnanceurs à comparer. 
-Le lab exécute toutes les combinaisons d'arguments possible, ainsi il est 
+fichiers de configuration correspondants au trois ordonnanceurs à comparer. 
+Le lab exécute toutes les combinaisons d'arguments possibles, ainsi il est 
 facile de démultiplier les simulations. Par exemple, l'ajout d'une ligne 
 \texttt{$SIM\_ARG 5$} permettrait de faire les mêmes simulations, mais avec 
 deux injecteurs différents.
 
-La commande \texttt{./lab.py -p 4 cmp-scheduler.cfg} permet d'exécuter 
+La commande \smalltt{./lab.py -p 4 cmp-scheduler.cfg} permet d'exécuter 
 cette expérience, avec 4 simulations en parallèle.
 
 \subsubsection{Analyse des résultats}
 
 A la fin des exécution le \emph{lab} extrait des traces de simulation les 
 observations demandées et les stocke dans des fichiers séparés, puis exécute 
-les commandes stipulées par les lignes \texttt{$POST\_COMMAND$}. En 
+les commandes stipulées par les lignes \smalltt{$POST\_COMMAND$}. En 
 l'occurence, il s'agit d'un template R, utilisant une librairie inclue dans le 
 lab :
 
@@ -504,17 +505,16 @@ demandée :
 	\end{tabular}
 \end{figure}
 
-On peut observer sur ces six graphiques qu'un intervale de reconsolidation nul 
-permet d'optimiser le nombre de machines utilisées, mais au prix de nombreuses 
-migrations concurrentes, qu'une intervale de 100 secondes ne présente aucun 
-intérêt en terme de d'optimisation, mais qu'un intervale de 10 secondes 
-optimise raisonablement la plateforme, tout en évitant toute migration 
-concurrente.
-
-Il est imporant de remarquer également que ces graphiques ont les travers 
-inévitables des données produites automatiquement : titres abscons, labels 
-génériques, et échelles par défaut. L'utilisateur souhaitant raffiner ces 
-données devra adapter le fichier \texttt{template.R}.
+On peut observer  sur ces six graphiques qu'un intervale  de reconsolidation nul
+permet d'optimiser le  nombre de machines utilisées, mais au  prix de nombreuses
+migrations concurrentes (quantité sur l'axe \textit{value}), qu'une intervale de
+100  secondes ne  présente aucun  intérêt  en terme  d'optimisation, mais  qu'un
+intervalle  de 10  secondes optimise  raisonablement la  plateforme, en  évitant
+quasiment toute migration  concurrente.  Il est imporant  de remarquer également
+que  ces   graphiques  ont  les   travers  inévitables  des   données  produites
+automatiquement   :  titres   abscons,  labels   génériques,  et   échelles  par
+défaut. L'utilisateur souhaitant  raffiner ces données devra  adapter le fichier
+\texttt{template.R}.
 
 %=========================================================
 \section{Conclusion} \label{sec:conclusion}
