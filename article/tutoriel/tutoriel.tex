@@ -150,7 +150,7 @@ enfin de disque.
 \end{tabular}
 \end{center}
 
-Une fois le simulateur réalisé, l'expérimentateur va pouvoir étudier le 
+Une fois le simulateur réalisé, l'expérimentateur peut étudier le 
 comportement de ses composants en observant les traces de ses exécutions, 
 parfois en très grand nombre. Les observations arrivent donc seulement en fin 
 de processus. Or, l'étude de ces observations mènent souvent à des 
@@ -355,7 +355,7 @@ Plaçons-nous dans le cas du problème, parfois appelé \textit{VM Packing}, de
 l'ordonnancement des VMs sur les machines physiques. 
 Supposons que l'on dispose d'un algorithme visant à reconsolider 
 régulièrement les VMs, c'est à dire à les concentrer sur le moins de PMs 
-possibles en les migrant, et que l'on souhaite étudier l'impact du \emph{délais}
+possibles en les migrant, et que l'on souhaite étudier l'impact du \emph{délai}
 entre ces reconsolidations sur le \emph{nombre de PMs utilisées} et sur le 
 \emph{nombre de migrations} nécessaires, lorsque le cloud est soumis à une 
 charge sinusoïdale.
@@ -388,7 +388,7 @@ maîtrisés.
 
 Le problème étudié est purement administrateur, seule compte la charge en terme 
 de nombre de VMs et de CPU de ces VMs, peu importe les applications qui y sont 
-exécutées.Nous allons donc utiliser l'application \emph{LoadInjector}, dont la 
+exécutées. Nous allons donc utiliser l'application \emph{LoadInjector}, dont la 
 fonction principale est \smalltt{loadinjector.SimpleInjection} et qui charge 
 simplement un injecteur dans la simulation.
 
@@ -498,7 +498,7 @@ demandée :
 
 On peut observer  sur ces six graphiques qu'un intervale  de reconsolidation nul
 permet d'optimiser le  nombre de machines utilisées, mais au  prix de nombreuses
-migrations concurrentes (quantité sur l'axe \textit{value}), qu'une intervale de
+migrations concurrentes (quantité sur l'axe \textit{value}), qu'un intervalle de
 100  secondes ne  présente aucun  intérêt  en terme  d'optimisation, mais  qu'un
 intervalle  de 10  secondes optimise  raisonablement la  plateforme, en  évitant
 quasiment toute migration  concurrente.  Il est imporant de remarquer également
@@ -511,20 +511,20 @@ adapter le fichier \texttt{template.R}.
 \section{Conclusion} \label{sec:conclusion}
 %=========================================================
 
-Le \emph{lab} est un outil pour l'automatisation d'exécution d'expériences
-\emph{in silico} qui permet d'exécuter facilement de multiples simulations. 
-L'automatisation des simulation et des observations permet non
-seulement de s'assurer que rien n'échappe à l'expérimentateur, mais rend aussi
-l'expérience trivialement reproductible. Le \emph{lab} est déjà utilisé au seins
-de notre équipes pour la validation de SCHIaaS, en simulant automatiquement
-l'ensemble d'une archive de 273 exécutions réelles, chacune dans 5 conditions 
-exéprimentales différentes, soit plus de 1300 simulations à observer. Nous 
-l'utilisons également pour des simulations de
-Monte Carlo, en procédant à des lots de 500 simulations afin d'approcher 
-l'évaluation des performances d'une application dont les temps d'exécution sont 
-difficilement modélisables.
-Des études par la simulation de tel volumes sont pratiquement impossibles à 
-mener des solutions n'intégrant pas tous le processus d'étude de bout-en-bout.
+Le  \emph{lab}  est un  outil  pour  l'automatisation d'exécution  d'expériences
+\emph{in  silico} qui  permet  d'exécuter facilement  de multiples  simulations.
+L'automatisation  des simulation  et des  observations permet  non seulement  de
+s'assurer que rien  n'échappe à l'expérimentateur, mais  rend aussi l'expérience
+trivialement reproductible.   Le \emph{lab} est  déjà utilisé au seins  de notre
+équipes pour  la validation de  SCHIaaS, en simulant  automatiquement l'ensemble
+d'une   archive  de   273  exécutions   réelles,  chacune   dans  5   conditions
+exéprimentales  différentes, soit  plus de  1300 simulations  à observer.   Nous
+l'utilisons également  pour des simulations de  Monte Carlo, en procédant  à des
+lots de  500 simulations  afin d'approcher  l'évaluation des  performances d'une
+application  dont les  temps d'exécution  sont difficilement  modélisables.  Des
+études par la  simulation de tels volumes sont pratiquement  impossibles à mener
+sans  un outil  support à  la méthodologie  de l'expérimentation  permettant une
+étude de bout-en-bout.
 
 
 
