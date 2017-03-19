@@ -15,6 +15,7 @@
 \pgfdeclarelayer{background}
 \pgfsetlayers{background,main}
 
+\newcommand\smalltt[1]{\texttt{\small #1}}
 
 \graphicspath{{gfx/}}
 
@@ -29,7 +30,7 @@
 \title{SCHIaaS : Un laboratoire d'études d'algorithmes par la simulation des clouds.}
 \shorttitle{Simuler les clouds}
 
-\author{Julien Gossa, Stéphane Genaud, Luke Bertot}% A voir l'ordre. 
+\author{Julien Gossa, Luke Bertot, Stéphane Genaud, Stéphane Genaud}% A voir l'ordre. 
 % - Stéphane: moi en dernier.
 
 \address{Université De Strasbourg,\\
@@ -51,16 +52,18 @@ point de vue de l'administrateur qui doit par exemple décider de l'emplacement
 des machines virtuelles sur l'infrastructure matérielle, ou du client qui doit 
 décider du dimentionnement de sa plateforme virtuelle. Pour ce faire, de nombreux
 simulateurs ont vu le jour. Malheureusement, ces derniers se limitent souvent à 
-mimer les fonctionnalités d'un cloud. Ils ne proposent pas un cadre complet d'étude
-des résultats obtenus, pourtant indispensable à la reproductibiltié des expériences
-et la comparaison de solutions différentes. De plus, ils manquent d'ancrage dans la 
+mimer les fonctionnalités d'un cloud. Ils manquent d'ancrage dans la 
 réalité, en raison d'une part d'une absence de comparaison à des exécutions réelles, 
-et d'autre part d'un ensemble de traces réelles injectables dans les simulations.
-Le projet SCHIaaS vise à combler ces deux manques. Nous montrons l'architecture de 
-ce \textit{framework}, puis les résultats des expériences de validation.
+et d'autre part d'un ensemble de traces réelles injectables dans les 
+simulations. De plus, ils ne proposent pas un cadre complet d'étude
+des résultats obtenus, pourtant indispensable à la reproductibiltié des 
+expériences et la comparaison de solutions différentes.
+Le projet SCHIaaS vise à combler ces deux manques. Cet article ce focalise sur 
+ce dernier point, en présentant un \textit{framework} d'étude par la 
+simulation de bout-en-bout, de la conception du simulateur à l'anaylse des 
+résutats.
 
-  \MotsCles{un maximum de 5 mots significatifs, en français, doivent être 
-    isolés sous forme de mots-clés.}
+  \MotsCles{simulation ; cloud}
 \end{abstract}
 
 
@@ -73,7 +76,7 @@ l'informatique,   omni-présents  dans   les   architectures   de  nos   systèm
 d'information. La compréhension de leurs  comportements est donc un enjeu majeur
 qui a incité les chercheurs à proposer des simulateurs de cloud, essentiellement
 pour les clouds de type \textit{Infrastructure-as-a-Service} (IaaS). Ces
-simulateurs   reposent   sur   une   modélisation  qu'on   peut   qualifier   de
+simulateurs   reposent   sur   une   modélisation  que l'on peut qualifier de
 \textit{bottom-up} : les ressources matérielles sont d'abord modélisées, puis le
 comportement des  machines virtuelles sur  ces ressources matérielles,  puis les
 applications s'exécutant dans cet environnement. On peut donc distinguer dans 
@@ -85,12 +88,12 @@ de nombreux outils de simulation trois composants :
 \end{itemize}
 
 Le modèle de simulation forme le coeur d'un simulateur. Il décrit l'évolution de
-l'état de tous  les constituants du système  simulé en fonction du  temps et des
+l'état de tous  les composants du système  simulé en fonction du  temps et des
 évènements.   Il  repose  sur  des   modèles  individuels  pour  chacun  de  ces
-constituants  (réseau,  processeur,  \ldots).   Etant  donné  la  complexité  du
-comportement   des   constituants,  les   modèles   actuels   procèdent  à   des
-simplifications  générant  des  erreurs,   accentuées  par  la  combinaison  des
-modèles. La précision des modèles utilisés est le principal élément discriminant
+composants  (réseau,  processeur,  \ldots).   Etant  donné  la  complexité  du
+comportement   des   composants,  les   modèles   actuels   procèdent  à   des
+simplifications, ce qui engendre des écarts avec la réalité. La précision des 
+modèles utilisés est le principal élément discriminant
 entre simulateurs, l'utilisateur  n'ayant généralement que peu de  prise sur cet
 aspect%
 \footnote{SimGrid  permet  néanmoins  de  choisir  différents  modèles  pour  le
@@ -100,7 +103,7 @@ La spécification de plateforme décrit  l'environnement simulé.  Elle est four
 par l'utilisateur et décrit les caractéristiques techniques de l'infrastructure,
 comme la topologie  d'interconnexion, la puissance des  processeurs, la capacité
 des liens réseaux,  etc.  Le niveau de détail de  cette description, qui différe
-selon les simulateurs, influence la précision de la simulation.
+selon les simulateurs, influence également la précision de la simulation.
 
 La  spécification   de  l'application,   fournie  par  l'utilisateur,   est  une
 description de la  séquence des évènements à simuler.  Les simulateurs existants
@@ -108,11 +111,16 @@ priviligient cette  description sous la forme  d'un programme qui, à  l'aide de
 primitives  de  la  bibliothéque  de  simulation,  décrit  le  comportement  des
 opération  réelles simulées.   Mais d'autres  mode de  description peuvent  être
 proposés,   comme   l'injection  d'une   trace   d'exécution   réelle,  ou   une
-représentation abstraite de suite d'opérations. La figure~\ref{fig:sim-features}
-donne un aperçu des possibilités de différents simulateurs.
+représentation abstraite de suite d'opérations. 
 
+Le tableau suivant
+donne un aperçu des possibilités des principaux simulateurs du domaine, en 
+terme d'application : (a) trace d'execution, (b) representation abstraite, (c) 
+simulation  programmée ; de performance CPU : (d) delai mesuré, (e) délai
+utilisateur ; de réseau : (flow) analytique ou (packet) niveau paquet ; et 
+enfin de disque.
 
-\begin{figure}[hbt]
+  \begin{center}
 \begin{tabular}{|c||c|c|c||c|c|c|c|}
 	\hline
 	%% line 1
@@ -137,30 +145,32 @@ donne un aperçu des possibilités de différents simulateurs.
 	seek+transfert \\
 	\hline
 \end{tabular}
-\caption{Principaux simulateurs du domaine et les possibilités de décrire
-  l'application : (a) trace d'execution, (b) representation abstraite, (c) simulation
-  programmée, ou la performance CPU : (d) delai mesuré, (e) délai
-  utilisateur. Le réseau peut être simulé analytiquement (flow) ou avec un
-  simulateur externe dédié (packet)}
-\label{fig:sim-features}
-\end{figure}
+\end{center}
 
-Cette description générale montre que la simulation d'une application exécutée
-sur un cloud repose sur une combinaison de modèles qui par définition génèrent
-une part d'erreur. La quantification de cette erreur est une tâche expérimentale
-extrêmement fastidieuse, ce qui explique qu'elle est rarement menée. L'objet
-de notre travail est ici de présenter un outil, le \emph{lab}, qui facilite
-le travail d'analyse des résultats de simulation. Nous montrons comment cet 
-outil peut être utilisé dans le cadre de la simulation d'application cloud
-avec le \textit{framework} SCHIaaS qui repose sur SimGrid. Nous présentons 
-d'abord cette interface dans la section~\ref{sec:schiaas}, puis blah blah.
+Une fois le simulateur réalisé, l'expérimentateur va pouvoir étudier le 
+comportement de ses composants en observant les traces de ses exécutions, 
+parfois en très grand nombre. Les observations arrivent donc seulement en fin 
+de processus. Or, l'étude de ces observations mènent souvent à des 
+modifications du simulateur, ainsi que du choix des observations pertinentes. Il 
+faudrait ensuite refaire toutes les simulations et toutes les observations, ce 
+qui est une tâche fastidieuse souvent négligée par l'expérimentateur qui se 
+limite aux quelques simulations et observations qui lui paraissent pertinentes 
+sur l'instant. Ce processus artisanal est source d'erreur dans la compréhension 
+des phénomènes simulés : n'appliquant pas les mêmes observations à toutes les 
+simuations, certaines choses peuvent échapper à l'expérimentateur.
 
+L'objet  de cet  article est  de  présenter le  \textit{framework} SCHIaaS,  qui
+repose sur  SimGrid, et  qui grâce  à un  outil appelé  \emph{le lab}  permet de
+standardiser  les  études  par  simulation  afin  d'éviter  ces  travers.   Nous
+présentons  d'abord ce  \textit{framework} dans  la section~\ref{sec:framework},
+puis  un cas  d'utilisation concret  en section~\ref{sec:usecase}  et enfin  une
+conclusion en section~\ref{sec:conclusion}.
 
 
 
 
 %=========================================================
-\section{Présentation du \textit{framework}}
+\section{Présentation du \textit{framework}} \label{sec:framework}
 %=========================================================
 
 
@@ -226,7 +236,7 @@ observations};
 
 SimGrid~\cite{simgrid}  est un  simulateur à  évenements discrets  qui permet  à
 l'utilisateur d'exprimer la modélisation  d'une application distribuée à travers
-un  programme utilisant  les  primitives  SimGrid qui  décrivent  les phases  de
+un  programme utilisant  des  primitives  qui  décrivent  les phases  de
 communications et de calcul des différents processus applicatifs. Ces primitives
 sont disponibles à travers différentes interfaces, adaptées aux systèmes étudiés
 ; il  existe par exemple  des interface  pour les applications  pair-à-pair, MPI
@@ -234,12 +244,13 @@ sont disponibles à travers différentes interfaces, adaptées aux systèmes ét
 de type CSP (MSG).
 
 Le  travail présenté  dans  cet article  repose sur  une  nouvelle interface  de
-SimGrid,  nommée SCHIaaS,  dédiée  à  la simulation  de  clouds  IaaS.  Nous  ne
+SimGrid,  nommée SCHIaaS pour \textit{Simulation of Cloud, Hypervisor and 
+IaaS}.  Nous  ne
 présentons ici que quelques éléments saillants de SCHIaaS mais le lecteur pourra
 trouver  une  description  détaillée  sur  le  site  dédié~\cite{schiaas-gforge}.
 SCHIaaS  est  un  \textit{framework}   permettant  le  développement  rapide  de
-simulateurs de cloud. Il peut être utilisé évaluer des algorithmes au niveau du 
-gestionnaire de cloud (appelée aussi \textit{cloud-kit},  par exemple
+simulateurs de cloud. Il peut être utilisé pour évaluer des algorithmes au 
+niveau du gestionnaire de cloud (appelée aussi \textit{cloud-kit},  par exemple
 OpenStack), mais aussi au niveau d'applications clientes d'un cloud.
 
 Développé en JAVA, il offre un ensemble de classes prédéfinies représentant tous
@@ -247,6 +258,8 @@ les composants d'un cloud kit. L'utilisateur qui souhaite insérer sa descriptio
 du  comportement d'un  ou plusieurs  composants, peut  rapidement greffer  cette
 descritpion sous la forme d'un programme  qui vient spécialiser l'une ou l'autre
 de ces classes.
+
+
 % ----- inutile maintenant -----
 % Le tout  est facilement  instrumentable par  un ensemble  de scripts,
 %appelé \emph{lab},  qui permet d'automatiser l'exécution  des simulations, leurs
@@ -257,7 +270,7 @@ moteurs, exposant les fonctionnalités des clouds au niveau administrateur :
 \begin{itemize}
  \item Compute : moteur d'instanciation et de gestion des VM;
  \item Storage : moteur de gestion des stockages;
- \item Network : moteur de gestion de la virtualisation du réseau (à l'état purement abstrait pour l'instant).
+ \item Network : moteur de gestion de la virtualisation du réseau.
 \end{itemize}
 
 Chacun de  ces moteurs est  une interface abstraite  assurant l'interopérabilité
@@ -277,11 +290,7 @@ chacune d'elles.
 
 Un  système abstrait  d'injection de  charge  est également  fourni. Ce  dernier
 permet de  contrôler un  nombre de  VM déployées et  les charges  de ces  VM, en
-particulier  CPU,   afin  de  faciliter  l'évaluation   des  algorithmes.   Deux
-injecteurs  par défaut  sont  fournis. Le  premier est  un  simple injecteur  de
-charges sinusoidales  entièrement paramétrables.  Le second injecte  les charges
-observées  sur  l'infrastructure  de  Google,   et  rendue  disponible  dans  le
-google-cluster-traces.
+particulier  CPU.   
 
 Ces interfaces ne sont  que celles utilisées dans la suite  de l'article à titre
 d'illustration, mais tous les composant d'un \textit{cloud-kit} sont présents
@@ -305,6 +314,10 @@ Cependant, deux applications sont fournies par défaut:
 \item \emph{LoadInjector}, qui permet d'injecter  une charge utilisateur sans se
   préoccuper des  applications qui s'exécutent  dans les  VM. Il est  utile pour
   mener des études au niveau administrateur.
+  Deux injecteurs  par défaut  sont  fournis. Le  premier est  un  simple 
+injecteur  de charges sinusoidales  entièrement paramétrables.  Le second 
+injecte  les charges observées  sur  l'infrastructure  de  Google,   et  rendue 
+ disponible  dans  le google cluster-data\cite{gcd}.
 \item  \emph{SimSchlouder},  qui   est  la  version  simulée   du  système  réel
   Schlouder\cite{Michon2017}.  Il s'agit d'un  courtier de ressources virtuelles
   capable   de  piloter   de   concert   un  ordonnanceur   de   tâches  et   un
@@ -340,14 +353,14 @@ le lab assure que tous les cas seront observés de la même manière, ce qui év
 ou de différencier le traitement des simulations au risque d'arriver à des conclusions abusives.
 
 
-\section{Cas d'usage concret}
+\section{Cas d'usage concret} \label{sec:usecase}
 
 Plaçons-nous dans le cas du problème, parfois appelé \textit{VM Packing}, de 
 l'ordonnancement des VMs sur les machines physiques. 
 Supposons que l'on dispose d'un algorithme visant à reconsolider 
 régulièrement les VMs, c'est à dire à les concentrer sur le moins de PMs 
 possibles en les migrant, et que l'on souhaite étudier l'impact du \emph{délais}
-entre de ces reconsolidations sur le \emph{nombre de PMs utilisées} et sur le 
+entre ces reconsolidations sur le \emph{nombre de PMs utilisées} et sur le 
 \emph{nombre de migrations} nécessaires, lorsque le cloud est soumis à une 
 charge sinusoïdale.
 
@@ -368,11 +381,11 @@ Les développements se limitent alors strictement aux parties spécifiques à
 l'étude.
 
 Dans le contexte de cette étude, le développement concernera seulement 
-l'interface \texttt{ComputeScheduler}, qu'il faudra implanter avec l'algorithme 
+l'interface \smalltt{ComputeScheduler}, qu'il faudra implanter avec l'algorithme 
 étudié. Des implantations génériques fournies par défaut facilitent ce 
 développement. En l'occurence, il suffira de spécialiser 
-\texttt{SimpleReconfigurator}, qui reconfigure le placement des VMs avec un 
-\emph{délais} configurable.
+\smalltt{SimpleReconfigurator}, qui reconfigure le placement des VMs avec un 
+\emph{délai} configurable.
 
 Tous les autres modules sont ceux par défaut, et ne nécessitent même pas d'être 
 maîtrisés.
@@ -380,7 +393,7 @@ maîtrisés.
 Le problème étudié est purement administrateur, seule compte la charge en terme 
 de nombre de VMs et de CPU de ces VMs, peu importe les applications qui y sont 
 exécutées.Nous allons donc utiliser l'application \emph{LoadInjector}, dont la 
-fonction principale est \texttt{loadinjector.SimpleInjection} et qui charge 
+fonction principale est \smalltt{loadinjector.SimpleInjection} et qui charge 
 simplement un injecteur dans la simulation.
 
 \subsection{Description du contexte expérimental des simulations}
@@ -392,21 +405,21 @@ fichiers xml, respectant le format standard de SimGrid :
 	\item[platform.xml] décrit l'infrastructure matérielle : machines 
 physiques et réseau.
 	\item[deploy.xml] décrit les processus.
-	\item[cloud.xml] décrit la plateforme de cloud : hôtes pour les VMS,
+	\item[cloud.xml] décrit la plateforme de cloud : hôtes pour les VMs,
 types d'instance, et ordonnanceurs.
 	\item[injector.xml] décrit les injecteurs à utiliser.
 \end{description}
 
-Dans notre cas, \texttt{deploy.xml} est inutile, mais il faudra produire 
-\texttt{platform.xml} et \texttt{cloud.xml}, ou utiliser les exemples fournis.
+Dans notre cas, \smalltt{deploy.xml} est inutile, mais il faudra produire 
+\smalltt{platform.xml} et \smalltt{cloud.xml}, ou utiliser les exemples fournis.
 
 Nous allons comparer les résultats avec des délais de reconsolidation de $0$, 
 $10$ et $100$. Il faudra donc décliner le fichier de configuration du cloud 
-pour ces trois cas : \texttt{cloud-reconsolidator0.xml}, 
-\texttt{cloud-reconsolidator10.xml} et \texttt{cloud-reconsolidator100.xml}. 
+pour ces trois cas : \smalltt{cloud-reconsolidator0.xml}, 
+\smalltt{cloud-reconsolidator10.xml} et \smalltt{cloud-reconsolidator100.xml}. 
 
 De plus, il faudra configurer l'injecteur, par exemple en utilisant 
-\texttt{SinInjector} qui injecte une charge de calcul sinusoïdale sur un nombre 
+\smalltt{SinInjector} qui injecte une charge de calcul sinusoïdale sur un nombre 
 de VMs suivant également une sinusoïde.
 
 
@@ -419,7 +432,7 @@ injector.xml
 \end{verbatim}
 
 Toutes les expérience du \emph{lab} sont guidées par un fichier de 
-configuration. Celui ci contient l'ensemble des information nécessaire aux 
+configuration. Celui ci contient l'ensemble des informations nécessaires aux 
 simulations, les variables à observer, et si nécessaire les pré- ou post- 
 traitements requis. 
 
@@ -444,25 +457,25 @@ SIM_ARG 5 injector.xml
 \end{lstlisting}
 
 Les lignes \texttt{$TU\_ARG$} permettent de définir les observations que nous 
-souhaitons faire, en l'occurence le nombre de machines dont le nombre de coeur 
-utilisé n'est pas nul, ainsi que le nombre de VM en état de migration.
+souhaitons faire, en l'occurence le nombre de machines dont le nombre de coeurs 
+utilisés n'est pas nul, ainsi que le nombre de VM en état de migration.
 
 Les lignes \texttt{$SIM\_ARG$} donnent les arguments des simulations à faire. 
 En l'occurence, le quatrième argument doit prendre successivement les trois 
-fichiers de configuration correspondant au trois ordonnanceurs à comparer. 
-Le lab exécute toutes les combinaisons d'arguments possible, ainsi il est 
+fichiers de configuration correspondants au trois ordonnanceurs à comparer. 
+Le lab exécute toutes les combinaisons d'arguments possibles, ainsi il est 
 facile de démultiplier les simulations. Par exemple, l'ajout d'une ligne 
 \texttt{$SIM\_ARG 5$} permettrait de faire les mêmes simulations, mais avec 
 deux injecteurs différents.
 
-La commande \texttt{./lab.py -p 4 cmp-scheduler.cfg} permet d'exécuter 
+La commande \smalltt{./lab.py -p 4 cmp-scheduler.cfg} permet d'exécuter 
 cette expérience, avec 4 simulations en parallèle.
 
 \subsubsection{Analyse des résultats}
 
 A la fin des exécution le \emph{lab} extrait des traces de simulation les 
 observations demandées et les stocke dans des fichiers séparés, puis exécute 
-les commandes stipulées par les lignes \texttt{$POST\_COMMAND$}. En 
+les commandes stipulées par les lignes \smalltt{$POST\_COMMAND$}. En 
 l'occurence, il s'agit d'un template R, utilisant une librairie inclue dans le 
 lab :
 
@@ -489,20 +502,19 @@ demandée :
 	\end{tabular}
 \end{figure}
 
-On peut observer sur ces six graphiques qu'un intervale de reconsolidation nul 
-permet d'optimiser le nombre de machines utilisées, mais au prix de nombreuses 
-migrations concurrentes, qu'une intervale de 100 secondes ne présente aucun 
-intérêt en terme de d'optimisation, mais qu'un intervale de 10 secondes 
-optimise raisonablement la plateforme, tout en évitant toute migration 
-concurrente.
-
-Il est imporant de remarquer également que ces graphiques ont les travers 
-inévitables des données produites automatiquement : titres abscons, labels 
-génériques, et échelles par défaut. L'utilisateur souhaitant raffiner ces 
-données devra adapter le fichier \texttt{template.R}.
+On peut observer  sur ces six graphiques qu'un intervale  de reconsolidation nul
+permet d'optimiser le  nombre de machines utilisées, mais au  prix de nombreuses
+migrations concurrentes (quantité sur l'axe \textit{value}), qu'une intervale de
+100  secondes ne  présente aucun  intérêt  en terme  d'optimisation, mais  qu'un
+intervalle  de 10  secondes optimise  raisonablement la  plateforme, en  évitant
+quasiment toute migration  concurrente.  Il est imporant  de remarquer également
+que  ces   graphiques  ont  les   travers  inévitables  des   données  produites
+automatiquement   :  titres   abscons,  labels   génériques,  et   échelles  par
+défaut. L'utilisateur souhaitant  raffiner ces données devra  adapter le fichier
+\texttt{template.R}.
 
 %=========================================================
-\section{Conclusion}
+\section{Conclusion} \label{sec:conclusion}
 %=========================================================
 
 Le \emph{lab} est un outil pour l'automatisation d'exécution d'expériences
