@@ -10,7 +10,16 @@
 \usepackage{graphicx}
 \usepackage{listings}
 \usepackage{tikz}
-\usetikzlibrary{positioning}
+\usetikzlibrary{fit,positioning}
+
+
+\definecolor{mybluei}{RGB}{124,156,205}
+\definecolor{myblueii}{RGB}{73,121,193}
+\definecolor{mygreen}{RGB}{202,217,126}
+
+\pgfdeclarelayer{background}
+\pgfsetlayers{background,main}
+
 
 \graphicspath{{gfx/}}
 
@@ -159,6 +168,67 @@ d'abord cette interface dans la section~\ref{sec:schiaas}, puis blah blah.
 \section{Présentation du \textit{framework}}
 %=========================================================
 
+
+\begin{tikzpicture}[node distance=5pt,
+level/.style={
+  font={\sffamily\bfseries\color{black} \fontsize{9pt}{12}\selectfont},
+  align=right,
+  text width=3cm,
+  text height=10pt,
+  text depth=4pt},
+module1/.style={
+  level,
+  font={\sffamily\bfseries\color{white} \fontsize{9pt}{12}\selectfont},
+  fill=mybluei,
+  rounded corners,
+  text width=9cm+26pt,
+  align=center},
+module2/.style={
+  module1,
+  text width=4.5cm+6pt},
+module3/.style={
+  module1,
+  text width=3cm},
+moduleset/.style={
+  rounded corners,
+  fill=mygreen},
+]
+
+\node[level] (Lab) {Lab};
+\node[module2,right=of Lab] (labpy) {Pilotage des 
+simulations};
+\node[module2,right=of labpy] (TU) {Analyse des 
+observations};
+\begin{pgfonlayer}{background}
+\node[moduleset, fit=(labpy) (TU)] {};
+\end{pgfonlayer}
+
+
+
+\node[level,below=of Lab] (App) {Applications};
+\node[module3,right=of App] (LI) {LoadInjector};
+\node[module3,right=of LI] (SS) {SimSchlouder};
+\node[module3,right=of SS] () {...};
+
+\node[level,below=of App] (SCHIaaS) {SCHIaaS};
+\node[module1,right=of SCHIaaS] (API) 
+{API de \textit{cloud-kit}};
+\node[level,below=of SCHIaaS] (SCHIaaS2) {};
+\node[module3,right=of SCHIaaS2] (CE) {Compute Engine};
+\node[module3,right=of CE] (SE) {Storage Engine};
+\node[module3,right=of SE] (NE) {Network Engine};
+\begin{pgfonlayer}{background}
+\node[moduleset, fit=(API) (CE) (SE) (NE)] {};
+\end{pgfonlayer}
+
+\node[level,below=of SCHIaaS2] (SG) {SimGrid};
+\node[module1,right=of SG] (SG) {MSG};
+
+
+
+\end{tikzpicture}
+
+
 \subsection{SCHIaaS et SimGrid}
 
 
@@ -182,16 +252,6 @@ niveau  qui  lui convient,  le  reste  étant assuré  par  défaut.   Le tout  
 facilement instrumentable  par un  ensemble de  scripts, appelé  \emph{lab}, qui
 permet  d'automatiser  l'exécution  des   simulations,  leurs  observations,  et
 l'analyse des résultats.
-
-\begin{figure}[hbt]
-\includegraphics[scale=0.8]{gfx/framework.png}
-\caption{ ... Couches Pampers ....}
-\label{sec:framework}
-\end{figure}
-
-% Voir gfx/framework.txt pour le code source
-% Généré avec 
-% java -jar /opt/local/share/java/ditaa0_9.jar framework.txt 
 
 La simulation du fonctionnement du  niveau \textit{cloud-kit} est assuré par des
 moteurs, exposant les fonctionnalités des clouds au niveau administrateur :
