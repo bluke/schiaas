@@ -30,16 +30,17 @@
 
 \begin{document}
 
-\title{SCHIaaS : Un laboratoire d'études d'algorithmes par la simulation des clouds.}
-\shorttitle{Simuler les clouds}
+\title{Conduire des études reproductibles par la simulation de clouds grâce au 
+\textit{framework} SCHIaaS.}
+\shorttitle{SCHIaaS}
 
-\author{Julien Gossa, Luke Bertot, Stéphane Genaud}% A voir l'ordre. 
+\author{Luke Bertot, Julien Gossa, Stéphane Genaud}% A voir l'ordre. 
 % - Stéphane: moi en dernier.
 
 \address{Université De Strasbourg,\\
 Laboratoire ICube - Pôle API - 300 Bd Sébastien Brant\\
 67400 Illkirch-Graffenstaden - France\\
-julien.gossa@unistra.fr genaud@unistra.fr lbertot@unistra.fr}
+lbertot@unistra.fr gossa@unistra.fr genaud@unistra.fr }
 
 \date{\today}
 
@@ -53,20 +54,21 @@ julien.gossa@unistra.fr genaud@unistra.fr lbertot@unistra.fr}
 Les clouds ont été intensivement étudiés les dernières années, que ce soit du 
 point de vue de l'administrateur qui doit par exemple décider de l'emplacement
 des machines virtuelles sur l'infrastructure matérielle, ou du client qui doit 
-décider du dimentionnement de sa plateforme virtuelle. Pour ce faire, de nombreux
+décider du dimensionnement de sa plateforme virtuelle. Pour ce faire, de 
+nombreux
 simulateurs ont vu le jour. Malheureusement, ces derniers se limitent souvent à 
 mimer les fonctionnalités d'un cloud. Ils manquent d'ancrage dans la 
 réalité, en raison d'une part d'une absence de comparaison à des exécutions réelles, 
 et d'autre part d'un ensemble de traces réelles injectables dans les 
 simulations. De plus, ils ne proposent pas un cadre complet d'étude
-des résultats obtenus, pourtant indispensable à la reproductibiltié des 
+des résultats obtenus, pourtant indispensable à la reproductibilité des 
 expériences et la comparaison de solutions différentes.
 Le projet SCHIaaS vise à combler ces deux manques. Cet article ce focalise sur 
 ce dernier point, en présentant un \textit{framework} d'étude par la 
-simulation de bout-en-bout, de la conception du simulateur à l'anaylse des 
-résutats.
+simulation de bout-en-bout, de la conception du simulateur à l'analyse des 
+résultats.
 
-  \MotsCles{simulation ; cloud ; reproducibilité }
+  \MotsCles{simulation ; cloud ; reproductibilité }
 \end{abstract}
 
 
@@ -85,7 +87,7 @@ comportement des  machines virtuelles sur  ces ressources matérielles,  puis le
 applications s'exécutant dans cet environnement. On peut donc distinguer dans 
 de nombreux outils de simulation trois composants : 
 \begin{itemize}
-		\item une spécification de platforme
+		\item une spécification de plateforme
 		\item une spécification de l'application.
 		\item un modèle de simulation
 \end{itemize}
@@ -320,7 +322,7 @@ Cependant, deux applications sont fournies par défaut:
   Deux injecteurs  par défaut  sont  fournis. Le  premier est  un  simple 
 injecteur  de charges sinusoïdales  entièrement paramétrables.  Le second 
 injecte  les charges observées  sur  l'infrastructure  de  Google,   et  rendue 
- disponible  dans  le google cluster-data\cite{gcd}.
+ disponible  en tant que google cluster-data\cite{gcd}.
 \item  \emph{SimSchlouder},  qui   est  la  version  simulée   du  système  réel
   Schlouder\cite{Michon2017}.  Il s'agit d'un  courtier de ressources virtuelles
   capable   de  piloter   de   concert   un  ordonnanceur   de   tâches  et   un
@@ -362,10 +364,11 @@ charge sinusoïdale.
 
 Pour mener cette étude, les différentes étapes sont :
 \begin{enumerate}
+ \itemsep0em
  \item la conception du simulateur ;
  \item la description du contexte expérimental des simulations ;
- \item la description et l'exécution les simulations à faire ;
- \item l'analyse les résultats.
+ \item la description et l'exécution des simulations ;
+ \item l'analyse des résultats.
 \end{enumerate}
 
 
@@ -419,7 +422,7 @@ De plus, il faudra configurer l'injecteur, par exemple en utilisant
 de VMs suivant également une sinusoïde.
 
 
-\subsection{Description et l'exécution les simulations à faire}
+\subsection{Description et exécution des simulations}
 
 L'exécution d'une simulation se fait avec la commande suivante : 
 \begin{lstlisting}
@@ -431,24 +434,6 @@ Toutes les expérience du \emph{lab} sont guidées par un fichier de
 configuration. Celui ci contient l'ensemble des informations nécessaires aux 
 simulations, les variables à observer, et si nécessaire les pré- ou post- 
 traitements requis. 
-
-\begin{lstlisting}
-# setup
-SETUP_DIR ./setup/cmp-scheduler
-NEEDED_POST template.R
-POST_COMMAND_DATA R -f template.R > R.out
-# observations
-TU_ARG --count-if used_cores ne 0
-TU_ARG --count-if vm:.*:state eq migrating
-# simulations
-SIM_ARG 1 loadinjector.SimpleInjection
-SIM_ARG 2 platform.xml 
-SIM_ARG 3 deploy.xml
-SIM_ARG 4:reconsolidator0 cloud-reconsolidator10.xml
-SIM_ARG 4:reconsolidator10 cloud-reconsolidator10.xml 
-SIM_ARG 4:reconsolidator100 cloud-reconsolidator100.xml
-SIM_ARG 5 injector.xml
-\end{lstlisting}
 
 Les lignes \smalltt{TU\_ARG} permettent de définir les observations que nous 
 souhaitons faire, en l'occurrence le nombre de machines dont le nombre de cœurs 
@@ -463,14 +448,35 @@ facile de démultiplier les simulations. Par exemple, l'ajout d'une ligne
 deux injecteurs différents.
 
 La commande \smalltt{./lab.py -p 4 cmp-scheduler.cfg} permet d'exécuter 
-cette expérience, avec 4 simulations en parallèle.
+notre expérience, avec 4 simulations en parallèle, grâce au fichier :
+
+\begin{lstlisting}
+# setup
+SETUP_DIR ./setup/cmp-scheduler
+NEEDED_POST template.R
+POST_COMMAND_DATA R -f template.R > R.out
+
+# observations
+TU_ARG --count-if used_cores ne 0
+TU_ARG --count-if vm:.*:state eq migrating
+
+# simulations
+SIM_ARG 1 loadinjector.SimpleInjection
+SIM_ARG 2 platform.xml 
+SIM_ARG 3 deploy.xml
+SIM_ARG 4:reconsolidator0 cloud-reconsolidator10.xml
+SIM_ARG 4:reconsolidator10 cloud-reconsolidator10.xml 
+SIM_ARG 4:reconsolidator100 cloud-reconsolidator100.xml
+SIM_ARG 5 injector.xml
+\end{lstlisting}
+
 
 \subsubsection{Analyse des résultats}
 
 A la fin des exécution le \emph{lab} extrait des traces de simulation les 
 observations demandées et les stocke dans des fichiers séparés, puis exécute 
 les commandes stipulées par les lignes \smalltt{$POST\_COMMAND$}. En 
-l'occurrence, il s'agit d'un template R, utilisant une librairie inclue dans le 
+l'occurrence, il s'agit d'un patron R, utilisant une librairie inclue dans le 
 lab :
 
 \begin{lstlisting}
@@ -480,10 +486,10 @@ dev.off()
 \end{lstlisting}
 
 Ce dernier va automatiquement produire un graphique pour chaque observation 
-demandée :
+demandée, comme montré Figure \ref{output}.
 
 \begin{figure}[]
-	\label{output}
+	
 	\caption{Graphiques produits automatiquement par le lab.}
 	\begin{tabular}{ccc}
 \includegraphics[scale=0.30]{reconsolidator0_used_cores_ne_0}&
@@ -492,8 +498,8 @@ demandée :
 \includegraphics[scale=0.30]{xp_reconsolidator0_slow_vm__state_eq_migrating}&
 \includegraphics[scale=0.30]{xp_reconsolidator10_slow_vm__state_eq_migrating}&
 \includegraphics[scale=0.30]{xp_reconsolidator100_slow_vm__state_eq_migrating}\\
-
 	\end{tabular}
+	\label{output}
 \end{figure}
 
 On peut observer  sur ces six graphiques qu'un intervalle de reconsolidation nul
@@ -502,7 +508,7 @@ migrations concurrentes (quantité sur l'axe \textit{value}), qu'un intervalle d
 100  secondes ne  présente aucun  intérêt  en terme  d'optimisation, mais  qu'un
 intervalle  de 10  secondes optimise  raisonnablement la  plateforme, en  évitant
 quasiment toute migration  concurrente.  Il est important de remarquer également
-que  ces   graphiques, visibles en annexe,  ont les travers inévitables
+que  ces   graphiques ont les travers inévitables
 des   données  produites automatiquement : titres abscons, labels   génériques,
 et   échelles  par défaut. L'utilisateur souhaitant raffiner ces données devra
 adapter le fichier \texttt{template.R}.
@@ -545,16 +551,19 @@ rendu à l'utilisateur, isolé sur sa propre plateforme virtuelle.
 Schlouder\cite{Michon2017} est un courtier de ressources virtuelles. Il prend en
 entrée la description d'une charge de travail, au format slurm citation???
 étendu de quelques informations permettant d'adapter le courtage aux besoins
-utilisateurs. Ensuite, Schlouder anaylse la charge de travail soumise, et décide
+utilisateurs. Ensuite, Schlouder analyse la charge de travail soumise, et 
+décide
 à l'aide d'algorithmes de dimensionnement (\textit{provisioning}) de déployer un
 certains nombres de VM, puis ordonnance les tâches sur ces VMs, et étend les VMs
 lorsqu'elles sont devenues inutiles.
 
 SimSchlouder est l'alter-égo de Schlouder, dont l'architecture, les fonctionnalités, le comportement
 et les entrées/sorties sont entièrement reproduite dans SCHIaaS. La description d'une charge de 
-travail peut donc être soumise indifférement à Schlouder pour une exécution réelle, ou à SimSchlouder
+travail peut donc être soumise indifféremment à Schlouder pour une exécution 
+réelle, ou à SimSchlouder
 pour une évaluation des choix de courtage par la simulation. Une option de Schlouder permet 
-d'ailleurs d'appeler directement SimSchlouder, et d'obtenir le temps de completion et le prix 
+d'ailleurs d'appeler directement SimSchlouder, et d'obtenir le temps de 
+complétion et le prix 
 de l'exécution demandée en fonction de la plateforme de cloud cible et de la stratégie de réservation
 de VM choisie.
 
@@ -572,8 +581,10 @@ assez différents pour qu'on les considère ocmme des clouds différents.
 Les charges de travail sont issues de deux applications : OMSSA, qui est un sac de tâches assez courtes 
 en protéomique, et MONTAGE, qui est un \textit{workflow} en astronomie ayant des tâches plus imposantes. 
 
-Ainsi, l'utilisation de SimSchlouder permet de ne développer que le coeur d'un stratégie de résevation 
-de resources, simplement en implémentant une interface abstraite très simple, pour pouvoir comparer cette 
+Ainsi, l'utilisation de SimSchlouder permet de ne développer que le c\oe{}ur 
+d'un stratégie de réservation 
+de ressources, simplement en implémentant une interface abstraite très simple, 
+pour pouvoir comparer cette 
 stratégie aux autres dans des contextes applicatifs et matériels nombreux, représentatifs, et réellement 
 éprouvés.
 
