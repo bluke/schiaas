@@ -242,16 +242,23 @@ sont disponibles à travers différentes interfaces, adaptées aux systèmes ét
 de type CSP (MSG).
 
 Le  travail présenté  dans  cet article  repose sur  une  nouvelle interface  de
-SimGrid, nommée  SCHIaaS, dédiée à la  simulation de clouds IaaS.   Celle-ci est
-basée  sur l'interface  MSG.  SCHIaaS  est un  \textit{framework} permettant  le
-développement rapide de simulateurs de  cloud pour l'évaluation d'algorithmes au
-niveau du gestionnaire  de cloud (appelée aussi  \textit{cloud-kit}, par exemple
-OpenStack) et au dessus.  Développé en  JAVA, il permet la spécialisation rapide
-d'un ensemble de  classes permettant de greffer les travaux  de l'utilisateur au
-niveau  qui  lui convient,  le  reste  étant assuré  par  défaut.   Le tout  est
-facilement instrumentable  par un  ensemble de  scripts, appelé  \emph{lab}, qui
-permet  d'automatiser  l'exécution  des   simulations,  leurs  observations,  et
-l'analyse des résultats.
+SimGrid,  nommée SCHIaaS,  dédiée  à  la simulation  de  clouds  IaaS.  Nous  ne
+présentons ici que quelques éléments saillants de SCHIaaS mais le lecteur pourra
+trouver  une  description  détaillée  sur  le  site  dédié~\cite{schiaas-gforge}.
+SCHIaaS  est  un  \textit{framework}   permettant  le  développement  rapide  de
+simulateurs de cloud. Il peut être utilisé évaluer des algorithmes au niveau du 
+gestionnaire de cloud (appelée aussi \textit{cloud-kit},  par exemple
+OpenStack), mais aussi au niveau d'applications clientes d'un cloud.
+
+Développé en JAVA, il offre un ensemble de classes prédéfinies représentant tous
+les composants d'un cloud kit. L'utilisateur qui souhaite insérer sa description
+du  comportement d'un  ou plusieurs  composants, peut  rapidement greffer  cette
+descritpion sous  la forme  d'un programme  qui vient  spécialiser l'une  de ces
+classes.  
+% ----- inutile maintenant -----
+% Le tout  est facilement  instrumentable par  un ensemble  de scripts,
+%appelé \emph{lab},  qui permet d'automatiser l'exécution  des simulations, leurs
+%observations, et l'analyse des résultats.
 
 La simulation du fonctionnement du  niveau \textit{cloud-kit} est assuré par des
 moteurs, exposant les fonctionnalités des clouds au niveau administrateur :
@@ -261,10 +268,10 @@ moteurs, exposant les fonctionnalités des clouds au niveau administrateur :
  \item Network : moteur de gestion de la virtualisation du réseau (à l'état purement abstrait pour l'instant).
 \end{itemize}
 
-Chacun de ces moteurs est une interface abstraite, qui assure l'interopérabilité
-entre  eux,  ainsi  qu'avec  les   autres  niveaux  du  \textit{framework}.  Des
-implémentations sont fournies, qui permettent d'obtenir un simulateur par défaut
-pleinement   fonctionnel.   Ces    implémentations   imitent   le   comportement
+Chacun de  ces moteurs est  une interface abstraite  assurant l'interopérabilité
+entre  eux  ainsi  qu'avec  les   autres  niveaux  du  \textit{framework}.   Des
+implémentations de ces  moteurs sont fournies, permettant  d'avoir un simulateur
+par défaut pleinement fonctionnel.   Ces implémentations imitent le comportement
 d'OpenStack. Un développeur  de fonctionnalités administrateur n'a  donc qu'à se
 concentrer sur  la partie  qui l'intéresse, par  exemple différents  systèmes de
 stockages.
@@ -285,11 +292,13 @@ observées  sur  l'infrastructure  de  Google,   et  rendue  disponible  dans  l
 google-cluster-traces.
 
 Ces interfaces ne sont  que celles utilisées dans la suite  de l'article à titre
-d'illustration.  De la même manière, SCHIaaS  fourni de façon modulaire tous les
-composant d'un \textit{cloud-kit}.  Chaque module peut être remplacé, étendu, ou
-utilisé en l'état,  ce qui permet le prototypage rapide  de simulateurs de cloud
-adaptés à l'étude de l'utilisateur, sans qu'il  ait à développer plus que ce qui
-l'intéresse.
+d'illustration, mais tous les composant d'un \textit{cloud-kit} sont présents
+dans SCHIaaS.  
+% --- repetition -----
+%Chaque module peut être remplacé, étendu, ou
+%utilisé en l'état,  ce qui permet le prototypage rapide  de simulateurs de cloud
+%adaptés à l'étude de l'utilisateur, sans qu'il  ait à développer plus que ce qui
+%l'intéresse.
 
 \subsection{Applications}
 
