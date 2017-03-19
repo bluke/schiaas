@@ -4,9 +4,7 @@
 % Une des trois options 'parallelisme', 'architecture', 'systeme' 
 % doit être utilisée avec le style compas2017
 \documentclass[parallelisme]{compas2017}
-\usepackage{rotating}
 \usepackage{comment}
-\usepackage{multirow}
 \usepackage{graphicx}
 \usepackage{listings}
 \usepackage{tikz}
@@ -18,6 +16,11 @@
 \newcommand\smalltt[1]{\texttt{\small #1}}
 
 \graphicspath{{gfx/}}
+
+\lstset{%
+	basicstyle=\small\ttfamily,
+	frame=single
+}
 
 %===========================================================
 %                               Title
@@ -120,7 +123,7 @@ simulation  programmée ; de performance CPU : (d) delai mesuré, (e) délai
 utilisateur ; de réseau : (flow) analytique ou (packet) niveau paquet ; et 
 enfin de disque.
 
-  \begin{center}
+\begin{center}
 \begin{tabular}{|c||c|c|c||c|c|c|c|}
 	\hline
 	%% line 1
@@ -322,16 +325,6 @@ injecte  les charges observées  sur  l'infrastructure  de  Google,   et  rendue
   Schlouder\cite{Michon2017}.  Il s'agit d'un  courtier de ressources virtuelles
   capable   de  piloter   de   concert   un  ordonnanceur   de   tâches  et   un
   \textit{cloud-kit}  pour  exécuter  des   calculs  scientifiques  sur  clouds.
-  Schlouder et SimSchlouder ont exactement les mêmes entrées/sorties, excepté le
-  résulat des  calculs effectués, ce  qui permet de  mener des études  au niveau
-  utilisateur de  cloud, sans se  préoccuper du niveau administrateur.  De plus,
-  ceci permet de confronter les  performances simulées aux performances réelles,
-  et donc de valider la précision de la  simulation. Cela a été fait sur la base
-  de  273 exécution  réelles, incluant  8  cas applicatifs  représentatifs et  4
-  plateformes  de  cloud  représentatives.  Cette validation  est  en  cours  de
-  publication.  Les traces  d'exécution réelles  sont inclues  dans SimSchlouder
-  afin de pouvoir servir à la  validation des travaux sur le calcul scientifique
-  sur cloud.
 \end{itemize}
 
 \subsection{Le Lab}
@@ -408,7 +401,7 @@ fichiers xml, respectant le format standard de SimGrid :
 	\item[platform.xml] décrit l'infrastructure matérielle : machines 
 physiques et réseau.
 	\item[deploy.xml] décrit les processus.
-	\item[cloud.xml] décrit la plateforme de cloud : hôtes pour les VMs,
+	\item[cloud.xml] décrit la plateforme de cloud : hôtes,
 types d'instance, et ordonnanceurs.
 	\item[injector.xml] décrit les injecteurs à utiliser.
 \end{description}
@@ -444,11 +437,9 @@ traitements requis.
 SETUP_DIR ./setup/cmp-scheduler
 NEEDED_POST template.R
 POST_COMMAND_DATA R -f template.R > R.out
-
 # observations
 TU_ARG --count-if used_cores ne 0
 TU_ARG --count-if vm:.*:state eq migrating
-
 # simulations
 SIM_ARG 1 loadinjector.SimpleInjection
 SIM_ARG 2 platform.xml 
@@ -491,7 +482,7 @@ dev.off()
 Ce dernier va automatiquemet produire un graphique pour chaque observation 
 demandée :
 
-\begin{figure}[h]
+\begin{figure}[]
 	\label{output}
 	\caption{Graphiques produits automatiquement par le lab.}
 	\begin{tabular}{ccc}
@@ -510,11 +501,11 @@ permet d'optimiser le  nombre de machines utilisées, mais au  prix de nombreuse
 migrations concurrentes (quantité sur l'axe \textit{value}), qu'une intervale de
 100  secondes ne  présente aucun  intérêt  en terme  d'optimisation, mais  qu'un
 intervalle  de 10  secondes optimise  raisonablement la  plateforme, en  évitant
-quasiment toute migration  concurrente.  Il est imporant  de remarquer également
-que  ces   graphiques  ont  les   travers  inévitables  des   données  produites
-automatiquement   :  titres   abscons,  labels   génériques,  et   échelles  par
-défaut. L'utilisateur souhaitant  raffiner ces données devra  adapter le fichier
-\texttt{template.R}.
+quasiment toute migration  concurrente.  Il est imporant de remarquer également
+que  ces   graphiques, visibles en annexe,  ont les travers inévitables
+des   données  produites automatiquement : titres abscons, labels   génériques,
+et   échelles  par défaut. L'utilisateur souhaitant raffiner ces données devra
+adapter le fichier \texttt{template.R}.
 
 %=========================================================
 \section{Conclusion} \label{sec:conclusion}
