@@ -343,13 +343,16 @@ Au delà de l'aspect pratique et du gain de temps de mise en oeuvre de l'étude,
 de ``standardiser'' l'étude. Cette standardisation assure sa reproductibilité, ainsi qu'une comparaison
 équitable entre solutions à un même problème.
 
-Mais le lab permet également une approche systématique permetant à l'expérimentateur de ne pas rater 
-de phénomène. En effet, il est fréquent de faire un grand lot de simulations, plus d'observer plus
-finement celles qui présentent des particularités. Ce faisant, l'expérimentateur exclu les autres 
-simulation de ces observations plus précises, à moins de les refaire entièrement. En rendant plus 
-pratique la définition des observations directement au niveau du \textit{workflow} de simulations, 
-le lab assure que tous les cas seront observés de la même manière, ce qui évite de rater un phénomène,
-ou de différencier le traitement des simulations au risque d'arriver à des conclusions abusives.
+Mais le lab permet également une approche systématique permettant à 
+l'expérimentateur de ne pas rater de phénomène. En effet, il est fréquent de 
+faire un grand lot de simulations, plus d'observer plus finement celles qui 
+présentent des particularités. Ce faisant, l'expérimentateur exclu les autres 
+simulation de ces observations plus précises, à moins de les refaire 
+entièrement. En rendant plus pratique la définition des observations 
+directement au niveau du \textit{workflow} de simulations, le lab assure que 
+tous les cas seront observés de la même manière, ce qui évite de rater un 
+phénomène, ou de différencier le traitement des simulations au risque d'arriver 
+à des conclusions abusives.
 
 
 \section{Cas d'usage concret} \label{sec:usecase}
@@ -518,14 +521,21 @@ données devra adapter le fichier \texttt{template.R}.
 %=========================================================
 
 Le \emph{lab} est un outil pour l'automatisation d'exécution d'expériences
-\emph{in silico} qui permet chainé facilement de multiple simulation en faisant
-varié les entrées. L'automatisation des simulation et des observation permet non
-seulement de s'assurer que rien n'échappe a l'utilisateur mais rend aussi
+\emph{in silico} qui permet d'exécuter facilement de multiples simulations. 
+L'automatisation des simulation et des observations permet non
+seulement de s'assurer que rien n'échappe à l'expérimentateur, mais rend aussi
 l'expérience trivialement reproductible. Le \emph{lab} est déjà utilisé au seins
 de notre équipes pour la validation de SCHIaaS, en simulant automatiquement
-l'ensemble d'une archive de 273 exécution réelle, et pour des simulation de
-Monte Carlo, en procédant de manière répétée a 500 simulations d'une même
-plateforme avec des taches généré aléatoirement. ???
+l'ensemble d'une archive de 273 exécutions réelles, chacune dans 5 conditions 
+exéprimentales différentes, soit plus de 1300 simulations à observer. Nous 
+l'utilisons également pour des simulations de
+Monte Carlo, en procédant à des lots de 500 simulations afin d'approcher 
+l'évaluation des performances d'une application dont les temps d'exécution sont 
+difficilement modélisables.
+Des études par la simulation de tel volumes sont pratiquement impossibles à 
+mener des solutions n'intégrant pas tous le processus d'étude de bout-en-bout.
+
+
 
 
 \bibliography{biblio}
