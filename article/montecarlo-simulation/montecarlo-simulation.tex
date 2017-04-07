@@ -149,6 +149,49 @@ models.
 
 \section{Problem description}
 
+
+\section{Le fil du coeur du travail}
+Punch line:
+*  on sait dire comment le makespan est affecté par différents niveaux de
+perturbations 
+    + étant donné un niveau de perturbation, on sait encadrer le
+      makespan dans un IC 95\% (tout ça en simulation)
+    + cet encadrement converge très vite: 5 à 10 simulations MC suffisent
+
+* on obtient des makespan simulés très proches de la réalité : montrer l'écart
+relatif à la réalité. 
+
+
+\section{ Monte-Carlo Simulation}
+
+The simulation engine SimSchlouder takes as input the runtimes of the differents
+jobs  as specified  by the  user,  schedules the  jobs and  finally outputs  the
+makespan of  the whole batch. The  user's estimation of jobs'  runtimes might be
+inaccurate, and  we describe hereafter  a method  to characterize the  impact of
+repeated  imprecisions (on  each job  runtime) on  the final  makespan. We  have
+developped a Monte-Carlo  simulation tool (seef Figure \ref{fig:})  to compute a
+confidence interval  around the makespan  produced by simulation. Let  us sketch
+the overall process:
+\begin{itemize}
+\item  from each  job runtime  provided by  the user,  the system  generated $n$
+  perturbed runtimes, each obtained by a  random uniform draw within a specified
+  relative range around the original runtime,
+\item a simulation  is run for each set of  perturbed runtimes, producing a
+      makespan for each,
+\item  a  normal  distribution  ${\cal  N}(\mu,\sigma)$  is  fitted  on  the
+      different  makespan values.   
+      \textbf{(donner  un argument  pour dire  que c'est normal)}
+\end{itemize}
+To measure the impact of the runtime perturbation, we compute the range
+$[\mu-2\sigma;\mu+2\sigma]$ (that is a 95\% confidence interval) relative 
+to the mean $\mu$.
+
+
+
+
+
+
+
 \bibliographystyle{IEEEtran}
 \bibliography{montecarlo-simulation}
 
