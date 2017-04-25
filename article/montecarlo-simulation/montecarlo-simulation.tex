@@ -19,6 +19,7 @@
 \acrodef{pdf}[PDF]{probability density function}
 \acrodef{cdf}[CDF]{cumulative distribution function}
 
+\newcommand*\rot{\rotatebox{90}}
 \newcommand{\pmpc}[1]{$\pm#1\%$}
 \newcommand{\etal}[1]{\emph{#1 et al.}}
 
@@ -241,10 +242,54 @@ strong aggregation step using normal law fitting fitting. To determine the
 convergence properties of our Monte Carlo simulations we observe the evolution
 of the normal distribution obtained depending on the number of simulation done. 
 Using the simulations order index we are able to produce the fitting we would
-had obtained after any arbitrary number of simulation.
+had obtained after any arbitrary number of simulation. For every subset we
+observe the absolute relative error in the resulting values of $\mu$ and $\sigma$ 
+when compared to the value taken when all 500 simulation results are used. 
 
+Table~\ref{tab:mcs-convergence} how many simulations are required before the
+absolute error consistently passes under the $.5\%$ threshold average makespan
+value $\mu$ and the $1\%$ threshold of the quarter length of the confidence
+interval $\sigma$ for different input perturbation levels. For the fitting
+process to bear any value we started using at least 5 simulations. The result
+show that for this type of simulations at reasonable level of perturbation $\mu$
+converges quickly. A hundred simulation is generally enough to get a sense of
+the workload makespan. On the other hand the computation of $\sigma$ is much
+more volatile and does not appear to exhibit  as strong a convergence. This is
+partly compensated by the fact the values of $\sigma$ small compared to the
+values of $\mu$.
 
+\begin{table}
+	\centering
+	%\caption{Monte Carlo simulation convergence based on perturbation}
+	\begin{tabular}{rcc|cc|cc|cc}
+		\cline{2-9}
+		& \multicolumn{2}{c|}{$5\%$}& \multicolumn{2}{c|}{$10\%$}&
+		\multicolumn{2}{c|}{$15\%$}& \multicolumn{2}{c}{$20\%$}\\
+		&\rot{$\mu.ae<.5\%$}&\rot{$\sigma.ae<1\%$}&\rot{$\mu.ae<.5\%$}&\rot{$\sigma.ae<1\%$}&\rot{$\mu.ae<.5\%$}&\rot{$\sigma.ae<1\%$}&\rot{$\mu.ae<.5\%$}&\rot{$\sigma.ae<1\%$}\\
+		\hline
+		min&$>5$&$402$&$>5$&$423$&$>5$&$318$&$>5$&$353$\\
+		mean&$14$&$448$&$30$&$465$&$29$&$409$&$73$&$442$\\
+		max&$44$&$498$&$88$&$490$&$71$&$480$&$238$&$497$\\
+		\hline
+	\end{tabular}
+	\caption{Monte Carlo simulation convergence}
+	\label{tab:mcs-convergence}
+\end{table}
 
+\subsection{Monte Carlo fitting process}
+
+The fitting process used to aggregate the final result of the Monte Carlo
+simulation also possesses it's own confidence characteristic. The method we used
+gives a standard deviation for the fitted value of $\mu$ and $\sigma$. Relative
+standard deviation as a function of the number of the simulations are shown
+figure~\ref{fig:confidence}
+
+\begin{figure}
+	\centering
+	\input{meanconf.tex}
+	\caption{test}
+	\label{fig:confidence}
+\end{figure}
 
 
 
