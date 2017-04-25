@@ -119,7 +119,7 @@ simulators in the context of cloud scheduling.
 
 \section{Related Works.}
 
-Computing the resulting \ac{rv} of a stochastic simulation a non-trivial
+Computing the resulting \ac{rv} of a stochastic simulation is a non-trivial
 process.  \acp{rv} are defined through their \ac{pdf} and \ac{cdf} where $CDF(x)
 = \int_{-\infty}^{x} PDF(y) dy$. Works by \etal{Li}~\cite{Li97} and
 \etal{Ludwig}\cite{Ludwig01} show that in the context of task \ac{dag} with
@@ -160,12 +160,13 @@ perturbations
 relatif à la réalité. 
 \section{Simschlouder}
 
-SimGird\cite{simgrid} is a discrete event simulator build to study the behavior
-of HPC, Grids and Clouds. On top of SimGrid we implemented SimSchlouder, a
-simulated implementation of the Schlouder job broker \cite{Michon17}. Schlouder
-handle resource provisioning as well as job scheduling. In Schlouder the number
-of machines used and the scheduling of jobs on these machine is controled
-thought a strategy. SimSchlouder implements two strategies : 
+SimGrid~\cite{simgrid} is a discrete event simulator aimed at studying a variety
+of distributed systems, such as Grids, Clouds  or HPC systems. On top of SimGrid
+we implemented  SimSchlouder, a  simulated implementation  of the  Schlouder job
+broker~\cite{Michon17}.  Schlouder handles resource  provisioning as well  as job
+scheduling. In Schlouder the number of  machines used and the scheduling of jobs
+on these  machine is controled  thought a strategy. SimSchlouder  implements two
+strategies :
 \begin{description}
 \item [ASAP] Schedule jobs as soon as possible, provisioning more resources
 	unless a machine is already available.
