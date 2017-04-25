@@ -166,25 +166,25 @@ of distributed systems, such as Grids, Clouds  or HPC systems. On top of SimGrid
 we implemented  SimSchlouder, a  simulated implementation  of the  Schlouder job
 broker~\cite{Michon17}.  Schlouder handles resource  provisioning as well  as job
 scheduling. In Schlouder the number of  machines used and the scheduling of jobs
-on these  machine is controled  thought a strategy. SimSchlouder  implements two
+on these  machine is controled  through a strategy. SimSchlouder  implements two
 strategies :
 \begin{description}
-\item [ASAP] Schedule jobs as soon as possible, provisioning more resources
-	unless a machine is already available.
-\item [AFAP] Schedule jobs to already available resource unless doing so would
-	overun previous reservation.
+\item  ASAP: schedules  jobs as  soon as  possible, provisioning  more resources
+  unless a machine is already available.
+\item AFAP: schedules  jobs to already available resource  unless doing so
+      would overun previous reservation.
 \end{description}
 
 \section{Monte-Carlo Simulation}
 
-The simulation engine SimSchlouder takes as input the runtimes of the different
+The simulation engine SimSchlouder takes as  input the runtimes of the different
 jobs  as specified  by the  user,  schedules the  jobs and  finally outputs  the
 makespan of  the whole batch. The  user's estimation of jobs'  runtimes might be
 inaccurate, and  we describe hereafter  a method  to characterize the  impact of
 repeated  imprecisions (on  each job  runtime) on  the final  makespan. We  have
-developed a Monte-Carlo  simulation tool (see Figure~\ref{fig:mcprocess})  to compute a
-confidence interval  around the makespan  produced by simulation. Let  us sketch
-the overall process:
+developed  a Monte-Carlo  simulation  tool  (see Figure~\ref{fig:mcprocess})  to
+compute a confidence interval around the makespan produced by simulation. Let us
+sketch the overall process:
 \begin{itemize} 
 	\item  from each  job runtime  provided by  the user,  the system
 		generated $n$ perturbed runtimes, each obtained by a  random
@@ -205,27 +205,29 @@ the overall process:
 	user provided set, every simulation is then simulated, the resulting
 	makespans are fitted into the final result. \label{fig:mcprocess}}
 \end{figure}
-Fitting is done to a normal distribution because, in essence the makespan is
-the sum of the runtimes of the jobs in the critical path of the schedule.
-To measure the impact of the runtime perturbation, we compute the range
-$[\mu-2\sigma;\mu+2\sigma]$ (that is a 95\% confidence interval) relative to the
-mean $\mu$. For comparison purpose we test this process with both available
-strategies. The characterisation attempted here is two fold, we want
-to evaluate the impact of input perturbation first on convergence speed of the
-Monte Carlo simulation and second on the size of the confidence interval
-resulting of the Monet Carlo simulation.
+Fitting is done to a normal distribution because, in essence the makespan is the
+sum  of the  runtimes of  the jobs  in the  critical path  of the  schedule.  To
+measure the impact  of the runtime perturbation on the  makespan, we compute the
+range $[\mu-2\sigma;\mu+2\sigma]$ (that is  a 95\% confidence interval) relative
+to  the mean  $\mu$. 
+% plus tard, on ? : For  comparison  purpose we  test this  process with  both
+%strategies. 
+We now  seek to answer the  following two questions: given  a \emph{perturbation
+  level}  of  the input  runtimes,  i)  what is  the  convergence  speed of  the
+Monte-Carlo  simulation and  ii) what  is the  size of  the confidence  interval
+resulting from the Monte-Carlo simulation.
 
-To run this Monte Carlo simulation, we used in lieu of user provided runtimes
-six base sets of runtimes established by a Montage\cite{montage2009} workflow.
-We call \emph{realisation} a set of perturbed runtimes. A \emph{realisations}
-are is based on a given base set, for each job runtime in the base set a
-separate relative perturbation is drawn uniformly between $[1-P,1+P]$, with $P$
-the perturbation level, and applied to it's given job runtime. For every base
-set we generate 500 realisation, each realisation receives an order number.
-Every realisation is then simulated by SimSchlouder. In order to study the
-properties like convergence speed we opted to keep the results of each
-individual simulation indexed by base set, perturbation level, and order number.
-Normal distribution is fitted to data using the maximum likelihood method.
+To run  this Monte-Carlo simulation, we  used in lieu of  user provided runtimes
+six base sets  of runtimes established by  a Montage\cite{montage2009} workflow.
+We call \emph{realisation} a set  of perturbed runtimes. A \emph{realisation} is
+based on  a given  base set. For  each job  runtime in the  base set  a separate
+relative  perturbation is  drawn  uniformly between  $[1-P,1+P]$,  with $P$  the
+perturbation level, and applied to it's given job runtime. For every base set we
+generate  500 realisations,  each realisation  receives an  order number.   Every
+realisation is then simulated by SimSchlouder.  In order to study the properties
+like  convergence  speed  we  opted  to keep  the  results  of  each  individual
+simulation indexed  by base set,  perturbation level, and order  number.  Normal
+distribution is fitted to data using the maximum likelihood method.
 
 This process was repeated at 4 different perturbation levels, \pmpc{5},
 \pmpc{10}, \pmpc{15} and, \pmpc{20}.
