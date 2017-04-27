@@ -18,6 +18,8 @@
 \acrodef{rv}[RV]{random variable}
 \acrodef{pdf}[PDF]{probability density function}
 \acrodef{cdf}[CDF]{cumulative distribution function}
+\acrodef{mcs}[MCS]{Monte-Carlo simulation}
+\acrodefplural{mcs}[MCS's]{Monte-Carlo simulations}
 
 \newcommand*\rot{\rotatebox{90}}
 \newcommand{\pmpc}[1]{$\pm#1\%$}
@@ -134,18 +136,18 @@ problem, though some approximation can be used to attempt and solve it
 numerically as in~\cite{dodin85}.
 
 To sidestep the computational difficulty \emph{van Slyke} suggests in
-1963\cite{Slyke63} the use of Monte Carlo methods. In Monte Carlo
-simulations the random inputs are repeatedly sampled to compute multiple
-results, those results are used to compute the process overall \acl{rv}. Because
-it is based on a repetition of a deterministic simulation using samples drawn
-for the input \ac{rv}, this method avoids complex operations such as
-convolution or the repeated integration needed to switch from an \ac{rv}'s
-\ac{pdf} to its \ac{cdf}. This approach was used in 1971 by~\etal{Burt} for
-network analysis~\cite{burt71} and in the context of task scheduling by
+1963\cite{Slyke63} the use of Monte Carlo methods. In \acp{mcs} the random
+inputs are repeatedly sampled to compute multiple results, those results are
+used to compute the process overall \acl{rv}. Because it is based on a
+repetition of a deterministic simulation using samples drawn for the input
+\ac{rv}, this method avoids complex operations such as convolution or the
+repeated integration needed to switch from an \ac{rv}'s \ac{pdf} to its
+\ac{cdf}. This approach was used in 1971 by~\etal{Burt} for network
+analysis~\cite{burt71} and in the context of task scheduling by
 \etal{Canon}~\cite{Canon10} to compare the robustness of \ac{dag} schedules, and
 \etal{Zheng}, to optimise schedules stochastic \acp{dag}. \etal{Cai} have worked
 to extend CloudSim~\cite{cloudsim} with ElasticSim, a Monte Carlo
-simulator~\cite{cai16}. As Monte Carlo simulations gain in traction we want to
+simulator~\cite{cai16}. As \acp{mcs} gain in traction we want to
 evaluate the quality of this approach relatively to the precision of the tasks
 models.
 
@@ -183,7 +185,7 @@ $T_1, \ldots ,  T_n$ of the different  jobs as specified by  the user, schedules
 the jobs and  finally outputs the makespan  $M$ of the whole  batch.  The user's
 estimation of  jobs' runtimes might be  inaccurate, and we describe  hereafter a
 method to characterize the impact of repeated imprecisions (on each job runtime)
-on the  final makespan.  We  have developed  a Monte-Carlo simulation  tool (see
+on the  final makespan.  We  have developed a \ac{mcp}  tool (see
 Figure~\ref{fig:mcprocess}) to compute a confidence interval around the makespan
 produced   by   simulation.   Let   us   sketch   the   overall   process   (see
 Fig~\ref{fig:mc-process}):
@@ -219,10 +221,10 @@ to  the mean  $\mu$.
 %strategies. 
 We now  seek to answer the  following two questions: given  a perturbation
   level  of  the input  runtimes,  i)  what is  the  convergence  speed of  the
-Monte-Carlo  simulation and  ii) what  is the  size of  the confidence  interval
-resulting from the Monte-Carlo simulation.
+\ac{mcs} and  ii) what  is the  size of  the confidence  interval
+resulting from the \ac{mcs}.
 
-For this Monte-Carlo simulation, we use  as user provided runtimes six base sets
+For this \ac{mcs}, we use  as user provided runtimes six base sets
 of runtimes obtained  by running a Montage\cite{montage2009}  workflow on actual
 clusters.  For every base set we generate 500 realizations, and each realization
 receives an order number.  Every  realization is then simulated by SimSchlouder.
@@ -244,7 +246,7 @@ can require more samples or a more targeted sampling to yield correct
 results. Our experiment includes both a non trivial simulation step, where
 scheduling and job dependency affects which runtimes are significant, and a
 strong aggregation step using normal law fitting. To determine the
-convergence properties of our Monte Carlo simulations we observe the evolution
+convergence properties of our \ac{mcs} we observe the evolution
 of the normal distribution obtained depending on the number of simulations done. 
 Using the simulations order index we are able to produce the fitting we would
 have obtained after any arbitrary number of simulation. For every subset we
@@ -283,11 +285,21 @@ values of $\mu$.
 
 \subsection{Monte Carlo fitting process}
 
-The fitting process used to aggregate the final result of the Monte Carlo
-simulation also possesses it's own confidence characteristic. The method we used
+The fitting process used to aggregate the final result of the \ac{mcs} also 
+possesses it's own confidence characteristic. The method we used
 gives a standard deviation for the fitted value of $\mu$ and $\sigma$. Relative
 standard deviation as a function of the number of the simulations are shown
-figure~\ref{fig:confidence}
+Figure~\ref{fig:confidence}. We see here that the standard deviation measured on
+$\mu$ and $\sigma$ converges in following a $\fract{1}{\sqrt{n}}$ pattern
+common observed in Monte-Carlo methods. These observations comfort us in our
+choice of fitting results to a Normal law since they show adding more samples
+consistently reduce standard deviation on the results estimates. We also see the
+higher perturbation levels reduce the confidence in the estimated value of $\mu$
+but doesn't affect significantly the confidence in the estimates of $\sigma$.
+This is balanced by the fact the standard deviation on the estimated of $\mu$
+are is relatively small, whereas the standard deviation on the estimate of
+$\sigma$, tho unaffected by the input perturbation is significant in comparison
+to the value of $\sigma$.
 
 \begin{figure}
 	\centering
@@ -297,7 +309,8 @@ figure~\ref{fig:confidence}
 	\resizebox{0.5\textwidth}{!}{%
 		\input{sdconf.tex}
 	}
-	\caption{test}
+	\caption{Evolution of confidence on $\mu$ and $\sigma$ depending on the
+	number of simulations.}
 	\label{fig:confidence}
 \end{figure}
 
