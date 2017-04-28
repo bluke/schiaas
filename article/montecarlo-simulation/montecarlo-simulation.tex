@@ -155,6 +155,45 @@ simulator~\cite{cai16}. As \acp{mcs} gain in traction we want to
 evaluate the quality of this approach relatively to the precision of the tasks
 models.
 
+\section{Work Context}
+
+\subsection{Schlouder and SimSchlouder}
+In the recent years, we have developped a client-side job broker for IaaS clouds
+called Schlouder~\cite{Michon17}. This broker is able to submit on behalf of its
+user a  batch of  jobs, be  it a  set of  independent jobs  or a  workflow.  The
+broker's main role is to schedule the set of jobs onto a set of cloud resources,
+which can  be scaled  up or down  depending on a  \emph{strategy} chosen  by the
+user.   Technically, the  broker connects  to the  cloud management  system (for
+instance OpenStack) to  instruct how the infrastrustrure  should be provisionned
+and  then assigns  the jobs  to  the resources  using the  Slurm job  management
+system.  Schlouder offers two main strategies for job submission:
+\begin{itemize}
+\item ASAP (or \textit{as soon as possible}): schedules the job immediately onto
+  a  resource  on  an already  started  VM,  or  if  no resource  is  available,
+  immediately provisions  a new immediately  VM to start  the job on  it.  Hence
+  this strategy tries to minimize the makespan of the job batch execution.
+
+\item AFAP (or \textit{as full as  possible}): schedules each job in priority to
+  an already  available resource where  the remaining time  before a new  BTU is
+  started is greater or equal to the job's estimated runtime. By solving this 
+ bin-packing problem, this strategy tends to minimize the monetary cost of the
+ batch execution.
+\end{itemize}
+
+A follow-up of this work has been  SimSchlouder, a simulator able to predict the
+behavior of Schlouder using ASAP or AFAP. Integrated to Schlouder, the simulator
+allows  the user  to  request an  estimation  of the  cost  and makespan  before
+choosing a strategy for a real execution.  SimSchlouder is implemented on top of
+SimGrid~\cite{simgrid}, a discrete  event simulator aimed at  studying a variety
+of distributed systems, such as Grids, Clouds or HPC systems.
+
+\subsection{}
+
+
+
+
+* We make comparisons of simulation and reality
+
 \section{Le fil du coeur du travail}
 Punch line:
 *  on sait dire comment le makespan est affecté par différents niveaux de
@@ -165,21 +204,7 @@ perturbations
 
 * on obtient des makespan simulés très proches de la réalité : montrer l'écart
 relatif à la réalité. 
-\section{Simschlouder}
 
-SimGrid~\cite{simgrid} is a discrete event simulator aimed at studying a variety
-of distributed systems, such as Grids, Clouds  or HPC systems. On top of SimGrid
-we implemented  SimSchlouder, a  simulated implementation  of the  Schlouder job
-broker~\cite{Michon17}.  Schlouder handles resource  provisioning as well  as job
-scheduling. In Schlouder the number of  machines used and the scheduling of jobs
-on these  machine is controled  through a strategy. SimSchlouder  implements two
-strategies :
-\begin{itemize}
-\item  ASAP: schedules  jobs as  soon as  possible, provisioning  more resources
-  unless a machine is already available.
-\item AFAP: schedules  jobs to already available resource  unless doing so
-      would overun previous reservation.
-\end{itemize}
 
 \section{Monte-Carlo Simulation}
 
@@ -223,6 +248,15 @@ range $[\mu-2\sigma;\mu+2\sigma]$ (that is  a 95\% confidence interval) relative
 to  the mean  $\mu$. 
 % plus tard, on ? : For  comparison  purpose we  test this  process with  both
 %strategies. 
+
+
+\Large{
+- Imprécisions sur les input -> effet sur le Makespan 
+- On étudie la variablilité du Makespan en focntion de la variabilité des
+entrées. Subsdiaire : à quelle vitesse ce résultat est obtenu par MCS
+}
+
+
 We now  seek to answer the  following two questions: given  a perturbation
   level  of  the input  runtimes,  i)  what is  the  convergence  speed of  the
 \ac{mcs} and  ii) what  is the  size of  the confidence  interval
@@ -245,10 +279,10 @@ This process was repeated at 4 different perturbation levels, \pmpc{5},
 Since Monte Carlo methods are based on repetition of random processes, it is
 necessary to repeat the processes enough to obtain the intended result. In
 simple Monte Carlo experiments, like integration, the relative error is capped
-by $\frac{1}{\sqrt{n}}$, where $n$ is the number of samples, but complex applications
+by $\frac{1}{\sqrt{n}}$~\cite{XX}, where $n$ is the number of samples, but complex applications
 can require more samples or a more targeted sampling to yield correct
 results. Our experiment includes both a non trivial simulation step, where
-scheduling and job dependency affects which runtimes are significant, and a
+scheduling and job dependencies affects which runtimes are significant, and a
 strong aggregation step using normal law fitting. To determine the
 convergence properties of our \ac{mcs} we observe the evolution
 of the normal distribution obtained depending on the number of simulations done. 
