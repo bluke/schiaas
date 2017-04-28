@@ -170,8 +170,8 @@ system.  Schlouder offers two main strategies for job submission:
 \begin{itemize}
 \item ASAP (or \textit{as soon as possible}): schedules the job immediately onto
   a  resource  on  an already  started  VM,  or  if  no resource  is  available,
-  immediately provisions  a new immediately  VM to start  the job on  it.  Hence
-  this strategy tries to minimize the makespan of the job batch execution.
+  immediately provisions a  new VM to start the job.   Hence this strategy tries
+  to minimize the makespan of the job batch execution.
 
 \item AFAP (or \textit{as full as  possible}): schedules each job in priority to
   an already  available resource where  the remaining time  before a new  BTU is
@@ -187,9 +187,7 @@ choosing a strategy for a real execution.  SimSchlouder is implemented on top of
 SimGrid~\cite{simgrid}, a discrete  event simulator aimed at  studying a variety
 of distributed systems, such as Grids, Clouds or HPC systems.
 
-\subsection{}
-
-
+\subsection{Experimental set-up and Test Applications}
 
 
 * We make comparisons of simulation and reality
