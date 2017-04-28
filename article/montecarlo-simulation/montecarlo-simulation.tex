@@ -41,18 +41,22 @@
 \maketitle
 
 \begin{abstract}
-  The pay as you go model of  cloud operators makes exceeding the arbitrary time
-  limits of the payment model costly. Budgeting the cost of running a scientific
-  workflow  requires users  to  be able  to reliably  predict  runtimes of  jobs
-  within. Attempts  to do so  are hampered by  the heterogeneity and  opacity of
-  cloud  platform   which  make   job  runtimes  both   variable  and   hard  to
-  predict. Variable jobs call for a  form of stochastic simulation, which can be
-  achieved  through  either complex  calculations  heavily  constrained to  some
-  reference cases or  through a Monte-Carlo approach  iterating on deterministic
-  simulations. In this paper we study  the limits of the Monte-Carlo approach by
+  In the  cloud computing  model, cloud providers  invoice clients  for resource
+  consumption. Hence, tools helping the client to budget the cost of running its
+  application are  of pre-eminent  importance. To  that end,  a number  of cloud
+  simulators have been  proposed by researchers. However, the  attempts to reach
+  reliable predictions  are hampered by  the heterogeneity and opacity  of cloud
+  platform which make job runtimes both  variables and hard to predict. Variable
+  runtimes call for a form of stochastic simulation.
+   % -------- to be moved into intro ------
+   % which can be achieved
+  % through  either complex  calculations  heavily constrained  to some  reference
+  % cases   or  through   a  Monte-Carlo   approach  iterating   on  deterministic
+  %simulations. 
+In this paper we study  the limits of the Monte-Carlo approach by
   characterising the relationship  between the precision of  the input variables
   and the simulations results, as well as the impact of the number of iterations
-  for each level of input precision. We show.
+  for each level of input precision. We show ... (FIXME)
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -71,7 +75,7 @@ higher computing power.  These resources are made available freely to members of
 the institutions within the constraints  of time sharing and available computing
 power.
 
-Over the  last decade the advancement  of virtiualization techniques has  lead to
+Over the  last decade the advancement  of virtualization techniques has  lead to
 the emergence of new economic and exploitation approach of computer resources in
 the form of \ac{IaaS}. In this model, all computing resources are made available
 on demand  by third-party operators  and payed based  on usage.  The  ability to
@@ -106,19 +110,19 @@ operators attempt  to mask these  irregularities in computing power  and network
 access by guaranteeing a minimum  performance, variability occurs in presence of
 \emph{less-than-noisy-neighbors} as it  is not in the interest  of the \ac{IaaS}
 operators to  limit power  when available over  the guaranteed  minimums.  These
-factor add  to the  already high  difficulty of modeling  job exaction  times on
-Networks of Computers as shown by \emph{Lastovetsky} and \emph{Twamley} in
-\cite{Lastovetsky05}.
+factor add  to the already  high difficulty of  modeling job execution  times on
+Networks  of  Computers  as   shown  by  \emph{Lastovetsky}  and  \emph{Twamley}
+in~\cite{Lastovetsky05}.
 
-To deal with the inherent unpredictability introduced by opaque heterogeneous
-grids, the standard approach is to consider jobs runtimes to be stochastic.
-Every job can be modeled by a \ac{rv} that models the whole spectrum of
-possible runtimes. These \ac{rv} are the basis required for a stochastic
-simulations.  Such simulations output a random variable of the observed
-phenomenon (\emph{makespan} or \emph{\ac{BTU}}) which in turn can be used to
-create intervals of possible results with their assorted confidence. In this
-paper we will evaluate the precision of Monte Carlo method based stochastic
-simulators in the context of cloud scheduling.
+To deal  with the inherent  unpredictability introduced by  opaque heterogeneous
+platforms, the standard approach is to  consider jobs runtimes to be stochastic.
+Every job can be modeled by a \ac{rv} that models the whole spectrum of possible
+runtimes. These  \ac{rv} are  the basis required  for a  stochastic simulations.
+Such  simulations   output  a  random   variable  of  the   observed  phenomenon
+(\emph{makespan}  or  \emph{\ac{BTU}}) which  in  turn  can  be used  to  create
+intervals of possible  results with their assorted confidence. In  this paper we
+will evaluate the precision of Monte Carlo method based stochastic simulators in
+the context of cloud scheduling.
 
 \section{Related Works.}
 
@@ -193,8 +197,8 @@ sketch   the   overall   process   (see Fig~\ref{fig:mc-process}):
   $s$ sets of perturbed runtimes  $\{T_i^1\}, \ldots, \{T_i^s\}$. Each perturbed
   runtime    is   a    random   value    uniformely   drawn    in   the    range
   $[T_i (1-P); T_i  (1+P)]$, where $P$ is called  the \emph{perturbation level},
-  e.g  5\%. We  call such  each random  draw of  a set  of perturbed  runtimes a
-  \emph{realization}.
+  e.g  5\%.  We \emph{realization}  call  each  such random  draw  of  a set  of
+  perturbed runtimes.
 \item a simulation  is run for each realization, producing  a makespan $M^i$ for
   each,
 \item  a  normal  distribution  ${\cal N}(\mu,\sigma)$  is  fitted  on
@@ -205,10 +209,11 @@ sketch   the   overall   process   (see Fig~\ref{fig:mc-process}):
 	\resizebox{0.5\textwidth}{!}{%
 		\input{mc-process.tex}
 		}
-	\caption{Overview of the Monte-Carlo process : $500$ realisations are
-	generated by drawing and adding a perturbation to each job of the
-	user provided set, every simulation is then simulated, the resulting
-	makespans are fitted into the final result. \label{fig:mcprocess}}
+                \caption{Overview   of   the   Monte-Carlo   process   :   $500$
+                  realizations   are  generated   by   drawing   and  adding   a
+                  perturbation to each  job's runtime of the  user provided set,
+                  every simulation  is then  simulated, the  resulting makespans
+                  are fitted into the final result. \label{fig:mcprocess}}
       \label{fig:mc-process}
 \end{figure}
 Fitting is done to a normal distribution because, in essence the makespan is the
@@ -295,9 +300,9 @@ choice of fitting results to a Normal law since they show adding more samples
 consistently reduce standard deviation on the results estimates. We also see the
 higher perturbation levels reduce the confidence in the estimated value of $\mu$
 but doesn't affect significantly the confidence in the estimates of $\sigma$.
-This is balanced by the fact the standard deviation on the estimated of $\mu$
-are is relatively small, whereas the standard deviation on the estimate of
-$\sigma$, tho unaffected by the input perturbation is significant in comparison
+This is balanced by the fact the standard deviation on the estimate of $\mu$
+is relatively small, whereas the standard deviation on the estimate of
+$\sigma$, tho (FIXME) unaffected by the input perturbation is significant in comparison
 to the value of $\sigma$.
 
 \begin{figure}
