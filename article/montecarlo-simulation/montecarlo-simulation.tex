@@ -369,26 +369,32 @@ scenarios. This means the \ac{mcs} despite using more simulations did not bring
 a significant improvement in precision. However when brought to higher level of
 perturbation the \ac{mcs} shows a significant improvement.
 
+\section{\acl{mcs} convergence and confidence}
 
-
+We saw previously that \aclp{mcs} generally give smaller confidence intervals
+than a full `what if' scenario would do. But the `what if' approach requieres
+only two easily generated simulation whereas a our \acp{mcs} required 500
+simulations each. In this section we try examine the evolution of the previous
+\acp{mcs} results depending on the number of performed simulation to figure how
+many simulations are necessary, and if the \acp{mcs} perturbation levels affects
+the number of simulations required.
 
 \subsection{Monte Carlo Convergence}
 
-In Monte Carlo methods random inputs are repeatedly drawn in order to get a
-large number sample. These samples are aggregated as the final result.
 In simple Monte-Carlo based computations, the accuracy of the result increases
 as $\frac{1}{\sqrt{n}}$, where $n$ is the number of samples\cite{Press92}.
 Our experiment includes both a non trivial simulation step, where
 scheduling and job dependencies affects which runtimes are significant, and a
-strong aggregation step using normal law fitting. To determine the
-convergence properties of our \ac{mcs} we observe the evolution
+strong aggregation step using normal law fitting. 
+
+To determine the convergence properties of our \ac{mcs} we observe the evolution
 of the normal distribution obtained depending on the number of simulations done. 
-Using the simulations order index we are able to produce the fitting we would
+Using the simulations order we are able to produce the fitting we would
 have obtained after any arbitrary number of simulation. For every subset we
 observe the absolute relative error in the resulting values of $\mu$ and $\sigma$ 
 when compared to the value taken when all 500 simulation results are used. 
 
-Tab.~\ref{tab:mcs-convergence}. how many simulations are required before the
+Tab.~\ref{tab:mcs-convergence}. shows how many simulations are required before the
 absolute error consistently passes under the $.5\%$ threshold average makespan
 value $\mu$ and the $1\%$ threshold of the quarter length of the confidence
 interval $\sigma$ for different input perturbation levels. For the fitting
@@ -432,7 +438,7 @@ higher perturbation levels reduce the confidence in the estimated value of $\mu$
 but doesn't affect significantly the confidence in the estimates of $\sigma$.
 This is balanced by the fact the standard deviation on the estimate of $\mu$
 is relatively small, whereas the standard deviation on the estimate of
-$\sigma$, tho (FIXME) unaffected by the input perturbation is significant in comparison
+$\sigma$, though unaffected by the input perturbation is significant in comparison
 to the value of $\sigma$.
 
 \begin{figure}
