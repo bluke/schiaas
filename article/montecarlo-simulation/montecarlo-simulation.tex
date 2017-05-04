@@ -154,7 +154,7 @@ repeated integration needed to switch from an \ac{rv}'s \ac{pdf} to its
 \ac{cdf}. This approach was used in 1971 by~\etal{Burt} for network
 analysis~\cite{burt71} and in the context of task scheduling by
 \etal{Canon}~\cite{Canon10} to compare the robustness of \ac{dag} schedules, and
-\etal{Zheng}, to optimise schedules stochastic \acp{dag}. \etal{Cai} have worked
+\etal{Zheng}, to optimize schedules stochastic \acp{dag}. \etal{Cai} have worked
 to extend CloudSim~\cite{cloudsim} with ElasticSim, a Monte Carlo
 simulator~\cite{cai16}. As \acp{mcs} gain in traction we want to
 evaluate the quality of this approach relatively to the precision of the tasks
@@ -167,8 +167,8 @@ In the recent years, we have developped a client-side job broker for IaaS clouds
 called Schlouder~\cite{Michon17}. This broker is able to submit on behalf of its
 user a  batch of  jobs, be  it a  set of  independent jobs  or a  workflow.  The
 broker's main role is to schedule the set of jobs onto a set of cloud resources,
-which can  be scaled  up or down  depending on a  \emph{strategy} chosen  by the
-user.   Technically, the  broker connects  to the  cloud management  system (for
+which the broker can  scale up or down depending on  a \emph{strategy} chosen by
+the user.  Technically, the broker connects  to the cloud management system (for
 instance OpenStack) to  instruct how the infrastrustrure  should be provisionned
 and  then assigns  the jobs  to  the resources  using the  Slurm job  management
 system.  Schlouder offers two main strategies for job submission:
@@ -193,10 +193,10 @@ SimGrid~\cite{simgrid}, a discrete  event simulator aimed at  studying a variety
 of distributed systems, such as Grids, Clouds or HPC systems.
 
 \subsection{Experimental Set-up and Test Applications}
+\label{sc:setup}
 
-We used Schlouder to run scientific workloads on a private Openstack based
-cloud. We used two workload of different application fields and of different
-structures.
+Our experimental evaluation is carried out on two applications having very
+different characteristics.
 \begin{itemize}
 	\item Montage\cite{montage2009}, the Montage Astronomical Image Mosaic
 		Engine, is designed to splice astronomical images. As shown in
@@ -204,11 +204,13 @@ structures.
 		workflow. This application is extremely data intensive with a
 		\emph{communication-to-computation} ratio superior to $90\%$.
 	\item OMSSA\cite{Geer2004}, the Open Mass-Spectrometry Search Algorithm, is
-		used to analyse mass-spectrometer results. This workload is a
-		Bag of Tasks with no job dependencies. This application is
+		used to analyze mass-spectrometer results. The application is
+                parallelized as a bag-of-tasks, \textit{i.e} as a number of
+                independent parallel jobs. This application is
 		computation intensive with a
 		\emph{communication-to-computation} ratio under to $20\%$.
 \end{itemize}
+
 
 \begin{figure}
 	\resizebox{0.5\textwidth}{!}{%
@@ -218,14 +220,27 @@ structures.
 	\label{fig:montage}
 \end{figure}
 
-To run the experiment with Schlouder a we set up a 96 core cloud based on four
-identical dual $2.67GHz$ Intel Xeon X5650 servers with KVM based virtualisation
-and an Openstack cloud-front (first 2012.1, and later 2014.2). This cluster was
-exclusive to our usage and special attention was given to never overload the
-system.
+We run these two applications with Schlouder on a private cloud.  We set up a 96
+core cloud based on four identical  dual $2.67GHz$ Intel Xeon X5650 servers with
+KVM based virtualization  and an Openstack cloud-front (first  2012.1, and later
+2014.2). This cluster was exclusive to our usage and special attention was given
+to never overload the system.
 
 
 \subsection{Enriched Simulation}
+
+\textbf{(FIXME) Section en chantier.}
+
+The above experimental material is our  basis to evaluate the relevance of using
+the \ac{mcs} method described hereafter. As mentioned in introduction, our final
+goal is to provide the user with enriched simuation results, based on confidence
+intervals rather than the unique and deterministic results the simple simulation
+provides given a  set of inputs. Simulation generally introduces  a bias towards
+reality because simulation  relies on a modeling of the  processes and platforms
+which induces some simplification of the  reality. The method we propose intends
+to construct intervals  in which real runtime observations will  fall into, thus
+bluring the bias of simulation.
+
 
 Even in a stable environment devoid of cross-chatter like our private platform,
 the length of execution of jobs within the Montage or OMSSA workflows is
@@ -236,19 +251,24 @@ drawing values from the random variables modeling the phenomenon and computing
 results samples. The results samples can be then aggregated in the final result
 of the \ac{mcs}. Because this result is also a random variable we can establish
 confidence intervals.
+=======
+The overview  of our  evaluation process  can be sketched  as follows.  One test
+consist    in    running    one    application   (among    those    listed    in
+section~\ref{sc:setup}) on  the actual platform. We collect the runtimes of the
+different jobs and the resulting makespan. These are our observations. Each
+observed runtime is then used as a basis to construct a random variable, .
 
-* We make comparisons of simulation and reality
+We then run a \ac{mcs}, that is a number of simulations, each job runtimes 
 
-%\section{Le fil du coeur du travail}
-%Punch line:
-%*  on sait dire comment le makespan est affecté par différents niveaux de
-%perturbations 
-%    + étant donné un niveau de perturbation, on sait encadrer le
-%      makespan dans un IC 95\% (tout ça en simulation)
-%    + cet encadrement converge très vite: 5 à 10 simulations MC suffisent
-%
-%* on obtient des makespan simulés très proches de la réalité : montrer l'écart
-%relatif à la réalité. 
+, and we run a  \ac{mcs} based on these observations. It means
+the \ac{mcs} repeatedly call simulations with values
+
+% draws its values from a random variable constructed from the
+% observation, and produces result samples by running the simu to model the phenomenons in order to get result samples which
+% are then aggregates as the \acp{mcs} result. 
+
+
+
 
 
 \section{Monte-Carlo Simulation}
@@ -355,11 +375,11 @@ strategies exhibited significantly different results. The strategy applied durin
 the simulation is always the same as the one used in the execution from which
 the base times where obtained. Differences between results fall down
 mostly to how the choice of strategy affects scheduling and how that in turn
-affects how the simulation results. Because AFAP optimises to limit the number
+affects how the simulation results. Because AFAP optimizes to limit the number
 of core used, in our base dataset all jobs are run one after the other on a
 single core, this means that i) any perturbation on any job affects the
 makespan and ii) scheduling being nonexistent and does not affect the result.
-Conversely because ASAP uses multiple cores to optimise makespan not every jobs
+Conversely because ASAP uses multiple cores to optimize makespan not every jobs
 will affect the makespan. The notion of critical path comes into play and only
 the jobs on the cores that took the longest to finish are a part of the critical
 path. This is further more compounded by fork and join structure of the Montage
