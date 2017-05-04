@@ -2,7 +2,9 @@
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage{url}
+
 \usepackage{tikz}
+\usetikzlibrary{fit}
 
 \usepackage{acronym}
 \acrodef{IaaS}{Infrastructure as a Service}
@@ -32,7 +34,7 @@
 			and Julien~Gossa}
 	\IEEEauthorblockA{Icube-ICPS --- UMR 7357, Univeristé de Strasbourg, CNRS\\
 		P\^ole API Blvd S. Bant, 67400 Illkirch\\
-		email: \url{lbertot@unistra.fr}, \url{gossa@unistra.fr}, \url{genaud@unistra.fr}}
+		email: \url{lbertot@unistra.fr}, \url{genaud@unistra.fr}, \url{gossa@unistra.fr}}
 	}
 
 
@@ -54,14 +56,16 @@
   % through  either complex  calculations  heavily constrained  to some  reference
   % cases   or  through   a  Monte-Carlo   approach  iterating   on  deterministic
   %simulations. 
-In this paper we study  the limits of the Monte-Carlo approach by
+  In this paper we study  the limits of the Monte-Carlo approach by
   characterising the relationship  between the precision of  the input variables
   and the simulations results, as well as the impact of the number of iterations
-  for each level of input precision. We show ... (FIXME)
+  for each level of input precision. We show that \acl{mcs} can be used to
+  maintain precise predictions even in cases where inputs show strong
+  variability.
 \end{abstract}
 
 \begin{IEEEkeywords}
-cloud computing, infrastructure as a service, simulation, montecarlo.
+cloud computing, computer simulation, monte carlo methods.
 \end{IEEEkeywords}
 
 \section{Introduction.}
@@ -190,16 +194,48 @@ of distributed systems, such as Grids, Clouds or HPC systems.
 
 \subsection{Experimental Set-up and Test Applications}
 
+We used Schlouder to run scientific workloads on a private Openstack based
+cloud. We used two workload of different application fields and of different
+structures.
+\begin{itemize}
+	\item Montage\cite{montage2009}, the Montage Astronomical Image Mosaic
+		Engine, is designed to splice astronomical images. As shown in
+		Fig.~\ref{fig:montage} this application is a fork-join type
+		workflow. This application is extremely data intensive with a
+		\emph{communication-to-computation} ratio superior to $90\%$.
+	\item OMSSA\cite{Geer2004}, the Open Mass-Spectrometry Search Algorithm, is
+		used to analyse mass-spectrometer results. This workload is a
+		Bag of Tasks with no job dependencies. This application is
+		computation intensive with a
+		\emph{communication-to-computation} ratio under to $20\%$.
+\end{itemize}
+
+\begin{figure}
+	\resizebox{0.5\textwidth}{!}{%
+		\input{gfx/montage.tex}
+		}%
+	\caption{Montage workflow diagram.}
+	\label{fig:montage}
+\end{figure}
+
+To run the experiment with Schlouder a we set up a 96 core cloud based on four
+identical dual $2.67GHz$ Intel Xeon X5650 servers with KVM based virtualisation
+and an Openstack cloud-front (first 2012.1, and later 2014.2). This cluster was
+exclusive to our usage and special attention was given to never overload the
+system.
 
 
+\subsection{Enriched Simulation}
 
-\subsection{Enriched Simulation Simulation}
-
-
-
-To simulate an unpredictable phenomenon a \ac{mcs} draws repeatedly inputs from
-random variable modeling the phenomenons in order to get result samples which
-are then aggregates as the \acp{mcs} result. 
+Even in a stable environment devoid of cross-chatter like our private platform,
+the length of execution of jobs within the Montage or OMSSA workflows is
+noticeably variable. The unpredictability of these variation means that a job's
+runtime is best modeled by a random variable which requires a stochastic
+simulation. A \acf{mcs} simulates unpredictable phenomenons by repeatedly
+drawing values from the random variables modeling the phenomenon and computing
+results samples. The results samples can be then aggregated in the final result
+of the \ac{mcs}. Because this result is also a random variable we can establish
+confidence intervals.
 
 * We make comparisons of simulation and reality
 
@@ -216,7 +252,6 @@ are then aggregates as the \acp{mcs} result.
 
 
 \section{Monte-Carlo Simulation}
-
 
 
 \subsection{Problem Statement}
@@ -238,15 +273,15 @@ sketch   the   overall   process   (see Fig~\ref{fig:mc-process}):
   $[T_i (1-P); T_i  (1+P)]$, where $P$ is called  the \emph{perturbation level},
   e.g  5\%.  We call \emph{realization}  each  such random  draw  of  a set  of
   perturbed runtimes.
-\item a simulation  is run for each realization, producing  a makespan $M^i$ for
-  each,
+\item a simulation  is run for each realization, producing a makespan $M^i$
+	sample for each,
 \item  a  normal  distribution  ${\cal N}(\mu,\sigma)$  is  fitted  on
-		the different  makespan values.
+	the different  makespan values.
 \end{itemize}
 \begin{figure}
 	\centering
 	\resizebox{0.5\textwidth}{!}{%
-		\input{mc-process.tex}
+		\input{gfx/mc-process.tex}
 		}
                 \caption{Overview   of   the   Monte-Carlo   process   :   $500$
                   realizations   are  generated   by   drawing   and  adding   a
@@ -267,63 +302,41 @@ To be relevant confidence intervals must remain as small as possible all while
 keeping the confidence guaranteed. Therefore we want to understand the relationship
 between the input perturbation and the size of the resulting confidence interval.
 
-
-
-%\Large{
-%- Imprécisions sur les input -> effet sur le Makespan 
-%- On étudie la variablilité du Makespan en focntion de la variabilité des
-%entrées. Subsdiaire : à quelle vitesse ce résultat est obtenu par MCS
-%}
-%We now  seek to answer the  following two questions: given  a perturbation
-%  level  of  the input  runtimes,  i)  what is  the  convergence  speed of  the
-%\ac{mcs} and  ii) what  is the  size of  the confidence  interval
-%resulting from the \ac{mcs}.
-
-%For this \ac{mcs}, we use  as user provided runtimes six base sets
-%of runtimes obtained  by running a Montage\cite{montage2009}  workflow on actual
-%clusters.  For every base set we generate 500 realizations.
-%Every  realization is then simulated by SimSchlouder.
-%In order  to study the  properties like convergence speed  we opted to  keep the
-%results of each individual simulation indexed by base set, and perturbation level.
-%Normal distribution  is fitted  to data  using the  maximum likelihood method.
-%
-%This process was repeated at 4 different perturbation levels, \pmpc{5},
-%\pmpc{10}, \pmpc{15} and, \pmpc{20}.
-
-
-
 \subsection{Accuracy of the \acl{mcs}}
 
 \textbf{(FIXME: one more topic sentence).}~~
+In this section we look to establish how precision of the input, the job's
+runtimes, affects the precision of the \acp{mcs} output, the width of the 95\%
+confidence interval. 
 To establish what relations exist between the inputs perturbations and the
 outputted confidence interval we ran \acp{mcs} at different perturbation levels.
 The \emph{perturbation level}, expressed as a percentage, defines an interval
-around each jobs base runtime were the jobs' simulated runtimes can be drawn -- 
+around each jobs base runtime were the job's simulated runtimes can be drawn -- 
 e.g.~in a simulation with a \pmpc{15} perturbation level a job with a 100s base
 runtime can take any runtime between 85s and 115s. These \acp{mcs} will be based
-on 6 different real executions of Montage\cite{montage2009}, and done with four
+on 6 different real executions of Montage, and done with four
 different perturbations levels, \pmpc{5}, \pmpc{10}, \pmpc{15} and, \pmpc{20}.
 The \acp{mcs} are done with 500 simulations. 
 
-For each perturbation level we also simulate cases where every job takes the
-shortest runtime possible at this perturbation level and cases where every job
-receives the maximum perturbation possible at this perturbation level. These
-\emph{`what if'} scenarios present the absolute limits of cases possible for any
-given perturbation levels and their results are the endpoints of a 100\%
-confidence interval for this perturbation level.
+For each perturbation level we also simulate the \emph{best-case} where every
+job takes the shortest runtime possible at this perturbation level and the
+\emph{worst-case} where every job take as long as possible at this perturbation
+level. These worst-case/best-case scenarios present the absolute limits of cases
+possible for any given perturbation levels and their results are the endpoints
+of a 100\% confidence interval for this perturbation level.
 
 Tab.~\ref{tab:perts}. shows the relative results of those simulations.
 For results of a \ac{mcs} the result shown is \[\frac{4\sigma}{\mu}\] the width
-of the 95\% confidence interval divided by the average value. For `what if'
-scenarios the result is computed as
-\[\frac{|M_{+P\%}-M_{-P\%}|}{(M_{+P\%}+M_{-P\%})/2}\] the width of the
-100\% confidence interval divided by the arithmetic mean of it's endpoints.
+of the 95\% confidence interval divided by the average value. For
+worst-case/best-case scenarios the result is computed as
+\[\frac{|M_{W}-M_{B}|}{(M_{W}+M_{B})/2}\] the width of the 100\% confidence
+interval divided by the arithmetic mean of it's endpoints.
 
 \begin{table}
 	\begin{tabular}{|l|cc|cc|}
 		\hline
 		Input&\multicolumn{2}{|c|}{$95\%$Confidence
-		Interval}&\multicolumn{2}{c|}{What If Scenarios}\\
+		Interval}&\multicolumn{2}{c|}{Worst/Best Scenarios}\\
 		Perturbations&AFAP&ASAP&AFAP&ASAP\\
 		\hline
 		\pmpc{5}&\pc{1.6}&\pc{6}--\pc{10}&\pc{9}&\pc{10}\\
@@ -350,7 +363,7 @@ Conversely because ASAP uses multiple cores to optimise makespan not every jobs
 will affect the makespan. The notion of critical path comes into play and only
 the jobs on the cores that took the longest to finish are a part of the critical
 path. This is further more compounded by fork and join structure of the Montage
-workflow (\texttt{???graph de montage???}), and by the SimSchlouder scheduler
+workflow (Fig.~\ref{fig:montage}), and by the SimSchlouder scheduler
 which only schedules jobs once all dependencies have been executed, and will do
 so depending on which runtimes of jobs already done. This means that in
 experiments using the ASAP experiment, not every job is part of the critical
@@ -358,33 +371,33 @@ path but the critical path changes depending on the perturbation of each job.
 The results show that workflows structure and jobs scheduling have a non
 negligible impact on how perturbation affect the makespan's possible values.
 
-The \emph{`what if'} simulations behaved mostly as one would expect
+The worst-case/best-case simulations behaved mostly as one would expect
 them too. In AFAP where the makespan is the sum of every job's runtime the
 makespan varies by two times the perturbation level. ASAP show more instability,
 due to the potential change of scheduling and variation of the critical path,
 but globally the makespan variation is close to two times the perturbation
 level. This confirms that as a trade-off for it's simplicity the
-\emph{`what if'} simulation will give any additional precision that
+worst-case/best-case simulation will give any additional precision that
 what is nakedly obvious when looking at input precision. 
 
 The \emph{\acl{mcs}} on the other hand result in ranges much more focused than
-those given thought `what if' scenarios. When using the AFAP strategy the
+those given thought worst-case/best-case scenarios. When using the AFAP strategy the
 \acp{mcs} give consistently extremely focused results. The $95\%$ confidence interval
 relative size appears to be a third of the input perturbation level. This result
 can partially be explained by the presence of every job on the critical path.
 Because the perturbation for these job are drawn with the same space a large
 number of the will tend to cancel out, this works well in montage because the
 workflow contains large pools of similar jobs. When using ASAP with lower
-perturbation levels the final $95\%$ confidence interval varies between half the
-width observed in the `what if' scenarios up to the same size as the `what if'
-scenarios. This means the \ac{mcs} despite using more simulations did not bring
+perturbation levels the final $95\%$ confidence interval varies from half to the
+full width observed in the worst/best cases scenarios.
+This means the \ac{mcs} despite using more simulations did not bring
 a significant improvement in precision. However when brought to higher level of
 perturbation the \ac{mcs} shows a significant improvement.
 
 \subsection{\acl{mcs} convergence and confidence}
 
 We saw previously that \aclp{mcs} generally give smaller confidence intervals
-than a full `what if' scenario would do. But the `what if' approach requieres
+than a full worst/best cases scenarios would do. But the worst/best approach requires
 only two easily generated simulation whereas a our \acp{mcs} required 500
 simulations each. In this section we try examine the evolution of the previous
 \acp{mcs} results depending on the number of performed simulation to figure how
@@ -433,7 +446,7 @@ values of $\mu$.
 	\label{tab:mcs-convergence}
 \end{table}
 
-\subsection{\acl{MCS} fitting process}
+\subsection{\acl{mcs} fitting process}
 
 The fitting process used to aggregate the final result of the \ac{mcs} also 
 possesses it's own confidence characteristic. The method we used
@@ -454,10 +467,10 @@ to the value of $\sigma$.
 \begin{figure}
 	\centering
 	\resizebox{0.5\textwidth}{!}{%
-		\input{meanconf.tex}
+		\input{gfx/meanconf.tex}
 	}
 	\resizebox{0.5\textwidth}{!}{%
-		\input{sdconf.tex}
+		\input{gfx/sdconf.tex}
 	}
 	\caption{Evolution of confidence on $\mu$ and $\sigma$ depending on the
 	number of simulations.}
