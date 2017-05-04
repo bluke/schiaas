@@ -188,28 +188,39 @@ choosing a strategy for a real execution.  SimSchlouder is implemented on top of
 SimGrid~\cite{simgrid}, a discrete  event simulator aimed at  studying a variety
 of distributed systems, such as Grids, Clouds or HPC systems.
 
-\subsection{Experimental set-up and Test Applications}
+\subsection{Experimental Set-up and Test Applications}
 
 
-* We make comparisons of simulation and reality
-
-\section{Le fil du coeur du travail}
-Punch line:
-*  on sait dire comment le makespan est affecté par différents niveaux de
-perturbations 
-    + étant donné un niveau de perturbation, on sait encadrer le
-      makespan dans un IC 95\% (tout ça en simulation)
-    + cet encadrement converge très vite: 5 à 10 simulations MC suffisent
-
-* on obtient des makespan simulés très proches de la réalité : montrer l'écart
-relatif à la réalité. 
 
 
-\section{Monte-Carlo Simulation}
+\subsection{Enriched Simulation Simulation}
+
+
 
 To simulate an unpredictable phenomenon a \ac{mcs} draws repeatedly inputs from
 random variable modeling the phenomenons in order to get result samples which
 are then aggregates as the \acp{mcs} result. 
+
+* We make comparisons of simulation and reality
+
+%\section{Le fil du coeur du travail}
+%Punch line:
+%*  on sait dire comment le makespan est affecté par différents niveaux de
+%perturbations 
+%    + étant donné un niveau de perturbation, on sait encadrer le
+%      makespan dans un IC 95\% (tout ça en simulation)
+%    + cet encadrement converge très vite: 5 à 10 simulations MC suffisent
+%
+%* on obtient des makespan simulés très proches de la réalité : montrer l'écart
+%relatif à la réalité. 
+
+
+\section{Monte-Carlo Simulation}
+
+
+
+\subsection{Problem Statement}
+
 
 Suppose an  application consisting of  $n$ jobs,  independent or organized  as a
 workflow.   The  simulation engine  SimSchlouder  takes  as input  the  runtimes
@@ -279,10 +290,11 @@ between the input perturbation and the size of the resulting confidence interval
 %This process was repeated at 4 different perturbation levels, \pmpc{5},
 %\pmpc{10}, \pmpc{15} and, \pmpc{20}.
 
-\section{Effect of input perturbation on the result of a \acl{mcs}}
 
-\subsection{Experiment}
 
+\subsection{Accuracy of the \acl{mcs}}
+
+\textbf{(FIXME: one more topic sentence).}~~
 To establish what relations exist between the inputs perturbations and the
 outputted confidence interval we ran \acp{mcs} at different perturbation levels.
 The \emph{perturbation level}, expressed as a percentage, defines an interval
@@ -369,7 +381,7 @@ scenarios. This means the \ac{mcs} despite using more simulations did not bring
 a significant improvement in precision. However when brought to higher level of
 perturbation the \ac{mcs} shows a significant improvement.
 
-\section{\acl{mcs} convergence and confidence}
+\subsection{\acl{mcs} convergence and confidence}
 
 We saw previously that \aclp{mcs} generally give smaller confidence intervals
 than a full `what if' scenario would do. But the `what if' approach requieres
@@ -378,8 +390,6 @@ simulations each. In this section we try examine the evolution of the previous
 \acp{mcs} results depending on the number of performed simulation to figure how
 many simulations are necessary, and if the \acp{mcs} perturbation levels affects
 the number of simulations required.
-
-\subsection{Monte Carlo Convergence}
 
 In simple Monte-Carlo based computations, the accuracy of the result increases
 as $\frac{1}{\sqrt{n}}$, where $n$ is the number of samples\cite{Press92}.
@@ -423,7 +433,7 @@ values of $\mu$.
 	\label{tab:mcs-convergence}
 \end{table}
 
-\subsection{Monte Carlo fitting process}
+\subsection{\acl{MCS} fitting process}
 
 The fitting process used to aggregate the final result of the \ac{mcs} also 
 possesses it's own confidence characteristic. The method we used
