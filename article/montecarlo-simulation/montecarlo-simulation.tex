@@ -170,9 +170,9 @@ and  then assigns  the jobs  to  the resources  using the  Slurm job  management
 system.  Schlouder offers two main strategies for job submission:
 \begin{itemize}
 \item ASAP (or \textit{as soon as possible}): schedules the job immediately onto
-  a  resource  on  an already  started  VM,  or  if  no resource  is  available,
-  immediately provisions a  new VM to start the job.   Hence this strategy tries
-  to minimize the makespan of the job batch execution.
+  an already started VM, or if  no resource is available, immediately provisions
+  a new VM to start the job.  Hence this strategy tries to minimize the makespan
+  of the job batch execution.
 
 \item AFAP (or \textit{as full as  possible}): schedules each job in priority to
   an already  available resource where  the remaining time  before a new  BTU is
@@ -225,7 +225,7 @@ sketch   the   overall   process   (see Fig~\ref{fig:mc-process}):
   $s$ sets of perturbed runtimes  $\{T_i^1\}, \ldots, \{T_i^s\}$. Each perturbed
   runtime    is   a    random   value    uniformly   drawn    in   the    range
   $[T_i (1-P); T_i  (1+P)]$, where $P$ is called  the \emph{perturbation level},
-  e.g  5\%.  We \emph{realization}  call  each  such random  draw  of  a set  of
+  e.g  5\%.  We call \emph{realization}  each  such random  draw  of  a set  of
   perturbed runtimes.
 \item a simulation  is run for each realization, producing  a makespan $M^i$ for
   each,
@@ -279,28 +279,28 @@ between the input perturbation and the size of the resulting confidence interval
 %This process was repeated at 4 different perturbation levels, \pmpc{5},
 %\pmpc{10}, \pmpc{15} and, \pmpc{20}.
 
-\section{Effect of input perturbation on the result of an \acl{mcs}}
+\section{Effect of input perturbation on the result of a \acl{mcs}}
 
-\subsection{Experiement}
+\subsection{Experiment}
 
 To establish what relations exist between the inputs perturbations and the
 outputted confidence interval we ran \acp{mcs} at different perturbation levels.
-The \emph{perturbation level}, expressed as a percentage, defines interval
-around each jobs base runtime were the jobs simulated runtime can be drawn -- 
+The \emph{perturbation level}, expressed as a percentage, defines an interval
+around each jobs base runtime were the jobs' simulated runtimes can be drawn -- 
 e.g.~in a simulation with a \pmpc{15} perturbation level a job with a 100s base
 runtime can take any runtime between 85s and 115s. These \acp{mcs} will be based
 on 6 different real executions of Montage\cite{montage2009}, and done with four
 different perturbations levels, \pmpc{5}, \pmpc{10}, \pmpc{15} and, \pmpc{20}.
-The \acp{mcs} are done with 500 simulation. 
+The \acp{mcs} are done with 500 simulations. 
 
-For each perturbation levels we also simulate cases where every jobs take the
+For each perturbation level we also simulate cases where every job takes the
 shortest runtime possible at this perturbation level and cases where every job
-receive the maximum perturbation possible at this perturbation level. These
+receives the maximum perturbation possible at this perturbation level. These
 \emph{`what if'} scenarios present the absolute limits of cases possible for any
 given perturbation levels and their results are the endpoints of a 100\%
 confidence interval for this perturbation level.
 
-Tab.~\ref{tab:perts}. shows the results relative results of those simulations.
+Tab.~\ref{tab:perts}. shows the relative results of those simulations.
 For results of a \ac{mcs} the result shown is \[\frac{4\sigma}{\mu}\] the width
 of the 95\% confidence interval divided by the average value. For `what if'
 scenarios the result is computed as
