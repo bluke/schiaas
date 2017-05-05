@@ -233,24 +233,32 @@ to never overload the system.
 
 The above experimental material is our  basis to evaluate the relevance of using
 the \ac{mcs} method described hereafter. As mentioned in introduction, our final
-goal is to provide the user with enriched simuation results, based on confidence
+goal is to provide the user with enriched simulation results, based on confidence
 intervals rather than the unique and deterministic results the simple simulation
 provides given a  set of inputs. Simulation generally introduces  a bias towards
 reality because simulation  relies on a modeling of the  processes and platforms
-which induces some simplification of the  reality. The method we propose intends
-to construct intervals  in which real runtime observations will  fall into, thus
-bluring the bias of simulation.
+which induces some simplification of the reality. The method we propose intends
+to construct intervals in which real runtime observations will fall into, thus
+blurring the bias of simulation.
 
+\aclp{mcs} derives the stochastic result of a simulation involving stochastic
+inputs by repeated sampling. By repeatedly drawing input values, from \aclp{rv}
+modeling the input phenomenons, and simulating them we get results samples that
+can be aggregated a stochastic result. \acp{mcs} allow us to use our
+deterministic simulator in a stochastic context by using sampling at the cost of
+having to run a larger number of simulations. In our context the random inputs
+are job runtimes modeled by \aclp{rv}, the simulator SimSchlouder, and the
+result samples the makespans obtained by SimSchlouder. 
 
-Even in a stable environment devoid of cross-chatter like our private platform,
-the length of execution of jobs within the Montage or OMSSA workflows is
-noticeably variable. The unpredictability of these variation means that a job's
-runtime is best modeled by a random variable which requires a stochastic
-simulation. A \acf{mcs} simulates unpredictable phenomenons by repeatedly
-drawing values from the random variables modeling the phenomenon and computing
-results samples. The results samples can be then aggregated in the final result
-of the \ac{mcs}. Because this result is also a random variable we can establish
-confidence intervals.
+%Even in a stable environment devoid of cross-chatter like our private platform,
+%the length of execution of jobs within the Montage or OMSSA workflows is
+%noticeably variable. The unpredictability of these variation means that a job's
+%runtime is best modeled by a random variable which requires a stochastic
+%simulation. A \acf{mcs} simulates unpredictable phenomenons by repeatedly
+%drawing values from the random variables modeling the phenomenon and computing
+%results samples. The results samples can be then aggregated in the final result
+%of the \ac{mcs}. Because this result is also a random variable we can establish
+%confidence intervals.
 =======
 The overview  of our  evaluation process  can be sketched  as follows.  One test
 consist    in    running    one    application   (among    those    listed    in
