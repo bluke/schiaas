@@ -63,8 +63,10 @@
   variables  and  the  accuracy  of   the  simulation  results.   We  show  that
   imprecisions in runtimes input by the  user are largely amortized in the final
   resulting makespan, which  varies in about a third of  the inputs variability.
-  Finally, we  compare how  well a set  of real executions  are captured  by our
-  method.
+  Finally we show that, by including for runtime variability, our method can in
+  most cases correctly captures real runtimes. 
+ %Finally, we  compare how  well a set  of real executions  are captured  by our
+ %method.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -302,13 +304,13 @@ to  the mean  $\mu$.
 
 In this section, we evaluate the  proposed method from two viewpoints. The first
 one regards the method itself. We  study the relationship between inputs and the
-confidence interval for makespan (section \ref {sec:mcs-accuracy}), how fast the
-method construct a satisfactory interval (section \ref{sec:mcs-convergence}) and
+confidence interval for makespan (section~\ref{sec:mcs-accuracy}), how fast the
+method construct a satisfactory interval (section~\ref{sec:mcs-convergence}), and
 ... (FIXME: fitting necessary?). The second viewpoint is the most interesting to
 the user.  Given a set  of real executions on  the same inputs,  all potentially
 showing slightly different  runtimes and makespans, we assess how  many of these
 real observations  are captured in the  confidence interval build by  our method
-(section \ref{sc:rl}).
+(section~\ref{sc:rl}).
   
 
 
@@ -505,7 +507,7 @@ In the method presented above, we establish the  relationship between  the user 
   inputs ${T_i}$ and the probable makespan, \textit{i.e} we want to evaluate how
   variability  of the  ${T_i}$ influences  the size  of the  confidence interval
   for the makespan. 
-
+\begin{itemize}
 \item  The second result concerns the relationship between real observations and 
 the confidence interval for the makespan.  
 \end{itemize}
