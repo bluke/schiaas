@@ -247,11 +247,11 @@ result \emph{samples}  which are then  aggregated as the \ac{mcs}'s  result.  In
 our case, the random variable models what  values the job runtimes can take, and
 the result samples are the makespans obtained through simulation of the workload
 execution.  An important  question is how should we define  the random variables
-to reflect variablility  in the job runtimes. In the  method described hereafter,
+to reflect variablility in the job  runtimes. In the method described hereafter,
 we make the  assumption that the random value take  its values \emph{around} the
 runtimes  specified by  the  user and  we  will study  the  effects of  choosing
-different extents around the specified runtimes for the random variables. Let us
-now describe the \ac{mcs} process itself.
+different extents  around the specified  runtimes for the random  variables (see
+section~\ref{sec:mcs-accuracy}. Let us now describe the \ac{mcs} process itself.
 
 
 
@@ -302,48 +302,32 @@ In this section, we evaluate the  proposed method from two viewpoints. The first
 one regards the method itself. We  study the relationship between inputs and the
 confidence interval for makespan (section \ref {sec:mcs-accuracy}), how fast the
 method construct a satisfactory interval (section \ref{sec:mcs-convergence}) and
-... (FIXME: fitting necessary?). The second viewpoint 
+... (FIXME: fitting necessary?). The second viewpoint is the most interesting to
+the user.  Given a set  of real executions on  the same inputs,  all potentially
+showing slightly different  runtimes and makespans, we assess how  many of these
+real observations  are captured in the  confidence interval build by  our method
+(section \ref{sc:rl}).
   
 
-  
-\begin{itemize}
-\item  The first  result regards  the  relationship between  the user  specified
-  inputs ${T_i}$ and the probable makespan, \textit{i.e} we want to evaluate how
-  variability  of the  ${T_i}$ influences  the size  of the  confidence interval
-  for the makespan. 
-\item  The second result concerns the relationship between real observations and 
-the confidence interval for the makespan.  
-\end{itemize}
-
-In the method presented above, we establish
-
-%Simulation generally introduces a bias towards reality because simulation relies
-%on a modeling  of the processes and platforms which  induces some simplification
-%of the  reality. The method we  propose intends to construct  intervals in which
-%real runtime observations will fall into, thus bluring the bias of simulation.
-
-% J'essaye d'introduire la question ici mais ma forumulation est peut etre
-% alambiqué
-To be relevant confidence intervals must remain as small as possible all while
-keeping the confidence guaranteed. Therefore we want to understand the relationship
-between the input perturbation and the size of the resulting confidence interval.
 
 \subsection{Accuracy of the \acl{mcs}}
 \label{sec:mcs-accuracy}
 
-\textbf{(FIXME: one more topic sentence).}~~
-In this section we look to establish how precision of the input, the job's
-runtimes, affects the precision of the \acp{mcs} output, the width of the 95\%
-confidence interval. 
-To establish what relations exist between the inputs perturbations and the
-outputted confidence interval we ran \acp{mcs} at different perturbation levels.
-The \emph{perturbation level}, expressed as a percentage, defines an interval
-around each jobs base runtime were the job's simulated runtimes can be drawn -- 
-e.g.~in a simulation with a \pmpc{15} perturbation level a job with a 100s base
-runtime can take any runtime between 85s and 115s. These \acp{mcs} will be based
-on 6 different real executions of Montage, and done with four
-different perturbations levels, \pmpc{5}, \pmpc{10}, \pmpc{15} and, \pmpc{20}.
-The \acp{mcs} are done with 500 simulations. 
+To be relevant  confidence intervals must remain as small  as possible all while
+keeping  the  confidence  guaranteed.  Therefore   we  want  to  understand  the
+relationship  between the  input  perturbation  and the  size  of the  resulting
+confidence interval.  In this section we  look to establish how accuracy of the
+input, the  job's runtimes, affects the accuracy of the \acp{mcs}  output, the
+width  of the  95\%  confidence  interval.  To  establish  what relations  exist
+between the  inputs perturbations and  the outputted confidence interval  we ran
+\acp{mcs}  at different  perturbation  levels.   The \emph{perturbation  level},
+expressed as  a percentage, defines  an interval  around each jobs  base runtime
+were the job's  simulated runtimes can be  drawn -- e.g.~in a  simulation with a
+\pmpc{15} perturbation level a job with a 100s base runtime can take any runtime
+between  85s  and 115s.  These  \acp{mcs}  will be  based  on  6 different  real
+executions  of  Montage, and  done  with  four different  perturbations  levels,
+\pmpc{5}, \pmpc{10}, \pmpc{15} and, \pmpc{20}.   The \acp{mcs} are done with 500
+simulations.
 
 For each perturbation level we also simulate the \emph{best-case} where every
 job takes the shortest runtime possible at this perturbation level and the
@@ -505,6 +489,31 @@ to the value of $\sigma$.
 	\label{fig:confidence}
 \end{figure}
 
+
+\subsection{Prediction of Real Executions}
+\label{sec:rl}
+  
+We now examine how well real executions are captured by our method. If we
+consider a specific application run, for which we observe the runtimes ${R_i}$ 
+and a makespan.
+
+
+ 
+In the method presented above, we establish the  relationship between  the user  specified
+  inputs ${T_i}$ and the probable makespan, \textit{i.e} we want to evaluate how
+  variability  of the  ${T_i}$ influences  the size  of the  confidence interval
+  for the makespan. 
+
+\item  The second result concerns the relationship between real observations and 
+the confidence interval for the makespan.  
+\end{itemize}
+
+
+
+%Simulation generally introduces a bias towards reality because simulation relies
+%on a modeling  of the processes and platforms which  induces some simplification
+%of the  reality. The method we  propose intends to construct  intervals in which
+%real runtime observations will fall into, thus bluring the bias of simulation.
 
 
 \bibliographystyle{IEEEtran}
