@@ -303,13 +303,13 @@ to  the mean  $\mu$.
 
 In this section, we evaluate the  proposed method from two viewpoints. The first
 one regards the method itself. We  study the relationship between inputs and the
-confidence interval for makespan (section~\ref{sec:mcs-accuracy}), how fast the
-method construct a satisfactory interval (section~\ref{sec:mcs-convergence}), and
-... (FIXME: fitting necessary?). The second viewpoint is the most interesting to
-the user.  Given a set  of real executions on  the same inputs,  all potentially
-showing slightly different  runtimes and makespans, we assess how  many of these
-real observations  are captured in the  confidence interval build by  our method
-(section~\ref{sc:rl}).
+confidence interval for makespan  (section~\ref{sec:mcs-accuracy}), how fast the
+method  construct a  satisfactory interval  (section~\ref{sec:mcs-convergence}),
+and  ...  (FIXME:  fitting  necessary?).   The  second  viewpoint  is  the  most
+interesting to the user.  Given a set of real executions on the same inputs, all
+potentially showing  slightly different  runtimes and  makespans, we  assess how
+many of these real observations are captured in the confidence interval built by
+our method (section~\ref{sec:rl}).
   
 
 
@@ -432,7 +432,7 @@ have obtained after any arbitrary number of simulation. For every subset we
 observe the absolute relative error in the resulting values of $\mu$ and $\sigma$ 
 when compared to the value taken when all 500 simulation results are used. 
 
-Tab.~\ref{tab:mcs-convergence}. shows how many simulations are required before the
+Tab.~\ref{tab:mcs-convergence} shows how many simulations are required before the
 absolute error consistently passes under the $.5\%$ threshold average makespan
 value $\mu$ and the $1\%$ threshold of the quarter length of the confidence
 interval $\sigma$ for different input perturbation levels. For the fitting
@@ -496,28 +496,20 @@ to the value of $\sigma$.
 \subsection{Prediction of Real Executions}
 \label{sec:rl}
   
-We now examine how well real executions are captured by our method. If we
-consider a specific application run, for which we observe the runtimes ${R_i}$ 
-and a makespan.
-
-
- 
-In the method presented above, we establish the  relationship between  the user  specified
-  inputs ${T_i}$ and the probable makespan, \textit{i.e} we want to evaluate how
-  variability  of the  ${T_i}$ influences  the size  of the  confidence interval
-  for the makespan. 
-\begin{itemize}
-\item  The second result concerns the relationship between real observations and 
-the confidence interval for the makespan.  
-\end{itemize}
+We now  examine how real  executions are captured by  our method. We  consider a
+specific application run, for which we  observe the job runtimes $\{R_i\}$ and a
+makespan  $M_R$.  We  then substitute  the $\{R_i\}$  for the  $\{T_i\}$ in  the
+Monte-Carlo  process  (see Figure~\ref{fig:mc-process}).   Simulation  generally
+introduces a bias towards reality because simulation relies on a modeling of the
+processes and platforms, which induces  some simplification of reality.  Hence a
+makespan computed  by simulation  is likely  to differ from  $M_R$, and  so does
+\textit{a fortiori} the mean makespan $M_s$.   Therefore, we wish to evaluate if
+the confidence  interval built around $M_S$  contains $M_R$, and thus  blurs the
+bias of simulation.
 
 
 
-%Simulation generally introduces a bias towards reality because simulation relies
-%on a modeling  of the processes and platforms which  induces some simplification
-%of the  reality. The method we  propose intends to construct  intervals in which
-%real runtime observations will fall into, thus bluring the bias of simulation.
-
+%
 
 \bibliographystyle{IEEEtran}
 \bibliography{montecarlo-simulation}
