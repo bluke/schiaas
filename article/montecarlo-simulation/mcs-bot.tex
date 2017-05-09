@@ -28,7 +28,8 @@
 \newcommand{\etal}[1]{\emph{#1 et al.}}
 \newcommand{\pc}[1]{$#1\%$}
 
-\title{Modeling the accuracy of Monte-Carlo approach for Cloud based workflow simulations.}
+\title{Modeling the accuracy of Monte-Carlo approach for the Simulation of
+  Bag-of-Tasks applications on Clouds.}
 \author{\IEEEauthorblockN{Luke~Bertot 
 			and Stéphane~Genaud 
 			and Julien~Gossa}
@@ -52,20 +53,21 @@
   platform which make job runtimes both  variables and hard to predict. Variable
   runtimes call for a form of stochastic simulation.  
 %
-  We  consider the  execution of  batch  of jobs  which can  be bag-of-tasks  or
-  workflow.   The execution  is handled  by our  broker Schlouder  in charge  of
-  provisioning the infrastructure and scheduling  the jobs with regard to their
-  estimated runtimes specified  by the user.  While we are  able to simulate how
-  the  broker handles  executions  with our  tool  SimSchlouder, this  simulator
-  cannot predict the possible variability in  makespan and cost.  In this paper,
-  we propose  to enrich  simulation with  the Monte-Carlo  method.  We  study on
-  practical  examples  the  relationship  between the  precision  of  the  input
-  variables  and  the  accuracy  of   the  simulation  results.   We  show  that
-  imprecisions in runtimes input by the  user are largely amortized in the final
-  resulting makespan, which  varies in about a third of  the inputs variability.
-  Finally we show our method can in most cases correctly captures real makespans. 
- %Finally, we  compare how  well a set  of real executions  are captured  by our
- %method.
+  In this  paper, we propose to  enrich simulation with the  Monte-Carlo method.
+  We consider  bag-of-tasks applications, \textit{i.e} applications  composed of
+  independent jobs.  We  illustrate the proposed method on  a concrete use-case,
+  the OMSSA  software used in proteomics,  for which we compare  real executions
+  and simulations.  The  execution is handled by our broker  Schlouder in charge
+  of  provisioning the  infrastructure and  scheduling the  jobs with  regard to
+  their estimated runtimes specified by the user.  While we are able to simulate
+  how the broker  handles executions with our tool  SimSchlouder, this simulator
+  cannot predict  the possible variability in  makespan and cost.  We  study the
+  relationship between the precision of the  input variables and the accuracy of
+  the simulation  results.  We show that  imprecisions in runtimes input  by the
+  user are  largely amortized in the  final resulting makespan, which  varies in
+  about a third of the inputs  variability.  Finally we experimentally show that
+  our method can correctly captures real makespans in a given confidence
+  interval on the use-case.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -500,12 +502,12 @@ We now  examine how real  executions are captured by  our method. We  consider a
 specific application run, for which we  observe the job runtimes $\{R_i\}$ and a
 makespan  $M_R$.  We  then substitute  the $\{R_i\}$  for the  $\{T_i\}$ in  the
 Monte-Carlo  process  (see Figure~\ref{fig:mc-process}).   Simulation  generally
-introduces a bias towards reality because simulation relies on a modeling of the
-processes and platforms, which induces  some simplification of reality.  Hence a
-makespan computed  by simulation  is likely  to differ from  $M_R$, and  so does
-\textit{a fortiori} the mean makespan $M_s$.   Therefore, we wish to evaluate if
-the confidence  interval built around $M_S$  contains $M_R$, and thus  blurs the
-bias of simulation.
+carry biases in comparison to real execution  because it relies on a modeling of
+the  processes and  platforms,  which induces  some  simplification of  reality.
+Hence a makespan computed  by simulation is likely to differ  from $M_R$, and so
+does  \textit{a  fortiori} the  mean  makespan  $M_s$.   Therefore, we  wish  to
+evaluate if the confidence interval built  around $M_S$ contains $M_R$, and thus
+blurs the bias of simulation.
 
 
 
