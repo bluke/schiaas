@@ -431,7 +431,8 @@ injector.xml
 \end{lstlisting}
 
 Toutes les expériences du \emph{lab} sont guidées par un fichier de 
-configuration. Celui-ci contient l'ensemble des informations nécessaires aux 
+configuration (voir exemple ci-après). Celui-ci contient 
+l'ensemble des informations nécessaires aux 
 simulations, les variables à observer, et si nécessaire les pré- ou post- 
 traitements requis. 
 
@@ -448,7 +449,8 @@ facile de démultiplier les simulations. Par exemple, l'ajout d'une ligne
 deux injecteurs différents.
 
 La commande \smalltt{./lab.py -p 4 cmp-scheduler.cfg} permet d'exécuter 
-notre expérience, avec 4 simulations en parallèle, grâce au fichier :
+notre expérience, avec 4 simulations en parallèle pour exploiter tous les 
+c\oe urs d'une machine, grâce au fichier :
 
 \begin{lstlisting}
 # setup
@@ -471,7 +473,7 @@ SIM_ARG 5 injector.xml
 \end{lstlisting}
 
 
-\subsubsection{Analyse des résultats}
+\subsection{Analyse des résultats}
 
 A la fin des exécutions le \emph{lab} extrait des traces de simulation les 
 observations demandées et les stocke dans des fichiers séparés, puis exécute 
@@ -491,27 +493,42 @@ demandée, comme montré Figure \ref{output}.
 \begin{figure}[]
 	
 	\caption{Graphiques produits automatiquement par le lab.}
-	\begin{tabular}{ccc}
-\includegraphics[scale=0.30]{reconsolidator0_used_cores_ne_0}&
-\includegraphics[scale=0.30]{reconsolidator10_used_cores_ne_0}&
-\includegraphics[scale=0.30]{reconsolidator100_used_cores_ne_0}\\
-\includegraphics[scale=0.30]{xp_reconsolidator0_slow_vm__state_eq_migrating}&
-\includegraphics[scale=0.30]{xp_reconsolidator10_slow_vm__state_eq_migrating}&
-\includegraphics[scale=0.30]{xp_reconsolidator100_slow_vm__state_eq_migrating}\\
+	\begin{tabular}{cc}
+\includegraphics[scale=0.45]{reconsolidator0_used_cores_ne_0}&
+\includegraphics[scale=0.45]{xp_reconsolidator0_slow_vm__state_eq_migrating}\\
+\includegraphics[scale=0.45]{reconsolidator10_used_cores_ne_0}&
+\includegraphics[scale=0.45]{xp_reconsolidator10_slow_vm__state_eq_migrating}\\
+\includegraphics[scale=0.45]{reconsolidator100_used_cores_ne_0}&
+\includegraphics[scale=0.45]{xp_reconsolidator100_slow_vm__state_eq_migrating}\\
 	\end{tabular}
 	\label{output}
 \end{figure}
 
-On peut observer  sur ces six graphiques qu'un intervalle de reconsolidation nul
-permet d'optimiser le  nombre de machines utilisées, mais au  prix de nombreuses
-migrations concurrentes (quantité sur l'axe \textit{value}), qu'un intervalle de
-100  secondes ne  présente aucun  intérêt  en terme  d'optimisation, mais  qu'un
-intervalle  de 10  secondes optimise  raisonnablement la  plateforme, en  évitant
-quasiment toute migration  concurrente.  Il est important de remarquer également
-que  ces   graphiques ont les travers inévitables
-des   données  produites automatiquement : titres abscons, labels   génériques,
-et   échelles  par défaut. L'utilisateur souhaitant raffiner ces données devra
-adapter le fichier \texttt{template.R}.
+Ces six graphiques montrent le nombre de machines physiques totalement 
+déchargées de ses VMs, puisque le nombre de c\oe urs utilisés est non nul, et 
+qui peuvent donc être éteintes (à gauche) et le nombre de migrations 
+concurrentes de VM (à droite) à chaque instant. Les trois lignes concernent des 
+délais de reconsolidation différents : $0$ (les VMs sont migrées dès que la 
+charge de la plateforme change), $10s$ et $100s$.
+
+On peut ainsi observer qu'un intervalle de reconsolidation nul permet de 
+décharger complètement des machines physiques mais au  prix de nombreuses 
+migrations concurrentes, dont il faut s'attendre à ce qu'elles perturbent 
+grandement le fonctionnement de la plateforme. D'un autre côté, un intervalle 
+de 100 secondes ne décharge pratiquement aucune machine, et rend donc la 
+stratégie de migration inutile. En revanche, un intervalle  de 10 secondes 
+décharge raisonnablement les machines physiques, tout en  évitant toute 
+migration concurrente, et préservant ainsi les performances de la plateforme.
+
+Il est important de remarquer également que  ces   graphiques ont les travers 
+inévitables des   données  produites automatiquement : titres abscons, labels   
+génériques, et   échelles  par défaut. L'utilisateur souhaitant raffiner ces 
+données devra adapter le fichier \texttt{template.R}. En revanche, un très 
+grand nombre de métriques est automatiquement journalisé et \textit{le lab} 
+dispose d'une expressivité suffisante pour tracer immédiatement une très grande 
+game de valeurs. De plus, le système de journalisation est accessible et permet 
+d'inclure dans le simulateur toute valeur définie par l'utilisateur, qui sera 
+également automatiquement disponible comme toutes les autres.
 
 %=========================================================
 \section{Conclusion} \label{sec:conclusion}
