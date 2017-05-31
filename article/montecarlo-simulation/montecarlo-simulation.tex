@@ -28,7 +28,12 @@
 \newcommand{\etal}[1]{\emph{#1 et al.}}
 \newcommand{\pc}[1]{$#1\%$}
 
-\title{Modeling the accuracy of Monte-Carlo approach for Cloud based workflow simulations.}
+%\title{Modeling the accuracy of Monte-Carlo approach for Cloud based workflow
+%  simulations.}
+
+\title{Executing Batches of Jobs on Clouds: How Accurately Predict the Reality?}
+
+
 \author{\IEEEauthorblockN{Luke~Bertot 
 			and Stéphane~Genaud 
 			and Julien~Gossa}
@@ -48,24 +53,24 @@
   consumption. Hence, tools helping the client to budget the cost of running its
   application are  of pre-eminent  importance. To  that end,  a number  of cloud
   simulators have been  proposed by researchers. However, the  attempts to reach
-  reliable predictions  are hampered by  the heterogeneity and opacity  of cloud
-  platform which make job runtimes both  variables and hard to predict. Variable
-  runtimes call for a form of stochastic simulation.  
-%
-  We  consider the  execution of  batch  of jobs  which can  be bag-of-tasks  or
-  workflow.   The execution  is handled  by our  broker Schlouder  in charge  of
-  provisioning the infrastructure and scheduling  the jobs with regard to their
-  estimated runtimes specified  by the user.  While we are  able to simulate how
-  the  broker handles  executions  with our  tool  SimSchlouder, this  simulator
-  cannot predict the possible variability in  makespan and cost.  In this paper,
-  we propose  to enrich  simulation with  the Monte-Carlo  method.  We  study on
-  practical  examples  the  relationship  between the  precision  of  the  input
-  variables  and  the  accuracy  of   the  simulation  results.   We  show  that
-  imprecisions in runtimes input by the  user are largely amortized in the final
-  resulting makespan, which  varies in about a third of  the inputs variability.
-  Finally we show our method can in most cases correctly captures real makespans. 
- %Finally, we  compare how  well a set  of real executions  are captured  by our
- %method.
+  reliable  predictions are  hampered by  the opacity  regarding the  underlying
+  hardware platform  and the  multi-tenant nature  of the  cloud which  make job
+  runtimes both  variables and hard to  predict.  In this paper,  we investigate
+  through two real  use-cases, which parameters are the most  influential in the
+  prediction of the actual execution behavior in terms of cost and makespan.
+
+  We consider the execution  of batch of jobs on a  actual platform, one example
+  being a  bag-of-tasks and the other  one a workflow, whose  jobs are scheduled
+  using typical  heuristics based on  the user's  estmates of job  runtimes.  We
+  propose an  improved simulation framework  based on the Monte-Carlo  method to
+  study the  relationship between the  precision of  the user estimates  and the
+  accuracy of the simulation results regarding  cost and makespan. Based on this
+  stochastic process,  predictions are expressed as  interval-based makespan and
+  cost.   We show  that imprecisions  in  user estimates  are most  of the  time
+  largely amortized in the final predictions but still can capture real
+  observations. Finally, we evidence the influence of the sheduling heuristics
+  on the accuracy of the method.
+ 
 \end{abstract}
 
 \begin{IEEEkeywords}
