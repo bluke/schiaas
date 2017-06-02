@@ -2,6 +2,7 @@
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage{url}
+\usepackage{comment}
 
 \usepackage{tikz}
 \usetikzlibrary{fit}
@@ -31,7 +32,7 @@
 %\title{Modeling the accuracy of Monte-Carlo approach for Cloud based workflow
 %  simulations.}
 
-\title{Executing Batches of Jobs on Clouds: How Accurately Predict the Reality?}
+\title{Executing Batches of Jobs on Clouds: How to Accurately Predict the Reality?}
 
 
 \author{\IEEEauthorblockN{Luke~Bertot 
@@ -79,6 +80,10 @@ cloud computing, computer simulation, monte carlo methods.
 
 \section{Introduction.}
 
+
+
+\begin{comment}
+---- Useless --
 Whether to  model impractical  experiments or extract  information out  of large
 quantities of data, large scale computing is central to scientific, and sometime
 industrial,  operations.  Institutions  have  historically taken  the burden  of
@@ -88,44 +93,80 @@ existing resources, sometime pooling resource  with other institution to achieve
 higher computing power.  These resources are made available freely to members of
 the institutions within the constraints  of time sharing and available computing
 power.
+\end{comment}
 
 Over the  last decade the advancement  of virtualization techniques has  lead to
 the emergence of new economic and exploitation approach of computer resources in
-the form of \ac{IaaS}. In this model, all computing resources are made available
-on demand  by third-party operators  and payed based  on usage.  The  ability to
-provision resources on demand provided by  \ac{IaaS} operators is mainly used in
-two ways.  Firstly,  for scaling purposes where new machines  are brought online
-to fulfill  service availability in  the face of  higher load, this  approach is
-used for  providing service allows for  a lower baseline cost  while still being
-able to deal  by spikes in demand  by provisioning machine on  the go.  Secondly
-for parallelizing tasks to achieve shorter makespan as equal cost, this approach
-is  used for  scientific and  industrial  workload with  a clear  end and  where
-runtime is heavily dependent on computing power.  This approach is made possible
-by   the   pricing   model   of  cloud   infrastructure,   as   popularized   by
-AWS\footnote{Amazon  Web  Services},  in  which  payment  for  computing  power,
-provided  as  \acp{VM},  happens  in  increment of  arbitrary  length  of  time,
+the form of \ac{IaaS}, one form of cloud computing. In this model, all computing
+resources are made available on demand  by third-party operators and payed based
+on usage.   The ability to provision  resources on demand provided  by \ac{IaaS}
+operators is mainly  used in two ways.  Firstly, for  scaling purposes where new
+machines  are brought  online to  fulfill service  availability in  the face  of
+higher load,  this approach  is used  for providing service  allows for  a lower
+baseline cost while still being able to deal by spikes in demand by provisioning
+machine on the go.  Secondly for parallelizing tasks to achieve shorter makespan
+as equal cost, this approach is used for scientific and industrial workload with
+a clear  end and where  runtime is heavily  dependent on computing  power.  This
+approach  is made  possible by  the pricing  model of  cloud infrastructure,  as
+popularized by AWS\footnote{Amazon Web Services}, in which payment for computing
+power, provided as  \acp{VM}, happens in increment of arbitrary  length of time,
 \ac{BTU}, usually of one hour. Running two \ac{VM} side by side for one \ac{BTU}
 each costs  the same  as running  one \ac{VM}  for two  \ac{BTU}, but  every BTU
-started is  owed in full.  As  such within a  workflow a slowed job  forcing the
-subsequent job to run beyond the \ac{BTU}  limit can cause a full \ac{BTU} to be
-invoiced for a handful of seconds of computation. Cases where such a thing might
-not  always  be  avoided  but  \ac{IaaS}  to  be  reliably  used  in  scientific
-computations  the eventuality  of  an  overrun must  be  reliably predicted  and
-budgeted.
+started is  owed in full.  
 
-Accurate  prediction of  the  runtime  of scientific  workloads  is hampered  by
-multiple factors. First \ac{IaaS} operates in a opaque fashion, the exact nature
-of the underlying platforms are unknown and extremely heterogeneous as operators
-complete  their data-centers  over the  years  with new  servers and  equipment.
-Secondly cloud systems  are multi-tenant by nature which ads  uncertainty due to
-contention  on  network  and  memory  accesses, depending  on  how  \ac{VM}  are
-scheduled  and  the activity  of  your  \emph{neighbors}.  Even  when  \ac{IaaS}
-operators attempt  to mask these  irregularities in computing power  and network
-access by guaranteeing a minimum  performance, variability occurs in presence of
-\emph{less-than-noisy-neighbors} as it  is not in the interest  of the \ac{IaaS}
-operators to  limit power  when available over  the guaranteed  minimums.  These
-factor add  to the already  high difficulty of  modeling job execution  times on
-Networks  of  Computers  as   shown  by  \emph{Lastovetsky}  and  \emph{Twamley}
+From the client's  perspective, provisioning an appropriate set  of resources in
+order to  handle a set of  jobs is a difficult  task, for which tools  may be of
+great help.   
+
+The first tool we can think of is the scheduler. Compared to earlier distributed
+computing systems  (e.g Grids),  the scheduling problem  statement in  the cloud
+must be  reformulated because of two  fundamental novelties: i) the  size of the
+infrastructure  can be  dynamically  scaled, and  ii) as  economic  cost can  be
+clearly measured, it naturally becomes a additional objective to the traditional
+makespan  objective,  making  the   problem  multi-objective.   A  abundance  of
+heuristics have been  developed to adapt to the cloud  context, spanning a large
+variety of assumptions about the setup.  The bi-objective issue is often tackled
+by  combining the  cost and  makespan  metrics in  a  single one  or fixing  one
+parameter as a constraint (deadline-  or budget- constrained schedule), while it
+can be argued  that several solutions may be equally  interesting trade-offs and
+it is up to the user to choose.  In~\cite{Su13} is proposed a strategy where VMs
+belonging to a  Pareto front representing the most  cost-efficient resources are
+used  in  priority  to  map  jobs.  Likewise,  in  ~\cite{Durillo14}  a  set  of
+Pareto-optimal solutions are  proposed to the user, and this  is also the spirit
+of our  own work.   Another discriminating criterion  between approaches  is the
+assumption of  an \emph{online}  (or \emph{just-in-time}) or  \emph{offline} (or
+\emph{static})  schedule,  on   the  type  of  workload   (independent  jobs  or
+workflows),  the homogeneity  of  the ressources,  or the  way  they handle  the
+multiple objectives.  Offline scheduling represents a large body of the research
+works often based  on the adaptation of popular heuristics  aiming at minimizing
+makespan in Grids.  For instance  the popular HEFT~\cite{Zhao2003} heuristic has
+been  revisited in~\cite{LinL11},  which  adds the  ability  to scale  resources
+depending on whether or not a task  can execute by its estimated finish time, or
+is extended in~\cite{Li11cost-conscious} to select  slots with a balance between
+runtime  and  cost.  However,  offline  scheduling  is often  evaluated  through
+simulation while online scheduling is closer to the assumptions of practitioners
+who evaluate  their ideas  on actual environments.   Online strategies  has been
+early  proposed  for  bags-of-tasks,  to adress  the  problem  of  appropriately
+provisioning                             the                            platform
+(e.g~\cite{MarshallKF10,GenaudG11,DuongLG11,VillegasASI12}).  These  works share
+many  commonalities, taking  especially  into account  some important  operating
+system level details such as the boot time of a VM or the contention that occurs
+if too many VMs are started simultaneously.
+  
+The second important  type of tool is a prediction  tool. Accurate prediction of
+the  runtime of  scientific workloads  is  hampered by  multiple factors.  First
+\ac{IaaS}  operates in  a opaque  fashion, the  exact nature  of the  underlying
+platforms are  unknown and  may slightly vary  for a given  type of  resource as
+operators  complete their  data-centers  over  the years  with  new servers  and
+equipment.   Secondly  cloud  systems  are  multi-tenant  by  nature  which  ads
+uncertainty due to  contention on network and memory accesses,  depending on how
+\ac{VM}  are scheduled  and the  activity of  your \emph{neighbors}.   Even when
+\ac{IaaS} operators attempt to mask  these irregularities in computing power and
+network  access by  guaranteeing a  minimum performance,  variability occurs  in
+presence of \emph{less-than-noisy-neighbors} as it is not in the interest of the
+\ac{IaaS} operators to limit power  when available over the guaranteed minimums.
+These factor add to the already  high difficulty of modeling job execution times
+on  Networks of  Computers  as shown  by  \emph{Lastovetsky} and  \emph{Twamley}
 in~\cite{Lastovetsky05}.
 
 To deal  with the inherent  unpredictability introduced by  opaque heterogeneous
@@ -200,7 +241,8 @@ allows  the user  to  request an  estimation  of the  cost  and makespan  before
 choosing a strategy for a real execution.  SimSchlouder is implemented on top of
 SimGrid~\cite{simgrid}, a discrete  event simulator aimed at  studying a variety
 of distributed systems, such as Grids,  Clouds or HPC systems. SimGrid and hence
-SimSchlouer takes as  input i) a textual description of  the hardware components
+SimSchlouer takes as  input i)
+a textual description of  the hardware components
 and their characteristics,  ii) a program describing  the application processes,
 and using its models for computation and communications, outputs a chronology of
 the various  events. Notice that  the simulation  result is deterministic  for a
