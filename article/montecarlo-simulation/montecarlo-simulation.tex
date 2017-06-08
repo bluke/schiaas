@@ -151,7 +151,8 @@ provisioning                             the                            platform
 (e.g~\cite{MarshallKF10,GenaudG11,DuongLG11,VillegasASI12}).  These  works share
 many  commonalities, taking  especially  into account  some important  operating
 system level details such as the boot time of a VM or the contention that occurs
-if too many VMs are started simultaneously.
+if too many VMs are started simultaneously. We show in this paper that these are
+influential factors to the prediction of the execution.
   
 The second important  type of tool is a prediction  tool. Accurate prediction of
 the  runtime of  scientific workloads  is  hampered by  multiple factors.  First
@@ -166,8 +167,7 @@ network  access by  guaranteeing a  minimum performance,  variability occurs  in
 presence of \emph{less-than-noisy-neighbors} as it is not in the interest of the
 \ac{IaaS} operators to limit power  when available over the guaranteed minimums.
 These factor add to the already  high difficulty of modeling job execution times
-on  Networks of  Computers  as shown  by  \emph{Lastovetsky} and  \emph{Twamley}
-in~\cite{Lastovetsky05}.
+on network of computers as shown in~\cite{Lastovetsky05}.
 
 To deal  with the inherent  unpredictability introduced by  opaque heterogeneous
 platforms, the standard approach is to  consider jobs runtimes to be stochastic.
@@ -179,7 +179,8 @@ intervals of possible  results with their assorted confidence. In  this paper we
 will evaluate the precision of Monte Carlo method based stochastic simulators in
 the context of cloud scheduling.
 
-\section{Related Works.}
+
+%\section{Related Works.}
 
 Computing the resulting \ac{rv} of a stochastic simulation is a non-trivial
 process.  \acp{rv} are defined through their \ac{pdf} and \ac{cdf} where $CDF(x)
@@ -212,7 +213,7 @@ models.
 
 \section{Work Context}
 
-\subsection{Schlouder and SimSchlouder}
+\subsection{Schlouder}
 In the recent years, we have developped a client-side job broker for IaaS clouds
 called Schlouder~\cite{Michon17}. This broker is able to submit on behalf of its
 user a  batch of  jobs, be  it a  set of  independent jobs  or a  workflow.  The
@@ -283,6 +284,11 @@ KVM based virtualization  and an Openstack cloud-front (first  2012.1, and later
 2014.2). This cluster was exclusive to our usage and special attention was given
 to never overload the system.
 
+\subsection{Experimental Observations}
+
+
+
+\section{Enriched Simulation Framework}
 
 \subsection{Monte-Carlo Simulaton}
 
