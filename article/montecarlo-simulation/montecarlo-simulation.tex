@@ -239,18 +239,6 @@ system.  Schlouder offers two main strategies for job submission:
 	monetary cost of the batch execution.
 \end{itemize}
 
-A follow-up of this work has been  SimSchlouder, a simulator able to predict the
-behavior of Schlouder using ASAP or AFAP\@. Integrated to Schlouder, the simulator
-allows  the user  to  request an  estimation  of the  cost  and makespan  before
-choosing a strategy for a real execution.  SimSchlouder is implemented on top of
-SimGrid~\cite{simgrid}, a discrete  event simulator aimed at  studying a variety
-of distributed systems, such as Grids,  Clouds or HPC systems. SimGrid and hence
-SimSchlouer takes as  input i)
-a textual description of  the hardware components
-and their characteristics,  ii) a program describing  the application processes,
-and using its models for computation and communications, outputs a chronology of
-the various  events. Notice that  the simulation  result is deterministic  for a
-given infrastructure description and application.
 
 
 \subsection{Experimental Set-up and Test Applications}
@@ -288,17 +276,17 @@ to never overload the system.
 
 \subsection{Experimental Observations}
 
-We used Schlouder to repeatedly run the test applications on our private cloud
-platform and archived Schlouder outputs. Schlouder keeps track a quite a few
-useful metrics including, but not limited to, the \ac{vm}'s start dates, boot
-time, shutdown times and tasks assigned, and the task's start date, walltime.
-We are interested in two macro metrics, the makespan and the cost. The makespan
-is the time elapsed between the submission in the first jobs and the completion
-of the last completed jobs. The cost is measured as a number \acp{btu}. Since
-our experiments have a single \ac{vm} type we counted one \ac{btu} per \ac{vm}
-per started hour to match the most common pricing on the cloud.
-Table~\ref{tab:nbruns}.\ gives an overview of the executions our the archive
-used in this paper.
+We used Schlouder  to repeatedly run the test applications  on our private cloud
+platform and archived Schlouder outputs. Schlouder keeps track of several useful
+metrics including,  but not limited  to, the  \ac{vm}'s start dates,  boot time,
+shutdown times and tasks assigned, and  the task's start date, walltime.  We are
+interested in two macro metrics, the makespan  and the cost. The makespan is the
+time elapsed between the  submission of the first job and  the completion of the
+last completed  job.  The  cost is  measured as a  number \acp{btu}.   Since our
+experiments have a  single \ac{vm} type we counted one  \ac{btu} per \ac{vm} per
+started   hour   to   match   the    most   common   pricing   on   the   cloud.
+Table~\ref{tab:nbruns}.   Table~\ref{tab:nbruns}  gives   an  overview   of  the
+executions our the archive used in this paper.
 
 \begin{table}
 	\centering
@@ -322,10 +310,10 @@ used in this paper.
 	runs\label{fig:realbrs}}
 \end{figure}
 
-Figure~\ref{fig:realbrs}.\ presents the distribution of makespans and \ac{btu}
+Figure~\ref{fig:realbrs} presents the distribution of makespans and \ac{btu}
 counts across the 204 OMSSA runs. This exposes the behaviour exhibited our
 different strategies. As one would have it ASAP appears to finish faster in the
-most cases and AFAP is less costly. But these optimization comes at the cost of
+most cases and AFAP is less costly. But these optimizations come at the cost of
 instability on the dimension they aim to optimize. ASAP uses a high number of
 \ac{btu} but the number of \ac{btu} used is stable, whereas the number of
 \ac{btu} used in the runs scheduled with AFAP, despite being less, is also
@@ -345,12 +333,43 @@ correctly implemented in the simulations.
 
 \section{Enriched Simulation Framework}
 
+\subsection{SimSchlouder}
+
+A follow-up of the Schlouder project  has been SimSchlouder, a simulator able to
+predict  the behavior  of  Schlouder.  Integrated  to  Schlouder, the  simulator
+allows  the user  to  request an  estimation  of the  cost  and makespan  before
+choosing a strategy for a real execution.  SimSchlouder is implemented on top of
+SimGrid~\cite{simgrid}, a discrete  event simulator aimed at  studying a variety
+of distributed systems,  such as Grids, Clouds or HPC  systems. SimGrid has been
+chosen as the simulation engine, for  the versatily of its interfaces, and above
+all,    for    its    well     studied    accuracy    against    reality    (e.g
+\cite{StanisicTLVM15,VelhoSCL13}).
+
+
+SimGrid and  hence SimSchlouer takes  as input i)  a textual description  of the
+hardware  components and  their characteristics,  ii) a  program describing  the
+application processes, and using its  models for computation and communications,
+outputs a chronology  of the various events.  Notice that  the simulation result
+is deterministic for a given infrastructure description and application.
+
+As exposed above, the variability of real executions suggests that a simulation,
+even if it was  perfectly accurate, would capture only a narrow  part of the set
+of possible reals  executions. We will show later that  the simulation is indeed
+very accurate when the user estimates are also accurate. However, if we want to
+provide  the user  with a  broader  view of  how his/her  real executions  could
+behave, we should  enrich the simulation framework with some  form of stochastic
+prediction.
+
+
 \subsection{Monte-Carlo Simulation}
 
-Even in a stable environment devoid  of cross-chatter like our private platform,
-the  length of  execution  of jobs  within  the Montage  or  OMSSA workflows  is
-noticeably  variable. This  can not  be reflected  directly through  simulation,
-which produces  deterministic results.  The unpredictability  of these variation
+% -- To be moved with observations--
+% Even in a stable environment devoid  of cross-chatter like our private platform,
+% the  length of  execution  of jobs  within  the Montage  or  OMSSA workflows  is
+% noticeably  variable. This  can not  be reflected  directly through  simulation,
+% which produces  deterministic results.  
+%% --------------------------------------
+The unpredictability  of these variation
 means that a job's runtime is best modeled by a random variable which requires a
 stochastic simulation.  To simulate an unpredictable phenomenon a \ac{mcs} draws
 repeatedly inputs from a random variable modeling the phenomenon in order to get
@@ -404,6 +423,10 @@ sum  of the  runtimes of  the jobs  on the  critical path  of the  schedule.  To
 measure the impact  of the runtime perturbation on the  makespan, we compute the
 range $[\mu-2\sigma;\mu+2\sigma]$ (that is  a 95\% confidence interval) relative
 to  the mean  $\mu$. 
+
+\subsection{Input Modeling}
+
+
 
 \section{Evaluation}
 
