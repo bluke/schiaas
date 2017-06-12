@@ -11,7 +11,7 @@
 \usetikzlibrary{fit}
 
 \usepackage{acronym}
-\acrodef{IaaS}{Infrastructure as a Service}
+\acrodef{iaas}[IaaS]{Infrastructure as a Service}
 \acrodef{SaaS}{Software as a Service}
 \acrodef{PaaS}{Platform as a Service}
 \acrodef{dag}[DAG]{directed acyclic graph}
@@ -65,14 +65,14 @@
 
   We consider the execution  of batch of jobs on a  actual platform, one example
   being a  bag-of-tasks and the other  one a workflow, whose  jobs are scheduled
-  using typical  heuristics based on  the user's  estmates of job  runtimes.  We
+  using typical  heuristics based on  the user's  estimates of job  runtimes.  We
   propose an  improved simulation framework  based on the Monte-Carlo  method to
   study the  relationship between the  precision of  the user estimates  and the
   accuracy of the simulation results regarding  cost and makespan. Based on this
   stochastic process,  predictions are expressed as  interval-based makespan and
   cost.   We show  that imprecisions  in  user estimates  are most  of the  time
   largely amortized in the final predictions but still can capture real
-  observations. Finally, we evidence the influence of the sheduling heuristics
+  observations. Finally, we evidence the influence of the scheduling heuristics
   on the accuracy of the method.
  
 \end{abstract}
@@ -100,9 +100,9 @@ power.
 
 Over the  last decade the advancement  of virtualization techniques has  lead to
 the emergence of new economic and exploitation approach of computer resources in
-the form of \ac{IaaS}, one form of cloud computing. In this model, all computing
+the form of \ac{iaas}, one form of cloud computing. In this model, all computing
 resources are made available on demand  by third-party operators and payed based
-on usage.   The ability to provision  resources on demand provided  by \ac{IaaS}
+on usage.   The ability to provision  resources on demand provided  by \ac{iaas}
 operators is mainly  used in two ways.  Firstly, for  scaling purposes where new
 machines  are brought  online to  fulfill service  availability in  the face  of
 higher load,  this approach  is used  for providing service  allows for  a lower
@@ -159,16 +159,16 @@ influential factors to the prediction of the execution.
   
 The second important  type of tool is a prediction  tool. Accurate prediction of
 the  runtime of  scientific workloads  is  hampered by  multiple factors.  First
-\ac{IaaS}  operates in  a opaque  fashion, the  exact nature  of the  underlying
+\ac{iaas}  operates in  a opaque  fashion, the  exact nature  of the  underlying
 platforms are  unknown and  may slightly vary  for a given  type of  resource as
 operators  complete their  data-centers  over  the years  with  new servers  and
 equipment.   Secondly  cloud  systems  are  multi-tenant  by  nature  which  ads
 uncertainty due to  contention on network and memory accesses,  depending on how
 \ac{vm}  are scheduled  and the  activity of  your \emph{neighbors}.   Even when
-\ac{IaaS} operators attempt to mask  these irregularities in computing power and
+\ac{iaas} operators attempt to mask  these irregularities in computing power and
 network  access by  guaranteeing a  minimum performance,  variability occurs  in
 presence of \emph{less-than-noisy-neighbors} as it is not in the interest of the
-\ac{IaaS} operators to limit power  when available over the guaranteed minimums.
+\ac{iaas} operators to limit power  when available over the guaranteed minimums.
 These factor add to the already  high difficulty of modeling job execution times
 on network of computers as shown in~\cite{Lastovetsky05}.
 
@@ -217,13 +217,13 @@ models.
 \section{Work Context}
 
 \subsection{Schlouder}
-In the recent years, we have developped a client-side job broker for IaaS clouds
+In the recent years, we have developed a client-side job broker for IaaS clouds
 called Schlouder~\cite{Michon17}. This broker is able to submit on behalf of its
 user a  batch of  jobs, be  it a  set of  independent jobs  or a  workflow.  The
 broker's main role is to schedule the set of jobs onto a set of cloud resources,
 which the broker can  scale up or down depending on  a \emph{strategy} chosen by
 the user.  Technically, the broker connects  to the cloud management system (for
-instance OpenStack) to  instruct how the infrastrustrure  should be provisionned
+instance OpenStack) to  instruct how the infrastructure  should be provisioned
 and  then assigns  the jobs  to  the resources  using the  Slurm job  management
 system.  Schlouder offers two main strategies for job submission:
 \begin{itemize}
@@ -238,20 +238,6 @@ system.  Schlouder offers two main strategies for job submission:
 	By solving this bin-packing problem, this strategy tends to minimize the
 	monetary cost of the batch execution.
 \end{itemize}
-
-A follow-up of this work has been  SimSchlouder, a simulator able to predict the
-behavior of Schlouder using ASAP or AFAP\@. Integrated to Schlouder, the simulator
-allows  the user  to  request an  estimation  of the  cost  and makespan  before
-choosing a strategy for a real execution.  SimSchlouder is implemented on top of
-SimGrid~\cite{simgrid}, a discrete  event simulator aimed at  studying a variety
-of distributed systems, such as Grids,  Clouds or HPC systems. SimGrid and hence
-SimSchlouer takes as  input i)
-a textual description of  the hardware components
-and their characteristics,  ii) a program describing  the application processes,
-and using its models for computation and communications, outputs a chronology of
-the various  events. Notice that  the simulation  result is deterministic  for a
-given infrastructure description and application.
-
 
 \subsection{Experimental Set-up and Test Applications}
 \label{sc:setup}
@@ -345,6 +331,48 @@ correctly implemented in the simulations.
 
 \section{Enriched Simulation Framework}
 
+\subsection{SimSchlouder}
+
+As a follow-up on our work on Schlouder we developed SimSchlouder, a simulator
+reimplementing the behaviour of Schlouder. Integrated to Schlouder, this
+simulator allows the user to requestion an estimate of the makespan and the cost
+before choosing a strategy for a real run. SimSchlouder includes the same
+strategies as Schlouder, and as its real-world counterpart it is easily
+extendable with new strategies. SimSchlouder is based on SimGrid~\cite{simgrid},
+a framework to build discrete event simulators of distributed systems such as
+Grids, Clouds or HPC systems. For the purpose of this paper, we classify the
+inputs required by SimSchlouder in two categories. The first category is the
+operator inputs, they describe the hardware platform and the cloud
+configuration, internally they are fed to the SimGrid core and the \ac{iaas}
+simulation layer SCHIaaS. The second category is the end user inputs, They
+describe the workflow to simulate, the submission dates of each tasks, the
+runtime prediction that would be provided to Schlouder. Additionally for the
+purpose of the simulator a user can choose to supply, real runtimes to match,
+communication to simulate, alternative boot times for the \acp{vm}. Those
+additional inputs are used to alter the sequence of event simulated without
+interfering with parameters that would change the provisioning or scheduling
+decisions taken by SimSchlouder, eg.\ having a job overrun its runtime without
+changing the corresponding user prediction.
+
+
+\begin{comment}
+A follow-up of this work has been SimSchlouder, a simulator able to predict the
+behavior of Schlouder using ASAP or AFAP\@. Integrated to Schlouder, the simulator
+allows the user to request an estimation of the cost and makespan before
+choosing a strategy for a real execution. SimSchlouder is implemented on top of
+SimGrid~\cite{simgrid}, a discrete event simulator aimed at studying a variety
+of distributed systems, such as Grids, Clouds or HPC systems. SimGrid and hence
+SimSchlouer takes as input i)
+a textual description of the hardware components
+and their characteristics, ii) a program describing the application processes,
+and using its models for computation and communications, outputs a chronology of
+the various events. Notice that the simulation result is deterministic for a
+given infrastructure description and application.
+\end{comment}
+
+
+% TODO: SimSchlouder section
+
 \subsection{Monte-Carlo Simulation}
 
 Even in a stable environment devoid  of cross-chatter like our private platform,
@@ -404,6 +432,9 @@ sum  of the  runtimes of  the jobs  on the  critical path  of the  schedule.  To
 measure the impact  of the runtime perturbation on the  makespan, we compute the
 range $[\mu-2\sigma;\mu+2\sigma]$ (that is  a 95\% confidence interval) relative
 to  the mean  $\mu$. 
+
+\subsection{Input modeling}
+% TODO: Input modeling
 
 \section{Evaluation}
 
