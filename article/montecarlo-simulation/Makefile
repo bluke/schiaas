@@ -1,6 +1,6 @@
 # Author: Emiliano Carlos de Moraes Firmino @ 10/2012
 SHELL=/bin/sh
-NAME=mcs-bot
+NAME=montecarlo-simulation
 
 .SUFFIXES:
 .SUFFIXES: .bib .pdf .tex
