@@ -185,34 +185,6 @@ the context of cloud scheduling.
 
 %\section{Related Works.}
 
-Computing the resulting \ac{rv} of a stochastic simulation is a non-trivial
-process.  \acp{rv} are defined through their \ac{pdf} and \ac{cdf} where $CDF(x)
-= \int_{-\infty}^{x} PDF(y) dy$. Works by \etal{Li}~\cite{Li97} and
-\etal{Ludwig}\cite{Ludwig01} show that in the context of task \ac{dag} with
-independent \acp{rv} the \ac{rv} representing successive tasks is a convolution
-product of their respective \acp{pdf} whereas the \ac{rv} of parallel tasks
-joining is the product of their respective \acp{cdf}. Solving stochastic
-\ac{dag} numerically is therefore extremely computationally intensive even when
-the initial constraint of independence of the \acp{rv} can be fulfilled. In the
-general cases solving the \ac{rv} for a \ac{dag} is deemed a \#P-complete
-problem, though some approximation can be used to attempt and solve it
-numerically as in~\cite{dodin85}.
-
-To sidestep the computational difficulty \emph{van Slyke} suggests in
-1963\cite{Slyke63} the use of Monte Carlo methods. In \acp{mcs} the random
-inputs are repeatedly sampled to compute multiple results, those results are
-used to compute the process overall \acl{rv}. Because it is based on a
-repetition of a deterministic simulation using samples drawn for the input
-\ac{rv}, this method avoids complex operations such as convolution or the
-repeated integration needed to switch from an \ac{rv}'s \ac{pdf} to its
-\ac{cdf}. This approach was used in 1971 by~\etal{Burt} for network
-analysis~\cite{burt71} and in the context of task scheduling by
-\etal{Canon}~\cite{Canon10} to compare the robustness of \ac{dag} schedules, and
-\etal{Zheng}, to optimize schedules stochastic \acp{dag}. \etal{Cai} have worked
-to extend CloudSim~\cite{cloudsim} with ElasticSim, a Monte Carlo
-simulator~\cite{cai16}. As \acp{mcs} gain in traction we want to
-evaluate the quality of this approach relatively to the precision of the tasks
-models.
 
 \section{Work Context}
 
@@ -225,7 +197,18 @@ which the broker can  scale up or down depending on  a \emph{strategy} chosen by
 the user.  Technically, the broker connects  to the cloud management system (for
 instance OpenStack) to  instruct how the infrastructure  should be provisioned
 and  then assigns  the jobs  to  the resources  using the  Slurm job  management
-system.  Schlouder offers two main strategies for job submission:
+system. 
+
+Application are submitted to Schlouder as job batches. Each job is provided with
+a user estimate of the runtime, and if the application is a workflow the list of
+dependencies. Schlouder uses an non-dynamic on-line scheduling where jobs are
+assigned to \acp{vm} as soon as all their dependencies are satisfied. We call
+strategy the heuristic used by Schlouder to take provisioning and scheduling
+decisions. Strategies provision \acp{vm} and schedules jobs based on the user
+estimates of the runtime. The effective runtime is only taken into account for
+jobs scheduled later, due to dependencies or late submission dates, but the
+potentially delayed previously scheduled jobs are not reassigned. Schlouder
+offers two main strategies for job submission~:
 \begin{itemize}
 \item ASAP (or \textit{as soon as possible}): schedules the job immediately onto
   an already started VM, or if  no resource is available, immediately provisions
@@ -274,18 +257,18 @@ to never overload the system.
 
 \subsection{Experimental Observations}
 
-We used Schlouder  to repeatedly run the test applications  on our private cloud
+We used Schlouder to repeatedly run the test applications on our private cloud
 platform and archived Schlouder outputs. Schlouder keeps track of several useful
-metrics including,  but not limited  to, the  \ac{vm}'s start dates,  boot time,
-shutdown times and tasks assigned, and  the task's start date, walltime.  We are
-interested in two macro metrics, the makespan  and the cost. The makespan is the
-time elapsed between the  submission of the first job and  the completion of the
-last completed  job.  The  cost is  measured as a  number \acp{btu}.   Since our
-experiments have a  single \ac{vm} type we counted one  \ac{btu} per \ac{vm} per
-started   hour   to   match   the    most   common   pricing   on   the   cloud.
-Table~\ref{tab:nbruns}.   Table~\ref{tab:nbruns}  gives   an  overview   of  the
-executions our the archive used in this paper.
-
+metrics including, but not limited to, the \ac{vm}'s start dates, boot time,
+shutdown times and tasks assigned, and the task's start date, effective
+runtimes. We are interested in two macro metrics, the makespan and the cost.
+The makespan is the time elapsed between the submission of the first job and the
+completion of the last completed job. The cost is measured as a number
+\acp{btu}. Since our experiments have a single \ac{vm} type we counted one
+\ac{btu} per \ac{vm} per started hour to match the most common pricing on the
+cloud. Table~\ref{tab:nbruns} gives an overview of the executions our the
+archive used in this paper. We observe variability on the makespan due to the
+variability of individual job's effective runtime.
 \begin{table}
 	\centering
 	\caption{Overview of archived executions}\label{tab:nbruns}
@@ -318,7 +301,8 @@ instability on the dimension they aim to optimize. ASAP uses a high number of
 more variable. When looking at the makespan, we take note of how the different
 strategies affect the skewness of the overall distribution. The positive skew
 seen on ASAP suggest that even thought the strategy globally produces shorter
-makespan perturbations are more likely to extend the makespan. 
+makespan perturbations are more likely to extend the makespan, whereas AFAP
+makespan are more spread out en skews negatively.
 
 All the behaviours discussed in this section are due to the specifics of the
 provisioning and scheduling strategies. In the case of AFAP and ASAP thorough
@@ -342,12 +326,12 @@ extendable with new strategies. SimSchlouder is based on SimGrid~\cite{simgrid},
 a framework to build discrete event simulators of distributed systems such as
 Grids, Clouds or HPC systems. SimGrid has been chosen as the simulation engine,
 for the versatility of its interfaces, and above all, for its well studied
-accuracy against reality (e.g \cite{StanisicTLVM15,VelhoSCL13}).
+accuracy against reality (e.g~\cite{StanisicTLVM15,VelhoSCL13}).
 
 For the purpose of this paper, we classify the inputs required by SimSchlouder
 in two categories. The first category is the operator inputs, they describe the
 hardware platform and the cloud configuration, internally they are fed to the
-SimGrid core and the \ac{iaas} simulation layer SCHIaaS. The second category is
+SimGrid core and the \ac{iaas} simulation layer. The second category is
 the end user inputs, They describe the workflow to simulate, the submission
 dates of each tasks, the runtime prediction that would be provided to Schlouder.
 Additionally for the purpose of the simulator a user can choose to supply, real
@@ -367,27 +351,21 @@ prediction.
 
 \subsection{Monte-Carlo Simulation}
 
-% -- To be moved with observations--
-% Even in a stable environment devoid  of cross-chatter like our private platform,
-% the  length of  execution  of jobs  within  the Montage  or  OMSSA workflows  is
-% noticeably  variable. This  can not  be reflected  directly through  simulation,
-% which produces  deterministic results.  
-%% --------------------------------------
-The unpredictability  of these variation
-means that a job's runtime is best modeled by a random variable which requires a
-stochastic simulation.  To simulate an unpredictable phenomenon a \ac{mcs} draws
-repeatedly inputs from a random variable modeling the phenomenon in order to get
-result \emph{samples}  which are then  aggregated as the \ac{mcs}'s  result.  In
-our case, the random variable models what  values the job runtimes can take, and
-the result samples are the makespans obtained through simulation of the workload
-execution.  An important  question is how should we define  the random variables
-to reflect variability in the job  runtimes. In the method described hereafter,
-we make the  assumption that the random value take  its values \emph{around} the
-runtimes  specified by  the  user and  we  will study  the  effects of  choosing
-different extents  around the specified  runtimes for the random  variables (see
-Section~\ref{sec:mcs-accuracy}. Let us now describe the \ac{mcs} process itself.
+Stochastic simulations are computationally more expensive than deterministic
+ones. In stochastic simulations inputs become random variables representing the
+distribution of possible values for the parameters. In the context of stochastic
+\ac{dag} it has been show the computing the makespan's distribution requires
+multiple derivation and integration~\cite{Ludwig01,Li97}. Monte Carlo methods
+allow us to side step computational difficulties. This method was proposed for
+PERT graphs in 1967~\cite{Slyke63}, and in the recent year in the context
+\ac{dag} scheduling~\cite{Canon10,Zheng13}. 
 
-
+\aclp{mcs} work by repeatedly drawing input variables and using them in
+deterministic simulations to obtain samples of the possible results. Once
+enough sample have been computed, traditional fitting can be used characterized
+the resulting random variable. In our case, we will draw values of the effective
+runtimes of the individual jobs, and through simulation we obtain samples of
+makespans an BTU counts.
 
 %\paragraph{Method} 
 Suppose an  application consisting of  $n$ jobs,  independent or organized  as a
@@ -400,27 +378,26 @@ on the  final makespan.  We  have developed a \ac{mcs}  tool to compute a
 confidence interval around the makespan produced   by   simulation.   Let   us
 sketch   the   overall   process   (see Fig~\ref{fig:mc-process}):
 \begin{itemize} 
-\item from  the set of user  specified runtimes $\{T_i\}$, the  system generates
-  $s$ sets of perturbed runtimes  $\{T_i^1\}, \ldots, \{T_i^s\}$. Each perturbed
-  runtime    is   a    random   value    uniformly   drawn    in   the    range
-  $[T_i (1-P); T_i  (1+P)]$, where $P$ is called  the \emph{perturbation level},
-  e.g  5\%.  We call \emph{realization}  each  such random  draw  of  a set  of
-  perturbed runtimes.
-\item a simulation  is run for each realization, producing a makespan $M^i$
-	sample for each,
+\item from the set specified set effective runtimes $\{T_i\}$, the system
+	generates $s$ sets of perturbed runtimes $\{T_i^1\}, \ldots, \{T_i^s\}$.
+	Each perturbed runtime is a random value uniformly drawn in the range
+	$[T_i (1-P); T_i (1+P)]$, where $P$ is called the \emph{perturbation
+	level}, e.g 5\%. We call \emph{realization} each such random draw of a
+	set of perturbed runtimes.
+\item a simulation  is run for each realization, producing a makespan $M^i$ and
+	BTU count sample for each,
 \item  a  normal  distribution  ${\cal N}(\mu,\sigma)$  is  fitted  on
-	the different  makespan values.
+	the different makespan values.
 \end{itemize}
 \begin{figure}
 	\centering
 	\resizebox{0.5\textwidth}{!}{%
 		\input{gfx/mc-process.tex}
 		}
-                \caption{Overview   of   the   Monte-Carlo   process~:   $500$
-                  realizations   are  generated   by   drawing   and  adding   a
-                  perturbation to each  job's runtime of the  user provided set,
-                  every simulation  is then  simulated, the  resulting makespans
-		  samples are fitted into the final result.}\label{fig:mc-process}
+\caption{Overview of the Monte-Carlo process~: $500$ realizations are generated
+by drawing and adding a perturbation to each job's runtime of the provided
+runtimes set, every simulation is then simulated, the resulting makespans
+samples are fitted into the final result.}\label{fig:mc-process}
 \end{figure}
 Fitting is done to a normal distribution because, in essence the makespan is the
 sum  of the  runtimes of  the jobs  on the  critical path  of the  schedule.  To
@@ -428,8 +405,41 @@ measure the impact  of the runtime perturbation on the  makespan, we compute the
 range $[\mu-2\sigma;\mu+2\sigma]$ (that is  a 95\% confidence interval) relative
 to  the mean  $\mu$. 
 
+\begin{comment}
+Computing the resulting \ac{rv} of a stochastic simulation is a non-trivial
+process.  \acp{rv} are defined through their \ac{pdf} and \ac{cdf} where $CDF(x)
+= \int_{-\infty}^{x} PDF(y) dy$. Works by \etal{Li}~\cite{Li97} and
+\etal{Ludwig}\cite{Ludwig01} show that in the context of task \ac{dag} with
+independent \acp{rv} the \ac{rv} representing successive tasks is a convolution
+product of their respective \acp{pdf} whereas the \ac{rv} of parallel tasks
+joining is the product of their respective \acp{cdf}. Solving stochastic
+\ac{dag} numerically is therefore extremely computationally intensive even when
+the initial constraint of independence of the \acp{rv} can be fulfilled. In the
+general cases solving the \ac{rv} for a \ac{dag} is deemed a \#P-complete
+problem, though some approximation can be used to attempt and solve it
+numerically as in~\cite{dodin85}.
+
+To sidestep the computational difficulty \emph{van Slyke} suggests in
+1963\cite{Slyke63} the use of Monte Carlo methods. In \acp{mcs} the random
+inputs are repeatedly sampled to compute multiple results, those results are
+used to compute the process overall \acl{rv}. Because it is based on a
+repetition of a deterministic simulation using samples drawn for the input
+\ac{rv}, this method avoids complex operations such as convolution or the
+repeated integration needed to switch from an \ac{rv}'s \ac{pdf} to its
+\ac{cdf}. This approach was used in 1971 by~\etal{Burt} for network
+analysis~\cite{burt71} and in the context of task scheduling by
+\etal{Canon}~\cite{Canon10} to compare the robustness of \ac{dag} schedules, and
+\etal{Zheng}, to optimize schedules stochastic \acp{dag}. \etal{Cai} have worked
+to extend CloudSim~\cite{cloudsim} with ElasticSim, a Monte Carlo
+simulator~\cite{cai16}. As \acp{mcs} gain in traction we want to
+evaluate the quality of this approach relatively to the precision of the tasks
+models.
+\end{comment}
+
 \subsection{Input Modeling}
 % TODO: Input modeling
+
+
 
 \section{Evaluation}
 
