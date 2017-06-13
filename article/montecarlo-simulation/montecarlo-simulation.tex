@@ -200,15 +200,15 @@ and  then assigns  the jobs  to  the resources  using the  Slurm job  management
 system. 
 
 Application are submitted to Schlouder as job batches. Each job is provided with
-a user estimate of the runtime, and if the application is a workflow the list of
-dependencies. Schlouder uses an non-dynamic on-line scheduling where jobs are
-assigned to \acp{vm} as soon as all their dependencies are satisfied. We call
-strategy the heuristic used by Schlouder to take provisioning and scheduling
-decisions. Strategies provision \acp{vm} and schedules jobs based on the user
-estimates of the runtime. The effective runtime is only taken into account for
-jobs scheduled later, due to dependencies or late submission dates, but the
-potentially delayed previously scheduled jobs are not reassigned. Schlouder
-offers two main strategies for job submission~:
+a \emph{user estimate} of the runtime, and if the application is a workflow, the
+list of  dependencies. Schlouder  uses an  non-dynamic on-line  scheduling where
+jobs  are  assigned   to  \acp{vm}  as  soon  as  all   their  dependencies  are
+satisfied. We call strategy the heuristic used by Schlouder to take provisioning
+and scheduling decisions. Strategies provision \acp{vm} and schedules jobs based
+on the user estimates  of the runtime. The effective runtime  is only taken into
+account for jobs scheduled later, due  to dependencies or late submission dates,
+but  the  potentially delayed  previously  scheduled  jobs are  not  reassigned.
+Schlouder offers two main strategies for job submission~:
 \begin{itemize}
 \item ASAP (or \textit{as soon as possible}): schedules the job immediately onto
   an already started VM, or if  no resource is available, immediately provisions
@@ -263,7 +263,7 @@ metrics including, but not limited to, the \ac{vm}'s start dates, boot time,
 shutdown times and tasks assigned, and the task's start date, effective
 runtimes. We are interested in two macro metrics, the makespan and the cost.
 The makespan is the time elapsed between the submission of the first job and the
-completion of the last completed job. The cost is measured as a number
+completion of the last completed job. The cost is measured as a number of
 \acp{btu}. Since our experiments have a single \ac{vm} type we counted one
 \ac{btu} per \ac{vm} per started hour to match the most common pricing on the
 cloud. Table~\ref{tab:nbruns} gives an overview of the executions our the
@@ -302,7 +302,7 @@ more variable. When looking at the makespan, we take note of how the different
 strategies affect the skewness of the overall distribution. The positive skew
 seen on ASAP suggest that even thought the strategy globally produces shorter
 makespan perturbations are more likely to extend the makespan, whereas AFAP
-makespan are more spread out en skews negatively.
+makespan are more spread out (FIXME) en skews negatively.
 
 All the behaviours discussed in this section are due to the specifics of the
 provisioning and scheduling strategies. In the case of AFAP and ASAP thorough
@@ -328,26 +328,27 @@ Grids, Clouds or HPC systems. SimGrid has been chosen as the simulation engine,
 for the versatility of its interfaces, and above all, for its well studied
 accuracy against reality (e.g~\cite{StanisicTLVM15,VelhoSCL13}).
 
-For the purpose of this paper, we classify the inputs required by SimSchlouder
-in two categories. The first category is the operator inputs, they describe the
-hardware platform and the cloud configuration, internally they are fed to the
-SimGrid core and the \ac{iaas} simulation layer. The second category is
-the end user inputs, They describe the workflow to simulate, the submission
-dates of each tasks, the runtime prediction that would be provided to Schlouder.
-Additionally for the purpose of the simulator a user can choose to supply, real
-runtimes to match, communication to simulate, alternative boot times for the
-\acp{vm}. Those additional inputs are used to alter the sequence of event
+
+For the purpose  of this paper, we classify the  inputs required by SimSchlouder
+in two categories. The first category is the operator inputs, which describe the
+hardware platform and  the cloud configuration. Internally, they are  fed to the
+SimGrid core and the \ac{iaas} simulation  layer. The second category is the end
+user inputs.   They describe the workflow  to simulate, the submission  dates of
+each  task,  the  runtime  prediction  that  would  be  provided  to  Schlouder.
+Additionally for the purpose of the simulator  a user can choose to supply, real
+runtimes to  match, communication  to simulate, alternative  boot times  for the
+\acp{vm}.  Those additional  inputs are  used to  alter the  sequence of  events
 simulated without interfering with parameters that would change the provisioning
-or scheduling decisions taken by SimSchlouder, eg.\ having a job overrun its
+or scheduling  decisions taken by  SimSchlouder, eg.\  having a job  overrun its
 runtime without changing the corresponding user prediction.
 
 As exposed above, the variability of real executions suggests that a simulation,
 even if it was  perfectly accurate, would capture only a narrow  part of the set
 of possible reals  executions. We will show later that  the simulation is indeed
-very accurate when the user estimates are also accurate. However, if we want to
-provide  the user  with a  broader  view of  how his/her  real executions  could
-behave, we should  enrich the simulation framework with some  form of stochastic
-prediction.
+very   accurate  when   the  user   estimates  are   close  to   the  effectives
+runtimes. However,  if we want to  provide the user  with a broader view  of how
+his/her real executions could behave,  we should enrich the simulation framework
+with some form of stochastic prediction.
 
 \subsection{Monte-Carlo Simulation}
 
