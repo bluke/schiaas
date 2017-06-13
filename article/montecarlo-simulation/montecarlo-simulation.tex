@@ -203,12 +203,15 @@ Application are submitted to Schlouder as job batches. Each job is provided with
 a \emph{user estimate} of the runtime, and if the application is a workflow, the
 list of  dependencies. Schlouder  uses an  non-dynamic on-line  scheduling where
 jobs  are  assigned   to  \acp{vm}  as  soon  as  all   their  dependencies  are
-satisfied. We call strategy the heuristic used by Schlouder to take provisioning
-and scheduling decisions. Strategies provision \acp{vm} and schedules jobs based
-on the user estimates  of the runtime. The effective runtime  is only taken into
-account for jobs scheduled later, due  to dependencies or late submission dates,
-but  the  potentially delayed  previously  scheduled  jobs are  not  reassigned.
-Schlouder offers two main strategies for job submission~:
+satisfied. We call strategy the heuristic used by Schlouder to make provisioning
+and scheduling decisions.   A dozen of strategies and variants  are available to
+the user (\cite{GenaudG11}), of which we  will use two in this paper. Strategies
+provision  \acp{vm} and  schedules  jobs  based on  the  user  estimates of  the
+runtime. Notice that jobs' real  runtimes, called \emph{effective runtimes}, may
+differ  from the  estimates, but  this does  not change  the initial  scheduling
+decision regarding to which resources the jobs are assigned.
+
+Let us now decribe the two  main strategies proposed by Schlouder:
 \begin{itemize}
 \item ASAP (or \textit{as soon as possible}): schedules the job immediately onto
   an already started VM, or if  no resource is available, immediately provisions
@@ -221,6 +224,7 @@ Schlouder offers two main strategies for job submission~:
 	By solving this bin-packing problem, this strategy tends to minimize the
 	monetary cost of the batch execution.
 \end{itemize}
+
 
 \subsection{Experimental Set-up and Test Applications}
 \label{sc:setup}
@@ -352,20 +356,20 @@ with some form of stochastic prediction.
 
 \subsection{Monte-Carlo Simulation}
 
-Stochastic simulations are computationally more expensive than deterministic
-ones. In stochastic simulations inputs become random variables representing the
+Stochastic  simulations are  computationally more  expensive than  deterministic
+ones. In stochastic simulations inputs  become random variables representing the
 distribution of possible values for the parameters. In the context of stochastic
-\ac{dag} it has been show the computing the makespan's distribution requires
-multiple derivation and integration~\cite{Ludwig01,Li97}. Monte Carlo methods
-allow us to side step computational difficulties. This method was proposed for
-PERT graphs in 1967~\cite{Slyke63}, and in the recent year in the context
-\ac{dag} scheduling~\cite{Canon10,Zheng13}. 
+\ac{dag} it has  been shown that computing the  makespan's distribution requires
+multiple derivations and  integrations~\cite{Ludwig01,Li97}. Monte Carlo methods
+allow us to side step these computational difficulties. This method was proposed
+for PERT  graphs in 1967~\cite{Slyke63}, and  in the recent year  in the context
+\ac{dag} scheduling~\cite{Canon10,Zheng13}.
 
-\aclp{mcs} work by repeatedly drawing input variables and using them in
-deterministic simulations to obtain samples of the possible results. Once
-enough sample have been computed, traditional fitting can be used characterized
-the resulting random variable. In our case, we will draw values of the effective
-runtimes of the individual jobs, and through simulation we obtain samples of
+\aclp{mcs}  work  by  repeatedly  drawing  input variables  and  using  them  in
+deterministic simulations to obtain samples of the possible results. Once enough
+samples have been computed, traditional fitting  can be used to characterize the
+resulting random  variable. In our  case, we will  draw values of  the effective
+runtimes of  the individual jobs,  and we  obtain through simulation  samples of
 makespans an BTU counts.
 
 %\paragraph{Method} 
