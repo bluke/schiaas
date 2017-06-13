@@ -178,15 +178,20 @@ Every job can be modeled by a \ac{rv} that models the whole spectrum of possible
 runtimes. These  \ac{rv} are  the basis required  for a  stochastic simulations.
 Such  simulations   output  a  random   variable  of  the   observed  phenomenon
 (\emph{makespan}  or  \emph{\ac{btu}}) which  in  turn  can  be used  to  create
-intervals of possible  results with their assorted confidence. In  this paper we
-will evaluate the precision of Monte Carlo method based stochastic simulators in
-the context of cloud scheduling.
+intervals of possible  results with their assorted confidence. 
 
-
-%\section{Related Works.}
+In this paper, we propose a stochastic method to enrich the classical prediction
+based  on a  discrete-event  simulator, and  we study  the  conditions for  this
+approach to be relevant. This study is  carried out on a real setting, described
+in  section~\ref{sec:work-context},   where  the  applications   use-cases,  the
+scheduler  and  the  experimental  observations are  presented.  The  stochastic
+framework we propose is  then presented in section~\ref{sec:enriched-sim}, and
+is evaluated in section~\ref{sec:eval}. We finally conclude by discussing the 
+improvements and the limits of the approach.
 
 
 \section{Work Context}
+\label{sec:work-context}
 
 \subsection{Schlouder}
 In the recent years, we have developed a client-side job broker for IaaS clouds
@@ -205,13 +210,17 @@ list of  dependencies. Schlouder  uses an  non-dynamic on-line  scheduling where
 jobs  are  assigned   to  \acp{vm}  as  soon  as  all   their  dependencies  are
 satisfied. We call strategy the heuristic used by Schlouder to make provisioning
 and scheduling decisions.   A dozen of strategies and variants  are available to
-the user (\cite{GenaudG11}), of which we  will use two in this paper. Strategies
-provision  \acp{vm} and  schedules  jobs  based on  the  user  estimates of  the
-runtime. Notice that jobs' real  runtimes, called \emph{effective runtimes}, may
-differ  from the  estimates, but  this does  not change  the initial  scheduling
-decision regarding to which resources the jobs are assigned.
+the user (details can be found in~\cite{GenaudG11}), of which we will use two in
+this paper. Strategies  provision \acp{vm} and schedules jobs based  on the user
+estimates   of  the   runtime.   Notice  that   jobs'   real  runtimes,   called
+\emph{effective  runtimes}, may  differ from  the estimates,  but this  does not
+change the initial scheduling decision regarding to which resources the jobs are
+assigned.
 
-Let us now decribe the two  main strategies proposed by Schlouder:
+As mentioned in introduction, as no solution usually dominates the other in all
+objectives, we leave to the user a choice of strategies which will favor one or
+the other objective (cost or makespan). These two main strategies proposed by
+Schlouder are:
 \begin{itemize}
 \item ASAP (or \textit{as soon as possible}): schedules the job immediately onto
   an already started VM, or if  no resource is available, immediately provisions
@@ -224,7 +233,8 @@ Let us now decribe the two  main strategies proposed by Schlouder:
 	By solving this bin-packing problem, this strategy tends to minimize the
 	monetary cost of the batch execution.
 \end{itemize}
-
+In the following, we will evaluate the real executions at the light of these two
+strategies.
 
 \subsection{Experimental Set-up and Test Applications}
 \label{sc:setup}
@@ -306,7 +316,7 @@ more variable. When looking at the makespan, we take note of how the different
 strategies affect the skewness of the overall distribution. The positive skew
 seen on ASAP suggest that even thought the strategy globally produces shorter
 makespan perturbations are more likely to extend the makespan, whereas AFAP
-makespan are more spread out (FIXME) en skews negatively.
+makespan are more spread out and skews negatively.
 
 All the behaviours discussed in this section are due to the specifics of the
 provisioning and scheduling strategies. In the case of AFAP and ASAP thorough
@@ -318,6 +328,7 @@ distribution of our run and of the biases of our strategies, as long as they are
 correctly implemented in the simulations.
 
 \section{Enriched Simulation Framework}
+\label{sec:enriched-sim}
 
 \subsection{SimSchlouder}
 
@@ -447,6 +458,7 @@ models.
 
 
 \section{Evaluation}
+\label{sec:eval}
 
 In this section, we evaluate the  proposed method from two viewpoints. The first
 one regards the method itself. We  study the relationship between inputs and the
@@ -464,20 +476,20 @@ our method (Section~\ref{sec:rl}).
 \label{sec:mcs-accuracy}
 
 To be relevant  confidence intervals must remain as small  as possible all while
-keeping  the  confidence  guaranteed.  Therefore   we  want  to  understand  the
+keeping  the  confidence  guaranteed.   Therefore  we  want  to  understand  the
 relationship  between the  input  perturbation  and the  size  of the  resulting
-confidence interval.  In this section we  look to establish how accuracy of the
-input, the  job's runtimes, affects the accuracy of the \acp{mcs}  output, the
+confidence interval.  In  this section we look to establish  how accuracy of the
+input, the  job's runtimes, affects  the accuracy  of the \acp{mcs}  output, the
 width  of the  95\%  confidence  interval.  To  establish  what relations  exist
 between the  inputs perturbations and  the outputted confidence interval  we ran
 \acp{mcs}  at different  perturbation  levels.   The \emph{perturbation  level},
 expressed as  a percentage, defines  an interval  around each jobs  base runtime
-were the job's  simulated runtimes can be  drawn \textendash{} e.g.~in a  simulation with a
-\pmpc{15} perturbation level a job with a 100s base runtime can take any runtime
-between  85s  and 115s.  These  \acp{mcs}  will be  based  on  6 different  real
-executions  of  Montage, and  done  with  four different  perturbations  levels,
-\pmpc{5}, \pmpc{10}, \pmpc{15} and, \pmpc{20}.   The \acp{mcs} are done with 500
-simulations.
+were  the  job's  simulated  runtimes  can  be  drawn  \textendash{}  e.g.~in  a
+simulation with  a \pmpc{15} perturbation level  a job with a  100s base runtime
+can take any runtime  between 85s and 115s.  These \acp{mcs} will  be based on 6
+different real executions of Montage, and done with four different perturbations
+levels, \pmpc{5}, \pmpc{10},  \pmpc{15} and, \pmpc{20}.  The  \acp{mcs} are done
+with 500 simulations.
 
 For each perturbation level we also simulate the \emph{best-case} where every
 job takes the shortest runtime possible at this perturbation level and the
@@ -655,8 +667,8 @@ the confidence  interval built around $M_S$  contains $M_R$, and thus  blurs the
 bias of simulation.
 
 
+\section{Conclusion}
 
-%
 
 \bibliographystyle{IEEEtran}
 \bibliography{montecarlo-simulation}
