@@ -193,7 +193,12 @@ improvements and the limits of the approach.
 
 \section{Work Context}
 \label{sec:work-context}
-
+\begin{figure*}
+	\centering
+	\includegraphics[width=\textwidth]{gfx/real_plot.pdf}
+	\caption{Makepsan and BTU count distribution for OMSSA and Montage
+	runs\label{fig:realbrs}}
+\end{figure*}
 \subsection{Schlouder}
 In the recent years, we have developed a client-side job broker for IaaS clouds
 called Schlouder~\cite{Michon17}. This broker is able to submit on behalf of its
@@ -258,13 +263,14 @@ used are:
 		computation intensive with a
 		\emph{communication-to-computation} ratio under to $20\%$.
 \end{itemize}
-
+\begin{comment}
 \begin{figure}
 	\resizebox{0.5\textwidth}{!}{%
 		\input{gfx/montage.tex}
 		}%
 	\caption{Montage workflow diagram.}\label{fig:montage}
 \end{figure}
+\end{comment}
 
 These two applications were executed using Schlouder on a private cloud.  We set
 up a 96 core cloud based on four identical  dual $2.67GHz$ Intel Xeon X5650
@@ -300,12 +306,7 @@ runtime.
 		\bottomrule
 	\end{tabular}
 \end{table}
-\begin{figure}
-	\centering
-	\includegraphics[width=0.5\textwidth]{gfx/real_brs.pdf}
-	\caption{Makepsan and BTU count distribution for OMSSA
-	runs\label{fig:realbrs}}
-\end{figure}
+
 
 Figure~\ref{fig:realbrs} presents the distribution of makespans and \ac{btu}
 counts across the 204 OMSSA runs. This exposes the behaviour exhibited by the
