@@ -473,9 +473,47 @@ perturbations.
 	at varying perturbation levels}\label{fig:int}
 \end{figure*}
 
+\subsection{Prediction Quality}
 
+\texttt{On compare nos simulation a la réalité (voir fig:fit) on ce félicite de
+nos 90\% de fitting sur OMSSA et de nos 100\% avec montage. Pour les BTU est
+résultats sont même encore plus génials... géniaux\\
+ON rappel néamoins qu'on avait le benefice d'un gros backlog, pour affine nos
+modéles}
 
+\subsection{Strategy analysis}
 
+\texttt{On montre que même si on était pas suffisament précis pour construire un
+modele parfait, en jouant avec les perturbation on peux regardé le comportement
+des stratégie et trouver leur faiblesse (fig:int)}
+
+\subsection{Advantages and limitations of the Monte Carlo approach}
+
+Thanks to our backlog of executions, we were able to build a trustworthy for how
+the applications behaved on our platform. Our ability to check repeatedly our
+simulation against reality has allowed to test multiple ways to models our
+inputs and multiple option on what to simulate. 
+
+First we found that for our purposes the \ac{mcs} did not require thousands of
+simulations to be successful. When used in other domains such as physics
+\acp{mc} are often used with up from 20\,000 deterministic simulations, but the
+size of the input distribution is usually much larger. The result presented in
+this paper were obtain using 500 simulation per \ac{mcs}. By keeping the results
+of the individual simulations ordered, we were able to determine that by the
+hundredth simulation the average makespan was already precise to the second,
+with it's value hardly changing by the addition of the 400 next simulation. The
+standard deviation use to compute the width of the makespan interval was less
+stable, but but still showed strongly diminishing returns past the 100th
+simulation mark. On our setup one 500 iteration \ac{mcs} took 8 CPU minutes. The
+only attempt we did a speeding up was making sure all read/write operation were
+done to ram instead of to disk, so it's quite possible that better tooling could
+lead to a significantly faster process. It should also be noted that the
+individual simulation run within the \ac{mcs} can be parallelized.
+
+\texttt{sim precision : boot times, correct simulation of individual cases}
+
+\texttt{Simply increasing the pert when you don't know won't get you better
+results : see previous subsection.}
 
 % TODO : Eval checklist here
 \begin{verbatim}
