@@ -409,7 +409,6 @@ measure the impact  of the runtime perturbation on the  makespan, we compute the
 range $[\mu-2\sigma;\mu+2\sigma]$ (that is  a 95\% confidence interval) relative
 to  the mean  $\mu$. 
 
-
 \subsection{Input Modeling}
 
 Core  to the  \acl{mcs} is  the accuracy  of our  job runtimes  inputs. Given  a
@@ -462,6 +461,21 @@ perturbations.
 
 \section{Evaluation}
 \label{sec:eval}
+
+\begin{figure*}
+	\includegraphics[width=\textwidth]{gfx/fit_plot.pdf}
+	\caption{Makespan and BTU count distribution for OMSSA and Montage
+	Monte Carlo Simulation compared to reality.}\label{fig:fit}
+\end{figure*}
+\begin{figure*}
+	\includegraphics[width=\textwidth]{gfx/int_plot.pdf}
+	\caption{Makespan intervals and BTU count distribution for OMSSA and Montage
+	at varying perturbation levels}\label{fig:int}
+\end{figure*}
+
+
+
+
 
 % TODO : Eval checklist here
 \begin{verbatim}
