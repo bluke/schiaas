@@ -456,46 +456,53 @@ models.
 \subsection{Input Modeling}
 % TODO: Input modeling
 
-Core to the \acl{mcs} is the accuracy of our job runtimes model. Given a precise
-simulator and enough samples the \ac{mcs} will return a precise result, but this
-result corresponds to the reality described by the input models. As such for the
-result to be a good predictor of the reality, the inputs must be a good
-descriptor of reality. An ideal model would present a individual distribution
-for every job in the workflow, such distribution would require high level
-understanding of the jobs computation, communication, and of the underlying
-platform. In real life such modeling is not practical, the underlying platform
-is usually not known precisely, and the user might not be deeply familiar with
-the application if they as not developed it themselves. For this reason, despite
-having ourselves a comprehensive archive, we choose to use a more generic model.
+Core  to the  \acl{mcs} is  the accuracy  of our  job runtimes  inputs. Given  a
+precise simulator and enough samples the  \ac{mcs} will return a precise result,
+but this  result corresponds to  the reality described  by the inputs.  In other
+words, for the result to be a good  predictor of the reality, the inputs must be
+a good descriptor of reality.
+
+Hence, we seek  to determine which is  the range of acceptable  input values for
+the  \ac{MCS} to  produce accurate  enough predictions  (in terms  of confidence
+interval),  and we  term this  research \emph{input  modeling}.  Answering  this
+question will tell the  acceptable margin of error in the  user estimate for the
+method to be relevant.
+An ideal  model would present  an individual distribution  for every job  in the
+workflow, and such a distribution would require a deep understanding of the jobs
+computation, communication, and  of the underlying platform.  In  real life such
+modeling  is not  practical  as the  underlying platform  is  usually not  known
+precisely, and  the user might  not be very  familiar with the  application. For
+this reason, despite having ourselves a  comprehensive archive, we choose to use
+a more generic model.
 
 As discussed in Section~\ref{sec:MCS}, for the purpose of our \ac{mcs} we choose
-to consider our jobs runtimes as base on which is applied a perturbation. Though
-the base is determined job per job, the perturbation level is set simulation
-wide. The effective runtime of a job $i$  within the $n$\textit{-th} simulation of an
-\ac{mcs} is:
+to  consider   our  jobs   runtimes  as   the  base  on   which  is   applied  a
+perturbation. Though the base is determined  job per job, the perturbation level
+is  set  simulation  wide.  The  effective  runtime of  a  job  $i$  within  the
+$n$\textit{-th} simulation of an \ac{mcs} is:
 \[T_i^n = T_i * (1+r_i^n)\]
 with $r_i^n$ a value drawn between $[-P;+P]$. We call $P$ the perturbation level
 and denote it as percentage. 
 
-We take as our base value $T_i$ as the average
-effective runtime observed for this job. The simulation wide perturbation level
-is average of the worsts relative deviation for every job in the workload: 
+We take as  our base value $T_i$  as the average effective  runtime observed for
+this job.  The simulation wide  perturbation level is  the average of  the worst
+relative deviations for all jobs in the workload:
 
 \[P = \underset{i}{\textrm{mean}}(\delta{}_i)\]
 \[\delta{}_i = \max_n\left(\frac{R_i^n-mean(R_i)}{mean(R_i)}\right)\]
 with $R_i^m$ the observed effective runtime for job $i$ during execution $m$. 
 
-For OMSSA the perturbation level given by this methods where roughly 10\% for
-both strategies. For montage our calculated perturbation level was 20\% when
-looking at ASAP executions and 5\% when looking at AFAP executions. We believe
-this difference can be partially explained by the low number of montage runs in
-the archive. As such we also ran Montage simulation using the 10\% perturbation
+For OMSSA, the perturbation level given by this methods is roughly 10\% for both
+strategies. For Montage  our calculated perturbation level is  20\% when looking
+at ASAP  executions and  5\% when  looking at AFAP  executions. We  believe this
+difference can be partially  explained by the low number of  montage runs in the
+archive. As  such we  also ran  Montage simulation  using the  10\% perturbation
 level calculated using the OMSSA executions.
 
-For each application and strategy we also perform a single deterministic
-simulation using the raw base value with 0\% perturbation. This simulation
-serves as a reference point when evaluating the strategies behaviour when faced
-with perturbations
+For  each  application and  strategy  we  also  perform a  single  deterministic
+simulation  using the  raw base  value  with 0\%  perturbation. This  simulation
+serves as  reference when  evaluating the strategies  behaviour when  faced with
+perturbations.
 
 \section{Evaluation}
 \label{sec:eval}
