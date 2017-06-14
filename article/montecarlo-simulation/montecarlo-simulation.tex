@@ -204,10 +204,10 @@ the user.  Technically, the broker connects  to the cloud management system (for
 instance OpenStack) to  instruct how the infrastructure  should be provisioned
 and  then assigns  the jobs  to  the resources  using the  Slurm job  management
 system. 
-% TODO: type of scheduler
+
 Applications are submitted to Schlouder as job batches. Each job is provided with
 a \emph{user estimate} of the runtime, and if the application is a workflow, the
-list of  dependencies. Schlouder  uses an  non-dynamic on-line  scheduling where
+list of  dependencies. Schlouder  uses just-in-time  scheduling where
 jobs  are  assigned   to  \acp{vm}  as  soon  as  all   their  dependencies  are
 satisfied. We call strategy the heuristic used by Schlouder to make provisioning
 and scheduling decisions.   A dozen of strategies and variants  are available to
@@ -237,11 +237,14 @@ Schlouder are:
 In the following, we will evaluate the real executions at the light of these two
 strategies.
 
-\subsection{Experimental Set-up and Test Applications}
-\label{sc:setup}
+\subsection{Experimental Set-up and Test Applications}\label{sc:setup}
 
-Our experimental evaluation is carried out on two applications having very
-different characteristics.
+To evaluate Schlouder's performance we carried out multiple executions of
+common scientific applications. The execution traces for those runs where
+collected into an archive. This backlog of real execution is the benchmark
+against which our simulation performance will be evaluated. The applications
+used are:
+
 \begin{itemize}
 	\item Montage\cite{montage2009}, the Montage Astronomical Image Mosaic
 		Engine, is designed to splice astronomical images. As shown in
@@ -255,7 +258,6 @@ different characteristics.
 		computation intensive with a
 		\emph{communication-to-computation} ratio under to $20\%$.
 \end{itemize}
-% TODO our goal is to highlight exp behaviour
 
 \begin{figure}
 	\resizebox{0.5\textwidth}{!}{%
@@ -264,26 +266,25 @@ different characteristics.
 	\caption{Montage workflow diagram.}\label{fig:montage}
 \end{figure}
 
-We run these two applications with Schlouder on a private cloud.  We set up a 96
-core cloud based on four identical  dual $2.67GHz$ Intel Xeon X5650 servers with
-KVM based virtualization  and an Openstack cloud-front (first  2012.1, and later
-2014.2). This cluster was exclusive to our usage and special attention was given
-to never overload the system.
+These two applications were executed using Schlouder on a private cloud.  We set
+up a 96 core cloud based on four identical  dual $2.67GHz$ Intel Xeon X5650
+servers with KVM based virtualization  and an Openstack cloud-front (first
+2012.1, and later 2014.2). This cluster was exclusive to our usage and special
+attention was given to never overload the system.
 
 \subsection{Experimental Observations}
 
-We used Schlouder to repeatedly run the test applications on our private cloud
-platform and archived Schlouder outputs. Schlouder keeps track of several useful
-metrics including, but not limited to, the \ac{vm}'s start dates, boot time,
-shutdown times and tasks assigned, and the task's start date, effective
-runtimes. We are interested in two macro metrics, the makespan and the cost.
-The makespan is the time elapsed between the submission of the first job and the
-completion of the last completed job. The cost is measured as a number of
-\acp{btu}. Since our experiments have a single \ac{vm} type we counted one
-\ac{btu} per \ac{vm} per started hour to match the most common pricing on the
-cloud. Table~\ref{tab:nbruns} gives an overview of the executions in the
-archive used in this paper. We observe variability on the makespan due to the
-variability of individual job's effective runtime.
+Schlouder's execution traces contain several useful metrics including, but not
+limited to, the \ac{vm}'s start dates, boot time, shutdown times and tasks
+assigned, and the task's start date and effective runtimes. We are interested in
+two macro metrics, the makespan and the cost.  The makespan is the time elapsed
+between the submission of the first job and the completion of the last completed
+job. The cost is measured as a number of \acp{btu}. Since our experiments have a
+single \ac{vm} type we counted one \ac{btu} per \ac{vm} per started hour to
+match the most common pricing on the cloud. Table~\ref{tab:nbruns} gives an
+overview of the executions in the archive used in this paper. We observe
+variability on the makespan due to the variability of individual job's effective
+runtime.
 \begin{table}
 	\centering
 	\caption{Overview of archived executions}\label{tab:nbruns}
@@ -454,7 +455,6 @@ models.
 \end{comment}
 
 \subsection{Input Modeling}
-% TODO: Input modeling
 
 Core  to the  \acl{mcs} is  the accuracy  of our  job runtimes  inputs. Given  a
 precise simulator and enough samples the  \ac{mcs} will return a precise result,
