@@ -411,7 +411,7 @@ to  the mean  $\mu$.
 \begin{figure*}
 	\includegraphics[width=\textwidth]{gfx/fit_plot.pdf}
 	\caption{Makespan and BTU count distribution for OMSSA and Montage Monte
-	Carlo Simulation compared to realityi at 10\% perturbation
+	Carlo Simulation compared to reality at 10\% perturbation
 	level.}\label{fig:fit}
 \end{figure*}
 
@@ -491,64 +491,66 @@ Section~\ref{sec:MCS}.  Unless  specified  otherwise  we  use  a  standard  95\%
 confidence interval  of width $4\sigma$.  BTU representation is making  sure the
 simulation  represents  at least  every  BTU  counts  observed during  our  real
 runs. Figure~\ref{fig:fit}  shows results  for \acp{mcs}  using the  input model
-presented in the previous section at a 10\% perturbation levels.
+presented in the previous section at a 10\% perturbation level.
 
-With our model we were able to capture 90\% of real executions in ASAP and
-92\% of real AFAP run for OMSSA\@. These intervals span 7 and 10 minutes
-respectively whereas the results in our archive spread over 10 and 11 minutes.
-Using a 99\% confidence interval will results in better capture rates, 100\% for
-AFAP and 98\% for ASAP, but also wider intervals. 15 minutes intervals do not
-have huge impact on 3 to 4 hours applications like OMSSA, but would present a
-significant part short workflow. For cost prediction our enriched simulation
-find exactly the same possibilities as experienced in reality, though in the
-case of AFAP repartition favors higher BTU counts slightly more than observed in
-our backlog.
+With our model we  are able to capture 90\% of real executions  in ASAP and 92\%
+of real AFAP run for OMSSA\@. These intervals span 7 and 10 minutes respectively
+whereas the results in our archive spread  over 10 and 11 minutes.  Using a 99\%
+confidence interval results  in better capture rates of 100\%  for AFAP and 98\%
+for ASAP, but also in wider intervals  of 15 minutes.  Such an interval increase
+may be seen as having little impact , like in our OMSSA use-case exhibiting 3 to
+4 hour runs. Probably is this choice  of the confidence interval best let to the
+user.
+
+For cost prediction our enriched  simulation finds exactly the same possibilities
+as experienced in reality, though in  the case of AFAP, repartition favors higher
+BTU counts slightly more than observed in our backlog.
 
 Working on Montage when using \acp{mcs} with the perturbation level of its
 respective strategy, as seen in Section~\ref{sec:im}, capture rate is 100\%
 across all strategies. This capture rate is maintained when using the 10\%
 perturbation obtained using the OMSSA archive. In this cases the intervals span
 from 1.5 to 2.5 minutes for AFAP and ASAP respectively on workflow lasting from
-47 to 25 minutes. Because Montage as a sub 1 hour runtimes BTU counts are
+47 to 25 minutes. Because Montage has a sub 1 hour runtimes BTU counts are
 naturally stable, this stability is also found in the results of our simulations
-that match perfectly the number of BTU used.
+that match perfectly the number of BTUs used.
 
-The results shown in this section show that provided a good description of job
-runtimes our simulator will provide good predictions of the possible executions
-of this runs. However, thought we strived to keep our input modeling as simple
-as possible, the benefits of hindsight provided by the archive means that only
-the users most knowledgeable about their workflow the platform they plan to
-execute it one can hope to achieve such predictions. In Section~\ref{sec:lim},
-we will discuss the limits we experienced to this approach. In the next section
-we show by comparing different \acp{mcs} we can study the behaviour of the
-strategies when confronted with different applications and perturbation levels.
+The results shown in  this section show that provided a  good description of job
+runtimes our simulator will provide  good predictions of the possible executions
+of this runs. However,  thought we strived to keep our  input modeling as simple
+as possible, the  benefits of hindsight provided by the  archive means that only
+the users most knowledgeable about their  workload and the targeted platform can
+hope to achieve such predictions.  In Section~\ref{sec:lim}, we will discuss the
+limits we experienced to this approach. In the next section we show by comparing
+different \acp{mcs}  that we are able  to study the behavior  of the strategies
+when confronted with different applications and perturbation levels.
 
 
 \subsection{Strategy analysis}\label{sec:sa}
 
-In our method the perturbation is meant to capture all sources of uncertainty
-that could affect a jobs runtime, noisy neighbors, memory access contention,
-cache misses, or even variations in the underlying platform. This as allowed us
-to bring all these uncertainty under one dimension, but it should be noted that
-you could achieve similar results by having you \ac{mcs}, draw different values
-of network bandwidth, cpu-speed, or any other uncertain parameter for each
-individual simulations. Our one-dimensional approach is much easier implement to
+In our method the perturbation is meant to capture all sources of uncertainties
+that could affect a job runtime, noisy neighbors, memory access contention,
+cache misses, or even variations in the underlying platform. This has allowed us
+to bring all these uncertainties under one dimension, but it should be noted that
+we could achieve similar results by having a different \ac{mcs}, draw different values
+of network bandwidth, cpu-speed, or any other uncertain parameters for each
+individual simulation. Our one-dimensional approach is much easier to implement
 but at the cost of making the perturbation level more difficult to construct.
 
-In this section we continue to base our user estimates on the average runtimes
-of the jobs, as a knowledgable user would, but consider that we do not know
-which perturbation level is appropriate of this platform application strategy
-tuple. In such a situation a user would be interested on testing his application
-with different perturbation.
+In this section we  continue to base our user estimates  on the average runtimes
+of the  jobs, as a  knowledgable user  would, but consider  that we do  not know
+which perturbation  level is appropriate for the given platform  and application
+strategy.   In such  a  situation a  user  would be  interested  on testing  his
+application with different perturbation levels.
 
-Figure~\ref{fig:int} presents the results the results of such simulations for a
-10\% and 30\% perturbation level. On the Makespan interval graphs the box
-represents the span of the capture interval and the crossbar in the box
-represent a single 0\% perturbation simulations done outside the \ac{mcs}. Such
-as simulation serve as a reference point, it is the singular of the simulation
-running the users estimates. Comparing the interval of perturbed simulation to
-this unperturbed simulation allows us to view the effect of perturbation on the
-strategy. 
+Figure~\ref{fig:int} presents  the results  of such simulations  for a  10\% and
+30\% perturbation level.  On the  makespan interval graphs (left subfigures) the
+boxes represent the span  of the capture interval and the  crossbar inside a box
+represents   a   single   0\%   perturbation  simulations   done   outside   the
+\ac{mcs}. Comparing  the interval  of perturbed  simulation to  this unperturbed
+simulation allows us to view the effect  of perturbation on the strategy. On top
+in  these subfigures,  are presented  for  reference the  interval spanning  the
+minimum and maximum observed makespans over all runs.
 
 These affect are most noticeable in the first graph of Fig.~\ref{fig:int}.\
 showing the makespan intervals obtained for OMSSA at 30\% and 10\% perturbation
@@ -558,8 +560,8 @@ makespan, by definition the center of the capture interval, also gets higher.
 This shows that ASAP, a strategy geared towards reducing the makespan regardless
 of cost, is not as effective when scheduling bag-of-tasks in environment where
 job runtimes might vary widely. This is also true to a certain extent when
-scheduling workflows. As seens in the third graph of Fig.~\ref{fig:int}.\ the
-average runtime for Montage also increase slightly with the perturbation level.
+scheduling workflows. As seen in the third graph of Fig.~\ref{fig:int} the
+average runtime for Montage also increases slightly with the perturbation level.
 But our enriched simulation with Montage shows that at 30\% perturbation level
 it is for ASAP to outperform the results obtained at 10\%. This doesn't happen
 within the 95\% confidence intervals when looking at simulation of OMSSA at the
@@ -570,11 +572,11 @@ perturbation level increases low BTU count runs become less likely to occur and
 higher BTU counts become possible. This is not the case for ASAP, or in context
 where the application is clearly under an hour.
 
-This approach to analysing strategies and their interactions with workflow has
+This approach to analyzing strategies and their interactions with workflow has
 the notable advantage of not requiring complete understanding of a strategy, as
-long as a correct implementation of the strategy is available in de simulator,
-it can be considered a black box. The enriched simulation allows the user can
-witness it's behaviour against any workflow or variability.
+long as a correct implementation of the strategy is available in the simulator,
+it can be considered a black box. The enriched simulation allows the user to
+witness its behavior against any workflow or variability.
 
 
 \subsection{Advantages and limitations of the enriched simulation}\label{sec:lim}
