@@ -436,22 +436,21 @@ precisely, and  the user might  not be very  familiar with the  application. For
 this reason, despite having ourselves a  comprehensive archive, we choose to use
 a more generic model.
 
-As discussed in Section~\ref{sec:MCS}, for the purpose of our \ac{mcs} we choose
-to consider  our job runtimes  as the base on  which is applied  a perturbation,
-which extent is called the \emph{perturbation level}, denoted $P$ expressed as a
-percentage in  the following.  Though  the base is  determined job per  job, the
-perturbation level  is set simulation wide.   We set the effective  runtime of a
-job $i$ within the $n$\textit{-th} simulation of an \ac{mcs} to:
-\[T_i^n = T_i * (1+r_i^n)\]
-with $r_i^n$ a value drawn between $[-P;+P]$.
+As discussed in Section~\ref{sec:MCS}, for the purpose of our \ac{mcs} we
+consider job runtimes as a base runtime on which is applied a perturbation.  The
+extent of this perturbation is called the \emph{perturbation level} and is
+denoted $P$. Though the base is determined job per job, the perturbation level
+is set simulation wide. We set the effective runtime of a job $i$ within the
+$n$\textit{-th} simulation of an \ac{mcs} to: \[T_i^n = T_i * (1+r_i^n)\] with
+$r_i^n$ the perturbation value drawn between $[-P;+P]$.
 
 As we  will see  in Section~\ref{sec:sa},  the parameters $T_i$  and $P$  have a
 great influence on the \ac{mcs} results.  Our findings are that the best results
 are obtained by  taking as $T_i$ the average effective  runtime observed for job
-$i$ for a given  strategy. This corresponds to the guess of a  user who would be
-very  knowledgeable of  the execution  behavior. Regarding  the simulation  wide
-perturbation level  $P$, we found  that the best setting  is the average  of the
-worst relative deviations for all jobs in the workload:
+$i$ for a given  strategy. This corresponds to the guess of a knowledgable user.
+Regarding  the simulation  wide perturbation level  $P$, we found  that the best
+setting  is the average  of the worst relative deviations for all jobs in the
+workload:
 
 \[P = \underset{i}{\textrm{mean}}(\delta{}_i)\]
 \[\delta{}_i = \max_n\left(\frac{R_i^n-mean(R_i)}{mean(R_i)}\right)\]
@@ -543,7 +542,40 @@ tuple. In such a situation a user would be interested on testing his application
 with different perturbation.
 
 Figure~\ref{fig:int} presents the results the results of such simulations for a
-10\% and 30\% perturbation level.
+10\% and 30\% perturbation level. On the Makespan interval graphs the box
+represents the span of the capture interval and the crossbar in the box
+represent a single 0\% perturbation simulations done outside the \ac{mcs}. Such
+as simulation serve as a reference point, it is the singular of the simulation
+running the users estimates. Comparing the interval of perturbed simulation to
+this unperturbed simulation allows us to view the effect of perturbation on the
+strategy. 
+
+These affect are most noticeable in the first graph of Fig.~\ref{fig:int}.\
+showing the makespan intervals obtained for OMSSA at 30\% and 10\% perturbation
+levels. With the increase of the perturbation level the intervals given by our
+enhanced simulations get naturally wider, but this graph shows that the average
+makespan, by definition the center of the capture interval, also gets higher.
+This shows that ASAP, a strategy geared towards reducing the makespan regardless
+of cost, is not as effective when scheduling bag-of-tasks in environment where
+job runtimes might vary widely. This is also true to a certain extent when
+scheduling workflows. As seens in the third graph of Fig.~\ref{fig:int}.\ the
+average runtime for Montage also increase slightly with the perturbation level.
+But our enriched simulation with Montage shows that at 30\% perturbation level
+it is for ASAP to outperform the results obtained at 10\%. This doesn't happen
+within the 95\% confidence intervals when looking at simulation of OMSSA at the
+same perturbation level.
+
+When looking at cost, these simulation show that when using AFAP, as
+perturbation level increases low BTU count runs become less likely to occur and
+higher BTU counts become possible. This is not the case for ASAP, or in context
+where the application is clearly under an hour.
+
+This approach to analysing strategies and their interactions with workflow has
+the notable advantage of not requiring complete understanding of a strategy, as
+long as a correct implementation of the strategy is available in de simulator,
+it can be considered a black box. The enriched simulation allows the user can
+witness it's behaviour against any workflow or variability.
+
 
 \subsection{Advantages and limitations of the enriched simulation}\label{sec:lim}
 
