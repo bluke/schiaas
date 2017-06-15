@@ -579,51 +579,45 @@ witness it's behaviour against any workflow or variability.
 
 \subsection{Advantages and limitations of the enriched simulation}\label{sec:lim}
 
-Thanks to our backlog of executions, we were able to build a trustworthy for how
-the applications behaved on our platform. Our ability to check repeatedly our
-simulation against reality has allowed to test multiple ways to models our
+Thanks to our backlog of executions, we were able to build a trustworthy model
+of how the applications behaved on our platform. Our ability to check repeatedly
+our simulation against reality has allowed to test multiple ways to models our
 inputs and multiple option on what to simulate. 
 
 First we found that for our purposes the \ac{mcs} did not require thousands of
-simulations to be successful. When used in other domains such as physics
-\acp{mcs} are often used with up from 20\,000 deterministic simulations, but the
-size of the input distribution is usually much larger. The result presented in
-this paper were obtain using 500 simulation per \ac{mcs}. By keeping the results
-of the individual simulations ordered, we were able to determine that by the
-hundredth simulation the average makespan was already precise to the second,
-with it's value hardly changing by the addition of the 400 next simulation. The
-standard deviation use to compute the width of the makespan interval was less
-stable, but but still showed strongly diminishing returns past the 100th
-simulation mark. On our setup one 500 iteration \ac{mcs} took 8 CPU minutes. The
-only attempt we did a speeding up was making sure all read/write operation were
-done to ram instead of to disk, so it's quite possible that better tooling could
-lead to a significantly faster process. It should also be noted that the
-individual simulation run within the \ac{mcs} can be parallelized.
+deterministic simulations to be successful. When used in other domains such as
+physics \acp{mcs} are often used with up from 20\,000 deterministic simulations,
+but the size of the input distribution is usually much larger. The result
+presented in this paper were obtain using 500 simulation per \ac{mcs}. By
+keeping the results of the individual simulations ordered, we were able to
+determine that by the hundredth simulation the average makespan was already
+precise to the second, with it's value hardly changing by the addition of the
+400 next simulation. The standard deviation use to compute the width of the
+makespan interval was less stable, but but still showed strongly diminishing
+returns past the 100th simulation mark.
 
-\texttt{sim precision : boot times, correct simulation of individual cases}
+Our tool chain was able to run a 500\ac{mcs} in 15 CPU minutes. However our
+setup was poorly optimized and our only attempt at speeding up the process was
+having the simulation write results to RAM instead of to disk. It should also be
+noted the individual simulation within the \ac{mcs} can be parallelized.
 
-\texttt{Simply increasing the pert when you don't know won't get you better
-results : see previous subsection.}
+As discussed in Section~\ref{sec:MCS}, \aclp{mcs} replaces a stochastic
+simulation by repeated execution of deterministic simulations of the same
+phenomenon on random samples of the possible inputs. It is critical variables on
+contained within the inputs to be correct within the deterministic simulations.
+This include for example the correct simulation of boot times, and correct
+reimplementation of strategies. Ideally your deterministic simulator is able to
+properly reproduce real run when fed all the relevant information. In cases
+where some external parameter is also unstable or unpredictable, it can also be
+made part of the \ac{mcs} to be randomly drawn at each iteration.
 
-% TODO : Eval checklist here
-\begin{verbatim}
-= Following our input model we get good BTU repartion match and 90\% real fit.
-== real/sim BTU graph (OMSSA)
-== real/sim density grpah (OMSSA)
-== Montage results in text
-
-=  behaviour of strategies in the face of instabilities
-== Makespan bracket graph especially ASAP (OMSSA/MOntage) (20%)
-=== Show ASAP deviating under pert for BOT
-== BTU Graph at 50%
-
-= Limits of the system
-== Correct boottimes
-== Average jobs lenght
-== Fit only good if pretubations match reality (b/c ASAP instability)
-=== Fit/Pert graph
-
-\end{verbatim}
+Increasing the perturbation level will not always increase you predictions
+capture rate. To illustrate this we added the intervals of observed real
+makespans to the relevant graphs in Figure~\ref{fig:int}. On the OMSSA/ASAP
+makespan interval graph you can see that as the perturbation level gets higher
+the enriched simulation's resulting interval wider, but not as fast as the
+average makespan gets higher. Eventually this would lead a lower capture rate as
+the \ac{mcs} results gets further away from the real makepans. 
 
 \section{Conclusion}
 
