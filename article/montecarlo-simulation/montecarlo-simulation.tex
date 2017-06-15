@@ -352,8 +352,8 @@ As exposed above, the variability of real executions suggests that a simulation,
 even if it was  perfectly accurate, would capture only one of the set
 of possible reals  executions. We will show later that  the simulation is indeed
 very   accurate  when   the  user   estimates  are   close  to   the  effectives
-runtimes. However,  if we want to  provide the user  with a broader view  of how
-his/her real executions could behave,  we should enrich the simulation framework
+runtimes. However,  to  provide the user  with a broader view  of how
+his/her real executions could behave with job runtimes variability,  we should enrich the simulation framework
 with some form of stochastic prediction.
 
 \subsection{Monte-Carlo Simulation}\label{sec:MCS}
@@ -477,11 +477,12 @@ perturbations.
 \begin{figure*}
 	\includegraphics[width=\textwidth]{gfx/int_plot.pdf}
 	\caption{Makespan intervals and BTU count distribution for OMSSA and 
-	Montage at varying perturbation levels.	In makespan interval graph the 
+	Montage at different perturbation levels. In makespan interval graph the 
 	box represent the 95\% confidence interval resulting from the \acs{mcs},
 	and the crossbar the results of a single unperturbed simulations us 
 	average job times.}\label{fig:int}
 \end{figure*}
+%JG : inverser 10% et 40% sur deux figures pour être dans le même ordre sur les 4 figures
 
 \subsection{Prediction Quality}\label{sec:pq}
 
@@ -501,7 +502,7 @@ of real AFAP run for OMSSA\@. These intervals span 7 and 10 minutes respectively
 whereas the results in our archive spread  over 10 and 11 minutes.  Using a 99\%
 confidence interval results  in better capture rates of 100\%  for AFAP and 98\%
 for ASAP, but also in wider intervals  of 15 minutes.  Such an interval increase
-may be seen as having little impact , like in our OMSSA use-case exhibiting 3 to
+may be seen as having little impact, like in our OMSSA use-case exhibiting 3 to
 4 hour runs. Probably is this choice  of the confidence interval best let to the
 user.
 
@@ -515,8 +516,7 @@ across all strategies. This capture rate is maintained when using the 10\%
 perturbation obtained using the OMSSA archive. In this cases the intervals span
 from 1.5 to 2.5 minutes for AFAP and ASAP respectively on workflow lasting from
 47 to 25 minutes. Because Montage has a sub 1 hour runtimes BTU counts are
-naturally stable, this stability is also found in the results of our simulations
-that match perfectly the number of BTUs used.
+naturally stable, which is perfectly assessed by our simulations.
 
 The results shown in  this section show that provided a  good description of job
 runtimes our simulator will provide  good predictions of the possible executions
@@ -608,7 +608,7 @@ properly reproduce real runs when fed with all the relevant information. In case
 where some external parameter is also unstable or unpredictable, it can also be
 made part of the \ac{mcs} to be randomly drawn at each iteration.
 
-Increasing the perturbation level will not always increase you predictions
+Increasing the perturbation level will not always increase the predictions
 capture rate. To illustrate this we added the intervals of observed real
 makespans to the relevant graphs in Figure~\ref{fig:int}. On the OMSSA/ASAP
 makespan interval graph we can see that as the perturbation level gets higher
@@ -619,8 +619,8 @@ despite presenting a much wider interval. In reality the perturbation level of
 our system is not close to 40\%, therefore a \ac{mcs} with this level of
 perturbation can not be a good predictor of reality. Such a simulation would be
 a predictor of an alternate reality where this level of perturbation exists. As
-mentioned in Section~\ref{sec:pq}, trade off between the capture rate and
-makespan interval with is still possible by using a different confidence
+mentioned in Section~\ref{sec:pq}, trade-off between the capture rate and
+makespan interval is still possible by using a different confidence
 interval after fitting the simulated makespan to a Normal distribution.
 
 \section{Conclusion}
