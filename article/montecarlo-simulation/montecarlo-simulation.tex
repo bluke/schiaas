@@ -111,7 +111,7 @@ The first tool we can think of is the scheduler. Compared to earlier distributed
 computing systems  (e.g Grids),  the scheduling problem  statement in  the cloud
 must be  reformulated because of two  fundamental novelties: i) the  size of the
 infrastructure  can be  dynamically  scaled, and  ii) as  economic  cost can  be
-clearly measured, it naturally becomes a additional objective to the traditional
+clearly measured, it naturally becomes an additional objective to the traditional
 makespan  objective,  making  the   problem  multi-objective.   An abundance  of
 heuristics have been  developed to adapt to the cloud  context, spanning a large
 variety of assumptions about the setup.  The bi-objective issue is often tackled
@@ -203,7 +203,7 @@ satisfied.  We call  \emph{strategy} the  heuristic  used by  Schlouder to  make
 provisioning and scheduling  decisions.  A dozen of strategies  and variants are
 available to  the user (details can  be found in~\cite{GenaudG11}), of  which we
 will use  two in this  paper. Strategies  provision \acp{vm} and  schedules jobs
-based on  the user estimates of  the runtime.  Notice that  jobs' real runtimes,
+based on  the user estimates of  the runtime.  Notice that  jobs real runtimes,
 called \emph{effective runtimes},  may differ from the estimates,  but this does
 not change the initial scheduling decision regarding to which resources the jobs
 are assigned.
@@ -214,8 +214,8 @@ the other objective (cost or makespan). These two main strategies proposed by
 Schlouder are:
 \begin{itemize}
 \item ASAP (or \textit{as soon as possible}): schedules the job immediately onto
-  an already started VM, or if  no resource is available, immediately provisions
-  a new VM to start the job.  Hence this strategy tries to minimize the makespan
+  an idle VM, or immediately provisions a new VM to start the job if no idle VM 
+  is available.  Hence this strategy tries to minimize the makespan
   of the job batch execution.
 
 \item AFAP (or \textit{as full as  possible}): schedules each job in priority to
