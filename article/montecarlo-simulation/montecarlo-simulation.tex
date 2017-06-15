@@ -226,7 +226,7 @@ Schlouder are:
 	By solving this bin-packing problem, this strategy tends to minimize the
 	monetary cost of the batch execution.
 \end{itemize}
-In the following, we will evaluate the real executions at the light of these two
+In the following, we will evaluate the real executions against the backdrop of these two
 strategies.
 
 \subsection{Experimental Set-up and Test Applications}\label{sc:setup}
@@ -299,12 +299,12 @@ Figure~\ref{fig:realbrs}  presents the  distribution of  makespans and  \ac{btu}
 counts over  more than  200 runs.  This exposes the  behaviour exhibited  by the
 different strategies. ASAP  appears to finish faster in the  most cases and AFAP
 is less costly. But  these optimizations come at the cost  of instability on the
-dimension they  aim to  optimize. ASAP uses  a high number  of \ac{btu}  but the
-number of \ac{btu}  used is stable, whereas  the number of \ac{btu}  used in the
-runs  scheduled with  AFAP,  despite being  less, is  also  more variable.  When
+dimension they  aim to  optimize. ASAP uses  a high number  of \ac{btu}s  but this
+number of \ac{btu}s  is stable, whereas AFAP uses a lower number of \ac{btu}s  
+but this number of \ac{btu}s is  more variable.  When
 looking at the makespan, we take note of how the different strategies affect the
 skewness of  the overall distribution. The  positive skew seen on  ASAP suggests
-that even though  the strategy globally produces  shorter makespan perturbations
+that even though  the strategy globally produces  shorter makespan, perturbations
 are more likely  to extend the makespan, whereas AFAP  makespans are more spread
 out and skews negatively.
 
@@ -312,10 +312,11 @@ All the behaviours discussed in this section are due to the specifics of the
 provisioning and scheduling strategies. In the case of AFAP and ASAP a thorough
 analysis could probably expose the strategies instabilities, but that would not
 be possible on more complex and dynamic strategies. In the following sections we
-choose to consider strategies as black boxes to show that we are able through
-simulation to obtain an accurate prediction of the distribution of our runs
-and of the biases of our strategies, as long as they are correctly implemented
+choose to consider strategies as black boxes to show that through simulation 
+we are able  to obtain an accurate prediction of the distribution of our runs
+and of the biases of our strategies, as long as they are correctly implemented 
 in the simulations.
+%JG : je supprimerai cette dernière partie de phrase ``as long as...''
 
 \section{Enriched Simulation Framework}
 \label{sec:enriched-sim}
