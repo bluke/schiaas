@@ -55,7 +55,7 @@
 
 \begin{abstract}
   In the  cloud computing  model, cloud providers  invoice clients  for resource
-  consumption. Hence, tools helping the client to budget the cost of running its
+  consumption. Hence, tools helping the client to budget the cost of running his
   application are  of pre-eminent  importance. To  that end,  a number  of cloud
   simulators have been  proposed by researchers. However, the  attempts to reach
   reliable  predictions are  hampered by  the opacity  regarding the  underlying
@@ -93,15 +93,15 @@ operators is mainly  used in two ways.  Firstly, for  scaling purposes where new
 machines  are brought  online to  fulfill service  availability in  the face  of
 higher load,  this approach  is used  for providing service  allows for  a lower
 baseline cost while still being able to deal by spikes in demand by provisioning
-machine on the go.  Secondly for parallelizing tasks to achieve shorter makespan
-as equal cost, this approach is used for scientific and industrial workload with
-a clear  end and where  runtime is heavily  dependent on computing  power.  This
-approach  is made  possible by  the pricing  model of  cloud infrastructure,  as
-popularized by AWS\footnote{Amazon Web Services}, in which payment for computing
-power, provided as  \acp{vm}, happens in increment of arbitrary  length of time,
-\ac{btu}, usually of one hour. Running two \ac{vm} side by side for one \ac{btu}
-each costs  the same  as running  one \ac{vm}  for two  \ac{btu}, but  every
-\ac{btu} started is  owed in full.  
+machines  on  the go.   Secondly  for  parallelizing  tasks to  achieve  shorter
+makespan as  equal cost,  this approach  is used  for scientific  and industrial
+workload with  a clear end and  where runtime is heavily  dependent on computing
+power.   This  approach  is  made  possible   by  the  pricing  model  of  cloud
+infrastructure, as  popularized by  AWS\footnote{Amazon Web Services},  in which
+payment  for computing  power, provided  as  \acp{vm}, happens  in increment  of
+arbitrary length  of time, \ac{btu},  usually of  one hour. Running  two \ac{vm}
+side by side for one \ac{btu} each costs the same as running one \ac{vm} for two
+\ac{btu}, but every \ac{btu} started is owed in full.
 
 From the client's  perspective, provisioning an appropriate set  of resources in
 order to  handle a set of  jobs is a difficult  task, for which tools  may be of
@@ -112,7 +112,7 @@ computing systems  (e.g Grids),  the scheduling problem  statement in  the cloud
 must be  reformulated because of two  fundamental novelties: i) the  size of the
 infrastructure  can be  dynamically  scaled, and  ii) as  economic  cost can  be
 clearly measured, it naturally becomes a additional objective to the traditional
-makespan  objective,  making  the   problem  multi-objective.   A  abundance  of
+makespan  objective,  making  the   problem  multi-objective.   An abundance  of
 heuristics have been  developed to adapt to the cloud  context, spanning a large
 variety of assumptions about the setup.  The bi-objective issue is often tackled
 by  combining the  cost and  makespan  metrics in  a  single one  or fixing  one
@@ -148,7 +148,7 @@ the  runtime of  scientific workloads  is  hampered by  multiple factors.  First
 \ac{iaas}  operates in  a opaque  fashion, the  exact nature  of the  underlying
 platforms are  unknown and  may slightly vary  for a given  type of  resource as
 operators  complete their  data-centers  over  the years  with  new servers  and
-equipment.   Secondly  cloud  systems  are  multi-tenant  by  nature  which  ads
+equipment.   Secondly  cloud  systems  are  multi-tenant  by  nature  which adds
 uncertainty due to  contention on network and memory accesses,  depending on how
 \ac{vm}  are scheduled  and the  activity of  your \emph{neighbors}.   Even when
 \ac{iaas} operators attempt to mask  these irregularities in computing power and
@@ -195,18 +195,18 @@ instance OpenStack) to  instruct how the infrastructure  should be provisioned
 and  then assigns  the jobs  to  the resources  using the  Slurm job  management
 system. 
 
-Applications are submitted to Schlouder as job batches. Each job is provided with
-a \emph{user estimate} of the runtime, and if the application is a workflow, the
-list of  dependencies. Schlouder  uses just-in-time  scheduling where
+Applications are  submitted to Schlouder  as job  batches. Each job  is provided
+with  a  \emph{user estimate}  of  the  runtime, and  if  the  application is  a
+workflow, the list of dependencies. Schlouder uses just-in-time scheduling where
 jobs  are  assigned   to  \acp{vm}  as  soon  as  all   their  dependencies  are
-satisfied. We call strategy the heuristic used by Schlouder to make provisioning
-and scheduling decisions.   A dozen of strategies and variants  are available to
-the user (details can be found in~\cite{GenaudG11}), of which we will use two in
-this paper. Strategies  provision \acp{vm} and schedules jobs based  on the user
-estimates   of  the   runtime.   Notice  that   jobs'   real  runtimes,   called
-\emph{effective  runtimes}, may  differ from  the estimates,  but this  does not
-change the initial scheduling decision regarding to which resources the jobs are
-assigned.
+satisfied.  We call  \emph{strategy} the  heuristic  used by  Schlouder to  make
+provisioning and scheduling  decisions.  A dozen of strategies  and variants are
+available to  the user (details can  be found in~\cite{GenaudG11}), of  which we
+will use  two in this  paper. Strategies  provision \acp{vm} and  schedules jobs
+based on  the user estimates of  the runtime.  Notice that  jobs' real runtimes,
+called \emph{effective runtimes},  may differ from the estimates,  but this does
+not change the initial scheduling decision regarding to which resources the jobs
+are assigned.
 
 As mentioned in introduction, as no solution usually dominates the other in all
 objectives, we leave to the user a choice of strategies which will favor one or
@@ -293,17 +293,17 @@ runtime.
 \end{table}
 
 
-Figure~\ref{fig:realbrs} presents the distribution of makespans and \ac{btu}
-counts across the 204 OMSSA runs. This exposes the behaviour exhibited by the
-different strategies. ASAP appears to finish faster in the most cases and AFAP
-is less costly. But these optimizations come at the cost of instability on the
-dimension they aim to optimize. ASAP uses a high number of \ac{btu} but the
-number of \ac{btu} used is stable, whereas the number of \ac{btu} used in the
-runs scheduled with AFAP, despite being less, is also more variable. When
+Figure~\ref{fig:realbrs}  presents the  distribution of  makespans and  \ac{btu}
+counts over  more than  200 runs.  This exposes the  behaviour exhibited  by the
+different strategies. ASAP  appears to finish faster in the  most cases and AFAP
+is less costly. But  these optimizations come at the cost  of instability on the
+dimension they  aim to  optimize. ASAP uses  a high number  of \ac{btu}  but the
+number of \ac{btu}  used is stable, whereas  the number of \ac{btu}  used in the
+runs  scheduled with  AFAP,  despite being  less, is  also  more variable.  When
 looking at the makespan, we take note of how the different strategies affect the
-skewness of the overall distribution. The positive skew seen on ASAP suggests
-that even though the strategy globally produces shorter makespan perturbations
-are more likely to extend the makespan, whereas AFAP makespans are more spread
+skewness of  the overall distribution. The  positive skew seen on  ASAP suggests
+that even though  the strategy globally produces  shorter makespan perturbations
+are more likely  to extend the makespan, whereas AFAP  makespans are more spread
 out and skews negatively.
 
 All the behaviours discussed in this section are due to the specifics of the
@@ -311,7 +311,7 @@ provisioning and scheduling strategies. In the case of AFAP and ASAP a thorough
 analysis could probably expose the strategies instabilities, but that would not
 be possible on more complex and dynamic strategies. In the following sections we
 choose to consider strategies as black boxes to show that we are able through
-simulation of obtaining an accurate prediction of the distribution of our runs
+simulation to obtain an accurate prediction of the distribution of our runs
 and of the biases of our strategies, as long as they are correctly implemented
 in the simulations.
 
@@ -346,7 +346,7 @@ provisioning or scheduling decisions made by SimSchlouder, eg.\ having a job
 overrun its runtime without changing the corresponding user prediction.
 
 As exposed above, the variability of real executions suggests that a simulation,
-even if it was  perfectly accurate, would capture only a narrow  part of the set
+even if it was  perfectly accurate, would capture only one of the set
 of possible reals  executions. We will show later that  the simulation is indeed
 very   accurate  when   the  user   estimates  are   close  to   the  effectives
 runtimes. However,  if we want to  provide the user  with a broader view  of how
@@ -364,28 +364,28 @@ allow us to side step these computational difficulties. This method was proposed
 for PERT  graphs in 1967~\cite{Slyke63}, and  in the recent year  in the context
 \ac{dag} scheduling~\cite{Canon10,Zheng13}.
 
-\aclp{mcs}  work  by  repeatedly  drawing  input variables  and  using  them  in
-deterministic simulations to obtain samples of the possible results. Once enough
-samples have been computed, traditional fitting  can be used to characterize the
-resulting random  variable. In our  case, we will  draw values of  the effective
-runtimes of  the individual jobs,  and we  obtain through simulation  samples of
-makespans an BTU counts.
+\aclp{mcs} (\acs{mcs})\acused{mcs}  work by  repeatedly drawing  input variables
+and using  them in deterministic simulations  to obtain samples of  the possible
+results. Once enough samples have been computed, traditional fitting can be used
+to characterize the resulting random variable.  In our case, we will draw values
+of  the  effective runtimes  of  the  individual  jobs,  and we  obtain  through
+simulation samples of makespans an BTU counts.
 
 %\paragraph{Method} 
 Suppose an  application consisting of  $n$ jobs,  independent or organized  as a
 workflow.  The simulation engine SimSchlouder  takes as input the user estimates
 $T_1, \ldots , T_n$ for the job runtimes, schedules the jobs and finally outputs
-the makespan $M$ of the whole batch.  The user estimates of might be inaccurate,
+the makespan $M$ of the whole batch.  The user estimates might be inaccurate,
 and  we describe  hereafter  a method  to characterize  the  impact of  repeated
 imprecisions (on each  job runtime) on the final makespan.   We have developed a
 \ac{mcs} tool to  compute a confidence interval around the  makespan produced by
 simulation.  Let us sketch the overall process (see Fig~\ref{fig:mc-process}):
 \begin{itemize} 
-\item  from the  set  specified  set effective  runtimes  $\{T_i\}$, the  system
-  generates $s$ sets of perturbed runtimes $\{T_i^1\}, \ldots, \{T_i^s\}$.  Each
-  perturbed  runtime is  a  random value  uniformly drawn  around  $T_i$ (to  be
-  precised later). We call \emph{realization} each  such random draw of a set of
-  perturbed runtimes.
+\item from  the set of  specified runtimes  $\{T_i\}$, the system  generates $s$
+  sets  of perturbed  runtimes $\{T_i^1\},  \ldots, \{T_i^s\}$.   Each perturbed
+  runtime  is a  random  value  uniformly drawn  around  $T_i$  (to be  precised
+  later). We call \emph{realization} each such random draw of a set of perturbed
+  runtimes.
 \item a simulation  is run for each realization, producing  a makespan $M^i$ and
   BTU count sample for each,
 \item a  normal distribution ${\cal  N}(\mu,\sigma)$ is fitted on  the different
@@ -418,7 +418,7 @@ to  the mean  $\mu$.
 \subsection{Input Modeling}\label{sec:im}
 
 Core  to the  \acl{mcs} is  the accuracy  of our  job runtimes  inputs. Given  a
-precise simulator and enough samples the  \ac{mcs} will return a precise result,
+precise simulator and enough samples, the \ac{mcs} will return a precise result,
 but this  result corresponds to  the reality described  by the inputs.  In other
 words, for the result to be a good  predictor of the reality, the inputs must be
 a good descriptor of reality.
@@ -453,7 +453,7 @@ setting  is the average  of the worst relative deviations for all jobs in the
 workload:
 
 \[P = \underset{i}{\textrm{mean}}(\delta{}_i)\]
-\[\delta{}_i = \max_n\left(\frac{R_i^n-mean(R_i)}{mean(R_i)}\right)\]
+\[\delta{}_i = \max_n\left(\frac{R_i^n-\textrm{mean}(R_i)}{\textrm{mean}(R_i)}\right)\]
 with $R_i^m$ the observed effective runtime for job $i$ during execution $m$. 
 
 For OMSSA, the perturbation level given by this methods is roughly 10\% for both
@@ -482,22 +482,22 @@ perturbations.
 
 \subsection{Prediction Quality}
 
-We evaluate the validity of our simulation based on two different factors, the
-makespan capture rate and the BTU representation. The makespan capture rate is
-the percentage of real makespan in the archive contained within the confidence
-interval generated by fitting the makespans of our individual simulations using
-a Normal distribution, as discussed in Section~\ref{sec:MCS}. Unless specified
-otherwise we use a standard 95\% confidence interval of width $4\sigma$. BTU
-representation is making sure the simulation represents at least every BTU
-counts observed during our real runs. Figure~\ref{fig:fit} shows results for
-\acp{mcs} using the input model presented in the previous section at a 10\%
-perturbation levels.
+We evaluate the  validity of our simulation based on  two different factors, the
+\emph{makespan  capture rate}  and the  \emph{BTU representation}.  The makespan
+capture rate is the percentage of  real makespans in the archive contained within
+the confidence  interval generated  by fitting the  makespans of  our individual
+simulations    using     a    Normal     distribution,    as     discussed    in
+Section~\ref{sec:MCS}.  Unless  specified  otherwise  we  use  a  standard  95\%
+confidence interval  of width $4\sigma$.  BTU representation is making  sure the
+simulation  represents  at least  every  BTU  counts  observed during  our  real
+runs. Figure~\ref{fig:fit}  shows results  for \acp{mcs}  using the  input model
+presented in the previous section at a 10\% perturbation levels.
 
 With our model we were able to capture 90\% of real executions in ASAP and
 92\% of real AFAP run for OMSSA\@. These intervals span 7 and 10 minutes
 respectively whereas the results in our archive spread over 10 and 11 minutes.
 Using a 99\% confidence interval will results in better capture rates, 100\% for
-AFAP and 98\% for ASAP, but also wider intervals. 15 minutes intervals don't
+AFAP and 98\% for ASAP, but also wider intervals. 15 minutes intervals do not
 have huge impact on 3 to 4 hours applications like OMSSA, but would present a
 significant part short workflow. For cost prediction our enriched simulation
 find exactly the same possibilities as experienced in reality, though in the
