@@ -537,6 +537,24 @@ results : see previous subsection.}
 
 \section{Conclusion}
 
+Predicting  the execution  behavior  of complex  workloads in  the  cloud is  an
+important challenge. While a number  of research work have proposed model-driven
+simulators, much remains to be done for their adoption in production-grade cloud
+settings. As  advocated by Puchert  et al.~\cite{PucherGWK15}, the trust  we can
+put in  the predictions  demands certainty  and precision  that only  comes from
+validating simulation against empirical observation.
+
+This  paper contributes  to  this effort  on  two sides.   First,  we propose  a
+\acl{MCS}  extension to  a  discrete  event simulator  based  on SimGrid.   This
+extension provides stochastic predictions which are more informative than single
+values of cost and makespan.  Second, we  apply our method in an actual setting,
+on both a  bag-of-tasks and a workflow applications for  which we have collected
+execution traces. Our study put forward  the conditions for the applicability of
+the method, especially regarding the impact of the initial user estimates of the
+jobs' runtimes, which are central to any scheduling process. The perspectives of
+this work are certainly to apply the method to production clouds on a wider set 
+of applications.  
+
 \bibliographystyle{IEEEtran}
 \bibliography{montecarlo-simulation}
 
