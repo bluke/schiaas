@@ -446,7 +446,7 @@ job $i$ within the $n$\textit{-th} simulation of an \ac{mcs} to:
 with $r_i^n$ a value drawn between $[-P;+P]$.
 
 As we  will see  in Section~\ref{sec:sa},  the parameters $T_i$  and $P$  have a
-great influence on the \ac{MCS} results.  Our findings are that the best results
+great influence on the \ac{mcs} results.  Our findings are that the best results
 are obtained by  taking as $T_i$ the average effective  runtime observed for job
 $i$ for a given  strategy. This corresponds to the guess of a  user who would be
 very  knowledgeable of  the execution  behavior. Regarding  the simulation  wide
@@ -482,12 +482,6 @@ perturbations.
 \end{figure*}
 
 \subsection{Prediction Quality}
-
-\texttt{On compare nos simulation a la réalité (voir fig:fit) on ce félicite de
-nos 90\% de fitting sur OMSSA et de nos 100\% avec montage. Pour les BTU est
-résultats sont même encore plus géniaux\\
-ON rappel néamoins qu'on avait le benefice d'un gros backlog, pour affine nos
-modéles}
 
 We evaluate the validity of our simulation based on two different factors, the
 makespan capture rate and the BTU representation. The makespan capture rate is
@@ -531,11 +525,25 @@ we show by comparing different \acp{mcs} we can study the behaviour of the
 strategies when confronted with different applications and perturbation levels.
 
 
-\subsection{Strategy analysis}
+\subsection{Strategy analysis}\label{sec:sa}
 
-\texttt{On montre que même si on était pas suffisament précis pour construire un
-modele parfait, en jouant avec les perturbation on peux regardé le comportement
-des stratégie et trouver leur faiblesse (fig:int)}
+In our method the perturbation is meant to capture all sources of uncertainty
+that could affect a jobs runtime, noisy neighbors, memory access contention,
+cache misses, or even variations in the underlying platform. This as allowed us
+to bring all these uncertainty under one dimension, but it should be noted that
+you could achieve similar results by having you \ac{mcs}, draw different values
+of network bandwidth, cpu-speed, or any other uncertain parameter for each
+individual simulations. Our one-dimensional approach is much easier implement to
+but at the cost of making the perturbation level more difficult to construct.
+
+In this section we continue to base our user estimates on the average runtimes
+of the jobs, as a knowledgable user would, but consider that we do not know
+which perturbation level is appropriate of this platform application strategy
+tuple. In such a situation a user would be interested on testing his application
+with different perturbation.
+
+Figure~\ref{fig:int} presents the results the results of such simulations for a
+10\% and 30\% perturbation level.
 
 \subsection{Advantages and limitations of the enriched simulation}\label{sec:lim}
 
@@ -546,7 +554,7 @@ inputs and multiple option on what to simulate.
 
 First we found that for our purposes the \ac{mcs} did not require thousands of
 simulations to be successful. When used in other domains such as physics
-\acp{mc} are often used with up from 20\,000 deterministic simulations, but the
+\acp{mcs} are often used with up from 20\,000 deterministic simulations, but the
 size of the input distribution is usually much larger. The result presented in
 this paper were obtain using 500 simulation per \ac{mcs}. By keeping the results
 of the individual simulations ordered, we were able to determine that by the
