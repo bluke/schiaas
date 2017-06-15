@@ -68,7 +68,7 @@
 
   We consider the execution  of batch of jobs on a  actual platform, one example
   being a  bag-of-tasks and the other  one a workflow, whose  jobs are scheduled
-  using typical  heuristics based on  the user's  estimates of job  runtimes.  We
+  using typical  heuristics based on  the user  estimates of job  runtimes.  We
   propose an  improved simulation framework  based on the Monte-Carlo  method to
   study the  relationship between the  precision of  the user estimates  and the
   accuracy of the simulation results regarding  cost and makespan. Based on this
@@ -105,7 +105,7 @@ arbitrary length  of time, \ac{btu},  usually of  one hour. Running  two \ac{vm}
 side by side for one \ac{btu} each costs the same as running one \ac{vm} for two
 \ac{btu}, but every \ac{btu} started is owed in full.
 
-From the client's  perspective, provisioning an appropriate set  of resources in
+From the client  perspective, provisioning an appropriate set  of resources in
 order to  handle a set of  jobs is a difficult  task, for which tools  may be of
 great help.   
 
@@ -190,7 +190,7 @@ improvements and the limits of the approach.
 In the recent years, we have developed a client-side job broker for IaaS clouds
 called Schlouder~\cite{Michon17}. This broker is able to submit on behalf of its
 user a  batch of  jobs, be  it a  set of  independent jobs  or a  workflow.  The
-broker's main role is to schedule the set of jobs onto a set of cloud resources,
+broker main role is to schedule the set of jobs onto a set of cloud resources,
 which the broker can  scale up or down depending on  a \emph{strategy} chosen by
 the user.  Technically, the broker connects  to the cloud management system (for
 instance OpenStack) to  instruct how the infrastructure  should be provisioned
@@ -222,7 +222,7 @@ Schlouder are:
 
 \item AFAP (or \textit{as full as  possible}): schedules each job in priority to
 	an already  available resource where  the remaining time  before a new
-	\ac{btu} is started is greater or equal to the job's estimated runtime.
+	\ac{btu} is started is greater or equal to the job estimated runtime.
 	By solving this bin-packing problem, this strategy tends to minimize the
 	monetary cost of the batch execution.
 \end{itemize}
@@ -231,7 +231,7 @@ strategies.
 
 \subsection{Experimental Set-up and Test Applications}\label{sc:setup}
 
-To evaluate Schlouder's performance we carried out multiple executions of
+To evaluate Schlouder performance we carried out multiple executions of
 common scientific applications. The execution traces for those runs where
 collected into an archive. This backlog of real execution is the benchmark
 against which our simulation performance will be evaluated. The applications
@@ -267,16 +267,16 @@ attention was given to never overload the system.
 
 \subsection{Experimental Observations}
 
-Schlouder's execution traces contain several useful metrics including, but not
-limited to, the \ac{vm}'s start dates, boot time, shutdown times and tasks
-assigned, and the task's start date and effective runtimes. We are interested in
+Schlouder execution traces contain several useful metrics including, but not
+limited to, the \ac{vm} start dates, boot time, shutdown times and tasks
+assigned, and the task start date and effective runtimes. We are interested in
 two macro metrics, the makespan and the cost.  The makespan is the time elapsed
 between the submission of the first job and the completion of the last completed
 job. The cost is measured as a number of \acp{btu}. Since our experiments have a
 single \ac{vm} type we counted one \ac{btu} per \ac{vm} per started hour to
 match the most common pricing on the cloud. Table~\ref{tab:nbruns} gives an
 overview of the executions in the archive used in this paper. We observe
-variability on the makespan due to the variability of individual job's effective
+variability on the makespan due to the variability of individual job effective
 runtime.
 \begin{table}
 	\centering
@@ -359,7 +359,7 @@ with some form of stochastic prediction.
 Stochastic  simulations are  computationally more  expensive than  deterministic
 ones. In stochastic simulations inputs  become random variables representing the
 distribution of possible values for the parameters. In the context of stochastic
-\ac{dag} it has  been shown that computing the  makespan's distribution requires
+\ac{dag} it has  been shown that computing the  makespan distribution requires
 multiple derivations and  integrations~\cite{Ludwig01,Li97}. Monte Carlo methods
 allow us to side step these computational difficulties. This method was proposed
 for PERT  graphs in 1967~\cite{Slyke63}, and  in the recent year  in the context
@@ -398,7 +398,7 @@ simulation.  Let us sketch the overall process (see Fig~\ref{fig:mc-process}):
 		\input{gfx/mc-process.tex}
 		}
 \caption{Overview of the Monte-Carlo process: $500$ realizations are generated
-by drawing and adding a perturbation to each job's runtime of the provided
+by drawing and adding a perturbation to each job runtime of the provided
 runtimes set, every simulation is then simulated, the resulting makespans
 samples are fitted into the final result.}\label{fig:mc-process}
 \end{figure}
@@ -610,7 +610,7 @@ Increasing the perturbation level will not always increase the predictions
 capture rate. To illustrate this we added the intervals of observed real
 makespans to the relevant graphs in Figure~\ref{fig:int}. On the OMSSA/ASAP
 makespan interval graph we can see that as the perturbation level gets higher
-the enriched simulation's resulting interval wider, but not as fast as the
+the enriched simulation resulting interval wider, but not as fast as the
 average makespan gets higher. This leads to a lower capture rate with the 40\%
 perturbation level, 83\% capture, than with 10\% perturbation level 90\%,
 despite presenting a much wider interval. In reality the perturbation level of
@@ -637,9 +637,12 @@ values of cost and makespan.  Second, we  apply our method in an actual setting,
 on both a  bag-of-tasks and a workflow applications for  which we have collected
 execution traces. Our study put forward  the conditions for the applicability of
 the method, especially regarding the impact of the initial user estimates of the
-jobs' runtimes, which are central to any scheduling process. The perspectives of
-this work are certainly to apply the method to production clouds on a wider set 
-of applications.  
+jobs runtimes, which are central to any scheduling process. The first perspective of
+this work is to apply the method to production clouds on a wider set 
+of applications. This implies to automatize the process we described as best as 
+possible, especially regarding the capture of job runtimes. Moreover, now that 
+the approach is validated, we will study deeper the impact of the number of 
+simulations on the accuray of the provided information.
 
 \bibliographystyle{IEEEtran}
 \bibliography{montecarlo-simulation}
