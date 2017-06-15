@@ -33,6 +33,8 @@
 \newcommand{\etal}[1]{\emph{#1 et al.}}
 \newcommand{\pc}[1]{$#1\%$}
 
+\IEEEtriggeratref{17}
+
 %\title{Modeling the accuracy of Monte-Carlo approach for Cloud based workflow
 %  simulations.}
 
@@ -480,7 +482,7 @@ perturbations.
 	average job times.}\label{fig:int}
 \end{figure*}
 
-\subsection{Prediction Quality}
+\subsection{Prediction Quality}\label{sec:pq}
 
 We evaluate the  validity of our simulation based on  two different factors, the
 \emph{makespan  capture rate}  and the  \emph{BTU representation}.  The makespan
@@ -521,7 +523,7 @@ of this runs. However,  thought we strived to keep our  input modeling as simple
 as possible, the  benefits of hindsight provided by the  archive means that only
 the users most knowledgeable about their  workload and the targeted platform can
 hope to achieve such predictions.  In Section~\ref{sec:lim}, we will discuss the
-limits we experienced to this approach. In the next section we show by comparing
+limits we experienced with this approach. In the next section we show by comparing
 different \acp{mcs}  that we are able  to study the behavior  of the strategies
 when confronted with different applications and perturbation levels.
 
@@ -544,7 +546,7 @@ strategy.   In such  a  situation a  user  would be  interested  on testing  his
 application with different perturbation levels.
 
 Figure~\ref{fig:int} presents  the results  of such simulations  for a  10\% and
-30\% perturbation level.  On the  makespan interval graphs (left subfigures) the
+40\% perturbation level.  On the  makespan interval graphs (left subfigures) the
 boxes represent the span  of the capture interval and the  crossbar inside a box
 represents   a   single   0\%   perturbation  simulations   done   outside   the
 \ac{mcs}. Comparing  the interval  of perturbed  simulation to  this unperturbed
@@ -552,20 +554,17 @@ simulation allows us to view the effect  of perturbation on the strategy. On top
 in  these subfigures,  are presented  for  reference the  interval spanning  the
 minimum and maximum observed makespans over all runs.
 
-These affect are most noticeable in the first graph of Fig.~\ref{fig:int}.\
-showing the makespan intervals obtained for OMSSA at 30\% and 10\% perturbation
-levels. With the increase of the perturbation level the intervals given by our
-enhanced simulations get naturally wider, but this graph shows that the average
-makespan, by definition the center of the capture interval, also gets higher.
+These effects are most noticeable in the first graph of Fig.~\ref{fig:int}
+showing the makespan intervals obtained for OMSSA at 40\% and 10\% perturbation
+levels. With the increase of the perturbation level the intervals get naturally 
+wider, but the average makespan, by definition the center of the capture 
+interval, also gets higher. On OMSSA this happens to the extent that the lower 
+bound of our interval at 40\% is higher than the lower bound at 10\%.
 This shows that ASAP, a strategy geared towards reducing the makespan regardless
-of cost, is not as effective when scheduling bag-of-tasks in environment where
-job runtimes might vary widely. This is also true to a certain extent when
+of cost, is not as effective when scheduling bag-of-tasks in environments where
+job runtimes might vary widely.  This is also true to a certain extent when
 scheduling workflows. As seen in the third graph of Fig.~\ref{fig:int} the
 average runtime for Montage also increases slightly with the perturbation level.
-But our enriched simulation with Montage shows that at 30\% perturbation level
-it is for ASAP to outperform the results obtained at 10\%. This doesn't happen
-within the 95\% confidence intervals when looking at simulation of OMSSA at the
-same perturbation level.
 
 When looking at cost, these simulation show that when using AFAP, as
 perturbation level increases low BTU count runs become less likely to occur and
@@ -584,42 +583,44 @@ witness its behavior against any workflow or variability.
 Thanks to our backlog of executions, we were able to build a trustworthy model
 of how the applications behaved on our platform. Our ability to check repeatedly
 our simulation against reality has allowed to test multiple ways to models our
-inputs and multiple option on what to simulate. 
+inputs and multiple options on what to simulate. 
 
-First we found that for our purposes the \ac{mcs} did not require thousands of
-deterministic simulations to be successful. When used in other domains such as
+First we found that  for our purposes the \ac{mcs} did  not require thousands of
+deterministic simulations to  be successful. When used in other  domains such as
 physics \acp{mcs} are often used with up from 20\,000 deterministic simulations,
-but the size of the input distribution is usually much larger. The result
-presented in this paper were obtain using 500 simulation per \ac{mcs}. By
-keeping the results of the individual simulations ordered, we were able to
-determine that by the hundredth simulation the average makespan was already
-precise to the second, with it's value hardly changing by the addition of the
-400 next simulation. The standard deviation use to compute the width of the
-makespan interval was less stable, but but still showed strongly diminishing
-returns past the 100th simulation mark.
-
-Our tool chain was able to run a 500\ac{mcs} in 15 CPU minutes. However our
-setup was poorly optimized and our only attempt at speeding up the process was
-having the simulation write results to RAM instead of to disk. It should also be
-noted the individual simulation within the \ac{mcs} can be parallelized.
+but  the size  of the  input  distribution is  usually much  larger. The  result
+presented  in this  paper were  obtain using  500 simulation  per \ac{mcs}.   By
+keeping  the results  of the  individual simulations  ordered, we  were able  to
+determine  that by  the hundredth  simulation the  average makespan  was already
+precise to the second, with its value hardly changing by the addition of the 400
+next  simulations. The  standard  deviation used  to compute  the  width of  the
+makespan interval was less stable, but still showed strongly diminishing returns
+past the 100th simulation mark.
 
 As discussed in Section~\ref{sec:MCS}, \aclp{mcs} replaces a stochastic
 simulation by repeated execution of deterministic simulations of the same
-phenomenon on random samples of the possible inputs. It is critical variables on
-contained within the inputs to be correct within the deterministic simulations.
+phenomenon on random samples of the possible inputs. It is critical that the
+operators inputs to the simulation be correct within the deterministic simulations.
 This include for example the correct simulation of boot times, and correct
-reimplementation of strategies. Ideally your deterministic simulator is able to
-properly reproduce real run when fed all the relevant information. In cases
+reimplementation of strategies. Ideally, the deterministic simulator is able to
+properly reproduce real runs when fed with all the relevant information. In cases
 where some external parameter is also unstable or unpredictable, it can also be
 made part of the \ac{mcs} to be randomly drawn at each iteration.
 
 Increasing the perturbation level will not always increase you predictions
 capture rate. To illustrate this we added the intervals of observed real
 makespans to the relevant graphs in Figure~\ref{fig:int}. On the OMSSA/ASAP
-makespan interval graph you can see that as the perturbation level gets higher
+makespan interval graph we can see that as the perturbation level gets higher
 the enriched simulation's resulting interval wider, but not as fast as the
-average makespan gets higher. Eventually this would lead a lower capture rate as
-the \ac{mcs} results gets further away from the real makepans. 
+average makespan gets higher. This leads to a lower capture rate with the 40\%
+perturbation level, 83\% capture, than with 10\% perturbation level 90\%,
+despite presenting a much wider interval. In reality the perturbation level of
+our system is not close to 40\%, therefore a \ac{mcs} with this level of
+perturbation can not be a good predictor of reality. Such a simulation would be
+a predictor of an alternate reality where this level of perturbation exists. As
+mentioned in Section~\ref{sec:pq}, trade off between the capture rate and
+makespan interval with is still possible by using a different confidence
+interval after fitting the simulated makespan to a Normal distribution.
 
 \section{Conclusion}
 
