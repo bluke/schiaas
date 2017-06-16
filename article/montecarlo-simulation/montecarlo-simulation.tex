@@ -33,7 +33,7 @@
 \newcommand{\etal}[1]{\emph{#1 et al.}}
 \newcommand{\pc}[1]{$#1\%$}
 
-\IEEEtriggeratref{17}
+\IEEEtriggeratref{15}
 
 %\title{Modeling the accuracy of Monte-Carlo approach for Cloud based workflow
 %  simulations.}
@@ -649,19 +649,24 @@ settings. As  advocated by Puchert  et al.~\cite{PucherGWK15}, the trust  we can
 put in  the predictions  demands certainty  and precision  that only  comes from
 validating simulation against empirical observation.
 
-This  paper contributes  to  this effort  on  two sides.   First,  we propose  a
-\acl{mcs}  extension to  a  discrete  event simulator  based  on SimGrid.   This
+This paper contributes to this effort on two sides. First, we propose a
+\acl{mcs} extension to a discrete event simulator based on SimGrid. This
 extension provides stochastic predictions which are more informative than single
-values of cost and makespan.  Second, we  apply our method in an actual setting,
-on both a  bag-of-tasks and a workflow applications for  which we have collected
-execution traces. Our study put forward  the conditions for the applicability of
+values of cost and makespan. Second, we apply our method in an actual setting,
+on both a bag-of-tasks and a workflow applications for which we have collected
+execution traces. Our study put forward the conditions for the applicability of
 the method, especially regarding the impact of the initial user estimates of the
-jobs runtimes, which are central to any scheduling process. The first perspective of
-this work is to apply the method to production clouds on a wider set 
-of applications. This implies to automatize the process we described as best as 
-possible, especially regarding the capture of job runtimes. Moreover, now that 
-the approach is validated, we will study deeper the impact of the number of 
-simulations on the accuracy of the provided information.
+jobs runtimes, which are central to any scheduling process. The first
+perspective of this work is to apply the method to production clouds. This
+implies to automatize the process we described as best as possible, especially
+regarding the capture of job runtimes. Our second perspective, now that we are
+confident in our ability application executions, is to move away from the
+applications in our archive and using our enriched simulation to study the
+interactions between scheduling and workflow. More specifically, we are
+interested in how the structure of a workflow affects a scheduling's robustness,
+that is, its ability to satisfy predetermined constraint in terms of deadline or
+cost.
+
 
 \bibliographystyle{IEEEtran}
 \bibliography{montecarlo-simulation}
