@@ -504,6 +504,30 @@ may be seen as having little impact, like in our OMSSA use-case exhibiting 3 to
 4 hour runs. Probably is this choice  of the confidence interval best let to the
 user.
 
+\begin{table}
+	\centering
+	\caption{Capture rate and BTU representation depending on confidence interval
+          (IC) }\label{tab:fit}
+	\begin{tabular}{llcccc}
+		\toprule
+		Application&Strategy& 
+                                      \multicolumn{2}{c}{Capture Rate}&
+                                      \multicolumn{2}{c}{BTU representation} \\
+                           &         & IC 95\% & IC 99\% & IC 95\% & IC 99\% \\
+		\midrule
+		\multirow{2}{*}{OMSSA}&ASAP&  90\%& 98\% & & \\
+				      &AFAP&  92\%& 100\%& & &\\
+		\midrule
+		\multirow{2}{*}{Montage}&ASAP& & & & &\\
+					&AFAP& & & & &\\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+\begin{comment}
+
+\end{comment}
+
 For cost prediction our enriched  simulation finds exactly the same possibilities
 as experienced in reality, though in  the case of AFAP, repartition favors higher
 BTU counts slightly more than observed in our backlog.
