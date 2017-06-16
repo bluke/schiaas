@@ -109,10 +109,10 @@ From the client  perspective, provisioning an appropriate set  of resources in
 order to  handle a set of  jobs is a difficult  task, for which tools  may be of
 great help.   
 
-The first tool we can think of is the scheduler. Compared to earlier distributed
+The first type of tool is the scheduler. Compared to earlier distributed
 computing systems  (e.g Grids),  the scheduling problem  statement in  the cloud
-must be  reformulated because of two  fundamental novelties: i) the  size of the
-infrastructure  can be  dynamically  scaled, and  ii) as  economic  cost can  be
+must be reformulated because of two fundamental novelties: firstly the size of the
+infrastructure can be dynamically scaled, and secondly as economic cost can be
 clearly measured, it naturally becomes an additional objective to the traditional
 makespan  objective,  making  the   problem  multi-objective.   An abundance  of
 heuristics have been  developed to adapt to the cloud  context, spanning a large
@@ -205,7 +205,7 @@ satisfied.  We call  \emph{strategy} the  heuristic  used by  Schlouder to  make
 provisioning and scheduling  decisions.  A dozen of strategies  and variants are
 available to  the user (details can  be found in~\cite{GenaudG11}), of  which we
 will use  two in this  paper. Strategies  provision \acp{vm} and  schedules jobs
-based on  the user estimates of  the runtime.  Notice that  jobs real runtimes,
+based on the user estimates of the runtime. Notice that the jobs' real runtimes,
 called \emph{effective runtimes},  may differ from the estimates,  but this does
 not change the initial scheduling decision regarding to which resources the jobs
 are assigned.
@@ -455,14 +455,14 @@ workload:
 
 \[P = \underset{i}{\textrm{mean}}(\delta{}_i)\]
 \[\delta{}_i = \max_n\left(\frac{R_i^n-\textrm{mean}(R_i)}{\textrm{mean}(R_i)}\right)\]
-with $R_i^m$ the observed effective runtime for job $i$ during execution $m$. 
+with $R_i^n$ the observed effective runtime for job $i$ during execution $n$. 
 
 For OMSSA, the perturbation level given by this methods is roughly 10\% for both
 strategies. For Montage  our calculated perturbation level is  20\% when looking
 at ASAP  executions and  5\% when  looking at AFAP  executions. We  believe this
 difference can be partially  explained by the low number of  montage runs in the
-archive. As  such we  also ran  Montage simulation  using the  10\% perturbation
-level calculated using the OMSSA executions.
+archive. As such we additionally ran a Montage simulation using the 10\% 
+perturbation level calculated using the OMSSA executions.
 
 For  each  application and  strategy  we  also  perform a  single  deterministic
 simulation  using the  raw base  value  with 0\%  perturbation. This  simulation
