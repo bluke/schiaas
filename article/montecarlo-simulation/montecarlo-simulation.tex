@@ -38,7 +38,7 @@
 %\title{Modeling the accuracy of Monte-Carlo approach for Cloud based workflow
 %  simulations.}
 
-\title{Executing Batches of Jobs on Clouds: How to Accurately Predict the Reality?}
+\title{Executing Batch Jobs on Clouds: How to Predict Reality Accurately ?}
 
 
 \author{\IEEEauthorblockN{Luke~Bertot 
@@ -61,22 +61,22 @@
   application are  of pre-eminent  importance. To  that end,  a number  of cloud
   simulators have been  proposed by researchers. However, the  attempts to reach
   reliable  predictions are  hampered by  the opacity  regarding the  underlying
-  hardware platform  and the  multi-tenant nature  of the  cloud which  make job
-  runtimes both  variables and hard to  predict.  In this paper,  we investigate
+  hardware platform  and the  multi-tenant nature  clouds make job
+  runtimes both  variable and hard to  predict.  In this paper,  we investigate
   through two real  use-cases, which parameters are the most  influential in the
   prediction of the actual execution behavior in terms of cost and makespan.
 
-  We consider the execution  of batch of jobs on a  actual platform, one example
+  We consider the execution  of batch jobs on an  actual platform, one example
   being a  bag-of-tasks and the other  one a workflow, whose  jobs are scheduled
   using typical  heuristics based on  the user  estimates of job  runtimes.  We
   propose an  improved simulation framework  based on the Monte-Carlo  method to
   study the  relationship between the  precision of  the user estimates  and the
   accuracy of the simulation results regarding  cost and makespan. Based on this
   stochastic process,  predictions are expressed as  interval-based makespan and
-  cost.   We show  that imprecisions  in  user estimates  are most  of the  time
+  cost.   We show  that  most  of the time imprecisions  in  user estimates are
   largely amortized in the final predictions but still can capture real
-  observations. Finally, we evidence the influence of the scheduling heuristics
-  on the accuracy of the method.
+  observations. Finally, we offer evidence of the influence of the scheduling 
+  heuristics on the accuracy of the method.
  
 \end{abstract}
 
@@ -87,27 +87,27 @@ cloud computing, computer simulation, monte carlo methods.
 \section{Introduction.}
 
 Over the  last decade the advancement  of virtualization techniques has  lead to
-the emergence of new economic and exploitation approach of computer resources in
+the emergence of new economic and exploitation approaches of computer resources in
 the form of \ac{iaas}, one form of cloud computing. In this model, all computing
 resources are made available on demand  by third-party operators and payed based
 on usage.   The ability to provision  resources on demand provided  by \ac{iaas}
 operators is mainly  used in two ways.  Firstly, for  scaling purposes where new
 machines  are brought  online to  fulfill service  availability in  the face  of
-higher load,  this approach  is used  for providing service  allows for  a lower
-baseline cost while still being able to deal by spikes in demand by provisioning
-machines  on  the go.   Secondly  for  parallelizing  tasks to  achieve  shorter
-makespan as  equal cost,  this approach  is used  for scientific  and industrial
-workload with  a clear end and  where runtime is heavily  dependent on computing
+higher loads, this approach is used for providing service and allows for a lower
+baseline cost while still being able to deal with spikes in demand by provisioning
+machines  on  the fly. Secondly  for  parallelizing  tasks to  achieve  shorter
+makespan at  equal cost,  this approach  is used  for scientific  and industrial
+workloads with a clear goal and  where runtime is heavily  dependent on computing
 power.   This  approach  is  made  possible   by  the  pricing  model  of  cloud
-infrastructure, as  popularized by  AWS\footnote{Amazon Web Services},  in which
-payment  for computing  power, provided  as  \acp{vm}, happens  in increment  of
-arbitrary length  of time, \ac{btu},  usually of  one hour. Running  two \ac{vm}
+infrastructures, as  popularized by  AWS\footnote{Amazon Web Services},  in which
+payment  for computing  power, provided  as  \acp{vm}, happens  in increments of
+arbitrary lengths of time, \ac{btu},  usually of  one hour. Running  two \ac{vm}
 side by side for one \ac{btu} each costs the same as running one \ac{vm} for two
 \ac{btu}, but every \ac{btu} started is owed in full.
 
 From the client  perspective, provisioning an appropriate set  of resources in
-order to  handle a set of  jobs is a difficult  task, for which tools  may be of
-great help.   
+order to  handle a set of  jobs is a difficult  task, for which tools would be 
+of great help.   
 
 The first type of tool is the scheduler. Compared to earlier distributed
 computing systems  (e.g Grids),  the scheduling problem  statement in  the cloud
@@ -118,8 +118,8 @@ makespan  objective,  making  the   problem  multi-objective.   An abundance  of
 heuristics have been  developed to adapt to the cloud  context, spanning a large
 variety of assumptions about the setup.  The bi-objective issue is often tackled
 by  combining the  cost and  makespan  metrics in  a  single one  or fixing  one
-parameter as a constraint (deadline-  or budget- constrained schedule), while it
-can be argued  that several solutions may be equally  interesting trade-offs and
+parameter as a constraint (deadline- or budget- constrained schedules). While it
+can be argued  that several solutions may be equally  interesting trade-offs,
 it is up to the user to choose.  In~\cite{Su13} is proposed a strategy where VMs
 belonging to a  Pareto front representing the most  cost-efficient resources are
 used  in  priority  to  map  jobs.  Likewise,  in~\cite{Durillo14}  a  set  of
@@ -127,21 +127,21 @@ Pareto-optimal solutions are  proposed to the user, and this  is also the spirit
 of our  own work.   Another discriminating criterion  between approaches  is the
 assumption of  an \emph{online}  (or \emph{just-in-time}) or  \emph{offline} (or
 \emph{static})  schedule,  on   the  type  of  workload   (independent  jobs  or
-workflows),  the homogeneity  of  the ressources,  or the  way  they handle  the
-multiple objectives.  Offline scheduling represents a large body of the research
-works often based  on the adaptation of popular heuristics  aiming at minimizing
+workflows),  the homogeneity  of  the resources,  or the  way  they handle  the
+multiple objectives.  Offline scheduling represents a large body of the research 
+often based  on the adaptation of popular heuristics  aiming to minimize
 makespan in Grids.  For instance  the popular HEFT~\cite{Zhao2003} heuristic has
 been  revisited in~\cite{LinL11},  which  adds the  ability  to scale  resources
 depending on whether or not a task  can execute by its estimated finish time, or
-is extended in~\cite{Li11cost-conscious} to select  slots with a balance between
+as extended in~\cite{Li11cost-conscious} to select  slots with a balance between
 runtime  and  cost.  However,  offline  scheduling  is often  evaluated  through
-simulation while online scheduling is closer to the assumptions of practitioners
-who evaluate  their ideas  on actual environments.   Online strategies  has been
-early  proposed  for  bags-of-tasks,  to adress  the  problem  of  appropriately
+simulation while online scheduling is closer to the practitioners assumptions 
+who evaluate  their ideas  in actual environments.   Online strategies have been
+proposed  for  bags-of-tasks, to address  the problem  of  appropriately
 provisioning                             the                            platform
 (e.g~\cite{MarshallKF10,GenaudG11,DuongLG11,VillegasASI12}).  These  works share
-many  commonalities, taking  especially  into account  some important  operating
-system level details such as the boot time of a VM or the contention that occurs
+many  commonalities, especially taking  into account  some important  operating
+system level details, such as the boot time of a VM or the contention that occurs
 if too many VMs are started simultaneously. We show in this paper that these are
 influential factors to the prediction of the execution.
   
@@ -156,12 +156,12 @@ uncertainty due to  contention on network and memory accesses,  depending on how
 \ac{iaas} operators attempt to mask  these irregularities in computing power and
 network  access by  guaranteeing a  minimum performance,  variability occurs  in
 presence of \emph{less-than-noisy-neighbors} as it is not in the interest of the
-\ac{iaas} operators to limit power  when available over the guaranteed minimums.
-These factor add to the already  high difficulty of modeling job execution times
-on network of computers as shown in~\cite{Lastovetsky05}.
+\ac{iaas} operators to limit power  available over the guaranteed minimums.
+These factors add to the already  high difficulty of modeling job execution times
+on a network of computers as shown in~\cite{Lastovetsky05}.
 
 To deal  with the inherent  unpredictability introduced by  opaque heterogeneous
-platforms, the standard approach is to  consider jobs runtimes to be stochastic.
+platforms, the standard approach is to  consider job runtimes to be stochastic.
 Every job can be modeled by a \ac{rv} that models the whole spectrum of possible
 runtimes. These  \ac{rv} are  the basis required  for a  stochastic simulation.
 Such  simulations   output  a  random   variable  of  the   observed  phenomenon
@@ -169,13 +169,13 @@ Such  simulations   output  a  random   variable  of  the   observed  phenomenon
 intervals of possible  results with their assorted confidence. 
 
 In this paper, we propose a stochastic method to enrich the classical prediction
-based  on a  discrete-event  simulator, and  we study  the  conditions for  this
-approach to be relevant. This study is  carried out on a real setting, described
+based on a discrete-event simulator, and  we study the conditions needed for this
+approach to be relevant. This study is  carried out in a real setting, described
 in  section~\ref{sec:work-context},   where  the  applications   use-cases,  the
-scheduler  and  the  experimental  observations are  presented.  The  stochastic
-framework we propose is  then presented in section~\ref{sec:enriched-sim}, and
+scheduler, and  the  experimental  observations are  presented.  The  stochastic
+framework we propose is  then presented in section~\ref{sec:enriched-sim} and
 is evaluated in section~\ref{sec:eval}. We finally conclude by discussing the 
-improvements and the limits of the approach.
+possible improvements and the limits of the approach.
 
 
 \section{Work Context}
@@ -188,41 +188,41 @@ improvements and the limits of the approach.
 \end{figure*}
 \subsection{Schlouder}
 In the recent years, we have developed a client-side job broker for IaaS clouds
-called Schlouder~\cite{Michon17}. This broker is able to submit on behalf of its
-user a  batch of  jobs, be  it a  set of  independent jobs  or a  workflow.  The
-broker main role is to schedule the set of jobs onto a set of cloud resources,
+called Schlouder~\cite{Michon17}. This broker is able to submit on the user's 
+ batch  jobs, be  it a  set of  independent jobs  or a  workflow.  The
+broker's main role is to schedule the set of jobs onto a set of cloud resources,
 which the broker can  scale up or down depending on  a \emph{strategy} chosen by
 the user.  Technically, the broker connects  to the cloud management system (for
-instance OpenStack) to  instruct how the infrastructure  should be provisioned
+instance, OpenStack) to  instruct how the infrastructure  should be provisioned
 and  then assigns  the jobs  to  the resources  using the  Slurm job  management
 system. 
 
-Applications are  submitted to Schlouder  as job  batches. Each job  is provided
+Applications are  submitted to Schlouder  as batch jobs. Each job  is provided
 with  a  \emph{user estimate}  of  the  runtime, and  if  the  application is  a
 workflow, the list of dependencies. Schlouder uses just-in-time scheduling where
 jobs  are  assigned   to  \acp{vm}  as  soon  as  all   their  dependencies  are
 satisfied.  We call  \emph{strategy} the  heuristic  used by  Schlouder to  make
-provisioning and scheduling  decisions.  A dozen of strategies  and variants are
+provisioning and scheduling  decisions.  A dozen strategies and their variants are
 available to  the user (details can  be found in~\cite{GenaudG11}), of  which we
-will use  two in this  paper. Strategies  provision \acp{vm} and  schedules jobs
+will use  two in this  paper. Strategies  provision \acp{vm} and  schedule jobs
 based on the user estimates of the runtime. Notice that the jobs' real runtimes,
 called \emph{effective runtimes},  may differ from the estimates,  but this does
-not change the initial scheduling decision regarding to which resources the jobs
-are assigned.
+not change the initial scheduling decision with regards to which resources the 
+jobs are assigned.
 
-As mentioned in introduction, as no solution usually dominates the other in all
-objectives, we leave to the user a choice of strategies which will favor one or
-the other objective (cost or makespan). These two main strategies proposed by
-Schlouder are:
+As mentioned in introduction, as no one solution dominates the other in all
+objectives, we leave it to the user the choice of strategies which will favor 
+one or the other objective (cost or makespan). These two main strategies 
+proposed by Schlouder are:
 \begin{itemize}
 \item ASAP (or \textit{as soon as possible}): schedules the job immediately onto
   an idle VM, or immediately provisions a new VM to start the job if no idle VM 
   is available.  Hence this strategy tries to minimize the makespan
-  of the job batch execution.
+  of the batch job execution.
 
 \item AFAP (or \textit{as full as  possible}): schedules each job in priority to
-	an already  available resource where  the remaining time  before a new
-	\ac{btu} is started is greater or equal to the job estimated runtime.
+	an already available resource whenever the remaining time  before a new
+	\ac{btu} begins is greater or equal to the job estimated runtime.
 	By solving this bin-packing problem, this strategy tends to minimize the
 	monetary cost of the batch execution.
 \end{itemize}
@@ -232,8 +232,8 @@ strategies.
 \subsection{Experimental Set-up and Test Applications}\label{sc:setup}
 
 To evaluate Schlouder performance we carried out multiple executions of
-common scientific applications. The execution traces for those runs where
-collected into an archive. This backlog of real execution is the benchmark
+typical scientific applications. The execution traces for those runs were
+collected in an archive. This backlog of real executions is the benchmark
 against which our simulation performance will be evaluated. The applications
 used are:
 
@@ -245,10 +245,10 @@ used are:
 		\emph{commuication-to-computation} ratio superior to $90\%$.
 	\item OMSSA\cite{Geer2004}, the Open Mass-Spectrometry Search Algorithm, 
 		is used to analyze mass-spectrometer results. The application is
-                parallelized as a bag-of-tasks, \textit{i.e} as a number of
+                parallelized as a bag-of-tasks, \textit{i.e.} as a number of
                 independent parallel jobs. This application is
 		computation intensive with a
-		\emph{communication-to-computation} ratio under to $20\%$.
+		\emph{communication-to-computation} ratio under $20\%$.
 \end{itemize}
 \begin{comment}
 \begin{figure}
@@ -261,15 +261,15 @@ used are:
 
 These two applications were executed using Schlouder on a private cloud.  We set
 up a 96 core cloud based on four identical  dual $2.67GHz$ Intel Xeon X5650
-servers with KVM based virtualization  and an Openstack cloud-front (first
-2012.1, and later 2014.2). This cluster was exclusive to our usage and special
-attention was given to never overload the system.
+servers with KVM-based virtualization  and an Openstack cloud-front (first
+2012.1, and later 2014.2). This cluster was exclusively used by us and special
+attention was taken to never overload the system.
 
 \subsection{Experimental Observations}
 
 Schlouder execution traces contain several useful metrics including, but not
-limited to, the \ac{vm} start dates, boot time, shutdown times and tasks
-assigned, and the task start date and effective runtimes. We are interested in
+limited to, the \ac{vm} start dates, boot time, shutdown times, and assigned
+tasks, as well as the task start date and effective runtimes. We are interested in
 two macro metrics, the makespan and the cost.  The makespan is the time elapsed
 between the submission of the first job and the completion of the last completed
 job. The cost is measured as a number of \acp{btu}. Since our experiments have a
@@ -296,11 +296,11 @@ runtime.
 
 
 Figure~\ref{fig:realbrs}  presents the  distribution of  makespans and  \ac{btu}
-counts over  more than  200 runs.  This exposes the  behaviour exhibited  by the
+counts over  more than  200 runs in all.  This exposes the  behaviour exhibited  by the
 different strategies. ASAP  appears to finish faster in the  most cases and AFAP
 is less costly. But  these optimizations come at the cost  of instability on the
 dimension they  aim to  optimize. ASAP uses  a high number  of \ac{btu}s  but this
-number of \ac{btu}s  is stable, whereas AFAP uses a lower number of \ac{btu}s  
+number is stable, whereas AFAP uses a lower number of \ac{btu}s  
 but this number of \ac{btu}s is  more variable.  When
 looking at the makespan, we take note of how the different strategies affect the
 skewness of  the overall distribution. The  positive skew seen on  ASAP suggests
@@ -310,26 +310,26 @@ out and skews negatively.
 
 All the behaviours discussed in this section are due to the specifics of the
 provisioning and scheduling strategies. In the case of AFAP and ASAP a thorough
-analysis could probably expose the strategies instabilities, but that would not
+analysis could probably expose the strategies' instabilities, but that would not
 be possible on more complex and dynamic strategies. In the following sections we
 choose to consider strategies as black boxes to show that through simulation 
-we are able  to obtain an accurate prediction of the distribution of our runs
-and of the biases of our strategies.
+we are able  to obtain an accurate prediction of our runs' distribution
+and of our strategies' biases.
 
 \section{Enriched Simulation Framework}
 \label{sec:enriched-sim}
 
 \subsection{SimSchlouder}
 
-As a follow-up on our work on Schlouder we developed SimSchlouder, a simulator
-reimplementing the behaviour of Schlouder. Integrated to Schlouder, this
+As a follow-up to our work on Schlouder we developed SimSchlouder, a simulator
+reimplementing the behaviour of Schlouder. Integrated in Schlouder, this
 simulator allows the user to request an estimate of the makespan and the cost
 before choosing a strategy for a real run. SimSchlouder includes the same
 strategies as Schlouder, and as its real-world counterpart it is easily
 extendable with new strategies. SimSchlouder is based on SimGrid~\cite{simgrid},
 a framework to build discrete event simulators of distributed systems such as
-Grids, Clouds or HPC systems. SimGrid has been chosen as the simulation engine,
-for the versatility of its interfaces, and above all, for its well studied
+Grids, Clouds, or HPC systems. SimGrid has been chosen as the simulation engine,
+for the versatility of its interfaces, and above all, for its well-studied
 accuracy against reality (e.g~\cite{StanisicTLVM15,VelhoSCL13}).
 
 
@@ -341,18 +341,18 @@ user inputs. They describe the workflow to simulate, the submission dates of
 each job, the runtime prediction that would be provided to Schlouder.
 Additionally for the purpose of the simulator, a user can choose to supply
 effective runtimes to match, communication to simulate, or alternative boot
-times for the \acp{vm}. Those additional inputs are used to alter the sequence
+times for the \acp{vm}. These additional inputs are used to alter the sequence
 of events simulated without interfering with parameters that would change the
-provisioning or scheduling decisions made by SimSchlouder, eg.\ having a job
+provisioning or scheduling decisions made by SimSchlouder, e.g.\ having a job
 overrun its runtime without changing the corresponding user prediction.
 
-As exposed above, the variability of real executions suggests that a simulation,
+As mentioned above, the variability of real executions suggests that a simulation,
 even if it was  perfectly accurate, would capture only one of the set
-of possible reals  executions. We will show later that  the simulation is indeed
-very   accurate  when   the  user   estimates  are   close  to   the  effectives
+of possible real executions. We will show later that  the simulation is indeed
+very   accurate  when   the  user   estimates  are   close  to   the  effective
 runtimes. However,  to  provide the user  with a broader view  of how
-his/her real executions could behave with job runtimes variability,  we should enrich the simulation framework
-with some form of stochastic prediction.
+their real executions could behave with job runtimes variability,  we should 
+enrich the simulation framework with some form of stochastic prediction.
 
 \subsection{Monte-Carlo Simulation}\label{sec:MCS}
 
@@ -370,13 +370,13 @@ and using  them in deterministic simulations  to obtain samples of  the possible
 results. Once enough samples have been computed, traditional fitting can be used
 to characterize the resulting random variable.  In our case, we will draw values
 of  the  effective runtimes  of  the  individual  jobs,  and we  obtain  through
-simulation samples of makespans an BTU counts.
+simulation samples of makespans and BTU counts.
 
 %\paragraph{Method} 
-Suppose an  application consisting of  $n$ jobs,  independent or organized  as a
+Consider an  application consisting of  $n$ jobs,  independent or organized  as a
 workflow.  The simulation engine SimSchlouder  takes as input the user estimates
 $T_1, \ldots , T_n$ for the job runtimes, schedules the jobs and finally outputs
-the makespan $M$ of the whole batch.  The user estimates might be inaccurate,
+the makespan $M$ of the whole batch.  The user estimates might be inaccurate
 and  we describe  hereafter  a method  to characterize  the  impact of  repeated
 imprecisions (on each  job runtime) on the final makespan.   We have developed a
 \ac{mcs} tool to  compute a confidence interval around the  makespan produced by
@@ -384,10 +384,10 @@ simulation.  Let us sketch the overall process (see Fig~\ref{fig:mc-process}):
 \begin{itemize} 
 \item from  the set of  specified runtimes  $\{T_i\}$, the system  generates $s$
   sets  of perturbed  runtimes $\{T_i^1\},  \ldots, \{T_i^s\}$.   Each perturbed
-  runtime  is a  random  value  uniformly drawn  around  $T_i$  (to be  precised
-  later). We call \emph{realization} each such random draw of a set of perturbed
+  runtime  is a  random  value  uniformly drawn  around  $T_i$  (to be explained
+  below). We call \emph{realisation} each such random draw of a set of perturbed
   runtimes.
-\item a simulation  is run for each realization, producing  a makespan $M^i$ and
+\item a simulation  is run for each realisation, producing  a makespan $M^i$ and
   BTU count sample for each,
 \item a  normal distribution ${\cal  N}(\mu,\sigma)$ is fitted on  the different
   makespan values.
@@ -399,7 +399,7 @@ simulation.  Let us sketch the overall process (see Fig~\ref{fig:mc-process}):
 		}
 \caption{Overview of the Monte-Carlo process: $500$ realizations are generated
 by drawing and adding a perturbation to each job runtime of the provided
-runtimes set, every simulation is then simulated, the resulting makespans
+runtime set, every simulation is then simulated, the resulting makespan
 samples are fitted into the final result.}\label{fig:mc-process}
 \end{figure}
 Fitting is done to a normal distribution because, in essence the makespan is the
@@ -426,19 +426,19 @@ a good descriptor of reality.
 
 Hence, we seek  to determine which is  the range of acceptable  input values for
 the  \ac{mcs} to  produce accurate  enough predictions  (in terms  of confidence
-interval),  and we  term this  research \emph{input  modeling}.  Answering  this
-question will tell the  acceptable margin of error in the  user estimate for the
+interval),  and we call this  search \emph{input  modeling}.  Answering  this
+question will tell us the  acceptable margin of error in the  user estimate for the
 method to be relevant.
 An ideal  model would present  an individual distribution  for every job  in the
 workflow, and such a distribution would require a deep understanding of the jobs
 computation, communication, and  of the underlying platform.  In  real life such
-modeling  is not  practical  as the  underlying platform  is  usually not  known
-precisely, and  the user might  not be very  familiar with the  application. For
-this reason, despite having ourselves a  comprehensive archive, we choose to use
-a more generic model.
+modeling  is not  practical  as the  underlying platform  is  usually not
+precisely  known, and  the user might not be very familiar with the application.
+For this reason, despite having a comprehensive archive ourselves, we choose to 
+use a more generic model.
 
 As discussed in Section~\ref{sec:MCS}, for the purpose of our \ac{mcs} we
-consider job runtimes as a base runtime on which is applied a perturbation.  The
+consider job runtimes as a base runtime on which a perturbation is applied. The
 extent of this perturbation is called the \emph{perturbation level} and is
 denoted $P$. Though the base is determined job per job, the perturbation level
 is set simulation wide. We set the effective runtime of a job $i$ within the
@@ -466,7 +466,7 @@ perturbation level calculated using the OMSSA executions.
 
 For  each  application and  strategy  we  also  perform a  single  deterministic
 simulation  using the  raw base  value  with 0\%  perturbation. This  simulation
-serves as  reference when  evaluating the strategies  behaviour when  faced with
+serves as  reference when  evaluating the strategies' behaviour when  faced with
 perturbations.
 
 \section{Evaluation}
@@ -475,10 +475,9 @@ perturbations.
 \begin{figure*}
 	\includegraphics[width=\textwidth]{gfx/int_plot.pdf}
 	\caption{Makespan intervals and BTU count distribution for OMSSA and 
-	Montage at different perturbation levels. In makespan interval graph the 
-	box represent the 95\% confidence interval resulting from the \acs{mcs},
-	and the crossbar the results of a single unperturbed simulations us 
-	average job times.}\label{fig:int}
+	Montage at different perturbation levels. In the makespan interval graph 
+	the box represent the 95\% confidence interval resulting from the \acs{mcs},
+	and the bar the results of a single unperturbed simulation.}\label{fig:int}
 \end{figure*}
 
 \begin{table}
@@ -504,15 +503,15 @@ We evaluate the  validity of our simulation based on  two different factors, the
 \emph{makespan capture  rate} and  the \emph{BTU capture rate}.   The makespan
 capture rate is the percentage of  real makespans which fall into the confidence
 interval generated by fitting the  makespans of our individual simulations using
-a Normal distribution, as  discussed in Section~\ref{sec:MCS}.  Unless specified
-otherwise we  use a standard 95\%  confidence interval of width  $4\sigma$.  BTU
+a Normal distribution, as  discussed in Section~\ref{sec:MCS}.  Unless otherwise
+specified we  use a standard 95\%  confidence interval of width  $4\sigma$.  BTU
 capture rate is the ratio of BTU counts found in the simulation to the BTU
 counts observed  during our  real runs.  Figure~\ref{fig:fit} shows  results for
 \acp{mcs} using  the input  model presented  in the previous  section at  a 10\%
 perturbation level.
 
 Table~\ref{tab:fit}  summarizes the  results obtained  with a  10\% perturbation
-level. Along with the makespan capture rates is included in parenthesis the size
+level. Along with the makespan capture rates included in parenthesis is the size
 of the confidence interval relative to  the average makespan.  With our model we
 are able to  capture 90\% of real executions  in ASAP and 92\% of  real AFAP run
 for OMSSA\@.  These intervals  span 7  and 10  minutes respectively  whereas the
@@ -520,24 +519,23 @@ results in our archive  spread over 10 and 11 minutes.   Using a 99\% confidence
 interval results in  better capture rates of  100\% for AFAP and  98\% for ASAP,
 but also  in wider intervals  of 15 minutes.  Such  an interval increase  may be
 seen as having little impact, like in  our OMSSA use-case exhibiting 3 to 4 hour
-runs. Probably  is this choice  of the confidence  interval best let  to the
-user.
+runs. Probably this choice of the confidence interval is best left to the user.
 
 For cost prediction our enriched  simulation finds exactly the same possibilities
 as experienced in reality, though in  the case of AFAP, repartition favors higher
-BTU counts slightly more than observed in our backlog.
+BTU counts, slightly more than observed in our backlog.
 
 Working on Montage when using \acp{mcs} with the perturbation level of its
-respective strategy, as seen in Section~\ref{sec:im}, capture rate is 100\%
+respective strategy, as seen in Section~\ref{sec:im}, the capture rate is 100\%
 across all strategies. This capture rate is maintained when using the 10\%
 perturbation obtained using the OMSSA archive. In this cases the intervals span
 from 1.5 to 2.5 minutes for AFAP and ASAP respectively on workflow lasting from
-47 to 25 minutes. Because Montage has a sub 1 hour runtimes BTU counts are
-naturally stable, which is perfectly assessed by our simulations.
+47 and 25 minutes respectively. Because Montage runs in less than 1 hour BTU 
+counts are naturally stable, which is perfectly assessed by our simulations.
 
 The results shown in  this section show that provided a  good description of job
 runtimes our simulator will provide  good predictions of the possible executions
-of this runs. However,  thought we strived to keep our  input modeling as simple
+of these runs. However, though we strived to keep our input modeling as simple
 as possible, the  benefits of hindsight provided by the  archive means that only
 the users most knowledgeable about their  workload and the targeted platform can
 hope to achieve such predictions.  In Section~\ref{sec:lim}, we will discuss the
@@ -560,7 +558,7 @@ but at the cost of making the perturbation level more difficult to construct.
 In this section we  continue to base our user estimates  on the average runtimes
 of the  jobs, as a  knowledgable user  would, but consider  that we do  not know
 which perturbation  level is appropriate for the given platform  and application
-strategy.   In such  a  situation a  user  would be  interested  on testing  his
+strategy.   In such  a  situation a  user  would be  interested  in testing  his
 application with different perturbation levels.
 
 Figure~\ref{fig:int} presents  the results  of such simulations  for a  10\% and
@@ -568,13 +566,13 @@ Figure~\ref{fig:int} presents  the results  of such simulations  for a  10\% and
 boxes represent the span  of the capture interval and the  crossbar inside a box
 represents   a   single   0\%   perturbation  simulations   done   outside   the
 \ac{mcs}. Comparing  the interval  of perturbed  simulation to  this unperturbed
-simulation allows us to view the effect  of perturbation on the strategy. On top
-in  these subfigures,  are presented  for  reference the  interval spanning  the
-minimum and maximum observed makespans over all runs.
+simulation allows us to view the effect  of perturbation on the strategy. In the
+middle of these subfigures,  are presented  for  reference the  interval 
+spanning  the minimum and maximum observed makespans over all runs.
 
 These effects are most noticeable in the leftmost graph of Fig.~\ref{fig:int}
 showing the makespan intervals obtained for OMSSA at 40\% and 10\% perturbation
-levels. With the increase of the perturbation level the intervals get naturally 
+levels. With the increase of the perturbation level the intervals naturally get 
 wider, but the average makespan, by definition the center of the capture 
 interval, also gets higher. On OMSSA this happens to the extent that the lower 
 bound of our interval at 40\% is higher than the lower bound at 10\%.
@@ -586,8 +584,8 @@ average runtime for Montage also increases slightly with the perturbation level.
 
 When looking at cost, these simulations show that with AFAP, as
 perturbation level increases, low BTU count runs become less likely to occur and
-higher BTU counts become possible. This is not the case for ASAP, or in context
-where the application is clearly under an hour.
+higher BTU counts become possible. This is not the case for ASAP, or in a 
+context where the application run is clearly under an hour.
 
 This approach to analyzing strategies and their interactions with workflow has
 the notable advantage of not requiring complete understanding of a strategy, as
@@ -600,8 +598,8 @@ witness its behavior against any workflow or variability.
 
 Thanks to our backlog of executions, we were able to build a trustworthy model
 of how the applications behaved on our platform. Our ability to check repeatedly
-our simulation against reality has allowed to test multiple ways to models our
-inputs and multiple options on what to simulate. 
+our simulation against reality has allowed us to test multiple ways to model 
+our inputs and multiple options on what to simulate. 
 
 First we found that  for our purposes the \ac{mcs} did  not require thousands of
 deterministic simulations to  be successful. When used in other  domains such as
@@ -615,17 +613,17 @@ next  simulations. The  standard  deviation used  to compute  the  width of  the
 makespan interval was less stable, but still showed strongly diminishing returns
 past the 100th simulation mark.
 
-As discussed in Section~\ref{sec:MCS}, \aclp{mcs} replaces a stochastic
+As discussed in Section~\ref{sec:MCS}, \aclp{mcs} replace a stochastic
 simulation by repeated execution of deterministic simulations of the same
 phenomenon on random samples of the possible inputs. It is critical that the
-operators inputs to the simulation be correct within the deterministic simulations.
-This include for example the correct simulation of boot times, and correct
+operator inputs to the simulation be correct within the deterministic simulations.
+This includes for example the correct simulation of boot times, and correct
 reimplementation of strategies. Ideally, the deterministic simulator is able to
 properly reproduce real runs when fed with all the relevant information. In cases
 where some external parameter is also unstable or unpredictable, it can also be
 made part of the \ac{mcs} to be randomly drawn at each iteration.
 
-Increasing the perturbation level will not always increase the predictions
+Increasing the perturbation level will not always increase the prediction's
 capture rate. To illustrate this we added the intervals of observed real
 makespans to the relevant graphs in Figure~\ref{fig:int}. On the OMSSA/ASAP
 makespan interval graph we can see that as the perturbation level gets higher
@@ -643,29 +641,29 @@ interval after fitting the simulated makespan to a Normal distribution.
 \section{Conclusion}
 
 Predicting  the execution  behavior  of complex  workloads in  the  cloud is  an
-important challenge. While a number  of research work have proposed model-driven
+important challenge. While a number of research works have proposed model-driven
 simulators, much remains to be done for their adoption in production-grade cloud
 settings. As  advocated by Puchert  et al.~\cite{PucherGWK15}, the trust  we can
-put in  the predictions  demands certainty  and precision  that only  comes from
+put in  the prediction  demands certainty  and precision  that only  comes from
 validating simulation against empirical observation.
 
-This paper contributes to this effort on two sides. First, we propose a
+This paper contributes to this effort in two ways. First, we propose a
 \acl{mcs} extension to a discrete event simulator based on SimGrid. This
 extension provides stochastic predictions which are more informative than single
-values of cost and makespan. Second, we apply our method in an actual setting,
-on both a bag-of-tasks and a workflow applications for which we have collected
-execution traces. Our study put forward the conditions for the applicability of
+values of cost and makespan. Second, we apply our method in a real setting,
+on both a bag-of-tasks and a workflow application for which we have collected
+execution traces. Our study puts forward the conditions for the applicability of
 the method, especially regarding the impact of the initial user estimates of the
-jobs runtimes, which are central to any scheduling process. The first
+jobs' runtimes, which are central to any scheduling process. The first
 perspective of this work is to apply the method to production clouds. In this
 paper we managed to aggregate all the different sources of uncertainty into a
-perturbation on the jobs runtime. We are interested in checking whether this is
+perturbation on the job's runtime. We are interested in checking whether this is
 still possible in highly variable environments. Our second perspective, now that
 we are confident in our ability to simulate application executions, is to move
 away from the applications in our archive and use our enriched simulation to
 study the interactions between scheduling and workflow. More specifically, we
 are interested in how the structure of a workflow affects a scheduling's
-robustness, that is, its ability to satisfy predetermined constraint in terms of
+robustness, that is, its ability to satisfy predetermined constraints in terms of
 deadline or cost.
 
 
