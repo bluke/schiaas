@@ -20,37 +20,38 @@ Pôle API - 300 Bd Sébastien Brant - 67400 Illkirch-Graffenstaden - France} % S
 \begin{document}
 \maketitle  % See Section 4.1
 \begin{columns}
-	\column{0.65}
-\block{1. Exécution d'application de calcul scientifique dans les Cloud}{%See Section 4.2
-Grâce au cloud il est possible d'obtenir la puissance équivalente d'une grille
-de calcul, à la demande et sans le lourd investissement initiale. Cela ce fait
-au prix d'un payement a l'utilisation et de instabilité inhérente a une
-plateforme mutualisée.\\
+  \column{0.65} \block{1.  Exécution d'application  de calcul  scientifique dans
+    le Cloud}{%See Section 4.2
+    Le Cloud permet  d'obtenir de la puissance de calcul  à la demande, avec un
+    coût de location des ressources linéaire en le temps utilisé, compté en
+    unités de temps (BTU). Comme toute plateforme mutualisée, on y observe une 
+    variabilité des performances.\\
 
-Nous avons développer un système de courtage de cloud appelé
-Schlouder~\cite{Michon2017}.
-Schlouder planifie l'exécution de jobs dans le cloud, ce charge de démarrage et
-l'extinction des VMs, ainsi que de l'exécution individuelle des jobs. Schlouder
-utilise des stratégies pour déterminer combien de VMs démarrer et où placer les
-jobs. ASAP vise une exécution rapide, AFAP vise a minimiser les coûts.\\
+    Nous   avons   développé   un   système  de   courtage   de   cloud   appelé
+    Schlouder~\cite{Michon2017}.  Schlouder ordonnance  l'exécution de jobs dans
+    le cloud, se  charge du démarrage et  de l'extinction des VMs,  ainsi que de
+    l'exécution  individuelle des  jobs. Schlouder  utilise des  stratégies pour
+    déterminer combien de VMs démarrer et où placer les
+    jobs. ASAP vise une exécution rapide, AFAP vise a minimiser les coûts.\\
 
-Nous avons exécuté sur un cloud privé deux application. OMSSA une application de
-protéomique en bag-of-tasks et Montage est un workflow pour la fusion d'image
-astronomiques. Pour chaque exécution Schlouder relève les temps de démarrage,
-les temps d'exécution de chaque jobs, les coûts, et le temps total d'exécution.
-\\
+    Nous  avons  exécuté  sur  un   cloud  privé  deux  application.  OMSSA  une
+    application de protéomique  en bag-of-tasks et Montage est  un workflow pour
+    la fusion d'image astronomiques. Pour  chaque exécution Schlouder relève les
+    temps de démarrage,  les temps d'exécution de chaque jobs,  les coûts, et le
+    temps total d'exécution.
+    \\
 
 Même sur un Cloud privatif comme le notre, on observe une variabilité
 significative des temps d'exécutions. Cette variabilité est un obstacle aux
-prédictions des coût et temps d'exécution total. La prise en compte de cette
-variabilité requière une Simulation stochastique.\\
+prédictions des coûts et du temps d'exécution total. La prise en compte de cette
+variabilité requiert une simulation stochastique.\\
 
-La Figure 1.\ ci-contre présente les distribution observé des temps d'exécution
-(makespan) et des coût (BTU count) pour chacune de ces applications. 
+La Figure 1.\ ci-contre présente les distributions observées des temps d'exécution
+(makespan) et des coûts (BTU count) pour chacune de ces applications. 
 }
 \column{0.35}
 \block{}{%
-	\begin{tikzfigure}[Distribtion du temps d'execution et du coût dans la
+	\begin{tikzfigure}[Distribtion du temps d'exécution et du coût dans la
 		realité]
 		\includegraphics[width=0.97\linewidth]{gfx/real_plot.pdf}
 	\end{tikzfigure}
@@ -63,61 +64,63 @@ La Figure 1.\ ci-contre présente les distribution observé des temps d'exécuti
 \column{0.6}  % See Section 4.4
 
 \block{2. Simulation de Monte Carlo}{%
-Basé sur SimGrid~\cite{simgrid}, le simulateur de cloud SCHIaaS est
-déterministe. De ce fait il est aisé de l'utiliser pour répliquer Schlouder, ce
-que nous avons fait avec SimSchlouder. Néanmoins cela le rend inadapté à prendre
-en compte la variabilité des temps d'exécutions et des coûts.\\
+\`A partir de SimGrid~\cite{simgrid}, nous avons développé une interface
+permettant de modéliser les clouds IaaS. Avec cette interface, nous avons
+pu développer SimSchlouder, un simulateur du courtier Schlouder.
 
-La \ac{mcs} permet de réalisé des simulations stochastiques
-avec des simulateur déterministe. Comme avec les méthodes de Monte Carlo dont 
-elle découle, les \ac{mcs} fonctionnent par tirage répété des valeurs aléatoires
-pour échantillonner les résultat possible.\\
+Cependant, le moteur de simulation à évènements discrets de SimGrid est
+déterministe et n'est pas adapté à la variabilité des temps d'exécutions et des coûts.\\
 
-Ici nos variable aléatoire d'entrée sont les temps d'exécution des jobs, et nos
-variable de sortie le temps d'exécution total et le coût.\\
+La \ac{mcs} permet de réaliser des simulations stochastiques
+avec des simulateurs déterministes. Comme avec les méthodes de Monte Carlo dont 
+elles découlent, les \ac{mcs} fonctionnent par tirage répété des valeurs aléatoires
+pour échantillonner les résultats possibles.\\
+
+Ici nos variables aléatoires d'entrée sont les temps d'exécution des jobs, et nos
+variables de sortie le temps d'exécution total et le coût.\\
 \begin{tikzfigure}[Simulation de Monte Carlo]
 	\input{gfx/mc-process.tex}
 \end{tikzfigure}
 }
 \block{4. Résultats}{%
 La Figue 3.\ ci-contre, présente la distribution des résultat des simulations
-d'une MCS et les comparent à la réalité (en bleu). Notre MCS capture bien une
-majeur partie des exécution réelle.
+d'une MCS et les compare à la réalité (en bleu). Notre MCS capture une très grande
+partie des exécutions réelles.
 
-Lorsque l'on agrège les temps d'exécution obtenus par les simulation avec une
-loi normale, les intervalles de confiance à 99\% obtenus capture 100\% cas
-réels, à l'exception de OMSSA/ASAP ou le taux de capture et de 98\%. 
+Lorsque l'on agrège les temps d'exécution obtenus par les simulations avec une
+loi normale, les intervalles de confiance à 99\% obtenus capturent 100\% des cas
+réels, à l'exception de OMSSA/ASAP où le taux de capture et de 98\%. 
 
-Du coté du coût la simulation capture toutes les possibilité de nombre de BTU
-possible pour un couple application/stratégie donné.\\
+Du coté du coût, la simulation capture toutes les possibilités de nombres de BTU
+possibles pour un couple application/stratégie donnée.\\
 
 Néanmoins notre modèle est trop simpliste pour capturer exactement la 
-distribution des temps d'exécutions et des coûts. Dans la réalité la variabilité
+distribution des temps d'exécution et des coûts. Dans la réalité la variabilité
 des temps d'exécution n'est pas uniforme et change de job à job.
 }
 \block{5. En Résumé}{%
-Le Cloud présente un instabilité inhérente qui affecte le coût et le temps
-nécessaire a l'exécution d'un application. Cette variabilité est un frein a
-l'usage de la simulation comme outils de prédiction.\\
+Le Cloud présente un variablité inhérente qui affecte le coût et le temps
+nécessaire à l'exécution d'une application. Cette variabilité est un frein à
+l'usage de la simulation comme outil de prédiction.\\
 
 La simulation de Monte Carlo nous permet de modéliser la variabilité
-d'une application exécuté sur le cloud avec une précision suffisante pour
+d'une application exécutée sur le cloud avec une précision suffisante pour
 fournir un intervalle de confiance du temps total d'exécution et du coût.
 }
 \column{0.4}
 \block{3. Modèle Applicatif}{%
-Pour modélisé la variabilité des jobs sur notre plateforme de cloud on considère
-chaque temps d'exécution comme étant une base fixe auquel est appliqué une
+Pour modéliser la variabilité des jobs sur notre plateforme de cloud on considère
+chaque temps d'exécution comme étant une base fixe auquelle est appliquée une
 perturbation tirée aléatoirement. \[T_i^n = T_i * (1+r)\] 
 avec $T_i$ le temps moyen observé pour le job $i$, et $r$ une valeur aléatoire
 obtenue par un tirage uniforme dans l'intervalle $[-P,+P]$.\\
 
-Le niveau de perturbation $P$ est global pour toute la \ac{mcs} et est définit
-comme étant la moyenne des pire écarts à la moyenne observés. 
+Le niveau de perturbation $P$ est global pour toute la \ac{mcs} et est défini
+comme étant la moyenne des plus grands écarts à la moyenne observée. 
 Pour notre Cloud ce niveau de perturbation est de 10\%.
 } 
 \block{}{%
-\begin{tikzfigure}[Distribution des temps d'éxecutions et des coût obtenue par
+\begin{tikzfigure}[Distribution des temps d'éxecution et des coûts obtenus par
 la MCS]
 	\includegraphics[width=0.9\linewidth]{gfx/fit_plot.pdf}
 \end{tikzfigure}
