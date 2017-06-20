@@ -25,14 +25,14 @@ Pôle API - 300 Bd Sébastien Brant - 67400 Illkirch-Graffenstaden - France} % S
     Le Cloud permet  d'obtenir de la puissance de calcul  à la demande, avec un
     coût de location des ressources linéaire en le temps utilisé, compté en
     unités de temps (BTU). Comme toute plateforme mutualisée, on y observe une 
-    variabilité des performances.\\
+    variabilité des performances.
 
     Nous   avons   développé   un   système  de   courtage   de   cloud   appelé
     Schlouder~\cite{Michon2017}.  Schlouder ordonnance  l'exécution de jobs dans
     le cloud, se  charge du démarrage et  de l'extinction des VMs,  ainsi que de
     l'exécution  individuelle des  jobs. Schlouder  utilise des  stratégies pour
     déterminer combien de VMs démarrer et où placer les
-    jobs. ASAP vise une exécution rapide, AFAP vise a minimiser les coûts.\\
+    jobs. ASAP vise une exécution rapide, AFAP vise a minimiser les coûts.
 
     Nous  avons  exécuté  sur  un   cloud  privé  deux  application.  OMSSA  une
     application de protéomique  en bag-of-tasks et Montage est  un workflow pour
@@ -53,7 +53,7 @@ La Figure 1.\ ci-contre présente les distributions observées des temps d'exéc
 \block{}{%
 	\begin{tikzfigure}[Distribtion du temps d'exécution et du coût dans la
 		realité]
-		\includegraphics[width=0.97\linewidth]{gfx/real_plot.pdf}
+		\includegraphics[width=0.92\linewidth]{gfx/real_plot.pdf}
 	\end{tikzfigure}
 }
 \end{columns}
@@ -67,7 +67,6 @@ La Figure 1.\ ci-contre présente les distributions observées des temps d'exéc
 \`A partir de SimGrid~\cite{simgrid}, nous avons développé une interface
 permettant de modéliser les clouds IaaS. Avec cette interface, nous avons
 pu développer SimSchlouder, un simulateur du courtier Schlouder.
-
 Cependant, le moteur de simulation à évènements discrets de SimGrid est
 déterministe et n'est pas adapté à la variabilité des temps d'exécutions et des coûts.\\
 
@@ -92,14 +91,14 @@ loi normale, les intervalles de confiance à 99\% obtenus capturent 100\% des ca
 réels, à l'exception de OMSSA/ASAP où le taux de capture et de 98\%. 
 
 Du coté du coût, la simulation capture toutes les possibilités de nombres de BTU
-possibles pour un couple application/stratégie donnée.\\
+possibles pour un couple application/stratégie donnée.
 
 Néanmoins notre modèle est trop simpliste pour capturer exactement la 
 distribution des temps d'exécution et des coûts. Dans la réalité la variabilité
 des temps d'exécution n'est pas uniforme et change de job à job.
 }
 \block{5. En Résumé}{%
-Le Cloud présente un variablité inhérente qui affecte le coût et le temps
+Le Cloud présente un variabilité inhérente qui affecte le coût et le temps
 nécessaire à l'exécution d'une application. Cette variabilité est un frein à
 l'usage de la simulation comme outil de prédiction.\\
 
@@ -110,7 +109,7 @@ fournir un intervalle de confiance du temps total d'exécution et du coût.
 \column{0.4}
 \block{3. Modèle Applicatif}{%
 Pour modéliser la variabilité des jobs sur notre plateforme de cloud on considère
-chaque temps d'exécution comme étant une base fixe auquelle est appliquée une
+chaque temps d'exécution comme étant une base fixe à la quelle est appliquée une
 perturbation tirée aléatoirement. \[T_i^n = T_i * (1+r)\] 
 avec $T_i$ le temps moyen observé pour le job $i$, et $r$ une valeur aléatoire
 obtenue par un tirage uniforme dans l'intervalle $[-P,+P]$.\\
