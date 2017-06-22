@@ -1,0 +1,65 @@
+\begin{tikzpicture}[node distance=5pt,
+level/.style={
+  font={\sffamily\bfseries\color{black} \fontsize{9pt}{12}\selectfont},
+  align=right,
+  text width=3cm,
+  text height=10pt,
+  text depth=4pt},
+module1/.style={
+  level,
+  font={\sffamily\bfseries\color{white} \fontsize{9pt}{12}\selectfont},
+  rounded corners,
+  text width=9cm+26pt,
+  align=center},
+module2/.style={
+  module1,
+  text width=4.5cm+6pt},
+module3/.style={
+  module1,
+  text width=3cm},
+moduleset/.style={
+  rounded corners,
+  fill=lightgray},
+]
+
+%\node[level] (Lab) {Lab};
+%\node[module2,right=of Lab,fill=blue!90] (labpy) {Pilotage des 
+%simulations};
+%\node[module2,right=of labpy,fill=blue!90] (TU) {Analyse des 
+%observations};
+%\begin{pgfonlayer}{background}
+%\node[moduleset, fit=(labpy) (TU)] {};
+%\end{pgfonlayer}
+
+\node[level] (App) {Applications};
+\node[module3,right=of App,fill=blue!85] (LI) {LoadInjector};
+\node[module3,right=of LI,fill=blue!85] (SS) {SimSchlouder};
+\node[module3,right=of SS,fill=blue!85] () {...};
+
+\node[level,below=of App] (SCHIaaS) {SCHIaaS};
+\node[module1,right=of SCHIaaS,fill=blue!75] (API) 
+{API de \textit{cloud-kit}};
+\node[level,below=of SCHIaaS] (SCHIaaS2) {};
+\node[module3,right=of SCHIaaS2,fill=blue!70] (CE) {Compute Engine};
+\node[module3,right=of CE,fill=blue!70] (SE) {Storage Engine};
+\node[module3,right=of SE,fill=blue!70] (NE) {Network Engine};
+\begin{pgfonlayer}{background}
+\node[moduleset, fit=(API) (CE) (SE) (NE)] {};
+\end{pgfonlayer}
+
+\node[level,below=of App] {SCHIaaS};
+\node[module1,right=of SCHIaaS,fill=blue!75]  
+{API de \textit{cloud-kit}};
+\node[level,below=of SCHIaaS] {};
+\node[module3,right=of SCHIaaS2,fill=blue!70] {Compute Engine};
+\node[module3,right=of CE,fill=blue!70] {Storage Engine};
+\node[module3,right=of SE,fill=blue!70] {Network Engine};
+
+\node[level,below=of SCHIaaS2] (SG) {SimGrid};
+\node[module1,right=of SG,fill=blue!50] (SG) {MSG};
+
+
+
+\end{tikzpicture}
+
+
