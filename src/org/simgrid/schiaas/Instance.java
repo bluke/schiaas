@@ -179,7 +179,6 @@ public class Instance {
 	 */
 	public void terminate() {
 		this.compute.terminateInstance(this);
-		this.vm = null;
 	}
 
 	/**

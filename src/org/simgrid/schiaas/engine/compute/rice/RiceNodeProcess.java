@@ -79,13 +79,16 @@ public class RiceNodeProcess extends Process {
 			
 		case SHUTDOWN:
 			// TODO: May be an issue when the slot is reused immediately and there is penalty for start/shutdown
-			while(riceInstance.vm()==null || riceInstance.isPending() || riceInstance.vm().isMigrating() == 1) { 
-				waitFor(1);
-			}
-			if (riceInstance.vm().isRunning() == 1) {
-				riceInstance.terminate();
+			if (riceInstance.vm() != null) {
+				while(riceInstance.isPending() || riceInstance.vm().isMigrating() == 1) { 
+					waitFor(1);
+				}
+				if (riceInstance.vm().isRunning() == 1) {
+					riceInstance.vm().shutdown();
+				}
 			}
 			riceHost.removeInstance(riceInstance);
+			
 			break;
 		case SUSPEND:
 			riceInstance.vm().suspend();

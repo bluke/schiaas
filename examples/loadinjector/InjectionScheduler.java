@@ -93,7 +93,6 @@ public class InjectionScheduler extends Process {
 		Msg.info("All injections finished. Terminating now.");
 		SchIaaS.terminate();
 
-		
 		Msg.info("Goodbye now!");
 	}
 	

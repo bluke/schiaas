@@ -118,7 +118,7 @@ public class RiceHost implements ComputeHost {
 	 * @param riceInstance the instance to unhost
 	 */
 	public void removeInstance(RiceInstance riceInstance) {
-		freeCores += riceInstance.vm().getCoreNumber();
+		freeCores += Integer.parseInt(riceInstance.getInstanceType().getProperty("core"));
 		this.instances.remove(riceInstance);
 		trace.addEvent("used_cores", ""+(host.getCoreNumber()-freeCores));
 	}
