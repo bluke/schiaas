@@ -57,7 +57,7 @@ public class Master extends Process {
 		
 		for (int i=0; i<nVMs; i++)
 		{
-			vms[i] = new VM(hosts[0],"vm-"+i, 1, 256, 10,"/default", 1000, 10, 1);
+			vms[i] = new VM(hosts[0],"vm-"+i, 256, 10, 1);
 			vms[i].start();
 			
 			Msg.info("Vm "+vms[i].getName()+" created on "+hosts[0].getName());

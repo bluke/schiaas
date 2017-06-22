@@ -176,7 +176,7 @@ public class Rice extends ComputeEngine {
 		}
 	}
 		
-	
+
 	/**
 	 * Migrate an instance to one given host
 	 * 

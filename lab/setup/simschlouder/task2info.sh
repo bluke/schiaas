@@ -15,27 +15,25 @@ fi
 command=$1
 shift
 
+taskfile=`basename $1`
+
+id=`echo $taskfile | cut -f1-8 -d'.'`
+xml=simschlouder.`echo $taskfile | cut -f5-7 -d'.'`.xml
+provisioning=`echo $taskfile | cut -f4 -d'.' | tr [a-z] [A-Z]`
+json=$id.json
+
 if [[ $command == *i* ]] ; then
-	echo -n "`echo $1 | tr '/' '.' | cut -f2-7,9 -d'.'` "
+	echo -n "$id "
 fi
 
 if [[ $command == *x* ]] ; then
-	[[ $1 == *remoteio* || $1 == *migration* || $1 == *montecarlo* ]] && vmlimit="-10" || vmlimit=""
-	[[ $1 == *v3.standard.[23]x[23].asap.regular.openstack-icps.[234]* ]] && vmlimit="-10"
-	[[ $1 == *monitoring* ]] && monitoring="-m" || monitoring=""
-
-	stopla=`echo $1 | cut -f5,6 -d"."`
-	btp=`echo $1 | cut -f7 -d"."`
-
-	echo -n "./xml/simschlouder.$stopla$vmlimit$monitoring.$btp.xml "
+	echo -n "$xml "
 fi
 
 if [[ $command == *p* ]] ; then
-	echo -n "`echo $1 | cut -f4 -d'.' | tr 'a-z' 'A-Z'` "
+	echo -n "$provisioning "
 fi
 
 if [[ $command == *j* ]] ; then
-	echo -n "`echo ${1#*\/} | cut -f1-6 | sed 's/\./\//'` "
+	echo -n "$json "
 fi
-
-echo

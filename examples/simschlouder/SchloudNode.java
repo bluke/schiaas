@@ -14,7 +14,7 @@ import java.util.Vector;
 import org.simgrid.msg.HostFailureException;
 import org.simgrid.msg.HostNotFoundException;
 import org.simgrid.msg.Msg;
-import org.simgrid.msg.NativeException;
+import org.simgrid.msg.MsgException;
 import org.simgrid.msg.Task;
 import org.simgrid.msg.TaskCancelledException;
 import org.simgrid.msg.TimeoutException;
@@ -197,12 +197,12 @@ public class SchloudNode extends Process implements Comparable<SchloudNode>{
 		this.index = currentIndex++;
 		this.instance = instance;
 		this.cloud=cloud;
-		
+
 		speed = instance.vm().getSpeed();
-		
+
 		this.queue = new LinkedList<SchloudTask>();
 		this.completedQueue = new LinkedList<SchloudTask>();
-		 		
+
 		bootTimePrediction=cloud.getBootTimePrediction();
 		
 		setState(STATE.FUTURE);
@@ -392,7 +392,6 @@ public class SchloudNode extends Process implements Comparable<SchloudNode>{
 			this.processQueue();
 		}
 		idleDate+=task.getWalltimePrediction();
-		//Msg.info("idledate "+instanceId+" "+idleDate+" "+(idleDate-23));
 	}
 	
 	/**
@@ -414,6 +413,7 @@ public class SchloudNode extends Process implements Comparable<SchloudNode>{
 	 * process the queue of this node, by running a SchloudTaskController.
 	 */
 	protected void processQueue() {
+		Msg.verb("Processing queue of "+this);
 		SchloudTaskController stc = new SchloudTaskController(this);
 		try {
 			stc.start();
@@ -432,14 +432,13 @@ public class SchloudNode extends Process implements Comparable<SchloudNode>{
 		
 		while(true) {
 			// Receiving the command
+			// Msg.info("receive queue :"+this.queue.size()+" "+this.queue.peek().getName());
 			Task task = Task.receive(getMessageBox());
 			try {
 				task.execute();
 			} catch (TaskCancelledException e) {
 				Msg.critical("Something bad happened in SimSchlouder: "+e.getStackTrace());
 			}
-
-			//Msg.info("Received \"" + task.getName() +  "\". Processing it.");
 			
 			// Receiving the input data
 			currentSchloudTask.setState(SchloudTask.STATE.INPUTTING);
@@ -479,7 +478,7 @@ public class SchloudNode extends Process implements Comparable<SchloudNode>{
 			// Send the complete task
 			try {
 				currentSchloudTask.getCompleteTask().send(getMessageBox());
-			} catch (NativeException e) {
+			} catch (MsgException e) {
 				Msg.critical("Something bad happened at the C level: "+e.getMessage());
 				e.printStackTrace();
 			}

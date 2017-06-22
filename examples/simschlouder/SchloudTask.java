@@ -101,6 +101,8 @@ public class SchloudTask {
 		this.name = name;
 		this.id = currentId++;
 		
+		runtime = Math.max(0, runtime);
+		
 		this.walltimePrediction = walltimePrediction;
 		this.standardWalltime = runtime;
 		

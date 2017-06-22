@@ -25,7 +25,6 @@ import org.simgrid.msg.HostFailureException;
 import org.simgrid.msg.HostNotFoundException;
 import org.simgrid.msg.Msg;
 import org.simgrid.msg.MsgException;
-import org.simgrid.msg.NativeException;
 import org.simgrid.schiaas.SchIaaS;
 import org.simgrid.schiaas.tools.Trace;
 import org.xml.sax.SAXException;
@@ -100,7 +99,6 @@ public class SimSchlouder {
 			HashMap<String, SchloudTask> taskMap = new HashMap<String, SchloudTask>();
 			
 			double oldSubmissionDate = 0;
-			int i;
 			double d1, d2, d3;
 			Scanner sc = new Scanner(scf.nextLine());
 			if (sc.hasNext("\\[boots\\]")) {
@@ -240,18 +238,18 @@ public class SimSchlouder {
 	/**
 	 * Main entry point of the simulation.
 	 * @param args is given by the jvm
-	 * @throws NativeException
+	 * @throws MsgException
 	 * @throws HostNotFoundException
 	 * @throws IOException
 	 * @throws HostFailureException
 	 * @throws SimSchlouderException
 	 */
-    public static void main(String[] args) throws NativeException, HostNotFoundException, IOException, HostFailureException, SimSchlouderException {       
+    public static void main(String[] args) throws MsgException, HostNotFoundException, IOException, HostFailureException, SimSchlouderException {       
 	    Msg.init(args);
 	
 	    if (args.length < 3) {
-			Msg.info("Usage   : SimSchlouder simschlouder_file tasks_file strategyClass [real_walltimes] [communications] [real_boottimes] [real_threads]");
-			Msg.info("example : SimSchlouder simschlouder.xml workload.tasks ASAP");
+			Msg.info("Usage   : SimSchlouder simschlouder_file strategyClass tasks_file [real_walltimes] [communications] [real_boottimes] [real_threads]");
+			Msg.info("example : SimSchlouder simschlouder.xml ASAP workload.tasks");
 			System.exit(1);	
 		}
 	    

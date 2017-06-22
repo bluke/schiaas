@@ -92,7 +92,7 @@ public class Master extends Process {
 			for (int i=0; i<slavesCount; i++) {
 				Msg.info("waiting for boot "+i+" "+nHosts+" node-"+(i%(nHosts-1)+1)+".me");
 				VM vm = new VM(Host.getByName("node-"+(i%(nHosts-1)+1)+".me"),
-						"vm-"+i, 1, 256, 10,"/default", 1000, 10, 1);
+						"vm-"+i, 256, 10, 1);
 				vm.start();
 				hosts[i]=vm;
 			}
@@ -102,7 +102,7 @@ public class Master extends Process {
 			for (int i=0; i<slavesCount; i++) {
 				Msg.info("waiting for boot "+i+" "+nHosts+" node-"+(i%(nHosts-1)+1)+".me");
 				VM vm = new VM(Host.getByName("node-"+(i%(nHosts-1)+1)+".me"),
-						"vm-"+i, 1, 256, 10,"/default", 1000, 10, 1);
+						"vm-"+i, 256, 10, 1);
 				vm.start();
 				vms[i]=vm;
 				hosts[i]=Host.getByName("node-"+(i%(nHosts-1)+1)+".me");
@@ -161,11 +161,13 @@ public class Master extends Process {
 			for (int i = 0; i < slavesCount; i++) {
 				VM vm = (VM) hosts[i];
 				vm.shutdown();
+				vm = null;
 			}
 			break;			
 		case VMHOST:
 			for (int i = 0; i < slavesCount; i++) {
 				vms[i].shutdown();
+				vms[i] = null;
 			}
 			break;
 		case HOST:

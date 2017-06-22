@@ -37,7 +37,6 @@ make
 sudo make install
 @endcode
 You can also get the Simgrid jar from the <a href="http://simgrid.gforge.inria.fr/">simgrid website</a>. 
-Make sure to have at least version 3.11
 
 
 @subsection running_retrieving Retrieving and Installing SchIaaS
@@ -54,7 +53,7 @@ Afterward, you can build SchIaaS:
 @code
 cd schiaas
 cmake .
-make
+sudo make
 @endcode
 
 If cmake complains about the location simgrid.jar, make sure to set SIMGRID_JAR_PATH:
@@ -65,6 +64,11 @@ For instance:
 @code
 export SIMGRID_JAR_PATH=/usr/local/java/
 @endcode
+
+If make complains about ggplot2, make sure to install it:
+@code
+sudo apt-get install r-cran-ggplot2
+@endconde
 
 The build produces a schiaas.jar file in the bin/ directory under the current working directory. 
 

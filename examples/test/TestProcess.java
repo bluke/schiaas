@@ -28,8 +28,8 @@ public class TestProcess extends Process {
 		Host pm1 = Host.getByName("node-1.me");
 		Host pm2 = Host.getByName("node-2.me");
 
-		VM vm1 = new VM(pm1, "VM1", 2, 1000, 250, "/dev", 1000, 250, 1);
-		VM vm2 = new VM(pm1, "VM2", 2, 1000, 250, "/dev", 1000, 250, 1);
+		VM vm1 = new VM(pm1, "VM1", 250, 250, 1);
+		VM vm2 = new VM(pm1, "VM2", 250, 250, 1);
 		
 		vm1.start();
 		vm2.start();
@@ -45,9 +45,9 @@ public class TestProcess extends Process {
 
 		vm1.shutdown();
 		vm2.shutdown();
-		
-		vm1.destroy();
-		vm2.destroy();
+
+		vm1 = null;
+		vm2 = null;
 				
 		Msg.info("Goodbye now!");
 	}
