@@ -329,7 +329,12 @@ def main():
     set_dirs(config)
 
     # check CLASSPATH
-    print("CLASSPATH="+os.environ.get('CLASSPATH'))
+    try:
+        print("CLASSPATH="+os.environ.get('CLASSPATH'))
+    except:
+        print("ERROR: CLASSPATH is not set. It must include simgrid.jar, schiaas.jar, and simschlouder.jar. For instance:", file=sys.stderr)
+        print("export CLASSPATH=/usr/local/java/simgrid.jar:~/schiaas/bin/schiaas.jar:~/schiaas/bin/simschlouder/simschlouder.jar", file=sys.stderr)
+        sys.exit(2)
 
     # load configuration file
     print("Loading configuration")

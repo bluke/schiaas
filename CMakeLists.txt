@@ -102,7 +102,7 @@ find_program( R_BIN R )
 if(NOT ${R_BIN} MATCHES R_BIN-NOTFOUND)
 	add_custom_target(r-install ALL)
 	add_custom_command( TARGET r-install
-		COMMAND R CMD INSTALL ${PROJECT_TRACEUTIL_DIR} )
+		COMMAND sudo R CMD INSTALL ${PROJECT_TRACEUTIL_DIR} )
 
 endif(NOT ${R_BIN} MATCHES R_BIN-NOTFOUND)
 	

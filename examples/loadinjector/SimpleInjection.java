@@ -9,14 +9,14 @@ package loadinjector;
 
 import org.simgrid.msg.HostNotFoundException;
 import org.simgrid.msg.Msg;
-import org.simgrid.msg.NativeException;
+import org.simgrid.msg.MsgException;
 import org.simgrid.schiaas.SchIaaS;
 import org.simgrid.schiaas.loadinjector.Injector;
 import org.simgrid.schiaas.tools.Trace;
 
 public class SimpleInjection {   
    
-    public static void main(String[] args) throws NativeException, HostNotFoundException {       
+    public static void main(String[] args) throws MsgException, HostNotFoundException {       
 	    /* initialize the MSG simulation. Must be done before anything else (even logging). */
 	    Msg.init(args);
 	
