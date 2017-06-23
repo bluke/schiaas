@@ -6,7 +6,7 @@
 \usepackage{graphicx}
 \usepackage{tikz}
 \usepackage{comment}
-
+\usepackage{lstlinebgrd} % see http://www.ctan.org/pkg/lstaddons
 \graphicspath{{./gfx/}}
 
 % bold font text
@@ -138,13 +138,147 @@ public static void main(String args[]){
     /* execute the simulation */
         Msg.run();
 }
-	\end{lstlisting}
+\end{lstlisting}
+
 \end{frame}
 
 \section{Automatisation des simulations.}
 
 \begin{frame}
 	\frametitle{Enjeux de l'automatisation de simulation.}
+	\begin{itemize}
+		\item Systématiser le lancement d'un grand nombre de simulation.
+		\item Automatiser la collecte des résultats sur \emph{toutes} 
+			les simulations.
+		\item Automatiser l'analyse des résultat lorsque c'est possible.
+		\item Faciliter la reproduction des expériences. 
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Le \lab}
+	\resizebox{\textwidth}{!}{\input{gfx/stackfull.tex}}
+	Le fichier de configuration décrit toutes les étapes d'une expérience à
+	mener.
+\end{frame}
+
+\begin{frame}[fragile]
+	\frametitle{Configuration du lab}
+\begin{lstlisting}[language=bash,basicstyle=\tt\footnotesize,backgroundcolor=\color{gray!10},
+morekeywords={SETUP_DIR,TU_ARG,PRE_COMMAND_SETUP,POST_COMMAND_DATA,SIM_ARG},
+keywordstyle=\color{red!90},commentstyle=\color{blue!70}]
+# setup
+SETUP_DIR ./setup/xp-dir
+PRE_COMMAND_SETUP generate_deploy.py > deploy.xml
+POST_COMMAND_DATA R -f template.R > R.out
+
+# observations
+TU_ARG --count-if used_cores ne 0
+TU_ARG --count-if vm:.*:state eq migrating
+
+# simulations
+SIM_ARG 1 mysim.SimpleSim
+SIM_ARG 2 platform.xml 
+SIM_ARG 3 deploy.xml
+SIM_ARG 4:A cloudA.xml
+SIM_ARG 4:B cloudB.xml 
+SIM_ARG 4:C cloudC.xml
+SIM_ARG 5:slow 17 6
+SIM_ARG 5:fast 32 8
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]
+	\frametitle{Configuration du lab : setup}
+\begin{lstlisting}[language=bash,basicstyle=\tt\footnotesize,
+morekeywords={SETUP_DIR,TU_ARG,PRE_COMMAND_SETUP,POST_COMMAND_DATA,SIM_ARG},
+keywordstyle=\color{red!90},commentstyle=\color{blue!70},
+linebackgroundcolor={\ifnum\value{lstnumber}<5\color{green!50}\else\color{gray!10}\fi}
+]
+# setup
+SETUP_DIR ./setup/xp-dir
+PRE_COMMAND_SETUP generate_deploy.py > deploy.xml
+POST_COMMAND_DATA R -f template.R > R.out
+
+# observations
+TU_ARG --count-if used_cores ne 0
+TU_ARG --count-if vm:.*:state eq migrating
+
+# simulations
+SIM_ARG 1 mysim.SimpleSim
+SIM_ARG 2 platform.xml 
+SIM_ARG 3 deploy.xml
+SIM_ARG 4:A cloudA.xml
+SIM_ARG 4:B cloudB.xml 
+SIM_ARG 4:C cloudC.xml
+SIM_ARG 5:slow 17 6
+SIM_ARG 5:fast 32 8
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]
+	\frametitle{Configuration du lab : Simulations}
+\begin{lstlisting}[language=bash,basicstyle=\tt\footnotesize,
+morekeywords={SETUP_DIR,TU_ARG,PRE_COMMAND_SETUP,POST_COMMAND_DATA,SIM_ARG},
+keywordstyle=\color{red!90},commentstyle=\color{blue!70},
+linebackgroundcolor={\ifnum\value{lstnumber}>2\color{green!50}
+\else\color{gray!10}\fi}
+]
+# SIM_ARG pos[:name] args...
+
+# simulations
+SIM_ARG 1 mysim.SimpleSim
+SIM_ARG 2 platform.xml 
+SIM_ARG 3 deploy.xml
+SIM_ARG 4:A cloudA.xml
+SIM_ARG 4:B cloudB.xml 
+SIM_ARG 4:C cloudC.xml
+SIM_ARG 5:slow 17 6
+SIM_ARG 5:fast 32 8
+\end{lstlisting}
+
+{\footnotesize{}
+\begin{tabular}{ccc}
+xp\textunderscore{}A\textunderscore{}slow&:&
+\texttt{mysim.SimpleSim platform.xml deploy.xml cloudA.xml 17 6}\\
+xp\textunderscore{}A\textunderscore{}fast&:&
+\texttt{mysim.SimpleSim platform.xml deploy.xml cloudA.xml 32 8}\\
+\vdots&&\vdots\\
+xp\textunderscore{}C\textunderscore{}fast&:&
+\texttt{mysim.SimpleSim platform.xml deploy.xml cloudC.xml 32 8}\\
+\end{tabular}
+}
+\end{frame}
+
+\begin{frame}[fragile]
+	\frametitle{Configuration du lab : Observations}
+\begin{lstlisting}[language=bash,basicstyle=\tt\footnotesize,
+morekeywords={SETUP_DIR,TU_ARG,PRE_COMMAND_SETUP,POST_COMMAND_DATA,SIM_ARG},
+keywordstyle=\color{red!90},commentstyle=\color{blue!70},
+linebackgroundcolor={\ifnum\value{lstnumber}>5
+\ifnum\value{lstnumber}<9\color{green!50}
+\else\color{gray!10}\fi
+\else\color{gray!10}\fi}
+]
+# setup
+SETUP_DIR ./setup/xp-dir
+PRE_COMMAND_SETUP generate_deploy.py > deploy.xml
+POST_COMMAND_DATA R -f template.R > R.out
+
+# observations
+TU_ARG --count-if used_cores ne 0
+TU_ARG --count-if vm:.*:state eq migrating
+
+# simulations
+[...]
+\end{lstlisting}
+
+\texttt{TU\textunderscore{}ARG} ne fonctionne qu'avec les traces générées par le
+module de trace de SCHIaaS. Les commandes
+\texttt{POST\textunderscore{}COMMAND\textunderscore{}SETUP} et
+\texttt{POST\textunderscore{}COMMAND\textunderscore{}DATA} peuvent servir à
+lancer des script de collecte et d'analyse personnalisés.
+
 \end{frame}
 
 \begin{frame}
