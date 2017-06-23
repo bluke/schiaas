@@ -119,7 +119,7 @@
 	\begin{itemize}
 		\item Initialiser SimGrid avec la description de la plateforme.
 		\item Initialiser SCHIaaS.
-		\item Assigner au mon une tache a un ressource de la plateforme.
+		\item Assigner au moins une tâche a une ressource de la plateforme.
 		\item Lancer l'exécution de la simulation.
 	\end{itemize}
 	\begin{lstlisting}[basicstyle=\footnotesize,language=Java,
@@ -286,15 +286,15 @@ lancer des script de collecte et d'analyse personnalisés.
 	\begin{block}{Validation SimSchlouder}
 		SimSchlouder est l'implémentation simulée de Schlouder, notre
 		système de courtage de cloud. La validation de l'exécution de
-		SimSchlouder ce fait en rejouant des trace d'exécution de
+		SimSchlouder se fait en rejouant des traces d'exécution de
 		Schlouder dans SimSchlouder. Cette validation présente près de
 		1300 simulations automatisées par le \lab.
 	\end{block}
 	\begin{block}{Simulations de Monte-Carlo}
 		La simulation de Monte-Carlo nous permet de prendre en compte la
 		variabilité inhérente au cloud en échantillonnant les temps
-		d'exécution possible de chacune des tâches. Le \lab{} nous 
-		permet d'automatiser l'échantillonnage, les simulation et 
+		d'exécution possibles de chacune des tâches. Le \lab{} nous 
+		permet d'automatiser l'échantillonnage, les simulations et 
 		l'analyse des résultats.
 	\end{block}
 \end{frame}
