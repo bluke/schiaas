@@ -83,6 +83,7 @@
 	\footnotetext{\texttt{http://schiaas.gforge.inria.fr}}
 \end{frame}
 
+\begin{comment}
 \begin{frame}
 	\frametitle{Simulations : opérateur de cloud}
 	\resizebox{\textwidth}{!}{\input{gfx/stackcore.tex}} 
@@ -97,7 +98,6 @@
 	les primitives fournie par SimGrid~\ldots{} et SCHIaaS
 \end{frame}
 
-\begin{comment}
 	SCHIaaS~\footnotemark est un \emph{framework} permettant
 	le développement de simulateur de cloud basée sur SimGrid écrit en JAVA.\bigskip
 
@@ -272,14 +272,76 @@ TU_ARG --count-if vm:.*:state eq migrating
 # simulations
 [...]
 \end{lstlisting}
-
 \texttt{TU\textunderscore{}ARG} ne fonctionne qu'avec les traces générées par le
 module de trace de SCHIaaS. Les commandes
 \texttt{POST\textunderscore{}COMMAND\textunderscore{}SETUP} et
 \texttt{POST\textunderscore{}COMMAND\textunderscore{}DATA} peuvent servir à
 lancer des script de collecte et d'analyse personnalisés.
-
 \end{frame}
+
+\section{Cas d'usage}
+
+\begin{frame}
+	\frametitle{Problématique}
+	\begin{itemize}
+		\item Notre cloud tente régulièrement de reconsolider les VM.
+		\item On aimerai observer l'effet de la variation du délai entre
+			deux reconsolidations, sur le nombre PM utilisées le le
+			nombre de migrations sous une charge sinusoïdale.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Conception du simulateur}
+	\resizebox{\textwidth}{!}{\input{gfx/stackcase.tex}}
+	Load Injector est un simple programme lançant et éteignant des VM selon
+	une charge donnée par \texttt{injector.xml}.\\
+
+	\texttt{SimpleReconfigurator} remplace l'ordonnanceur du Compute Engine.
+	Il est chargé et configuré au travers tu fichier de configuration de
+	SCHIaaS \texttt{cloud.xml}.
+\end{frame}
+
+\begin{frame}[fragile]
+	\frametitle{Configuration des simulations.}
+\begin{lstlisting}[language=bash,basicstyle=\tt\footnotesize,backgroundcolor=\color{gray!10},
+morekeywords={SETUP_DIR,TU_ARG,NEEDED_POST,POST_COMMAND_DATA,SIM_ARG},
+keywordstyle=\color{red!90},commentstyle=\color{blue!70}]
+# setup
+SETUP_DIR ./setup/cmp-scheduler
+NEEDED_POST template.R
+POST_COMMAND_DATA R -f template.R > R.out
+
+# observations
+TU_ARG --count-if used_cores ne 0
+TU_ARG --count-if vm:.*:state eq migrating
+
+# simulations
+SIM_ARG 1 loadinjector.SimpleInjection
+SIM_ARG 2 platform.xml 
+SIM_ARG 3 deploy.xml
+SIM_ARG 4:reconsolidator0 cloud-reconsolidator0.xml
+SIM_ARG 4:reconsolidator10 cloud-reconsolidator10.xml 
+SIM_ARG 4:reconsolidator100 cloud-reconsolidator100.xml
+SIM_ARG 5 injector.xml
+\end{lstlisting}
+La commande \texttt{./lab.py -p 3 cmp-schaduler.cfg} permet de lancer cette
+expérience en exécutant 3 simulations en parallèle.
+\end{frame}
+
+\begin{frame}
+	\frametitle{Résultats}
+	\begin{tabular}{ccc}
+\includegraphics[scale=0.22]{reconsolidator0_used_cores_ne_0}&
+\includegraphics[scale=0.22]{reconsolidator10_used_cores_ne_0}&
+\includegraphics[scale=0.22]{reconsolidator100_used_cores_ne_0}\\
+\includegraphics[scale=0.22]{xp_reconsolidator0_slow_vm__state_eq_migrating}&
+\includegraphics[scale=0.22]{xp_reconsolidator10_slow_vm__state_eq_migrating}&
+\includegraphics[scale=0.22]{xp_reconsolidator100_slow_vm__state_eq_migrating}\\
+	\end{tabular}
+\end{frame}
+
+\section{Conclusion}
 
 \begin{frame}
 	\frametitle{Autres Applications}
