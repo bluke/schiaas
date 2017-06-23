@@ -147,10 +147,10 @@ public static void main(String args[]){
 \begin{frame}
 	\frametitle{Enjeux de l'automatisation de simulation.}
 	\begin{itemize}
-		\item Systématiser le lancement d'un grand nombre de simulation.
+		\item Systématiser le lancement d'un grand nombre de simulations.
 		\item Automatiser la collecte des résultats sur \emph{toutes} 
 			les simulations.
-		\item Automatiser l'analyse des résultat lorsque c'est possible.
+		\item Automatiser l'analyse des résultats lorsque c'est possible.
 		\item Faciliter la reproduction des expériences. 
 	\end{itemize}
 \end{frame}
@@ -276,7 +276,7 @@ TU_ARG --count-if vm:.*:state eq migrating
 module de trace de SCHIaaS. Les commandes
 \texttt{POST\textunderscore{}COMMAND\textunderscore{}SETUP} et
 \texttt{POST\textunderscore{}COMMAND\textunderscore{}DATA} peuvent servir à
-lancer des script de collecte et d'analyse personnalisés.
+lancer des scripts de collecte et d'analyse personnalisés.
 \end{frame}
 
 \section{Cas d'usage}
@@ -285,8 +285,8 @@ lancer des script de collecte et d'analyse personnalisés.
 	\frametitle{Problématique}
 	\begin{itemize}
 		\item Notre cloud tente régulièrement de reconsolider les VM.
-		\item On aimerai observer l'effet de la variation du délai entre
-			deux reconsolidations, sur le nombre PM utilisées le le
+		\item On aimerait observer l'effet de la variation du délai entre
+			deux reconsolidations, sur le nombre PM utilisées et le
 			nombre de migrations sous une charge sinusoïdale.
 	\end{itemize}
 \end{frame}
@@ -298,7 +298,7 @@ lancer des script de collecte et d'analyse personnalisés.
 	une charge donnée par \texttt{injector.xml}.\\
 
 	\texttt{SimpleReconfigurator} remplace l'ordonnanceur du Compute Engine.
-	Il est chargé et configuré au travers tu fichier de configuration de
+	Il est chargé et configuré au travers du fichier de configuration de
 	SCHIaaS \texttt{cloud.xml}.
 \end{frame}
 
@@ -325,7 +325,7 @@ SIM_ARG 4:reconsolidator10 cloud-reconsolidator10.xml
 SIM_ARG 4:reconsolidator100 cloud-reconsolidator100.xml
 SIM_ARG 5 injector.xml
 \end{lstlisting}
-La commande \texttt{./lab.py -p 3 cmp-schaduler.cfg} permet de lancer cette
+La commande \texttt{./lab.py -p 3 cmp-scheduler.cfg} permet de lancer cette
 expérience en exécutant 3 simulations en parallèle.
 \end{frame}
 
