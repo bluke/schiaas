@@ -1,7 +1,6 @@
 \documentclass{beamer}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
-\newcommand{\unistra}{\empty}
 \usepackage{listings}
 \usepackage[french]{babel}
 \usepackage{graphicx}
@@ -32,7 +31,7 @@
 
 
 
-\title[SCHIaaS]{\unistra{}Étude expérimentale par la simulation de clouds avec SCHIaaS}
+\title[SCHIaaS]{Étude expérimentale par la simulation de clouds avec SCHIaaS}
 \author[Luke Bertot]{\underline{Luke Bertot}, Julien Gossa, Stéphane Genaud}
 \institute[ICPS]{Équipe ICPS \\
 	ICube, Université de Strasbourg---CNRS\\ 
@@ -48,7 +47,8 @@
 \addbibresource{biblio.bib}
 
 \usetikzlibrary{fit,positioning}
-
+\pgfdeclarelayer{background}
+\pgfsetlayers{background,main}
 
 \newcommand{\lab}{\texttt{lab}}
 
@@ -81,7 +81,7 @@
 
 \begin{frame}
 	\frametitle{Simulation of Cloud,Hypervisor and IaaS (SCHIaaS)}
-	SCHIaaS~\footfullcite{schiaas-gforge} est un \emph{framework} permettant
+	SCHIaaS~\footnotemark est un \emph{framework} permettant
 	le développement de simulateur de cloud basée sur SimGrid écrit en JAVA.\bigskip
 
 	SCHIaaS simule l'instanciation et la gestion des VM, la gestion des
@@ -92,6 +92,8 @@
 
 	SCHIaaS est initialisé avec la liste des classes a charger et la
 	configuration du cloud (\texttt{cloud.xml})
+
+	\footnotetext{\texttt{http://schiaas.gforge.inria.fr}}
 \end{frame}
 
 \begin{frame}
@@ -129,7 +131,8 @@ public static void main(String args[]){
 \begin{frame}
 	\frametitle{Structure SCHIaaS}
 	\Wider[8em]{%
-	\input{gfx/stack.tex}}
+	\input{gfx/stack.tex}
+	}
 \end{frame}
 
 
@@ -156,8 +159,6 @@ public static void main(String args[]){
 		\usebeamerfont{title}Merci\par
 	\end{beamercolorbox}
 \end{frame}
-
-\printbibliography{}
 
 \end{document}
 
