@@ -250,8 +250,8 @@ public class Master extends Process {
 		
 		// Terminating SchIaaS (and all instances at once)
 		Msg.info("Terminating");
-		SchIaaS.terminate();
-
+		//SchIaaS.terminate();
+		
 		Msg.info("Goodbye now!");
 	}
 }

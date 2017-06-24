@@ -15,16 +15,22 @@ public class TracedVM extends VM {
 	/** The trace of this TracedVM */
 	Trace trace;
 
-	public TracedVM(Host host, String name, double nCore, int ramSize, int netCap, String diskPath, int diskSize, int migNetSpeed, int dpIntensity) {
-		super(host, name, (int)nCore, ramSize, netCap, diskPath, diskSize, migNetSpeed, dpIntensity);
+	/**
+	 * Create a traced VM
+	 * @param host the host of the VM
+	 * @param name the name of the VM
+	 * @param nCore the number of cores of the VM (deprecated?)
+	 * @param ramSize the size of the RAM of the VM 
+	 * @param migNetSpeed
+	 * @param dpIntensity
+	 */
+	public TracedVM(Host host, String name, double nCore, int ramSize, int migNetSpeed, int dpIntensity) {
+		super(host, name, ramSize, migNetSpeed, dpIntensity);
 		
 		trace = Trace.newCategorizedTrace("vm", name);
 		
 		trace.addProperty("n_cores", ""+nCore);
 		trace.addProperty("ram_size", ""+ramSize);
-		trace.addProperty("net_cap", ""+netCap);
-		trace.addProperty("disk_path", ""+diskPath);
-		trace.addProperty("disk_size", ""+diskSize);
 		trace.addProperty("mig_net_speed", ""+migNetSpeed);
 		trace.addProperty("dp_intensity", ""+dpIntensity);	
 		
@@ -37,13 +43,6 @@ public class TracedVM extends VM {
  		super.migrate(destination);
  		trace.addEvent("state", "running");
  	}
- 	
-	@Override
- 	public void restore() {
- 		trace.addEvent("state", "restoring");
- 		super.restore();
- 		trace.addEvent("state", "running");
- 	}
 
 	@Override
  	public void resume() {
@@ -51,19 +50,11 @@ public class TracedVM extends VM {
  		super.resume();
  		trace.addEvent("state", "running");
  	}
-
-	@Override
- 	public void save() {
- 		trace.addEvent("state", "saving");
- 		super.save();
- 		trace.addEvent("state", "running");
- 	}
-
 	@Override
  	public void shutdown() {
  		trace.addEvent("state", "shutingdown");
  		super.shutdown();
- 		trace.addEvent("state", "shutdown");
+  		trace.addEvent("state", "shutdown");
  	}
 
 	@Override

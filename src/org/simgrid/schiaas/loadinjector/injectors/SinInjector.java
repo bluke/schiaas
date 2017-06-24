@@ -89,8 +89,10 @@ public class SinInjector extends AbstractInjector {
 			int dInstance = targetInstance-loadedInstances.size();
 			if (dInstance < 0) {
 				for (int i=0; i<-dInstance; i++) {
-					loadedInstances.remove(random.nextInt(loadedInstances.size()))
-						.terminate();
+					LoadedInstance loadedInstance = loadedInstances.get(random.nextInt(loadedInstances.size()));
+					loadedInstances.remove(loadedInstance);
+					loadedInstance.terminate();
+						
 				}
 			} else {
 				try {

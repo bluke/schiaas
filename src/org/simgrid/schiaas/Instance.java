@@ -139,9 +139,6 @@ public class Instance {
 		this.vm = new TracedVM(compute.getComputeEngine().getComputeHostOf(this).getHost(), id+"_VM", 
 				Double.parseDouble(instanceType.getProperty("core")),
 				Integer.parseInt(instanceType.getProperty("ramSize")), 
-				Integer.parseInt(instanceType.getProperty("netCap")),
-				instanceType.getProperty("diskPath"), 
-				Integer.parseInt(instanceType.getProperty("diskSize")),
 				Integer.parseInt(instanceType.getProperty("migNetSpeed")),
 				Integer.parseInt(instanceType.getProperty("dpIntensity")));
 	}

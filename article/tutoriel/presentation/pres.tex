@@ -1,0 +1,372 @@
+\documentclass{beamer}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{listings}
+\usepackage[french]{babel}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{comment}
+\usepackage{lstlinebgrd} % see http://www.ctan.org/pkg/lstaddons
+\graphicspath{{./gfx/}}
+
+% bold font text
+\fontseries{bx}\selectfont
+
+%Beamer theme
+\usetheme{Madrid}
+\setbeamertemplate{navigation symbols}{}%remove navigation symbols
+ \AtBeginSection[]{%
+ \begin{frame}
+ 	\begin{beamercolorbox}[sep=8pt,center,shadow=true,rounded=true]{title}
+ 		\usebeamerfont{title}\insertsectionhead\par
+ 	\end{beamercolorbox}
+ \end{frame}
+ }
+
+
+
+\title[SCHIaaS]{Étude expérimentale par la simulation de clouds avec SCHIaaS}
+\author[Luke Bertot]{\underline{Luke Bertot}, Julien Gossa, Stéphane Genaud}
+\institute[ICPS]{Équipe ICPS \\
+	ICube, Université de Strasbourg---CNRS\\ 
+	\{lbertot,gossa,genaud\}@unistra.fr\\
+	Pole API, 300Bd Sébastien Brant, CS 10417\\
+	F-67412 Illkirch Cedex, France
+}
+\date{28 Juin 2017}
+\titlegraphic{\raisebox{-0.5\height}{\includegraphics[width=1.5cm]{icube-png.png}}\hspace*{1cm}~\raisebox{-0.5\height}{\includegraphics[width=2.5cm]{uds.png}}\hspace*{1cm}~\raisebox{-0.5\height}{\includegraphics[width=1.5cm]{Logo_CNRS.png}}}
+
+
+\usepackage[backend=bibtex,doi=false,url=false,isbn=false]{biblatex}
+\addbibresource{biblio.bib}
+
+\newcommand{\lab}{\texttt{lab}}
+
+
+\begin{document}
+\begin{frame}
+	\titlepage{}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Plan}
+	\tableofcontents
+\end{frame}
+
+\section{Simulation de cloud}
+
+\begin{frame}
+	\frametitle{Simgrid}
+	\resizebox{\textwidth}{!}{\input{gfx/sg.tex}}
+	SimGrid~\footfullcite{simgrid} est un simulateur à évènement discret 
+	conçu pour l'étude de systèmes distribués développé en C.	
+\end{frame}
+
+\begin{comment}
+	SimGrid est un simulateur à évènement discret conçu
+	pour l'étude de systèmes distribués développé en C.\bigskip 
+	
+	SimGrid présente de multiples interfaces pour les applications MPI
+	(SMPI), les workflow (SimDAG), ou les processus communicants (MSG).
+	\bigskip
+
+	SimGrid est instancié avec une description de la plateforme physique a
+	simuler (\texttt{platform.xml}) et lorsque c'est nécessaire une liste de
+	tâche a déployer (\texttt{deploy.xml})
+\end{comment}
+
+\begin{frame}
+	\frametitle{Simulation of Cloud,Hypervisor and IaaS (SCHIaaS)}
+	\resizebox{\textwidth}{!}{\input{gfx/stackbase.tex}}
+	SCHIaaS~\footnotemark est un \emph{framework} permettant
+	le développement de simulateur de cloud basée sur SimGrid écrit en JAVA.
+	\footnotetext{\texttt{http://schiaas.gforge.inria.fr}}
+\end{frame}
+
+\begin{comment}
+\begin{frame}
+	\frametitle{Simulations : opérateur de cloud}
+	\resizebox{\textwidth}{!}{\input{gfx/stackcore.tex}} 
+	L'architecture modulaire de SCHIaaS permet d'implémenter aisément de
+	nouveau comportement au cloud simulé.
+\end{frame}
+
+\begin{frame}
+	\frametitle{Simulations : utilisateur de cloud}
+	\resizebox{\textwidth}{!}{\input{gfx/stackapps.tex}} 
+	Dans la philosophie de SimGrid une simulation est un programme appelant
+	les primitives fournie par SimGrid~\ldots{} et SCHIaaS
+\end{frame}
+
+	SCHIaaS~\footnotemark est un \emph{framework} permettant
+	le développement de simulateur de cloud basée sur SimGrid écrit en JAVA.\bigskip
+
+	SCHIaaS simule l'instanciation et la gestion des VM, la gestion des
+	stockage et la visualisation des réseau.\bigskip
+
+	L'architecture modulaire de SCHIaaS permet d'implémenter aisément de
+	nouveau comportement au sein de la simulation.\bigskip
+
+	SCHIaaS est initialisé avec la liste des classes a charger et la
+	configuration du cloud (\texttt{cloud.xml})
+
+	\footnotetext{\texttt{http://schiaas.gforge.inria.fr}}
+\end{comment}
+
+\begin{frame}[fragile]
+	\frametitle{Developper une simulation avec SCHIaaS}
+	Pour fonctionner un simulateur SCHIaaS doit :
+	\begin{itemize}
+		\item Initialiser SimGrid avec la description de la plateforme.
+		\item Initialiser SCHIaaS.
+		\item Assigner au moins une tâche a une ressource de la plateforme.
+		\item Lancer l'exécution de la simulation.
+	\end{itemize}
+	\begin{lstlisting}[basicstyle=\footnotesize,language=Java,
+	backgroundcolor=\color{gray!10},
+	commentstyle=\color{red!90}
+	]
+import org.simgrid.msg
+import org.simgird.schiaas
+[...]
+public static void main(String args[]){
+    /*Init Simgrid with platform.xml and deploy.xml*/
+        Msg.createEnvironment(args[0]);
+        Msg.deployApplication(args[1]);
+    /*Init SCHIaaS with cloud.xml*/
+        SchIaaS.init(args[2]);
+    /* execute the simulation */
+        Msg.run();
+}
+\end{lstlisting}
+
+\end{frame}
+
+\section{Automatisation des simulations.}
+
+\begin{frame}
+	\frametitle{Enjeux de l'automatisation de simulation.}
+	\begin{itemize}
+		\item Systématiser le lancement d'un grand nombre de simulations.
+		\item Automatiser la collecte des résultats sur \emph{toutes} 
+			les simulations.
+		\item Automatiser l'analyse des résultats lorsque c'est possible.
+		\item Faciliter la reproduction des expériences. 
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Le \lab}
+	\resizebox{\textwidth}{!}{\input{gfx/stackfull.tex}}
+	Le fichier de configuration décrit toutes les étapes d'une expérience à
+	mener.
+\end{frame}
+
+\begin{frame}[fragile]
+	\frametitle{Configuration du lab}
+\begin{lstlisting}[language=bash,basicstyle=\tt\footnotesize,backgroundcolor=\color{gray!10},
+morekeywords={SETUP_DIR,TU_ARG,PRE_COMMAND_SETUP,POST_COMMAND_DATA,SIM_ARG},
+keywordstyle=\color{red!90},commentstyle=\color{blue!70}]
+# setup
+SETUP_DIR ./setup/xp-dir
+PRE_COMMAND_SETUP generate_deploy.py > deploy.xml
+POST_COMMAND_DATA R -f template.R > R.out
+
+# observations
+TU_ARG --count-if used_cores ne 0
+TU_ARG --count-if vm:.*:state eq migrating
+
+# simulations
+SIM_ARG 1 mysim.SimpleSim
+SIM_ARG 2 platform.xml 
+SIM_ARG 3 deploy.xml
+SIM_ARG 4:A cloudA.xml
+SIM_ARG 4:B cloudB.xml 
+SIM_ARG 4:C cloudC.xml
+SIM_ARG 5:slow 17 6
+SIM_ARG 5:fast 32 8
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]
+	\frametitle{Configuration du lab : setup}
+\begin{lstlisting}[language=bash,basicstyle=\tt\footnotesize,
+morekeywords={SETUP_DIR,TU_ARG,PRE_COMMAND_SETUP,POST_COMMAND_DATA,SIM_ARG},
+keywordstyle=\color{red!90},commentstyle=\color{blue!70},
+linebackgroundcolor={\ifnum\value{lstnumber}<5\color{green!50}\else\color{gray!10}\fi}
+]
+# setup
+SETUP_DIR ./setup/xp-dir
+PRE_COMMAND_SETUP generate_deploy.py > deploy.xml
+POST_COMMAND_DATA R -f template.R > R.out
+
+# observations
+TU_ARG --count-if used_cores ne 0
+TU_ARG --count-if vm:.*:state eq migrating
+
+# simulations
+SIM_ARG 1 mysim.SimpleSim
+SIM_ARG 2 platform.xml 
+SIM_ARG 3 deploy.xml
+SIM_ARG 4:A cloudA.xml
+SIM_ARG 4:B cloudB.xml 
+SIM_ARG 4:C cloudC.xml
+SIM_ARG 5:slow 17 6
+SIM_ARG 5:fast 32 8
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]
+	\frametitle{Configuration du lab : Simulations}
+\begin{lstlisting}[language=bash,basicstyle=\tt\footnotesize,
+morekeywords={SETUP_DIR,TU_ARG,PRE_COMMAND_SETUP,POST_COMMAND_DATA,SIM_ARG},
+keywordstyle=\color{red!90},commentstyle=\color{blue!70},
+linebackgroundcolor={\ifnum\value{lstnumber}>2\color{green!50}
+\else\color{gray!10}\fi}
+]
+# SIM_ARG pos[:name] args...
+
+# simulations
+SIM_ARG 1 mysim.SimpleSim
+SIM_ARG 2 platform.xml 
+SIM_ARG 3 deploy.xml
+SIM_ARG 4:A cloudA.xml
+SIM_ARG 4:B cloudB.xml 
+SIM_ARG 4:C cloudC.xml
+SIM_ARG 5:slow 17 6
+SIM_ARG 5:fast 32 8
+\end{lstlisting}
+
+{\footnotesize{}
+\begin{tabular}{ccc}
+xp\textunderscore{}A\textunderscore{}slow&:&
+\texttt{mysim.SimpleSim platform.xml deploy.xml cloudA.xml 17 6}\\
+xp\textunderscore{}A\textunderscore{}fast&:&
+\texttt{mysim.SimpleSim platform.xml deploy.xml cloudA.xml 32 8}\\
+\vdots&&\vdots\\
+xp\textunderscore{}C\textunderscore{}fast&:&
+\texttt{mysim.SimpleSim platform.xml deploy.xml cloudC.xml 32 8}\\
+\end{tabular}
+}
+\end{frame}
+
+\begin{frame}[fragile]
+	\frametitle{Configuration du lab : Observations}
+\begin{lstlisting}[language=bash,basicstyle=\tt\footnotesize,
+morekeywords={SETUP_DIR,TU_ARG,PRE_COMMAND_SETUP,POST_COMMAND_DATA,SIM_ARG},
+keywordstyle=\color{red!90},commentstyle=\color{blue!70},
+linebackgroundcolor={\ifnum\value{lstnumber}>5
+\ifnum\value{lstnumber}<9\color{green!50}
+\else\color{gray!10}\fi
+\else\color{gray!10}\fi}
+]
+# setup
+SETUP_DIR ./setup/xp-dir
+PRE_COMMAND_SETUP generate_deploy.py > deploy.xml
+POST_COMMAND_DATA R -f template.R > R.out
+
+# observations
+TU_ARG --count-if used_cores ne 0
+TU_ARG --count-if vm:.*:state eq migrating
+
+# simulations
+[...]
+\end{lstlisting}
+\texttt{TU\textunderscore{}ARG} ne fonctionne qu'avec les traces générées par le
+module de trace de SCHIaaS. Les commandes
+\texttt{POST\textunderscore{}COMMAND\textunderscore{}SETUP} et
+\texttt{POST\textunderscore{}COMMAND\textunderscore{}DATA} peuvent servir à
+lancer des scripts de collecte et d'analyse personnalisés.
+\end{frame}
+
+\section{Cas d'usage}
+
+\begin{frame}
+	\frametitle{Problématique}
+	\begin{itemize}
+		\item Notre cloud tente régulièrement de reconsolider les VM.
+		\item On aimerait observer l'effet de la variation du délai entre
+			deux reconsolidations, sur le nombre PM utilisées et le
+			nombre de migrations sous une charge sinusoïdale.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Conception du simulateur}
+	\resizebox{\textwidth}{!}{\input{gfx/stackcase.tex}}
+	Load Injector est un simple programme lançant et éteignant des VM selon
+	une charge donnée par \texttt{injector.xml}.\\
+
+	\texttt{SimpleReconfigurator} remplace l'ordonnanceur du Compute Engine.
+	Il est chargé et configuré au travers du fichier de configuration de
+	SCHIaaS \texttt{cloud.xml}.
+\end{frame}
+
+\begin{frame}[fragile]
+	\frametitle{Configuration des simulations.}
+\begin{lstlisting}[language=bash,basicstyle=\tt\footnotesize,backgroundcolor=\color{gray!10},
+morekeywords={SETUP_DIR,TU_ARG,NEEDED_POST,POST_COMMAND_DATA,SIM_ARG},
+keywordstyle=\color{red!90},commentstyle=\color{blue!70}]
+# setup
+SETUP_DIR ./setup/cmp-scheduler
+NEEDED_POST template.R
+POST_COMMAND_DATA R -f template.R > R.out
+
+# observations
+TU_ARG --count-if used_cores ne 0
+TU_ARG --count-if vm:.*:state eq migrating
+
+# simulations
+SIM_ARG 1 loadinjector.SimpleInjection
+SIM_ARG 2 platform.xml 
+SIM_ARG 3 deploy.xml
+SIM_ARG 4:reconsolidator0 cloud-reconsolidator0.xml
+SIM_ARG 4:reconsolidator10 cloud-reconsolidator10.xml 
+SIM_ARG 4:reconsolidator100 cloud-reconsolidator100.xml
+SIM_ARG 5 injector.xml
+\end{lstlisting}
+La commande \texttt{./lab.py -p 3 cmp-scheduler.cfg} permet de lancer cette
+expérience en exécutant 3 simulations en parallèle.
+\end{frame}
+
+\begin{frame}
+	\frametitle{Résultats}
+	\begin{tabular}{ccc}
+\includegraphics[scale=0.22]{reconsolidator0_used_cores_ne_0}&
+\includegraphics[scale=0.22]{reconsolidator10_used_cores_ne_0}&
+\includegraphics[scale=0.22]{reconsolidator100_used_cores_ne_0}\\
+\includegraphics[scale=0.22]{xp_reconsolidator0_slow_vm__state_eq_migrating}&
+\includegraphics[scale=0.22]{xp_reconsolidator10_slow_vm__state_eq_migrating}&
+\includegraphics[scale=0.22]{xp_reconsolidator100_slow_vm__state_eq_migrating}\\
+	\end{tabular}
+\end{frame}
+
+\section{Conclusion}
+
+\begin{frame}
+	\frametitle{Autres Applications}
+	\begin{block}{Validation SimSchlouder}
+		SimSchlouder est l'implémentation simulée de Schlouder, notre
+		système de courtage de cloud. La validation de l'exécution de
+		SimSchlouder se fait en rejouant des traces d'exécution de
+		Schlouder dans SimSchlouder. Cette validation présente près de
+		1300 simulations automatisées par le \lab.
+	\end{block}
+	\begin{block}{Simulations de Monte-Carlo}
+		La simulation de Monte-Carlo nous permet de prendre en compte la
+		variabilité inhérente au cloud en échantillonnant les temps
+		d'exécution possibles de chacune des tâches. Le \lab{} nous 
+		permet d'automatiser l'échantillonnage, les simulations et 
+		l'analyse des résultats.
+	\end{block}
+\end{frame}
+
+\begin{frame}
+	\begin{beamercolorbox}[sep=8pt,center,shadow=true,rounded=true]{title}
+		\usebeamerfont{title}Merci\par
+	\end{beamercolorbox}
+\end{frame}
+
+\end{document}
+
+% vim:spell spelllang=fr:

@@ -9,7 +9,7 @@ package cloudmasterslave;
 
 import org.simgrid.msg.HostNotFoundException;
 import org.simgrid.msg.Msg;
-import org.simgrid.msg.NativeException;
+import org.simgrid.msg.MsgException;
 import org.simgrid.schiaas.Instance;
 import org.simgrid.schiaas.SchIaaS;
 import org.simgrid.schiaas.Cloud;
@@ -24,7 +24,7 @@ public class Masterslave {
     * which also contains such a launcher
     */
    
-    public static void main(String[] args) throws NativeException, HostNotFoundException {       
+    public static void main(String[] args) throws MsgException, HostNotFoundException {       
 	    /* initialize the MSG simulation. Must be done before anything else (even logging). */
 	    Msg.init(args);
 	

@@ -9,7 +9,7 @@ package test;
 
 import org.simgrid.msg.HostNotFoundException;
 import org.simgrid.msg.Msg;
-import org.simgrid.msg.NativeException;
+import org.simgrid.msg.MsgException;
 
 public class Test {
    public static final int TASK_COMP_SIZE = 2000000000;
@@ -20,7 +20,7 @@ public class Test {
     * which also contains such a launcher
     */
    
-    public static void main(String[] args) throws NativeException, HostNotFoundException {       
+    public static void main(String[] args) throws MsgException, HostNotFoundException {       
 	    /* initialize the MSG simulation. Must be done before anything else (even logging). */
 	    Msg.init(args);
 	

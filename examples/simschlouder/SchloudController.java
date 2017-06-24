@@ -149,6 +149,7 @@ public class SchloudController extends org.simgrid.msg.Process {
 		terminatedNodes.add(node);
 		schloudCloud.compute.terminateInstance(node.instance);
 		node.setState(SchloudNode.STATE.TERMINATED);
+		node.kill();
 	}
 	
 	/**

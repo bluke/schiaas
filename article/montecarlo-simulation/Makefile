@@ -6,6 +6,8 @@ NAME=montecarlo-simulation
 .SUFFIXES: .bib .pdf .tex
 .PHONY: run
 
+regen: | clean run
+
 run: $(NAME).pdf
 
 $(NAME).pdf: $(NAME).bbl $(NAME).tex

@@ -43,7 +43,7 @@ public class SchloudTaskController extends Process {
 			*/	
 		while (!node.queue.isEmpty()) {
 			
-			SchloudTask schloudTask=node.queue.peek();
+			SchloudTask schloudTask=node.queue.poll();
 			node.currentSchloudTask = schloudTask;
 			
 			schloudTask.setState(SchloudTask.STATE.SUBMITTED);
@@ -83,7 +83,7 @@ public class SchloudTaskController extends Process {
 				}
 			}
 			
-			node.completedQueue.add(node.queue.poll());
+			node.completedQueue.add(node.currentSchloudTask);
 			schloudTask.setState(SchloudTask.STATE.COMPLETE);
 			// correct the idleDate
 			node.idleDate+=schloudTask.getWalltime()-schloudTask.getWalltimePrediction();

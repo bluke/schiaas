@@ -21,7 +21,6 @@ public class LoadedInstance {
 	protected Instance instance;
 	protected LoadedInstanceProcess loadedInstanceProcess;
 
-
 	/**
 	 * Loads the CPU of an exiting instance 
 	 * @param compute the compute of the instance
@@ -29,18 +28,20 @@ public class LoadedInstance {
 	 */
 	public LoadedInstance(Compute compute, Instance instance) {
 		this.compute = compute;
-		this.instance = instance;
-		
+		this.instance = instance;		
 		for (int i=0; i<1; i++) {
 			this.loadedInstanceProcess = new LoadedInstanceProcess(this);
 
 			try {
+				Msg.info("DEBUG : WFRAS "+this);
 				ComputeTools.waitForRunningAndStart(compute.getComputeEngine(), instance, this.loadedInstanceProcess);
+				
 			} catch (HostNotFoundException e) {
 				Msg.critical("Something went wrong while trying to start the loading process "+this.loadedInstanceProcess.getName());
 				e.printStackTrace();
 			}
 		}
+		
 	}
 	
 	/**
@@ -67,7 +68,6 @@ public class LoadedInstance {
 		this(compute, compute.runInstance(
 						compute.describeImage(imageId),
 						new InstanceType(CPURequest, RAMRequest, diskRequest)));
-		
 	}
 
 	/**
@@ -94,6 +94,7 @@ public class LoadedInstance {
 		instance.getTrace().addEvent("cpu_load", ""+load);
 	}
 
+	
 	/**
 	 * The process to load this instance
 	 * @author julien.gossa@unistra.fr

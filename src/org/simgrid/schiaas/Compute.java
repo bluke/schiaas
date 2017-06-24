@@ -237,7 +237,7 @@ public class Compute {
 
 	/**
 	 * 
-	 * @return all the instances, alive and terminated, of this
+	 * @return all the currently running instances of this
 	 */
 	public Collection<Instance> describeInstances() {
 		return this.instances.values();

@@ -1,13 +1,13 @@
 <?xml version='1.0'?>
 <!DOCTYPE platform SYSTEM "http://simgrid.gforge.inria.fr/simgrid/simgrid.dtd">
-<platform version="4">
-  <!-- The master process (with some arguments) -->
+<platform version="4.1">
+  <!-- The master actor (with some arguments) -->
 
-  <process host="controller" function="cloudmasterslave.Master">
+  <actor host="controller" function="cloudmasterslave.Master">
      <argument value="24"/>       <!-- Number of tasks -->
      <argument value="5000e9"/>  <!-- Computation size of tasks -->
      <argument value="1e9"/>   <!-- Communication size of tasks -->
      <argument value="2"/>  <!-- Number of masterslave.Slaves -->
-  </process>
+  </actor>
 
 </platform>
