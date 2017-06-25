@@ -22,7 +22,7 @@ do
 	
 	./generate_sim_numrange.py -f $tasksfile -m draw -t multiply  \
 		-s 0.40	\
-		-r 500 \
+		-r 100 \
 		-p $resdir \
 		| awk "{ print \"SIM_ARG 2:${id}_\"NR\" ${xml} $provisioning \",\$1 }"
 done
