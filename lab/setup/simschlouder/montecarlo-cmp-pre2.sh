@@ -21,7 +21,7 @@ do
 	xml="simschlouder.`echo $id | cut -f5-7 -d"."`.xml"
 	
 	./generate_sim_numrange.py -f $tasksfile -m draw -t multiply  \
-		-s 0.40	\
+		-s 0.10	\
 		-r 100 \
 		-p $resdir \
 		| awk "{ print \"SIM_ARG 2:${id}_\"NR\" ${xml} $provisioning \",\$1 }"

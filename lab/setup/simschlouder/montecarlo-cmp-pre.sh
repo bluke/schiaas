@@ -21,10 +21,9 @@ do
 	provisioning=`echo $id | cut -f4 -d"." | tr "a-z" "A-Z"`
 	xml="simschlouder.`echo $id | cut -f5-7 -d"."`.xml"
 	
-	./generate_sim.py -f $tasksfile \
-		-m draw --draw_function normal \
-		--draw_expectation 0 --draw_deviation 0.5 -t add \
-		-r 3 \
+	./generate_sim_numrange.py -f $tasksfile -m draw -t multiply  \
+		-s 0.05	\
+		-r 500 \
 		-p $resdir \
 		| awk "{ print \"SIM_ARG 2:${id}_\"NR\" ${xml} $provisioning \",\$1 }"
 done
