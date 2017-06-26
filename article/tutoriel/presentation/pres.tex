@@ -111,7 +111,6 @@
 	configuration du cloud (\texttt{cloud.xml})
 
 	\footnotetext{\texttt{http://schiaas.gforge.inria.fr}}
-\end{comment}
 
 \begin{frame}[fragile]
 	\frametitle{Developper une simulation avec SCHIaaS}
@@ -141,6 +140,7 @@ public static void main(String args[]){
 \end{lstlisting}
 
 \end{frame}
+\end{comment}
 
 \section{Automatisation des simulations.}
 
@@ -188,6 +188,8 @@ SIM_ARG 5:fast 32 8
 \end{lstlisting}
 \end{frame}
 
+
+\begin{comment}
 \begin{frame}[fragile]
 	\frametitle{Configuration du lab : setup}
 \begin{lstlisting}[language=bash,basicstyle=\tt\footnotesize,
@@ -215,6 +217,7 @@ SIM_ARG 5:slow 17 6
 SIM_ARG 5:fast 32 8
 \end{lstlisting}
 \end{frame}
+\end{comment}
 
 \begin{frame}[fragile]
 	\frametitle{Configuration du lab : Simulations}
@@ -224,7 +227,7 @@ keywordstyle=\color{red!90},commentstyle=\color{blue!70},
 linebackgroundcolor={\ifnum\value{lstnumber}>2\color{green!50}
 \else\color{gray!10}\fi}
 ]
-# SIM_ARG pos[:name] args...
+# SIM_ARG ord[:name] args...
 
 # simulations
 SIM_ARG 1 mysim.SimpleSim
@@ -250,6 +253,7 @@ xp\textunderscore{}C\textunderscore{}fast&:&
 }
 \end{frame}
 
+\begin{comment}
 \begin{frame}[fragile]
 	\frametitle{Configuration du lab : Observations}
 \begin{lstlisting}[language=bash,basicstyle=\tt\footnotesize,
@@ -278,29 +282,33 @@ module de trace de SCHIaaS. Les commandes
 \texttt{POST\textunderscore{}COMMAND\textunderscore{}DATA} peuvent servir à
 lancer des scripts de collecte et d'analyse personnalisés.
 \end{frame}
+\end{comment}
 
 \section{Cas d'usage}
 
 \begin{frame}
-	\frametitle{Problématique}
+	\frametitle{Problématique: \emph{VM-packing}}
 	\begin{itemize}
+		\item On veux minimiser le nombre de PM utilisées.
 		\item Notre cloud tente régulièrement de reconsolider les VM.
 		\item On aimerait observer l'effet de la variation du délai entre
 			deux reconsolidations, sur le nombre PM utilisées et le
-			nombre de migrations sous une charge sinusoïdale.
+			nombre de migrations.
 	\end{itemize}
 \end{frame}
 
 \begin{frame}
 	\frametitle{Conception du simulateur}
-	\resizebox{\textwidth}{!}{\input{gfx/stackcase.tex}}
+	\resizebox{\textwidth}{!}{\input{gfx/stackcase.tex}}	
+\end{frame}
+\begin{comment}
 	Load Injector est un simple programme lançant et éteignant des VM selon
 	une charge donnée par \texttt{injector.xml}.\\
 
 	\texttt{SimpleReconfigurator} remplace l'ordonnanceur du Compute Engine.
 	Il est chargé et configuré au travers du fichier de configuration de
 	SCHIaaS \texttt{cloud.xml}.
-\end{frame}
+\end{comment}
 
 \begin{frame}[fragile]
 	\frametitle{Configuration des simulations.}
