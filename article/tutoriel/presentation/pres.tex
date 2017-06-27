@@ -59,7 +59,7 @@
 	\frametitle{Simgrid}
 	\resizebox{\textwidth}{!}{\input{gfx/sg.tex}}
 	SimGrid~\footfullcite{simgrid} est un simulateur à évènement discret 
-	conçu pour l'étude de systèmes distribués développé en C.	
+	conçu pour l'étude de systèmes distribués.	
 \end{frame}
 
 \begin{comment}
@@ -284,19 +284,23 @@ module de trace de SCHIaaS. Les commandes
 \texttt{POST\textunderscore{}COMMAND\textunderscore{}DATA} peuvent servir à
 lancer des scripts de collecte et d'analyse personnalisés.
 \end{frame}
-\end{comment}
 
-\section{Cas d'usage}
-
-\begin{frame}
-	\frametitle{Problématique: \emph{VM-packing}}
-	\begin{itemize}
+\begin{itemize}
 		\item Minimiser le nombre de PM utilisées.
 		\item Cloud capable de régulièrement de reconsolider les VM.
 		\item Observer l'effet de la variation du délai entre
 			deux reconsolidations sur le nombre PM utilisées et le
 			nombre de migrations.
 	\end{itemize}
+\end{comment}
+
+\section{Cas d'usage}
+
+\begin{frame}
+	\frametitle{Problématique: \emph{VM-packing}}
+	\begin{center}
+	\resizebox{!}{0.8\textheight}{\input{gfx/vmpack.tex}}
+	\end{center}
 \end{frame}
 
 \begin{frame}

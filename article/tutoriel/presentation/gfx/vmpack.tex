@@ -1,0 +1,49 @@
+\begin{tikzpicture}[x=3cm,y=1.5cm,
+pm/.style={%
+fill=gray!25,
+anchor=south,
+minimum width=1.5cm,
+minimum height=6cm,
+draw,rounded corners,
+},
+pname/.style={%
+anchor=north,
+},
+vm/.style={%
+anchor=south,
+draw,
+rounded corners,
+outer sep=1mm,
+minimum width=1.3cm,
+minimum height=1.3cm,
+},
+VM/.style={
+vm,
+fill=blue!50,
+},
+spot/.style={
+fill=blue!10,
+vm,dashed,
+}
+]
+\node[pname]at(-1,0){PM 1};
+\node[pm]at(-1,0){};
+\node[pname]at(0,0){PM 2};
+\node[pm]at(0,0){};
+\node[pname]at(1,0){PM 3};
+\node[pm]at(1,0){};
+
+
+\node[VM]at(-1,2){VM};
+\node[VM]at(-1,1){VM};
+\node[VM]at(-1,0){VM};
+
+\node[VM]at(0,0)(src){VM};
+
+\node[VM]at(1,1){VM};
+\node[VM]at(1,0){VM};
+
+
+\node[spot]at(-1,3)(dst){};
+\draw[bend right,thick,-latex](src)to(dst);
+\end{tikzpicture}
