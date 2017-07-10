@@ -9,35 +9,40 @@ techniques to  address this issue.   A pitfall of research  on IaaS lies  in the
 validation of the models and algorithms proposed, which requires infrastructures
 that are difficult to set up for individual researchers.  As a consequence, many
 researchers evaluate their work through  simulation. A number of simulators have
-been  developed for  that purpose  (\cite{CalheirosRBRB11,KliazovichBK12}).  They  are typically  based on
-discrete-event simulation,  using models  for each  elementary component  of the
-infrastructure,  which  are then  composed  to  simulate  the whole  system  and
-applications running on it.  This approach is attractive from the infrastructure
-provider  perspective  since the  simulated  system  can be  finely  customized.
-However, such  an \textit{ab  initio} construction  poses a  significant problem
-regarding  the  calibration  and  validation   of  the  composed  model  against
-real-world  measurements.    Another  approach   is  the  simulation   from  the
-client-side (from the application perspective),  which can specifically focus on
-the prediction of a couple of metrics, such  as the makespan and the cost of the
-application.  It is  noticeable that the research papers  adopting a client-side
-view  generally include  an evaluation  of the  simulation through  experimental
-studies, while such  an evaluation is generally  missing for infrastructure-wide
-simulators.
+been developed  for that purpose  (\cite{CalheirosRBRB11,KliazovichBK12}).  They
+are  typically  based  on  discrete-event  simulation,  using  models  for  each
+elementary component of the infrastructure,  which are then composed to simulate
+the whole  system and applications running  on it.  This approach  is attractive
+from the infrastructure  provider perspective since the simulated  system can be
+finely customized.   However, such  an \textit{ab  initio} construction  poses a
+significant problem  regarding the  calibration and  validation of  the composed
+model against real-world measurements.  Another  approach is the simulation from
+the client-side (from the application perspective), which can specifically focus
+on the prediction of  a couple of metrics, such as the makespan  and the cost of
+the  application.   It  is  noticeable  that  the  research  papers  adopting  a
+client-side  view generally  include  an evaluation  of  the simulation  through
+experimental  studies,  while  such  an  evaluation  is  generally  missing  for
+infrastructure-wide simulators.
 
 Altough much  fewer works  address the simulation  from the  client perspective,
 several very  different methods have  been proposed  to reach this  goal.  Among
 these    works,     detailed    in    the    related     work    section,    are
 EMUSIM~\cite{CalheirosNRB13}  that  use   emulation,  PICS~\cite{KimWH15}  which
-implemens  a simplified  discrete  event  simulator, and~\cite{PucherGWK15}  who
+implements  a simplified  discrete  event  simulator, and~\cite{PucherGWK15}  who
 build a statistical model from observations.
 
 
-In this  paper, we study the  simulation also from the  application perspective,
+In this  paper, we also study  the simulation from the  application perspective,
 using  the   discrete  event  simulation  toolkit   SimGrid~\cite{simgrid08}  to
-implement our model. We assume an  automated process making the provisioning and
-scheduling decisions  on behalf the  user on  the real infrastructure.   To that
-purpose,  we   use  \emph{Schlouder}  \cite{},  a   client-side  cloud  resource
-broker. This  paper's contribution  is twofold:
+implement our model.  SimGrid has been chosen as the  simulation engine, for the
+versatility  of its  interfaces, and  above all,  for its  well-studied accuracy
+against reality (e.g~\cite{StanisicTLVM15,VelhoSCL13}).  
+
+
+We assume an automated process  making the provisioning and scheduling decisions
+on  behalf  the user  on  the  real infrastructure.   To  that  purpose, we  use
+\emph{Schlouder}~\cite{Michon17},  a  client-side  cloud resource  broker.  This
+paper's contribution is twofold:
 \begin{itemize}
 \item We propose a simulation tool
 \item We make an  in-depth analysis  of the
@@ -46,9 +51,9 @@ the related works. We analyze the sensitivity of several parameters, among which
 the  impact  of   the  job  submission  management  overheads,   the  effect  of
 inaccuracies in the job execution times specified  by the user, or the boot time
 of  VMs.  The  study is  carried out  on several  use cases  which comprise  two
-different type  of applications (workflow  and bag-of-tasks), with  several size
-instances for  each of them, and  each application is operated  on two different
-type of infrastructure (private and public).
+different types of applications (workflow  and bag-of-tasks), with  several size
+instances for  each of them, and  each application operated  on two different
+types of infrastructure (private and public).
 \end{itemize}
 
 ....
