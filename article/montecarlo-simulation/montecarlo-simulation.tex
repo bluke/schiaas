@@ -105,60 +105,42 @@ arbitrary lengths of time, \ac{btu},  usually of  one hour. Running  two \ac{vm}
 side by side for one \ac{btu} each costs the same as running one \ac{vm} for two
 \ac{btu}, but every \ac{btu} started is owed in full.
 
-From the client  perspective, provisioning an appropriate set  of resources in
-order to  handle a set of  jobs is a difficult  task, for which tools would be 
-of great help.   
+This model offers leaves the client an  almost complete freedom to start or stop
+new servers as long as the price can be afforded. However, for complex workloads
+composed of a number of potentially  dependent jobs it becomes quickly difficuly
+to manually provision the resources and the use of a scheduler is unavoidable.
+ 
+In this paper,  we are interested in  predicting the execution time  and cost of
+such complex workloads, in which the scheduling plays an important role. In this
+study,  we consider  two opposite  scheduling  strategies to  put forward  their
+impact on execution behavior. We will review in the related work section several
+other scheduling approaches.
 
-The first type of tool is the scheduler. Compared to earlier distributed
-computing systems  (e.g Grids),  the scheduling problem  statement in  the cloud
-must be reformulated because of two fundamental novelties: firstly the size of the
-infrastructure can be dynamically scaled, and secondly as economic cost can be
-clearly measured, it naturally becomes an additional objective to the traditional
-makespan  objective,  making  the   problem  multi-objective.   An abundance  of
-heuristics have been  developed to adapt to the cloud  context, spanning a large
-variety of assumptions about the setup.  The bi-objective issue is often tackled
-by  combining the  cost and  makespan  metrics in  a  single one  or fixing  one
-parameter as a constraint (deadline- or budget- constrained schedules). While it
-can be argued  that several solutions may be equally  interesting trade-offs,
-it is up to the user to choose.  In~\cite{Su13} is proposed a strategy where VMs
-belonging to a  Pareto front representing the most  cost-efficient resources are
-used  in  priority  to  map  jobs.  Likewise,  in~\cite{Durillo14}  a  set  of
-Pareto-optimal solutions are  proposed to the user, and this  is also the spirit
-of our  own work.   Another discriminating criterion  between approaches  is the
-assumption of  an \emph{online}  (or \emph{just-in-time}) or  \emph{offline} (or
-\emph{static})  schedule,  on   the  type  of  workload   (independent  jobs  or
-workflows),  the homogeneity  of  the resources,  or the  way  they handle  the
-multiple objectives.  Offline scheduling represents a large body of the research 
-often based  on the adaptation of popular heuristics  aiming to minimize
-makespan in Grids.  For instance  the popular HEFT~\cite{Zhao2003} heuristic has
-been  revisited in~\cite{LinL11},  which  adds the  ability  to scale  resources
-depending on whether or not a task  can execute by its estimated finish time, or
-as extended in~\cite{Li11cost-conscious} to select  slots with a balance between
-runtime  and  cost.  However,  offline  scheduling  is often  evaluated  through
-simulation while online scheduling is closer to the practitioners assumptions 
-who evaluate  their ideas  in actual environments.   Online strategies have been
-proposed  for  bags-of-tasks, to address  the problem  of  appropriately
-provisioning                             the                            platform
-(e.g~\cite{MarshallKF10,GenaudG11,DuongLG11,VillegasASI12}).  These  works share
-many  commonalities, especially taking  into account  some important  operating
-system level details, such as the boot time of a VM or the contention that occurs
-if too many VMs are started simultaneously. We show in this paper that these are
-influential factors to the prediction of the execution.
-  
-The second important  type of tool is a prediction  tool. Accurate prediction of
-the  runtime of  scientific workloads  is  hampered by  multiple factors.  First
-\ac{iaas}  operates in  a opaque  fashion, the  exact nature  of the  underlying
-platforms are  unknown and  may slightly vary  for a given  type of  resource as
-operators  complete their  data-centers  over  the years  with  new servers  and
-equipment.   Secondly  cloud  systems  are  multi-tenant  by  nature  which adds
-uncertainty due to  contention on network and memory accesses,  depending on how
-\ac{vm}  are scheduled  and the  activity of  your \emph{neighbors}.   Even when
-\ac{iaas} operators attempt to mask  these irregularities in computing power and
-network  access by  guaranteeing a  minimum performance,  variability occurs  in
-presence of \emph{less-than-noisy-neighbors} as it is not in the interest of the
-\ac{iaas} operators to limit power  available over the guaranteed minimums.
-These factors add to the already  high difficulty of modeling job execution times
-on a network of computers as shown in~\cite{Lastovetsky05}.
+
+%----------------------- prediction tools --------------------------------------
+Independtly  of scheduling  decisions,  accurate prediction  of  the runtime  of
+complex workloads is hampered by  multiple factors.  First \ac{iaas} operates
+in a  opaque fashion, the exact  nature of the underlying  platforms are unknown
+and may slightly vary  for a given type of resource  as operators complete their
+data-centers  over the  years with  new servers  and equipment.   Secondly cloud
+systems are multi-tenant  by nature which adds uncertainty due  to contention on
+network and  memory accesses,  depending on  how \ac{vm}  are scheduled  and the
+activity of  your \emph{neighbors}.   Even when  \ac{iaas} operators  attempt to
+mask these irregularities in computing  power and network access by guaranteeing
+a    minimum     performance,    variability     occurs    in     presence    of
+\emph{less-than-noisy-neighbors} as it  is not in the interest  of the \ac{iaas}
+operators to limit power available  over the guaranteed minimums.  These factors
+add to the already high difficulty of  modeling job execution times on a network
+of computers as shown in~\cite{Lastovetsky05}.
+
+In this regard,  the prediction is highly dependent on  the underlying simulator
+of the system and on the phenomena it  can capture. In this work, we rely on the
+SimGrid~\cite{simgrid}  simulation toolkit,  enabling  to  build discrete  event
+simulators of distributed systems such as Grids, Clouds, or HPC systems. SimGrid
+has been chosen as the simulation engine, for the versatility of its interfaces,
+and    above   all,    for   its    well-studied   accuracy    against   reality
+(e.g~\cite{StanisicTLVM15,VelhoSCL13}).
+
 
 To deal  with the inherent  unpredictability introduced by  opaque heterogeneous
 platforms, the standard approach is to  consider job runtimes to be stochastic.
@@ -639,6 +621,50 @@ a predictor of an alternate reality where this level of perturbation exists. As
 mentioned in Section~\ref{sec:pq}, trade-off between the capture rate and
 makespan interval is still possible by using a different confidence
 interval after fitting the simulated makespan to a Normal distribution.
+
+
+
+\section{Related Works}
+
+%----------------------- scheduling approaches ---------------------------------
+
+The first type of tool is the scheduler. Compared to earlier distributed
+computing systems  (e.g Grids),  the scheduling problem  statement in  the cloud
+must be reformulated because of two fundamental novelties: firstly the size of the
+infrastructure can be dynamically scaled, and secondly as economic cost can be
+clearly measured, it naturally becomes an additional objective to the traditional
+makespan  objective,  making  the   problem  multi-objective.   An abundance  of
+heuristics have been  developed to adapt to the cloud  context, spanning a large
+variety of assumptions about the setup.  The bi-objective issue is often tackled
+by  combining the  cost and  makespan  metrics in  a  single one  or fixing  one
+parameter as a constraint (deadline- or budget- constrained schedules). While it
+can be argued  that several solutions may be equally  interesting trade-offs,
+it is up to the user to choose.  In~\cite{Su13} is proposed a strategy where VMs
+belonging to a  Pareto front representing the most  cost-efficient resources are
+used  in  priority  to  map  jobs.  Likewise,  in~\cite{Durillo14}  a  set  of
+Pareto-optimal solutions are  proposed to the user, and this  is also the spirit
+of our  own work.   Another discriminating criterion  between approaches  is the
+assumption of  an \emph{online}  (or \emph{just-in-time}) or  \emph{offline} (or
+\emph{static})  schedule,  on   the  type  of  workload   (independent  jobs  or
+workflows),  the homogeneity  of  the resources,  or the  way  they handle  the
+multiple objectives.  Offline scheduling represents a large body of the research 
+often based  on the adaptation of popular heuristics  aiming to minimize
+makespan in Grids.  For instance  the popular HEFT~\cite{Zhao2003} heuristic has
+been  revisited in~\cite{LinL11},  which  adds the  ability  to scale  resources
+depending on whether or not a task  can execute by its estimated finish time, or
+as extended in~\cite{Li11cost-conscious} to select  slots with a balance between
+runtime  and  cost.  However,  offline  scheduling  is often  evaluated  through
+simulation while online scheduling is closer to the practitioners assumptions 
+who evaluate  their ideas  in actual environments.   Online strategies have been
+proposed  for  bags-of-tasks, to address  the problem  of  appropriately
+provisioning                             the                            platform
+(e.g~\cite{MarshallKF10,GenaudG11,DuongLG11,VillegasASI12}).  These  works share
+many  commonalities, especially taking  into account  some important  operating
+system level details, such as the boot time of a VM or the contention that occurs
+if too many VMs are started simultaneously. We show in this paper that these are
+influential factors to the prediction of the execution.
+
+
 
 \section{Conclusion}
 
