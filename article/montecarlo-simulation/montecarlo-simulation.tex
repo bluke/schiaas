@@ -84,6 +84,8 @@
 cloud computing, computer simulation, monte carlo methods.
 \end{IEEEkeywords}
 
+\tableofcontents
+
 \section{Introduction.}
 
 Over the  last decade the advancement  of virtualization techniques has  lead to
@@ -137,18 +139,21 @@ In this regard,  the prediction is highly dependent on  the underlying simulator
 of the system and on the phenomena it  can capture. In this work, we rely on the
 SimGrid~\cite{simgrid}  simulation toolkit,  enabling  to  build discrete  event
 simulators of distributed systems such as Grids, Clouds, or HPC systems. SimGrid
-has been chosen as the simulation engine, for the versatility of its interfaces,
-and    above   all,    for   its    well-studied   accuracy    against   reality
-(e.g~\cite{StanisicTLVM15,VelhoSCL13}).
+has   been    chosen   for    its   well-studied   accuracy    against   reality
+(e.g~\cite{StanisicTLVM15,VelhoSCL13}).   In   particular,   given   a   precise
+description  of the  hardware platform,  its  network model  takes into  account
+network contention in  presence of multiple communication flows and  can model VM
+boot times.
 
-
-To deal  with the inherent  unpredictability introduced by  opaque heterogeneous
-platforms, the standard approach is to  consider job runtimes to be stochastic.
-Every job can be modeled by a \ac{rv} that models the whole spectrum of possible
-runtimes. These  \ac{rv} are  the basis required  for a  stochastic simulation.
-Such  simulations   output  a  random   variable  of  the   observed  phenomenon
-(\emph{makespan}  or  \emph{\ac{btu}}) which  in  turn  can  be used  to  create
-intervals of possible  results with their assorted confidence. 
+However, we may not be able to provide a fully accurate platform description, or
+unable  to estimate  the network  cross-traffic, yielding  a distorsion  between
+simulation and reality.  To deal with this problem, the  standard approach is to
+consider job runtimes to  be stochastic.  Every job can be  modeled by a \ac{rv}
+that models the whole spectrum of possible runtimes. These \ac{rv} are the basis
+required for a stochastic simulation.  Such simulations output a random variable
+of the  observed phenomenon (\emph{makespan}  or \emph{\ac{btu}}) which  in turn
+can  be  used to  create  intervals  of  possible  results with  their  assorted
+confidence.
 
 In this paper, we propose a stochastic method to enrich the classical prediction
 based on a discrete-event simulator, and  we study the conditions needed for this
@@ -168,176 +173,12 @@ possible improvements and the limits of the approach.
 	\caption{Makepsan and BTU count distribution for OMSSA and Montage
 	runs\label{fig:realbrs}}
 \end{figure*}
-\subsection{Schlouder}
-In the recent years, we have developed a client-side job broker for IaaS clouds
-called Schlouder~\cite{Michon17}. This broker is able to submit on the user's 
- batch  jobs, be  it a  set of  independent jobs  or a  workflow.  The
-broker's main role is to schedule the set of jobs onto a set of cloud resources,
-which the broker can  scale up or down depending on  a \emph{strategy} chosen by
-the user.  Technically, the broker connects  to the cloud management system (for
-instance, OpenStack) to  instruct how the infrastructure  should be provisioned
-and  then assigns  the jobs  to  the resources  using the  Slurm job  management
-system. 
 
-Applications are  submitted to Schlouder  as batch jobs. Each job  is provided
-with  a  \emph{user estimate}  of  the  runtime, and  if  the  application is  a
-workflow, the list of dependencies. Schlouder uses just-in-time scheduling where
-jobs  are  assigned   to  \acp{vm}  as  soon  as  all   their  dependencies  are
-satisfied.  We call  \emph{strategy} the  heuristic  used by  Schlouder to  make
-provisioning and scheduling  decisions.  A dozen strategies and their variants are
-available to  the user (details can  be found in~\cite{GenaudG11}), of  which we
-will use  two in this  paper. Strategies  provision \acp{vm} and  schedule jobs
-based on the user estimates of the runtime. Notice that the jobs' real runtimes,
-called \emph{effective runtimes},  may differ from the estimates,  but this does
-not change the initial scheduling decision with regards to which resources the 
-jobs are assigned.
+\subsection{Simulation}
 
-As mentioned in introduction, as no one solution dominates the other in all
-objectives, we leave it to the user the choice of strategies which will favor 
-one or the other objective (cost or makespan). These two main strategies 
-proposed by Schlouder are:
-\begin{itemize}
-\item ASAP (or \textit{as soon as possible}): schedules the job immediately onto
-  an idle VM, or immediately provisions a new VM to start the job if no idle VM 
-  is available.  Hence this strategy tries to minimize the makespan
-  of the batch job execution.
+\subsection{Stochastic Simulations}
 
-\item AFAP (or \textit{as full as  possible}): schedules each job in priority to
-	an already available resource whenever the remaining time  before a new
-	\ac{btu} begins is greater or equal to the job estimated runtime.
-	By solving this bin-packing problem, this strategy tends to minimize the
-	monetary cost of the batch execution.
-\end{itemize}
-In the following, we will evaluate the real executions against the backdrop of these two
-strategies.
-
-\subsection{Experimental Set-up and Test Applications}\label{sc:setup}
-
-To evaluate Schlouder performance we carried out multiple executions of
-typical scientific applications. The execution traces for those runs were
-collected in an archive. This backlog of real executions is the benchmark
-against which our simulation performance will be evaluated. The applications
-used are:
-
-\begin{itemize}
-	\item Montage\cite{montage2009}, the Montage Astronomical Image Mosaic
-		Engine, is designed to splice astronomical images. The structure
-                of this application is a fork-join type workflow. This
-                application  is extremely data intensive with a
-		\emph{commuication-to-computation} ratio superior to $90\%$.
-	\item OMSSA\cite{Geer2004}, the Open Mass-Spectrometry Search Algorithm, 
-		is used to analyze mass-spectrometer results. The application is
-                parallelized as a bag-of-tasks, \textit{i.e.} as a number of
-                independent parallel jobs. This application is
-		computation intensive with a
-		\emph{communication-to-computation} ratio under $20\%$.
-\end{itemize}
-\begin{comment}
-\begin{figure}
-	\resizebox{0.5\textwidth}{!}{%
-		\input{gfx/montage.tex}
-		}%
-	\caption{Montage workflow diagram.}\label{fig:montage}
-\end{figure}
-\end{comment}
-
-These two applications were executed using Schlouder on a private cloud.  We set
-up a 96 core cloud based on four identical  dual $2.67GHz$ Intel Xeon X5650
-servers with KVM-based virtualization  and an Openstack cloud-front (first
-2012.1, and later 2014.2). This cluster was exclusively used by us and special
-attention was taken to never overload the system.
-
-\subsection{Experimental Observations}
-
-Schlouder execution traces contain several useful metrics including, but not
-limited to, the \ac{vm} start dates, boot time, shutdown times, and assigned
-tasks, as well as the task start date and effective runtimes. We are interested in
-two macro metrics, the makespan and the cost.  The makespan is the time elapsed
-between the submission of the first job and the completion of the last completed
-job. The cost is measured as a number of \acp{btu}. Since our experiments have a
-single \ac{vm} type we counted one \ac{btu} per \ac{vm} per started hour to
-match the most common pricing on the cloud. Table~\ref{tab:nbruns} gives an
-overview of the executions in the archive used in this paper. We observe
-variability on the makespan due to the variability of individual job effective
-runtime.
-\begin{table}
-	\centering
-	\caption{Overview of archived executions}\label{tab:nbruns}
-	\begin{tabular}{llrcc}
-		\toprule
-		Application&Strategy&\#runs&BTU count&Makespan ($s$)\\
-		\midrule
-		\multirow{2}{*}{OMSSA}&ASAP&106&40&12811 -- 13488\\
-				      &AFAP&98&33 -- 36&13564 -- 14172\\
-		\midrule
-		\multirow{2}{*}{Montage}&ASAP&3&10&1478 -- 1554\\
-					&AFAP&3&1&2833 -- 2837\\
-		\bottomrule
-	\end{tabular}
-\end{table}
-
-
-Figure~\ref{fig:realbrs}  presents the  distribution of  makespans and  \ac{btu}
-counts over  more than  200 runs in all. Makespan distribution is represented
-using an density curve, by definition these curves have an integral equal to 1.
-These figures expose the  behaviour exhibited  by the
-different strategies. ASAP  appears to finish faster in the  most cases and AFAP
-is less costly. But  these optimizations come at the cost  of instability on the
-dimension they  aim to  optimize. ASAP uses  a high number  of \ac{btu}s  but this
-number is stable, whereas AFAP uses a lower number of \ac{btu}s  
-but this number of \ac{btu}s is  more variable.  When
-looking at the makespan, we take note of how the different strategies affect the
-skewness of  the overall distribution. The  positive skew seen on  ASAP suggests
-that even though  the strategy globally produces  shorter makespan, perturbations
-are more likely  to extend the makespan, whereas AFAP  makespans are more spread
-out and skews negatively.
-
-All the behaviours discussed in this section are due to the specifics of the
-provisioning and scheduling strategies. In the case of AFAP and ASAP a thorough
-analysis could probably expose the strategies' instabilities, but that would not
-be possible on more complex and dynamic strategies. In the following sections we
-choose to consider strategies as black boxes to show that through simulation 
-we are able  to obtain an accurate prediction of our runs' distribution
-and of our strategies' biases.
-
-\section{Enriched Simulation Framework}
-\label{sec:enriched-sim}
-
-\subsection{SimSchlouder}
-
-As a follow-up to our work on Schlouder we developed SimSchlouder, a simulator
-reimplementing the behaviour of Schlouder. Integrated in Schlouder, this
-simulator allows the user to request an estimate of the makespan and the cost
-before choosing a strategy for a real run. SimSchlouder includes the same
-strategies as Schlouder, and as its real-world counterpart it is easily
-extendable with new strategies. SimSchlouder is based on SimGrid~\cite{simgrid},
-a framework to build discrete event simulators of distributed systems such as
-Grids, Clouds, or HPC systems. SimGrid has been chosen as the simulation engine,
-for the versatility of its interfaces, and above all, for its well-studied
-accuracy against reality (e.g~\cite{StanisicTLVM15,VelhoSCL13}).
-
-
-For the purpose of this paper, we classify the inputs required by SimSchlouder
-in two categories. The first category is the operator inputs, which describe the
-hardware platform and the cloud configuration. Internally, they are fed to the
-SimGrid core and the \ac{iaas} simulation layer. The second category is the end
-user inputs. They describe the workflow to simulate, the submission dates of
-each job, the runtime prediction that would be provided to Schlouder.
-Additionally for the purpose of the simulator, a user can choose to supply
-effective runtimes to match, communication to simulate, or alternative boot
-times for the \acp{vm}. These additional inputs are used to alter the sequence
-of events simulated without interfering with parameters that would change the
-provisioning or scheduling decisions made by SimSchlouder, e.g.\ having a job
-overrun its runtime without changing the corresponding user prediction.
-
-As mentioned above, the variability of real executions suggests that a simulation,
-even if it was  perfectly accurate, would capture only one of the set
-of possible real executions. We will show later that  the simulation is indeed
-very   accurate  when   the  user   estimates  are   close  to   the  effective
-runtimes. However,  to  provide the user  with a broader view  of how
-their real executions could behave with job runtimes variability,  we should 
-enrich the simulation framework with some form of stochastic prediction.
-
+\subsection{Monte-Carlo Method}
 \subsection{Monte-Carlo Simulation}\label{sec:MCS}
 
 Stochastic  simulations are  computationally more  expensive than  deterministic
@@ -399,6 +240,184 @@ to  the mean  $\mu$.
 	Carlo Simulation compared to reality at 10\% perturbation
 	level.}\label{fig:fit}
 \end{figure*}
+
+\section{Enriched Simulation Framework}
+\label{sec:enriched-sim}
+
+
+\subsection{In-Vivo Experiment}
+In the recent years, we have developed a client-side job broker for IaaS clouds
+called Schlouder~\cite{Michon17}. This broker is able to submit on the user's 
+ batch  jobs, be  it a  set of  independent jobs  or a  workflow.  The
+broker's main role is to schedule the set of jobs onto a set of cloud resources,
+which the broker can  scale up or down depending on  a \emph{strategy} chosen by
+the user.  Technically, the broker connects  to the cloud management system (for
+instance, OpenStack) to  instruct how the infrastructure  should be provisioned
+and  then assigns  the jobs  to  the resources  using the  Slurm job  management
+system. 
+
+Applications are  submitted to Schlouder  as batch jobs. Each job  is provided
+with  a  \emph{user estimate}  of  the  runtime, and  if  the  application is  a
+workflow, the list of dependencies. Schlouder uses just-in-time scheduling where
+jobs  are  assigned   to  \acp{vm}  as  soon  as  all   their  dependencies  are
+satisfied.  We call  \emph{strategy} the  heuristic  used by  Schlouder to  make
+provisioning and scheduling  decisions.  A dozen strategies and their variants are
+available to  the user (details can  be found in~\cite{GenaudG11}), of  which we
+will use  two in this  paper. Strategies  provision \acp{vm} and  schedule jobs
+based on the user estimates of the runtime. Notice that the jobs' real runtimes,
+called \emph{effective runtimes},  may differ from the estimates,  but this does
+not change the initial scheduling decision with regards to which resources the 
+jobs are assigned.
+
+As mentioned in introduction, as no one solution dominates the other in all
+objectives, we leave it to the user the choice of strategies which will favor 
+one or the other objective (cost or makespan). These two main strategies 
+proposed by Schlouder are:
+\begin{itemize}
+\item ASAP (or \textit{as soon as possible}): schedules the job immediately onto
+  an idle VM, or immediately provisions a new VM to start the job if no idle VM 
+  is available.  Hence this strategy tries to minimize the makespan
+  of the batch job execution.
+
+\item AFAP (or \textit{as full as  possible}): schedules each job in priority to
+	an already available resource whenever the remaining time  before a new
+	\ac{btu} begins is greater or equal to the job estimated runtime.
+	By solving this bin-packing problem, this strategy tends to minimize the
+	monetary cost of the batch execution.
+\end{itemize}
+In the following, we will evaluate the real executions against the backdrop of these two
+strategies.
+
+\subsubsection{Experimental Set-up and Test Applications}\label{sc:setup}
+
+To evaluate Schlouder performance we carried out multiple executions of
+typical scientific applications. The execution traces for those runs were
+collected in an archive. This backlog of real executions is the benchmark
+against which our simulation performance will be evaluated. The applications
+used are:
+
+\begin{itemize}
+	\item Montage\cite{montage2009}, the Montage Astronomical Image Mosaic
+		Engine, is designed to splice astronomical images. The structure
+                of this application is a fork-join type workflow. This
+                application  is extremely data intensive with a
+		\emph{commuication-to-computation} ratio superior to $90\%$.
+	\item OMSSA\cite{Geer2004}, the Open Mass-Spectrometry Search Algorithm, 
+		is used to analyze mass-spectrometer results. The application is
+                parallelized as a bag-of-tasks, \textit{i.e.} as a number of
+                independent parallel jobs. This application is
+		computation intensive with a
+		\emph{communication-to-computation} ratio under $20\%$.
+\end{itemize}
+\begin{comment}
+\begin{figure}
+	\resizebox{0.5\textwidth}{!}{%
+		\input{gfx/montage.tex}
+		}%
+	\caption{Montage workflow diagram.}\label{fig:montage}
+\end{figure}
+\end{comment}
+
+These two applications were executed using Schlouder on a private cloud.  We set
+up a 96 core cloud based on four identical  dual $2.67GHz$ Intel Xeon X5650
+servers with KVM-based virtualization  and an Openstack cloud-front (first
+2012.1, and later 2014.2). This cluster was exclusively used by us and special
+attention was taken to never overload the system.
+
+\subsubsection{Experimental Observations}
+
+Schlouder execution traces contain several useful metrics including, but not
+limited to, the \ac{vm} start dates, boot time, shutdown times, and assigned
+tasks, as well as the task start date and effective runtimes. We are interested in
+two macro metrics, the makespan and the cost.  The makespan is the time elapsed
+between the submission of the first job and the completion of the last completed
+job. The cost is measured as a number of \acp{btu}. Since our experiments have a
+single \ac{vm} type we counted one \ac{btu} per \ac{vm} per started hour to
+match the most common pricing on the cloud. Table~\ref{tab:nbruns} gives an
+overview of the executions in the archive used in this paper. We observe
+variability on the makespan due to the variability of individual job effective
+runtime.
+\begin{table}
+	\centering
+	\caption{Overview of archived executions}\label{tab:nbruns}
+	\begin{tabular}{llrcc}
+		\toprule
+		Application&Strategy&\#runs&BTU count&Makespan ($s$)\\
+		\midrule
+		\multirow{2}{*}{OMSSA}&ASAP&106&40&12811 -- 13488\\
+				      &AFAP&98&33 -- 36&13564 -- 14172\\
+		\midrule
+		\multirow{2}{*}{Montage}&ASAP&3&10&1478 -- 1554\\
+					&AFAP&3&1&2833 -- 2837\\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+
+Figure~\ref{fig:realbrs}  presents the  distribution of  makespans and  \ac{btu}
+counts over  more than  200 runs in all. Makespan distribution is represented
+using an density curve, by definition these curves have an integral equal to 1.
+These figures expose the  behaviour exhibited  by the
+different strategies. ASAP  appears to finish faster in the  most cases and AFAP
+is less costly. But  these optimizations come at the cost  of instability on the
+dimension they  aim to  optimize. ASAP uses  a high number  of \ac{btu}s  but this
+number is stable, whereas AFAP uses a lower number of \ac{btu}s  
+but this number of \ac{btu}s is  more variable.  When
+looking at the makespan, we take note of how the different strategies affect the
+skewness of  the overall distribution. The  positive skew seen on  ASAP suggests
+that even though  the strategy globally produces  shorter makespan, perturbations
+are more likely  to extend the makespan, whereas AFAP  makespans are more spread
+out and skews negatively.
+
+All the behaviours discussed in this section are due to the specifics of the
+provisioning and scheduling strategies. In the case of AFAP and ASAP a thorough
+analysis could probably expose the strategies' instabilities, but that would not
+be possible on more complex and dynamic strategies. In the following sections we
+choose to consider strategies as black boxes to show that through simulation 
+we are able  to obtain an accurate prediction of our runs' distribution
+and of our strategies' biases.
+
+
+
+
+\subsection{In-Silico Experiment}
+
+As a follow-up to our work on Schlouder we developed SimSchlouder, a simulator
+reimplementing the behaviour of Schlouder. Integrated in Schlouder, this
+simulator allows the user to request an estimate of the makespan and the cost
+before choosing a strategy for a real run. SimSchlouder includes the same
+strategies as Schlouder, and as its real-world counterpart it is easily
+extendable with new strategies. SimSchlouder is based on SimGrid~\cite{simgrid},
+a framework to build discrete event simulators of distributed systems such as
+Grids, Clouds, or HPC systems. SimGrid has been chosen as the simulation engine,
+for the versatility of its interfaces, and above all, for its well-studied
+accuracy against reality (e.g~\cite{StanisicTLVM15,VelhoSCL13}).
+
+
+For the purpose of this paper, we classify the inputs required by SimSchlouder
+in two categories. The first category is the operator inputs, which describe the
+hardware platform and the cloud configuration. Internally, they are fed to the
+SimGrid core and the \ac{iaas} simulation layer. The second category is the end
+user inputs. They describe the workflow to simulate, the submission dates of
+each job, the runtime prediction that would be provided to Schlouder.
+Additionally for the purpose of the simulator, a user can choose to supply
+effective runtimes to match, communication to simulate, or alternative boot
+times for the \acp{vm}. These additional inputs are used to alter the sequence
+of events simulated without interfering with parameters that would change the
+provisioning or scheduling decisions made by SimSchlouder, e.g.\ having a job
+overrun its runtime without changing the corresponding user prediction.
+
+As mentioned above, the variability of real executions suggests that a simulation,
+even if it was  perfectly accurate, would capture only one of the set
+of possible real executions. We will show later that  the simulation is indeed
+very   accurate  when   the  user   estimates  are   close  to   the  effective
+runtimes. However,  to  provide the user  with a broader view  of how
+their real executions could behave with job runtimes variability,  we should 
+enrich the simulation framework with some form of stochastic prediction.
+
+
+
+
 
 \subsection{Input Modeling}\label{sec:im}
 
