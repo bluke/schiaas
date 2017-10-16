@@ -114,9 +114,9 @@ arbitrary lengths of time, \ac{btu},  usually of  one hour. Running  two \ac{vm}
 side by side for one \ac{btu} each costs the same as running one \ac{vm} for two
 \ac{btu}, but every \ac{btu} started is owed in full.
 
-This model offers leaves the client an  almost complete freedom to start or stop
-new servers as long as the price can be afforded. However, for complex workloads
-composed of a number of potentially dependent jobs it becomes quickly difficult
+This model  offers the client  an almost complete freedom  to start or  stop new
+servers as  long as the  price can be  afforded. However, for  complex workloads
+composed of a number of potentially  dependent jobs it becomes quickly difficult
 to manually provision the resources and the use of a scheduler is unavoidable.
  
 In this paper,  we are interested in  predicting the execution time  and cost of
@@ -127,10 +127,10 @@ other scheduling approaches.
 
 
 %----------------------- prediction tools --------------------------------------
-Independently  of scheduling  decisions,  accurate prediction  of  the runtime  of
-complex workloads is hampered by  multiple factors.  First \ac{iaas} operates
-in a  opaque fashion, the exact  nature of the underlying  platforms are unknown
-and may slightly vary  for a given type of resource  as operators complete their
+Independently of  scheduling decisions,  accurate prediction  of the  runtime of
+complex workloads is hampered by  multiple factors.  First \ac{iaas} operates in
+a opaque fashion,  the exact nature of the underlying  platforms are unknown and
+may  slightly vary  for a  given type  of resource  as operators  complete their
 data-centers  over the  years with  new servers  and equipment.   Secondly cloud
 systems are multi-tenant  by nature which adds uncertainty due  to contention on
 network and  memory accesses,  depending on  how \ac{vm}  are scheduled  and the
@@ -147,9 +147,9 @@ of the system and on the phenomena it  can capture. In this work, we rely on the
 SimGrid~\cite{simgrid}  simulation toolkit,  enabling  to  build discrete  event
 simulators of distributed systems such as Grids, Clouds, or HPC systems. SimGrid
 has   been    chosen   for    its   well-studied   accuracy    against   reality
-(e.g~\cite{StanisicTLVM15,VelhoSCL13}).   In   particular,   given   a   precise
+(e.g~\cite{StanisicTLVM15,VelhoSCL13}).    In   particular,  given   a   precise
 description  of the  hardware platform,  its  network model  takes into  account
-network contention in  presence of multiple communication flows and  can model VM
+network contention in presence of multiple  communication flows and can model VM
 boot times.
 
 However, we may not be able to provide a fully accurate platform description, or
@@ -163,17 +163,17 @@ can  be  used to  create  intervals  of  possible  results with  their  assorted
 confidence.
 
 In this paper, we propose a stochastic method to enrich the classical prediction
-based on a discrete-event simulator, and  we study the conditions needed for this
-approach to be relevant. This study is  carried out in a real setting, described
-in  section~\ref{sec:work-context},   where  the  applications   use-cases,  the
-scheduler, and  the  experimental  observations are  presented.  The  stochastic
-framework we propose is  then presented in section~\ref{sec:enriched-sim} and
-is evaluated in section~\ref{sec:eval}. We finally conclude by discussing the 
-possible improvements and the limits of the approach.
+based  on the  discrete-event simulator  SimGrid,  and we  study the  conditions
+needed for  this approach to be  relevant. This study  is carried out in  a real
+setting,  described in  section~\ref{sec:work-context},  where the  applications
+use-cases, the scheduler, and the  experimental observations are presented.  The
+stochastic     framework     we     propose     is     then     presented     in
+section~\ref{sec:enriched-sim}  and is  evaluated in  section~\ref{sec:eval}. We
+finally conclude by  discussing the possible improvements and the  limits of the
+approach.
 
 
-\section{Work Context}
-\label{sec:work-context}
+\section{Related Work}
 
 \subsection{Scheduling}
 %----------------------- scheduling approaches ---------------------------------
@@ -213,6 +213,8 @@ occurs if too many VMs are started simultaneously.
 
 % TODO explain  how scheduling gets in the way of simulation
 \subsection{Simulation}
+
+\textbf{FIXME:tell me more about other simulator (comparative table)} 
 \begin{comment}
 % TODO Simulations of cloud, avantages of Determinist simulation 
 \begin{itemize}
@@ -309,81 +311,43 @@ to characterize the resulting random variable.  In our case, we will draw values
 of  the  effective runtimes  of  the  individual  jobs,  and we  obtain  through
 simulation samples of makespans and BTU counts.
 
-%\paragraph{Method} 
-Consider an  application consisting of  $n$ jobs,  independent or organized  as a
-workflow.  The simulation engine SimSchlouder  takes as input the user estimates
-$T_1, \ldots , T_n$ for the job runtimes, schedules the jobs and finally outputs
-the makespan $M$ of the whole batch.  The user estimates might be inaccurate
-and  we describe  hereafter  a method  to characterize  the  impact of  repeated
-imprecisions (on each  job runtime) on the final makespan.   We have developed a
-\ac{mcs} tool to  compute a confidence interval around the  makespan produced by
-simulation.  Let us sketch the overall process (see Fig~\ref{fig:mc-process}):
-\begin{itemize} 
-\item from  the set of  specified runtimes  $\{T_i\}$, the system  generates $s$
-  sets  of perturbed  runtimes $\{T_i^1\},  \ldots, \{T_i^s\}$.   Each perturbed
-  runtime  is a  random  value  uniformly drawn  around  $T_i$  (to be explained
-  below). We call \emph{realisation} each such random draw of a set of perturbed
-  runtimes.
-\item a simulation  is run for each realisation, producing  a makespan $M^i$ and
-  BTU count sample for each,
-\item a  normal distribution ${\cal  N}(\mu,\sigma)$ is fitted on  the different
-  makespan values.
-\end{itemize}
-\begin{figure}
-	\centering
-	\resizebox{0.5\textwidth}{!}{%
-		\input{gfx/mc-process.tex}
-		}
-\caption{Overview of the Monte-Carlo process: $500$ realizations are generated
-by drawing and adding a perturbation to each job runtime of the provided
-runtime set, every simulation is then simulated, the resulting makespan
-samples are fitted into the final result.}\label{fig:mc-process}
-\end{figure}
-Fitting is done to a normal distribution because, in essence the makespan is the
-sum  of the  runtimes of  the jobs  on the  critical path  of the  schedule.  To
-measure the impact  of the runtime perturbation on the  makespan, we compute the
-range $[\mu-2\sigma;\mu+2\sigma]$ (that is  a 95\% confidence interval) relative
-to  the mean  $\mu$. 
 
-%% Free floating graphs mus be declared a page in advance
-\begin{figure*}
-	\includegraphics[width=\textwidth]{gfx/fit_plot.pdf}
-	\caption{Makespan and BTU count distribution for OMSSA and Montage Monte
-	Carlo Simulation compared to reality at 10\% perturbation
-	level.}\label{fig:fit}
-\end{figure*}
+\section{Work Context}
+\label{sec:work-context}
 
-\section{Enriched Simulation Framework}
-\label{sec:enriched-sim}
+We  present  hereafter   our  experimental  setup.  It  consists   of  two  test
+applications, which are run  on one side, on a real  platform with our scheduler
+Schlouder (In-vivo experiment) and on the other side, are simulated with our
+simulator SimSchlouder based on SimGrid (In-silico experiment).
 
+ 
 
 \subsection{In-Vivo Experiment}
-In the recent years, we have developed a client-side job broker for IaaS clouds
-called Schlouder~\cite{Michon17}. This broker is able to submit on the user's 
- batch  jobs, be  it a  set of  independent jobs  or a  workflow.  The
-broker's main role is to schedule the set of jobs onto a set of cloud resources,
-which the broker can  scale up or down depending on  a \emph{strategy} chosen by
-the user.  Technically, the broker connects  to the cloud management system (for
-instance, OpenStack) to  instruct how the infrastructure  should be provisioned
-and  then assigns  the jobs  to  the resources  using the  Slurm job  management
-system. 
+In the recent years, we have developed  a client-side job broker for IaaS clouds
+called Schlouder~\cite{Michon17}.  This broker is  able to submit on  the user's
+batch jobs, be  it a set of  independent jobs or a workflow.   The broker's main
+role is  to schedule the set  of jobs onto a  set of cloud resources,  which the
+broker can scale up  or down depending on a \emph{strategy}  chosen by the user.
+Technically, the broker  connects to the cloud management  system (for instance,
+OpenStack) to  instruct how  the infrastructure should  be provisioned  and then
+assigns the jobs to the resources using the Slurm job management system.
 
-Applications are  submitted to Schlouder  as batch jobs. Each job  is provided
-with  a  \emph{user estimate}  of  the  runtime, and  if  the  application is  a
-workflow, the list of dependencies. Schlouder uses just-in-time scheduling where
-jobs  are  assigned   to  \acp{vm}  as  soon  as  all   their  dependencies  are
-satisfied.  We call  \emph{strategy} the  heuristic  used by  Schlouder to  make
-provisioning and scheduling  decisions.  A dozen strategies and their variants are
-available to  the user (details can  be found in~\cite{GenaudG11}), of  which we
-will use  two in this  paper. Strategies  provision \acp{vm} and  schedule jobs
-based on the user estimates of the runtime. Notice that the jobs' real runtimes,
-called \emph{effective runtimes},  may differ from the estimates,  but this does
-not change the initial scheduling decision with regards to which resources the 
-jobs are assigned.
+Applications are submitted to Schlouder as batch jobs. Each job is provided with
+a \emph{user estimate} of the runtime, and if the application is a workflow, the
+list  of dependencies.  Schlouder uses  just-in-time scheduling  where jobs  are
+assigned to \acp{vm}  as soon as all their dependencies  are satisfied.  We call
+\emph{strategy}  the  heuristic  used  by Schlouder  to  make  provisioning  and
+scheduling decisions.   A dozen strategies  and their variants are  available to
+the user (details can be found in~\cite{GenaudG11}), of which we will use two in
+this paper.  Strategies provision \acp{vm} and  schedule jobs based on  the user
+estimates  of  the  runtime.  Notice   that  the  jobs'  real  runtimes,  called
+\emph{effective  runtimes}, may  differ from  the estimates,  but this  does not
+change the initial scheduling decision with  regards to which resources the jobs
+are assigned.
 
-As mentioned in introduction, as no one solution dominates the other in all
-objectives, we leave it to the user the choice of strategies which will favor 
-one or the other objective (cost or makespan). These two main strategies 
+As mentioned  in introduction,  as no  one solution dominates  the other  in all
+objectives, we leave  it to the user  the choice of strategies  which will favor
+one  or the  other  objective  (cost or  makespan).  These  two main  strategies
 proposed by Schlouder are:
 \begin{itemize}
 \item ASAP (or \textit{as soon as possible}): schedules the job immediately onto
@@ -397,8 +361,8 @@ proposed by Schlouder are:
 	By solving this bin-packing problem, this strategy tends to minimize the
 	monetary cost of the batch execution.
 \end{itemize}
-In the following, we will evaluate the real executions against the backdrop of these two
-strategies.
+In the following,  we will evaluate the real executions  against the backdrop of
+these two strategies.
 
 \subsubsection{Experimental Set-up and Test Applications}\label{sc:setup}
 
@@ -493,18 +457,16 @@ and of our strategies' biases.
 
 
 \subsection{In-Silico Experiment}
+\textbf{FIXME:This subsection ends in nothing, no result. Should merge
+all the MCS contribution with it? In this case 'In-silico Experiment should
+go outside 'Work Context'.} 
 
-As a follow-up to our work on Schlouder we developed SimSchlouder, a simulator
-reimplementing the behaviour of Schlouder. Integrated in Schlouder, this
-simulator allows the user to request an estimate of the makespan and the cost
-before choosing a strategy for a real run. SimSchlouder includes the same
-strategies as Schlouder, and as its real-world counterpart it is easily
-extendable with new strategies. SimSchlouder is based on SimGrid~\cite{simgrid},
-a framework to build discrete event simulators of distributed systems such as
-Grids, Clouds, or HPC systems. SimGrid has been chosen as the simulation engine,
-for the versatility of its interfaces, and above all, for its well-studied
-accuracy against reality (e.g~\cite{StanisicTLVM15,VelhoSCL13}).
-
+As a follow-up  to our work on Schlouder we  developed SimSchlouder, a simulator
+reimplementing the  behaviour of Schlouder, and  relying on SimGrid as  its core
+simulation engine.  This simulator allows the user to request an estimate of the
+makespan and  the cost before choosing  a strategy for a  real run. SimSchlouder
+includes the same strategies as Schlouder,  and as its real-world counterpart it
+is easily extendable with new strategies. 
 
 For the purpose of this paper, we classify the inputs required by SimSchlouder
 in two categories. The first category is the operator inputs, which describe the
@@ -528,6 +490,54 @@ their real executions could behave with job runtimes variability,  we should
 enrich the simulation framework with some form of stochastic prediction.
 
 
+
+\section{Enriched Simulation Framework}
+\label{sec:enriched-sim}
+
+
+%\paragraph{Method} 
+Consider an  application consisting of  $n$ jobs,  independent or organized  as a
+workflow.  The simulation engine SimSchlouder  takes as input the user estimates
+$T_1, \ldots , T_n$ for the job runtimes, schedules the jobs and finally outputs
+the makespan $M$ of the whole batch.  The user estimates might be inaccurate
+and  we describe  hereafter  a method  to characterize  the  impact of  repeated
+imprecisions (on each  job runtime) on the final makespan.   We have developed a
+\ac{mcs} tool to  compute a confidence interval around the  makespan produced by
+simulation.  Let us sketch the overall process (see Fig~\ref{fig:mc-process}):
+\begin{itemize} 
+\item from  the set of  specified runtimes  $\{T_i\}$, the system  generates $s$
+  sets  of perturbed  runtimes $\{T_i^1\},  \ldots, \{T_i^s\}$.   Each perturbed
+  runtime  is a  random  value  uniformly drawn  around  $T_i$  (to be explained
+  below). We call \emph{realisation} each such random draw of a set of perturbed
+  runtimes.
+\item a simulation  is run for each realisation, producing  a makespan $M^i$ and
+  BTU count sample for each,
+\item a  normal distribution ${\cal  N}(\mu,\sigma)$ is fitted on  the different
+  makespan values.
+\end{itemize}
+\begin{figure}
+	\centering
+	\resizebox{0.5\textwidth}{!}{%
+		\input{gfx/mc-process.tex}
+		}
+\caption{Overview of the Monte-Carlo process: $500$ realizations are generated
+by drawing and adding a perturbation to each job runtime of the provided
+runtime set, every simulation is then simulated, the resulting makespan
+samples are fitted into the final result.}\label{fig:mc-process}
+\end{figure}
+Fitting is done to a normal distribution because, in essence the makespan is the
+sum  of the  runtimes of  the jobs  on the  critical path  of the  schedule.  To
+measure the impact  of the runtime perturbation on the  makespan, we compute the
+range $[\mu-2\sigma;\mu+2\sigma]$ (that is  a 95\% confidence interval) relative
+to  the mean  $\mu$. 
+
+%% Free floating graphs mus be declared a page in advance
+\begin{figure*}
+	\includegraphics[width=\textwidth]{gfx/fit_plot.pdf}
+	\caption{Makespan and BTU count distribution for OMSSA and Montage Monte
+	Carlo Simulation compared to reality at 10\% perturbation
+	level.}\label{fig:fit}
+\end{figure*}
 
 
 
@@ -762,7 +772,6 @@ interval after fitting the simulated makespan to a Normal distribution.
 
 
 
-\section{Related Works}
 
 \section{Conclusion}
 
