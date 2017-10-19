@@ -87,12 +87,6 @@ cloud computing, computer simulation, monte carlo methods.
 \tableofcontents
 
 \section{Introduction.}
-\begin{figure*}
-	\centering
-	\includegraphics[width=\textwidth]{gfx/real_plot.pdf}
-	\caption{Makepsan and BTU count distribution for OMSSA and Montage
-	runs\label{fig:realbrs}}
-\end{figure*}
 
 
 Over the last decade, the advancement  of virtualization techniques has  led to
@@ -315,14 +309,20 @@ simulation samples of makespans and BTU counts.
 \section{Work Context}
 \label{sec:work-context}
 
-We  present  hereafter   our  experimental  setup.  It  consists   of  two  test
+\begin{figure*}
+	\centering
+	\includegraphics[width=\textwidth]{gfx/real_plot.pdf}
+	\caption{Makespan and BTU count distribution for OMSSA and Montage
+	runs\label{fig:realbrs}}
+\end{figure*}
+
+We  present  hereafter  our  experimental   setup.   It  consists  of  two  test
 applications, which are run  on one side, on a real  platform with our scheduler
-Schlouder (In-vivo experiment) and on the other side, are simulated with our
-simulator SimSchlouder based on SimGrid (In-silico experiment).
+Schlouder and on  the other side, are simulated with  our simulator SimSchlouder
+based on SimGrid.
 
  
-
-\subsection{In-Vivo Experiment}
+\subsection{Real Execution Setup}
 In the recent years, we have developed  a client-side job broker for IaaS clouds
 called Schlouder~\cite{Michon17}.  This broker is  able to submit on  the user's
 batch jobs, be  it a set of  independent jobs or a workflow.   The broker's main
@@ -364,7 +364,39 @@ proposed by Schlouder are:
 In the following,  we will evaluate the real executions  against the backdrop of
 these two strategies.
 
-\subsubsection{Experimental Set-up and Test Applications}\label{sc:setup}
+
+
+
+\subsection{Simulated Execution Setup}
+As a follow-up  to our work on Schlouder we  developed SimSchlouder, a simulator
+reimplementing the  behaviour of Schlouder, and  relying on SimGrid as  its core
+simulation engine.  This simulator allows the user to request an estimate of the
+makespan and  the cost before choosing  a strategy for a  real run. SimSchlouder
+includes the same strategies as Schlouder,  and as its real-world counterpart it
+is easily extendable with new strategies. 
+
+For the purpose of this paper, we classify the inputs required by SimSchlouder
+in two categories. The first category is the operator inputs, which describe the
+hardware platform and the cloud configuration. Internally, they are fed to the
+SimGrid core and the \ac{iaas} simulation layer. The second category is the end
+user inputs. They describe the workflow to simulate, the submission dates of
+each job, the runtime prediction that would be provided to Schlouder.
+Additionally for the purpose of the simulator, a user can choose to supply
+effective runtimes to match, communication to simulate, or alternative boot
+times for the \acp{vm}. These additional inputs are used to alter the sequence
+of events simulated without interfering with parameters that would change the
+provisioning or scheduling decisions made by SimSchlouder, e.g.\ having a job
+overrun its runtime without changing the corresponding user prediction.
+
+As mentioned above, the variability of real executions suggests that a simulation,
+even if it was  perfectly accurate, would capture only one of the set
+of possible real executions. We will show later that  the simulation is indeed
+very   accurate  when   the  user   estimates  are   close  to   the  effective
+runtimes. However,  to  provide the user  with a broader view  of how
+their real executions could behave with job runtimes variability,  we should 
+enrich the simulation framework with some form of stochastic prediction.
+
+\subsection{Test Applications}\label{sc:setup}
 
 To evaluate Schlouder performance we carried out multiple executions of
 typical scientific applications. The execution traces for those runs were
@@ -400,99 +432,22 @@ servers with KVM-based virtualization  and an Openstack cloud-front (first
 2012.1, and later 2014.2). This cluster was exclusively used by us and special
 attention was taken to never overload the system.
 
-\subsubsection{Experimental Observations}
 
-Schlouder execution traces contain several useful metrics including, but not
-limited to, the \ac{vm} start dates, boot time, shutdown times, and assigned
-tasks, as well as the task start date and effective runtimes. We are interested in
-two macro metrics, the makespan and the cost.  The makespan is the time elapsed
-between the submission of the first job and the completion of the last completed
-job. The cost is measured as a number of \acp{btu}. Since our experiments have a
-single \ac{vm} type we counted one \ac{btu} per \ac{vm} per started hour to
-match the most common pricing on the cloud. Table~\ref{tab:nbruns} gives an
-overview of the executions in the archive used in this paper. We observe
-variability on the makespan due to the variability of individual job effective
-runtime.
-\begin{table}
-	\centering
-	\caption{Overview of archived executions}\label{tab:nbruns}
-	\begin{tabular}{llrcc}
-		\toprule
-		Application&Strategy&\#runs&BTU count&Makespan ($s$)\\
-		\midrule
-		\multirow{2}{*}{OMSSA}&ASAP&106&40&12811 -- 13488\\
-				      &AFAP&98&33 -- 36&13564 -- 14172\\
-		\midrule
-		\multirow{2}{*}{Montage}&ASAP&3&10&1478 -- 1554\\
-					&AFAP&3&1&2833 -- 2837\\
-		\bottomrule
-	\end{tabular}
-\end{table}
-
-
-Figure~\ref{fig:realbrs}  presents the  distribution of  makespans and  \ac{btu}
-counts over  more than  200 runs in all. Makespan distribution is represented
-using an density curve, by definition these curves have an integral equal to 1.
-These figures expose the  behaviour exhibited  by the
-different strategies. ASAP  appears to finish faster in the  most cases and AFAP
-is less costly. But  these optimizations come at the cost  of instability on the
-dimension they  aim to  optimize. ASAP uses  a high number  of \ac{btu}s  but this
-number is stable, whereas AFAP uses a lower number of \ac{btu}s  
-but this number of \ac{btu}s is  more variable.  When
-looking at the makespan, we take note of how the different strategies affect the
-skewness of  the overall distribution. The  positive skew seen on  ASAP suggests
-that even though  the strategy globally produces  shorter makespan, perturbations
-are more likely  to extend the makespan, whereas AFAP  makespans are more spread
-out and skews negatively.
-
-All the behaviours discussed in this section are due to the specifics of the
-provisioning and scheduling strategies. In the case of AFAP and ASAP a thorough
-analysis could probably expose the strategies' instabilities, but that would not
-be possible on more complex and dynamic strategies. In the following sections we
-choose to consider strategies as black boxes to show that through simulation 
-we are able  to obtain an accurate prediction of our runs' distribution
-and of our strategies' biases.
-
-
-
-
-\subsection{In-Silico Experiment}
-\textbf{FIXME:This subsection ends in nothing, no result. Should merge
-all the MCS contribution with it? In this case 'In-silico Experiment should
-go outside 'Work Context'.} 
-
-As a follow-up  to our work on Schlouder we  developed SimSchlouder, a simulator
-reimplementing the  behaviour of Schlouder, and  relying on SimGrid as  its core
-simulation engine.  This simulator allows the user to request an estimate of the
-makespan and  the cost before choosing  a strategy for a  real run. SimSchlouder
-includes the same strategies as Schlouder,  and as its real-world counterpart it
-is easily extendable with new strategies. 
-
-For the purpose of this paper, we classify the inputs required by SimSchlouder
-in two categories. The first category is the operator inputs, which describe the
-hardware platform and the cloud configuration. Internally, they are fed to the
-SimGrid core and the \ac{iaas} simulation layer. The second category is the end
-user inputs. They describe the workflow to simulate, the submission dates of
-each job, the runtime prediction that would be provided to Schlouder.
-Additionally for the purpose of the simulator, a user can choose to supply
-effective runtimes to match, communication to simulate, or alternative boot
-times for the \acp{vm}. These additional inputs are used to alter the sequence
-of events simulated without interfering with parameters that would change the
-provisioning or scheduling decisions made by SimSchlouder, e.g.\ having a job
-overrun its runtime without changing the corresponding user prediction.
-
-As mentioned above, the variability of real executions suggests that a simulation,
-even if it was  perfectly accurate, would capture only one of the set
-of possible real executions. We will show later that  the simulation is indeed
-very   accurate  when   the  user   estimates  are   close  to   the  effective
-runtimes. However,  to  provide the user  with a broader view  of how
-their real executions could behave with job runtimes variability,  we should 
-enrich the simulation framework with some form of stochastic prediction.
-
+\textbf{Transition vers ESF}.
 
 
 \section{Enriched Simulation Framework}
 \label{sec:enriched-sim}
+
+%\subsection{In-Silico Experiment}
+%\textbf{FIXME:This subsection ends in nothing, no result. Should merge
+%all the MCS contribution with it? In this case 'In-silico Experiment should
+%go outside 'Work Context'.} 
+
+
+
+
+\subsection{MCS}
 
 
 %\paragraph{Method} 
@@ -539,6 +494,61 @@ to  the mean  $\mu$.
 	level.}\label{fig:fit}
 \end{figure*}
 
+
+
+\subsection{Experimental Observations}
+
+Schlouder execution traces contain several useful metrics including, but not
+limited to, the \ac{vm} start dates, boot time, shutdown times, and assigned
+tasks, as well as the task start date and effective runtimes. We are interested in
+two macro metrics, the makespan and the cost.  The makespan is the time elapsed
+between the submission of the first job and the completion of the last completed
+job. The cost is measured as a number of \acp{btu}. Since our experiments have a
+single \ac{vm} type we counted one \ac{btu} per \ac{vm} per started hour to
+match the most common pricing on the cloud. Table~\ref{tab:nbruns} gives an
+overview of the executions in the archive used in this paper. We observe
+variability on the makespan due to the variability of individual job effective
+runtime.
+\begin{table}
+	\centering
+	\caption{Overview of archived executions}\label{tab:nbruns}
+	\begin{tabular}{llrcc}
+		\toprule
+		Application&Strategy&\#runs&BTU count&Makespan ($s$)\\
+		\midrule
+		\multirow{2}{*}{OMSSA}&ASAP&106&40&12811 -- 13488\\
+				      &AFAP&98&33 -- 36&13564 -- 14172\\
+		\midrule
+		\multirow{2}{*}{Montage}&ASAP&3&10&1478 -- 1554\\
+					&AFAP&3&1&2833 -- 2837\\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+
+Figure~\ref{fig:realbrs}  presents the  distribution of  makespans and  \ac{btu}
+counts over  more than  200 runs in all. Makespan distribution is represented
+using an density curve, by definition these curves have an integral equal to 1.
+These figures expose the  behaviour exhibited  by the
+different strategies. ASAP  appears to finish faster in the  most cases and AFAP
+is less costly. But  these optimizations come at the cost  of instability on the
+dimension they  aim to  optimize. ASAP uses  a high number  of \ac{btu}s  but this
+number is stable, whereas AFAP uses a lower number of \ac{btu}s  
+but this number of \ac{btu}s is  more variable.  When
+looking at the makespan, we take note of how the different strategies affect the
+skewness of  the overall distribution. The  positive skew seen on  ASAP suggests
+that even though  the strategy globally produces  shorter makespan, perturbations
+are more likely  to extend the makespan, whereas AFAP  makespans are more spread
+out and skews negatively.
+
+
+All the behaviours discussed in this section are due to the specifics of the
+provisioning and scheduling strategies. In the case of AFAP and ASAP a thorough
+analysis could probably expose the strategies' instabilities, but that would not
+be possible on more complex and dynamic strategies. In the following sections we
+choose to consider strategies as black boxes to show that through simulation 
+we are able  to obtain an accurate prediction of our runs' distribution
+and of our strategies' biases.
 
 
 \subsection{Input Modeling}\label{sec:im}
@@ -600,6 +610,8 @@ For  each  application and  strategy  we  also  perform a  single  deterministic
 simulation  using the  raw base  value  with 0\%  perturbation. This  simulation
 serves as  reference when  evaluating the strategies' behaviour when  faced with
 perturbations.
+
+
 
 \section{Evaluation}
 \label{sec:eval}
