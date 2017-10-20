@@ -27,13 +27,14 @@
 \acrodef{cdf}[CDF]{cumulative distribution function}
 \acrodef{mcs}[MCS]{Monte-Carlo simulation}
 \acrodefplural{mcs}[MCS's]{Monte-Carlo simulations}
+\acrodef{des}[DES]{discrete event simulation}
 
 \newcommand*\rot{\rotatebox{90}}
 \newcommand{\pmpc}[1]{$\pm#1\%$}
 \newcommand{\etal}[1]{\emph{#1 et al.}}
 \newcommand{\pc}[1]{$#1\%$}
 
-\IEEEtriggeratref{15}
+%\IEEEtriggeratref{15}
 
 %\title{Modeling the accuracy of Monte-Carlo approach for Cloud based workflow
 %  simulations.}
@@ -168,6 +169,37 @@ approach.
 
 
 \section{Related Work}
+\begin{table*}
+	\centering
+	\caption{Comparison of capabilities and functions of 5 common cloud
+	simulators}
+	\label{tab:simcmp}
+\begin{tabular}{|c||c|c|c||c|c|c|c|}
+	\hline
+	%% line 1
+	& \multicolumn{3}{c||}{Workload} &
+	\multicolumn{2}{c|}{CPU}&Network&Disk\\
+	\cline{2-8}
+	%%line 2
+	Simulator &trace%(a) 
+                  &model%(b)
+                  &code%(c)
+                  &timed%(d)
+                  &\#instr%(e)
+		  &type 
+		  &max precision\\
+	\hline
+	%%line 3
+	CloudSim\cite{cloudsim} & & & \bf X &&\bf
+	X&store\&forward&seek+transfert\\ \hline
+	ICanCloud\cite{icancloud} & & & \bf X &&\bf X&packet& bloc \\ \hline
+	GroudSim\cite{groudsim} & & & \bf X &&\bf X&flot& n/a\\\hline
+	GreenCloud\cite{greencloud} & & \bf X &&&\bf X&packet& n/a\\ \hline
+	SimGrid\cite{simgrid}& \bf X & \bf X & \bf X &\bf X&\bf X& flot/packet &
+	seek+transfert \\
+	\hline
+\end{tabular}
+\end{table*}
 
 \subsection{Scheduling}
 %----------------------- scheduling approaches ---------------------------------
@@ -207,6 +239,35 @@ occurs if too many VMs are started simultaneously.
 
 % TODO explain  how scheduling gets in the way of simulation
 \subsection{Simulation}
+
+Simulation has always being corner stone of the study of distributed system.
+Because large scale distributed system are such a cost to setup and maintain,
+organisation operating them would rather be used for computational purpose
+rather than experiment on the functionally. Simulators allowed research on
+distributed systems with having to build a dedicated distributed system. Over
+the last decade the rise of cloud computing as allowed for the appearance of
+multiple simulator dedicated \ac{iaas}.   
+
+Most cloud simulator are based on \ac{des} which allows the simulator to
+fast-forward to the next event.\ac{des}s can be simply tested by feeding the
+simulator information about a real run to matching simulation and checking that
+the simulated chain of event matches the empirical one. The timing of events is
+computed by the simulation model. In most cases simulators have a
+\emph{bottom-up} approach based on the modeling of low level components
+(machines, networks, storage devices), and large scale behaviours emerges
+naturally from the interactions of these components. Working on disjointed low
+level components make it easier to tune the precision of the model to the wanted
+accuracy/speed trade-off. %However the bottom-up approach has a limited
+%scalability in cases where the simulated platform becomes to large to
+%comfortably simulate. For this reason some simulators offert large scale
+%structures.
+The models used is usually discriminating factor between two simulators of equal
+functionality.
+
+\textbf{FIXME:talk about application specification and platform specification}
+
+Table~\ref{tab:simcmp} gives an overview of the capabilities and models of
+commons cloud simulators. 
 
 \textbf{FIXME:tell me more about other simulator (comparative table)} 
 \begin{comment}
@@ -250,33 +311,9 @@ simulation  programmée ; de performance CPU : (d) délai mesuré, (e) délai
 utilisateur ; de réseau : (flow) analytique ou (packet) niveau paquet ; et 
 enfin de disque.
 
-\begin{center}
-\begin{tabular}{|c||c|c|c||c|c|c|c|}
-	\hline
-	%% line 1
-	& \multicolumn{3}{c|}{Application} &
-	\multicolumn{2}{c|}{CPU}&Réseau&Disque\\
-	\cline{2-8}
-	%%line 2
-	Simulator &(a) 
-                  &(b)
-                  &(c)
-                  &(d)
-                  &(e)&
-	type & precision max\\
-	\hline
-	%%line 3
-	CloudSim\cite{cloudsim} & & & \bf X &&\bf
-	X&store\&forward&seek+transfert\\ \hline
-	ICanCloud\cite{icancloud} & & & \bf X &&\bf X&packet& bloc \\ \hline
-	GroudSim\cite{groudsim} & & & \bf X &&\bf X&flot& n/a\\\hline
-	GreenCloud\cite{greencloud} & & \bf X &&&\bf X&packet& n/a\\ \hline
-	SimGrid\cite{simgrid}& \bf X & \bf X & \bf X &\bf X&\bf X& flot/packet &
-	seek+transfert \\
-	\hline
-\end{tabular}
-\end{center}
 \end{comment}
+
+\textbf{FIXME:Next paragraph needs updating.}
 
 In the context of cloud computing where execution is subject not only to it's
 inherent variability but also matters of memory and network contention. Because
@@ -287,7 +324,7 @@ correct for every run. Stochastic simulations aim to integrate this inherent
 variability by considering the full array of possible runtimes and outputting a
 distribution of possible outcomes.
 
-\subsection{Monte-Carlo Method}\label{sec:MCS}
+\subsection{Monte-Carlo Method}
 
 Stochastic  simulations are  computationally more  expensive than  deterministic
 ones. In stochastic simulations inputs  become random variables representing the
