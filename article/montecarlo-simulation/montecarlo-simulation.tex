@@ -240,19 +240,19 @@ occurs if too many VMs are started simultaneously.
 % TODO explain  how scheduling gets in the way of simulation
 \subsection{Simulation}
 
-Simulation has always being corner stone of the study of distributed system.
-Because large scale distributed system are such a cost to setup and maintain,
+Simulation has always being corner stone of the study of distributed systems.
+Because large scale distributed systems are such a cost to setup and maintain,
 organisation operating them would rather be used for computational purpose
-rather than experiment on the functionally. Simulators allowed research on
-distributed systems with having to build a dedicated distributed system. Over
+rather than experiment on them functionally. Simulators allow research on
+distributed systems without having to build a dedicated distributed system. Over
 the last decade the rise of cloud computing as allowed for the appearance of
-multiple simulator dedicated \ac{iaas}.
+multiple simulator dedicated to \ac{iaas}.
 
 Most cloud simulator are based on \ac{des}. In \aclp{des} the simulation is a
 series of events changing the state of the simulated system. Events can be the
 start (or end) of a computation, the change of state of a machine, or
 disconnection of a network. The simulator will jump from one event to the next
-updating the times of upcoming events to refelct the change of state in the
+updating the times of upcoming events to reflect the change of state in the
 simulations. Such \ac{des} based simulations require at least a platform
 specification and an application description. The platform specification
 describes both the physical nature of the cloud, e.g.~machines and networks, and
@@ -266,7 +266,7 @@ the experimenter.  Application are sometimes just the backdrop against which we
 study specific cloud components, e.g.~someone interested in testing new \ac{vm}
 placement algorithms will be simulating the same application multiple times
 while changing the platform specification. Application description can vary
-widely between simulators. The most common description is as user code that uses
+widely between simulators. The most common description is a user code that uses
 simulation primitives to trigger events. Simgrid\cite{simgrid} can also take as
 application description MPI traces, from which it will derive a sequence of
 events, or a \acl*{dag} abstracting the application.
@@ -331,13 +331,13 @@ enfin de disque.
 
 \textbf{FIXME:Next paragraph needs updating. Cite Wolsky maybe~?}
 
-In the context of cloud computing where execution is subject not only to it's
-inherent variability but also matters of memory and network contention. Because
-of the existence of so many sources of variability, the sequence of events for
-one execution to the other might not be the same from one execution to the
-other. As such a deterministic simulation will not produce a results that it
-correct for every run. Stochastic simulations aim to integrate this inherent
-variability by considering the full array of possible runtimes and outputting a
+In the context  of cloud computing where  execution is subject not  only to it's
+inherent variability but also matters  of memory and network contention. Because
+of the existence of  so many sources of variability, the  sequence of events for
+completing an application  execution might not be  the same from one  run to the
+other. As  such a deterministic  simulation will not  produce a results  that it
+correct for  every run.  Stochastic  simulations aim to integrate  this inherent
+variability by considering the full array  of possible runtimes and outputting a
 distribution of possible outcomes.
 
 \subsection{Monte-Carlo Method}
