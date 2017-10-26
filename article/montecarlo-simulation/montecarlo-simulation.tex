@@ -201,42 +201,7 @@ approach.
 \end{tabular}
 \end{table*}
 
-\subsection{Scheduling}
-\textbf{FIXME: chapeau et transition~?}
-%----------------------- scheduling approaches ---------------------------------
-Compared to earlier distributed computing systems (e.g Grids), the scheduling
-problem statement in the cloud must be reformulated because of two fundamental
-novelties: firstly the size of the infrastructure can be dynamically scaled, and
-secondly as economic cost can be clearly measured, it naturally becomes an
-additional objective to the traditional makespan objective, making the problem
-multi-objective. An abundance of heuristics have been developed to adapt to the
-cloud context, spanning a large variety of assumptions about the setup. The
-bi-objective issue is often tackled by combining the cost and makespan metrics
-in a single one or fixing one parameter as a constraint (deadline- or budget-
-constrained schedules). While it can be argued that several solutions may be
-equally interesting trade-offs, it is up to the user to choose. In~\cite{Su13}
-is proposed a strategy where VMs belonging to a Pareto front representing the
-most cost-efficient resources are used in priority to map jobs. Likewise,
-in~\cite{Durillo14} a set of Pareto-optimal solutions are proposed to the user,
-and this is also the spirit of our own work. Another discriminating criterion
-between approaches is the assumption of an \emph{online} (or
-\emph{just-in-time}) or \emph{offline} (or \emph{static}) schedule, on the type
-of workload (independent jobs or workflows), the homogeneity of the resources,
-or the way they handle the multiple objectives. Offline scheduling represents a
-large body of the research often based on the adaptation of popular heuristics
-aiming to minimize makespan in Grids. For instance the popular
-HEFT~\cite{Zhao2003} heuristic has been revisited in~\cite{LinL11}, which adds
-the ability to scale resources depending on whether or not a task can execute by
-its estimated finish time, or as extended in~\cite{Li11cost-conscious} to select
-slots with a balance between runtime and cost. However, offline scheduling is
-often evaluated through simulation while online scheduling is closer to the
-practitioners assumptions who evaluate their ideas in actual environments.
-Online strategies have been proposed for bags-of-tasks, to address the problem
-of appropriately provisioning the platform
-(e.g~\cite{MarshallKF10,GenaudG11,DuongLG11,VillegasASI12}). These works share
-many commonalities, especially taking into account some important operating
-system level details, such as the boot time of a VM or the contention that
-occurs if too many VMs are started simultaneously. 
+
 
 % TODO explain  how scheduling gets in the way of simulation
 \subsection{Simulation}
@@ -245,21 +210,27 @@ Because they allow for experiments on functionality without having to build a
 dedicated platform, simulations are a cornerstone of the study of distributed
 systems and clouds.  
 
-Most cloud simulator are based on \ac{des}. In \aclp{des} the simulation is a
-series of events changing the state of the simulated system. Events can be the
-start (or end) of a computation, the change of state of a machine, or
-disconnection of a network. The simulator will jump from one event to the next
-updating the times of upcoming events to reflect the change of state in the
-simulations. Such \ac{des} based simulators require at least a platform
-specification and an application description. The platform specification
-describes both the physical nature of the cloud, e.g.~machines and networks, and
-the logical part of the clouds, e.g.~\ac{vm} placement and availability.
-Depending on the simulator, platform specification can be done through user
-code, as in CloudSim\cite{cloudsim} for example, or through platform description
-files, as is mostly the case in SimGrid\cite{simgrid}. The application is the
-series of events happening during the simulation. Although the application is
-the active payload of the simulation it is not always what is being observed by
-the experimenter.  Application are sometimes just the backdrop against which we
+Most cloud  simulator are based on  \ac{des}. In \aclp{des} the  simulation is a
+series of events changing the state of  the simulated system.  Events can be the
+start  (or  end)  of a  computation,  the  change  of  state of  a  machine,  or
+disconnection of a network.  The simulator will  jump from one event to the next
+updating the  times of  upcoming events to  reflect the change  of state  in the
+simulation.   Such  \ac{des}  based  simulators  require  at  least  a  platform
+specification  and  an  application  description.   The  platform  specification
+describes both the physical nature of the cloud, e.g. machines and networks, and
+the management rules, e.g.~\ac{vm} placement and availability.  Depending on the
+simulator,  platform  specification  can  be  done  through  user  code,  as  in
+CloudSim~\cite{cloudsim} for example, or  through platform description files, as
+is  mostly  the  case  in SimGrid~\cite{simgrid}.  The  application  description
+consists in a set of computing and communication tasks often described as an
+amount  of computation  of communication  to perform,  from which  the simulator
+computes the task duration based on the platform specification. An alternative
+approach is predict the task duration from previous actual execution traces.
+
+is the  series of
+events happening during  the simulation. Although the application  is the active
+payload  of the  simulation it  is  not always  what  is being  observed by  the
+experimenter.   Application are  sometimes just  the backdrop  against which  we
 study specific cloud components,%e.g.~someone interested in testing new \ac{vm}
 %placement algorithms will be simulating the same application multiple times
 %while changing the platform specification.
