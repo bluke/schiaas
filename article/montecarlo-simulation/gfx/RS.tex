@@ -1,0 +1,60 @@
+\begin{tikzpicture}[x=1cm,y=1cm,
+font=\large,
+plate/.style={anchor=south west},
+b/.style={
+draw,
+anchor=south,
+minimum width=0.8cm,
+minimum height=0.8cm,
+rounded corners},
+lb/.style={b,anchor=south west},
+rb/.style={b,anchor=south east},
+fg/.style={fill=gray!10},
+fw/.style={fill=white},
+]
+%Reality
+\begin{scope}[shift={(-3.5,0)}]
+\node[font=\Large,anchor=north]at(0,11){Reality};
+%%Cloud
+\node[b,fg,minimum width=5cm,minimum height=3cm]at(0,0){};
+\node[plate]at(-2.5,0){Cloud};
+\node[rb,fw](vm1)at(2,0.5){VM};
+\node[rb,fw](vm2)at(2,1.75){VM};
+\node[lb,fw](cc)at(-2.4,2.1){Controller};
+\draw[-{latex},dashed](cc)--(vm1);
+\draw[-{latex},dashed](cc)--(vm2);
+%%Sclouder
+\node[b,fg,minimum width=3.5cm,minimum height=1.5cm](schlouder)at(0,5.5){Schlouder};
+\draw[-{latex},thick,](schlouder.south-|cc.north)--(cc.north)node[pos=0.5,left]{provisioning};
+\draw[-{latex},thick,](schlouder.south-|vm2.north)--(vm2)node[pos=0.5,right]{jobs};
+%% Inputs
+\node[rb,align=left](jobs)at(-0.25,8){Jobs : \\ - estimates\\ - dependencies};
+\node[lb,align=left](conf)at(0.25,8.25){Scheduling\\Strategies};
+\draw[-{latex},thick](jobs.south-|schlouder.145)--(schlouder.145);
+\draw[-{latex},thick](conf.south-|schlouder.35)--(schlouder.35);
+\end{scope}
+\draw[thick](0,-0)--(0,11);
+%Simulation
+\begin{scope}[shift={(4,0)}]
+\node[font=\Large,anchor=north]at(0,11){Simulation};
+%%Cloud
+\node[b,fg,minimum width=5cm,minimum height=3cm](SG)at(0,0){};
+\node[plate]at(-2.5,0){SimGrid Core};
+\node[lb,fw,minimum width=3cm,minimum height=1.4cm,align=center](cc)at(-2.4,1.5){IaaS layer\\(SchIaaS)};
+%%Sclouder
+\node[b,fg,minimum width=3.5cm,minimum height=1.5cm](simschlouder)at(0,5.5){SimSchlouder};
+\draw[-{latex},thick,](simschlouder.south-|cc.north)--(cc)node[pos=0.5,left]{provisioning};
+\draw[-{latex},thick,](simschlouder.south-|SG.55)--(SG.55)node[pos=0.5,right]{jobs};
+%% Inputs
+\node[rb,align=left](jobs)at(-0.25,8){Jobs : \\ - estimates\\ - dependencies};
+\node[lb,align=left](conf)at(0.25,8.25){Scheduling\\Strategies};
+\node[lb]at(3.5,1.8)(cloudc){Cloud configuration};
+\node[lb]at(3.5,0.9)(plat){Platform description};
+\node[lb]at(3.5,0)(rt){Job effective runtimes};
+\draw[thick,-{latex}](cloudc.west)--(cloudc.west-|cc.east);
+\draw[-{latex},thick](plat.west)--(plat.west-|SG.east);
+\draw[-{latex},thick](rt.west)--(rt.west-|SG.east);
+\draw[-{latex},thick](jobs.south-|simschlouder.145)--(simschlouder.145);
+\draw[-{latex},thick](conf.south-|simschlouder.35)--(simschlouder.35);
+\end{scope}
+\end{tikzpicture}
