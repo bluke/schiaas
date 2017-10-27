@@ -90,22 +90,23 @@ cloud computing, computer simulation, monte carlo methods.
 \section{Introduction.}
 
 
-Over the last decade, the advancement  of virtualization techniques has  led to
-the emergence of new economic and exploitation approaches of computer resources in
-the form of \ac{iaas}, one form of cloud computing. In this model, all computing
-resources are made available on demand  by third-party operators and paid based
-on usage.   The ability to provision  resources on demand provided  by \ac{iaas}
-operators is mainly  used in two ways.  Firstly, for  scaling purposes where new
-machines  are brought  online to  fulfill service  availability in  the face  of
-higher loads, this approach is used for providing service and allows for a lower
-baseline cost while still being able to deal with spikes in demand by provisioning
-machines  on  the fly. Secondly, for  parallelizing  tasks to  achieve  shorter
-makespan at  equal cost,  this approach  is used  for scientific  and industrial
-workloads with a clear goal and  where runtime is heavily  dependent on computing
+Over the  last decade, the advancement  of virtualization techniques has  led to
+the emergence of new economic  and exploitation approaches of computer resources
+in  the form  of \ac{iaas},  one form  of cloud  computing. In  this model,  all
+computing resources  are made available  on demand by third-party  operators and
+paid based on  usage.  The ability to provision resources  on demand provided by
+\ac{iaas} operators is  mainly used in two ways.  Firstly,  for scaling purposes
+where new  machines are brought  online to  fulfill service availability  in the
+face of higher loads, this approach is used for providing service and allows for
+a lower baseline  cost while still being  able to deal with spikes  in demand by
+provisioning machines on  the fly. Secondly, for parallelizing  tasks to achieve
+shorter makespan (i.e  the total execution execution time from  the first to the
+last task)  at equal cost, this  approach is used for  scientific and industrial
+workloads with a clear goal and  where runtime is heavily dependent on computing
 power.   This  approach  is  made  possible   by  the  pricing  model  of  cloud
-infrastructures, as  popularized by  AWS\footnote{Amazon Web Services},  in which
-payment  for computing  power, provided  as  \acp{vm}, happens  in increments of
-arbitrary lengths of time, \ac{btu},  usually of  one hour. Running  two \ac{vm}
+infrastructures, as  popularized by AWS\footnote{Amazon Web  Services}, in which
+payment  for computing  power, provided  as \acp{vm},  happens in  increments of
+arbitrary lengths  of time, \ac{btu}, usually  of one hour. Running  two \ac{vm}
 side by side for one \ac{btu} each costs the same as running one \ac{vm} for two
 \ac{btu}, but every \ac{btu} started is owed in full.
 
@@ -370,15 +371,14 @@ estimates  of  the  runtime.  Notice   that  the  jobs'  real  runtimes,  called
 change the initial scheduling decision with  regards to which resources the jobs
 are assigned.
 
-As mentioned  in introduction,  as no  one solution dominates  the other  in all
-objectives, we leave  it to the user  the choice of strategies  which will favor
-one  or the  other  objective  (cost or  makespan).  These  two main  strategies
-proposed by Schlouder are:
+The  provisioning  and scheduling  strategies  of  Schlouder are  bi-objectives,
+namely cost  of renting the  resources, and makespan  of the execution.  In this
+paper, we test the two following strategies which favor one of the objectives: 
 \begin{itemize}
 \item ASAP (or \textit{as soon as possible}): schedules the job immediately onto
-  an idle VM, or immediately provisions a new VM to start the job if no idle VM 
-  is available.  Hence this strategy tries to minimize the makespan
-  of the batch job execution.
+  an idle VM, or immediately provisions a new  VM to start the job if no idle VM
+  is available.  Hence this strategy tries to minimize the makespan of the batch
+  job execution.
 
 \item AFAP (or \textit{as full as  possible}): schedules each job in priority to
 	an already available resource whenever the remaining time  before a new
