@@ -1,0 +1,36 @@
+\subsection{Scheduling}
+\textbf{FIXME: chapeau et transition~?}
+%----------------------- scheduling approaches ---------------------------------
+Compared to earlier distributed computing systems (e.g Grids), the scheduling
+problem statement in the cloud must be reformulated because of two fundamental
+novelties: firstly the size of the infrastructure can be dynamically scaled, and
+secondly as economic cost can be clearly measured, it naturally becomes an
+additional objective to the traditional makespan objective, making the problem
+multi-objective. An abundance of heuristics have been developed to adapt to the
+cloud context, spanning a large variety of assumptions about the setup. The
+bi-objective issue is often tackled by combining the cost and makespan metrics
+in a single one or fixing one parameter as a constraint (deadline- or budget-
+constrained schedules). While it can be argued that several solutions may be
+equally interesting trade-offs, it is up to the user to choose. In~\cite{Su13}
+is proposed a strategy where VMs belonging to a Pareto front representing the
+most cost-efficient resources are used in priority to map jobs. Likewise,
+in~\cite{Durillo14} a set of Pareto-optimal solutions are proposed to the user,
+and this is also the spirit of our own work. Another discriminating criterion
+between approaches is the assumption of an \emph{online} (or
+\emph{just-in-time}) or \emph{offline} (or \emph{static}) schedule, on the type
+of workload (independent jobs or workflows), the homogeneity of the resources,
+or the way they handle the multiple objectives. Offline scheduling represents a
+large body of the research often based on the adaptation of popular heuristics
+aiming to minimize makespan in Grids. For instance the popular
+HEFT~\cite{Zhao2003} heuristic has been revisited in~\cite{LinL11}, which adds
+the ability to scale resources depending on whether or not a task can execute by
+its estimated finish time, or as extended in~\cite{Li11cost-conscious} to select
+slots with a balance between runtime and cost. However, offline scheduling is
+often evaluated through simulation while online scheduling is closer to the
+practitioners assumptions who evaluate their ideas in actual environments.
+Online strategies have been proposed for bags-of-tasks, to address the problem
+of appropriately provisioning the platform
+(e.g~\cite{MarshallKF10,GenaudG11,DuongLG11,VillegasASI12}). These works share
+many commonalities, especially taking into account some important operating
+system level details, such as the boot time of a VM or the contention that
+occurs if too many VMs are started simultaneously. 
