@@ -297,32 +297,71 @@ enfin de disque.
 
 \textbf{FIXME:Next paragraph needs updating. Cite Wolsky maybe~?}
 
-In the context  of cloud computing where  execution is subject not  only to it's
-inherent variability but also matters  of memory and network contention. Because
-of the existence of  so many sources of variability, the  sequence of events for
-completing an application  execution might not be  the same from one  run to the
-other. As  such a deterministic  simulation will not  produce a results  that it
-correct for  every run.  Stochastic  simulations aim to integrate  this inherent
-variability by considering the full array  of possible runtimes and outputting a
-distribution of possible outcomes.
+In the context  of cloud computing memory and network contention, virtualisation
+overhead, and over-provisioning, make application runtimes difficult to predict
+and variable from one execution to the other. Discrete event simulators are
+deterministic in nature and not well equipped to deal with such cases, where
+stochastic simulations are much more appropriate.
+
 
 \subsection{Monte-Carlo Method}
 
-Stochastic  simulations are  computationally more  expensive than  deterministic
-ones. In stochastic simulations inputs  become random variables representing the
-distribution of possible values for the parameters. In the context of stochastic
-\ac{dag} it has  been shown that computing the  makespan distribution requires
-multiple derivations and  integrations~\cite{Ludwig01,Li97}. Monte Carlo methods
-allow us to side step these computational difficulties. This method was proposed
-for PERT  graphs in 1967~\cite{Slyke63}, and  in the recent year  in the context
-\ac{dag} scheduling~\cite{Canon10,Zheng13}.
+In stochastic simulations inputs become \acfp{rv} representing the distribution
+of possible values for the parameters. And the result of one such simulation is
+an \ac{rv} representing the distribution of the results. In this context the
+simulation of applications in clouds is analogous to the resolution of
+stochastic \acs{dag}, in which the vertices represent the jobs comprising the
+application, and the edges the dependencies between jobs. Each vertex can then
+be assigned it's respective \ac{rv} representing its possible runtimes. The
+result would be an \ac{rv} representing the possible the times needed for the
+execution of the whole \ac{dag}, called makespan. An \ac{rv} is defined by its
+\ac{pdf} and \ac{cdf}, where the \ac{cdf} is obtain by integrating the \ac{pfd}.
+Works on heterogeneous grids\cite{Li97} and PERT networks\cite{Ludwig01} show
+that, where tasks runtimes are independent the makespan of successive tasks is a
+convolution product of the individual tasks \acp{rv}, whereas the makespan of
+parallel tasks joining is the product of the tasks respective \ac{cdf}. This
+mathematical approach is extremely computationally and its core constraint the
+jobs \acp{rv} independence can not be guaranteed in most case. 
 
-\aclp{mcs} (\acs{mcs})\acused{mcs}  work by  repeatedly drawing  input variables
-and using  them in deterministic simulations  to obtain samples of  the possible
-results. Once enough samples have been computed, traditional fitting can be used
-to characterize the resulting random variable.  In our case, we will draw values
-of  the  effective runtimes  of  the  individual  jobs,  and we  obtain  through
-simulation samples of makespans and BTU counts.
+Moreover this \ac{dag} based approach implies fixed scheduling. In the context
+of a cloud platform where additional resources can be provisioned at anytime
+user are likely to call on dynamic schedulers that adapt the schedule on the fly
+depending of the already executed jobs runtimes and the availability of
+resources. In the context of a \ac{dag} representation this is akin to adding
+and removing edges depending on the runtime of certain vertices. Edges do not
+only represent the dependencies, the inherent constraint between the application
+jobs, but also the scheduling, the effective constraint imposed on a job queued
+after another.
+
+\begin{figure}
+	\centering
+	\resizebox{0.5\textwidth}{!}{%
+		\input{gfx/mc-process.tex}
+		}
+\caption{Overview of a Monte-Carlo simulation: $500$ realizations are generated
+by drawing runtimes for each job of the provided RVs, every realisation is then
+simulated, the resulting makespan samples are fitted into the final
+result.}\label{fig:mc-process}
+\end{figure}
+
+Instead of computing the resulting \ac{rv}, a \ac{mcs} samples the possible
+results by test testing multiple \emph{realisation} in a deterministic fashion.
+These realisations are obtained by drawing for every job in the application a
+runtime that follows their job's respective \ac{rv}. These realisation each
+represent a possible executions of the application and should respect the
+distribution of such possibilities. Since within a realisation each job has now
+a defined runtime, each realisation can be simulated in a deterministic fashion.
+Eventually given enough realisations the distribution of the simulations results
+will tend towards the distribution of the equivalent stochastic simulation.
+Statistical fitting techniques can then be used to characterise this makespan
+\ac{rv} The figure~\ref{fig:mc-process} presents schematically a \ac{mcs}.
+
+Such approach has already been used in the context stochastic
+PERT\cite{Slyke63}, and comparison of \ac{dag} schedules \cite{Canon10,Zheng13}.
+This approach allows us to sidestep intense numerical resolution by simply
+repeating simpler deterministic simulations and have realisations scheduled as
+they would based on their jobs runtimes by having dynamical scheduling
+integrated inside the simulator. 
 
 
 \section{Work Context}
@@ -332,7 +371,7 @@ simulation samples of makespans and BTU counts.
 		\input{gfx/RS.tex}
 		}%
 	\caption{Comparison of the real life experiment workflow with the
-	simulated one.}\label{fig:montage}
+	simulated one.}\label{fig:rs}
 \end{figure}
 
 \begin{figure*}
@@ -495,16 +534,7 @@ simulation.  Let us sketch the overall process (see Fig~\ref{fig:mc-process}):
 \item a  normal distribution ${\cal  N}(\mu,\sigma)$ is fitted on  the different
   makespan values.
 \end{itemize}
-\begin{figure}
-	\centering
-	\resizebox{0.5\textwidth}{!}{%
-		\input{gfx/mc-process.tex}
-		}
-\caption{Overview of the Monte-Carlo process: $500$ realizations are generated
-by drawing and adding a perturbation to each job runtime of the provided
-runtime set, every simulation is then simulated, the resulting makespan
-samples are fitted into the final result.}\label{fig:mc-process}
-\end{figure}
+
 Fitting is done to a normal distribution because, in essence the makespan is the
 sum  of the  runtimes of  the jobs  on the  critical path  of the  schedule.  To
 measure the impact  of the runtime perturbation on the  makespan, we compute the
