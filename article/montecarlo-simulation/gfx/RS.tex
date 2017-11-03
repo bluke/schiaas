@@ -33,17 +33,20 @@ fw/.style={fill=white},
 \draw[-{latex},thick](jobs.south-|schlouder.145)--(schlouder.145);
 \draw[-{latex},thick](conf.south-|schlouder.35)--(schlouder.35);
 \end{scope}
-\draw[thick](0,-0)--(0,11);
+\draw[thick](0,-1)--(0,11);
 %Simulation
 \begin{scope}[shift={(4,0)}]
 \node[font=\Large,anchor=north]at(0,11){Simulation};
+%Simulator
+\node[b,minimum width=5.2cm,minimum height=8.2cm]at(0,-1.1){};
+\node[anchor=south]at(0,-1){SimSchlouder};
 %%Cloud
 \node[b,fg,minimum width=5cm,minimum height=3cm](SG)at(0,0){};
 \node[plate]at(-2.5,0){SimGrid Core};
 \node[lb,fw,minimum width=3cm,minimum height=1.4cm,align=center](cc)at(-2.4,1.5){IaaS layer\\(SchIaaS)};
-%%Sclouder
-\node[b,fg,minimum width=3.5cm,minimum height=1.5cm](simschlouder)at(0,5.5){SimSchlouder};
-\draw[-{latex},thick,](simschlouder.south-|cc.north)--(cc)node[pos=0.5,left]{provisioning};
+%%SimSclouder
+\node[b,fg,minimum width=3.5cm,minimum height=1.5cm](simschlouder)at(0,5.5){Schlouder};
+\draw[-{latex},thick,](simschlouder.south-|cc.north)--(cc)node[pos=0.5,left]{provis.};
 \draw[-{latex},thick,](simschlouder.south-|SG.55)--(SG.55)node[pos=0.5,right]{jobs};
 %% Inputs
 \node[rb,align=left](jobs)at(-0.25,8){Jobs : \\ - estimates\\ - dependencies};
