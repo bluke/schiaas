@@ -227,7 +227,7 @@ consists in  a set of  computing and communication  tasks often described  as an
 amount of computation of communication  to perform, which the simulator computes
 the duration based on the platform  specification and its CPU or network models.
 An alternative  approach is  to extrapolate  the task  durations from  on actual
-execution traces observed in real executions~\cite{}.
+execution traces observed in real executions.
 %
 % -------   no need to mention, not relevant to the paper ------------------------
 % Although the application  is the active
@@ -251,52 +251,6 @@ functionality.
 Table~\ref{tab:simcmp} gives an overview of the capabilities and models of
 commons cloud simulators. 
 
-
-\begin{comment}
-% TODO Simulations of cloud, avantages of Determinist simulation 
-\begin{itemize}
-		\item une spécification de plateforme
-		\item une spécification de l'application.
-		\item un modèle de simulation
-\end{itemize}
-
-Le modèle de simulation forme le cœur d'un simulateur. Il décrit l'évolution de
-l'état de tous  les composants du système  simulé en fonction du  temps et des
-évènements.   Il  repose  sur  des   modèles  individuels  pour  chacun  de  ces
-composants  (réseau,  processeur,  \ldots).   Etant  donné  la  complexité  du
-comportement   des   composants,  les   modèles   actuels   procèdent  à   des
-simplifications, ce qui engendre des écarts avec la réalité. La précision des 
-modèles utilisés est le principal élément discriminant
-entre simulateurs, l'utilisateur  n'ayant généralement que peu de  prise sur cet
-aspect%
-\footnote{SimGrid  permet  néanmoins  de  choisir  différents  modèles  pour  le
-  réseau}.
-
-La spécification de plateforme décrit  l'environnement simulé.  Elle est fournie
-par l'utilisateur et décrit les caractéristiques techniques de l'infrastructure,
-comme la topologie  d'interconnexion, la puissance des  processeurs, la capacité
-des liens réseaux,  etc.  Le niveau de détail de  cette description, qui diffère
-selon les simulateurs, influence également la précision de la simulation.
-
-La  spécification   de  l'application,   fournie  par  l'utilisateur,   est  une
-description de la  séquence des évènements à simuler.  Les simulateurs existants
-privilégient cette  description sous la forme  d'un programme qui, à  l'aide des
-primitives  de  la  bibliothèque  de  simulation,  décrit  le  comportement  des
-opération  réelles simulées.   Mais d'autres  mode de  description peuvent  être
-proposés,   comme   l'injection  d'une   trace   d'exécution   réelle,  ou   une
-représentation abstraite de suite d'opérations. 
-
-Le tableau suivant
-donne un aperçu des possibilités des principaux simulateurs du domaine, en 
-terme d'application : (a) trace d'exécution, (b) représentation abstraite, (c) 
-simulation  programmée ; de performance CPU : (d) délai mesuré, (e) délai
-utilisateur ; de réseau : (flow) analytique ou (packet) niveau paquet ; et 
-enfin de disque.
-
-\end{comment}
-
-\textbf{FIXME:Next paragraph needs updating. Cite Wolsky maybe~?}
-
 In the context  of cloud computing memory and network contention, virtualisation
 overhead, and over-provisioning, make application runtimes difficult to predict
 and variable from one execution to the other. Discrete event simulators are
@@ -315,7 +269,7 @@ application, and the edges the dependencies between jobs. Each vertex can then
 be assigned it's respective \ac{rv} representing its possible runtimes. The
 result would be an \ac{rv} representing the possible the times needed for the
 execution of the whole \ac{dag}, called makespan. An \ac{rv} is defined by its
-\ac{pdf} and \ac{cdf}, where the \ac{cdf} is obtain by integrating the \ac{pfd}.
+\ac{pdf} and \ac{cdf}, where the \ac{cdf} is obtain by integrating the \ac{pdf}.
 Works on heterogeneous grids\cite{Li97} and PERT networks\cite{Ludwig01} show
 that, where tasks runtimes are independent the makespan of successive tasks is a
 convolution product of the individual tasks \acp{rv}, whereas the makespan of
@@ -361,25 +315,19 @@ PERT\cite{Slyke63}, and comparison of \ac{dag} schedules \cite{Canon10,Zheng13}.
 This approach allows us to sidestep intense numerical resolution by simply
 repeating simpler deterministic simulations and have realisations scheduled as
 they would based on their jobs runtimes by having dynamical scheduling
-integrated inside the simulator. 
+integrated inside the simulator. In this paper we will try to use Monte Carlo
+methods to enrich a cloud broking simulator.
 
 
 \section{Work Context}
 \label{sec:work-context}
-\begin{figure}
-	\resizebox{0.5\textwidth}{!}{%
-		\input{gfx/RS.tex}
-		}%
-	\caption{Comparison of the real life experiment workflow with the
-	simulated one.}\label{fig:rs}
-\end{figure}
 
-\begin{figure*}
-	\centering
-	\includegraphics[width=\textwidth]{gfx/real_plot.pdf}
-	\caption{Makespan and BTU count distribution for OMSSA and Montage
-	runs\label{fig:realbrs}}
-\end{figure*}
+Testing discrete event simulators can be easily done by feeding into the
+simulation all the relevant runtimes of a real run and checking that the
+resulting makespan matches the makespan observed in real life. For a stochastic
+simulation this approach requires feeding the simulation runtimes distribution
+observed over a number real run and comparing the resulting makespan
+distribution, with the distribution observed in real life.
 
 We  present  hereafter  our  experimental   setup.   It  consists  of  two  test
 applications, which are run  on one side, on a real  platform with our scheduler
@@ -425,11 +373,31 @@ paper, we test the two following strategies which favor one of the objectives:
 	By solving this bin-packing problem, this strategy tends to minimize the
 	monetary cost of the batch execution.
 \end{itemize}
-In the following,  we will evaluate the real executions  against the backdrop of
-these two strategies.
 
+The left part of figure~\ref{fig:rs} presents schematically the workflow of a
+real execution. The user sends to Schlouder a list of jobs. For each job the
+user provides a runtime estimate, the list of dependencies, and the job's
+payload. The user also select which scheduling strategies Schlouder should
+apply. Schlouder uses the selected strategy to establish the schedule and
+provision resources from the cloud's fronted, denoted Controller. Once the
+\acp{vm} are booted Schlouder sends the job to their assigned machines.
+Schlouder tracks jobs progression completing the schedule as dependencies are
+resolved, provisioning \acp{vm} as needed, and shutting down unneeded \acp{vm}
+as their billing cycle closes.
 
-
+\begin{figure}
+	\resizebox{0.5\textwidth}{!}{%
+		\input{gfx/RS.tex}
+		}%
+	\caption{Comparison of the real life experiment workflow with the
+	simulated one.}\label{fig:rs}
+\end{figure}
+\begin{figure*}
+	\centering
+	\includegraphics[width=\textwidth]{gfx/real_plot.pdf}
+	\caption{Makespan and BTU count distribution for OMSSA and Montage
+	runs\label{fig:realbrs}}
+\end{figure*}
 
 \subsection{Simulated Execution Setup}
 As a follow-up  to our work on Schlouder we  developed SimSchlouder, a simulator
@@ -439,6 +407,7 @@ makespan and  the cost before choosing  a strategy for a  real run. SimSchlouder
 includes the same strategies as Schlouder,  and as its real-world counterpart it
 is easily extendable with new strategies. 
 
+\textbf{FIXME: Use fig.2 to show this part}
 For the purpose of this paper, we classify the inputs required by SimSchlouder
 in two categories. The first category is the operator inputs, which describe the
 hardware platform and the cloud configuration. Internally, they are fed to the
