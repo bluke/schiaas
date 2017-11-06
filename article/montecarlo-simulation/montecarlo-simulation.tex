@@ -194,9 +194,9 @@ approach.
 	CloudSim\cite{cloudsim} & & & \bf X &&\bf
 	X&store\&forward&seek+transfert\\ \hline
 	ICanCloud\cite{icancloud} & & & \bf X &&\bf X&packet& bloc \\ \hline
-	GroudSim\cite{groudsim} & & & \bf X &&\bf X&flot& n/a\\\hline
+	GroudSim\cite{groudsim} & & & \bf X &&\bf X&flow& n/a\\\hline
 	GreenCloud\cite{greencloud} & & \bf X &&&\bf X&packet& n/a\\ \hline
-	SimGrid\cite{simgrid}& \bf X & \bf X & \bf X &\bf X&\bf X& flot/packet &
+	SimGrid\cite{simgrid}& \bf X & \bf X & \bf X &\bf X&\bf X& flow/packet &
 	seek+transfert \\
 	\hline
 \end{tabular}
@@ -331,7 +331,7 @@ Testing discrete event simulators can be easily done by feeding into the
 simulation all the relevant runtimes of a real run and checking that the
 resulting makespan matches the makespan observed in real life. For a stochastic
 simulation this approach requires feeding the simulation runtimes distribution
-observed over a number real run and comparing the resulting makespan
+observed over a number real runs and comparing the resulting makespan
 distribution, with the distribution observed in real life.
 
 We  present  hereafter  our  experimental   setup.   It  consists  of  two  test
@@ -379,16 +379,17 @@ paper, we test the two following strategies which favor one of the objectives:
 	monetary cost of the batch execution.
 \end{itemize}
 
-The left part of figure~\ref{fig:rs} presents schematically the workflow of a
+The left part of figure~\ref{fig:rs} schematically presents the workflow of a
 real execution. The user sends to Schlouder a list of jobs. For each job the
 user provides a runtime estimate, the list of dependencies, and the job's
-payload. The user also select which scheduling strategies Schlouder should
+payload \textbf{FIXME: c'est quoi ce payload ?}. 
+The user also chooses which scheduling strategy Schlouder should
 apply. Schlouder uses the selected strategy to establish the schedule and
 provision resources from the cloud's frontend, denoted Controller. Once the
 \acp{vm} are booted Schlouder sends the job to their assigned machines.
-Schlouder tracks jobs progression completing the schedule as dependencies are
+Schlouder tracks jobs progression, completing the schedule as dependencies are
 resolved, provisioning \acp{vm} as needed, and shutting down unneeded \acp{vm}
-as their billing cycle closes.
+as their billing cycle close.
 
 \begin{figure}
 	\resizebox{0.5\textwidth}{!}{%
@@ -413,19 +414,23 @@ makespan and  the cost before choosing  a strategy for a  real run. SimSchlouder
 includes the same strategies as Schlouder,  and as its real-world counterpart it
 is easily extendable with new strategies. 
 
-As shown on the right side of the figure~\ref{fig:rs} SimSchlouder operates in a
-way analogous to Schlouder. It receivers from the user a set of jobs, with their
-respective estimated runtimes and dependencies, and a strategy to use. But it
-uses SimGrid's cloud interface SchIaaS for provisioning and jobs are events
-within the SimGrid's simulated construct of \acp{vm}. Because SimSchlouder is a
-simulation it will require some information additional information not required
-in the Real Execution Setup. For a real execution the user does not usually know
-the cloud specification or configuration that the simulation requires to run.
-Most importantly during a real execution the \emph{effective runtime} of a job
-is the result of running a job on a \ac{vm} whereas in SimSchlouder it can be
-specified as input. This allows simulated jobs to have runtimes different from
-the user estimates provided by the user.
-
+As  shown on  the right  side of  Figure~\ref{fig:rs}, SimSchlouder  shares with
+Schlouder a  common subset of inputs.  It receives from  the user a set  of jobs
+with their  respective estimated  runtimes and dependencies,  and a  strategy to
+use. Whereas  Schlouder operates  on a  real cloud  management system  (e.g Open
+Stack), SimSchlouder  provisions simulated  \acp{vm} and jobs  through SimGrid's
+cloud interface  called SchIaaS. As  mentioned earlier, the  simulation requires
+additional information regarding the platform and processes simulated.
+% pas necessaire à mon avis: For a  real execution  the user  does not  usually 
+% know  the cloud  specification or configuration that the  simulation requires 
+% to run. 
+Most importantly, during a real execution  the \emph{effective runtime} is the
+real observed runtime of a job, which might differ from the user estimate (used 
+for scheduling purpose). For a better control of the simulation, SimSchlouder
+can take as input observed effective runtimes. 
+\textbf{FIXME: j'ai changé la phrase précédente, je comprends mieux la
+  justification comme ça.}
+\\
 
 \textbf{FIXME: Use fig.2 to show this part}
 \begin{comment}
@@ -450,6 +455,7 @@ runtimes. However,  to  provide the user  with a broader view  of how
 their real executions could behave with job runtimes variability,  we should 
 enrich the simulation framework with some form of stochastic prediction.
 \end{comment}
+
 \subsection{Test Applications}\label{sc:setup}
 
 To evaluate Schlouder performance we carried out multiple executions of
