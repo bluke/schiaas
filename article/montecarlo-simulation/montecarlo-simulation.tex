@@ -499,20 +499,33 @@ attention was taken to never overload the system.
 \section{Enriched Simulation Framework}
 \label{sec:enriched-sim}
 
-%\subsection{In-Silico Experiment}
-%\textbf{FIXME:This subsection ends in nothing, no result. Should merge
-%all the MCS contribution with it? In this case 'In-silico Experiment should
-%go outside 'Work Context'.} 
-
-
-
+We now  describe our contribution consisting  in an automated system  to provide
+stochastic simulation results.
 
 \subsection{MCS}
 
-
 %\paragraph{Method} 
-Consider an  application consisting of  $n$ jobs,  independent or organized  as a
-workflow.  The simulation engine SimSchlouder  takes as input the user estimates
+As  depicted   on  Figure~\ref{fig:mc-process},   we  consider   an  application
+consisting of  $n$ jobs, independent  or organized as  a workflow. For  each job
+$i \in \[1,\dots,n\]n$,  the user provides a runtime estimate  $T_i$, from which
+the system computes a \ac{rv} $R_i$ (to be explained below).
+
+One MCS-step then consists in 
+\begin{itemize}
+\item making one realization of the runtime  for each job $i$, that is randomly
+  drawing a runtime value from the associated $R_i$ to obtain a runtime $T_i$,
+\item and once runtimes have been realized for all jobs, proceed to a simulation
+  of the execution with these runtime values to obtain a makespan $M$.
+\end{itemize}
+The whole MCS process  consists in repeating this step a  large number of times
+(500 times  on the  figure). From the  set of makespans  $M^k$ obtained  at each
+step, we compute  a statistical distribution of the makespan  as a final \ac{rv}
+noted $M_S$.
+
+\begin{comment}
+%------------------- le paragraphe précédent remplace le texte suivant utilisé
+%------------------- dans HPCC17
+The simulation engine SimSchlouder  takes as input the user estimates
 $T_1, \ldots , T_n$ for the job runtimes, schedules the jobs and finally outputs
 the makespan $M$ of the whole batch.  The user estimates might be inaccurate
 and  we describe  hereafter  a method  to characterize  the  impact of  repeated
@@ -530,6 +543,9 @@ simulation.  Let us sketch the overall process (see Fig~\ref{fig:mc-process}):
 \item a  normal distribution ${\cal  N}(\mu,\sigma)$ is fitted on  the different
   makespan values.
 \end{itemize}
+% -------------------------------------------------------------------------------
+\end{comment}
+
 
 Fitting is done to a normal distribution because, in essence the makespan is the
 sum  of the  runtimes of  the jobs  on the  critical path  of the  schedule.  To
