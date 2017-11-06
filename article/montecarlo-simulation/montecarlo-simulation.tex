@@ -245,9 +245,6 @@ modeling  of low  level components  (machines, networks,  storage devices),  and
 large  scale  behaviours  emerge naturally  from  the  interactions  of  these
 components. Working  on disjointed low level  components make it easier  to tune
 the precision  of the model to  the wanted accuracy/speed trade-off.
-\textbf{FIXME:phrase suivante incorrecte/incompréhensible.} The models
-used  is  usually   discriminating  factor  between  two   simulators  of  equal
-functionality.
 
 Table~\ref{tab:simcmp} gives an overview of the capabilities and models of
 commons cloud simulators. 
@@ -307,9 +304,8 @@ runtime that follows their job's respective \ac{rv}. \textbf{FIXME: la phrase
 These realization each
 represent a possible execution of the application and should respect the
 distribution of such possibilities. Since within a realization each job has now
-a defined runtime, each realization can be simulated in a deterministic fashion.
-\textbf{FIXME: il faut que tu m'expliques ça, je ne suis pas sûr de comprendre
-déterministe.} 
+a defined runtime, each realization can be simulated using traditional
+methods like \ac{des}.
 Eventually given enough realizations the distribution of the simulations results
 will tend towards the distribution of the equivalent stochastic simulation.
 Statistical fitting techniques can then be used to characterize this makespan
@@ -382,7 +378,7 @@ paper, we test the two following strategies which favor one of the objectives:
 The left part of figure~\ref{fig:rs} schematically presents the workflow of a
 real execution. The user sends to Schlouder a list of jobs. For each job the
 user provides a runtime estimate, the list of dependencies, and the job's
-payload \textbf{FIXME: c'est quoi ce payload ?}. 
+payload \textbf{FIXME: c'est quoi ce payload ? code/executable}. 
 The user also chooses which scheduling strategy Schlouder should
 apply. Schlouder uses the selected strategy to establish the schedule and
 provision resources from the cloud's frontend, denoted Controller. Once the
@@ -428,11 +424,7 @@ Most importantly, during a real execution  the \emph{effective runtime} is the
 real observed runtime of a job, which might differ from the user estimate (used 
 for scheduling purpose). For a better control of the simulation, SimSchlouder
 can take as input observed effective runtimes. 
-\textbf{FIXME: j'ai changé la phrase précédente, je comprends mieux la
-  justification comme ça.}
-\\
 
-\textbf{FIXME: Use fig.2 to show this part}
 \begin{comment}
 For the purpose of this paper, we classify the inputs required by SimSchlouder
 in two categories. The first category is the operator inputs, which describe the
@@ -477,6 +469,16 @@ used are:
 		computation intensive with a
 		\emph{communication-to-computation} ratio under $20\%$.
 \end{itemize}
+
+Logs form the execution of these application display variability in the jobs
+individual runtimes, as well as in the application makespan, even when the
+execution where scheduled on the same platforms using the same strategies. This
+variability is inherent to executions in the cloud. SimSchlouder as shown
+promising results when when simulating a given execution, but as a \ac{des} it
+is ill-equipped to tackle cases wherein there is uncertainty as to the values of
+job runtimes.
+
+
 \begin{comment}
 \begin{figure}
 	\resizebox{0.5\textwidth}{!}{%
@@ -484,7 +486,6 @@ used are:
 		}%
 	\caption{Montage workflow diagram.}\label{fig:montage}
 \end{figure}
-\end{comment}
 
 These two applications were executed using Schlouder on a private cloud.  We set
 up a 96 core cloud based on four identical  dual $2.67GHz$ Intel Xeon X5650
@@ -492,24 +493,46 @@ servers with KVM-based virtualization  and an Openstack cloud-front (first
 2012.1, and later 2014.2). This cluster was exclusively used by us and special
 attention was taken to never overload the system.
 
+\end{comment}
 
-\textbf{Transition vers ESF}.
+\textbf{FIXME: Transition vers ESF}.
 
 
 \section{Enriched Simulation Framework}
 \label{sec:enriched-sim}
 
-%\subsection{In-Silico Experiment}
-%\textbf{FIXME:This subsection ends in nothing, no result. Should merge
-%all the MCS contribution with it? In this case 'In-silico Experiment should
-%go outside 'Work Context'.} 
+\subsection{MCS ???}
 
+\textbf{TODO : vendre notre contrib (devrai avoir sa propre subsection?)}
+\begin{itemize}
+	\item It is hard to trust a simulation whose result is one out of many
+		possible
+	\item Knowing the distribution of possible result is much more
+		interesting 
+	\item WE propose using the mcs on simschlouder to create such an
+		enriched simulation
+	\item using mcs guarantees the scheduling decision match the one that
+		would be done in reallife without adding to the ridiculous
+		mathematical complexity of stochastic simulation.
+\end{itemize}
 
+\textbf{TODO : Detailer l'application de la MCS a notre cas}
+\begin{itemize}
+	\item The input is the job runtimes, each of them is an RV giving a
+		range of possible runtimes (the definition of the RV is done in
+		sec:input modeling)
+	\item Simschlouder is given the the correct strategy and the same user
+		estimates as in real life, but the effective runtimes are drawn
+		using the RVs
+	\item Once all the realisation are drawn, we run Parrallel instances of
+		Simshclouder to do the sim.
+	\item We look a the simulated makespan as well as the simulated cost.
+		(qualitatively)
+	\item As a quantitavive test we create confidence interval using normal
+		fitting on the makespan. (explain CLT)
+\end{itemize}
 
-
-\subsection{MCS}
-
-
+\begin{comment}
 %\paragraph{Method} 
 Consider an  application consisting of  $n$ jobs,  independent or organized  as a
 workflow.  The simulation engine SimSchlouder  takes as input the user estimates
@@ -536,7 +559,7 @@ sum  of the  runtimes of  the jobs  on the  critical path  of the  schedule.  To
 measure the impact  of the runtime perturbation on the  makespan, we compute the
 range $[\mu-2\sigma;\mu+2\sigma]$ (that is  a 95\% confidence interval) relative
 to  the mean  $\mu$. 
-
+\end{comment}
 %% Free floating graphs mus be declared a page in advance
 \begin{figure*}
 	\includegraphics[width=\textwidth]{gfx/fit_plot.pdf}
@@ -546,8 +569,9 @@ to  the mean  $\mu$.
 \end{figure*}
 
 
-
 \subsection{Experimental Observations}
+
+\textbf{FIXME: description of the real life platform goes here}
 
 Schlouder execution traces contain several useful metrics including, but not
 limited to, the \ac{vm} start dates, boot time, shutdown times, and assigned
