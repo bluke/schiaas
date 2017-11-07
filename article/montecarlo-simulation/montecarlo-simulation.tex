@@ -204,7 +204,6 @@ approach.
 
 
 
-% TODO explain  how scheduling gets in the way of simulation
 \subsection{Simulation}
 
 Because they allow for experiments on functionality without having to build a
@@ -501,8 +500,27 @@ attention was taken to never overload the system.
 \section{Enriched Simulation Framework}
 \label{sec:enriched-sim}
 
-\subsection{MCS ???}
+Trustworthiness of simulation of variable environments is a major problem when
+simulating cloud. If the result of the simulation is one of many its relevance
+is immediately compromised. Users need results that contains actionable action.
+As such providing a distribution will of possible results is a better solution.
 
+In this section we propose one such enriched simulation by instrumenting a
+\ac{des}, SimSchlouder, as a stochastic simulator using the method of the
+\acf{mcs}. This solution combines the relative simplicity of a \ac{des} with the
+extensive results provides by stochastic simulations. This approach garantee
+that our simulation respects the scheduling and provisioning decision observed
+in real life, as the \ac{des} can easily be programmed to reproduces such
+decision, whereas integrating the implication of such decision in the already
+complex computation of the numerical results of a stochastic would be
+impossible.
+
+In this section we will first discuss the particulars of the Monte Carlo
+Simulation. Then we will review how we hope to test the validity of such an
+approach to simulation. At last we will explore the steps taken to model the
+input \acp{rv} representing the jobs runtimes.
+
+\begin{comment}
 \textbf{TODO : vendre notre contrib (devrai avoir sa propre subsection?)}
 \begin{itemize}
 	\item It is hard to trust a simulation whose result is one out of many
@@ -515,7 +533,7 @@ attention was taken to never overload the system.
 		would be done in reallife without adding to the ridiculous
 		mathematical complexity of stochastic simulation.
 \end{itemize}
-
+\end{comment}
 \textbf{TODO : Detailer l'application de la MCS a notre cas}
 \begin{itemize}
 	\item The input is the job runtimes, each of them is an RV giving a
@@ -532,12 +550,11 @@ attention was taken to never overload the system.
 		fitting on the makespan. (explain CLT)
 \end{itemize}
 
-\begin{comment}
 
 We now  describe our contribution consisting  in an automated system  to provide
 stochastic simulation results.
 
-
+\subsection{Simulation process}
 %\paragraph{Method} 
 As  depicted   on  Figure~\ref{fig:mc-process},   we  consider   an  application
 consisting of  $n$ jobs, independent  or organized as  a workflow. For  each job
