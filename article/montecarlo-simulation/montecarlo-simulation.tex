@@ -374,17 +374,16 @@ paper, we test the two following strategies which favor one of the objectives:
 	monetary cost of the batch execution.
 \end{itemize}
 
-The left part of figure~\ref{fig:rs} schematically presents the workflow of a
-real execution. The user sends to Schlouder a list of jobs. For each job the
-user provides a runtime estimate, the list of dependencies, and the job's
-payload \textbf{FIXME: c'est quoi ce payload ? code/executable}. 
-The user also chooses which scheduling strategy Schlouder should
-apply. Schlouder uses the selected strategy to establish the schedule and
-provision resources from the cloud's frontend, denoted Controller. Once the
-\acp{vm} are booted Schlouder sends the job to their assigned machines.
-Schlouder tracks jobs progression, completing the schedule as dependencies are
-resolved, provisioning \acp{vm} as needed, and shutting down unneeded \acp{vm}
-as their billing cycle close.
+The left  part of figure~\ref{fig:rs}  schematically presents the workflow  of a
+real execution.  The  user sends to Schlouder  a list of jobs. For  each job the
+user provides a runtime estimate (as in almost all batch scheduler systems), the
+list  of  depedencies  and  the scheduling  strategy.   Schlouder  computes  the
+scheduling and resource provisioning decisions  and communicates its requests to
+the  cloud's  frontend,  denoted  Controller.   Once  the  \acp{vm}  are  booted
+Schlouder  sends the  job to  their  assigned machines.   Schlouder tracks  jobs
+progression, completing the schedule  as dependencies are resolved, provisioning
+\acp{vm} as needed,  and shutting down unneeded \acp{vm} as  their billing cycle
+close.
 
 \begin{figure}
 	\resizebox{0.5\textwidth}{!}{%
@@ -410,12 +409,12 @@ includes the same strategies as Schlouder,  and as its real-world counterpart it
 is easily extendable with new strategies. 
 
 As  shown on  the right  side of  Figure~\ref{fig:rs}, SimSchlouder  shares with
-Schlouder a  common subset of inputs.  It receives from  the user a set  of jobs
+Schlouder a common  subset of inputs.  It  receives from the user a  set of jobs
 with their  respective estimated  runtimes and dependencies,  and a  strategy to
-use. Whereas  Schlouder operates  on a  real cloud  management system  (e.g Open
-Stack), SimSchlouder  provisions simulated  \acp{vm} and jobs  through SimGrid's
-cloud interface  called SchIaaS. As  mentioned earlier, the  simulation requires
-additional information regarding the platform and processes simulated.
+use.  Whereas  Schlouder  operates  on a  real  cloud  controller,  SimSchlouder
+provisions simulated \acp{vm} and jobs  through SimGrid's cloud interface called
+SchIaaS. As  mentioned earlier,  the simulation requires  additional information
+regarding the platform and processes simulated.
 % pas necessaire à mon avis: For a  real execution  the user  does not  usually 
 % know  the cloud  specification or configuration that the  simulation requires 
 % to run. 
@@ -494,28 +493,25 @@ attention was taken to never overload the system.
 
 \end{comment}
 
-\textbf{FIXME: Transition vers ESF}.
-
-
 \section{Enriched Simulation Framework}
 \label{sec:enriched-sim}
 
-Trustworthiness of simulation of variable environments is a major problem when
-simulating cloud. If the result of the simulation is one of many its relevance
-is immediately compromised. Users need results that contains actionable action.
-As such providing a distribution will of possible results is a better solution.
+Trustworthiness of simulation is a major issue when simulating variable
+environments such as clouds. If the result of the simulation is one of many
+possible outcomes, it might not be a relevant enough information to the user. 
+As such, providing a distribution of possible results is a better solution.
 
 In this section we propose one such enriched simulation by instrumenting a
 \ac{des}, SimSchlouder, as a stochastic simulator using the method of the
 \acf{mcs}. This solution combines the relative simplicity of a \ac{des} with the
-extensive results provides by stochastic simulations. This approach garantee
-that our simulation respects the scheduling and provisioning decision observed
-in real life, as the \ac{des} can easily be programmed to reproduces such
-decision, whereas integrating the implication of such decision in the already
+extensive results provides by stochastic simulations. This approach garantees
+that our simulation respects the scheduling and provisioning decisions observed
+in real life, as the \ac{des} can easily be programmed to reproduce such
+decisions, whereas integrating the implication of such decision in the already
 complex computation of the numerical results of a stochastic would be
 impossible.
 
-In this section we will first discuss the particulars of the Monte Carlo
+In this section we will first discuss the particularities of the Monte Carlo
 Simulation. Then we will review how we hope to test the validity of such an
 approach to simulation. At last we will explore the steps taken to model the
 input \acp{rv} representing the jobs runtimes.
@@ -554,12 +550,12 @@ input \acp{rv} representing the jobs runtimes.
 We now  describe our contribution consisting  in an automated system  to provide
 stochastic simulation results.
 
-\subsection{Simulation process}
+\subsection{Simulation Process}
 %\paragraph{Method} 
 As  depicted   on  Figure~\ref{fig:mc-process},   we  consider   an  application
 consisting of  $n$ jobs, independent  or organized as  a workflow. For  each job
-$i \in \[1,\dots,n\]n$,  the user provides a runtime estimate  $T_i$, from which
-the system computes a \ac{rv} $R_i$ (to be explained below).
+$i  \in\,[1;n]$, the  user provides  a runtime  estimate $T_i$,  from which  the
+system computes a \ac{rv} $R_i$ (to be explained below).
 
 One MCS-step then consists in 
 \begin{itemize}
