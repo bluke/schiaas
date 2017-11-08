@@ -6,12 +6,12 @@ rounded corners
 ]
 %% Origin node
 \node[align=center]at(0,2){Job\\RVs};
-\node at(0,0)(orig){$\{R_1,\ldots,R_n\}$};
+\node at(0,0)(orig){$\{T^1,\ldots,T^n\}$};
 %% Realisations
 \node at(3.5,2){Realisations};
-\node[]at(3.5,1)(pert1){$\{T_1^1,\ldots,T_n^1\}$};
+\node[]at(3.5,1)(pert1){$\{t_1^1,\ldots,t_1^n\}$};
 \node at(3.5,0){\vdots};
-\node at(3.5,-1)(pert5){$\{T_1^{500},\ldots,T_n^{500}\}$};
+\node at(3.5,-1)(pert5){$\{t_{500}^1,\ldots,t_{500}^n\}$};
 \draw[-{latex}](orig)--(pert1);
 \draw[-{latex}](orig)--(pert5);
 %%
@@ -22,14 +22,14 @@ rounded corners
 \draw[-{latex}](pert5)--(s5);
 %% Makespans
 \node at(8,2){Samples};
-\node at(8,1)(M1){$M^1$};
-\node at(8,-1)(M5){$M^{500}$};
+\node at(8,1)(M1){$m_1$};
+\node at(8,-1)(M5){$m_{500}$};
 \node at(8,-0){\vdots};
 \draw[-{latex}](s1)--(M1);
 \draw[-{latex}](s5)--(M5);
 %% Consolidation
 \node[align=center]at(10,2){Makespan\\RV};
-\node at(10,0)(r){$M_S$};
+\node at(10,0)(r){$M$};
 \draw[-{latex}](M1)--(r);
 \draw[-{latex}](M5)--(r);
 %%phases

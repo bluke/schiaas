@@ -289,9 +289,9 @@ after another.
 	\resizebox{0.5\textwidth}{!}{%
 		\input{gfx/mc-process.tex}
 		}
-\caption{Overview of a Monte-Carlo simulation: $500$ realizations are generated
-by drawing runtimes for each job of the provided RVs, every realisation is then
-simulated, the resulting makespan samples are fitted into the final
+\caption{Overview of a Monte-Carlo simulation~: $500$ realizations are generated
+by drawing runtimes for each of the $n$ jobs provided RVs, every realisation is
+then simulated, the resulting makespan samples are fitted into the final
 result.}\label{fig:mc-process}
 \end{figure}
 
@@ -308,7 +308,16 @@ methods like \ac{des}.
 Eventually given enough realizations the distribution of the simulations results
 will tend towards the distribution of the equivalent stochastic simulation.
 Statistical fitting techniques can then be used to characterize this makespan
-\ac{rv}. The figure~\ref{fig:mc-process} presents schematically a \ac{mcs}.
+\ac{rv}.
+
+The figure~\ref{fig:mc-process} presents schematically a \ac{mcs} of a $n$ job
+workflow. The input of the simulation is a set of $n$ \acp{rv} each
+corresponding to a given job, denoted as superscripts indices. A realisation is
+a set of $n$ runtimes that where drawn according to each jobs respective
+\ac{rv}.  In figure~\ref{fig:mc-process} we denote realisation number as
+subscript indices. Each of this realisation is simulated independently,
+providing a makespan sample. Finally the sample are aggregated in the final
+distribution.
 
 Such approach has already been used in the context of stochastic
 PERT~\cite{Slyke63}, and comparison of \ac{dag} schedules\cite{Canon10,Zheng13}.
@@ -504,7 +513,7 @@ As such, providing a distribution of possible results is a better solution.
 In this section we propose one such enriched simulation by instrumenting a
 \ac{des}, SimSchlouder, as a stochastic simulator using the method of the
 \acf{mcs}. This solution combines the relative simplicity of a \ac{des} with the
-extensive results provides by stochastic simulations. This approach garantees
+extensive results provides by stochastic simulations. This approach guarantees
 that our simulation respects the scheduling and provisioning decisions observed
 in real life, as the \ac{des} can easily be programmed to reproduce such
 decisions, whereas integrating the implication of such decision in the already
@@ -546,28 +555,32 @@ input \acp{rv} representing the jobs runtimes.
 		fitting on the makespan. (explain CLT)
 \end{itemize}
 
-
-We now  describe our contribution consisting  in an automated system  to provide
-stochastic simulation results.
-
 \subsection{Simulation Process}
 %\paragraph{Method} 
-As  depicted   on  Figure~\ref{fig:mc-process},   we  consider   an  application
+As  depicted   on  Figure~\ref{fig:mc-process},  we  consider   an  application
 consisting of  $n$ jobs, independent  or organized as  a workflow. For  each job
-$i  \in\,[1;n]$, the  user provides  a runtime  estimate $T_i$,  from which  the
-system computes a \ac{rv} $R_i$ (to be explained below).
+$i  \in\,[1;n]$, we provide  a runtime distribution $T^i$ following the method
+described in section~\ref{sec:im}.
 
 One MCS-step then consists in 
 \begin{itemize}
 \item making one realization of the runtime  for each job $i$, that is randomly
-  drawing a runtime value from the associated $R_i$ to obtain a runtime $T_i$,
-\item and once runtimes have been realized for all jobs, proceed to a simulation
-  of the execution with these runtime values to obtain a makespan $M$.
+  drawing a runtime value from the associated $T^i$ to obtain a runtime $t^i$,
+\item and once runtimes have been drawn for all jobs, proceed to a simulation
+  of the execution with these runtime values to obtain a makespan $m$.
 \end{itemize}
-The whole MCS process  consists in repeating this step a  large number of times
-(500 times  on the  figure). From the  set of makespans  $M^k$ obtained  at each
+The whole \ac{mcs} process  consists in repeating this step a  large number of times
+(500 times  on the  figure). From the  set of makespans  $m_k$ obtained  at each
 step, we compute  a statistical distribution of the makespan  as a final \ac{rv}
-noted $M_S$.
+noted $M$.
+
+Because of the \emph{pay-as-you-go} nature of the cloud we extend our simulation
+to two output variable, we will not only observe the makespan computed by any
+step but also the ``cost'' for each execution in number of \ac{btu}, that is the
+number of VM-hours started during this simulation.
+
+\textbf{FIXME: talk about fitting \& qualitative vs quantitative approach here
+or in next section~?}
 
 \begin{comment}
 %------------------- le paragraphe précédent remplace le texte suivant utilisé
@@ -609,7 +622,7 @@ to  the mean  $\mu$.
 \end{figure*}
 
 
-\subsection{Experimental Observations}
+\subsection{Experimental evaluation.}
 
 \textbf{FIXME: description of the real life platform goes here}
 
