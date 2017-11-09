@@ -297,18 +297,13 @@ result.}\label{fig:mc-process}
 
 Instead of computing the resulting \ac{rv}, a \ac{mcs} samples the possible
 results by testing multiple \emph{realizations} in a deterministic fashion.
-These realizations are obtained by drawing for every job in the application a
-runtime that follows their job's respective \ac{rv}. \textbf{FIXME: la phrase
-  suivante n'est elle pas redondante avec la précédente?}
-These realization each
-represent a possible execution of the application and should respect the
-distribution of such possibilities. Since within a realization each job has now
-a defined runtime, each realization can be simulated using traditional
-methods like \ac{des}.
-Eventually given enough realizations the distribution of the simulations results
-will tend towards the distribution of the equivalent stochastic simulation.
-Statistical fitting techniques can then be used to characterize this makespan
-\ac{rv}.
+A realizations is obtained by drawing for every job in the application a
+runtime that follows their job's respective \ac{rv}. Since within a realization
+each job has now a defined runtime, each realization can be simulated using
+traditional methods like \ac{des}.  Eventually given enough realizations the
+distribution of the simulations results will tend towards the distribution of
+the equivalent stochastic simulation.  Statistical fitting techniques can then
+be used to characterize this makespan \ac{rv}.
 
 The figure~\ref{fig:mc-process} presents schematically a \ac{mcs} of a $n$ job
 workflow. The input of the simulation is a set of $n$ \acp{rv} each
@@ -341,7 +336,6 @@ We  present  hereafter  our  experimental   setup.   It  consists  of  two  test
 applications, which are run  on one side, on a real  platform with our scheduler
 Schlouder and on  the other side, are simulated with  our simulator SimSchlouder
 based on SimGrid.
-
  
 \subsection{Real Execution Setup}
 In the recent years, we have developed  a client-side job broker for IaaS clouds
@@ -557,7 +551,7 @@ input \acp{rv} representing the jobs runtimes.
 %\paragraph{Method} 
 As  depicted   on  Figure~\ref{fig:mc-process},  we  consider   an  application
 consisting of  $n$ jobs, independent  or organized as  a workflow. For  each job
-$i  \in\,[1;n]$, we provide  a runtime distribution $T^i$ following the method
+$i  \in\,[1;n]$, we provide  a runtime distribution $T_i$ following the method
 described in section~\ref{sec:im}.
 
 One MCS-iteration then consists in 
@@ -582,9 +576,6 @@ to two output variable, we will not only observe the makespan computed by any
 step but also the ``cost'' for each execution in number of \ac{btu}, that is the
 number of VM-hours started during this simulation.
 
-\textbf{FIXME: talk about fitting \& qualitative vs quantitative approach here
-or in next section~?}
-
 \begin{comment}
 %------------------- le paragraphe précédent remplace le texte suivant utilisé
 %------------------- dans HPCC17
@@ -607,7 +598,6 @@ simulation.  Let us sketch the overall process (see Fig~\ref{fig:mc-process}):
   makespan values.
 \end{itemize}
 % -------------------------------------------------------------------------------
-\end{comment}
 
 
 Fitting is done to a normal distribution because, in essence the makespan is the
@@ -625,53 +615,69 @@ to  the mean  $\mu$.
 \end{figure*}
 
 
-\subsection{Experimental evaluation.}
+\subsection{FIXME : title}
 
-\textbf{FIXME: description of the real life platform goes here}
+Testing discrete event simulators can be easily done by feeding into the
+simulation all the relevant runtimes of a real run and checking that the
+resulting makespan or BTU cost matches the ones observed in real life. For a
+stochastic simulation this approach requires feeding the simulation runtimes
+distribution observed over a number real runs and comparing the resulting
+makespan distribution, with the distribution observed in real life.
 
-Schlouder execution traces contain several useful metrics including, but not
-limited to, the \ac{vm} start dates, boot time, shutdown times, and assigned
-tasks, as well as the task start date and effective runtimes. We are interested in
-two macro metrics, the makespan and the cost.  The makespan is the time elapsed
-between the submission of the first job and the completion of the last completed
-job. The cost is measured as a number of \acp{btu}. Since our experiments have a
-single \ac{vm} type we counted one \ac{btu} per \ac{vm} per started hour to
-match the most common pricing on the cloud. Table~\ref{tab:nbruns} gives an
-overview of the executions in the archive used in this paper. We observe
-variability on the makespan due to the variability of individual job effective
-runtime.
-\begin{table}
-	\centering
-	\caption{Overview of archived executions}\label{tab:nbruns}
-	\begin{tabular}{llrcc}
-		\toprule
+During the development of Schlouder, the cloud borker described in
+Section~\ref{sec:work-context}, we performed multiple execution of the
+application of OMSSA and Montage. These execution were performed on a 96 core
+Openstack cloud system set up on 4 identical dual $2.67GHz$ Intel Xeon X5650
+servers. We used the KVM hypervisor and Openstack version 2012.1 and 2014.4.
+
+Schlouder Execution traces from these experiments contain several useful metrics
+including, but not limited to, the \ac{vm} start dates, boot time, shutdown
+times, and assigned tasks, as well as the task start date and effective
+runtimes. We previously used these traces as a mean to test the validity of
+Simschlouder  These metrics will be used to generate our \ac{mcs} input
+\acp{rv} using the method we will describe in Section~\ref{sec:im}, and we will
+compare the makespan and \ac{btu} distributions of the \ac{mcs} to the
+distribution observed in the corresponding traces.
+
+For this purpose we grouped traces from comparable runs. A group contains runs
+of a same application using the same strategy on a same cloud platform. The
+number of observation in those group is uneven due to the changing nature of the
+experimental conditions in which the runs were executed. The
+Table~\ref{tab:nbruns} presents an overviews of the selected sets.
+
+\begin{table} \centering \caption{Overview of archived
+	executions}\label{tab:nbruns} 
+	\begin{tabular}{llrcc} \toprule
 		Application&Strategy&\#runs&BTU count&Makespan ($s$)\\
-		\midrule
+		\midrule 
 		\multirow{2}{*}{OMSSA}&ASAP&106&40&12811 -- 13488\\
-				      &AFAP&98&33 -- 36&13564 -- 14172\\
-		\midrule
+				      &AFAP&98&33 -- 36&13564 -- 14172\\ 
+		\midrule 
 		\multirow{2}{*}{Montage}&ASAP&3&10&1478 -- 1554\\
-					&AFAP&3&1&2833 -- 2837\\
-		\bottomrule
-	\end{tabular}
+				        &AFAP&3&1&2833 -- 2837\\
+		\bottomrule 
+	\end{tabular} 
 \end{table}
 
 
-Figure~\ref{fig:realbrs}  presents the  distribution of  makespans and  \ac{btu}
-counts over  more than  200 runs in all. Makespan distribution is represented
-using an density curve, by definition these curves have an integral equal to 1.
-These figures expose the  behaviour exhibited  by the
-different strategies. ASAP  appears to finish faster in the  most cases and AFAP
-is less costly. But  these optimizations come at the cost  of instability on the
-dimension they  aim to  optimize. ASAP uses  a high number  of \ac{btu}s  but this
-number is stable, whereas AFAP uses a lower number of \ac{btu}s  
-but this number of \ac{btu}s is  more variable.  When
-looking at the makespan, we take note of how the different strategies affect the
-skewness of  the overall distribution. The  positive skew seen on  ASAP suggests
-that even though  the strategy globally produces  shorter makespan, perturbations
-are more likely  to extend the makespan, whereas AFAP  makespans are more spread
-out and skews negatively.
+Figure~\ref{fig:realbrs}  presents the  distribution of  makespans and \ac{btu}
+counts for all the selectd real runs separated by application and strategy.
+Makespan distribution is represented using an density curve, by definition these
+curves have an integral equal to 1, whereas as a discrete value \ac{btu} count
+is presented using a distribution bar graph.
 
+\begin{comment}
+These figures expose the  behaviour
+exhibited  by the different strategies. ASAP  appears to finish faster in the
+most cases and AFAP is less costly. But  these optimizations come at the cost
+of instability on the dimension they  aim to  optimize. ASAP uses  a high number
+of \ac{btu}s  but this number is stable, whereas AFAP uses a lower number of
+\ac{btu}s  but this number of \ac{btu}s is  more variable.  When looking at the
+makespan, we take note of how the different strategies affect the skewness of
+the overall distribution. The  positive skew seen on  ASAP suggests that even
+though  the strategy globally produces  shorter makespan, perturbations are more
+likely  to extend the makespan, whereas AFAP  makespans are more spread out and
+skews negatively.
 
 All the behaviours discussed in this section are due to the specifics of the
 provisioning and scheduling strategies. In the case of AFAP and ASAP a thorough
@@ -680,6 +686,8 @@ be possible on more complex and dynamic strategies. In the following sections we
 choose to consider strategies as black boxes to show that through simulation 
 we are able  to obtain an accurate prediction of our runs' distribution
 and of our strategies' biases.
+\end{comment}
+
 
 
 \subsection{Input Modeling}\label{sec:im}
