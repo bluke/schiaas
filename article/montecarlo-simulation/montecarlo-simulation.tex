@@ -329,11 +329,35 @@ The  study conducted  in this  paper  is build  upon an  original comparison  of
 experiments  run in  actual environments  and experimental  results obtained  by
 simulation.   To strengthen  the validity  of the  comparison, the  experimental
 conditions  for  the  real  setup  and  the  simulation  should  share  as  many
-commonalities as  possible.  We  describe hereafter  our experimental  setup. It
-consists of two test applications which are  run on one side, on a real platform
-with  our scheduler  Schlouder and  on the  other side,  are simulated  with our
-simulator SimSchlouder based on SimGrid.  The two environments are sketched side
-by side on~Figure \ref{fig:rs}.
+commonalities  as   possible~\cite{PucherGWK15}.   We  describe   hereafter  our
+experimental setup.  It consists of two  test applications which are  run on one
+side, on a real platform with our scheduler Schlouder and on the other side, are
+simulated  with   our  simulator  SimSchlouder   based  on  SimGrid.    The  two
+environments are sketched side by side on~Figure \ref{fig:rs}.
+
+\subsection{Test Applications}\label{sc:setup}
+
+To evaluate Schlouder performance we  carried out multiple executions of two
+scientific applications. The  execution traces for those runs  were collected in
+an archive. This  backlog of real executions is the  benchmark against which our
+simulation performance will be evaluated. The applications used are:
+
+\begin{itemize}
+\item Montage\cite{montage2009},  the Montage Astronomical Image  Mosaic Engine,
+  is designed to  splice astronomical images. The structure  of this application
+  is a  fork-join type  workflow. This application  is extremely  data intensive
+  with a \emph{commuication-to-computation} ratio superior to $90\%$.
+
+\item OMSSA\cite{Geer2004}, the Open Mass-Spectrometry Search Algorithm, is used
+  to analyze  mass-spectrometer results.  The application  is parallelized  as a
+  bag-of-tasks, \textit{i.e.}  as a  number of  independent parallel  jobs. This
+  application        is        computation        intensive        with        a
+  \emph{communication-to-computation} ratio under $20\%$.
+\end{itemize}
+
+The executions of these applications each composed  of a set of jobs are driven
+by the scheduling policy applied. We detail in the next two sections how these
+executions are managed in the actual environment and in simulation.  
 
 \subsection{Real Execution Setup}
 In the recent years, we have developed  a client-side job broker for IaaS clouds
@@ -446,35 +470,7 @@ their real executions could behave with job runtimes variability,  we should
 enrich the simulation framework with some form of stochastic prediction.
 \end{comment}
 
-\subsection{Test Applications}\label{sc:setup}
 
-To evaluate Schlouder performance we carried out multiple executions of
-typical scientific applications. The execution traces for those runs were
-collected in an archive. This backlog of real executions is the benchmark
-against which our simulation performance will be evaluated. The applications
-used are:
-
-\begin{itemize}
-	\item Montage\cite{montage2009}, the Montage Astronomical Image Mosaic
-		Engine, is designed to splice astronomical images. The structure
-                of this application is a fork-join type workflow. This
-                application  is extremely data intensive with a
-		\emph{commuication-to-computation} ratio superior to $90\%$.
-	\item OMSSA\cite{Geer2004}, the Open Mass-Spectrometry Search Algorithm, 
-		is used to analyze mass-spectrometer results. The application is
-                parallelized as a bag-of-tasks, \textit{i.e.} as a number of
-                independent parallel jobs. This application is
-		computation intensive with a
-		\emph{communication-to-computation} ratio under $20\%$.
-\end{itemize}
-
-Logs form the execution of these application display variability in the jobs
-individual runtimes, as well as in the application makespan, even when the
-execution where scheduled on the same platforms using the same strategies. This
-variability is inherent to executions in the cloud. SimSchlouder as shown
-promising results when when simulating a given execution, but as a \ac{des} it
-is ill-equipped to tackle cases wherein there is uncertainty as to the values of
-job runtimes.
 
 
 \begin{comment}
@@ -490,6 +486,17 @@ up a 96 core cloud based on four identical  dual $2.67GHz$ Intel Xeon X5650
 servers with KVM-based virtualization  and an Openstack cloud-front (first
 2012.1, and later 2014.2). This cluster was exclusively used by us and special
 attention was taken to never overload the system.
+
+
+
+Logs from the executions of these applications display variability in the jobs
+individual runtimes, as well as in the application makespan, even when the
+execution where scheduled on the same platforms using the same strategies. This
+variability is inherent to executions in the cloud. SimSchlouder as shown
+promising results when when simulating a given execution, but as a \ac{des} it
+is ill-equipped to tackle cases wherein there is uncertainty as to the values of
+job runtimes.
+
 
 \end{comment}
 
@@ -507,7 +514,7 @@ In this section we propose one such enriched simulation by instrumenting a
 extensive results provides by stochastic simulations. This approach guarantees
 that our simulation respects the scheduling and provisioning decisions observed
 in real life, as the \ac{des} can easily be programmed to reproduce such
-decisions, whereas integrating the implication of such decision in the already
+decisions, whereas integrating the implication of such decisions in the already
 complex computation of the numerical results of a stochastic would be
 impossible.
 
@@ -565,13 +572,13 @@ at each step, we compute  a statistical distribution of the makespan  as a final
 \ac{rv} noted $M$.
 
 In this paper the full process taking as input runtimes distribution for
-every jobs and providing as results de makespan distribution is referred to as a
-\acf{mcs}. The multiple execution of SimSchlouder performed by the \ac{mcs} are
+every jobs and providing as results the makespan distribution is referred to as a
+\acf{mcs}. The multiple executions of SimSchlouder performed by the \ac{mcs} are
 referred to as \emph{simulations}.
 
 Because of the \emph{pay-as-you-go} nature of the cloud we extend our simulation
-to two output variable, we will not only observe the makespan computed by any
-step but also the ``cost'' for each execution in number of \ac{btu}, that is the
+to two output variables: we will not only observe the makespan computed by any
+step but also the cost for each execution in number of \ac{btu}, that is the
 number of VM-hours started during this simulation.
 
 \begin{comment}
@@ -597,7 +604,6 @@ simulation.  Let us sketch the overall process (see Fig~\ref{fig:mc-process}):
 \end{itemize}
 % -------------------------------------------------------------------------------
 
-
 Fitting is done to a normal distribution because, in essence the makespan is the
 sum  of the  runtimes of  the jobs  on the  critical path  of the  schedule.  To
 measure the impact  of the runtime perturbation on the  makespan, we compute the
@@ -622,8 +628,8 @@ stochastic simulation this approach requires feeding the simulation runtimes
 distribution observed over a number real runs and comparing the resulting
 makespan distribution, with the distribution observed in real life.
 
-During the development of Schlouder, the cloud borker described in
-Section~\ref{sec:work-context}, we performed multiple execution of the
+During the development of Schlouder, the cloud broker described in
+Section~\ref{sec:work-context}, we performed multiple executions of the
 application of OMSSA and Montage. These execution were performed on a 96 core
 Openstack cloud system set up on 4 identical dual $2.67GHz$ Intel Xeon X5650
 servers. We used the KVM hypervisor and Openstack version 2012.1 and 2014.4.
