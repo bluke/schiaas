@@ -312,10 +312,9 @@ Statistical fitting techniques can then be used to characterize this makespan
 
 The figure~\ref{fig:mc-process} presents schematically a \ac{mcs} of a $n$ job
 workflow. The input of the simulation is a set of $n$ \acp{rv} each
-corresponding to a given job, denoted as superscripts indices. A realisation is
+corresponding to a given job, denoted by indices. A realisation is
 a set of $n$ runtimes that where drawn according to each jobs respective
-\ac{rv}.  In figure~\ref{fig:mc-process} we denote realisation number as
-subscript indices. Each of this realisation is simulated independently,
+\ac{rv}. Each of this realisation is simulated independently,
 providing a makespan sample. Finally the sample are aggregated in the final
 distribution.
 
@@ -538,7 +537,6 @@ input \acp{rv} representing the jobs runtimes.
 		would be done in reallife without adding to the ridiculous
 		mathematical complexity of stochastic simulation.
 \end{itemize}
-\end{comment}
 \textbf{TODO : Detailer l'application de la MCS a notre cas}
 \begin{itemize}
 	\item The input is the job runtimes, each of them is an RV giving a
@@ -554,7 +552,7 @@ input \acp{rv} representing the jobs runtimes.
 	\item As a quantitavive test we create confidence interval using normal
 		fitting on the makespan. (explain CLT)
 \end{itemize}
-
+\end{comment}
 \subsection{Simulation Process}
 %\paragraph{Method} 
 As  depicted   on  Figure~\ref{fig:mc-process},  we  consider   an  application
@@ -562,17 +560,22 @@ consisting of  $n$ jobs, independent  or organized as  a workflow. For  each job
 $i  \in\,[1;n]$, we provide  a runtime distribution $T^i$ following the method
 described in section~\ref{sec:im}.
 
-One MCS-step then consists in 
+One MCS-iteration then consists in 
 \begin{itemize}
 \item making one realization of the runtime  for each job $i$, that is randomly
-  drawing a runtime value from the associated $T^i$ to obtain a runtime $t^i$,
+  drawing a runtime value from the associated $T_i$ to obtain a runtime $t_i$,
 \item and once runtimes have been drawn for all jobs, proceed to a simulation
   of the execution with these runtime values to obtain a makespan $m$.
 \end{itemize}
-The whole \ac{mcs} process  consists in repeating this step a  large number of times
-(500 times  on the  figure). From the  set of makespans  $m_k$ obtained  at each
-step, we compute  a statistical distribution of the makespan  as a final \ac{rv}
-noted $M$.
+The whole \ac{mcs} process  consists in repeating this iteration a  large number
+of times (500 times  on the  figure). From the  set of makespans  $m_k$ obtained
+at each step, we compute  a statistical distribution of the makespan  as a final
+\ac{rv} noted $M$.
+
+In this paper the full process taking as input runtimes distribution for
+every jobs and providing as results de makespan distribution is referred to as a
+\acf{mcs}. The multiple execution of SimSchlouder performed by the \ac{mcs} are
+referred to as \emph{simulations}.
 
 Because of the \emph{pay-as-you-go} nature of the cloud we extend our simulation
 to two output variable, we will not only observe the makespan computed by any

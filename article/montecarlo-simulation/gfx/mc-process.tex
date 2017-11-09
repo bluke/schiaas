@@ -6,12 +6,12 @@ rounded corners
 ]
 %% Origin node
 \node[align=center]at(0,2){Job\\RVs};
-\node at(0,0)(orig){$\{T^1,\ldots,T^n\}$};
+\node at(0,0)(orig){$\{T_1,\ldots,T_n\}$};
 %% Realisations
 \node at(3.5,2){Realisations};
-\node[]at(3.5,1)(pert1){$\{t_1^1,\ldots,t_1^n\}$};
+\node[]at(3.5,1)(pert1){$\{t_1,\ldots,t_n\}_1$};
 \node at(3.5,0){\vdots};
-\node at(3.5,-1)(pert5){$\{t_{500}^1,\ldots,t_{500}^n\}$};
+\node at(3.5,-1)(pert5){$\{t_1,\ldots,t_n\}_{500}$};
 \draw[-{latex}](orig)--(pert1);
 \draw[-{latex}](orig)--(pert5);
 %%
