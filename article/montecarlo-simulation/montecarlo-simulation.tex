@@ -516,35 +516,6 @@ Simulation. Then we will review how we hope to test the validity of such an
 approach to simulation. At last we will explore the steps taken to model the
 input \acp{rv} representing the jobs runtimes.
 
-\begin{comment}
-\textbf{TODO : vendre notre contrib (devrai avoir sa propre subsection?)}
-\begin{itemize}
-	\item It is hard to trust a simulation whose result is one out of many
-		possible
-	\item Knowing the distribution of possible result is much more
-		interesting 
-	\item WE propose using the mcs on simschlouder to create such an
-		enriched simulation
-	\item using mcs guarantees the scheduling decision match the one that
-		would be done in reallife without adding to the ridiculous
-		mathematical complexity of stochastic simulation.
-\end{itemize}
-\textbf{TODO : Detailer l'application de la MCS a notre cas}
-\begin{itemize}
-	\item The input is the job runtimes, each of them is an RV giving a
-		range of possible runtimes (the definition of the RV is done in
-		sec:input modeling)
-	\item Simschlouder is given the the correct strategy and the same user
-		estimates as in real life, but the effective runtimes are drawn
-		using the RVs
-	\item Once all the realisation are drawn, we run Parrallel instances of
-		Simshclouder to do the sim.
-	\item We look a the simulated makespan as well as the simulated cost.
-		(qualitatively)
-	\item As a quantitavive test we create confidence interval using normal
-		fitting on the makespan. (explain CLT)
-\end{itemize}
-\end{comment}
 \subsection{Simulation Process}
 %\paragraph{Method} 
 As  depicted   on  Figure~\ref{fig:mc-process},  we  consider   an  application
@@ -604,14 +575,6 @@ measure the impact  of the runtime perturbation on the  makespan, we compute the
 range $[\mu-2\sigma;\mu+2\sigma]$ (that is  a 95\% confidence interval) relative
 to  the mean  $\mu$. 
 \end{comment}
-%% Free floating graphs mus be declared a page in advance
-\begin{figure*}
-	\includegraphics[width=\textwidth]{gfx/fit_plot.pdf}
-	\caption{Makespan and BTU count distribution for OMSSA and Montage Monte
-	Carlo Simulation compared to reality at 10\% perturbation
-	level.}\label{fig:fit}
-\end{figure*}
-
 
 \subsection{FIXME : title}
 
@@ -686,10 +649,73 @@ we are able  to obtain an accurate prediction of our runs' distribution
 and of our strategies' biases.
 \end{comment}
 
+%% Free floating graphs mus be declared a page in advance
+\begin{figure*}
+	\includegraphics[width=\textwidth]{gfx/fit_plot.pdf}
+	\caption{Makespan and BTU count distribution for OMSSA and Montage Monte
+	Carlo Simulation compared to reality at 10\% perturbation
+	level.}\label{fig:fit}
+\end{figure*}
+
 
 
 \subsection{Input Modeling}\label{sec:im}
 
+The testing of our enriched simulation framework requires us to build input
+\acp{rv} for every job of OMSSA and Montage, in a way that is representative of
+the distribution of runtimes observed in the execution traces.
+
+The existence of a backlog of real execution traces would allows us to do so with
+reasonable precision, but in real simulation use-cases where having such traces
+is unlikely building such a model would require a deep understanding of the jobs
+computations, communication, and of the underlying cloud. Such knowledge is
+rarely available and estimated runtimes are seldom more than a educated guess.
+
+Hence we aimed to build or job \ac{rv} in such a way that they precise enough
+that the simulation can be expected to produce representative results while
+still being simple enough that a knowledgeable user can be expected to produce
+it without needing the benefit of hindsight we have.
+
+User will usually express uncertainties as a range around what they perceive is
+an average value. To match this expression we construct our job runtime model as
+a uniform distribution interval centered around the average runtime of the job
+modeled. The half-width of the interval is expressed relative to the average
+runtime as a percentage. We call this percentage the perturbation level en
+denote it $P$. As such $t_j$ the drawn time of job $j$ can be written as : 
+
+\begin{equation}
+	t_j = \bar{R_j} * (1 + p)
+	\label{eq:t}
+\end{equation}
+\begin{equation}
+	p = \mathcal{U}(-P,+P)
+	\label{eq:r}
+\end{equation}
+
+With $R_j$ the set of runtime observations for job $j$ in \eqref{eq:t} and
+$\mathcal{U}$ an uniform distribution in \eqref{eq:r}.  
+
+We expect the average user would not estimate perturbation levels on a job per
+job basis. Therefore we elect to compute as single Perturbation level per
+application/strategy group. We obtain the perturbation level by averaging the
+worst observed deviation from the mean for every job in the application.
+Formally expressed as :
+
+\begin{equation}
+P = \underset{i}{\textrm{mean}}(\delta{}_j)
+\label{eq:P}
+\end{equation}
+\begin{equation}
+\delta{}_j =
+\max_n\left(\frac{r_j^n-\bar{R_j}}{\bar{R_j}}\right)
+\label{eq:d}
+\end{equation}
+
+In equations \eqref{eq:P}\eqref{eq:d}, $j$ denote a given job, $R_j$ the set of real
+observation for this job, and $r_j^n$ the $n$th observation of this job.
+
+
+\begin{comment}
 Core  to the  \acl{mcs} is  the accuracy  of our  job runtimes  inputs. Given  a
 precise simulator and enough samples, the \ac{mcs} will return a precise result,
 but this  result corresponds to  the reality described  by the inputs.  In other
@@ -723,7 +749,7 @@ with $r_i^n$ the perturbation value drawn between $[-P;+P]$.
 As we  will see  in Section~\ref{sec:sa},  the parameters $T_i$  and $P$  have a
 great influence on the \ac{mcs} results.  Our findings are that the best results
 are obtained by  taking as $T_i$ the average effective  runtime observed for job
-$i$ for a given  strategy. This corresponds to the guess of a knowledgable user.
+$i$ for a given  strategy. This corresponds to the guess of a knowledgeable user.
 Regarding  the simulation  wide perturbation level  $P$, we found  that the best
 setting  is the average  of the worst relative deviations for all jobs in the
 workload:
@@ -735,6 +761,7 @@ P = \underset{i}{\textrm{mean}}(\delta{}_i)
 \max_n\left(\frac{R_i^n-\textrm{mean}(R_i)}{\textrm{mean}(R_i)}\right)
 \end{equation}
 with $R_i^n$ the observed effective runtime for job $i$ during execution $n$. 
+\end{comment}
 
 For OMSSA, the perturbation level given by this methods is roughly 10\% for both
 strategies. For Montage  our calculated perturbation level is  20\% when looking
@@ -743,41 +770,9 @@ difference can be partially  explained by the low number of  montage runs in the
 archive. As such we additionally ran a Montage simulation using the 10\% 
 perturbation level calculated using the OMSSA executions.
 
-For  each  application and  strategy  we  also  perform a  single  deterministic
-simulation  using the  raw base  value  with 0\%  perturbation. This  simulation
-serves as  reference when  evaluating the strategies' behaviour when  faced with
-perturbations.
-
-
-
 \section{Evaluation}
 \label{sec:eval}
 
-\begin{figure*}
-	\includegraphics[width=\textwidth]{gfx/int_plot.pdf}
-	\caption{Makespan intervals and BTU count distribution for OMSSA and 
-	Montage at different perturbation levels. In the makespan interval graph 
-	the box represent the 95\% confidence interval resulting from the \acs{mcs},
-	and the bar the results of a single unperturbed simulation.}\label{fig:int}
-\end{figure*}
-
-\begin{table}
-	\centering
-	\caption{Makespan and BTU capture rate depending on confidence interval
-          (CI) for a 10\% perturbation level}\label{tab:fit}
-	\begin{tabular}{llccc}
-		\toprule
-		Application&Strategy&\multicolumn{2}{c}{Makespan (Size of CI)}&BTU\\
-                           &         & CI 95\% & CI 99\% &\\
-		\midrule
-		\multirow{2}{*}{OMSSA}&ASAP&  90\% (3\%)&  98\% (5\%)& 100\%\\
-				      &AFAP&  92\% (4\%)& 100\% (6\%)& 100\%\\
-		\midrule
-		\multirow{2}{*}{Montage}&ASAP& 100\% (2\%)& 100\% (4\%)& 100\%\\
-					&AFAP& 100\% (1\%)& 100\% (2\%)& 100\%\\
-		\bottomrule
-	\end{tabular}
-\end{table}
 %\subsection{Prediction Quality}\label{sec:pq}
 
 We evaluate the  validity of our simulation based on  two different factors, the
@@ -823,6 +818,33 @@ hope to achieve such predictions.  In Section~\ref{sec:lim}, we will discuss the
 limits we experienced with this approach. In the next section we show by comparing
 different \acp{mcs}  that we are able  to study the behavior  of the strategies
 when confronted with different applications and perturbation levels.
+
+\begin{table}
+	\centering
+	\caption{Makespan and BTU capture rate depending on confidence interval
+          (CI) for a 10\% perturbation level}\label{tab:fit}
+	\begin{tabular}{llccc}
+		\toprule
+		Application&Strategy&\multicolumn{2}{c}{Makespan (Size of CI)}&BTU\\
+                           &         & CI 95\% & CI 99\% &\\
+		\midrule
+		\multirow{2}{*}{OMSSA}&ASAP&  90\% (3\%)&  98\% (5\%)& 100\%\\
+				      &AFAP&  92\% (4\%)& 100\% (6\%)& 100\%\\
+		\midrule
+		\multirow{2}{*}{Montage}&ASAP& 100\% (2\%)& 100\% (4\%)& 100\%\\
+					&AFAP& 100\% (1\%)& 100\% (2\%)& 100\%\\
+		\bottomrule
+	\end{tabular}
+\end{table}
+%%Free floating figure must be declare one page ahead.
+\begin{figure*}
+	\includegraphics[width=\textwidth]{gfx/int_plot.pdf}
+	\caption{Makespan intervals and BTU count distribution for OMSSA and 
+	Montage at different perturbation levels. In the makespan interval graph 
+	the box represent the 95\% confidence interval resulting from the \acs{mcs},
+	and the bar the results of a single unperturbed simulation.}\label{fig:int}
+\end{figure*}
+
 
 \section{Discussion}
 \subsection{Strategy analysis}\label{sec:sa}
