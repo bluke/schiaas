@@ -325,18 +325,16 @@ methods to enrich a cloud broking simulator.
 \section{Work Context}
 \label{sec:work-context}
 
-Testing discrete event simulators can be easily done by feeding into the
-simulation all the relevant runtimes of a real run and checking that the
-resulting makespan matches the makespan observed in real life. For a stochastic
-simulation this approach requires feeding the simulation runtimes distribution
-observed over a number real runs and comparing the resulting makespan
-distribution, with the distribution observed in real life.
+The  study conducted  in this  paper  is build  upon an  original comparison  of
+experiments  run in  actual environments  and experimental  results obtained  by
+simulation.   To strengthen  the validity  of the  comparison, the  experimental
+conditions  for  the  real  setup  and  the  simulation  should  share  as  many
+commonalities as  possible.  We  describe hereafter  our experimental  setup. It
+consists of two test applications which are  run on one side, on a real platform
+with  our scheduler  Schlouder and  on the  other side,  are simulated  with our
+simulator SimSchlouder based on SimGrid.  The two environments are sketched side
+by side on~Figure \ref{fig:rs}.
 
-We  present  hereafter  our  experimental   setup.   It  consists  of  two  test
-applications, which are run  on one side, on a real  platform with our scheduler
-Schlouder and on  the other side, are simulated with  our simulator SimSchlouder
-based on SimGrid.
- 
 \subsection{Real Execution Setup}
 In the recent years, we have developed  a client-side job broker for IaaS clouds
 called Schlouder~\cite{Michon17}.  This broker is  able to submit on  the user's
