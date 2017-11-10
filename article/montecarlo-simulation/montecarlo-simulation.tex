@@ -594,24 +594,26 @@ makespan distribution with the distribution observed in real life.
 
 During the development of Schlouder, the cloud broker described in
 Section~\ref{sec:work-context}, we performed multiple executions of the
-application of OMSSA and Montage. These execution were performed on a 96 core
+application of OMSSA and Montage. These executions were performed on a 96 core
 Openstack cloud system set up on 4 identical dual $2.67GHz$ Intel Xeon X5650
 servers. We used the KVM hypervisor and Openstack version 2012.1 and 2014.4.
 
-Schlouder execution traces from these experiments contain several useful metrics
-including, but not limited to, the \ac{vm} start dates, boot time, shutdown
-times, and assigned tasks, as well as the task start date and effective
-runtimes. We previously used these traces as a mean to test the validity of
-Simschlouder.  These metrics will be used to generate our \ac{mcs} input
-\acp{rv} using the method we will describe in Section~\ref{sec:im}, and we will
-compare the makespan and \ac{btu} distributions of the \ac{mcs} to the
+Schlouder  execution  traces obtained  from  these  experiments contain  several
+useful metrics  including, but  not limited  to, the  \ac{vm} start  dates, boot
+time, shutdown  times, and assigned  tasks, as well as  the task start  date and
+effective  runtimes. We  previously used  these traces  as a  means to  test the
+validity of Simschlouder.   These metrics will be used to  generate our \ac{mcs}
+input \acp{rv} using the method we will describe in Section~\ref{sec:im}, and we
+will compare  the makespan  and \ac{btu}  distributions of  the \ac{mcs}  to the
 distribution observed in the corresponding traces.
 
-For this purpose we grouped traces from comparable runs. A group contains runs
-of a same application using the same strategy on a same cloud platform. The
-number of observations in those groups is uneven due to the changing nature of the
-experimental conditions in which the runs were executed. The
-Table~\ref{tab:nbruns} presents an overviews of the selected sets.
+For this purpose we grouped traces  from comparable runs.  A group contains runs
+of a  same application  using the same  strategy on a  same cloud  platform. The
+number of observations in  those groups is uneven due to  the changing nature of
+the    experimental   conditions    in   which    the   runs    were   executed.
+Table~\ref{tab:nbruns}  presents  an  overview   of  the  selected  sets,  while
+Figure~\ref{fig:realbrs} presents the distribution of resulting makespans and
+\ac{btu} counts observed depending on application and scheduling strategy.
 
 \begin{table} \centering \caption{Overview of archived
 	executions}\label{tab:nbruns} 
@@ -628,8 +630,6 @@ Table~\ref{tab:nbruns} presents an overviews of the selected sets.
 \end{table}
 
 
-Figure~\ref{fig:realbrs}  presents the  distribution of  makespans and  \ac{btu}
-counts for  all the selected  real runs  separated by application  and strategy.
 
 \begin{comment}
 These figures expose the  behaviour
