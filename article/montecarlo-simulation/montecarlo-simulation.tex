@@ -446,7 +446,7 @@ regarding the platform and processes simulated.
 Most importantly, during a real execution  the \emph{effective runtime} is the
 real observed runtime of a job, which might differ from the user estimate (used 
 for scheduling purpose). For a better control of the simulation, SimSchlouder
-can take as input observed effective runtimes. 
+can take observed effective runtimes as inputs. 
 
 \begin{comment}
 For the purpose of this paper, we classify the inputs required by SimSchlouder
@@ -549,7 +549,7 @@ every jobs and providing as results the makespan distribution is referred to as 
 referred to as \emph{simulations}.
 
 Because of the \emph{pay-as-you-go} nature of the cloud we extend our simulation
-to two output variables: we will not only observe the makespan computed by any
+to two output variables: we will not only observe the makespan computed at any
 step but also the cost for each execution in number of \ac{btu}, that is the
 number of VM-hours started during this simulation.
 
@@ -585,12 +585,12 @@ to  the mean  $\mu$.
 
 \subsection{FIXME : title}
 
-Testing discrete event simulators can be easily done by feeding into the
-simulation all the relevant runtimes of a real run and checking that the
-resulting makespan or BTU cost matches the ones observed in real life. For a
-stochastic simulation this approach requires feeding the simulation runtimes
-distribution observed over a number real runs and comparing the resulting
-makespan distribution, with the distribution observed in real life.
+Testing  discrete event  simulators  can  be easily  done  by  feeding into  the
+simulation  all the  relevant  runtimes of  a  real run  and  checking that  the
+resulting makespan  or BTU cost  matches the ones observed  in real life.  For a
+stochastic  simulation this  approach requires  feeding the  simulation runtimes
+distribution observed  over a number  of real  runs and comparing  the resulting
+makespan distribution with the distribution observed in real life.
 
 During the development of Schlouder, the cloud broker described in
 Section~\ref{sec:work-context}, we performed multiple executions of the
@@ -598,18 +598,18 @@ application of OMSSA and Montage. These execution were performed on a 96 core
 Openstack cloud system set up on 4 identical dual $2.67GHz$ Intel Xeon X5650
 servers. We used the KVM hypervisor and Openstack version 2012.1 and 2014.4.
 
-Schlouder Execution traces from these experiments contain several useful metrics
+Schlouder execution traces from these experiments contain several useful metrics
 including, but not limited to, the \ac{vm} start dates, boot time, shutdown
 times, and assigned tasks, as well as the task start date and effective
 runtimes. We previously used these traces as a mean to test the validity of
-Simschlouder  These metrics will be used to generate our \ac{mcs} input
+Simschlouder.  These metrics will be used to generate our \ac{mcs} input
 \acp{rv} using the method we will describe in Section~\ref{sec:im}, and we will
 compare the makespan and \ac{btu} distributions of the \ac{mcs} to the
 distribution observed in the corresponding traces.
 
 For this purpose we grouped traces from comparable runs. A group contains runs
 of a same application using the same strategy on a same cloud platform. The
-number of observation in those group is uneven due to the changing nature of the
+number of observations in those groups is uneven due to the changing nature of the
 experimental conditions in which the runs were executed. The
 Table~\ref{tab:nbruns} presents an overviews of the selected sets.
 
@@ -628,11 +628,8 @@ Table~\ref{tab:nbruns} presents an overviews of the selected sets.
 \end{table}
 
 
-Figure~\ref{fig:realbrs}  presents the  distribution of  makespans and \ac{btu}
-counts for all the selectd real runs separated by application and strategy.
-Makespan distribution is represented using an density curve, by definition these
-curves have an integral equal to 1, whereas as a discrete value \ac{btu} count
-is presented using a distribution bar graph.
+Figure~\ref{fig:realbrs}  presents the  distribution of  makespans and  \ac{btu}
+counts for  all the selected  real runs  separated by application  and strategy.
 
 \begin{comment}
 These figures expose the  behaviour
