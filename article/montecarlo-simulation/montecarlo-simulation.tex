@@ -28,6 +28,7 @@
 \acrodef{mcs}[MCS]{Monte-Carlo simulation}
 \acrodefplural{mcs}[MCS's]{Monte-Carlo simulations}
 \acrodef{des}[DES]{discrete event simulation}
+\acrodef{ci}[CI]{confidence interval}
 
 \newcommand*\rot{\rotatebox{90}}
 \newcommand{\pmpc}[1]{$\pm#1\%$}
@@ -773,14 +774,92 @@ For OMSSA, the perturbation level given by this methods is roughly 10\% for both
 strategies. For Montage  our calculated perturbation level is  20\% when looking
 at ASAP  executions and  5\% when  looking at AFAP  executions. We  believe this
 difference can be partially  explained by the low number of  montage runs in the
-archive. As such we additionally ran a Montage simulation using the 10\% 
-perturbation level calculated using the OMSSA executions.
+archive. As such we make the hypothesis that the runtime variability comes
+mostly from the platform and will also try simulations of Montage with a 10\%
+perturbation level.
 
 \section{Evaluation}
 \label{sec:eval}
 
-%\subsection{Prediction Quality}\label{sec:pq}
+We ran 500 iteration \acp{mcs} for all for strategy/application group using the
+job models described in the previous section. The resulting distribution are
+shown in figure~\ref{fig:fit}. The makespan density graphs show the simulation
+result distribution as filled curves and the real observed executions, taken
+from fig.~\ref{fig:realbrs}, as simple curves. On the \ac{btu} count graphs
+real observed \ac{btu} counts appear in left columns and simulation result
+distribution are in the right. Each graph shows for both strategy the
+distribution of a specific metric for a given applications.
 
+When OMSSA results distribution, the first to graphs. The distribution of
+simulated makespan has good coverage, that is the simulated makespan range
+covers fairly well the range of observed makespans. But simulated distribution
+does not appear to show the skewness observed in real runs. Simulated makespan
+distributions appear mostly symmetrical whereas the observed makespan
+distributions are not. This is a consequence of our input model, in which job 
+distributions are also symmetrical when this was not the case in real
+executions. Looking at the OMSSA BTU count distributions offers similar results.
+In the AFAP case both real observation and simulated results indicate between 33
+and 36 BTU are required for an execution, but the simulated distribution does
+not share the real observation skewness towards lower values. The ASAP strategy
+shows a very stable BTU count which is match perfectly by the simulation.
+
+To provide a more quantitative approach when discussing makespan distribution we
+decide to fit simulated distribution to a normal distribution. This will allow
+us to build confidence intervals that can be checked against real observation.
+Since the makespan is in essence the sum of the runtimes of the jobs in that
+executions critical path, and job all distributed using the uniform all which has
+a finite variance, we consider the Central Limit Theorem to be applicable. Hence
+our choice to fit the simulated distribution to a normal law. The fitting
+process gives us an average makespan $\mu{}$, and a standard deviation
+$\sigma{}$. This allows to build \acp{ci}. The 95\% \ac{ci} of the normal
+distribution is defined as $[\mu{}-2\sigma{},\mu{}+2\sigma{}]$ and the 99\%
+\ac{ci} is $[\mu{}-3\sigma{},\mu{}+3\sigma{}]$.
+
+\begin{table}
+	\centering
+	\caption{Makespan and BTU capture rate depending on confidence interval
+          (CI) for a 10\% perturbation level}\label{tab:fit}
+	\begin{tabular}{llccc}
+		\toprule
+		Application&Strategy&\multicolumn{2}{c}{Makespan (Size of CI)}&BTU\\
+                           &         & CI 95\% & CI 99\% &\\
+		\midrule
+		\multirow{2}{*}{OMSSA}&ASAP&  90\% (3\%)&  98\% (5\%)& 100\%\\
+				      &AFAP&  92\% (4\%)& 100\% (6\%)& 100\%\\
+		\midrule
+		\multirow{2}{*}{Montage}&ASAP& 100\% (2\%)& 100\% (4\%)& 100\%\\
+					&AFAP& 100\% (1\%)& 100\% (2\%)& 100\%\\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+Table~\ref{tab:fit} presents that capture rate obtained by each interval
+computed after normal fitting. The capture rate expresses the number of observed
+real makespan fall withing a given \ac{ci} relative to the total number of real
+observation. Since improving the capture rate is always possible at the cost of
+enlarging the \ac{ci} and therefore diminishing it's relevance, we provide for
+each interval its size relative to the average makespan. 
+
+Still on OMSSA we can see that our normal fitting in not perfect our \acp{ci}
+appear of by 5\% with the 95\% \ac{ci} capturing only 90\% real observations.
+This result can be greatly improved upon using a 99\% \ac{ci} which managed to
+capture 98\% of real observations.
+
+Simulating Montage with the computed perturbation levels, as discussed in
+section~\ref{sec:im} 20\% when using ASAP and 5\% with AFAP, we obtained 100\%
+capture rate. The results displayed in the figure~\ref{fig:fit} and
+table~\ref{tab:fit} are for simulations done with the 10\% perturbation level.   
+
+
+[..]
+
+
+Improving on these results would require
+better inputs models and a better characterisation of the results less reliant
+on the normal distribution that cannot reflect skewness. Although such
+improvements would be possible in our cases this is not the case  
+
+\begin{comment}
 We evaluate the  validity of our simulation based on  two different factors, the
 \emph{makespan capture  rate} and  the \emph{BTU capture rate}.   The makespan
 capture rate is the percentage of  real makespans which fall into the confidence
@@ -824,24 +903,7 @@ hope to achieve such predictions.  In Section~\ref{sec:lim}, we will discuss the
 limits we experienced with this approach. In the next section we show by comparing
 different \acp{mcs}  that we are able  to study the behavior  of the strategies
 when confronted with different applications and perturbation levels.
-
-\begin{table}
-	\centering
-	\caption{Makespan and BTU capture rate depending on confidence interval
-          (CI) for a 10\% perturbation level}\label{tab:fit}
-	\begin{tabular}{llccc}
-		\toprule
-		Application&Strategy&\multicolumn{2}{c}{Makespan (Size of CI)}&BTU\\
-                           &         & CI 95\% & CI 99\% &\\
-		\midrule
-		\multirow{2}{*}{OMSSA}&ASAP&  90\% (3\%)&  98\% (5\%)& 100\%\\
-				      &AFAP&  92\% (4\%)& 100\% (6\%)& 100\%\\
-		\midrule
-		\multirow{2}{*}{Montage}&ASAP& 100\% (2\%)& 100\% (4\%)& 100\%\\
-					&AFAP& 100\% (1\%)& 100\% (2\%)& 100\%\\
-		\bottomrule
-	\end{tabular}
-\end{table}
+\end{comment}
 %%Free floating figure must be declare one page ahead.
 \begin{figure*}
 	\includegraphics[width=\textwidth]{gfx/int_plot.pdf}
