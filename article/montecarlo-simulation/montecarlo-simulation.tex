@@ -846,15 +846,24 @@ Simulating Montage with the computed perturbation levels, as discussed in
 section~\ref{sec:im} 20\% when using ASAP and 5\% with AFAP, we obtained 100\%
 capture rate. The results displayed in the figure~\ref{fig:fit} and
 table~\ref{tab:fit} are for simulations done with the 10\% perturbation level.   
+Here again the graph show great coverage. Distribution can not be significantly
+tested due to the lackluster number of real runs. The quantitative approach
+confirms our observation. The low number of evaluation limits our ability to
+have a good look at distribution, but the platform on which these experiment
+where run does not exist at this time preventing us from obtaining new real
+executions. We kept this limited Montage run as to check that the results
+obtained with OMSSA would not completely fail with an application with strong
+dependencies. These results give confidence that our method is extendable to
+workflow type applications.  
 
-
-[..]
-
-
-Improving on these results would require
-better inputs models and a better characterisation of the results less reliant
-on the normal distribution that cannot reflect skewness. Although such
-improvements would be possible in our cases this is not the case  
+Improving the \ac{mcs} results would require better inputs models and a better
+characterisation of the results less reliant on the normal distribution which
+cannot reflect skewness. Although such improvements would be possible in this
+experiment, this is only the case because we work with the benefit of hindsight.
+We believe that our model is representative of what a knowledgeable user could
+create upfront. In these condition users should expect to be able to obtain
+\ac{ci} for 90\% of the runs. Although not perfect the \ac{mcs} offers plenty of
+opportunities other than runtime and cost predictions.
 
 \begin{comment}
 We evaluate the  validity of our simulation based on  two different factors, the
@@ -913,7 +922,7 @@ when confronted with different applications and perturbation levels.
 
 \section{Discussion}
 \subsection{Strategy analysis}\label{sec:sa}
-
+\textbf{FIXME : now a discussion, strategies where not introduced beforehand}
 In our method the perturbation is meant to capture all sources of uncertainties
 that could affect a job runtime, noisy neighbors, memory access contention,
 cache misses, or even variations in the underlying platform. This has allowed us
