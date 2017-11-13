@@ -921,54 +921,61 @@ when confronted with different applications and perturbation levels.
 
 
 \section{Discussion}
+
+Outside of the realm of reproduction or predictions, we believe that \ac{mcs}
+can have other more research oriented applications. In this section we will
+exemplify one such application. Then we will discuss limitation we have
+encountered in our work with \ac{mcs}.
+
 \subsection{Strategy analysis}\label{sec:sa}
-\textbf{FIXME : now a discussion, strategies where not introduced beforehand}
-In our method the perturbation is meant to capture all sources of uncertainties
-that could affect a job runtime, noisy neighbors, memory access contention,
-cache misses, or even variations in the underlying platform. This has allowed us
-to bring all these uncertainties under one dimension, but it should be noted that
-we could achieve similar results by having a different \ac{mcs}, draw different values
-of network bandwidth, cpu-speed, or any other uncertain parameters for each
-individual simulation. Our one-dimensional approach is much easier to implement
-but at the cost of making the perturbation level more difficult to construct.
+During our work on defining the perturbation level to be applied to our average
+runtimes. We experimented with arbitrarily defined perturbation levels. This
+raises interesting usage of \acp{mcs}.
 
-In this section we  continue to base our user estimates  on the average runtimes
-of the  jobs, as a  knowledgable user  would, but consider  that we do  not know
-which perturbation  level is appropriate for the given platform  and application
-strategy.   In such  a  situation a  user  would be  interested  in testing  his
-application with different perturbation levels.
+Figure~\ref{fig:int} presents the resulting \acp{ci} for simulations with a 10\%
+and 40\% perturbation levels. On the makespan interval graphs (first and third
+subfigures) the boxes represent the span of the capture interval. For reference
+the inside bar representing a single simulation using the average runtimes
+without any random element has been added.  Comparing the interval of perturbed
+simulation to this unperturbed simulation allows us to better see the effect of
+perturbation on the strategy. In the middle row of these subfigures, are
+presented for reference the interval spanning the minimum and maximum observed
+real makespans over all runs. These \ac{ci} subfigures only presents ASAP
+strategy whereas the BTU distribution subfigures  present both strategies.
 
-Figure~\ref{fig:int} presents  the results  of such simulations  for a  10\% and
-40\% perturbation level.  On the  makespan interval graphs (left subfigures) the
-boxes represent the span  of the capture interval and the  crossbar inside a box
-represents   a   single   0\%   perturbation  simulations   done   outside   the
-\ac{mcs}. Comparing  the interval  of perturbed  simulation to  this unperturbed
-simulation allows us to view the effect  of perturbation on the strategy. In the
-middle of these subfigures,  are presented  for  reference the  interval 
-spanning  the minimum and maximum observed makespans over all runs.
+The first subfigure presenting the \acp{ci} for OMSSA using the ASAP strategy at
+40\% and 10\% perturbation levels. With the increase of the perturbation level
+the intervals naturally get wider, but the average makespan, by definition the
+center of the capture interval, also gets higher. On OMSSA this happens to the
+extent that the lower bound of our interval at 40\% is higher than the lower
+bound at 10\%. This impacts the capture rate of the simulation form 90\%
+(table~\ref{tab:fit}) to 83\% all the while bringing the width of the interval
+relative to the average value to 10\% (almost 24 minutes) up from 3\% (7 minutes).
 
-These effects are most noticeable in the leftmost graph of Fig.~\ref{fig:int}
-showing the makespan intervals obtained for OMSSA at 40\% and 10\% perturbation
-levels. With the increase of the perturbation level the intervals naturally get 
-wider, but the average makespan, by definition the center of the capture 
-interval, also gets higher. On OMSSA this happens to the extent that the lower 
-bound of our interval at 40\% is higher than the lower bound at 10\%.
-This shows that ASAP, a strategy geared towards reducing the makespan regardless
-of cost, is not as effective when scheduling bag-of-tasks in environments where
-job runtimes might vary widely.  This is also true to a certain extent when
-scheduling workflows. As seen in the third graph of Fig.~\ref{fig:int} the
-average runtime for Montage also increases slightly with the perturbation level.
+This results is two-fold. First this demonstrate that the perturbation level can
+not be used as a trade-off variable to augment capture rate at the expense of
+\ac{ci} compacity. The lower capture rate at a 40\% perturbation level is a
+strong indication that our real platform exhibits a variability closer to
+10\% than to 40\%. People for whom higher capture rates are more important than
+interval compacity should you statistical methods to build higher rate \acp{ci},
+like in our case the 99\% normal distribution \ac{ci}.
 
-When looking at cost, these simulations show that with AFAP, as
-perturbation level increases, low BTU count runs become less likely to occur and
-higher BTU counts become possible. This is not the case for ASAP, or in a 
-context where the application run is clearly under an hour.
-
-This approach to analyzing strategies and their interactions with workflow has
-the notable advantage of not requiring complete understanding of a strategy, as
-long as a correct implementation of the strategy is available in the simulator,
-it can be considered a black box. The enriched simulation allows the user to
-witness its behavior against any workflow or variability.
+Secondly this results show how an \ac{mcs} can be used to exhibit strategy
+behaviours. This upwards shift of the \ac{ci} shows that ASAP, a strategy
+geared towards reducing the makespan regardless of cost, is not as effective
+when scheduling bag-of-tasks in environments where job runtimes might vary
+widely. By testing Montage in the same way (third subfigure) we see that when
+scheduling workflows this behaviour does not happen to the same extent. The
+average makespan still rises, but not as fast as the interval grows, the \ac{ci}
+at a 40\% perturbation level is a superset of the one at a 10\% perturbation
+level. In the case of ASAP these behaviour could probably have been predicted by
+closely examining the code of the scheduling strategy. Both the makespans upward
+slide and its relative resilience when scheduling workflow instead of
+bags-of-tasks are trivial consequences of its code. But this analysis does not
+require foreknowledge of the scheduling strategies internals, other obviously
+than having it coded in the simulation, and therefore \ac{mcs} can be used to
+study or intuit the behaviour of complex scheduling strategies and test their
+consistence in various environment 
 
 
 \subsection{Advantages and limitations of the enriched simulation}\label{sec:lim}
