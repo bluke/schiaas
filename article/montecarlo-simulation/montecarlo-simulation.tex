@@ -666,29 +666,27 @@ and of our strategies' biases.
 \subsection{Input Modeling}\label{sec:im}
 
 The testing of our enriched simulation framework requires us to build input
-\acp{rv} for every job of OMSSA and Montage, in a way that is representative of
+\acp{rv}s for every job of OMSSA and Montage, in a way that is representative of
 the distribution of runtimes observed in the execution traces.
 
 The existence of a backlog of real execution traces would allows us to do so with
 reasonable precision, but in real simulation use-cases where having such traces
-is unlikely building such a model would require a deep understanding of the jobs
+is unlikely, building such a model would require a deep understanding of the
 computations, communication, and of the underlying cloud. Such knowledge is
 rarely available and estimated runtimes are seldom more than a educated guess.
 
-Hence we aimed to build or job \ac{rv} in such a way that they precise enough
-that the simulation can be expected to produce representative results while
-still being simple enough that a knowledgeable user can be expected to produce
-it without needing the benefit of hindsight we have.
-
-User will usually express uncertainties as a range around what they perceive is
-an average value. To match this expression we construct our job runtime model as
-a uniform distribution interval centered around the average runtime of the job
-modeled. The half-width of the interval is expressed relative to the average
-runtime as a percentage. We call this percentage the perturbation level en
-denote it $P$. As such $t_j$ the drawn time of job $j$ can be written as : 
+Hence we aim to build jobs' \ac{rv}s in  such a way that they are precise enough
+for the simulation  to produce representative results while  being simple enough
+for a knowledgeable user to express without needing the hindsight we have.  User
+will usually express uncertainties as a range around what they perceive to be an
+average value. To match this expression, we construct our job runtime model as a
+uniform distribution interval centered around the average runtime of the modeled
+job. The half-width of the interval is expressed relative to the average runtime
+as a  percentage. We call this  percentage the perturbation level  and denote it
+$P$. As such $t_j$, the drawn time of job $j$, can be written as :
 
 \begin{equation}
-	t_j = \bar{R_j} * (1 + p)
+	t_j = \bar{R_j} \cdot (1 + p)
 	\label{eq:t}
 \end{equation}
 \begin{equation}
@@ -696,14 +694,14 @@ denote it $P$. As such $t_j$ the drawn time of job $j$ can be written as :
 	\label{eq:r}
 \end{equation}
 
-With $R_j$ the set of runtime observations for job $j$ in \eqref{eq:t} and
+with $\bar{R_j}$ the set of runtime observations for job $j$ in \eqref{eq:t} and
 $\mathcal{U}$ an uniform distribution in \eqref{eq:r}.  
 
-We expect the average user would not estimate perturbation levels on a job per
-job basis. Therefore we elect to compute as single Perturbation level per
-application/strategy group. We obtain the perturbation level by averaging the
-worst observed deviation from the mean for every job in the application.
-Formally expressed as :
+We expect the average  user would not estimate perturbation levels  on a job per
+job  basis. Therefore  we choose  to compute  as single  perturbation level  per
+application/strategy group.  We obtain the  perturbation level by  averaging the
+worst  observed deviation  from  the  mean for  every  job  in the  application,
+formally expressed as :
 
 \begin{equation}
 P = \underset{i}{\textrm{mean}}(\delta{}_j)
@@ -767,7 +765,7 @@ P = \underset{i}{\textrm{mean}}(\delta{}_i)
 with $R_i^n$ the observed effective runtime for job $i$ during execution $n$. 
 \end{comment}
 
-For OMSSA, the perturbation level given by this methods is roughly 10\% for both
+For OMSSA, the perturbation level given by this method is roughly 10\% for both
 strategies. For Montage  our calculated perturbation level is  20\% when looking
 at ASAP  executions and  5\% when  looking at AFAP  executions. We  believe this
 difference can be partially  explained by the low number of  montage runs in the
@@ -778,16 +776,16 @@ perturbation level.
 \section{Evaluation}
 \label{sec:eval}
 
-We ran 500 iteration \acp{mcs} for all for strategy/application group using the
+We ran 500 iterations \acp{mcs} for all strategy/application group using the
 job models described in the previous section. The resulting distribution are
 shown in figure~\ref{fig:fit}. The makespan density graphs show the simulation
 result distribution as filled curves and the real observed executions, taken
 from fig.~\ref{fig:realbrs}, as simple curves. On the \ac{btu} count graphs
 real observed \ac{btu} counts appear in left columns and simulation result
 distribution are in the right. Each graph shows for both strategy the
-distribution of a specific metric for a given applications.
+distribution of a specific metric for a given application.
 
-When OMSSA results distribution, the first to graphs. The distribution of
+\textbf{FIXME: When OMSSA results distribution, the first to graphs}. The distribution of
 simulated makespan has good coverage, that is the simulated makespan range
 covers fairly well the range of observed makespans. But simulated distribution
 does not appear to show the skewness observed in real runs. Simulated makespan
@@ -798,13 +796,14 @@ executions. Looking at the OMSSA BTU count distributions offers similar results.
 In the AFAP case both real observation and simulated results indicate between 33
 and 36 BTU are required for an execution, but the simulated distribution does
 not share the real observation skewness towards lower values. The ASAP strategy
-shows a very stable BTU count which is match perfectly by the simulation.
+shows a very stable BTU count which is perfectly matched by the simulation.
 
 To provide a more quantitative approach when discussing makespan distribution we
-decide to fit simulated distribution to a normal distribution. This will allow
-us to build confidence intervals that can be checked against real observation.
+decide to fit simulated distribution to a normal distribution. This allows us 
+to build confidence intervals that can be checked against real observations.
 Since the makespan is in essence the sum of the runtimes of the jobs in that
-executions critical path, and job all distributed using the uniform all which has
+executions critical path, and job all distributed using the uniform \texbf{FIXME
+  : law?} all which has
 a finite variance, we consider the Central Limit Theorem to be applicable. Hence
 our choice to fit the simulated distribution to a normal law. The fitting
 process gives us an average makespan $\mu{}$, and a standard deviation
@@ -830,15 +829,15 @@ distribution is defined as $[\mu{}-2\sigma{},\mu{}+2\sigma{}]$ and the 99\%
 	\end{tabular}
 \end{table}
 
-Table~\ref{tab:fit} presents that capture rate obtained by each interval
+Table~\ref{tab:fit} presents the capture rate obtained by each interval
 computed after normal fitting. The capture rate expresses the number of observed
-real makespan fall withing a given \ac{ci} relative to the total number of real
-observation. Since improving the capture rate is always possible at the cost of
+real makespans that fall withing a given \ac{ci} relative to the total number of real
+observations. Since improving the capture rate is always possible at the cost of
 enlarging the \ac{ci} and therefore diminishing it's relevance, we provide for
 each interval its size relative to the average makespan. 
 
-Still on OMSSA we can see that our normal fitting in not perfect our \acp{ci}
-appear of by 5\% with the 95\% \ac{ci} capturing only 90\% real observations.
+Still, on OMSSA we can see that our normal fitting in not perfect as our \acp{ci}
+appears of by 5\% with the 95\% \ac{ci} capturing only 90\% real observations.
 This result can be greatly improved upon using a 99\% \ac{ci} which managed to
 capture 98\% of real observations.
 
@@ -846,18 +845,20 @@ Simulating Montage with the computed perturbation levels, as discussed in
 section~\ref{sec:im} 20\% when using ASAP and 5\% with AFAP, we obtained 100\%
 capture rate. The results displayed in the figure~\ref{fig:fit} and
 table~\ref{tab:fit} are for simulations done with the 10\% perturbation level.   
-Here again the graph show great coverage. Distribution can not be significantly
+Here again the graph shows great coverage. Distribution can not be significantly
 tested due to the lackluster number of real runs. The quantitative approach
 confirms our observation. The low number of evaluation limits our ability to
-have a good look at distribution, but the platform on which these experiment
-where run does not exist at this time preventing us from obtaining new real
-executions. We kept this limited Montage run as to check that the results
+have a good look at distribution, but the platform on which these experiments
+were run does not exist at this time preventing us from obtaining new real
+executions \textbf{FIXME: bien réfléchir si on ne se tire pas une balle dans le
+  pied}.
+ We kept this limited Montage run as to check that the results
 obtained with OMSSA would not completely fail with an application with strong
 dependencies. These results give confidence that our method is extendable to
 workflow type applications.  
 
 Improving the \ac{mcs} results would require better inputs models and a better
-characterisation of the results less reliant on the normal distribution which
+characterization of the results less reliant on the normal distribution which
 cannot reflect skewness. Although such improvements would be possible in this
 experiment, this is only the case because we work with the benefit of hindsight.
 We believe that our model is representative of what a knowledgeable user could
