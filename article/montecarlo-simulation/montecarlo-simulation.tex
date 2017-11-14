@@ -322,6 +322,7 @@ they would based on their jobs runtimes by having dynamical scheduling
 integrated inside the simulator. In this paper we will try to use Monte Carlo
 methods to enrich a cloud broking simulator.
 
+\textbf{FIXME: pas de biblio sur ElasticSim \cite{cai16}}
 
 \section{Work Context}
 \label{sec:work-context}
@@ -334,7 +335,7 @@ commonalities  as   possible~\cite{PucherGWK15}.   We  describe   hereafter  our
 experimental setup.  It consists of two  test applications which are  run on one
 side, on a real platform with our scheduler Schlouder and on the other side, are
 simulated  with   our  simulator  SimSchlouder   based  on  SimGrid.    The  two
-environments are sketched side by side on~Figure \ref{fig:rs}.
+environments are sketched side by side on Figure~\ref{fig:rs}.
 
 \subsection{Test Applications}\label{sc:setup}
 
@@ -690,21 +691,24 @@ and denote it $P$. As such $t_j$, the drawn time of job $j$, can be written as :
 	\label{eq:t}
 \end{equation}
 \begin{equation}
+	\bar{R_j} = \underset{n}{\textrm{mean}}\{r_j^n\}
+\end{equation}
+\begin{equation}
 	p = \mathcal{U}(-P,+P)
 	\label{eq:r}
 \end{equation}
 
-with $\bar{R_j}$ the set of runtime observations for job $j$ in \eqref{eq:t} and
-$\mathcal{U}$ an uniform distribution in \eqref{eq:r}.  
+where $r_j^n$ is the $n$th runtime observation for job $j$, $\bar{R_j}$ is the
+average of all observed runtimes, and $\mathcal{U}$ an uniform distribution.
 
 We expect the average  user would not estimate perturbation levels  on a job per
 job  basis. Therefore  we choose  to compute  as single  perturbation level  per
-application/strategy group.  We obtain the  perturbation level by  averaging the
+application-strategy combination.  We obtain the  perturbation level by  averaging the
 worst  observed deviation  from  the  mean for  every  job  in the  application,
 formally expressed as :
 
 \begin{equation}
-P = \underset{i}{\textrm{mean}}(\delta{}_j)
+P = \textrm{mean}(\delta{}_j)
 \label{eq:P}
 \end{equation}
 \begin{equation}
@@ -712,11 +716,6 @@ P = \underset{i}{\textrm{mean}}(\delta{}_j)
 \max_n\left(\frac{r_j^n-\bar{R_j}}{\bar{R_j}}\right)
 \label{eq:d}
 \end{equation}
-
-In equations \eqref{eq:P}\eqref{eq:d}, $j$ denotes a given job, $R_j$ the set of real
-observation for this job, and $r_j^n$ the $n$th observation of this job.
-\textbf{FIXME: et $\bar{R_j}$ c'est quoi ?}
-
 
 \begin{comment}
 Core  to the  \acl{mcs} is  the accuracy  of our  job runtimes  inputs. Given  a
@@ -777,40 +776,40 @@ perturbation level.
 \section{Evaluation}
 \label{sec:eval}
 
-We ran 500 iterations \acp{mcs} for all strategy/application group using the
-job models described in the previous section. The resulting distribution are
+We ran 500 iterations \acp{mcs} for all strategy-application combinations using
+the job models described in the previous section. The resulting distribution are
 shown in figure~\ref{fig:fit}. The makespan density graphs show the simulation
 result distribution as filled curves and the real observed executions, taken
-from fig.~\ref{fig:realbrs}, as simple curves. On the \ac{btu} count graphs
-real observed \ac{btu} counts appear in left columns and simulation result
+from fig.~\ref{fig:realbrs}, as simple curves. On the \ac{btu} count graphs real
+observed \ac{btu} counts appear in left columns and simulation result
 distribution are in the right. Each graph shows for both strategy the
 distribution of a specific metric for a given application.
 
-\textbf{FIXME: When OMSSA results distribution, the first to graphs}. The distribution of
-simulated makespan has good coverage, that is the simulated makespan range
-covers fairly well the range of observed makespans. But simulated distribution
-does not appear to show the skewness observed in real runs. Simulated makespan
-distributions appear mostly symmetrical whereas the observed makespan
-distributions are not. This is a consequence of our input model, in which job 
-distributions are also symmetrical when this was not the case in real
-executions. Looking at the OMSSA BTU count distributions offers similar results.
-In the AFAP case both real observation and simulated results indicate between 33
-and 36 BTU are required for an execution, but the simulated distribution does
-not share the real observation skewness towards lower values. The ASAP strategy
-shows a very stable BTU count which is perfectly matched by the simulation.
+When looking at the resulting OMSSA distributions, presented in the first two
+graphs, the distribution of simulated makespan has good coverage, that is the
+simulated makespan range covers fairly well the range of observed makespans. But
+simulated distribution does not appear to show the skewness observed in real
+runs. Simulated makespan distributions appear mostly symmetrical whereas the
+observed makespan distributions are not. This is a consequence of our input
+model, in which job distributions are also symmetrical when this was not the
+case in real executions. Looking at the OMSSA BTU count distributions offers
+similar results.  In the AFAP case both real observation and simulated results
+indicate between 33 and 36 BTU are required for an execution, but the simulated
+distribution does not share the real observation skewness towards lower values.
+The ASAP strategy shows a very stable BTU count which is perfectly matched by
+the simulation.
 
 To provide a more quantitative approach when discussing makespan distribution we
-decide to fit simulated distribution to a normal distribution. This allows us 
-to build confidence intervals that can be checked against real observations.
-Since the makespan is in essence the sum of the runtimes of the jobs in that
-executions critical path, and job all distributed using the uniform \texbf{FIXME
-  : law?} all which has
-a finite variance, we consider the Central Limit Theorem to be applicable. Hence
-our choice to fit the simulated distribution to a normal law. The fitting
-process gives us an average makespan $\mu{}$, and a standard deviation
-$\sigma{}$. This allows to build \acp{ci}. The 95\% \ac{ci} of the normal
-distribution is defined as $[\mu{}-2\sigma{},\mu{}+2\sigma{}]$ and the 99\%
-\ac{ci} is $[\mu{}-3\sigma{},\mu{}+3\sigma{}]$.
+decide to fit simulated distribution to a normal distribution. This allows us to
+build confidence intervals that can be checked against real observations.  Since
+the makespan is in essence the sum of the runtimes of the jobs in that
+executions critical path, and job are all distributed using the uniform
+distribution which has a finite variance, we consider the Central Limit Theorem
+to be applicable. Hence our choice to fit the simulated distribution to a normal
+distribution. The fitting process gives us an average makespan $\mu{}$, and a
+standard deviation $\sigma{}$. This allows to build \acp{ci}. The 95\% \ac{ci}
+of the normal distribution is defined as $[\mu{}-2\sigma{},\mu{}+2\sigma{}]$ and
+the 99\% \ac{ci} is $[\mu{}-3\sigma{},\mu{}+3\sigma{}]$.
 
 \begin{table}
 	\centering
@@ -1043,7 +1042,6 @@ deadline or cost.
 
 
 
-\textbf{FIXME: pas de biblio sur ElasticSim, ratio ref internes sur externes élevé}
 
 \bibliographystyle{IEEEtran}
 \bibliography{montecarlo-simulation}
