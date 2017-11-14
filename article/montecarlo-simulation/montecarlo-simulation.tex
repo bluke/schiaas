@@ -249,12 +249,20 @@ the precision  of the model to  the wanted accuracy/speed trade-off.
 Table~\ref{tab:simcmp} gives an overview of the capabilities and models of
 commons cloud simulators. 
 
-In the context  of cloud computing, memory and network contention, virtualization
-overhead, and over-provisioning, make application runtimes difficult to predict
-and variable from one execution to the other. Discrete event simulators are
-deterministic in nature and not well equipped to deal with such cases, where
+In the context of cloud computing, memory and network contention, virtualization
+overhead, and over-provisioning, make  application runtimes difficult to predict
+and variable  from one  execution to  the other.  Discrete event  simulators are
+deterministic in  nature and not  well equipped to  deal with such  cases, where
 stochastic simulations are much more appropriate.
 
+Predicting the  makespan of a task  graph, which requires to  compute a schedule
+based  on   stochastic  tasks  durations   has  been  early  studied   for  PERT
+networks~\cite{Slyke63},  and  applied  in  the recent  years  to  heterogeneous
+distributed  computing environments.   For  example,  Tang et  al.~\cite{Tang11}
+propose a modification of the well-known  scheduling heuristic HEFT to compute a
+schedule yielding the shortest makespan  given randomly variable task durations.
+However,  to go  one  step further  we  need  to analyze  the  variability in  a
+comprehensive manner, which is achieved through the Monte-Carlo method.
 
 \subsection{Monte-Carlo Method}
 
@@ -268,7 +276,7 @@ be assigned it's respective \ac{rv} representing its possible runtimes. The
 result would be an \ac{rv} representing the possible durations needed for the
 execution of the whole \ac{dag}, called makespan. An \ac{rv} is defined by its
 \ac{pdf} and \ac{cdf}, where the \ac{cdf} is obtain by integrating the \ac{pdf}.
-Works on heterogeneous grids\cite{Li97} and PERT networks\cite{Ludwig01} show
+Works on heterogeneous grids~\cite{Li97} and PERT networks~\cite{Ludwig01} show
 that, when tasks runtimes are independent the makespan of successive tasks is a
 convolution product of the individual tasks \acp{rv}, whereas the makespan of
 parallel tasks joining is the product of the tasks respective \ac{cdf}. This
@@ -306,16 +314,32 @@ distribution of the simulations results will tend towards the distribution of
 the equivalent stochastic simulation.  Statistical fitting techniques can then
 be used to characterize this makespan \ac{rv}.
 
-The figure~\ref{fig:mc-process} presents schematically a \ac{mcs} of a $n$ job
-workflow. The input of the simulation is a set of $n$ \acp{rv} each
-corresponding to a given job, denoted by indices. A realisation is
-a set of $n$ runtimes that where drawn according to each jobs respective
-\ac{rv}. Each of this realisation is simulated independently,
-providing a makespan sample. Finally the sample are aggregated in the final
-distribution.
+The figure~\ref{fig:mc-process} presents  schematically a \ac{mcs} of  a $n$ job
+workflow.  The  input  of  the  simulation   is  a  set  of  $n$  \acp{rv}  each
+corresponding to a given job, denoted by  indices. A realization is a set of $n$
+runtimes that  where drawn according  to each  jobs respective \ac{rv}.  Each of
+this   realisation   is   simulated    independently,   providing   a   makespan
+sample. Finally the sample are aggregated in the final distribution.
 
-Such approach has already been used in the context of stochastic
-PERT~\cite{Slyke63}, and comparison of \ac{dag} schedules\cite{Canon10,Zheng13}.
+The development  of heterogeneous distributed computing  environments, grids and
+now clouds, has led researchers to apply  \ac{mcs} in this field.  It is used in
+the  context  of grids,  where  the  number of  resources  is  fixed during  one
+execution,  by  Canon~\cite{Canon10}  to  evaluate the  robustness  of  \ac{dag}
+schedules when task durations vary, and similarly by Zheng et al.~\cite{Zheng13}
+to  evaluate  the  impact  of  this variability  on  makespan.   More  recently,
+ElasticSim~\cite{Cai17} as  been proposed as  a simulator extending  Cloudsim to
+integrate resource auto-scaling and stochastic  task durations. Similarly to our
+work, Elasticsim computes a schedule whose  objective is to minimize rental cost
+excepted  that they  impose deadline  constraints. The  study evaluates  how the
+rental cost and makespan change depending on the variability of task duration
+and deadline, for which some arbitrary values have been chosen to bound
+the statistical distribution used to draw random values. This differs 
+from our own work in that 
+
+\newline
+(FIXME: joindre les 2 paragraphes)
+\newline
+
 This approach allows us to sidestep intense numerical resolution by simply
 repeating simpler deterministic simulations and have realizations scheduled as
 they would based on their jobs runtimes by having dynamical scheduling
