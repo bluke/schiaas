@@ -981,50 +981,36 @@ consistence in various environment
 
 \subsection{Advantages and limitations of the enriched simulation}\label{sec:lim}
 
-Thanks to our backlog of executions, we were able to build a trustworthy model
-of how the applications behaved on our platform. Our ability to check repeatedly
-our simulation against reality has allowed us to test multiple ways to model 
-our inputs and multiple options on what to simulate. 
+In this section we discuss parameters that one might want to account for when
+using an \ac{mcs}. At these points in time we have not yet studied how they
+influence the \ac{mcs} or its result but are looking on to evaluate them in
+future works.
 
-First we found that  for our purposes the \ac{mcs} did  not require thousands of
-deterministic simulations to  be successful. When used in other  domains such as
-physics \acp{mcs} are often used with up from 20\,000 deterministic simulations,
-but  the size  of the  input  distribution is  usually much  larger. The  result
-presented  in this  paper were obtained using  500 simulations per \ac{mcs}.  By
-keeping  the results  of the  individual simulations  ordered, we  were able  to
-determine  that by  the hundredth  simulation the  average makespan  was already
-precise to the second, with its value hardly changing by the addition of the 400
-next  simulations. The  standard  deviation used  to compute  the  width of  the
-makespan interval was less stable, but still showed strongly diminishing returns
-past the 100th simulation mark.
+In this article the only variable parameter is jobs runtimes. As such these
+runtimes coalesce all sources of variability, change in available CPU time,
+network or memory contention and application inherent variability. We did so
+because this approach is closer to a cloud broker user scenario and  the
+execution traces we had did not allow for us to separate in convincing way these
+different variability. In circumstance where one is able to measure variability
+on CPU power or network speed it is possible to add those variable as input of
+the \ac{mcs}. In this case a realisation would draw not only each jobs size (in
+op/flop) but also a platform with different CPU powers and network speed.
+\acp{mcs} allow to fuse these different variability effortlessly, but it will
+require more iterations. 
 
-As discussed in Section~\ref{sec:MCS}, \aclp{mcs} replace a stochastic
-simulation by repeated execution of deterministic simulations of the same
-phenomenon on random samples of the possible inputs. It is critical that the
-operator inputs to the simulation be correct within the deterministic simulations.
-This includes for example the correct simulation of boot times, and correct
-reimplementation of strategies. Ideally, the deterministic simulator is able to
-properly reproduce real runs when fed with all the relevant information. In cases
-where some external parameter is also unstable or unpredictable, it can also be
-made part of the \ac{mcs} to be randomly drawn at each iteration.
-
-Increasing the perturbation level will not always increase the prediction's
-capture rate. To illustrate this we added the intervals of observed real
-makespans to the relevant graphs in Figure~\ref{fig:int}. On the OMSSA/ASAP
-makespan interval graph we can see that as the perturbation level gets higher
-the enriched simulation resulting interval wider, but not as fast as the
-average makespan gets higher. This leads to a lower capture rate with the 40\%
-perturbation level, 83\% capture, than with 10\% perturbation level 90\%,
-despite presenting a much wider interval. In reality the perturbation level of
-our system is not close to 40\%, therefore a \ac{mcs} with this level of
-perturbation can not be a good predictor of reality. Such a simulation would be
-a predictor of an alternate reality where this level of perturbation exists. As
-mentioned in Section~\ref{sec:pq}, trade-off between the capture rate and
-makespan interval is still possible by using a different confidence
-interval after fitting the simulated makespan to a Normal distribution.
-
-
-
+In this paper all the \ac{mcs} presented used 500 iterations, that is 500
+different runs of our \ac{des}. We determined that this was enough in the
+context of our simulation as additional simulation did not change the results
+and only marginally increased the confidence of the fitting process. The number
+of simulation necessary in an \ac{mcs} depends on the number of input variables
+and the distribution of these variables. \aclp{mcs} work by sampling the possible
+scenarios to get a distribution of possible. As such the more scenarios are
+possible the more samples are required. In our cases not only the number of jobs
+was low, 223 jobs for OMSSA and 184 jobs for Montage, but with a 10\%
+perturbation level the input variable distribution was compact. At a 40\%
+perturbation level there was a significant drop in the confidence of our fitting
+method. We are currently are method to determine the number of necessary
+iterations.
 
 \section{Conclusion}
 
