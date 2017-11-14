@@ -666,7 +666,7 @@ and of our strategies' biases.
 \subsection{Input Modeling}\label{sec:im}
 
 The testing of our enriched simulation framework requires us to build input
-\acp{rv}s for every job of OMSSA and Montage, in a way that is representative of
+\acp{rv} for every job of OMSSA and Montage, in a way that is representative of
 the distribution of runtimes observed in the execution traces.
 
 The existence of a backlog of real execution traces would allows us to do so with
@@ -675,15 +675,15 @@ is unlikely, building such a model would require a deep understanding of the
 computations, communication, and of the underlying cloud. Such knowledge is
 rarely available and estimated runtimes are seldom more than a educated guess.
 
-Hence we aim to build jobs' \ac{rv}s in  such a way that they are precise enough
+Hence we aim to build jobs' \acp{rv} in  such a way that they are precise enough
 for the simulation  to produce representative results while  being simple enough
-for a knowledgeable user to express without needing the hindsight we have.  User
-will usually express uncertainties as a range around what they perceive to be an
-average value. To match this expression, we construct our job runtime model as a
-uniform distribution interval centered around the average runtime of the modeled
-job. The half-width of the interval is expressed relative to the average runtime
-as a  percentage. We call this  percentage the perturbation level  and denote it
-$P$. As such $t_j$, the drawn time of job $j$, can be written as :
+for  a knowledgeable  user to  express without  needing the  hindsight we  have.
+Users will usually express uncertainties as a range around what they perceive to
+be an  average value.  To match  this expression, we  construct our  job runtime
+model as a uniform distribution interval  centered around the average runtime of
+the modeled  job. The half-width  of the interval  is expressed relative  to the
+average runtime as a percentage. We  call this percentage the perturbation level
+and denote it $P$. As such $t_j$, the drawn time of job $j$, can be written as :
 
 \begin{equation}
 	t_j = \bar{R_j} \cdot (1 + p)
@@ -713,8 +713,9 @@ P = \underset{i}{\textrm{mean}}(\delta{}_j)
 \label{eq:d}
 \end{equation}
 
-In equations \eqref{eq:P}\eqref{eq:d}, $j$ denote a given job, $R_j$ the set of real
+In equations \eqref{eq:P}\eqref{eq:d}, $j$ denotes a given job, $R_j$ the set of real
 observation for this job, and $r_j^n$ the $n$th observation of this job.
+\textbf{FIXME: et $\bar{R_j}$ c'est quoi ?}
 
 
 \begin{comment}
@@ -941,7 +942,7 @@ without any random element has been added.  Comparing the interval of perturbed
 simulation to this unperturbed simulation allows us to better see the effect of
 perturbation on the strategy. In the middle row of these subfigures, are
 presented for reference the interval spanning the minimum and maximum observed
-real makespans over all runs. These \ac{ci} subfigures only presents ASAP
+real makespans over all runs. These \ac{ci} subfigures only present ASAP
 strategy whereas the BTU distribution subfigures  present both strategies.
 
 The first subfigure presenting the \acp{ci} for OMSSA using the ASAP strategy at
@@ -949,19 +950,19 @@ The first subfigure presenting the \acp{ci} for OMSSA using the ASAP strategy at
 the intervals naturally get wider, but the average makespan, by definition the
 center of the capture interval, also gets higher. On OMSSA this happens to the
 extent that the lower bound of our interval at 40\% is higher than the lower
-bound at 10\%. This impacts the capture rate of the simulation form 90\%
+bound at 10\%. This impacts the capture rate of the simulation from 90\%
 (table~\ref{tab:fit}) to 83\% all the while bringing the width of the interval
 relative to the average value to 10\% (almost 24 minutes) up from 3\% (7 minutes).
 
-This results is two-fold. First this demonstrate that the perturbation level can
+This result is two-fold. First this demonstrates that the perturbation level can
 not be used as a trade-off variable to augment capture rate at the expense of
 \ac{ci} compacity. The lower capture rate at a 40\% perturbation level is a
 strong indication that our real platform exhibits a variability closer to
 10\% than to 40\%. People for whom higher capture rates are more important than
-interval compacity should you statistical methods to build higher rate \acp{ci},
+interval compacity should use statistical methods to build higher rate \acp{ci},
 like in our case the 99\% normal distribution \ac{ci}.
 
-Secondly this results show how an \ac{mcs} can be used to exhibit strategy
+Secondly this result shows how an \ac{mcs} can be used to exhibit strategy
 behaviours. This upwards shift of the \ac{ci} shows that ASAP, a strategy
 geared towards reducing the makespan regardless of cost, is not as effective
 when scheduling bag-of-tasks in environments where job runtimes might vary
@@ -969,7 +970,7 @@ widely. By testing Montage in the same way (third subfigure) we see that when
 scheduling workflows this behaviour does not happen to the same extent. The
 average makespan still rises, but not as fast as the interval grows, the \ac{ci}
 at a 40\% perturbation level is a superset of the one at a 10\% perturbation
-level. In the case of ASAP these behaviour could probably have been predicted by
+level. In the case of ASAP this behaviour could probably have been predicted by
 closely examining the code of the scheduling strategy. Both the makespans upward
 slide and its relative resilience when scheduling workflow instead of
 bags-of-tasks are trivial consequences of its code. But this analysis does not
@@ -986,19 +987,19 @@ of how the applications behaved on our platform. Our ability to check repeatedly
 our simulation against reality has allowed us to test multiple ways to model 
 our inputs and multiple options on what to simulate. 
 
-First we found that  for our purposes the \ac{mcs} did  not require thousands of
-deterministic simulations to  be successful. When used in other  domains such as
-physics \acp{mcs} are often used with up from 20\,000 deterministic simulations,
-but  the size  of the  input  distribution is  usually much  larger. The  result
-presented  in this  paper were obtained using  500 simulations per \ac{mcs}.  By
-keeping  the results  of the  individual simulations  ordered, we  were able  to
-determine  that by  the hundredth  simulation the  average makespan  was already
-precise to the second, with its value hardly changing by the addition of the 400
-next  simulations. The  standard  deviation used  to compute  the  width of  the
-makespan interval was less stable, but still showed strongly diminishing returns
-past the 100th simulation mark.
+First we  found that for  our purposes the  \ac{mcs} only requires  a relatively
+small number of  deterministic simulations to be successful. When  used in other
+domains  such  as  physics  \acp{mcs}  are  often  used  with  up  from  20\,000
+deterministic simulations,  but the  size of the  input distribution  is usually
+much  larger.  The  result  presented  in this  paper  are  obtained  using  500
+simulations per \ac{mcs}.  By keeping  the results of the individual simulations
+ordered, we are  able to determine that by the  hundredth simulation the average
+makespan is  already precise to the  second, with its value  hardly changing by
+the addition of the 400 next simulations. The standard deviation used to compute
+the width  of the makespan interval is less stable, but  still strongly shows
+diminishing returns past the 100th simulation mark.
 
-As discussed in Section~\ref{sec:MCS}, \aclp{mcs} replace a stochastic
+As discussed in Section~\ref{sec:MCS}, \aclp{mcs} replaces a stochastic
 simulation by repeated execution of deterministic simulations of the same
 phenomenon on random samples of the possible inputs. It is critical that the
 operator inputs to the simulation be correct within the deterministic simulations.
@@ -1021,13 +1022,12 @@ perturbation can not be a good predictor of reality. Such a simulation would be
 a predictor of an alternate reality where this level of perturbation exists. As
 mentioned in Section~\ref{sec:pq}, trade-off between the capture rate and
 makespan interval is still possible by using a different confidence
-interval after fitting the simulated makespan to a Normal distribution.
+interval after fitting the simulated makespan to a normal distribution.
 
 
 
 
 \section{Conclusion}
-
 Predicting  the execution  behavior  of complex  workloads in  the  cloud is  an
 important challenge. While a number of research works have proposed model-driven
 simulators, much remains to be done for their adoption in production-grade cloud
@@ -1055,8 +1055,14 @@ robustness, that is, its ability to satisfy predetermined constraints in terms o
 deadline or cost.
 
 
+
+
+\textbf{FIXME: pas de biblio sur ElasticSim, ratio ref internes sur externes élevé}
+
 \bibliographystyle{IEEEtran}
 \bibliography{montecarlo-simulation}
+
+
 
 \newpage
 
