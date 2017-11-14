@@ -315,11 +315,16 @@ the equivalent stochastic simulation.  Statistical fitting techniques can then
 be used to characterize this makespan \ac{rv}.
 
 The figure~\ref{fig:mc-process} presents  schematically a \ac{mcs} of  a $n$ job
-workflow.  The  input  of  the  simulation   is  a  set  of  $n$  \acp{rv}  each
+workflow.   The  input  of  the  simulation  is  a  set  of  $n$  \acp{rv}  each
 corresponding to a given job, denoted by  indices. A realization is a set of $n$
-runtimes that  where drawn according  to each  jobs respective \ac{rv}.  Each of
+runtimes that  where drawn according to  each jobs respective \ac{rv}.   Each of
 this   realisation   is   simulated    independently,   providing   a   makespan
-sample. Finally the sample are aggregated in the final distribution.
+sample.  Finally the  sample  are  aggregated in  the  final distribution.  This
+approach enables  to sidestep intense  numerical resolution by  simply repeating
+simpler deterministic simulations and have  realizations scheduled as they would
+based on  their jobs runtimes  by having dynamical scheduling  integrated inside
+the simulator. 
+
 
 The development  of heterogeneous distributed computing  environments, grids and
 now clouds, has led researchers to apply  \ac{mcs} in this field.  It is used in
@@ -331,22 +336,15 @@ ElasticSim~\cite{Cai17} as  been proposed as  a simulator extending  Cloudsim to
 integrate resource auto-scaling and stochastic  task durations. Similarly to our
 work, Elasticsim computes a schedule whose  objective is to minimize rental cost
 excepted  that they  impose deadline  constraints. The  study evaluates  how the
-rental cost and makespan change depending on the variability of task duration
-and deadline, for which some arbitrary values have been chosen to bound
-the statistical distribution used to draw random values. This differs 
-from our own work in that 
+rental cost  and makespan change depending  on the variability of  task duration
+and deadline,  for which some deviation  ranges have been arbitrarily  chosen to
+bound the statistical distribution used to draw random values. This differs from
+our own work in that we infer  the deviation ranges from actual execution traces
+and  check how  the makespan  \ac{rv}  covers actual  observations, while  their
+experiments  compare the  stochastic  schedules against  a  simulation based  on
+generated workflows.
 
-\newline
-(FIXME: joindre les 2 paragraphes)
-\newline
 
-This approach allows us to sidestep intense numerical resolution by simply
-repeating simpler deterministic simulations and have realizations scheduled as
-they would based on their jobs runtimes by having dynamical scheduling
-integrated inside the simulator. In this paper we will try to use Monte Carlo
-methods to enrich a cloud broking simulator.
-
-\textbf{FIXME: pas de biblio sur ElasticSim \cite{cai16}}
 
 \section{Work Context}
 \label{sec:work-context}
