@@ -299,7 +299,7 @@ after another.
 		\input{gfx/mc-process.tex}
 		}
 \caption{Overview of a Monte-Carlo simulation~: $500$ realizations are generated
-by drawing runtimes for each of the $n$ jobs provided RVs, every realisation is
+by drawing runtimes for each of the $n$ jobs provided RVs, every realization is
 then simulated, the resulting makespan samples are fitted into the final
 result.}\label{fig:mc-process}
 \end{figure}
@@ -318,7 +318,7 @@ The figure~\ref{fig:mc-process} presents  schematically a \ac{mcs} of  a $n$ job
 workflow.  The  input  of  the  simulation   is  a  set  of  $n$  \acp{rv}  each
 corresponding to a given job, denoted by  indices. A realization is a set of $n$
 runtimes that  where drawn according  to each  jobs respective \ac{rv}.  Each of
-this   realisation   is   simulated    independently,   providing   a   makespan
+this   realization   is   simulated    independently,   providing   a   makespan
 sample. Finally the sample are aggregated in the final distribution.
 
 The development  of heterogeneous distributed computing  environments, grids and
@@ -545,8 +545,8 @@ complex computation of the numerical results of a stochastic would be
 impossible.
 
 In this section we will first discuss the particularities of the Monte Carlo
-Simulation. Then we will review how we hope to test the validity of such an
-approach to simulation. At last we will explore the steps taken to model the
+Simulation. Then we present the real run we use as a reference point for this
+experiment. At last we will explore the steps taken to model the
 input \acp{rv} representing the jobs runtimes.
 
 \subsection{Simulation Process}
@@ -638,7 +638,9 @@ number of observations in  those groups is uneven due to  the changing nature of
 the    experimental   conditions    in   which    the   runs    were   executed.
 Table~\ref{tab:nbruns}  presents  an  overview   of  the  selected  sets,  while
 Figure~\ref{fig:realbrs} presents the distribution of resulting makespans and
-\ac{btu} counts observed depending on application and scheduling strategy.
+\ac{btu} counts observed depending on application and scheduling strategy. These
+figures show that even in our platform we observe significant makespan
+variability.
 
 \begin{table} \centering \caption{Overview of archived
 	executions}\label{tab:nbruns} 
@@ -654,30 +656,6 @@ Figure~\ref{fig:realbrs} presents the distribution of resulting makespans and
 	\end{tabular} 
 \end{table}
 
-
-
-\begin{comment}
-These figures expose the  behaviour
-exhibited  by the different strategies. ASAP  appears to finish faster in the
-most cases and AFAP is less costly. But  these optimizations come at the cost
-of instability on the dimension they  aim to  optimize. ASAP uses  a high number
-of \ac{btu}s  but this number is stable, whereas AFAP uses a lower number of
-\ac{btu}s  but this number of \ac{btu}s is  more variable.  When looking at the
-makespan, we take note of how the different strategies affect the skewness of
-the overall distribution. The  positive skew seen on  ASAP suggests that even
-though  the strategy globally produces  shorter makespan, perturbations are more
-likely  to extend the makespan, whereas AFAP  makespans are more spread out and
-skews negatively.
-
-All the behaviours discussed in this section are due to the specifics of the
-provisioning and scheduling strategies. In the case of AFAP and ASAP a thorough
-analysis could probably expose the strategies' instabilities, but that would not
-be possible on more complex and dynamic strategies. In the following sections we
-choose to consider strategies as black boxes to show that through simulation 
-we are able  to obtain an accurate prediction of our runs' distribution
-and of our strategies' biases.
-\end{comment}
-
 %% Free floating graphs mus be declared a page in advance
 \begin{figure*}
 	\includegraphics[width=\textwidth]{gfx/fit_plot.pdf}
@@ -690,25 +668,23 @@ and of our strategies' biases.
 
 \subsection{Input Modeling}\label{sec:im}
 
-The testing of our enriched simulation framework requires us to build input
-\acp{rv} for every job of OMSSA and Montage, in a way that is representative of
-the distribution of runtimes observed in the execution traces.
+The volatile nature of cloud platform means that effective runtimes are always
+variable. Using a \ac{mcs} we can account for this variability and provide the
+user with a range of possible makespans. In this section we propose a simple
+method to represent the potential variability by creating a small range around
+the estimated runtimes. We test this method against our backlog of real runs.
+The key finding detailed hereafter is that this simple method can be precise
+enough for the \ac{mcs} to predict 90\% for real runs.
 
-The existence of a backlog of real execution traces would allows us to do so with
-reasonable precision, but in real simulation use-cases where having such traces
-is unlikely, building such a model would require a deep understanding of the
-computations, communication, and of the underlying cloud. Such knowledge is
-rarely available and estimated runtimes are seldom more than a educated guess.
+This model for the runtimes \acp{rv} uses a job's estimated runtime and a unique
+perturbation level used on every job. The perturbation level, expressed as a
+percentage an denoted as P, is used to build a range around the estimated
+runtime in which the simulations effective runtimes will be drawn. 
 
-Hence we aim to build jobs' \acp{rv} in  such a way that they are precise enough
-for the simulation  to produce representative results while  being simple enough
-for  a knowledgeable  user to  express without  needing the  hindsight we  have.
-Users will usually express uncertainties as a range around what they perceive to
-be an  average value.  To match  this expression, we  construct our  job runtime
-model as a uniform distribution interval  centered around the average runtime of
-the modeled  job. The half-width  of the interval  is expressed relative  to the
-average runtime as a percentage. We  call this percentage the perturbation level
-and denote it $P$. As such $t_j$, the drawn time of job $j$, can be written as :
+We test the validity of this method by applying it on our experiment traces, and
+check the \ac{mcs} results against the real observed makespans. We assume a good
+guess for an estimated runtime is the average of all observed runtimes for a
+given job. As such $t_j$, the drawn time of job $j$, can be written as~:
 
 \begin{equation}
 	t_j = \bar{R_j} \cdot (1 + p)
@@ -723,13 +699,11 @@ and denote it $P$. As such $t_j$, the drawn time of job $j$, can be written as :
 \end{equation}
 
 where $r_j^n$ is the $n$th runtime observation for job $j$, $\bar{R_j}$ is the
-average of all observed runtimes, and $\mathcal{U}$ an uniform distribution.
+average of all observed runtimes for job $j$, and $\mathcal{U}$ an uniform distribution.
 
-We expect the average  user would not estimate perturbation levels  on a job per
-job  basis. Therefore  we choose  to compute  as single  perturbation level  per
-application-strategy combination.  We obtain the  perturbation level by  averaging the
-worst  observed deviation  from  the  mean for  every  job  in the  application,
-formally expressed as :
+To obtain the global perturbation level, which limits the worst deviations from
+the estimated runtimes, we average the worst observed deviation for every job in
+the application, formally expressed as :
 
 \begin{equation}
 P = \textrm{mean}(\delta{}_j)
@@ -853,12 +827,15 @@ the 99\% \ac{ci} is $[\mu{}-3\sigma{},\mu{}+3\sigma{}]$.
 	\end{tabular}
 \end{table}
 
-Table~\ref{tab:fit} presents the capture rate obtained by each interval
-computed after normal fitting. The capture rate expresses the number of observed
-real makespans that fall withing a given \ac{ci} relative to the total number of real
+Table~\ref{tab:fit} presents the capture rate obtained by each interval computed
+after normal fitting. The capture rate expresses the number of observed real
+makespans that fall withing a given \ac{ci} relative to the total number of real
 observations. Since improving the capture rate is always possible at the cost of
 enlarging the \ac{ci} and therefore diminishing it's relevance, we provide for
-each interval its size relative to the average makespan. 
+each interval its size relative to the average makespan. For example the first
+line of table~\ref{tab:fit} presents the results for OMSSA using the ASAP
+strategy, this this case the 95\% \ac{ci} spanned 419s, from 12797s to 13216s,
+for an average makespan of 13006s. Therefore the relative size is given as 3\%.
 
 Still, on OMSSA we can see that our normal fitting in not perfect as our \acp{ci}
 appears of by 5\% with the 95\% \ac{ci} capturing only 90\% real observations.
@@ -1017,7 +994,7 @@ because this approach is closer to a cloud broker user scenario and  the
 execution traces we had did not allow for us to separate in convincing way these
 different variability. In circumstance where one is able to measure variability
 on CPU power or network speed it is possible to add those variable as input of
-the \ac{mcs}. In this case a realisation would draw not only each jobs size (in
+the \ac{mcs}. In this case a realization would draw not only each jobs size (in
 op/flop) but also a platform with different CPU powers and network speed.
 \acp{mcs} allow to fuse these different variability effortlessly, but it will
 require more iterations. 
