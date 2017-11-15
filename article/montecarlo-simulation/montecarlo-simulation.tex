@@ -112,22 +112,22 @@ side by side for one \ac{btu} each costs the same as running one \ac{vm} for two
 \ac{btu}, but every \ac{btu} started is owed in full.
 
 This model  offers the client  an almost complete freedom  to start or  stop new
-servers as  long as  the price  can be  afforded. However,  running applications
-composed of  a set of  jobs, that  can be parallel  or dependent on  some others
-(generally a \ac{dag}  of jobs) quickly becomes difficult  to manually provision
-the resources  in an efficient way.  The use of a  scheduler becomes unavoidable
-for  such  workloads.  In  this  paper,  we  are  interested in  predicting  the
-execution time and cost of such complex workloads, in which the scheduling plays
-an  important  role.   In  this  study,  we  consider  two  opposite  scheduling
-strategies to put forward their impact  on execution behavior. 
+servers as long as the price can be afforded. However, for applications composed
+of a set of jobs, that can be  parallel or dependent on some others (generally a
+\ac{dag}  of  jobs) it  quickly  becomes  difficult  to manually  provision  the
+resources in an  efficient way.  The use of a  scheduler becomes unavoidable for
+such workloads.   In this paper, we  are interested in predicting  the execution
+time  and cost  of such  complex  workloads, in  which the  scheduling plays  an
+important role.  In  this study, we consider two  opposite scheduling strategies
+to put forward their impact on execution behavior.
 %--[We will review in the related work section several other scheduling approaches.]
 
 
 %----------------------- prediction tools --------------------------------------
 Independently of  scheduling decisions,  accurate prediction  of the  runtime of
 complex workloads is hampered by  multiple factors.  First \ac{iaas} operates in
-a opaque fashion, the exact nature of the underlying platforms being unknown and
-their hardware  subject to  evolution as  operators complete  their data-centers
+an opaque  fashion, the exact nature  of the underlying platforms  being unknown
+and their hardware subject to evolution as operators complete their data-centers
 over  the years  with new  servers and  equipment.  Secondly  cloud systems  are
 multi-tenant by nature  which adds uncertainty due to contention  on network and
 memory accesses, depending on how \ac{vm} are scheduled and the activity of your
@@ -296,7 +296,7 @@ jobs \acp{rv} independence can not be guaranteed in most cases.
 
 Moreover this \ac{dag} based approach implies fixed scheduling. In the context
 of a cloud platform where additional resources can be provisioned at anytime
-user are likely to call on dynamic schedulers that adapt the schedule on the fly
+users are likely to call on dynamic schedulers that adapt the schedule on the fly
 depending of the already executed jobs runtimes and the availability of
 resources. In the context of a \ac{dag} representation this is akin to adding
 and removing edges depending on the runtime of certain vertices. Edges do not
@@ -316,7 +316,7 @@ stochastic  simulation.  Statistical  fitting  techniques can  then  be used  to
 characterize this makespan \ac{rv}.
 
 The development  of heterogeneous distributed computing  environments, grids and
-now clouds,  has led  researchers to  use this  approach in  this field.  In the
+now clouds,  has led  researchers to use  this approach in  this field.   In the
 context of grids,  where the number of resources is  fixed during one execution,
 Tang et  al.~\cite{Tang11} propose a  modification of the  well-known scheduling
 heuristic  HEFT to  compute  a  schedule yielding  the  shortest makespan  given
@@ -327,13 +327,11 @@ on  makespan.  More  recently,  ElasticSim~\cite{Cai17} as  been  proposed as  a
 simulator extending  Cloudsim to integrate resource  auto-scaling and stochastic
 task  durations. Similarly  to our  work, Elasticsim  computes a  schedule whose
 objective  is  to  minimize  rental  cost excepted  that  they  impose  deadline
-constraints.  The  study evaluates  how  the  rental  cost and  makespan  change
-depending  on the  variability of  task duration  and deadline,  for which  some
-deviation  ranges  have  been  arbitrarily   chosen  to  bound  the  statistical
-distribution used to draw random values. This  differs from our own work in that
-we infer  the deviation ranges  from actual execution  traces and check  how the
-makespan \ac{rv} covers actual observations, while their experiments compare the
-stochastic schedules against a simulation based on generated workflows.
+constraints.  The  study compares the  simulation results regarding  rental cost
+and makespan,  when varying the variability  of task duration and  deadline with
+arbitrary  values,  for  several  generated workflows.  By  contrast,  our  work
+focuses on how the \ac{mcs} method, under some given variability assumptions, to
+capture actual observations.
 
 
 
@@ -352,10 +350,11 @@ environments are sketched side by side on Figure~\ref{fig:rs}.
 
 \subsection{Test Applications}\label{sc:setup}
 
-To evaluate Schlouder performance we  carried out multiple executions of two
-scientific applications. The  execution traces for those runs  were collected in
-an archive. This  backlog of real executions is the  benchmark against which our
-simulation performance will be evaluated. The applications used are:
+To  evaluate Schlouder  performance we  carried out  multiple executions  of two
+broadly used scientific  applications. The execution traces for  those runs were
+collected  in an  archive.  This backlog  of real  executions  is the  benchmark
+against which  our simulation  performance will  be evaluated.  The applications
+used are:
 
 \begin{itemize}
 \item Montage\cite{montage2009},  the Montage Astronomical Image  Mosaic Engine,
@@ -375,8 +374,9 @@ by the scheduling policy applied. We detail in the next two sections how these
 executions are managed in the actual environment and in simulation.  
 
 \subsection{Real Execution Setup}
+
 In the recent years, we have developed  a client-side job broker for IaaS clouds
-called Schlouder~\cite{Michon17}.  This broker is  able to submit on  the user's
+called  Schlouder~\cite{Michon17}.  This  broker is  able to  submit the  user's
 batch jobs, be  it a set of  independent jobs or a workflow.   The broker's main
 role is  to schedule the set  of jobs onto a  set of cloud resources,  which the
 broker can scale up  or down depending on a \emph{strategy}  chosen by the user.
@@ -384,12 +384,11 @@ Technically, the broker  connects to the cloud management  system (for instance,
 OpenStack) to  instruct how  the infrastructure should  be provisioned  and then
 assigns the jobs to the resources using the Slurm job management system.
 
-Applications are  submitted to Schlouder as  batch jobs. As in  almost all batch
-scheduler  systems,  the job  description  provides  a runtime  estimate  called
-\emph{user  estimate}. In  case of  a workflow,  the job  dependencies are  also
-provide.   Schlouder uses  just-in-time scheduling  where jobs  are assigned  to
-\acp{vm}  as   soon  as   all  their  dependencies   are  satisfied.    We  call
-\emph{strategy}  the  heuristic  used  by Schlouder  to  make  provisioning  and
+As in almost all batch scheduler systems, the job description provides a runtime
+estimate  called  \emph{user   estimate}.  In  case  of  a   workflow,  the  job
+dependencies are  also provided.   Schlouder uses just-in-time  scheduling where
+jobs are assigned  to \acp{vm} as soon as all  their dependencies are satisfied.
+We call \emph{strategy} the heuristic used by Schlouder to make provisioning and
 scheduling decisions.   A dozen strategies  and their variants are  available to
 the user (details can be found in~\cite{GenaudG11}), of which we will use two in
 this paper.  Strategies  provision \acp{vm} and schedule jobs based  on the user
@@ -414,23 +413,22 @@ test the two following strategies which favor one of the objectives:
 	monetary cost of the batch execution.
 \end{itemize}
 
-The left  part of figure~\ref{fig:rs}  schematically presents the workflow  of a
-real execution.  The  user sends to Schlouder  a list of jobs. For  each job the
-user provides a runtime estimate (as in almost all batch scheduler systems), the
-list  of  depedencies  and  the scheduling  strategy.   Schlouder  computes  the
-scheduling and resource provisioning decisions  and communicates its requests to
-the  cloud's  frontend,  denoted  Controller.   Once  the  \acp{vm}  are  booted
-Schlouder  sends each  job to  its  assigned machine.   Schlouder tracks  jobs
-progression, completing the schedule  as dependencies are resolved, provisioning
-\acp{vm} as needed,  and shutting down unneeded \acp{vm} as  their billing cycle
-close.
+The left part  of Figure~\ref{fig:rs} presents the outline of  a real execution.
+The user  sends to Schlouder a  list of jobs. For  each job the user  provides a
+runtime  estimate (as  in  almost  all batch  scheduler  systems),  the list  of
+depedencies and the scheduling strategy.   Schlouder computes the scheduling and
+resource provisioning  decisions and  communicates its  requests to  the cloud's
+frontend, denoted Controller.  Once the \acp{vm} are booted Schlouder sends each
+job to its assigned machine.   Schlouder tracks jobs progression, completing the
+schedule  as dependencies  are resolved,  provisioning \acp{vm}  as needed,  and
+shutting down unneeded \acp{vm} as their billing cycle close.
 
 \begin{figure}
 	\resizebox{0.5\textwidth}{!}{%
 		\input{gfx/RS.tex}
 		
 	}%
-	\caption{Comparison of the real life experiment workflow with the
+	\caption{Comparison of the real life experiment with the
 	simulated one.}\label{fig:rs}
 \end{figure}
 \begin{figure*}
@@ -564,12 +562,12 @@ of times (500 times  on the  figure). From the  set of makespans  $m_k$ obtained
 at each step, we compute  a statistical distribution of the makespan  as a final
 \ac{rv} noted $M$.
 
-Figure~\ref{fig:mc-process}  schematically  presents a \ac{mcs}  of  a $n$  job
-workflow.   The  input  of  the  simulation  is  a  set  of  $n$  \acp{rv}  each
+Figure~\ref{fig:mc-process}  schematically  presents a  \ac{mcs}  of  a $n$  job
+application.   The  input of  the  simulation  is a  set  of  $n$ \acp{rv}  each
 corresponding to a given job, denoted by  indices. A realization is a set of $n$
 runtimes that are drawn according to each jobs respective \ac{rv}.  Each of this
 realization is  simulated independently,  providing a makespan  sample.  Finally
-the sample are  aggregated in the final distribution.
+the sample are aggregated in the final distribution.
 
 In this paper the full process taking as input runtimes distribution for
 every jobs and providing as results the makespan distribution is referred to as a
