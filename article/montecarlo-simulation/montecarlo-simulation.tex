@@ -171,6 +171,7 @@ approach.
 
 
 \section{Related Work}
+\begin{comment}
 \begin{table*}
 	\centering
 	\caption{Comparison of capabilities and functions of 5 common cloud
@@ -202,7 +203,7 @@ approach.
 	\hline
 \end{tabular}
 \end{table*}
-
+\end{comment}
 
 
 \subsection{Simulation}
@@ -246,8 +247,13 @@ large  scale  behaviours  emerge naturally  from  the  interactions  of  these
 components. Working  on disjointed low level  components make it easier  to tune
 the precision  of the model to  the wanted accuracy/speed trade-off.
 
-Table~\ref{tab:simcmp} gives an overview of the capabilities and models of
-commons cloud simulators. 
+Available cloud \acp{des} include CloudSim~\cite{cloudsim} a extensible
+simulator written in Java, Simgrid~\cite{simgrid} when use in conjunction with
+the SCHIaaS cloud interface, the NS2-based GreenCloud~\cite{greencloud} centered
+on energy consumption of cloud's network apparatus, the commercial solution
+MDCSim~\cite{MDCSim} from Pennsylvania State University,
+ICanCloud~\cite{icancloud} which can be run in parallel on multiple machines,
+and GroudSim~\cite{groudsim} which can simulate both Grids and Clouds.
 
 In the context of cloud computing, memory and network contention, virtualization
 overhead, and over-provisioning, make  application runtimes difficult to predict
@@ -537,8 +543,7 @@ described in section~\ref{sec:im}.
 		}
 \caption{Overview of a Monte-Carlo simulation~: $500$ realizations are generated
 by drawing runtimes for each of the $n$ jobs provided RVs, every realization is
-then simulated, the resulting makespan samples are fitted into the final
-result.}\label{fig:mc-process}
+then simulated, the resulting makespan samples make up the final result.}\label{fig:mc-process}
 \end{figure}
 
 One MCS-iteration then consists in 
@@ -553,16 +558,12 @@ of times (500 times  on the  figure). From the  set of makespans  $m_k$ obtained
 at each step, we compute  a statistical distribution of the makespan  as a final
 \ac{rv} noted $M$.
 
-Figure~\ref{fig:mc-process}  schematically  presents a  \ac{mcs}  of  a $n$  job
+Figure~\ref{fig:mc-process}  schematically  presents a \ac{mcs}  of  a $n$  job
 workflow.   The  input  of  the  simulation  is  a  set  of  $n$  \acp{rv}  each
 corresponding to a given job, denoted by  indices. A realization is a set of $n$
 runtimes that are drawn according to each jobs respective \ac{rv}.  Each of this
 realization is  simulated independently,  providing a makespan  sample.  Finally
-the sample are  aggregated in the final distribution.  This  approach enables to
-sidestep intense numerical resolution  by simply repeating simpler deterministic
-simulations and  have realizations scheduled as  they would based on  their jobs
-runtimes by having dynamical scheduling integrated inside the simulator.
-
+the sample are  aggregated in the final distribution.
 
 In this paper the full process taking as input runtimes distribution for
 every jobs and providing as results the makespan distribution is referred to as a
