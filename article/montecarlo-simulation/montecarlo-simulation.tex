@@ -820,6 +820,14 @@ the 99\% \ac{ci} is $[\mu{}-3\sigma{},\mu{}+3\sigma{}]$.
 		\bottomrule
 	\end{tabular}
 \end{table}
+%%Free floating figure must be declare one page ahead.
+\begin{figure*}
+	\includegraphics[width=\textwidth]{gfx/int_plot.pdf}
+	\caption{Makespan intervals and BTU count distribution for OMSSA and 
+	Montage at different perturbation levels. In the makespan interval graph 
+	the box represent the 95\% confidence interval resulting from the \acs{mcs},
+	and the bar the results of a single unperturbed simulation.}\label{fig:int}
+\end{figure*}
 
 Table~\ref{tab:fit} presents the capture rate obtained by each interval computed
 after normal fitting. The capture rate expresses the number of observed real
@@ -906,14 +914,7 @@ limits we experienced with this approach. In the next section we show by compari
 different \acp{mcs}  that we are able  to study the behavior  of the strategies
 when confronted with different applications and perturbation levels.
 \end{comment}
-%%Free floating figure must be declare one page ahead.
-\begin{figure*}
-	\includegraphics[width=\textwidth]{gfx/int_plot.pdf}
-	\caption{Makespan intervals and BTU count distribution for OMSSA and 
-	Montage at different perturbation levels. In the makespan interval graph 
-	the box represent the 95\% confidence interval resulting from the \acs{mcs},
-	and the bar the results of a single unperturbed simulation.}\label{fig:int}
-\end{figure*}
+
 
 
 \section{Discussion}
