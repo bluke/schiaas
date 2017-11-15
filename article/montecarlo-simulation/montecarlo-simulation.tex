@@ -86,7 +86,7 @@
 cloud computing, computer simulation, monte carlo methods.
 \end{IEEEkeywords}
 
-\tableofcontents
+%\tableofcontents
 
 \section{Introduction.}
 
@@ -513,8 +513,17 @@ job runtimes.
 
 \end{comment}
 
-\section{Enriched Simulation Framework}
-\label{sec:enriched-sim}
+\section{Enriched Simulation Framework}\label{sec:enriched-sim}
+
+\begin{figure}
+	\centering
+	\resizebox{0.5\textwidth}{!}{%
+		\input{gfx/mc-process.tex}
+		}
+\caption{Overview of a Monte-Carlo simulation~: $500$ realizations are generated
+by drawing runtimes for each of the $n$ jobs provided RVs, every realization is
+then simulated, the resulting makespan samples make up the final result.}\label{fig:mc-process}
+\end{figure}
 
 Trustworthiness of simulation is a major issue when simulating variable
 environments such as clouds. If the result of the simulation is one of many
@@ -542,16 +551,6 @@ As  depicted   on  Figure~\ref{fig:mc-process},  we  consider   an  application
 consisting of  $n$ jobs, independent  or organized as  a workflow. For  each job
 $i  \in\,[1;n]$, we provide  a runtime distribution $T_i$ following the method
 described in section~\ref{sec:im}.
-
-\begin{figure}
-	\centering
-	\resizebox{0.5\textwidth}{!}{%
-		\input{gfx/mc-process.tex}
-		}
-\caption{Overview of a Monte-Carlo simulation~: $500$ realizations are generated
-by drawing runtimes for each of the $n$ jobs provided RVs, every realization is
-then simulated, the resulting makespan samples make up the final result.}\label{fig:mc-process}
-\end{figure}
 
 One MCS-iteration then consists in 
 \begin{itemize}
@@ -614,6 +613,27 @@ to  the mean  $\mu$.
 
 \subsection{Real Observations}
 
+\begin{table} \centering \caption{Overview of archived
+	executions}\label{tab:nbruns} 
+	\begin{tabular}{llrcc} \toprule
+		Application&Strategy&\#runs&BTU count&Makespan ($s$)\\
+		\midrule 
+		\multirow{2}{*}{OMSSA}&ASAP&106&40&12811 -- 13488\\
+				      &AFAP&98&33 -- 36&13564 -- 14172\\ 
+		\midrule 
+		\multirow{2}{*}{Montage}&ASAP&3&10&1478 -- 1554\\
+				        &AFAP&3&1&2833 -- 2837\\
+		\bottomrule 
+	\end{tabular} 
+\end{table}
+%% Free floating graphs mus be declared a page in advance
+\begin{figure*}
+	\includegraphics[width=\textwidth]{gfx/fit_plot.pdf}
+	\caption{Makespan and BTU count distribution for OMSSA and Montage Monte
+	Carlo Simulation compared to reality at 10\% perturbation
+	level.}\label{fig:fit}
+\end{figure*}
+
 
 During the development of Schlouder, the cloud broker described in
 Section~\ref{sec:work-context}, we performed multiple executions of the
@@ -639,30 +659,6 @@ Figure~\ref{fig:realbrs} presents the distribution of resulting makespans and
 \ac{btu} counts observed depending on application and scheduling strategy. These
 figures show that even in our platform we observe significant makespan
 variability.
-
-\begin{table} \centering \caption{Overview of archived
-	executions}\label{tab:nbruns} 
-	\begin{tabular}{llrcc} \toprule
-		Application&Strategy&\#runs&BTU count&Makespan ($s$)\\
-		\midrule 
-		\multirow{2}{*}{OMSSA}&ASAP&106&40&12811 -- 13488\\
-				      &AFAP&98&33 -- 36&13564 -- 14172\\ 
-		\midrule 
-		\multirow{2}{*}{Montage}&ASAP&3&10&1478 -- 1554\\
-				        &AFAP&3&1&2833 -- 2837\\
-		\bottomrule 
-	\end{tabular} 
-\end{table}
-
-%% Free floating graphs mus be declared a page in advance
-\begin{figure*}
-	\includegraphics[width=\textwidth]{gfx/fit_plot.pdf}
-	\caption{Makespan and BTU count distribution for OMSSA and Montage Monte
-	Carlo Simulation compared to reality at 10\% perturbation
-	level.}\label{fig:fit}
-\end{figure*}
-
-
 
 \subsection{Input Modeling}\label{sec:im}
 
@@ -772,6 +768,24 @@ perturbation level.
 \section{Evaluation}
 \label{sec:eval}
 
+\begin{table}
+	\centering
+	\caption{Makespan and BTU capture rate depending on confidence interval
+          (CI) for a 10\% perturbation level}\label{tab:fit}
+	\begin{tabular}{llccc}
+		\toprule
+		Application&Strategy&\multicolumn{2}{c}{Makespan (Size of CI)}&BTU\\
+                           &         & CI 95\% & CI 99\% &\\
+		\midrule
+		\multirow{2}{*}{OMSSA}&ASAP&  90\% (3\%)&  98\% (5\%)& 100\%\\
+				      &AFAP&  92\% (4\%)& 100\% (6\%)& 100\%\\
+		\midrule
+		\multirow{2}{*}{Montage}&ASAP& 100\% (2\%)& 100\% (4\%)& 100\%\\
+					&AFAP& 100\% (1\%)& 100\% (2\%)& 100\%\\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
 We ran 500 iterations \acp{mcs} for all strategy-application combinations using
 the job models described in the previous section. The resulting distribution are
 shown in figure~\ref{fig:fit}. The makespan density graphs show the simulation
@@ -806,32 +820,6 @@ distribution. The fitting process gives us an average makespan $\mu{}$, and a
 standard deviation $\sigma{}$. This allows to build \acp{ci}. The 95\% \ac{ci}
 of the normal distribution is defined as $[\mu{}-2\sigma{},\mu{}+2\sigma{}]$ and
 the 99\% \ac{ci} is $[\mu{}-3\sigma{},\mu{}+3\sigma{}]$.
-
-\begin{table}
-	\centering
-	\caption{Makespan and BTU capture rate depending on confidence interval
-          (CI) for a 10\% perturbation level}\label{tab:fit}
-	\begin{tabular}{llccc}
-		\toprule
-		Application&Strategy&\multicolumn{2}{c}{Makespan (Size of CI)}&BTU\\
-                           &         & CI 95\% & CI 99\% &\\
-		\midrule
-		\multirow{2}{*}{OMSSA}&ASAP&  90\% (3\%)&  98\% (5\%)& 100\%\\
-				      &AFAP&  92\% (4\%)& 100\% (6\%)& 100\%\\
-		\midrule
-		\multirow{2}{*}{Montage}&ASAP& 100\% (2\%)& 100\% (4\%)& 100\%\\
-					&AFAP& 100\% (1\%)& 100\% (2\%)& 100\%\\
-		\bottomrule
-	\end{tabular}
-\end{table}
-%%Free floating figure must be declare one page ahead.
-\begin{figure*}
-	\includegraphics[width=\textwidth]{gfx/int_plot.pdf}
-	\caption{Makespan intervals and BTU count distribution for OMSSA and 
-	Montage at different perturbation levels. In the makespan interval graph 
-	the box represent the 95\% confidence interval resulting from the \acs{mcs},
-	and the bar the results of a single unperturbed simulation.}\label{fig:int}
-\end{figure*}
 
 Table~\ref{tab:fit} presents the capture rate obtained by each interval computed
 after normal fitting. The capture rate expresses the number of observed real
@@ -927,6 +915,15 @@ limits we experienced with this approach. In the next section we show by compari
 different \acp{mcs}  that we are able  to study the behavior  of the strategies
 when confronted with different applications and perturbation levels.
 \end{comment}
+
+%%Free floating figure must be declare one page ahead.
+\begin{figure*}
+	\includegraphics[width=\textwidth]{gfx/int_plot.pdf}
+	\caption{Makespan intervals and BTU count distribution for OMSSA and 
+	Montage at different perturbation levels. In the makespan interval graph 
+	the box represent the 95\% confidence interval resulting from the \acs{mcs},
+	and the bar the results of a single unperturbed simulation.}\label{fig:int}
+\end{figure*}
 
 
 
