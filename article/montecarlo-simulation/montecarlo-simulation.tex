@@ -293,16 +293,6 @@ only represent the dependencies, the inherent constraint between the application
 jobs, but also the scheduling, the effective constraint imposed on a job queued
 after another.
 
-\begin{figure}
-	\centering
-	\resizebox{0.5\textwidth}{!}{%
-		\input{gfx/mc-process.tex}
-		}
-\caption{Overview of a Monte-Carlo simulation~: $500$ realizations are generated
-by drawing runtimes for each of the $n$ jobs provided RVs, every realization is
-then simulated, the resulting makespan samples are fitted into the final
-result.}\label{fig:mc-process}
-\end{figure}
 
 Instead  of computing  the resulting  \ac{rv}, a  \ac{mcs} samples  the possible
 results by testing  multiple \emph{realizations} in a  deterministic fashion.  A
@@ -313,16 +303,6 @@ methods like \ac{des}.  Eventually, given enough realizations the distribution o
 the simulations  results will  tend towards the  distribution of  the equivalent
 stochastic  simulation.  Statistical  fitting  techniques can  then  be used  to
 characterize this makespan \ac{rv}.
-
-Figure~\ref{fig:mc-process}  schematically  presents a  \ac{mcs}  of  a $n$  job
-workflow.   The  input  of  the  simulation  is  a  set  of  $n$  \acp{rv}  each
-corresponding to a given job, denoted by  indices. A realization is a set of $n$
-runtimes that are drawn according to each jobs respective \ac{rv}.  Each of this
-realization is  simulated independently,  providing a makespan  sample.  Finally
-the sample are  aggregated in the final distribution.  This  approach enables to
-sidestep intense numerical resolution  by simply repeating simpler deterministic
-simulations and  have realizations scheduled as  they would based on  their jobs
-runtimes by having dynamical scheduling integrated inside the simulator.
 
 The development  of heterogeneous distributed computing  environments, grids and
 now clouds, has led researchers to apply  \ac{mcs} in this field.  It is used in
@@ -550,6 +530,17 @@ consisting of  $n$ jobs, independent  or organized as  a workflow. For  each job
 $i  \in\,[1;n]$, we provide  a runtime distribution $T_i$ following the method
 described in section~\ref{sec:im}.
 
+\begin{figure}
+	\centering
+	\resizebox{0.5\textwidth}{!}{%
+		\input{gfx/mc-process.tex}
+		}
+\caption{Overview of a Monte-Carlo simulation~: $500$ realizations are generated
+by drawing runtimes for each of the $n$ jobs provided RVs, every realization is
+then simulated, the resulting makespan samples are fitted into the final
+result.}\label{fig:mc-process}
+\end{figure}
+
 One MCS-iteration then consists in 
 \begin{itemize}
 \item making one realization of the runtime  for each job $i$, that is randomly
@@ -561,6 +552,17 @@ The whole \ac{mcs} process  consists in repeating this iteration a  large number
 of times (500 times  on the  figure). From the  set of makespans  $m_k$ obtained
 at each step, we compute  a statistical distribution of the makespan  as a final
 \ac{rv} noted $M$.
+
+Figure~\ref{fig:mc-process}  schematically  presents a  \ac{mcs}  of  a $n$  job
+workflow.   The  input  of  the  simulation  is  a  set  of  $n$  \acp{rv}  each
+corresponding to a given job, denoted by  indices. A realization is a set of $n$
+runtimes that are drawn according to each jobs respective \ac{rv}.  Each of this
+realization is  simulated independently,  providing a makespan  sample.  Finally
+the sample are  aggregated in the final distribution.  This  approach enables to
+sidestep intense numerical resolution  by simply repeating simpler deterministic
+simulations and  have realizations scheduled as  they would based on  their jobs
+runtimes by having dynamical scheduling integrated inside the simulator.
+
 
 In this paper the full process taking as input runtimes distribution for
 every jobs and providing as results the makespan distribution is referred to as a
