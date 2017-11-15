@@ -95,16 +95,16 @@ Over the  last decade, the advancement  of virtualization techniques has  led to
 the emergence of new economic  and exploitation approaches of computer resources
 in  the form  of \ac{iaas},  one form  of cloud  computing. In  this model,  all
 computing resources  are made available  on demand by third-party  operators and
-paid based on  usage.  The ability to provision resources  on demand provided by
-\ac{iaas} operators is  mainly used in two ways.  Firstly,  for scaling purposes
-where new  machines are brought  online to  fulfill service availability  in the
-face of higher loads, this approach is used for providing service and allows for
-a lower baseline  cost while still being  able to deal with spikes  in demand by
-provisioning machines on  the fly. Secondly, for parallelizing  tasks to achieve
-shorter makespan (i.e  the total execution execution time from  the first to the
-last task)  at equal cost, this  approach is used for  scientific and industrial
-workloads with a clear goal and  where runtime is heavily dependent on computing
-power.   This  approach  is  made  possible   by  the  pricing  model  of  cloud
+paid based  on usage.  The  ability to provision  resources on demand  is mainly
+used in two ways.  Firstly, it can serve for scaling purposes where new machines
+are  brought online  to  fulfill  service availability  in  the  face of  higher
+loads.  This approach  is used  for  providing service  and allows  for a  lower
+baseline  cost  while  still  being  able  to deal  with  spikes  in  demand  by
+provisioning machines on the fly. Secondly, it is useful for parallelizing tasks
+to achieve a  shorter makespan (i.e the total execution  execution time from the
+first  to the  last task)  at equal  cost, this  approach being  often used  for
+scientific  and  industrial  workloads  when runtime  is  heavily  dependent  on
+computing power.  This  approach is made possible by the  pricing model of cloud
 infrastructures, as  popularized by AWS\footnote{Amazon Web  Services}, in which
 payment  for computing  power, provided  as \acp{vm},  happens in  increments of
 arbitrary lengths  of time, \ac{btu}, usually  of one hour. Running  two \ac{vm}
@@ -119,25 +119,25 @@ the resources  in an efficient way.  The use of a  scheduler becomes unavoidable
 for  such  workloads.  In  this  paper,  we  are  interested in  predicting  the
 execution time and cost of such complex workloads, in which the scheduling plays
 an  important  role.   In  this  study,  we  consider  two  opposite  scheduling
-strategies to put forward their impact  on execution behavior. We will review in
-the related work section several other scheduling approaches.
+strategies to put forward their impact  on execution behavior. 
+%--[We will review in the related work section several other scheduling approaches.]
 
 
 %----------------------- prediction tools --------------------------------------
 Independently of  scheduling decisions,  accurate prediction  of the  runtime of
 complex workloads is hampered by  multiple factors.  First \ac{iaas} operates in
-a opaque fashion,  the exact nature of the underlying  platforms are unknown and
-may  slightly vary  for a  given type  of resource  as operators  complete their
-data-centers  over the  years with  new servers  and equipment.   Secondly cloud
-systems are multi-tenant  by nature which adds uncertainty due  to contention on
-network and  memory accesses,  depending on  how \ac{vm}  are scheduled  and the
-activity of  your \emph{neighbors}.   Even when  \ac{iaas} operators  attempt to
-mask these irregularities in computing  power and network access by guaranteeing
-a    minimum     performance,    variability     occurs    in     presence    of
-\emph{less-than-noisy-neighbors} as it  is not in the interest  of the \ac{iaas}
-operators to limit power available  over the guaranteed minimums.  These factors
-add to the already high difficulty of  modeling job execution times on a network
-of computers as shown in~\cite{Lastovetsky05}.
+a opaque fashion, the exact nature of the underlying platforms being unknown and
+their hardware  subject to  evolution as  operators complete  their data-centers
+over  the years  with new  servers and  equipment.  Secondly  cloud systems  are
+multi-tenant by nature  which adds uncertainty due to contention  on network and
+memory accesses, depending on how \ac{vm} are scheduled and the activity of your
+\emph{neighbors}.   Even   when  \ac{iaas}  operators  attempt   to  mask  these
+irregularities in computing  power and network access by  guaranteeing a minimum
+performance, variability occurs  in presence of \emph{less-than-noisy-neighbors}
+as it is not in the interest of the \ac{iaas} operators to limit power available
+over the guaranteed minimums.  These factors  add to the already high difficulty
+of  modeling   job  execution  times  on   a  network  of  computers   as  shown
+in~\cite{Lastovetsky05}.
 
 In this regard,  the prediction is highly dependent on  the underlying simulator
 of the system and on the phenomena it  can capture. In this work, we rely on the
@@ -255,33 +255,33 @@ and variable  from one  execution to  the other.  Discrete event  simulators are
 deterministic in  nature and not  well equipped to  deal with such  cases, where
 stochastic simulations are much more appropriate.
 
-Predicting the  makespan of a task  graph, which requires to  compute a schedule
-based  on   stochastic  tasks  durations   has  been  early  studied   for  PERT
-networks~\cite{Slyke63},  and  applied  in  the recent  years  to  heterogeneous
-distributed  computing environments.   For  example,  Tang et  al.~\cite{Tang11}
-propose a modification of the well-known  scheduling heuristic HEFT to compute a
-schedule yielding the shortest makespan  given randomly variable task durations.
-However,  to go  one  step further  we  need  to analyze  the  variability in  a
-comprehensive manner, which is achieved through the Monte-Carlo method.
+Computing a schedule for a task graph whose task have stochastic tasks durations
+is a problem  that has been early studied for  PERT networks~\cite{Slyke63}, and
+applied in the recent years to heterogeneous distributed computing environments.
+For  example in  the  context  of grids,  Tang  et  al.~\cite{Tang11} propose  a
+modification of the  well-known scheduling heuristic HEFT to  compute a schedule
+yielding the shortest makespan given randomly variable task durations.  However,
+to go  one step further  we need to analyze  the variability in  a comprehensive
+manner, which is achieved through the Monte-Carlo method.
 
 \subsection{Monte-Carlo Method}
 
-In stochastic simulations inputs become \acfp{rv} representing the distribution
-of possible values for the parameters. The result of one such simulation is
-itself an \ac{rv} representing the distribution of the results. In this context, the
-simulation of applications in clouds is analogous to the resolution of
-stochastic \ac{dag}, in which the vertices represent the jobs comprising the
-application, and the edges the dependencies between jobs. Each vertex can then
-be assigned it's respective \ac{rv} representing its possible runtimes. The
-result would be an \ac{rv} representing the possible durations needed for the
-execution of the whole \ac{dag}, called makespan. An \ac{rv} is defined by its
-\ac{pdf} and \ac{cdf}, where the \ac{cdf} is obtain by integrating the \ac{pdf}.
-Works on heterogeneous grids~\cite{Li97} and PERT networks~\cite{Ludwig01} show
-that, when tasks runtimes are independent the makespan of successive tasks is a
-convolution product of the individual tasks \acp{rv}, whereas the makespan of
-parallel tasks joining is the product of the tasks respective \ac{cdf}. This
-mathematical approach is computationally intensive and its core constraint, the
-jobs \acp{rv} independence can not be guaranteed in most cases. 
+In stochastic simulations inputs  become \acfp{rv} representing the distribution
+of possible  values for the  parameters.  The result  of one such  simulation is
+itself an \ac{rv} representing the distribution of the results. In this context,
+the  simulation of  applications in  clouds is  analogous to  the resolution  of
+stochastic \ac{dag},  in which  the vertices represent  the jobs  comprising the
+application, and the  edges the dependencies between jobs. Each  vertex can then
+be assigned  it's respective  \ac{rv} representing  its possible  runtimes.  The
+result is a \ac{rv} representing the  possible duration for the execution of the
+whole \ac{dag},  called \emph{makespan}. An  \ac{rv} is defined by  its \ac{pdf}
+and \ac{cdf}, where  the \ac{cdf} is obtain by integrating  the \ac{pdf}.  Works
+on heterogeneous grids~\cite{Li97} and  PERT networks~\cite{Ludwig01} show that,
+when  tasks runtimes  are  independent the  makespan of  successive  tasks is  a
+convolution product  of the individual  tasks \acp{rv}, whereas the  makespan of
+parallel tasks  joining is the  product of  the tasks respective  \ac{cdf}. This
+mathematical approach is computationally intensive  and its core constraint, the
+jobs \acp{rv} independence can not be guaranteed in most cases.
 
 Moreover this \ac{dag} based approach implies fixed scheduling. In the context
 of a cloud platform where additional resources can be provisioned at anytime
@@ -304,26 +304,25 @@ then simulated, the resulting makespan samples are fitted into the final
 result.}\label{fig:mc-process}
 \end{figure}
 
-Instead of computing the resulting \ac{rv}, a \ac{mcs} samples the possible
-results by testing multiple \emph{realizations} in a deterministic fashion.
-A realizations is obtained by drawing for every job in the application a
-runtime that follows their job's respective \ac{rv}. Since within a realization
-each job has now a defined runtime, each realization can be simulated using
-traditional methods like \ac{des}.  Eventually given enough realizations the
-distribution of the simulations results will tend towards the distribution of
-the equivalent stochastic simulation.  Statistical fitting techniques can then
-be used to characterize this makespan \ac{rv}.
+Instead  of computing  the resulting  \ac{rv}, a  \ac{mcs} samples  the possible
+results by testing  multiple \emph{realizations} in a  deterministic fashion.  A
+realization is  obtained by drawing for  every job in the  application a runtime
+that follows their job's respective \ac{rv}. Since within a realization each job
+has now a  defined runtime, each realization can be  simulated using traditional
+methods like \ac{des}.  Eventually, given enough realizations the distribution of
+the simulations  results will  tend towards the  distribution of  the equivalent
+stochastic  simulation.  Statistical  fitting  techniques can  then  be used  to
+characterize this makespan \ac{rv}.
 
-The figure~\ref{fig:mc-process} presents  schematically a \ac{mcs} of  a $n$ job
+Figure~\ref{fig:mc-process}  schematically  presents a  \ac{mcs}  of  a $n$  job
 workflow.   The  input  of  the  simulation  is  a  set  of  $n$  \acp{rv}  each
 corresponding to a given job, denoted by  indices. A realization is a set of $n$
-runtimes that  where drawn according to  each jobs respective \ac{rv}.   Each of
-this   realisation   is   simulated    independently,   providing   a   makespan
-sample.  Finally the  sample  are  aggregated in  the  final distribution.  This
-approach enables  to sidestep intense  numerical resolution by  simply repeating
-simpler deterministic simulations and have  realizations scheduled as they would
-based on  their jobs runtimes  by having dynamical scheduling  integrated inside
-the simulator. 
+runtimes that are drawn according to each jobs respective \ac{rv}.  Each of this
+realisation is  simulated independently,  providing a makespan  sample.  Finally
+the sample are  aggregated in the final distribution.  This  approach enables to
+sidestep intense numerical resolution  by simply repeating simpler deterministic
+simulations and  have realizations scheduled as  they would based on  their jobs
+runtimes by having dynamical scheduling integrated inside the simulator.
 
 
 The development  of heterogeneous distributed computing  environments, grids and
@@ -393,15 +392,16 @@ Technically, the broker  connects to the cloud management  system (for instance,
 OpenStack) to  instruct how  the infrastructure should  be provisioned  and then
 assigns the jobs to the resources using the Slurm job management system.
 
-Applications are submitted to Schlouder as batch jobs. Each job is provided with
-a \emph{user estimate} of the runtime, and if the application is a workflow, the
-list  of dependencies.  Schlouder uses  just-in-time scheduling  where jobs  are
-assigned to \acp{vm}  as soon as all their dependencies  are satisfied.  We call
+Applications are  submitted to Schlouder as  batch jobs. As in  almost all batch
+scheduler  systems,  the job  description  provides  a runtime  estimate  called
+\emph{user  estimate}. In  case of  a workflow,  the job  dependencies are  also
+provide.   Schlouder uses  just-in-time scheduling  where jobs  are assigned  to
+\acp{vm}  as   soon  as   all  their  dependencies   are  satisfied.    We  call
 \emph{strategy}  the  heuristic  used  by Schlouder  to  make  provisioning  and
 scheduling decisions.   A dozen strategies  and their variants are  available to
 the user (details can be found in~\cite{GenaudG11}), of which we will use two in
-this paper.  Strategies provision \acp{vm} and  schedule jobs based on  the user
-estimates  of  the  runtime.  Notice   that  the  jobs'  real  runtimes,  called
+this paper.  Strategies  provision \acp{vm} and schedule jobs based  on the user
+estimates  of  the  runtime.   Notice  that  the  jobs'  real  runtimes,  called
 \emph{effective  runtimes}, may  differ from  the estimates,  but this  does not
 change the initial scheduling decision with  regards to which resources the jobs
 are assigned.
@@ -428,7 +428,7 @@ user provides a runtime estimate (as in almost all batch scheduler systems), the
 list  of  depedencies  and  the scheduling  strategy.   Schlouder  computes  the
 scheduling and resource provisioning decisions  and communicates its requests to
 the  cloud's  frontend,  denoted  Controller.   Once  the  \acp{vm}  are  booted
-Schlouder  sends the  job to  their  assigned machines.   Schlouder tracks  jobs
+Schlouder  sends each  job to  its  assigned machine.   Schlouder tracks  jobs
 progression, completing the schedule  as dependencies are resolved, provisioning
 \acp{vm} as needed,  and shutting down unneeded \acp{vm} as  their billing cycle
 close.
@@ -450,11 +450,11 @@ close.
 
 \subsection{Simulated Execution Setup}
 As a follow-up  to our work on Schlouder we  developed SimSchlouder, a simulator
-reimplementing the  behaviour of Schlouder, and  relying on SimGrid as  its core
-simulation engine.  This simulator allows the user to request an estimate of the
-makespan and  the cost before choosing  a strategy for a  real run. SimSchlouder
-includes the same strategies as Schlouder,  and as its real-world counterpart it
-is easily extendable with new strategies. 
+mimicking  the  behaviour  of  Schlouder. Its  implements  the  same  scheduling
+strategies  as  Schlouder  using  SimGrid  as its  core  simulation  engine.  In
+practice, SimSchlouder  is included as  a plugin  into Schlouder and  allows the
+user to request for  an estimate of the makespan and the  cost before choosing a
+strategy for a real run.
 
 As  shown on  the right  side of  Figure~\ref{fig:rs}, SimSchlouder  shares with
 Schlouder a common  subset of inputs.  It  receives from the user a  set of jobs
@@ -463,9 +463,6 @@ use.  Whereas  Schlouder  operates  on a  real  cloud  controller,  SimSchlouder
 provisions simulated \acp{vm} and jobs  through SimGrid's cloud interface called
 SchIaaS. As  mentioned earlier,  the simulation requires  additional information
 regarding the platform and processes simulated.
-% pas necessaire à mon avis: For a  real execution  the user  does not  usually 
-% know  the cloud  specification or configuration that the  simulation requires 
-% to run. 
 Most importantly, during a real execution  the \emph{effective runtime} is the
 real observed runtime of a job, which might differ from the user estimate (used 
 for scheduling purpose). For a better control of the simulation, SimSchlouder
@@ -542,10 +539,10 @@ decisions, whereas integrating the implication of such decisions in the already
 complex computation of the numerical results of a stochastic would be
 impossible.
 
-In this section we will first discuss the particularities of the Monte Carlo
-Simulation. Then we will review how we hope to test the validity of such an
-approach to simulation. At last we will explore the steps taken to model the
-input \acp{rv} representing the jobs runtimes.
+In this  section we will  first discuss the  particularities of the  Monte Carlo
+Simulation. Then  we will review  how test the validity  of such an  approach to
+simulation. At last we will explore the  steps taken to model the input \acp{rv}
+representing the jobs runtimes.
 
 \subsection{Simulation Process}
 %\paragraph{Method} 
