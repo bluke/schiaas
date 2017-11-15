@@ -246,37 +246,39 @@ large  scale  behaviours  emerge naturally  from  the  interactions  of  these
 components. Working  on disjointed low level  components make it easier  to tune
 the precision  of the model to  the wanted accuracy/speed trade-off.
 
-Table~\ref{tab:simcmp} gives an overview of the capabilities and models of
-commons cloud simulators. 
+However, in case the simulated system is subject to variability, it is difficult
+to formally  establish the  validity of simulation  results. Indeed,  given some
+definite inputs,  a DES  outputs a  single deterministic  result while  the real
+system  will output  slightly different  results at  each repeated  execution on
+those same inputs.  Hence, in practice  the simulation is informally regarded as
+valid if  its results  are ``close'' to  one or some  of the  real observations.
+Notice however  that in the  field of grid or  cloud computing, very  few papers
+address the issue of the simulation validity.
 
-In the context of cloud computing, memory and network contention, virtualization
-overhead, and over-provisioning, make  application runtimes difficult to predict
-and variable  from one  execution to  the other.  Discrete event  simulators are
-deterministic in  nature and not  well equipped to  deal with such  cases, where
-stochastic simulations are much more appropriate.
+\subsection{Stochastic Simulation and Monte-Carlo Method}
 
-Computing a schedule for a task graph whose task have stochastic tasks durations
-is a problem  that has been early studied for  PERT networks~\cite{Slyke63}, and
-applied in the recent years to heterogeneous distributed computing environments.
-For  example in  the  context  of grids,  Tang  et  al.~\cite{Tang11} propose  a
-modification of the  well-known scheduling heuristic HEFT to  compute a schedule
-yielding the shortest makespan given randomly variable task durations.  However,
-to go  one step further  we need to analyze  the variability in  a comprehensive
-manner, which is achieved through the Monte-Carlo method.
+For  more   comprehensive  predictions  in  such   variables  environments,  the
+simulation must  be \emph{stochastic}.  In stochastic simulations  inputs become
+\acfp{rv} representing the  distribution of possible values  for the parameters.
+The  result  of one  such  simulation  is  itself  an \ac{rv}  representing  the
+distribution  of the  results.  This  approach has  been used  early to  compute
+schedules for task graphs (\ac{dag}) with stochastic durations in the context of
+PERT networks~\cite{Slyke63}.
 
-\subsection{Monte-Carlo Method}
+%,  and applied in  the recent  years to
+%heterogeneous distributed computing environments.  For example in the context of
+%grids,  Tang  et al.~\cite{Tang11}  propose  a  modification of  the  well-known
+%scheduling heuristic HEFT  to compute a schedule yielding  the shortest makespan
+%given randomly variable task durations. 
 
-In stochastic simulations inputs  become \acfp{rv} representing the distribution
-of possible  values for the  parameters.  The result  of one such  simulation is
-itself an \ac{rv} representing the distribution of the results. In this context,
-the  simulation of  applications in  clouds is  analogous to  the resolution  of
-stochastic \ac{dag},  in which  the vertices represent  the jobs  comprising the
-application, and the  edges the dependencies between jobs. Each  vertex can then
-be assigned  it's respective  \ac{rv} representing  its possible  runtimes.  The
-result is a \ac{rv} representing the  possible duration for the execution of the
-whole \ac{dag},  called \emph{makespan}. An  \ac{rv} is defined by  its \ac{pdf}
-and \ac{cdf}, where  the \ac{cdf} is obtain by integrating  the \ac{pdf}.  Works
-on heterogeneous grids~\cite{Li97} and  PERT networks~\cite{Ludwig01} show that,
+Similarly in  our context,  an application's  jobs is modeled  as a  \ac{dag} in
+which the vertices represent the jobs  comprising the application, and the edges
+the dependencies between jobs.  Each vertex can then be assigned it's respective
+\ac{rv}  representing   its  possible  runtimes.    The  result  is   a  \ac{rv}
+representing  the possible  duration for  the execution  of the  whole \ac{dag},
+called  \emph{makespan}. An  \ac{rv} is  defined by  its \ac{pdf}  and \ac{cdf},
+where  the   \ac{cdf}  is  obtain   by  integrating  the  \ac{pdf}.    Works  on
+heterogeneous  grids~\cite{Li97} and  PERT  networks~\cite{Ludwig01} show  that,
 when  tasks runtimes  are  independent the  makespan of  successive  tasks is  a
 convolution product  of the individual  tasks \acp{rv}, whereas the  makespan of
 parallel tasks  joining is the  product of  the tasks respective  \ac{cdf}. This
@@ -305,22 +307,24 @@ stochastic  simulation.  Statistical  fitting  techniques can  then  be used  to
 characterize this makespan \ac{rv}.
 
 The development  of heterogeneous distributed computing  environments, grids and
-now clouds, has led researchers to apply  \ac{mcs} in this field.  It is used in
-the  context  of grids,  where  the  number of  resources  is  fixed during  one
-execution,  by  Canon~\cite{Canon10}  to  evaluate the  robustness  of  \ac{dag}
-schedules when task durations vary, and similarly by Zheng et al.~\cite{Zheng13}
-to  evaluate  the  impact  of  this variability  on  makespan.   More  recently,
-ElasticSim~\cite{Cai17} as  been proposed as  a simulator extending  Cloudsim to
-integrate resource auto-scaling and stochastic  task durations. Similarly to our
-work, Elasticsim computes a schedule whose  objective is to minimize rental cost
-excepted  that they  impose deadline  constraints. The  study evaluates  how the
-rental cost  and makespan change depending  on the variability of  task duration
-and deadline,  for which some deviation  ranges have been arbitrarily  chosen to
-bound the statistical distribution used to draw random values. This differs from
-our own work in that we infer  the deviation ranges from actual execution traces
-and  check how  the makespan  \ac{rv}  covers actual  observations, while  their
-experiments  compare the  stochastic  schedules against  a  simulation based  on
-generated workflows.
+now clouds,  has led  researchers to  use this  approach in  this field.  In the
+context of grids,  where the number of resources is  fixed during one execution,
+Tang et  al.~\cite{Tang11} propose a  modification of the  well-known scheduling
+heuristic  HEFT to  compute  a  schedule yielding  the  shortest makespan  given
+randomly  variable task  durations. Canon~\cite{Canon10}  have used  \ac{mcs} to
+evaluate  the robustness  of \ac{dag}  schedules when  task durations  vary, and
+similarly, Zheng et  al.~\cite{Zheng13} evaluate the impact  of this variability
+on  makespan.  More  recently,  ElasticSim~\cite{Cai17} as  been  proposed as  a
+simulator extending  Cloudsim to integrate resource  auto-scaling and stochastic
+task  durations. Similarly  to our  work, Elasticsim  computes a  schedule whose
+objective  is  to  minimize  rental  cost excepted  that  they  impose  deadline
+constraints.  The  study evaluates  how  the  rental  cost and  makespan  change
+depending  on the  variability of  task duration  and deadline,  for which  some
+deviation  ranges  have  been  arbitrarily   chosen  to  bound  the  statistical
+distribution used to draw random values. This  differs from our own work in that
+we infer  the deviation ranges  from actual execution  traces and check  how the
+makespan \ac{rv} covers actual observations, while their experiments compare the
+stochastic schedules against a simulation based on generated workflows.
 
 
 
@@ -385,9 +389,9 @@ estimates  of  the  runtime.   Notice  that  the  jobs'  real  runtimes,  called
 change the initial scheduling decision with  regards to which resources the jobs
 are assigned.
 
-The  provisioning  and scheduling  strategies  of  Schlouder are  bi-objectives,
-namely cost  of renting the  resources, and makespan  of the execution.  In this
-paper, we test the two following strategies which favor one of the objectives: 
+The provisioning and scheduling strategies of Schlouder are bi-objective, namely
+cost of renting the resources, and makespan of the execution.  In this paper, we
+test the two following strategies which favor one of the objectives:
 \begin{itemize}
 \item ASAP (or \textit{as soon as possible}): schedules the job immediately onto
   an idle VM, or immediately provisions a new  VM to start the job if no idle VM
@@ -606,12 +610,6 @@ to  the mean  $\mu$.
 
 \subsection{Real Observations}
 
-Testing  discrete event  simulators  can  be easily  done  by  feeding into  the
-simulation  all the  relevant  runtimes of  a  real run  and  checking that  the
-resulting makespan  or BTU cost  matches the ones observed  in real life.  For a
-stochastic  simulation this  approach requires  feeding the  simulation runtimes
-distribution observed  over a number  of real  runs and comparing  the resulting
-makespan distribution with the distribution observed in real life.
 
 During the development of Schlouder, the cloud broker described in
 Section~\ref{sec:work-context}, we performed multiple executions of the
