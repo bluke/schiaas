@@ -528,10 +528,10 @@ can easily  be programmed to  reproduce such decisions, whereas  integrating the
 implication  of  such  decisions  in  the already  complex  computation  of  the
 numerical results of a stochastic would be impossible.
 
-In this section we will first discuss the particularities of the Monte Carlo
-Simulation. Then we present the real run we use as a reference point for this
-experiment. At last we will explore the steps taken to model the
-input \acp{rv} representing the jobs runtimes.
+In  this  section we  first  discuss  the  particularities  of the  Monte  Carlo
+Simulation applied to our context. Then we present the empirical observations we
+used as a reference point for this experiment. At last we will explore the steps
+taken to model the input \acp{rv} representing the jobs runtimes.
 
 \subsection{Simulation Process}
 \begin{comment}
@@ -644,23 +644,23 @@ variability.
 
 \subsection{Input Modeling}\label{sec:im}
 
-The volatile nature of cloud platform means that effective runtimes are always
-variable. Using a \ac{mcs} we can account for this variability and provide the
-user with a range of possible makespans. In this section we propose a simple
-method to represent the potential variability by creating a small range around
-the estimated runtimes. We test this method against our backlog of real runs.
-The key finding detailed hereafter is that this simple method can be precise
-enough for the \ac{mcs} to predict 90\% of real runs.
+The volatile nature  of cloud platform means that effective  runtimes are always
+variable. Using a  \ac{mcs} we can account for this  variability and provide the
+user with  a range of  possible makespans. In this  section we propose  a simple
+method to represent  the potential variability by creating a  small range around
+the estimated  runtimes. We test this  method against our backlog  of real runs.
+The key  finding detailed hereafter  is that this  simple method can  be precise
+enough for the \ac{mcs} to predict over 90\% of real runs.
 
 This model for the runtimes \acp{rv} uses a job's estimated runtime and a global
-perturbation level for all job. The perturbation level, expressed as a
-percentage an denoted as $P$, is used to build a range around the estimated
-runtime in which the simulations effective runtimes will be drawn. 
-
-We test the validity of this method by applying it on our experiment traces, and
-check the \ac{mcs} results against the real observed makespans. We assume a good
-guess for an estimated runtime is the average of all observed runtimes for a
-given job. As such $t_j$, the drawn time of job $j$, can be written as~:
+perturbation  level  for  all  job.   The perturbation  level,  expressed  as  a
+percentage an  denoted as  $P$, is used  to build a  range around  the estimated
+runtime in which the simulations effective  runtimes will be drawn. If we assume
+$P$ can summarize the variability of the whole system, a central question is how
+should  be $P$  and the  user estimates  chosen to  assess the  validity of  the
+\ac{MCS}. To that  end, we assume a  good guess for an estimated  runtime is the
+average of all effective runtimes for a given job. As such $t_j$, the drawn time
+of job $j$, can be written as~:
 
 \begin{equation}
 	t_j = \bar{R_j} \cdot (1 + p)
@@ -677,9 +677,9 @@ given job. As such $t_j$, the drawn time of job $j$, can be written as~:
 where $r_j^n$ is the $n$th runtime observation for job $j$, $\bar{R_j}$ is the
 average of all observed runtimes for job $j$, and $\mathcal{U}$ an uniform distribution.
 
-To obtain the global perturbation level, which limits the worst deviations from
-the estimated runtimes, we average the worst observed deviation for every job in
-the application, formally expressed as :
+To obtain the  global perturbation level $P$, which limits  the worst deviations
+from the estimated  runtimes, we average the worst observed  deviation for every
+job in the application, formally expressed as :
 
 \begin{equation}
 P = \textrm{mean}(\delta{}_j)
