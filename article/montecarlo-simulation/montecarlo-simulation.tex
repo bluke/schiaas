@@ -647,18 +647,21 @@ variability.
 The volatile nature  of cloud platform means that effective  runtimes are always
 variable. Using a  \ac{mcs} we can account for this  variability and provide the
 user with  a range of  possible makespans. In this  section we propose  a simple
-method to represent  the potential variability by creating a  small range around
-the estimated  runtimes. We test this  method against our backlog  of real runs.
-The key  finding detailed hereafter  is that this  simple method can  be precise
-enough for the \ac{mcs} to predict over 90\% of real runs.
+method to  represent the variability of  the whole system using  a single factor
+parameter to create  a small range around every estimated  runtime. We test this
+method against our backlog of real  runs.  The key finding detailed hereafter is
+that this simple method  can be precise enough for the  \ac{mcs} to predict over
+90\% of real runs.
 
 This model for the runtimes \acp{rv} uses a job's estimated runtime and a global
 perturbation  level  for  all  job.   The perturbation  level,  expressed  as  a
 percentage an  denoted as  $P$, is used  to build a  range around  the estimated
-runtime in which the simulations effective  runtimes will be drawn. If we assume
+runtime in which the simulation effective  runtimes will be drawn. If we assume
 $P$ can summarize the variability of the whole system, a central question is how
 should  be $P$  and the  user estimates  chosen to  assess the  validity of  the
-\ac{MCS}. To that  end, we assume a  good guess for an estimated  runtime is the
+\ac{mcs}. Obviously, 
+
+To that  end, we assume a  good guess for an estimated  runtime is the
 average of all effective runtimes for a given job. As such $t_j$, the drawn time
 of job $j$, can be written as~:
 
@@ -740,11 +743,9 @@ with $R_i^n$ the observed effective runtime for job $i$ during execution $n$.
 \end{comment}
 
 For OMSSA, the perturbation level given by this method is $P\approx{}10\%$ for both
-strategies. For Montage  our calculated perturbation level is  $P\approx{}20\%$ when looking
-at ASAP  executions and $P\approx{}5\%$ when  looking at AFAP  executions.
+strategies. For Montage  our calculated perturbation level is  $P\approx{}20\%$
+for ASAP and $P\approx{}5\%$ for AFAP.
 
-These models offer the best guess as to the job's variability. This allows us to
-evaluate our \ac{mcs} without the interference of estimation mistakes.
 
 \section{Evaluation}
 \label{sec:eval}
@@ -767,37 +768,37 @@ evaluate our \ac{mcs} without the interference of estimation mistakes.
 	\end{tabular}
 \end{table}
 
-We ran a 500 iterations \ac{mcs} for every strategy-application combination using
-the job models described in the previous section. The resulting distribution are
-shown in Figure~\ref{fig:fit}. The makespan density graphs show the simulation
-result distribution as filled curves and the real observed executions, taken
-from fig.~\ref{fig:realbrs}, as non-filled curves. On the \ac{btu} count graphs real
-observed \ac{btu} counts appear in left columns and simulation result
-distribution are in the right. Each graph shows for both strategy the
-distribution of a specific metric for a given application.
+We ran a 500 iteration \ac{mcs} for every strategy-application combination using
+the job models described in the previous section. The resulting distributionsare
+shown in Figure~\ref{fig:fit}.  The makespan density graphs  show the simulation
+result distribution  as filled  curves and the  real observed  executions, taken
+from  fig.~\ref{fig:realbrs},  as  non-filled  curves.  On  the  \ac{btu}  count
+graphs, for  each tick on  the BTU axis, the  left bar represents  the empirical
+data, and  right bar the prediction  from the simulation.  Each  graph shows for
+both strategy the distribution of a specific metric for a given application.
 
-When looking at the resulting OMSSA distributions, presented in the first two
-graphs, the distribution of simulated makespan range covers fairly well the 
-range of observed makespans. But the simulated makespans do not exactly share
-the same distribution as the real observed executions.
-The OMSSA BTU count distributions offers
-similar results.  In the AFAP case both real observation and simulated results
-indicate between 33 and 36 BTU are required for an execution, but the simulated
-distribution do not completely match the real one.
+When looking at the resulting OMSSA distributions, presented in the two leftmost
+graphs,  the distribution  of simulated  makespan range  covers fairly  well the
+range of  observed makespans, notwithstanding a  slight right skew and  shift of
+the empirical  makespan distribution.  The  OMSSA BTU count  distributions shows
+similar results.  The range of BTU  numbers required for an execution is correct
+(for  instance, for  AFAP  both empirical  observation  and simulation  indicate
+between  33 and  36 BTU  are used)  but the  distributions of  these BTU  counts
+slightly differ.
 
-After this visual inspection of the results we now examine them thought
-confidence intervals.
-Since the makespan is in essence the sum of the runtimes of the jobs in that
-executions critical path, and job are all distributed using the uniform
-distribution which has a finite variance, we consider the possible application
-Central Limit Theorem. Fitting to a normal distribution gives us an average
-makespan $\mu{}$, and a standard deviation $\sigma{}$. These can be used to
-build \acp{ci}. For the normal distribution the 95\% \ac{ci} is defined as
-$[\mu{}-2\sigma{},\mu{}+2\sigma{}]$ and the 99\% \ac{ci} as
+
+After  this  visual inspection  of  the  results  we  now examine  them  through
+statistical confidence intervals.   Since the makespan is in essence  the sum of
+the runtimes  of the  jobs in that  executions critical path,  and jobs  are all
+distributed  using the  uniform distribution  which  has a  finite variance,  we
+consider the Central Limit Theorem applicable.  Fitting to a normal distribution
+gives us an average makespan $\mu{}$, and a standard deviation $\sigma{}$. These
+can be used to  build \acp{ci}. For the normal distribution  the 95\% \ac{ci} is
+defined  as   $[\mu{}-2\sigma{},\mu{}+2\sigma{}]$  and   the  99\%   \ac{ci}  as
 $[\mu{}-3\sigma{},\mu{}+3\sigma{}]$.
 
 The capture rate expresses the number of observed real makespans that fall
-withing a given \ac{ci} relative to the total number of real observations.
+within a given \ac{ci} relative to the total number of real observations.
 Table~\ref{tab:fit} presents the capture rate obtained by each interval computed
 after normal fitting.  Additionally we provide for each interval its size
 relative to the average makespan.
@@ -810,22 +811,22 @@ ASAP strategy, this this case the 95\% \ac{ci} spanned 419s, from 12797s to
 as 3\%.
 \end{comment}
 
-On OMSSA the \ac{mcs} captures 90\% of real observed makespans. The divergence
-between the capture rate and the \ac{ci} expected capture rate is to to the fact
-that real observation distribution does not follow a perfect normal distribution. Using a
-higher confidence intervals improves the capture rate up to 98\%.
-When simulating Montage the \ac{mcs} achieves a capture rate of 100\% for any
-\ac{ci}.
+On OMSSA the  \ac{mcs} captures 90\% of real observed  makespans. The divergence
+between the  capture rate and  the \ac{ci} expected capture  rate is due  to the
+fact that the  empirical makespan distribution does not follow  a perfect normal
+distribution. Using  a 99\% \{ci}  improves the capture  rate up to  98\%, hence
+very close  the theoretical expectation.   When simulating Montage  the \ac{mcs}
+achieves a capture rate of 100\% for any \ac{ci}.
 
 \begin{comment}
 The number of Montage runs does not allow to conclusively how well the
-simulation matched reality, the obtained results shown in figure~\ref{fig:fit}
+simulation matched reality, the obtained results shown in Figure~\ref{fig:fit}
 and table~\ref{tab:fit} indicate that Montage's workflow structure does not 
 impact the success of the \ac{mcs}.
 
 Simulating Montage with the computed perturbation levels, as discussed in
 section~\ref{sec:im} 20\% when using ASAP and 5\% with AFAP, we obtained 100\%
-capture rate. The results displayed in the figure~\ref{fig:fit} and
+capture rate. The results displayed in Figure~\ref{fig:fit} and
 table~\ref{tab:fit} are for simulations done with the 10\% perturbation level.   
 Here again the graph shows great coverage. Distribution can not be significantly
 tested due to the lackluster number of real runs. The quantitative approach
@@ -850,7 +851,7 @@ Improving the \ac{mcs} results would require
 either more complex inputs models or building ad-hoc \acp{ci} without relying not
 the normal distribution.
 \end{comment}
-Further more this \ac{mcs} offers plenty of opportunities other than runtime and
+Furthermore this \ac{mcs} offers plenty of opportunities other than runtime and
 cost predictions.
 
 \begin{comment}
@@ -918,20 +919,21 @@ exemplify one such application. Then we will discuss limitation we have
 encountered in our work with \ac{mcs}.
 
 \subsection{Strategy Analysis}\label{sec:sa}
-During our work on defining the perturbation level to be applied to our average
-runtimes. We experimented with arbitrarily defined perturbation levels. This
-raises interesting usage of \acp{mcs}.
 
+We have so  far set the perturbation level  to a value that was  relevant to the
+real system observed  (see Section~\ref{sec:im}).  A subsequent  question is how
+does   the  prediction   change   when  increasing   this  perturbation   level.
 Figure~\ref{fig:int} presents the resulting \acp{ci} for simulations with a 10\%
-and 40\% perturbation levels. On the makespan interval graphs (first and third
-subfigures) the boxes represent the span of the capture interval. For reference
-the inside bar representing a single simulation using the average runtimes
-without any random element has been added.  Comparing the interval of perturbed
-simulation to this unperturbed simulation allows us to better see the effect of
-perturbation on the strategy. In the middle row of these subfigures, are
-presented for reference the interval spanning the minimum and maximum observed
-real makespans over all runs. These \ac{ci} subfigures only present ASAP
-strategy whereas the BTU distribution subfigures  present both strategies.
+and 40\% perturbation  levels. On the makespan interval graphs  (first and third
+subfigures  from left  to right)  the boxes  represent the  span of  the capture
+interval. For reference  the vertical bar inside represents  a single simulation
+using  the average  runtimes without  any random  element added.   Comparing the
+interval of  perturbed simulation  to this unperturbed  simulation allows  us to
+better see  the effect of  perturbation on the strategy.   In the middle  row of
+these subfigures, are presented for  reference the interval spanning the minimum
+and maximum  observed real  makespans over all  runs.  These  \ac{ci} subfigures
+only present ASAP strategy whereas  the BTU distribution subfigures present both
+strategies.
 
 The leftmost subfigure presents the \acp{ci} for OMSSA using the ASAP strategy at
 40\% and 10\% perturbation levels. With the increase of the perturbation level
@@ -1009,24 +1011,29 @@ settings. As  advocated by Puchert  et al.~\cite{PucherGWK15}, the trust  we can
 put in  the prediction  demands certainty  and precision  that only  comes from
 validating simulation against empirical observation.
 
-This paper contributes to this effort in two ways. First, we propose a
-\acl{mcs} extension to a discrete event simulator based on SimGrid. This
-extension provides stochastic predictions which are more informative than single
-values of cost and makespan. Second, we apply our method in a real setting,
-on both a bag-of-tasks and a workflow application for which we have collected
-execution traces. Our study puts forward the conditions for the applicability of
-the method, especially regarding the impact of the initial user estimates of the
-jobs' runtimes, which are central to any scheduling process. The first
-perspective of this work is to apply the method to production clouds. In this
-paper we managed to aggregate all the different sources of uncertainty into a
-perturbation on the job's runtime. We are interested in checking whether this is
-still possible in highly variable environments. Our second perspective, now that
-we are confident in our ability to simulate application executions, is to move
-away from the applications in our archive and use our enriched simulation to
-study the interactions between scheduling and workflow. More specifically, we
-are interested in how the structure of a workflow affects a scheduling's
-robustness, that is, its ability to satisfy predetermined constraints in terms of
-deadline or cost.
+This paper contributes to this effort in two ways. First, we propose a \acl{mcs}
+extension  to a  discrete  event  simulator based  on  SimGrid.  This  extension
+provides stochastic predictions which are more informative than single values of
+rental cost  and makespan  produced by  traditionnal discrete  event simulators.
+The \acl{mcs}  must be parameterized to  draw random values from  relevant value
+spaces. In this work we show that the  variability we seek to account for can be
+modeled  by a  single parameter  called perturbation  level applied  to all  job
+runtimes. Second, we apply our method in  a real setting, on both a bag-of-tasks
+and a workflow application for which we have collected execution traces.  Thanks
+to these empirical observations, our study  shows that the proposed method could
+capture over  90\% of the  observed makespans given an  appropriate perturbation
+level.
+
+The  first  perspective of  this  work  is to  apply  the  method to  production
+clouds.  In this  paper we  managed to  aggregate all  the different  sources of
+uncertainty  into a  perturbation on  the job's  runtime. We  are interested  in
+checking whether  this is  still possible in  highly variable  environments. Our
+second  perspective, now  that  we  are confident  in  our  ability to  simulate
+application executions, is to move away from the applications in our archive and
+use our  enriched simulation  to study the  interactions between  scheduling and
+workflow.  More specifically,  we  are  interested in  how  the  structure of  a
+workflow  affects a  scheduling's robustness,  that is,  its ability  to satisfy
+predetermined constraints in terms of deadline or cost.
 
 
 
