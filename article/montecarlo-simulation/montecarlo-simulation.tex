@@ -659,8 +659,7 @@ percentage an  denoted as  $P$, is used  to build a  range around  the estimated
 runtime in which the simulation effective  runtimes will be drawn. If we assume
 $P$ can summarize the variability of the whole system, a central question is how
 should  be $P$  and the  user estimates  chosen to  assess the  validity of  the
-\ac{mcs}. Obviously, 
-
+\ac{mcs}.
 To that  end, we assume a  good guess for an estimated  runtime is the
 average of all effective runtimes for a given job. As such $t_j$, the drawn time
 of job $j$, can be written as~:
@@ -803,20 +802,22 @@ Table~\ref{tab:fit} presents the capture rate obtained by each interval computed
 after normal fitting.  Additionally we provide for each interval its size
 relative to the average makespan.
 
-\begin{comment}
-For example
-the first line of table~\ref{tab:fit} presents the results for OMSSA using the
-ASAP strategy, this this case the 95\% \ac{ci} spanned 419s, from 12797s to
-13216s, for an average makespan of 13006s. Therefore the relative size is given
-as 3\%.
-\end{comment}
+%%Free floating figure must be declare one page ahead.
+\begin{figure*}
+	\includegraphics[width=\textwidth]{gfx/int_plot.pdf}
+	\caption{Makespan intervals and BTU count distribution for OMSSA and 
+	Montage at different perturbation levels. In the makespan interval graph 
+	the boxes represent the 95\% \ac{ci} resulting from the normal fit of the
+	\acs{mcs}'s results, and the bar the results of a single unperturbed 
+	simulation.}\label{fig:int}
+\end{figure*}
 
 On OMSSA the  \ac{mcs} captures 90\% of real observed  makespans. The divergence
 between the  capture rate and  the \ac{ci} expected capture  rate is due  to the
 fact that the  empirical makespan distribution does not follow  a perfect normal
-distribution. Using  a 99\% \{ci}  improves the capture  rate up to  98\%, hence
-very close  the theoretical expectation.   When simulating Montage  the \ac{mcs}
-achieves a capture rate of 100\% for any \ac{ci}.
+distribution. Using  a 99\% \ac{ci}  improves the capture  rate up to  98\%,
+hence very close  the theoretical expectation.   When simulating Montage  the
+\ac{mcs} achieves a capture rate of 100\% for any \ac{ci}.
 
 \begin{comment}
 The number of Montage runs does not allow to conclusively how well the
@@ -900,14 +901,6 @@ different \acp{mcs}  that we are able  to study the behavior  of the strategies
 when confronted with different applications and perturbation levels.
 \end{comment}
 
-%%Free floating figure must be declare one page ahead.
-\begin{figure*}
-	\includegraphics[width=\textwidth]{gfx/int_plot.pdf}
-	\caption{Makespan intervals and BTU count distribution for OMSSA and 
-	Montage at different perturbation levels. In the makespan interval graph 
-	the boxes represent the 95\% confidence interval resulting from the \acs{mcs},
-	and the bar the results of a single unperturbed simulation.}\label{fig:int}
-\end{figure*}
 
 
 
@@ -923,9 +916,10 @@ encountered in our work with \ac{mcs}.
 We have so  far set the perturbation level  to a value that was  relevant to the
 real system observed  (see Section~\ref{sec:im}).  A subsequent  question is how
 does   the  prediction   change   when  increasing   this  perturbation   level.
-Figure~\ref{fig:int} presents the resulting \acp{ci} for simulations with a 10\%
-and 40\% perturbation  levels. On the makespan interval graphs  (first and third
-subfigures  from left  to right)  the boxes  represent the  span of  the capture
+Figure~\ref{fig:int} presents the 95\% \acp{ci} obtained thourgh the normal
+distribution fitting of simulations with both a 10\%
+and a 40\% perturbation  level. On the makespan interval graphs  (first and third
+subfigures  from left  to right)  the boxes  represent the  span of the \ac{ci}
 interval. For reference  the vertical bar inside represents  a single simulation
 using  the average  runtimes without  any random  element added.   Comparing the
 interval of  perturbed simulation  to this unperturbed  simulation allows  us to
@@ -941,8 +935,8 @@ the intervals naturally get wider, but the average makespan, by definition the
 center of the capture interval, also gets higher. On OMSSA this happens to the
 extent that the lower bound of our interval at 40\% is higher than the lower
 bound at 10\%. This diminishes the capture rate of the simulation from 90\%
-(table~\ref{tab:fit}) to 83\% all the while bringing the width of the interval
-relative to the average value to 10\% (almost 24 minutes) up from 3\% (7 minutes).
+(table~\ref{tab:fit}) to 83\% even as the relative width of the interval grows
+from 3\% (7 minutes) to 10\% (almost 24 minutes).
 
 This result is two-fold. First this demonstrates that the perturbation level can
 not be used as a trade-off variable to augment capture rate at the expense of
@@ -960,14 +954,11 @@ widely. By testing Montage in the same way (third subfigure) we see that when
 scheduling workflows this behaviour does not happen to the same extent. The
 average makespan still rises, but not as fast as the interval grows, the \ac{ci}
 at a 40\% perturbation level is a superset of the one at a 10\% perturbation
-level. In the case of ASAP this behaviour could probably have been predicted by
-closely examining the code of the scheduling strategy. Both the makespans upward
-slide and its relative resilience when scheduling workflow instead of
-bags-of-tasks are trivial consequences of its code. But this analysis does not
-require foreknowledge of the scheduling strategies internals, other obviously
-than having it coded in the simulation, and therefore \ac{mcs} can be used to
-study or intuit the behaviour of complex scheduling strategies and test their
-consistence in various environment 
+level. In the case of ASAP we can explain this behaviour is explained by the
+fact that when using ASAP the last job of every \ac{vm} are synchronized,
+therefore any runtime exceeding it's expected value will extend the makespan.
+But this kind of analysis can be used to gain insight in the strengths and
+weaknesses of complex strategies.
 
 
 \subsection{Advantages and limitations of the enriched simulation}\label{sec:lim}
