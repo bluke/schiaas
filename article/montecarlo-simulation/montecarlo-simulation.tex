@@ -93,7 +93,7 @@ cloud computing, computer simulation, monte carlo methods.
 
 Over the  last decade, the advancement  of virtualization techniques has  led to
 the emergence of new economic  and exploitation approaches of computer resources
-in  the form  of \ac{iaas},  one form  of cloud  computing. In  this model,  all
+in  \ac{iaas},  one form  of cloud  computing. In  this model,  all
 computing resources  are made available  on demand by third-party  operators and
 paid based  on usage.  The  ability to provision  resources on demand  is mainly
 used in two ways.  Firstly, it can serve for scaling purposes where new machines
@@ -166,8 +166,8 @@ setting,  described in  section~\ref{sec:work-context},  where the  applications
 use-cases, the scheduler, and the  experimental observations are presented.  The
 stochastic     framework     we     propose     is     then     presented     in
 section~\ref{sec:enriched-sim}  and is  evaluated in  section~\ref{sec:eval}. We
-finally conclude by  discussing the possible improvements and the  limits of the
-approach.
+finally conclude by  discussing in section~\ref{sec:disc} the possible
+improvements and the  limits of the approach.
 
 
 \section{Related Work}
@@ -219,7 +219,7 @@ disconnection of a network.  The simulator will jump from one event to the next,
 updating the  times of  upcoming events to  reflect the change  of state  in the
 simulation.   Such  \ac{des}  based  simulators  require  at  least  a  platform
 specification  and  an  application  description.   The  platform  specification
-describes both the physical nature of the cloud, e.g. machines and networks, and
+describes both the physical nature of the cloud, e.g.~machines and networks, and
 the management rules, e.g.~\ac{vm} placement and availability.  Depending on the
 simulator,  platform  specification  can  be  done  through  user  code,  as  in
 CloudSim~\cite{cloudsim} for example, or  through platform description files, as
@@ -229,15 +229,7 @@ amount of computation of communication  to perform, which the simulator computes
 the duration based on the platform  specification and its CPU or network models.
 An  alternative  approach is  to  extrapolate  the  task durations  from  actual
 execution traces observed in real executions.
-%
-% -------   no need to mention, not relevant to the paper ------------------------
-% Although the application  is the active
-% payload  of the  simulation it  is  not always  what  is being  observed by  the
-% experimenter.   Application are  sometimes just  the backdrop  against which  we
-% study specific cloud components. %e.g.~someone interested in testing new \ac{vm}
-% placement algorithms will be simulating the same application multiple times
-% while changing the platform specification.
-% --------------------------------------------------------------------------------
+
 Available cloud \acp{des} include CloudSim~\cite{cloudsim} a extensible
 simulator written in Java, Simgrid~\cite{simgrid} when use in conjunction with
 the SCHIaaS cloud interface, the NS2-based GreenCloud~\cite{greencloud} centered
@@ -330,8 +322,8 @@ objective  is  to  minimize  rental  cost excepted  that  they  impose  deadline
 constraints.  The  study compares the  simulation results regarding  rental cost
 and makespan,  when varying the variability  of task duration and  deadline with
 arbitrary  values,  for  several  generated workflows.  By  contrast,  our  work
-focuses on how the \ac{mcs} method, under some given variability assumptions, to
-capture actual observations.
+focuses on how the \ac{mcs} method, under some given variability assumptions, 
+captures actual observations.
 
 
 
@@ -379,7 +371,7 @@ In the recent years, we have developed  a client-side job broker for IaaS clouds
 called  Schlouder~\cite{Michon17}.  This  broker is  able to  submit the  user's
 batch jobs, be  it a set of  independent jobs or a workflow.   The broker's main
 role is  to schedule the set  of jobs onto a  set of cloud resources,  which the
-broker can scale up  or down depending on a \emph{strategy}  chosen by the user.
+broker can scale up  or down.
 Technically, the broker  connects to the cloud management  system (for instance,
 OpenStack) to  instruct how  the infrastructure should  be provisioned  and then
 assigns the jobs to the resources using the Slurm job management system.
@@ -394,8 +386,7 @@ the user (details can be found in~\cite{GenaudG11}), of which we will use two in
 this paper.  Strategies  provision \acp{vm} and schedule jobs based  on the user
 estimates  of  the  runtime.   Notice  that  the  jobs'  real  runtimes,  called
 \emph{effective  runtimes}, may  differ from  the estimates,  but this  does not
-change the initial scheduling decision with  regards to which resources the jobs
-are assigned.
+change the initial scheduling decision.
 
 The provisioning and scheduling strategies of Schlouder are bi-objective, namely
 cost of renting the resources, and makespan of the execution.  In this paper, we
@@ -454,8 +445,8 @@ provisions simulated \acp{vm} and jobs  through SimGrid's cloud interface called
 SchIaaS. As  mentioned earlier,  the simulation requires  additional information
 regarding the platform and processes simulated.
 Most importantly, during a real execution  the \emph{effective runtime} is the
-real observed runtime of a job, which might differ from the user estimate (used 
-for scheduling purpose). For a better control of the simulation, SimSchlouder
+real observed runtime of a job, which might differ from the user estimate, used 
+for scheduling purposes. For a better control of the simulation, SimSchlouder
 can take observed effective runtimes as inputs. 
 
 \begin{comment}
@@ -528,9 +519,9 @@ environments such as clouds. If the result of the simulation is one of many
 possible outcomes, it might not be a relevant enough information to the user. 
 As such, providing a distribution of possible results is a better solution.
 
-In this section we propose one such enriched simulation by instrumenting a
+In this section we propose one such extended simulation by instrumenting a
 \ac{des}, SimSchlouder, as a stochastic simulator using the method of the
-\acf{mcs}. This solution combines the relative simplicity of a \ac{des} with the
+\ac{mcs}. This solution combines the relative simplicity of a \ac{des} with the
 extensive results provides by stochastic simulations. This approach guarantees
 that our simulation respects the scheduling and provisioning decisions observed
 in real life, as the \ac{des} can easily be programmed to reproduce such
@@ -544,35 +535,30 @@ experiment. At last we will explore the steps taken to model the
 input \acp{rv} representing the jobs runtimes.
 
 \subsection{Simulation Process}
-%\paragraph{Method} 
+\begin{comment}
 As  depicted   on  Figure~\ref{fig:mc-process},  we  consider   an  application
 consisting of  $n$ jobs, independent  or organized as  a workflow. For  each job
 $i  \in\,[1;n]$, we provide  a runtime distribution $T_i$ following the method
 described in section~\ref{sec:im}.
 
 One MCS-iteration then consists in 
+\end{comment}
+
+The whole extended simulation process,  referred to as \ac{mcs}, applied on an
+application consiting of $n$ jobs (as depicted fig.~\ref{fig:mc-process})
+consists in applying successive MCS-iterations. Assuming we can provide a
+runtime distribution $T_i$ for every job $i$, a MCS-iteration consists in~:
 \begin{itemize}
 \item making one realization of the runtime  for each job $i$, that is randomly
   drawing a runtime value from the associated $T_i$ to obtain a runtime $t_i$,
 \item and once runtimes have been drawn for all jobs, proceed to a simulation
   of the execution with these runtime values to obtain a makespan $m$.
 \end{itemize}
-The whole \ac{mcs} process  consists in repeating this iteration a  large number
-of times (500 times  on the  figure). From the  set of makespans  $m_k$ obtained
-at each step, we compute  a statistical distribution of the makespan  as a final
-\ac{rv} noted $M$.
+Once we obtain enough makespans $m_k$, we compute  a statistical distribution of
+the makespan  as a final \ac{rv} noted $M$.
 
-Figure~\ref{fig:mc-process}  schematically  presents a  \ac{mcs}  of  a $n$  job
-application.   The  input of  the  simulation  is a  set  of  $n$ \acp{rv}  each
-corresponding to a given job, denoted by  indices. A realization is a set of $n$
-runtimes that are drawn according to each jobs respective \ac{rv}.  Each of this
-realization is  simulated independently,  providing a makespan  sample.  Finally
-the sample are aggregated in the final distribution.
-
-In this paper the full process taking as input runtimes distribution for
-every jobs and providing as results the makespan distribution is referred to as a
-\acf{mcs}. The multiple executions of SimSchlouder performed by the \ac{mcs} are
-referred to as \emph{simulations}.
+In this paper the simulation done within each MCS-iteration is performed by
+SimSchlouder.
 
 Because of the \emph{pay-as-you-go} nature of the cloud we extend our simulation
 to two output variables: we will not only observe the makespan computed at any
@@ -655,7 +641,7 @@ the    experimental   conditions    in   which    the   runs    were   executed.
 Table~\ref{tab:nbruns}  presents  an  overview   of  the  selected  sets,  while
 Figure~\ref{fig:realbrs} presents the distribution of resulting makespans and
 \ac{btu} counts observed depending on application and scheduling strategy. These
-figures show that even in our platform we observe significant makespan
+figures show that even on our platform we observe significant makespan
 variability.
 
 \subsection{Input Modeling}\label{sec:im}
@@ -666,11 +652,11 @@ user with a range of possible makespans. In this section we propose a simple
 method to represent the potential variability by creating a small range around
 the estimated runtimes. We test this method against our backlog of real runs.
 The key finding detailed hereafter is that this simple method can be precise
-enough for the \ac{mcs} to predict 90\% for real runs.
+enough for the \ac{mcs} to predict 90\% of real runs.
 
-This model for the runtimes \acp{rv} uses a job's estimated runtime and a unique
-perturbation level used on every job. The perturbation level, expressed as a
-percentage an denoted as P, is used to build a range around the estimated
+This model for the runtimes \acp{rv} uses a job's estimated runtime and a global
+perturbation level for all job. The perturbation level, expressed as a
+percentage an denoted as $P$, is used to build a range around the estimated
 runtime in which the simulations effective runtimes will be drawn. 
 
 We test the validity of this method by applying it on our experiment traces, and
@@ -755,13 +741,12 @@ P = \underset{i}{\textrm{mean}}(\delta{}_i)
 with $R_i^n$ the observed effective runtime for job $i$ during execution $n$. 
 \end{comment}
 
-For OMSSA, the perturbation level given by this method is roughly 10\% for both
-strategies. For Montage  our calculated perturbation level is  20\% when looking
-at ASAP  executions and  5\% when  looking at AFAP  executions. We  believe this
-difference can be partially  explained by the low number of  montage runs in the
-archive. As such we make the hypothesis that the runtime variability comes
-mostly from the platform and will also try simulations of Montage with a 10\%
-perturbation level.
+For OMSSA, the perturbation level given by this method is $P\approx{}10\%$ for both
+strategies. For Montage  our calculated perturbation level is  $P\approx{}20\%$ when looking
+at ASAP  executions and $P\approx{}5\%$ when  looking at AFAP  executions.
+
+These models offer the best guess as to the job's variability. This allows us to
+evaluate our \ac{mcs} without the interference of estimation mistakes.
 
 \section{Evaluation}
 \label{sec:eval}
@@ -784,57 +769,55 @@ perturbation level.
 	\end{tabular}
 \end{table}
 
-We ran 500 iterations \acp{mcs} for all strategy-application combinations using
+We ran a 500 iterations \ac{mcs} for every strategy-application combination using
 the job models described in the previous section. The resulting distribution are
-shown in figure~\ref{fig:fit}. The makespan density graphs show the simulation
+shown in Figure~\ref{fig:fit}. The makespan density graphs show the simulation
 result distribution as filled curves and the real observed executions, taken
-from fig.~\ref{fig:realbrs}, as simple curves. On the \ac{btu} count graphs real
+from fig.~\ref{fig:realbrs}, as non-filled curves. On the \ac{btu} count graphs real
 observed \ac{btu} counts appear in left columns and simulation result
 distribution are in the right. Each graph shows for both strategy the
 distribution of a specific metric for a given application.
 
 When looking at the resulting OMSSA distributions, presented in the first two
-graphs, the distribution of simulated makespan has good coverage, that is the
-simulated makespan range covers fairly well the range of observed makespans. But
-simulated distribution does not appear to show the skewness observed in real
-runs. Simulated makespan distributions appear mostly symmetrical whereas the
-observed makespan distributions are not. This is a consequence of our input
-model, in which job distributions are also symmetrical when this was not the
-case in real executions. Looking at the OMSSA BTU count distributions offers
+graphs, the distribution of simulated makespan range covers fairly well the 
+range of observed makespans. But the simulated makespans do not exactly share
+the same distribution as the real observed executions.
+The OMSSA BTU count distributions offers
 similar results.  In the AFAP case both real observation and simulated results
 indicate between 33 and 36 BTU are required for an execution, but the simulated
-distribution does not share the real observation skewness towards lower values.
-The ASAP strategy shows a very stable BTU count which is perfectly matched by
-the simulation.
+distribution do not completely match the real one.
 
-To provide a more quantitative approach when discussing makespan distribution we
-decide to fit simulated distribution to a normal distribution. This allows us to
-build confidence intervals that can be checked against real observations.  Since
-the makespan is in essence the sum of the runtimes of the jobs in that
+After this visual inspection of the results we now examine them thought
+confidence intervals.
+Since the makespan is in essence the sum of the runtimes of the jobs in that
 executions critical path, and job are all distributed using the uniform
-distribution which has a finite variance, we consider the Central Limit Theorem
-to be applicable. Hence our choice to fit the simulated distribution to a normal
-distribution. The fitting process gives us an average makespan $\mu{}$, and a
-standard deviation $\sigma{}$. This allows to build \acp{ci}. The 95\% \ac{ci}
-of the normal distribution is defined as $[\mu{}-2\sigma{},\mu{}+2\sigma{}]$ and
-the 99\% \ac{ci} is $[\mu{}-3\sigma{},\mu{}+3\sigma{}]$.
+distribution which has a finite variance, we consider the possible application
+Central Limit Theorem. Fitting to a normal distribution gives us an average
+makespan $\mu{}$, and a standard deviation $\sigma{}$. These can be used to
+build \acp{ci}. For the normal distribution the 95\% \ac{ci} is defined as
+$[\mu{}-2\sigma{},\mu{}+2\sigma{}]$ and the 99\% \ac{ci} as
+$[\mu{}-3\sigma{},\mu{}+3\sigma{}]$.
 
+The capture rate expresses the number of observed real makespans that fall
+withing a given \ac{ci} relative to the total number of real observations.
 Table~\ref{tab:fit} presents the capture rate obtained by each interval computed
-after normal fitting. The capture rate expresses the number of observed real
-makespans that fall withing a given \ac{ci} relative to the total number of real
-observations. Since improving the capture rate is always possible at the cost of
-enlarging the \ac{ci} and therefore diminishing it's relevance, we provide for
-each interval its size relative to the average makespan. For example the first
-line of table~\ref{tab:fit} presents the results for OMSSA using the ASAP
-strategy, this this case the 95\% \ac{ci} spanned 419s, from 12797s to 13216s,
-for an average makespan of 13006s. Therefore the relative size is given as 3\%.
+after normal fitting.  Additionally we provide for each interval its size
+relative to the average makespan.
 
-Still, on OMSSA we can see that our normal fitting in not perfect as our \acp{ci}
-appears of by 5\% with the 95\% \ac{ci} capturing only 90\% real observations.
-This result can be greatly improved upon using a 99\% \ac{ci} which managed to
-capture 98\% of real observations.
+\begin{comment}
+For example
+the first line of table~\ref{tab:fit} presents the results for OMSSA using the
+ASAP strategy, this this case the 95\% \ac{ci} spanned 419s, from 12797s to
+13216s, for an average makespan of 13006s. Therefore the relative size is given
+as 3\%.
+\end{comment}
 
-When Simulating Montage the \ac{mcs} achieves a capture rate of 100\%.
+On OMSSA the \ac{mcs} captures 90\% of real observed makespans. The divergence
+between the capture rate and the \ac{ci} expected capture rate is to to the fact
+that real observation distribution does not follow a perfect normal distribution. Using a
+higher confidence intervals improves the capture rate up to 98\%.
+When simulating Montage the \ac{mcs} achieves a capture rate of 100\% for any
+\ac{ci}.
 
 \begin{comment}
 The number of Montage runs does not allow to conclusively how well the
@@ -859,14 +842,18 @@ dependencies. These results give confidence that our method is extendable to
 workflow type applications.  
 \end{comment}
 
-Improving the \ac{mcs} results would require better inputs models and a better
-characterization of the results less reliant on the normal distribution which
-cannot reflect skewness. Although such improvements would be possible in this
-experiment, this is only the case because we work with the benefit of hindsight.
-We believe that our model is representative of what a knowledgeable user could
-create upfront. In these condition users should expect to be able to obtain
-\ac{ci} for 90\% of the runs. Although not perfect the \ac{mcs} offers plenty of
-opportunities other than runtime and cost predictions.
+Our \ac{mcs} and a simple job model can capture 90\% of reality all the while
+producing makespan intervals of limited size, a 3\% relative size representing 7
+minutes on a 3h 45m long makespan. We consider this result a satisfactory
+trade-off between the simplicity of the input model and the accuracy with
+regards to the theoretical \ac{ci}.
+\begin{comment}
+Improving the \ac{mcs} results would require
+either more complex inputs models or building ad-hoc \acp{ci} without relying not
+the normal distribution.
+\end{comment}
+Further more this \ac{mcs} offers plenty of opportunities other than runtime and
+cost predictions.
 
 \begin{comment}
 We evaluate the  validity of our simulation based on  two different factors, the
@@ -919,14 +906,14 @@ when confronted with different applications and perturbation levels.
 	\includegraphics[width=\textwidth]{gfx/int_plot.pdf}
 	\caption{Makespan intervals and BTU count distribution for OMSSA and 
 	Montage at different perturbation levels. In the makespan interval graph 
-	the box represent the 95\% confidence interval resulting from the \acs{mcs},
+	the boxes represent the 95\% confidence interval resulting from the \acs{mcs},
 	and the bar the results of a single unperturbed simulation.}\label{fig:int}
 \end{figure*}
 
 
 
 \section{Discussion}
-
+\label{sec:disc}
 Outside of the realm of reproduction or predictions, we believe that \ac{mcs}
 can have other more research oriented applications. In this section we will
 exemplify one such application. Then we will discuss limitation we have
@@ -948,12 +935,12 @@ presented for reference the interval spanning the minimum and maximum observed
 real makespans over all runs. These \ac{ci} subfigures only present ASAP
 strategy whereas the BTU distribution subfigures  present both strategies.
 
-The first subfigure presenting the \acp{ci} for OMSSA using the ASAP strategy at
+The first subfigure presents the \acp{ci} for OMSSA using the ASAP strategy at
 40\% and 10\% perturbation levels. With the increase of the perturbation level
 the intervals naturally get wider, but the average makespan, by definition the
 center of the capture interval, also gets higher. On OMSSA this happens to the
 extent that the lower bound of our interval at 40\% is higher than the lower
-bound at 10\%. This impacts the capture rate of the simulation from 90\%
+bound at 10\%. This diminishes the capture rate of the simulation from 90\%
 (table~\ref{tab:fit}) to 83\% all the while bringing the width of the interval
 relative to the average value to 10\% (almost 24 minutes) up from 3\% (7 minutes).
 
@@ -994,12 +981,12 @@ In this article the only variable parameter is jobs runtimes. As such these
 runtimes coalesce all sources of variability, change in available CPU time,
 network or memory contention and application inherent variability. We did so
 because this approach is closer to a cloud broker user scenario and  the
-execution traces we had did not allow for us to separate in convincing way these
-different variability. In circumstance where one is able to measure variability
+execution traces we had did not allow for us to separate in a convincing way these
+different variability sources. In circumstance where one is able to measure variability
 on CPU power or network speed it is possible to add those variable as input of
-the \ac{mcs}. In this case a realization would draw not only each jobs size (in
-op/flop) but also a platform with different CPU powers and network speed.
-\acp{mcs} allow to fuse these different variability effortlessly, but it will
+the \ac{mcs}. In this case a realization would draw not only each jobs size 
+ but also a platform with different CPU powers and network speed.
+\ac{mcs} enables to fuse these different variability sources effortlessly, but it will
 require more iterations. 
 
 In this paper all the \ac{mcs} presented used 500 iterations, that is 500
@@ -1013,8 +1000,8 @@ possible the more samples are required. In our cases not only the number of jobs
 was low, 223 jobs for OMSSA and 184 jobs for Montage, but with a 10\%
 perturbation level the input variable distribution was compact. At a 40\%
 perturbation level there was a significant drop in the confidence of our fitting
-method. We are currently are method to determine the number of necessary
-iterations.
+method. We are currently studying the relationship between perturbation level
+and the number of required MCS-iterations.
 
 \section{Conclusion}
 Predicting  the execution  behavior  of complex  workloads in  the  cloud is  an
