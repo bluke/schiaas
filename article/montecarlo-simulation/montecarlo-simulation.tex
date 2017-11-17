@@ -291,7 +291,7 @@ Moreover this \ac{dag} based approach implies fixed scheduling. In the context
 of a cloud platform where additional resources can be provisioned at anytime
 users are likely to call on dynamic schedulers that adapt the schedule on the fly
 depending of the already executed jobs runtimes and the availability of
-resources. In the context of a \ac{dag} representation this is akin to adding
+resources. With a \ac{dag} representation this is akin to adding
 and removing edges depending on the runtime of certain vertices. Edges do not
 only represent the dependencies, the inherent constraint between the application
 jobs, but also the scheduling, the effective constraint imposed on a job queued
@@ -944,7 +944,7 @@ not be used as a trade-off variable to augment capture rate at the expense of
 strong indication that our real platform exhibits a variability closer to
 10\% than to 40\%. People for whom higher capture rates are more important than
 interval compacity should use statistical methods to build higher rate \acp{ci},
-like in our case the 99\% normal distribution \ac{ci}.
+like the 99\% normal distribution \ac{ci} use in section~\ref{sec:eval}.
 
 Secondly this result shows how an \ac{mcs} can be used to exhibit strategy
 behaviours. This upwards shift of the \ac{ci} shows that ASAP, a strategy
