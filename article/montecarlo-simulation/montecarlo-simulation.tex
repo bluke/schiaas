@@ -63,10 +63,11 @@
   application are  of pre-eminent  importance. To  that end,  a number  of cloud
   simulators have been  proposed by researchers. However, the  attempts to reach
   reliable  predictions are  hampered by  the opacity  regarding the  underlying
-  hardware platform  and the  multi-tenant nature  clouds make job
+  hardware platform, and by the  multi-tenant nature of clouds. Those make job
   runtimes both  variable and hard to  predict.  In this paper,  we investigate
-  through two real  use-cases, which parameters are the most  influential in the
-  prediction of the actual execution behavior in terms of cost and makespan.
+  which parameters are the most  influential in the
+  prediction of the actual execution behavior in terms of cost and makespan,
+  through two real  use-cases.
 
   We consider the execution  of batch jobs on an  actual platform, one example
   being a  bag-of-tasks and the other  one a workflow, whose  jobs are scheduled
@@ -75,11 +76,11 @@
   study the  relationship between the  precision of  the user estimates  and the
   accuracy of the simulation results regarding  cost and makespan. Based on this
   stochastic process,  predictions are expressed as  interval-based makespan and
-  cost.   We show  that  most  of the time imprecisions  in  user estimates are
+  cost.   We show  that, most  of the time, imprecisions  in  user estimates are
   largely amortized in the final predictions but still can capture real
-  observations. Finally, we offer evidence of the influence of the scheduling 
+  observations. Finally, we identify evidence of the influence of the scheduling 
   heuristics on the accuracy of the method.
- 
+  % JG : je ne comprends pas le `` but still can capture real observations''
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -98,45 +99,44 @@ computing resources  are made available  on demand by third-party  operators and
 paid based  on usage.  The  ability to provision  resources on demand  is mainly
 used in two ways.  Firstly, it can serve for scaling purposes where new machines
 are  brought online  to  fulfill  service availability  in  the  face of  higher
-loads.  This approach  is used  for  providing service  and allows  for a  lower
+loads.  This approach  is used  for  providing services  and allows  for a  lower
 baseline  cost  while  still  being  able  to deal  with  spikes  in  demand  by
 provisioning machines on the fly. Secondly, it is useful for parallelizing tasks
-to achieve a  shorter makespan (i.e the total execution  execution time from the
-first  to the  last task)  at equal  cost, this  approach being  often used  for
+to achieve a shorter makespan (i.e. the time between the submission of the first
+task and the completion of the  last task)  at equal  cost, this  approach being  often used  for
 scientific  and  industrial  workloads  when runtime  is  heavily  dependent  on
 computing power.  This  approach is made possible by the  pricing model of cloud
 infrastructures, as  popularized by AWS\footnote{Amazon Web  Services}, in which
 payment  for computing  power, provided  as \acp{vm},  happens in  increments of
 arbitrary lengths  of time, \ac{btu}, usually  of one hour. Running  two \ac{vm}
-side by side for one \ac{btu} each costs the same as running one \ac{vm} for two
+side by side for one \ac{btu} actually costs the same as running one \ac{vm} for two
 \ac{btu}, but every \ac{btu} started is owed in full.
 
 This model  offers the client  an almost complete freedom  to start or  stop new
-servers as long as the price can be afforded. However, for applications composed
-of a set of jobs, that can be  parallel or dependent on some others (generally a
-\ac{dag}  of  jobs) it  quickly  becomes  difficult  to manually  provision  the
+servers as long as the price can be afforded. However, for parallel applications composed
+of a set of jobs, it  quickly  becomes  difficult  to manually  provision  the
 resources in an  efficient way.  The use of a  scheduler becomes unavoidable for
 such workloads.   In this paper, we  are interested in predicting  the execution
-time  and cost  of such  complex  workloads, in  which the  scheduling plays  an
+time  and cost  of such  workloads, in  which the  scheduling plays  an
 important role.  In  this study, we consider two  opposite scheduling strategies
 to put forward their impact on execution behavior.
 %--[We will review in the related work section several other scheduling approaches.]
 
 
 %----------------------- prediction tools --------------------------------------
-Independently of  scheduling decisions,  accurate prediction  of the  runtime of
+Independently of  scheduling decisions, the accurate prediction  of the  runtime of
 complex workloads is hampered by  multiple factors.  First \ac{iaas} operates in
-an opaque  fashion, the exact nature  of the underlying platforms  being unknown
-and their hardware subject to evolution as operators complete their data-centers
+an opaque  fashion: The exact nature  of the underlying platforms  is unknown,
+and their hardware are subject to evolution as operators update their data-centers
 over  the years  with new  servers and  equipment.  Secondly  cloud systems  are
-multi-tenant by nature  which adds uncertainty due to contention  on network and
+multi-tenant by nature: This adds uncertainty due to contention  on network and
 memory accesses, depending on how \ac{vm} are scheduled and the activity of your
 \emph{neighbors}.   Even   when  \ac{iaas}  operators  attempt   to  mask  these
 irregularities in computing  power and network access by  guaranteeing a minimum
 performance, variability occurs  in presence of \emph{less-than-noisy-neighbors}
 as it is not in the interest of the \ac{iaas} operators to limit power available
-over the guaranteed minimums.  These factors  add to the already high difficulty
-of  modeling   job  execution  times  on   a  network  of  computers   as  shown
+over the guaranteed minimums.  These factors  increase the difficulty
+of  modeling   job  execution  times, which is already difficult enough,  as  shown
 in~\cite{Lastovetsky05}.
 
 In this regard,  the prediction is highly dependent on  the underlying simulator
@@ -148,6 +148,7 @@ has   been    chosen   for    its   well-studied   accuracy    against   reality
 description  of the  hardware platform,  its  network model  takes into  account
 network contention in presence of multiple  communication flows and can model VM
 boot times.
+%JG : le boot time n'est pas modélisé de base dans simgrid.
 
 However, we may not be able to provide a fully accurate platform description, or
 unable  to estimate  the network  cross-traffic, yielding  a distorsion  between
