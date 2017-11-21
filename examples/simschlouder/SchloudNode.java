@@ -177,12 +177,7 @@ public class SchloudNode extends Process implements Comparable<SchloudNode>{
 				e.printStackTrace();
 			}
 			
-		try {
-			schloudNode.start();
-		} catch (HostNotFoundException e) {
-			Msg.critical("Something bad happened is SimSchlouder: The host of "+instance.getId()+" was not found.");
-			e.printStackTrace();
-		}
+		
 
 		}
 	}
@@ -221,12 +216,7 @@ public class SchloudNode extends Process implements Comparable<SchloudNode>{
 		SchloudNode schloudNode = new SchloudNode(instance,cloud);
 
 		SchloudNodeController schloudNodeController = schloudNode.new SchloudNodeController(schloudNode); 
-		try {
-			schloudNodeController.start();
-		} catch (HostNotFoundException e) {
-			Msg.critical("Something bad happened is SimSchlouder: The host of "+instance.getId()+" was not found.");
-			e.printStackTrace();
-		}
+		schloudNodeController.start();
 		
 		return schloudNode;
 	}
@@ -415,12 +405,7 @@ public class SchloudNode extends Process implements Comparable<SchloudNode>{
 	protected void processQueue() {
 		Msg.verb("Processing queue of "+this);
 		SchloudTaskController stc = new SchloudTaskController(this);
-		try {
-			stc.start();
-		} catch (HostNotFoundException e) {
-			Msg.critical("Something bad happened in Schoulder while trying to execute a task on "+this.getHost());
-			e.printStackTrace();
-		}
+		stc.start();
 	}
 	
 	/**

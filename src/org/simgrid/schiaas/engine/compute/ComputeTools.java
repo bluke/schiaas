@@ -37,11 +37,7 @@ public class ComputeTools {
 			this.destination = destination;
 			this.vmSchedulingException = null;
 			
-			try {
-				this.start();
-			} catch(HostNotFoundException e) {
-				Msg.critical("Something bad happend in the liveMigrationProcess"+e.getMessage());
-			}
+			this.start();
 		}
 
 		/**
@@ -159,14 +155,7 @@ public class ComputeTools {
 					if (instance.isTerminating()) return;
 					waitFor(1);
 				}
-				try {
-					process.start();
-				} catch (HostNotFoundException e) {
-					Msg.critical("Something went wrong while trying start "+process.getName()
-						+"after waiting for "+instance.getId()+" to run."); 
-					e.printStackTrace();
-				}
-
+				process.start();
 			}
 		}
 		

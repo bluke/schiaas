@@ -26,11 +26,7 @@ public class RiseProcess extends Process {
 		this.request = request;
 		this.data = data;
 		
-		try {
-			this.start();
-		} catch(HostNotFoundException e) {
-			Msg.critical("Something bad happend in RISE"+e.getMessage());
-		}
+		this.start();
 
 	} 
 	
