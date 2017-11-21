@@ -43,7 +43,7 @@ public class SimpleScheduler extends ComputeScheduler {
 	 * @param instanceType the type of the instance to be scheduled.
 	 * @return Return the weight of the given host depending on the number of free cores.
 	 */
-	protected double getWeight(ComputeHost computeHost, InstanceType instanceType) {
+	public double getWeight(ComputeHost computeHost, InstanceType instanceType) {
 		
 		switch (type) {
 		case BALANCER: 
@@ -54,7 +54,6 @@ public class SimpleScheduler extends ComputeScheduler {
 			return 0;
 		}
 	}
-
 	
 	/**
 	 * Simply compute a weight for each PMs, and select the greatest one.

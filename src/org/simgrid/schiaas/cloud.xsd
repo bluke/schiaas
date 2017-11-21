@@ -25,6 +25,12 @@ TODO: make "name" mandatory
 		<xs:anyAttribute processContents="lax" />
 	</xs:complexType>
 
+<!-- <reconfigurator [*=]>
+TODO: make "name" mandatory 
+-->
+	<xs:complexType name="ReconfiguratorConfig">
+		<xs:anyAttribute processContents="lax" />
+	</xs:complexType>
 
 <!-- <instance_type id=  core=  memory=  disk= />
 -->
@@ -65,6 +71,7 @@ TODO: make "name" mandatory
 <!-- <compute engine=  >
 		<config ...>
 		<scheduler ...>
+		<reconfigurator ...>
 		<instance_type ...>*
 		<image ...>
 		<cluster>|<host> *
@@ -74,6 +81,7 @@ TODO: make "name" mandatory
 		<xs:sequence>
 			<xs:element name="config" type="EngineConfig"/>
 			<xs:element name="scheduler" type="SchedulerConfig" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="reconfigurator" type="ReconfiguratorConfig" minOccurs="0" maxOccurs="1"/>
 			<xs:element name="instance_type" type="Instance" maxOccurs="unbounded" />
 			<xs:element name="image" type="Image" maxOccurs="unbounded" />
 			<xs:choice maxOccurs="unbounded">
