@@ -76,12 +76,7 @@ public class GoogleClusterInjector extends AbstractInjector {
 			Msg.info("Starting the TaskUsageProcess of the GoogleClusterInjector "+id);			
 
 			this.taskUsageInjectorProcess = new TaskUsageInjectorProcess(config.get("task_usage_filename"));
-			try {
-				this.taskUsageInjectorProcess.start();
-			} catch (HostNotFoundException e) {
-				Msg.critical("Something went wrong while starting Task Usage Injector Process");
-				e.printStackTrace();
-			}
+			this.taskUsageInjectorProcess.start();
 		}
 		
 		String taskEventLine;

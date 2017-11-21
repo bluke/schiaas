@@ -30,11 +30,6 @@ public class Master extends Process {
 			super(controller, "LiveMigrationProcess:"+vm.getName()+"->"+host.getName());
 			this.vm = vm;
 			this.host = host;
-			try {
-				this.start();
-			} catch(HostNotFoundException e) {
-				Msg.critical("Something bad happend in the LiveMigrationProcess of RICE"+e.getMessage());
-			}
 		}
 
 		public void main(String[] arg0) throws MsgException {

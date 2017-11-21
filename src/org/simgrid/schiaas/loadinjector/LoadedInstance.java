@@ -33,7 +33,6 @@ public class LoadedInstance {
 			this.loadedInstanceProcess = new LoadedInstanceProcess(this);
 
 			try {
-				Msg.info("DEBUG : WFRAS "+this);
 				ComputeTools.waitForRunningAndStart(compute.getComputeEngine(), instance, this.loadedInstanceProcess);
 				
 			} catch (HostNotFoundException e) {
