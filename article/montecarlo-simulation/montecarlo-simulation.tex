@@ -623,10 +623,12 @@ Figure~\ref{fig:realbrs} presents the distribution of resulting makespans and
 
 As expected our experiment show variability in runtimes. This is reflected by
 the makespan distribution observed in Figure~\ref{fig:realbrs}. In introduction,
-we mentioned existing studies relating to IaaS cloud variability. Using the
-methodology described in~\cite{LeitnerC16}, based on relative standard deviation
-of task runtimes, we find TODO
-our platform's variability to be 
+we mentioned existing studies related to IaaS cloud variability. Using the
+methodology described in the study~\cite{LeitnerC16}, based on relative standard
+deviation of jobs runtimes, we find our platform variability to stand between
+3\% and 6\%. This variability is within the range reported in the study for
+platforms like Amazon's EC2 or Google Cloud Engine, with the exception of shared
+CPU instances.
 Using a  \ac{mcs} we can account for this  variability and provide the
 user with  a range of  possible makespans. In this  section we propose  a simple
 method to  represent the variability of  the whole system using  a single factor
@@ -659,9 +661,11 @@ of job $j$, can be written as~:
 where $r_j^n$ is the $n$th runtime observation for job $j$, $\bar{R_j}$ is the
 average of all observed runtimes for job $j$, and $\mathcal{U}$ an uniform distribution.
 
-To obtain the  global perturbation level $P$, which limits  the worst deviations
-from the estimated  runtimes, we average the worst observed  deviation for every
-job in the application, formally expressed as :
+Since the global perturbation level $P$ establishes the limit for the worst
+deviations from the estimated runtimes, the relative standard deviation metric
+used in~\cite{LeitnerC16} is not well suited. Instead we choose to build $P$
+using the average of the worst observed deviation for every job in the
+application. Formally $P$ is expressed as :
 \begin{equation}
 P = \textrm{mean}(\delta{}_j)
 \label{eq:P}
@@ -674,9 +678,9 @@ P = \textrm{mean}(\delta{}_j)
 
 For OMSSA, the perturbation level given by this method is $P\approx{}10\%$ for both
 strategies. For Montage  our calculated perturbation level is  $P\approx{}20\%$
-for ASAP and $P\approx{}5\%$ for AFAP. This perturbation level metric is
-analogous to the one used in the later parts of~\cite{pics} and a 10\%
-perturbation level matches their findings.
+for ASAP and $P\approx{}5\%$ for AFAP. Using a similar deviation to the mean
+approach, \cite{pics} also observed most deviation to be within 10\% of the
+average runtime when working on Amazon EC2 instances with dedicated CPUs.
 
 \section{Evaluation}
 \label{sec:eval}
