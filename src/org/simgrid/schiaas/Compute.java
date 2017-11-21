@@ -290,7 +290,7 @@ public class Compute {
 	}
 
 	/**
-	 * Run a new instance, using a simple round-robin scheduling
+	 * Run a new instance
 	 * 
 	 * @param imageId
 	 *            the id of the image of the instance.
@@ -311,7 +311,7 @@ public class Compute {
 	}	
 	
 	/**
-	 * Run a new instance, using a simple round-robin scheduling
+	 * Run a new instance
 	 * 
 	 * @param image
 	 *            the image of the instance.

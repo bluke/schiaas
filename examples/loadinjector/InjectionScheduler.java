@@ -63,12 +63,7 @@ public class InjectionScheduler extends Process {
 		for (AbstractInjector injector : Injector.getInjectors().values()){
 			InjectionProcess ip = new InjectionProcess(injector);
 			this.injectionProcesses.add(ip);
-			try {
-				ip.start();
-			} catch (HostNotFoundException e) {
-				Msg.info("fuck : "+e.getMessage());
-				e.printStackTrace();
-			}
+			ip.start();
 		}
 	}
 
@@ -110,11 +105,6 @@ public class InjectionScheduler extends Process {
 		Msg.info("Using '"+controller.getName()+"' to host the injection processes" );
 		
 		InjectionScheduler is = new InjectionScheduler(controller);
-		try {
-			is.start();
-		} catch (HostNotFoundException e) {
-			Msg.critical("Something wrong happened while initializing the injectors: "+e.getMessage());
-			e.printStackTrace();
-		}
+		is.start();
 	}
 }

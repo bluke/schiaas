@@ -243,8 +243,10 @@ public class SimSchlouder {
 	 * @throws IOException
 	 * @throws HostFailureException
 	 * @throws SimSchlouderException
+	 * @throws IllegalAccessException 
+	 * @throws InstantiationException 
 	 */
-    public static void main(String[] args) throws MsgException, HostNotFoundException, IOException, HostFailureException, SimSchlouderException {       
+    public static void main(String[] args) throws MsgException, HostNotFoundException, IOException, HostFailureException, SimSchlouderException, InstantiationException, IllegalAccessException {       
 	    Msg.init(args);
 	
 	    if (args.length < 3) {
@@ -315,16 +317,26 @@ public class SimSchlouder {
      * Load a scheduling and provisioning strategy class 
      * @param alg the name of the class
      * @return an <i>AStrategy</i> object
+     * @throws IllegalAccessException 
+     * @throws InstantiationException 
      */
-	private static AStrategy loadStrategy(String alg) {
+	private static AStrategy loadStrategy(String alg) throws InstantiationException, IllegalAccessException {
     	try {
-    		return (AStrategy)Class.forName("simschlouder.algorithms."+alg).newInstance();
+    		return (AStrategy)Class.forName(alg).newInstance();
     	} catch (ClassNotFoundException ex) {
-    		Msg.error("Could not locate class: " + alg);
-    		System.exit(4);
+        	try {
+        		return (AStrategy)Class.forName("simschlouder.algorithms."+alg).newInstance();
+        	} catch (ClassNotFoundException ex2) {
+        		Msg.critical("Could not locate class: " + alg);
+        		System.exit(4);
+        	} 
+    		catch (Exception e) {
+    			Msg.critical("Unexpected exception when instanciating strategy");
+    			System.exit(4);
+    		}
     	} 
 		catch (Exception e) {
-			Msg.error("Unexpected exception when instanciating strategy");
+			Msg.critical("Unexpected exception when instanciating strategy");
 			System.exit(4);
 		}
 		return null;

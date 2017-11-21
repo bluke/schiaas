@@ -75,14 +75,6 @@
     <docanchor file="index" title="Running SchIaaS">running</docanchor>
     <docanchor file="index" title="Prerequisite">running_prerequisite</docanchor>
     <docanchor file="index" title="Retrieving and Installing SchIaaS">running_retrieving</docanchor>
-    <docanchor file="index" title="Tutorial: the master-slave example">tutorial</docanchor>
-    <docanchor file="index" title="Overview of the Example">tutorial_overview</docanchor>
-    <docanchor file="index" title="Simulation setup">tutorial_setup</docanchor>
-    <docanchor file="index" title="Cloud tag">cloud_tag</docanchor>
-    <docanchor file="index" title="Storage tag">storage_tag</docanchor>
-    <docanchor file="index" title="Compute tag">compute_tag</docanchor>
-    <docanchor file="index" title="Java Code">tutorial_code</docanchor>
-    <docanchor file="index" title="Initialization">tutorial_initialization</docanchor>
     <docanchor file="index" title="Instances management">tutorial_instance</docanchor>
     <docanchor file="index" title="Data management">tutorial_data</docanchor>
     <docanchor file="index" title="Reports">tutorial_reports</docanchor>

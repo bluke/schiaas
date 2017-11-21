@@ -453,31 +453,6 @@ job,  which   might  differ  from   the  user  estimate,  used   for  scheduling
 purposes. For a better control of the simulation, SimSchlouder can take observed
 effective runtimes as inputs.
 
-\begin{comment}
-For the purpose of this paper, we classify the inputs required by SimSchlouder
-in two categories. The first category is the operator inputs, which describe the
-hardware platform and the cloud configuration. Internally, they are fed to the
-SimGrid core and the \ac{iaas} simulation layer. The second category is the end
-user inputs. They describe the workflow to simulate, the submission dates of
-each job, the runtime prediction that would be provided to Schlouder.
-Additionally for the purpose of the simulator, a user can choose to supply
-effective runtimes to match, communication to simulate, or alternative boot
-times for the \acp{vm}. These additional inputs are used to alter the sequence
-of events simulated without interfering with parameters that would change the
-provisioning or scheduling decisions made by SimSchlouder, e.g.\ having a job
-overrun its runtime without changing the corresponding user prediction.
-
-As mentioned above, the variability of real executions suggests that a simulation,
-even if it was  perfectly accurate, would capture only one of the set
-of possible real executions. We will show later that  the simulation is indeed
-very   accurate  when   the  user   estimates  are   close  to   the  effective
-runtimes. However,  to  provide the user  with a broader view  of how
-their real executions could behave with job runtimes variability,  we should 
-enrich the simulation framework with some form of stochastic prediction.
-\end{comment}
-
-
-
 
 \begin{comment}
 \begin{figure}
@@ -641,14 +616,19 @@ number of observations in  those groups is uneven due to  the changing nature of
 the    experimental   conditions    in   which    the   runs    were   executed.
 Table~\ref{tab:nbruns}  presents  an  overview   of  the  selected  sets,  while
 Figure~\ref{fig:realbrs} presents the distribution of resulting makespans and
-\ac{btu} counts observed depending on application and scheduling strategy. These
-figures show that even on our platform we observe significant makespan
-variability.
+
 
 \subsection{Input Modeling}\label{sec:im}
 
-The volatile nature  of cloud platforms means that effective  runtimes are always
-variable. Using a  \ac{mcs} we can account for this  variability and provide the
+As expected our experiment show variability in runtimes. This is reflected by
+the makespan distribution observed in Figure~\ref{fig:realbrs}. In introduction,
+we mentioned existing studies related to IaaS cloud variability. Using the
+methodology described in the study~\cite{LeitnerC16}, based on relative standard
+deviation of jobs runtimes, we find our platform variability to stand between
+3\% and 6\%. This variability is within the range reported in the study for
+platforms like Amazon's EC2 or Google Cloud Engine, with the exception of shared
+CPU instances.
+Using a  \ac{mcs} we can account for this  variability and provide the
 user with  a range of  possible makespans. In this  section we propose  a simple
 method to  represent the variability of  the whole system using  a single factor
 parameter to create  a small range around every estimated  runtime. We test this
@@ -680,9 +660,11 @@ of job $j$, can be written as~:
 where $r_j^n$ is the $n$th runtime observation for job $j$, $\bar{R_j}$ is the
 average of all observed runtimes for job $j$, and $\mathcal{U}$ an uniform distribution.
 
-To obtain the  global perturbation level $P$, which limits  the worst deviations
-from the estimated  runtimes, we average the worst observed  deviation for every
-job in the application, formally expressed as :
+Since the global perturbation level $P$ establishes the limit for the worst
+deviations from the estimated runtimes, the relative standard deviation metric
+used in~\cite{LeitnerC16} is not well suited. Instead we choose to build $P$
+using the average of the worst observed deviation for every job in the
+application. Formally $P$ is expressed as :
 \begin{equation}
 P = \textrm{mean}(\delta{}_j)
 \label{eq:P}
@@ -695,7 +677,9 @@ P = \textrm{mean}(\delta{}_j)
 
 For OMSSA, the perturbation level given by this method is $P\approx{}10\%$ for both
 strategies. For Montage  our calculated perturbation level is  $P\approx{}20\%$
-for ASAP and $P\approx{}5\%$ for AFAP.
+for ASAP and $P\approx{}5\%$ for AFAP. Using a similar deviation to the mean
+approach, \cite{pics} also observed most deviation to be within 10\% of the
+average runtime when working on Amazon EC2 instances with dedicated CPUs.
 
 \section{Evaluation}
 \label{sec:eval}
