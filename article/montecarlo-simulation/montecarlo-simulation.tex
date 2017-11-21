@@ -39,8 +39,8 @@
 
 %\title{Modeling the accuracy of Monte-Carlo approach for Cloud based workflow
 %  simulations.}
-
-\title{Executing Batch Jobs on Clouds: How to Predict Reality Accurately?}
+%\title{Executing Batch Jobs on Clouds: How to Predict Reality Accurately?}
+\title{Improving Cloud Simulation using the Monte-Carlo Method}
 
 
 \author{\IEEEauthorblockN{Luke~Bertot 
@@ -124,27 +124,29 @@ to put forward their impact on execution behavior.
 
 
 %----------------------- prediction tools --------------------------------------
-Independently of  scheduling decisions, the accurate prediction  of the  runtime of
-complex workloads is hampered by  multiple factors.  First \ac{iaas} operates in
-an opaque  fashion~: the exact nature  of the underlying platforms  is unknown,
-and their hardware are subject to evolution as operators update their data-centers
-over  the years  with new  servers and  equipment.  Secondly  cloud systems  are
-multi-tenant by nature. This adds uncertainty due to contention  on network and
-memory accesses, depending on how \acp{vm} are scheduled and the activity of your
-\emph{neighbors}.   Even   when  \ac{iaas}  operators  attempt   to  mask  these
-irregularities in computing  power and network access by  guaranteeing a minimum
-performance, variability occurs ini the presence of \emph{less-than-noisy-neighbors}
-as it is not in the interest of the \ac{iaas} operators to limit power available
-over the guaranteed minimums.  These factors  increase the difficulty
-of  modeling   job  execution  times, which is already difficult enough,  as  shown
-in~\cite{Lastovetsky05}.
+Independently of scheduling decisions, the accurate prediction of the runtime of
+complex workloads is  hampered by the inherent variability  of clouds, explained
+by multiple factors.  First \ac{iaas} operates  in an opaque fashion~: the exact
+nature of the underlying platforms is unknown, and their hardware are subject to
+evolution as operators update their data-centers over the years.  Secondly cloud
+systems are multi-tenant  by nature. This adds uncertainty due  to contention on
+network and  memory accesses, depending  on how  \acp{vm} are scheduled  and the
+activity of  your \emph{neighbors}.  This  variability, reported by a  number of
+practitionners  who evaluate  parallel  application performance  on clouds  (e.g
+~\cite{MehrotraDHHJLSB16},  who report  an  average 5\%-6\%  variability on  AWS
+cluster   compute  instances),   has  also   been  measured   by  a   number  of
+benchmarks. One of the most comprehensive  and recent survey of such reports and
+further benchmarks has been published in~\cite{LeitnerC16}. We will see in this 
+article that our observations fit with the figures presented in this survey. 
 
-In this regard,  the prediction is highly dependent on  the underlying simulator
-of the system and on the phenomena it  can capture. In this work, we rely on the
-SimGrid~\cite{simgrid}  simulation toolkit, enabling us to build discrete event
+This  variablility increases  the difficulty  of modeling  job execution  times,
+which is  already difficult  enough, as  shown in~\cite{Lastovetsky05}.  In this
+regard, the  prediction is highly dependent  on the underlying simulator  of the
+system  and on  the phenomena  it can  capture.  In this  work, we  rely on  the
+SimGrid~\cite{simgrid} simulation  toolkit, enabling us to  build discrete event
 simulators of distributed systems such as Grids, Clouds, or HPC systems. SimGrid
 has   been    chosen   for    its   well-studied   accuracy    against   reality
-(e.g.~\cite{StanisicTLVM15,VelhoSCL13}).    In   particular,  given   a   precise
+(e.g.~\cite{StanisicTLVM15,VelhoSCL13}).    In  particular,   given  a   precise
 description  of the  hardware platform,  its  network model  takes into  account
 network contention in presence of multiple communication flows.
 
@@ -211,24 +213,24 @@ Because they allow for experiments without having to build or even use a real
 platform, simulations are a cornerstone of the study of distributed
 systems and clouds.  
 
-Most cloud  simulators are based on  \ac{des}. In \aclp{des} the  simulation is a
-serie of events changing the state of  the simulated system.  For instance, events can be the
-start  (or  end)  of  computations or of communications.
-The simulator will jump from one event to the next,
-updating the  times of  upcoming events to  reflect the state change in the
-simulation.   Such  \ac{des}-based  simulators  require  at  least  a  platform
-specification  and  an  application  description.   The  platform  specification
-describes both the physical nature of the cloud, e.g.~machines and networks, and
-the management rules, e.g.~\ac{vm} placement and availability.  Depending on the
-simulator, the platform  specification  can  be  done  through  user  code,  as  in
-CloudSim~\cite{cloudsim} for example, or  through platform description files, as
-is  mostly  the case  in  SimGrid~\cite{simgrid}.   The application  description
-consists in  a set of  computing and communicating  tasks, often described  as an
-amount of computation or communication  to perform. The simulator computes
-their duration based on the platform  specification, and its CPU and network models.
-An  alternative  approach is  to  extrapolate  the  task durations  from  actual
-execution traces observed in real executions.
-%JG : je ne vois pas l'intérêt de cette dernière phrase.
+Most cloud simulators  are based on \ac{des}. In \aclp{des}  the simulation is a
+serie  of events  changing the  state of  the simulated  system.  For  instance,
+events can  be the  start (or  end) of computations  or of  communications.  The
+simulator will jump from  one event to the next, updating  the times of upcoming
+events  to reflect  the state  change  in the  simulation.  Such  \ac{des}-based
+simulators  require  at  least  a  platform  specification  and  an  application
+description.  The platform  specification describes both the  physical nature of
+the cloud,  e.g.~machines and networks,  and the management  rules, e.g.~\ac{vm}
+placement  and   availability.   Depending   on  the  simulator,   the  platform
+specification can be done through  user code, as in CloudSim~\cite{cloudsim} for
+example,  or through  platform  description  files, as  is  mostly  the case  in
+SimGrid~\cite{simgrid}.   The  application  description  consists in  a  set  of
+computing and communicating  tasks, often described as an  amount of computation
+or communication to perform. The simulator  computes their duration based on the
+platform specification, and its CPU and network models.  An alternative approach
+is  to directly  input the  task  durations extrapolated  from actual  execution
+traces.
+
 
 Available cloud \acp{des} include CloudSim~\cite{cloudsim} an extensible
 simulator written in Java, Simgrid~\cite{simgrid} when use in conjunction with
@@ -237,20 +239,17 @@ on energy consumption of cloud's network apparatus, the commercial solution
 MDCSim~\cite{MDCSim} from Pennsylvania State University,
 iCanCloud~\cite{iCanCloud} which can be run in parallel on multiple machines,
 GroudSim~\cite{groudsim} which can simulate both Grids and Clouds, and
-most recently PICS~\cite{pics} which provides end-user point-of-view approach to
+most recently PICS~\cite{pics} which provides cloud user point-of-view approach to
 simulation.
 
-At the core of DES  is the  solver. The solver considers the  states of  the system
-generated by the platform and previous events  to compute the timing of the future
-events. Therefore it defines  which is the next event of the simulation. 
-In  most cases, simulators  have a  \emph{bottom-up} approach~: the
-modeling concerns low-level components  (machines, networks, storage devices), 
-and from their interactions emerge the high-level  behaviours.
-Working  on disjoint low level  components make it easier  to tune
-the precision  of the model to  the wanted accuracy or speed trade-off.
-
-PICS, which adopts a strict end-user point-of-view, completely abstracts the
-physical platform.
+At the core of DES is the solver.  The solver considers the states of the system
+generated  by the  platform and  previous events  to compute  the timing  of the
+future events. % Therefore  it defines which is the next  event of the simulation. - SG: redondant
+In  most  cases, simulators  have  a  \emph{bottom-up} approach~:  the  modeling
+concerns low-level  components (machines,  networks, storage devices),  and from
+their interactions  emerge the high-level  behaviours. Working on  disjoint low
+level components make it easier to tune the precision of the model to the wanted
+accuracy or speed trade-off.
 
 However, when the simulated system is subject to variability, it is difficult
 to  establish the  validity of simulation  results formally. Indeed,  given some
@@ -804,8 +803,6 @@ Improving the \ac{mcs} results would require
 either more complex inputs models or building ad-hoc \acp{ci} without relying not
 the normal distribution.
 \end{comment}
-Furthermore this \ac{mcs} offers plenty of opportunities other than runtime and
-cost predictions.
 
 \begin{comment}
 We evaluate the  validity of our simulation based on  two different factors, the
@@ -856,7 +853,7 @@ when confronted with different applications and perturbation levels.
 
 
 
-\section{Discussion}
+\section{Perspectives}
 \label{sec:disc}
 Outside of the realm of reproduction or predictions, we believe that \ac{mcs}
 can have other more research oriented applications. In this section we will
