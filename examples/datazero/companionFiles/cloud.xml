@@ -1,0 +1,40 @@
+<?xml version='1.0'?>
+ <!DOCTYPE clouds>
+ <clouds version="1">
+	<cloud  id="myCloud">
+		
+		<storage id="myStorage" engine="org.simgrid.schiaas.engine.storage.rise.Rise">
+			<config controller="SupervisionHost"/>
+		</storage>
+
+		<compute engine="org.simgrid.schiaas.engine.compute.rice.Rice"> 
+		
+			<config controller="SupervisionHost" 
+					image_storage="myStorage" image_caching="PRE"
+					inter_boot_delay="10"/>
+					
+			<scheduler name="org.simgrid.schiaas.engine.compute.scheduler.simplescheduler.SimpleScheduler"
+					   type="balancer"
+					   controller="SupervisionHost"
+					   delay="100"/>
+			
+			<instance_type id="small" core="1" memory="1000" disk="1690" />				
+			<instance_type id="medium" core="2" memory="1000" disk="1690"/>
+			<instance_type id="large" core="4" memory="1000" disk="1690"/>
+			
+			<image id="myImage" size="1073741824"/>
+
+			<host id="Host1_1"/>
+			<host id="Host1_2"/>
+			<host id="Host1_3"/>
+			<host id="Host2_1"/>
+			<host id="Host2_2"/>
+			<host id="Host2_3"/>
+			<host id="Host3_1"/>
+			<host id="Host3_2"/>
+			<host id="Host3_3"/>
+		</compute>
+
+	</cloud>
+</clouds> 
+ 

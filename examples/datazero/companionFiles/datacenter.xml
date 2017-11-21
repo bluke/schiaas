@@ -1,0 +1,110 @@
+<?xml version='1.0'?>
+<!DOCTYPE platform SYSTEM "http://simgrid.gforge.inria.fr/simgrid/simgrid.dtd">
+<platform version="4.1">
+	
+  <zone id="DataCenter" routing="Full">
+	  <zone id="RackSupervision" routing="Full">
+		<!-- Multiple pstate processor capacities can be defined as a list of powers specified for a given host -->
+		<!-- Attribute 'pstate' specifies the initialy selected pstate (here, the lowest pstate corresponds to the highest
+			 processor speed) -->
+		  <host id="SupervisionHost" speed="100.0Mf,50.0Mf,20.0Mf" pstate="0" core="4" >
+			  <!--  List of Idle:OneCore:AllCores (in Watts) corresponding to the speed consumed when the processor is idle
+					and when one core is at Full speed, and when all cores are Fully loaded -->
+			  <!--  The list must contain one energetic profile for each previously defined pstate-->
+			  <prop id="watt_per_state" value="100.0:120.0:200.0, 93.0:110.0:170.0, 90.0:105.0:150.0" />
+			  <prop id="watt_off" value="5" />
+		  </host>
+	  </zone>
+	  
+	  <zone id="RackUser1" routing="Full">
+		<host id="Host1_1" speed="100.0Mf,50.0Mf,20.0Mf" pstate="0" core="4" >
+		  <prop id="watt_per_state" value="100.0:120.0:200.0, 93.0:110.0:170.0, 90.0:105.0:150.0" />
+		  <prop id="watt_off" value="10" />
+		</host>
+		
+		<host id="Host1_2" speed="100.0Mf,50.0Mf,20.0Mf" pstate="0" core="1" >
+		  <!-- This host is mono-core, so AllCores=OneCore and is omitted -->
+		  <prop id="watt_per_state" value="100.0:200.0, 93.0:170.0, 90.0:150.0" />
+		  <prop id="watt_off" value="10" />
+		</host>
+		
+		<host id="Host1_3" speed="100.0Mf,50.0Mf,20.0Mf" pstate="0" core="1" >
+		  <!-- This host is mono-core, so AllCores=OneCore and is omitted -->
+		  <prop id="watt_per_state" value="100.0:200.0, 93.0:170.0, 90.0:150.0" />
+		  <prop id="watt_off" value="6" />
+		</host>
+		
+		<link id="RackUser1_backbone" bandwidth="1e9bps" latency="5E-5s"/> 
+	  	<route src="Host1_1" dst="Host1_2"><link_ctn id="RackUser1_backbone"/></route>
+	  	<route src="Host1_1" dst="Host1_3"><link_ctn id="RackUser1_backbone"/></route>
+	  	<route src="Host1_2" dst="Host1_3"><link_ctn id="RackUser1_backbone"/></route>
+		
+				
+	  </zone>
+
+	  <zone id="RackUser2" routing="Full">
+		<host id="Host2_1" speed="100.0Mf,50.0Mf,20.0Mf" pstate="0" core="4" >
+		  <prop id="watt_per_state" value="100.0:120.0:200.0, 93.0:110.0:170.0, 90.0:105.0:150.0" />
+		  <prop id="watt_off" value="7" />
+		</host>
+		
+		<host id="Host2_2" speed="100.0Mf,50.0Mf,20.0Mf" pstate="0" core="1" >
+		  <!-- This host is mono-core, so AllCores=OneCore and is omitted -->
+		  <prop id="watt_per_state" value="100.0:200.0, 93.0:170.0, 90.0:150.0" />
+		  <prop id="watt_off" value="8" />
+		</host>
+		
+		<host id="Host2_3" speed="100.0Mf,50.0Mf,20.0Mf" pstate="0" core="1" >
+		  <!-- This host is mono-core, so AllCores=OneCore and is omitted -->
+		  <prop id="watt_per_state" value="100.0:200.0, 93.0:170.0, 90.0:150.0" />
+		  <prop id="watt_off" value="9" />
+		</host>
+		
+		<link id="RackUser2_backbone" bandwidth="1e9bps" latency="5E-5s"/> 
+	  	<route src="Host2_1" dst="Host2_2"><link_ctn id="RackUser2_backbone"/></route>
+	  	<route src="Host2_1" dst="Host2_3"><link_ctn id="RackUser2_backbone"/></route>
+	  	<route src="Host2_2" dst="Host2_3"><link_ctn id="RackUser2_backbone"/></route>
+		
+		
+	  </zone>
+			
+	  <zone id="RackUser3" routing="Full">
+		<host id="Host3_1" speed="100.0Mf,50.0Mf,20.0Mf" pstate="0" core="4" >
+		  <prop id="watt_per_state" value="100.0:120.0:200.0, 93.0:110.0:170.0, 90.0:105.0:150.0" />
+		  <prop id="watt_off" value="10" />
+		</host>
+		
+		<host id="Host3_2" speed="100.0Mf,50.0Mf,20.0Mf" pstate="0" core="1" >
+		  <!-- This host is mono-core, so AllCores=OneCore and is omitted -->
+		  <prop id="watt_per_state" value="100.0:200.0, 93.0:170.0, 90.0:150.0" />
+		  <prop id="watt_off" value="11" />
+		</host>
+		
+		<host id="Host3_3" speed="100.0Mf,50.0Mf,20.0Mf" pstate="0" core="1" >
+		  <!-- This host is mono-core, so AllCores=OneCore and is omitted -->
+		  <prop id="watt_per_state" value="100.0:200.0, 93.0:170.0, 90.0:150.0" />
+		  <prop id="watt_off" value="12" />
+		</host>
+		
+		<link id="RackUser3_backbone" bandwidth="1e9bps" latency="5E-5s"/> 
+	  	<route src="Host3_1" dst="Host3_2"><link_ctn id="RackUser3_backbone"/></route>
+	  	<route src="Host3_1" dst="Host3_3"><link_ctn id="RackUser3_backbone"/></route>
+	  	<route src="Host3_2" dst="Host3_3"><link_ctn id="RackUser3_backbone"/></route>
+		
+	  </zone>
+	  
+	  <link id="backbone" bandwidth="1e9bps" latency="5E-5s"/> 
+	  <ASroute src="RackSupervision" dst="RackUser1" gw_src="SupervisionHost" gw_dst="Host1_1" symmetrical="YES">
+		<link_ctn id="backbone"/>
+	  </ASroute>
+	  <ASroute src="RackSupervision" dst="RackUser2" gw_src="SupervisionHost" gw_dst="Host2_1" symmetrical="YES">
+		<link_ctn id="backbone"/>
+	  </ASroute>
+	  <ASroute src="RackSupervision" dst="RackUser3" gw_src="SupervisionHost" gw_dst="Host3_1" symmetrical="YES">
+		<link_ctn id="backbone"/>
+	  </ASroute>
+	  
+  </zone>
+   
+   
+</platform>
