@@ -454,31 +454,6 @@ job,  which   might  differ  from   the  user  estimate,  used   for  scheduling
 purposes. For a better control of the simulation, SimSchlouder can take observed
 effective runtimes as inputs.
 
-\begin{comment}
-For the purpose of this paper, we classify the inputs required by SimSchlouder
-in two categories. The first category is the operator inputs, which describe the
-hardware platform and the cloud configuration. Internally, they are fed to the
-SimGrid core and the \ac{iaas} simulation layer. The second category is the end
-user inputs. They describe the workflow to simulate, the submission dates of
-each job, the runtime prediction that would be provided to Schlouder.
-Additionally for the purpose of the simulator, a user can choose to supply
-effective runtimes to match, communication to simulate, or alternative boot
-times for the \acp{vm}. These additional inputs are used to alter the sequence
-of events simulated without interfering with parameters that would change the
-provisioning or scheduling decisions made by SimSchlouder, e.g.\ having a job
-overrun its runtime without changing the corresponding user prediction.
-
-As mentioned above, the variability of real executions suggests that a simulation,
-even if it was  perfectly accurate, would capture only one of the set
-of possible real executions. We will show later that  the simulation is indeed
-very   accurate  when   the  user   estimates  are   close  to   the  effective
-runtimes. However,  to  provide the user  with a broader view  of how
-their real executions could behave with job runtimes variability,  we should 
-enrich the simulation framework with some form of stochastic prediction.
-\end{comment}
-
-
-
 
 \begin{comment}
 \begin{figure}
@@ -642,14 +617,17 @@ number of observations in  those groups is uneven due to  the changing nature of
 the    experimental   conditions    in   which    the   runs    were   executed.
 Table~\ref{tab:nbruns}  presents  an  overview   of  the  selected  sets,  while
 Figure~\ref{fig:realbrs} presents the distribution of resulting makespans and
-\ac{btu} counts observed depending on application and scheduling strategy. These
-figures show that even on our platform we observe significant makespan
-variability.
+
 
 \subsection{Input Modeling}\label{sec:im}
 
-The volatile nature  of cloud platforms means that effective  runtimes are always
-variable. Using a  \ac{mcs} we can account for this  variability and provide the
+As expected our experiment show variability in runtimes. This is reflected by
+the makespan distribution observed in Figure~\ref{fig:realbrs}. In introduction,
+we mentioned existing studies relating to IaaS cloud variability. Using the
+methodology described in~\cite{LeitnerC16}, based on relative standard deviation
+of task runtimes, we find TODO
+our platform's variability to be 
+Using a  \ac{mcs} we can account for this  variability and provide the
 user with  a range of  possible makespans. In this  section we propose  a simple
 method to  represent the variability of  the whole system using  a single factor
 parameter to create  a small range around every estimated  runtime. We test this
@@ -696,7 +674,9 @@ P = \textrm{mean}(\delta{}_j)
 
 For OMSSA, the perturbation level given by this method is $P\approx{}10\%$ for both
 strategies. For Montage  our calculated perturbation level is  $P\approx{}20\%$
-for ASAP and $P\approx{}5\%$ for AFAP.
+for ASAP and $P\approx{}5\%$ for AFAP. This perturbation level metric is
+analogous to the one used in the later parts of~\cite{pics} and a 10\%
+perturbation level matches their findings.
 
 \section{Evaluation}
 \label{sec:eval}
