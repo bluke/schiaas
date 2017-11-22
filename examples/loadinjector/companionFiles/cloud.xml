@@ -7,7 +7,7 @@
 			<config controller="controller"/>
 		</storage>
 
-		<compute engine="org.simgrid.schiaas.engine.compute.rice.Rice"> 
+		<compute engine="org.simgrid.schiaas.engine.compute.rice.Rice" standard_speed="1e9"> 
 		
 			<config controller="controller" 
 					image_storage="myStorage" image_caching="PRE"
