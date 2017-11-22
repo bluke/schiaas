@@ -27,7 +27,6 @@ public class SimpleHeuristic extends ReconfigurationHeuristic {
 	
 	protected TYPE type;
 
-	protected ComputeEngine computeEngine;
 	protected Compute compute;
 	protected Instance instance;
 	protected ComputeHost bestHost;
@@ -36,7 +35,7 @@ public class SimpleHeuristic extends ReconfigurationHeuristic {
 
 	public SimpleHeuristic(ComputeEngine computeEngine, Map<String, String> config) {
 		super(computeEngine, config);
-		this.computeEngine = computeEngine;
+
 		this.compute = computeEngine.getCompute();
 		this.type = TYPE.valueOf(config.get("type").toUpperCase());
 		this.simpleScheduler = new SimpleScheduler(computeEngine, config);
@@ -57,29 +56,34 @@ public class SimpleHeuristic extends ReconfigurationHeuristic {
 			i = (i+1)%instances.length;
 			instance = (Instance) instances[i];
 			
+			Msg.info("Considering "+instance.getId());
+			
 			// Check if the instance can be migrated 
 			if (!instance.isRunning() || instance.vm().isMigrating() == 1) {
 				instance = null;
-			} else {
-				// and if there is a better place for the scanned instance
-				try {
-					bestHost = simpleScheduler.schedule(instance.getInstanceType());
-					if (   simpleScheduler.getWeight(bestHost,instance.getInstanceType()) 
-						<= simpleScheduler.getWeight(computeEngine.getComputeHostOf(instance),
-									instance.getInstanceType()) ) {
-						instance = null;
-					}
-				} catch (VMSchedulingException e) {
+				continue;
+			}
+			
+			// and if there is a better place for the scanned instance
+			try {
+				bestHost = simpleScheduler.schedule(instance.getInstanceType());
+				double w1 = simpleScheduler.getWeight(bestHost,instance.getInstanceType());
+				double w2 = simpleScheduler.getWeight(computeEngine.getComputeHostOf(instance),	instance.getInstanceType());
+				//Msg.info("testing "+bestHost.getHost().getName()+" for "+instance+"("+computeEngine.getComputeHostOf(instance).getHost().getName()+"): "+w1+"<="+w2);
+				if ( w1 < w2 ) {
 					instance = null;
 				}
+			} catch (VMSchedulingException e) {
+				instance = null;
 			}
+
 		} while (i!=0 && instance==null);
 	}
 
 
 	@Override
 	public void applyReconfigurationPlan() {
-		Msg.info("apply reconfiguration plan");
+		Msg.info("apply reconfiguration plan: "+instance+" to "+bestHost);
 		if (instance != null) {
 
 			Msg.info("Reconfiguration: "+instance.getId()

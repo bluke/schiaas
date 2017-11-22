@@ -53,4 +53,9 @@ public interface ComputeHost {
 	 */
 	public abstract double getFreeDisk();
 	
+	/**
+	 * @return true if some instance SLA is violated on this host
+	 */
+	public abstract boolean isSLAViolated();
+	
 }

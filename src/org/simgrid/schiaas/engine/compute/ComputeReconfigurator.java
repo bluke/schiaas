@@ -96,7 +96,9 @@ public abstract class ComputeReconfigurator {
 	 *
 	 */
 	public static abstract class ReconfigurationHeuristic {
+		protected ComputeEngine computeEngine;
 		public ReconfigurationHeuristic(ComputeEngine computeEngine, Map<String, String> config) {
+			this.computeEngine = computeEngine;
 		}
 		public abstract void computeReconfigurationPlan();
 		public abstract void applyReconfigurationPlan();

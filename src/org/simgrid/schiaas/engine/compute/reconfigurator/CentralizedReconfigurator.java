@@ -8,7 +8,6 @@ import org.simgrid.msg.Msg;
 import org.simgrid.msg.MsgException;
 import org.simgrid.msg.Process;
 import org.simgrid.schiaas.Compute;
-import org.simgrid.schiaas.Instance;
 import org.simgrid.schiaas.engine.compute.ComputeEngine;
 import org.simgrid.schiaas.engine.compute.ComputeHost;
 import org.simgrid.schiaas.engine.compute.ComputeReconfigurator;
@@ -81,11 +80,10 @@ public class CentralizedReconfigurator extends ComputeReconfigurator {
 		public void main(String[] args) throws MsgException {
 
 			while(! reconfigurator.terminating) {
-			
 				waitFor(reconfigurator.delay);
 				Msg.info("Reconfiguration");
 				reconfigurationHeuristic.computeReconfigurationPlan();
-				reconfigurationHeuristic.computeReconfigurationPlan();
+				reconfigurationHeuristic.applyReconfigurationPlan();
 			}
 		}
 	}	
