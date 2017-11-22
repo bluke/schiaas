@@ -232,15 +232,35 @@ is  to directly  input the  task  durations extrapolated  from actual  execution
 traces.
 
 
-Available cloud \acp{des} include CloudSim~\cite{cloudsim} an extensible
-simulator written in Java, Simgrid~\cite{simgrid} when use in conjunction with
-the SchIaaS cloud interface, the NS2-based GreencCloud~\cite{greencloud} centered
-on energy consumption of cloud's network apparatus, the commercial solution
-MDCSim~\cite{MDCSim} from Pennsylvania State University,
-iCanCloud~\cite{iCanCloud} which can be run in parallel on multiple machines,
-GroudSim~\cite{groudsim} which can simulate both Grids and Clouds, and
-most recently PICS~\cite{pics} which provides cloud user point-of-view approach to
-simulation.
+The available  cloud \acp{des} can  be divided in  two categories. In  the first
+category are  the simulators  dedicated to  study the  clouds from  the provider
+point-of-view, whose purpose  is to help evaluating the design  decisions of the
+datacenter. Examples  of such simulators are  MDCSim~\cite{MDCSim}, which offers
+specific  and precise  models for  low-level components  including network  (e.g
+InfiniBand or  Gigabit ethernet),  operating system kernel  and disks.   It also
+offers a model  for energy consumption. However, the cloud  client activity that
+can be  modeled is restricted  to web-servers, application-servers  or data-base
+applications.   GreenCloud~\cite{greencloud} follows  the  same  purpose with  a
+string  focus  on  energy  consumption  of cloud's  network  apparatus  using  a
+packet-level  simulation  for  network  communications  (NS2).   In  the  second
+category  are the  simulators  targeting the  whole  cloud ecosystem,  including
+client activity. In this category, CloudSim~\cite{cloudsim} (originally stemming
+from  GridSim) is  the most  broadly used  simulator in  academic research.   It
+offers simplified models regaring network communications, CPU or disks. However,
+it is  easily extensible  and serves  as the underlying  simulation engine  in a
+number of projects (e.g  \cite{Cai17}, see section \ref{sc:relwork-stochastic}).
+Simgrid~\cite{simgrid} is  the other long-standing  project, which when  used in
+conjunction with  the SchIaaS cloud interface  provides similar functionnalities
+as CloudSim.   Among the other related  projects, are iCanCloud~\cite{iCanCloud}
+proposed to  address scalability  issues encountered  with CloudSim  (written in
+Java) for the simulation of large use-cases. Most recently, PICS~\cite{pics} has
+been  proposed  to  specifically  evaluate simulation  of  public  clouds.   The
+configuration of the simulator uses only  parameters that can be measured by the
+cloud client, namely inboud and  outbound network bandwidths, average CPU power,
+\ac{vm} boot times, and scaling/scaleout  policies. The data center is therefore
+seen as a black  box, for which no detailed description  of the hardware setting
+is required.  The validation  study of  PICS under  a variety  of use  cases has
+nonetheless shown accurate predictions.
 
 At the core of DES is the solver.  The solver considers the states of the system
 generated  by the  platform and  previous events  to compute  the timing  of the
@@ -251,14 +271,15 @@ their interactions  emerge the high-level  behaviours. Working on  disjoint low
 level components make it easier to tune the precision of the model to the wanted
 accuracy or speed trade-off.
 
-However, when the simulated system is subject to variability, it is difficult
-to  establish the  validity of simulation  results formally. Indeed,  given some
-defined inputs,  a DES  outputs a  single deterministic  result, while a real
-system  will output  slightly different  results at  each repeated  execution.
-Hence, in practice  the simulation is informally regarded as
-valid if  its results  are ``close'' to  one or some  of the  real observations.
-Notice however  that in the  field of grid or  cloud computing, very  few papers
-address the issue of the simulation validity.
+However, when the simulated system is subject to variability, it is difficult to
+establish  the  validity of  simulation  results  formally. Indeed,  given  some
+defined inputs, a DES outputs a single deterministic result, while a real system
+will output  slightly different results  at each repeated execution.   Hence, in
+practice  the simulation  is informally  regarded as  valid if  its results  are
+``close'' to one or  some of the real observations.  Notice  however that in the
+field  of grid  or cloud  computing, published  results in  terms of  validation
+against real settings are scarce relatively to the number of projects.
+
 
 \subsection{Stochastic Simulation and Monte-Carlo Method}
 
@@ -288,7 +309,7 @@ heterogeneous  grids~\cite{Li97} and  PERT  networks~\cite{Ludwig01} show  that
 when  tasks' runtimes  are  independent, the  makespan of  successive  tasks is  a
 convolution product  of the individual  tasks' \acp{rv}, while the  makespan of
 parallel tasks  joining is the  product of  the tasks respective  \acp{cdf}. However, this
-mathematical approach is computationally intensive, and it's core constraint,
+mathematical approach is computationally intensive, and its core constraint,
 the tasks \acp{rv}, independence can not be guaranteed in most cases.
 
 Moreover this \ac{dag}-based approach implies fixed scheduling. 
@@ -877,7 +898,7 @@ not be used as a trade-off variable to augment capture rate at the expense of
 strong indication that our real platform exhibits a variability closer to
 10\% than to 40\%. People for whom higher capture rates are more important than
 interval compactness should use statistical methods to build higher rate \acp{ci},
-like the 99\% normal distribution \ac{ci} use in section~\ref{sec:eval}.
+like the 99\% normal distribution \ac{ci} used in section~\ref{sec:eval}.
 
 Secondly this result shows how an \ac{mcs} can be used to exhibit strategy
 behaviours. This upwards shift of the \ac{ci} shows that ASAP, a strategy
