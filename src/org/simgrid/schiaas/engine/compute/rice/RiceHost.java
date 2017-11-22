@@ -150,6 +150,11 @@ public class RiceHost implements ComputeHost {
 	}
 
 	@Override
+	public double getRam() {
+		return RAM;
+	}
+	
+	@Override
 	public double getFreeRam() {
 		return freeRAM;
 	}
