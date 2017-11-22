@@ -101,7 +101,7 @@ used in two ways.  Firstly, it can serve for scaling purposes where new machines
 are  brought online  to  fulfill  service availability  in  the  face of higher 
 workloads.  This approach  is used  for  providing services  and allows  for a  lower
 baseline  cost  while  still  being  able  to deal  with  spikes  in  demand  by
-provisioning machines on the fly. Secondly, it is useful for parallelizing tasks
+provisioning machines on the fly. Secondly, it is useful for parallelizing jobs
 to achieve a shorter makespan (i.e.\ the time between the submission of the first
 task and the completion of the  last task)  at equal  cost, this  approach being  often used  for
 scientific  and  industrial  workloads  when runtime  is  heavily  dependent  on
@@ -225,7 +225,7 @@ placement  and   availability.   Depending   on  the  simulator,   the  platform
 specification can be done through  user code, as in CloudSim~\cite{cloudsim} for
 example,  or through  platform  description  files, as  is  mostly  the case  in
 SimGrid~\cite{simgrid}.   The  application  description  consists in  a  set  of
-computing and communicating  tasks, often described as an  amount of computation
+computing and communicating  jobs, often described as an  amount of computation
 or communication to perform. The simulator  computes their duration based on the
 platform specification, and its CPU and network models.  An alternative approach
 is  to directly  input the  task  durations extrapolated  from actual  execution
@@ -299,18 +299,18 @@ PERT networks~\cite{Slyke63}.
 %given randomly variable task durations. 
 
 Similarly in  our context,  an application is modeled  as a  \ac{dag} in
-which the vertices represent the tasks  comprising the application, and the edges
-the dependencies between those tasks.  Each vertex can then be assigned its respective
+which the vertices represent the jobs  comprising the application, and the edges
+the dependencies between those jobs.  Each vertex can then be assigned its respective
 \ac{rv}  representing   its  possible  runtime.    The  result  is   a  \ac{rv}
 representing  the possible  duration for  the execution  of the  whole \ac{dag},
 called the \emph{makespan}. An \ac{rv} is  defined by its \ac{pdf}  and \ac{cdf},
 where  the   \ac{cdf}  is  obtain   by  integrating  the  \ac{pdf}.    Works  on
 heterogeneous  grids~\cite{Li97} and  PERT  networks~\cite{Ludwig01} show  that
-when  tasks' runtimes  are  independent, the  makespan of  successive  tasks is  a
-convolution product  of the individual  tasks' \acp{rv}, while the  makespan of
-parallel tasks  joining is the  product of  the tasks respective  \acp{cdf}. However, this
+when  jobs' runtimes  are  independent, the  makespan of  successive  jobs is  a
+convolution product  of the individual  jobs' \acp{rv}, while the  makespan of
+parallel jobs joining is the  product of  the jobs respective  \acp{cdf}. However, this
 mathematical approach is computationally intensive, and its core constraint,
-the tasks \acp{rv}, independence can not be guaranteed in most cases.
+the jobs \acp{rv}, independence can not be guaranteed in most cases.
 
 Moreover this \ac{dag}-based approach implies fixed scheduling. 
 Since cloud platforms allow additional resources provisioning at anytime,
@@ -474,34 +474,6 @@ job,  which   might  differ  from   the  user  estimate,  used   for  scheduling
 purposes. For a better control of the simulation, SimSchlouder can take observed
 effective runtimes as inputs.
 
-
-\begin{comment}
-\begin{figure}
-	\resizebox{0.5\textwidth}{!}{%
-		\input{gfx/montage.tex}
-		}%
-	\caption{Montage workflow diagram.}\label{fig:montage}
-\end{figure}
-
-These two applications were executed using Schlouder on a private cloud.  We set
-up a 96 core cloud based on four identical  dual $2.67GHz$ Intel Xeon X5650
-servers with KVM-based virtualization  and an Openstack cloud-front (first
-2012.1, and later 2014.2). This cluster was exclusively used by us and special
-attention was taken to never overload the system.
-
-
-
-Logs from the executions of these applications display variability in the jobs
-individual runtimes, as well as in the application makespan, even when the
-execution where scheduled on the same platforms using the same strategies. This
-variability is inherent to executions in the cloud. SimSchlouder as shown
-promising results when when simulating a given execution, but as a \ac{des} it
-is ill-equipped to tackle cases wherein there is uncertainty as to the values of
-job runtimes.
-
-
-\end{comment}
-
 \section{Enriched Simulation Framework}\label{sec:enriched-sim}
 
 \begin{figure}
@@ -607,6 +579,7 @@ to  the mean  $\mu$.
 		\bottomrule 
 	\end{tabular} 
 \end{table}
+
 %% Free floating graphs mus be declared a page in advance
 \begin{figure*}
 	\includegraphics[width=\textwidth]{gfx/fit_plot.pdf}
@@ -624,7 +597,7 @@ servers. We used the KVM hypervisor and Openstack version 2012.1 and 2014.4.
 
 Schlouder  execution  traces obtained  from  these  experiments contain  several
 useful metrics  including, but  not limited  to, the  \ac{vm} start  dates, boot
-time, shutdown  times, and assigned  tasks, as well as  the task start  date and
+time, shutdown  times, and assigned  jobs, as well as  the task start  date and
 effective  runtimes. We  previously used  these traces  as a  means to  test the
 validity of Simschlouder.   These metrics will be used to  generate our \ac{mcs}
 input \acp{rv} using the method we will describe in Section~\ref{sec:im}, and we
@@ -698,13 +671,22 @@ P = \textrm{mean}(\delta{}_j)
 
 For OMSSA, the perturbation level given by this method is $P\approx{}10\%$ for both
 strategies. For Montage  our calculated perturbation level is  $P\approx{}20\%$
-for ASAP and $P\approx{}5\%$ for AFAP. Using a similar deviation to the mean
-approach, \cite{pics} also observed most deviation to be within 10\% of the
-average runtime when working on Amazon EC2 instances with dedicated CPUs.
+for ASAP and $P\approx{}5\%$ for AFAP. Using a similar metric, \cite{pics} also 
+observed most deviation to be within 10\% of the average runtime when working on
+Amazon EC2 instances with dedicated CPUs.
 
 \section{Evaluation}
 \label{sec:eval}
-
+%%Free floating figure must be declare one page ahead.
+\begin{figure*}
+	\includegraphics[width=\textwidth]{gfx/int_plot.pdf}
+	\caption{Makespan intervals and BTU count distribution for OMSSA and 
+	Montage at different perturbation levels. In the makespan interval graph 
+	the boxes represent the 95\% \ac{ci} resulting from the normal fit of the
+	\acs{mcs}'s results, and the bar the results of a single unperturbed 
+	simulation.}\label{fig:int}
+\end{figure*}
+%
 \begin{table}
 	\centering
 	\caption{Makespan and BTU capture rate depending on confidence interval
@@ -758,16 +740,6 @@ Table~\ref{tab:fit} presents the capture rate obtained by each interval computed
 after normal fitting.  Additionally we provide for each interval its size
 relative to the average makespan.
 
-%%Free floating figure must be declare one page ahead.
-\begin{figure*}
-	\includegraphics[width=\textwidth]{gfx/int_plot.pdf}
-	\caption{Makespan intervals and BTU count distribution for OMSSA and 
-	Montage at different perturbation levels. In the makespan interval graph 
-	the boxes represent the 95\% \ac{ci} resulting from the normal fit of the
-	\acs{mcs}'s results, and the bar the results of a single unperturbed 
-	simulation.}\label{fig:int}
-\end{figure*}
-
 On OMSSA the  \ac{mcs} captures 90\% of real observed  makespans. The divergence
 between the  capture rate and  the \ac{ci} expected capture  rate is due  to the
 fact that the  empirical makespan distribution does not follow  a perfect normal
@@ -775,87 +747,13 @@ distribution. Using  a 99\% \ac{ci}  improves the capture  rate up to  98\%,
 hence very close  the theoretical expectation.   When simulating Montage  the
 \ac{mcs} achieves a capture rate of 100\% for any \ac{ci}.
 
-\begin{comment}
-The number of Montage runs does not allow to conclusively how well the
-simulation matched reality, the obtained results shown in Figure~\ref{fig:fit}
-and table~\ref{tab:fit} indicate that Montage's workflow structure does not 
-impact the success of the \ac{mcs}.
 
-Simulating Montage with the computed perturbation levels, as discussed in
-section~\ref{sec:im} 20\% when using ASAP and 5\% with AFAP, we obtained 100\%
-capture rate. The results displayed in Figure~\ref{fig:fit} and
-table~\ref{tab:fit} are for simulations done with the 10\% perturbation level.   
-Here again the graph shows great coverage. Distribution can not be significantly
-tested due to the lackluster number of real runs. The quantitative approach
-confirms our observation. The low number of evaluation limits our ability to
-have a good look at distribution, but the platform on which these experiments
-were run does not exist at this time preventing us from obtaining new real
-executions \textbf{FIXME: bien réfléchir si on ne se tire pas une balle dans le
-  pied}.
- We kept this limited Montage run as to check that the results
-obtained with OMSSA would not completely fail with an application with strong
-dependencies. These results give confidence that our method is extendable to
-workflow type applications.  
-\end{comment}
 
 Our \ac{mcs} and a simple job model can capture 90\% of reality all the while
 producing makespan intervals of limited size, a 3\% relative size representing 7
 minutes on a 3h 45m long makespan. We consider this result a satisfactory
 trade-off between the simplicity of the input model and the accuracy with
 regards to the theoretical \ac{ci}.
-\begin{comment}
-Improving the \ac{mcs} results would require
-either more complex inputs models or building ad-hoc \acp{ci} without relying not
-the normal distribution.
-\end{comment}
-
-\begin{comment}
-We evaluate the  validity of our simulation based on  two different factors, the
-\emph{makespan capture  rate} and  the \emph{BTU capture rate}.   The makespan
-capture rate is the percentage of  real makespans which fall into the confidence
-interval generated by fitting the  makespans of our individual simulations using
-a Normal distribution, as  discussed in Section~\ref{sec:MCS}.  Unless otherwise
-specified we  use a standard 95\%  confidence interval of width  $4\sigma$.  BTU
-capture rate is the ratio of BTU counts found in the simulation to the BTU
-counts observed  during our  real runs.  Figure~\ref{fig:fit} shows  results for
-\acp{mcs} using  the input  model presented  in the previous  section at  a 10\%
-perturbation level.
-
-Table~\ref{tab:fit}  summarizes the  results obtained  with a  10\% perturbation
-level. Along with the makespan capture rates included in parenthesis is the size
-of the confidence interval relative to  the average makespan.  With our model we
-are able to  capture 90\% of real executions  in ASAP and 92\% of  real AFAP run
-for OMSSA\@.  These intervals  span 7  and 10  minutes respectively  whereas the
-results in our archive  spread over 10 and 11 minutes.   Using a 99\% confidence
-interval results in  better capture rates of  100\% for AFAP and  98\% for ASAP,
-but also  in wider intervals  of 15 minutes.  Such  an interval increase  may be
-seen as having little impact, like in  our OMSSA use-case exhibiting 3 to 4 hour
-runs. Probably this choice of the confidence interval is best left to the user.
-
-For cost prediction our enriched  simulation finds exactly the same possibilities
-as experienced in reality, though in  the case of AFAP, repartition favors higher
-BTU counts, slightly more than observed in our backlog.
-
-Working on Montage when using \acp{mcs} with the perturbation level of its
-respective strategy, as seen in Section~\ref{sec:im}, the capture rate is 100\%
-across all strategies. This capture rate is maintained when using the 10\%
-perturbation obtained using the OMSSA archive. In this cases the intervals span
-from 1.5 to 2.5 minutes for AFAP and ASAP respectively on workflow lasting from
-47 and 25 minutes respectively. Because Montage runs in less than 1 hour BTU 
-counts are naturally stable, which is perfectly assessed by our simulations.
-
-The results shown in  this section show that provided a  good description of job
-runtimes our simulator will provide  good predictions of the possible executions
-of these runs. However, though we strived to keep our input modeling as simple
-as possible, the  benefits of hindsight provided by the  archive means that only
-the users most knowledgeable about their  workload and the targeted platform can
-hope to achieve such predictions.  In Section~\ref{sec:lim}, we will discuss the
-limits we experienced with this approach. In the next section we show by comparing
-different \acp{mcs}  that we are able  to study the behavior  of the strategies
-when confronted with different applications and perturbation levels.
-\end{comment}
-
-
 
 
 \section{Perspectives}
@@ -872,7 +770,8 @@ real system observed  (see Section~\ref{sec:im}).  A subsequent  question is how
 does   the  prediction   change   when  increasing   this  perturbation   level.
 Figure~\ref{fig:int} presents the 95\% \acp{ci} obtained through the normal
 distribution fitting of simulations with both a 10\%
-and a 40\% perturbation  level. On the makespan interval graphs  (first and third
+and a 40\% perturbation  level. Such perturbation level are possible under are
+possible in for shared instance (\cite{LeitnerC16}). On the makespan interval graphs  (first and third
 subfigures  from left  to right)  the boxes  represent the  span of the \ac{ci}
 interval. For reference  the vertical bar inside represents  a single simulation
 using  the average  runtimes without  any random  element added.   Comparing the
@@ -967,18 +866,10 @@ runtimes. Second, we apply our method in  a real setting, on both a bag-of-tasks
 and a workflow application for which we have collected execution traces.  Thanks
 to these empirical observations, our study  shows that the proposed method could
 capture over  90\% of the  observed makespans given an  appropriate perturbation
-level.
-
-The  first  perspective of  this  work  is to  apply  the  method to  production
-clouds.  In this  paper we  managed to  aggregate all  the different  sources of
-uncertainty  into a  perturbation on  the job's  runtime. We  are interested  in
-checking whether  this is  still possible in  highly variable  environments. Our
-second  perspective, now  that  we  are confident  in  our  ability to  simulate
-application executions, is to move away from the applications in our archive and
-use our  enriched simulation  to study the  interactions between  scheduling and
-workflow.  More specifically,  we  are  interested in  how  the  structure of  a
-workflow  affects a  scheduling's robustness,  that is,  its ability  to satisfy
-predetermined  in terms of deadline or cost.
+level. We now aim to test our simulator on more use cases and platforms. In
+particular as a number of studies on public clouds have reported variability
+levels similar to our platform (\cite{LeitnerC16,pics}), we intend to reproduce
+these results on public clouds.
 
 
 
