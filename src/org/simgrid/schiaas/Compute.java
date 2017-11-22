@@ -51,8 +51,8 @@ public class Compute {
 	/** Contains all the config properties of this compute instance. */
 	protected Map<String, String> config;
 
-	/** Standard power, e.g. EC2CU.*/
-	protected double standardPower;
+	/** Standard speed, e.g. EC2CU, in flop/s. 1G per default. */
+	protected double standardSpeed = 1e9;
 	
 	/** tracing */
 	protected Trace trace; 
@@ -85,6 +85,11 @@ public class Compute {
 				.getNodeValue();
 		this.config.put("engine", engine);
 		Msg.debug("Compute initialization, engine=" + engine);
+		
+		Node ssNode = computeXMLNode.getAttributes().getNamedItem("standard_speed");
+		if (ssNode != null) this.standardSpeed = Double.parseDouble(ssNode.getNodeValue());
+		this.config.put("standard_speed", ""+standardSpeed);
+		Msg.debug("Compute initialization, standardSpeed=" + standardSpeed);
 		
 		List<Host> hosts = new Vector<>();
 		NodeList nodes = computeXMLNode.getChildNodes();
@@ -184,6 +189,7 @@ public class Compute {
 					+ engine);
 			e.printStackTrace();
 		}
+
 		if (schedulerName != null) {
 			this.computeEngine.setComputeScheduler(schedulerName, schedulerConfig);
 		} else {
@@ -220,10 +226,10 @@ public class Compute {
 	}
 
 	/**
-	 * @return the standard_power 
+	 * @return the standard_speed (e.g. EC2CU) of the compute, in flop/s.
 	 */
-	public double getStandardPower() {
-		return this.standardPower;
+	public double getStandardSpeed() {
+		return this.standardSpeed;
 	}
 	
 	/**

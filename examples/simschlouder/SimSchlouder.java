@@ -46,7 +46,7 @@ public class SimSchlouder {
 	 * @return task durations according to the cloud standard power.
 	 */
 	public static double timeToDuration(double time) {
-		return time*SchloudController.schloudCloud.standardPower;
+		return time*SchloudController.schloudCloud.compute.getStandardSpeed();
 	}
 	
 	/**

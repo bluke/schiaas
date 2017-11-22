@@ -19,9 +19,6 @@ public class SchloudCloud {
 	protected double bootTimeB0;
 	protected double bootTimeB1;
 	
-	/** Like EC2CU */
-	protected double standardPower;
-	
 	/** Duration of the Billing Time Unit in s. e.g. 3600s for EC2 */
 	protected double BTU;
 	
@@ -68,22 +65,19 @@ public class SchloudCloud {
 	 * @throws NumberFormatException 
 	 */
 	public SchloudCloud(String name, double bootTimeB0, double bootTimeB1, 
-			double BTU, double shutdownMargin, 
-			double standardPower, int maxInstances, 
+			double BTU, double shutdownMargin, int maxInstances, 
 			Double monitoringTimePrediction) throws NumberFormatException, Exception	{
-		this.name=name;
-		this.bootTimeB0=bootTimeB0;
-		this.bootTimeB1=bootTimeB1;
-		this.BTU=BTU;
-		this.shutdownMargin=shutdownMargin;
-		this.maxInstancesPerUser=maxInstances;
-		this.monitoringPrevisionTime=monitoringTimePrediction;
+		this.name = name;
+		this.bootTimeB0 = bootTimeB0;
+		this.bootTimeB1 = bootTimeB1;
+		this.BTU = BTU;
+		this.shutdownMargin = shutdownMargin;
+		this.maxInstancesPerUser = maxInstances;
+		this.monitoringPrevisionTime = monitoringTimePrediction;
 
 		this.bootCount = 0;
 		this.compute = SchIaaS.getCloud(name).getCompute();
 		this.storage = null;
-		
-		this.standardPower= standardPower;
 		
 		this.schloudBootInfos = new LinkedList<SchloudBootInfos>();
 	}

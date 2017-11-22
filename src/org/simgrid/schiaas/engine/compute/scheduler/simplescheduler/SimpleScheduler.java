@@ -70,7 +70,6 @@ public class SimpleScheduler extends ComputeScheduler {
 		double resultWeight = -Double.MAX_VALUE;
 		
 		for (ComputeHost ch : computeHosts) {
-			
 			if ( ch.isAvailable() && ch.canHost(instanceType) > 0 )	{
 				double weight = getWeight(ch, instanceType);
 				//Msg.info(" - Weigth of "+ch.getHost().getName()+" = "+weight);

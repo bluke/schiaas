@@ -6,7 +6,7 @@ xmlns:xs="http://www.w3.org/2001/XMLSchema">
 <!--		Attributes		-->
 	<xs:attribute name="id" type="xs:string" />
 	<xs:attribute name="engine" type="xs:string"/>
-
+	<xs:attribute name="standard_speed" type="xs:string"/>
 
 <!--		Elements		-->
 
@@ -68,7 +68,7 @@ TODO: make "name" mandatory
 	</xs:complexType>
 
 
-<!-- <compute engine=  >
+<!-- <compute engine=  standard_speed= >
 		<config ...>
 		<scheduler ...>
 		<reconfigurator ...>
@@ -90,6 +90,7 @@ TODO: make "name" mandatory
 			</xs:choice>
 		</xs:sequence>
 		<xs:attribute ref="engine" use="required"/>
+		<xs:attribute ref="standard_speed" use="optional"/>
 	</xs:complexType>
 
 
