@@ -226,7 +226,7 @@ public class Compute {
 	}
 
 	/**
-	 * @return the standard_power 
+	 * @return the standard_speed (e.g. EC2CU) of the compute, in flop/s.
 	 */
 	public double getStandardSpeed() {
 		return this.standardSpeed;

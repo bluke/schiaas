@@ -86,7 +86,7 @@ public class LoadedInstance {
 	
 	/**
 	 * Set the CPU load of this instance
-	 * @param load the load of the VM, ratio of the cloud standard_power
+	 * @param load the load of the VM, ratio of the cloud standard_speed
 	 */
 	public void setLoad(double load) {
 		this.instance.vm().setBound(load * compute.getStandardSpeed());
