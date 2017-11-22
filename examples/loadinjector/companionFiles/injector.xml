@@ -7,11 +7,11 @@
 	 	
 	 	<config 
 	 	 start_date="0"
-	     duration="1000"
-	     period="10"
-	     instance_period="1000"
+	     duration="100"
+	     period="30"
+	     instance_period="200"
 	     instance_min="0"
-	     instance_max="10"
+	     instance_max="24"
 	     load_period="100"
 	     load_min="90"
 	     load_max="100"
@@ -19,22 +19,4 @@
 	     instance_type_id="small"
 	     />
 	 </injector> 
-	 <injector id="myInjectorFast"
-	 	class="org.simgrid.schiaas.loadinjector.injectors.SinInjector"
-	 	cloud="myCloud">
-	 	
-	 	<config 
-	 	 start_date="1000"
-	     duration="2000"
-	     period="10"
-	     instance_period="100"
-	     instance_min="10"
-	     instance_max="20"
-	     load_period="100"
-	     load_min="90"
-	     load_max="100"
-	     image_id="myImage"
-	     instance_type_id="small"
-	     />
-	 </injector>
 </injectors>

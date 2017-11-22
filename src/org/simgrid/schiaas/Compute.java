@@ -92,6 +92,9 @@ public class Compute {
 		String schedulerName = null;
 		HashMap<String, String> schedulerConfig = new HashMap<>();
 
+		String reconfiguratorName = null;
+		HashMap<String, String> reconfiguratorConfig = new HashMap<>();
+		
 		for (int i = 0; i < nodes.getLength(); i++) {
 
 			if (nodes.item(i).getNodeName().compareTo("config") == 0) {
@@ -111,6 +114,17 @@ public class Compute {
 				}
 				schedulerName = schedulerConfig.get("name"); 
 			}
+
+			if (nodes.item(i).getNodeName().compareTo("reconfigurator") == 0) {
+				reconfiguratorName = "undefined";
+				NamedNodeMap configNNM = nodes.item(i).getAttributes();
+				for (int j = 0; j < configNNM.getLength(); j++) {
+					reconfiguratorConfig.put(configNNM.item(j).getNodeName(),
+										configNNM.item(j).getNodeValue());
+				}
+				reconfiguratorName = reconfiguratorConfig.get("name"); 
+			}
+
 			
 			if (nodes.item(i).getNodeName().compareTo("cluster") == 0) {
 				@SuppressWarnings("unused")
@@ -175,6 +189,9 @@ public class Compute {
 		} else {
 			Msg.warn("No scheduler is configured for the compute "+this.getId());
 		}
+		if (reconfiguratorName != null) {
+			this.computeEngine.setComputeReconfigurator(reconfiguratorName, reconfiguratorConfig);
+		} 
 		
 		trace.addProperties(config);
 	}

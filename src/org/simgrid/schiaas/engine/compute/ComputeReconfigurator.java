@@ -9,11 +9,11 @@ import org.simgrid.schiaas.exceptions.VMSchedulingException;
 import org.simgrid.schiaas.tools.Trace;
 
 /**
- * Describes an abstract scheduler, to decide where new instances must be run, and enforce reconfiguration plans.
+ * Describes an abstract reconfigurator, to decide where instances must be migrated at runtime.
  * @author julien.gossa@unistra.fr
  *
  */
-public abstract class ComputeScheduler {
+public abstract class ComputeReconfigurator {
 	
 	/** computeEngine of this **/
 	protected ComputeEngine computeEngine;
@@ -29,11 +29,11 @@ public abstract class ComputeScheduler {
 	 * @param computeEngine the compute engine using this scheduler
 	 * @param config the configuration of this scheduler
 	 */
-	public ComputeScheduler(ComputeEngine computeEngine, Map<String, String> config) {
+	public ComputeReconfigurator(ComputeEngine computeEngine, Map<String, String> config) {
 		this.computeEngine = computeEngine;
 		this.config = config;
 		
-		trace = computeEngine.getCompute().getTrace().newSubTrace("scheduler");
+		trace = computeEngine.getCompute().getTrace().newSubTrace("reconfigurator");
 		trace.addProperties(config);
 	}
 	
@@ -62,42 +62,45 @@ public abstract class ComputeScheduler {
 	public ComputeEngine getComputeEngine() {
 		return this.computeEngine;
 	}
-
 	
 	/**
-	 * Schedule a VM: proposes a physical host to host an instance of instanceType.
-	 * @param instanceType the type of the instance to be scheduled.
-	 * @return the ComputeHost to host the instance, null if no host is available.
-	 * @throws VMSchedulingException whenever the instance can not be scheduled.
+	 * Load a reconfigurator class 
+	 * @param reconfiguratorName the name of the class
+	 * @param computeEngine the engine of the compute using this reconfigurator.
+		 * @param config the configuration of this reconfigurator 
+	 * @return an <i>ComputeReconfigurator</i> object
 	 */
-	public abstract ComputeHost schedule(InstanceType instanceType) throws VMSchedulingException;
-
-	
-	
-	/**
-	 * Load a scheduler class 
-	 * @param schedulerName the name of the class
-	 * @param computeEngine the engine of the compute using this scheduler.
-		 * @param config the configuration of this scheduler 
-	 * @return an <i>ComputeScheduler</i> object
-	 */
-	public static ComputeScheduler load(String schedulerName, ComputeEngine computeEngine, Map<String, String> config) {
-		ComputeScheduler computeScheduler = null;
+	public static ComputeReconfigurator load(String reconfiguratorName, ComputeEngine computeEngine, Map<String, String> config) {
+		ComputeReconfigurator computeReconfigurator = null;
 		
 		try {
-			computeScheduler = (ComputeScheduler)Class.forName(schedulerName).getConstructor(ComputeEngine.class, Map.class).newInstance(computeEngine, config);
+			computeReconfigurator = (ComputeReconfigurator)Class.forName(reconfiguratorName).getConstructor(ComputeEngine.class, Map.class).newInstance(computeEngine, config);
 		} catch (Exception e) {
-			Msg.critical("Something wrong happened while loading the scheduler "
-					+ schedulerName);
+			Msg.critical("Something wrong happened while loading the reconfigurator "
+					+ reconfiguratorName);
 			e.printStackTrace();
 		}	
 		
-		return computeScheduler;
+		return computeReconfigurator;
 	}
 	
 	/**
 	 * Called at the termination of the cloud
 	 */
 	public void terminate() {
+	}
+	
+	/**
+	 * Heuristics for reconfiguration
+	 * @author julien
+	 *
+	 */
+	public static abstract class ReconfigurationHeuristic {
+		protected ComputeEngine computeEngine;
+		public ReconfigurationHeuristic(ComputeEngine computeEngine, Map<String, String> config) {
+			this.computeEngine = computeEngine;
+		}
+		public abstract void computeReconfigurationPlan();
+		public abstract void applyReconfigurationPlan();
 	}
 }

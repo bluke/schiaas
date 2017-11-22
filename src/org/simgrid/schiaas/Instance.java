@@ -36,6 +36,10 @@ public class Instance {
 	/** Tracing */
 	protected Trace trace;
 	
+	/** SLA of the instance */
+	public InstanceSLA SLA;
+	
+	
 	/**
 	 * Constructor to deploy and start a new instance.
 	 * 
@@ -55,6 +59,8 @@ public class Instance {
 		this.instanceType = instanceType;
 		
 		this.isPending = true;
+		
+		this.SLA = new InstanceSLA();
 		
 		this.trace.addProperty("image", this.image.getId());
 		this.trace.addProperty("instance_type", this.instanceType.getId());
@@ -181,6 +187,23 @@ public class Instance {
 		this.compute.terminateInstance(this);
 	}
 
+	/**
+	 * Set the SLA of this instance
+	 * @param InstanceSLA the SLA of this instance
+	 */
+	public void setSLA(InstanceSLA instanceSLA) {
+		this.SLA = instanceSLA;
+	}
+
+	/**
+	 * GET the SLA of this instance
+	 * @return the SLA of this instance
+	 */
+	public InstanceSLA getSLA() {
+		return this.SLA;
+	}
+
+	
 	/**
 	 * Of course.
 	 * @return A string containing the name of the instance and its host.

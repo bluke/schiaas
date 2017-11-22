@@ -32,6 +32,9 @@ public class RiceHost implements ComputeHost {
 	/** The current amount of free cores to be used by live VM. */
 	protected double freeCores;
 
+	/** The current amount of RAM to be used by live VM. */
+	protected int RAM;
+	
 	/** The current amount of free RAM to be used by live VM. */
 	protected int freeRAM;
 
@@ -69,6 +72,7 @@ public class RiceHost implements ComputeHost {
 		this.imagesCache = new HashMap<>();
 		
 		this.freeCores = host.getCoreNumber();
+		this.RAM = ramSize;
 		this.freeRAM = ramSize;
 		this.freeDisk = diskSize;
 		
@@ -146,7 +150,12 @@ public class RiceHost implements ComputeHost {
 	}
 
 	@Override
-	public double getFreeRam() {
+	public int getRam() {
+		return RAM;
+	}
+	
+	@Override
+	public int getFreeRam() {
 		return freeRAM;
 	}
 
@@ -169,6 +178,18 @@ public class RiceHost implements ComputeHost {
 	 */
 	protected String messageBox() {
 		return "MB_RICE_"+host.getName();
+	}
+
+	@Override
+	public boolean isSLAViolated() {
+		double totalSpeed = 0;
+		int totalRAM = 0;
+		for(Instance instance : instances) {
+			totalSpeed += instance.SLA.speed;
+			totalRAM += instance.SLA.RAM;
+		}
+		return (	totalSpeed <= host.getCoreNumber()*host.getSpeed() 
+				&& 	totalRAM <= RAM);
 	}
 
 

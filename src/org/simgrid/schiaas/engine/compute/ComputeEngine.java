@@ -26,6 +26,8 @@ public abstract class ComputeEngine {
 	/** The scheduler of this */
 	protected ComputeScheduler computeScheduler;
 
+	/** The reconfigurator of this */
+	protected ComputeReconfigurator computeReconfigurator;
 	
 	/**
 	 * Enumerates the possible commands to control instances.
@@ -62,6 +64,15 @@ public abstract class ComputeEngine {
 	 */
 	public void setComputeScheduler(String schedulerName, Map<String, String> config){		
 		this.computeScheduler = ComputeScheduler.load(schedulerName, this, config);
+	}
+	
+	/**
+	 * Set and start the reconfigurator
+	 * @param reconfiguratorName the class of the reconfigurator
+	 * @param config the configuration of the reconfigurator
+	 */
+	public void setComputeReconfigurator(String reconfiguratorName, Map<String, String> config){		
+		this.computeReconfigurator = ComputeReconfigurator.load(reconfiguratorName, this, config);
 	}
 	
 	/**
@@ -147,6 +158,9 @@ public abstract class ComputeEngine {
 		Msg.debug("Terminating the compute engine");
 		if (this.computeScheduler != null) {
 			this.computeScheduler.terminate();
+		}
+		if (this.computeReconfigurator != null) {
+			this.computeReconfigurator.terminate();
 		}
 	}
 

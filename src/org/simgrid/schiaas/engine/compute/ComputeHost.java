@@ -44,13 +44,23 @@ public interface ComputeHost {
 	public abstract double getFreeCores();
 
 	/**
-	 * @return the amount of free RAM to host new VMs
+	 * @return the amount of RAM in B to host new VMs
 	 */
-	public abstract double getFreeRam();
+	public abstract int getRam();
+	
+	/**
+	 * @return the amount of free RAM in B to host new VMs
+	 */
+	public abstract int getFreeRam();
 	
 	/**
 	 * @return the amount of free disk to host new VMs
 	 */
 	public abstract double getFreeDisk();
+	
+	/**
+	 * @return true if some instance SLA is violated on this host
+	 */
+	public abstract boolean isSLAViolated();
 	
 }

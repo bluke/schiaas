@@ -1,14 +1,12 @@
 <?xml version='1.0'?>
 <!DOCTYPE platform SYSTEM "http://simgrid.gforge.inria.fr/simgrid/simgrid.dtd">
 <platform version="4.1">
- 
- 
   
  
  <zone  id="AS0" routing="Full">
 	
-	<cluster id="my_cluster" prefix="node-" suffix=".me" radical="1-100" 
-         speed="1e9f" core="24" bw="1e9Bps" lat="5E-5s"
+	<cluster id="my_cluster" prefix="node-" suffix=".me" radical="1-2" 
+         speed="1e9f" core="12" bw="1e9Bps" lat="5E-5s"
     	 bb_bw="10e9Bps" bb_lat="5E-4s" />
  
  	 <zone id="AS_Controller" routing="Full">
