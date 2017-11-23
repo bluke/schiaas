@@ -600,19 +600,29 @@ effective  runtimes.
 
 First, we  used  those traces to improve and validate Simschlouder. To do so, we
 compared the backlogs of all of the real executions with the backlogs of the 
-corresponding simulations inputted \emph{effective runtime}
+corresponding simulations inputted with \emph{effective runtime} from reality. 
+We looked at every differences between simulations and reality, 
+identified the source of these differences, fixed them by modifying either 
+SimSchlouder or Schlouder depending on the nature of the differences.
+This iteration was repeated until the remaining differences can be explained by 
+phenomenas that are negligible or impossible to simulate, such as massive 
+platform failures. In the end, for the executions presented in 
+this article, the differences between real and simulated makespans are less than 
+1 second, and the count of \ac{btu} are systematically identical.
+This work is under publication process.
 
-These metrics will be used to  generate our \ac{mcs}
-input \acp{rv} using the method we will describe in Section~\ref{sec:im}, and we
-will compare  the makespan  and \ac{btu}  distributions of  the \ac{mcs}  to the
+Then, we used those traces to  generate our \ac{mcs}
+input \acp{rv} using the method we will describe in Section~\ref{sec:im}.
+
+Finally, we compared the makespan  and \ac{btu}  distributions of  the \ac{mcs}  to the
 distribution observed in the corresponding traces.
 
-For this purpose we grouped traces  from comparable runs.  A group contains runs
-of a  same application  using the same  strategy on a  same cloud  platform. The
-number of observations in  those groups is uneven due to  the changing nature of
-the    experimental   conditions    in   which    the   runs    were   executed.
-Table~\ref{tab:nbruns}  presents  an  overview   of  the  selected  sets,  while
+For this purpose we grouped traces  from comparable runs.  A group is defined by
+a unique triplet {application, strategy, platform}. 
+Table~\ref{tab:nbruns}  presents  an  overview   of  those groups,  while
 Figure~\ref{fig:realbrs} presents the distribution of resulting makespans and \ac{btu} count.
+The number of observations uneven between groups because of  the changing nature of
+the    experimental   conditions    in   which    the   runs    were   executed.
 
 
 \subsection{Input Modeling}\label{sec:im}
