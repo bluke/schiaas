@@ -146,7 +146,7 @@ description  of the  hardware platform,  its  network model  takes into  account
 network contention in presence of multiple communication flows.
 
 However, we may not be able to provide a fully accurate platform description, or
-be unable  to estimate  the network  cross-traffic, yielding  a distorsion  between
+be unable  to estimate  the network  cross-traffic, yielding  a distortion  between
 simulation and reality.  To deal with this problem, the  standard approach is to
 consider job runtimes to  be stochastic.  Every job can be  modeled by a \ac{rv}
 that models the whole spectrum of possible runtimes. These \acp{rv} are the basis
@@ -251,8 +251,8 @@ proposed to  address scalability  issues encountered  with CloudSim  (written in
 Java) for the simulation of large use-cases. Most recently, PICS~\cite{pics} has
 been  proposed  to  specifically  evaluate simulation  of  public  clouds.   The
 configuration of the simulator uses only  parameters that can be measured by the
-cloud client, namely inboud and  outbound network bandwidths, average CPU power,
-\ac{vm} boot times, and scaling/scaleout  policies. The data center is therefore
+cloud client, namely inbound and  outbound network bandwidths, average CPU power,
+\ac{vm} boot times, and scaling/scaleout  policies. The data center is therefore % scaleout ?
 seen as a black  box, for which no detailed description  of the hardware setting
 is required.  The validation  study of  PICS under  a variety  of use  cases has
 nonetheless shown accurate predictions.
@@ -441,7 +441,7 @@ whenever it is needed.
 \begin{figure*}
 	\centering
 	\includegraphics[width=\textwidth]{gfx/real_plot.pdf}
-	\caption{Distrubtions of makespan and BTU count accross the OMSSA and 
+	\caption{Distributions of makespan and BTU count across the OMSSA and 
 	  Montage real-life executions described in Table~\ref{tab:nbruns}}
 	\label{fig:realbrs}
 \end{figure*}
@@ -464,7 +464,7 @@ the SimGrid's cloud interface  called SchIaaS. As mentioned  earlier, the simula
 requires  additional information: First, a description of the hardware platform 
 (capabilities and topology of compute, storage, and network) and of the cloud configuration
 (\acp{vm} management policies); but most importantly, the \emph{effective runtime}
-of each job, as it has beed observed during a real execution.
+of each job, as it has been observed during a real execution.
 
 As platform description and cloud configuration allows to simulate the environment of 
 execution, the jobs \emph{effective runtime} allows to simulate the execution of 
@@ -486,7 +486,7 @@ then simulated; the resulting makespan samples make up the final result M.}\labe
 
 
 As stated in  section~\ref{sc:relwork-stochastic}, trustworthiness of simulation
-is questionnable when its result is only one of the many possible outcomes. This
+is questionable when its result is only one of the many possible outcomes. This
 work addresses this issue by  proposing a framework implementing the Monte-Carlo
 method using SimSchlouder  as  simulation engine.   This  solution combines  the
 relative  simplicity  of a  \ac{des}  with  the  extensive results  provided  by
@@ -598,8 +598,9 @@ useful metrics  including, but  not limited  to, the  \ac{vm} start  dates, boot
 time, shutdown  times, and assigned  jobs, as well as  the job start  date and
 effective  runtimes. 
 
-First, we  used  those traces to improve and validate Simschlouder.
-%JG: j'en suis là
+First, we  used  those traces to improve and validate Simschlouder. To do so, we
+compared the backlogs of all of the real executions with the backlogs of the 
+corresponding simulations inputted \emph{effective runtime}
 
 These metrics will be used to  generate our \ac{mcs}
 input \acp{rv} using the method we will describe in Section~\ref{sec:im}, and we
