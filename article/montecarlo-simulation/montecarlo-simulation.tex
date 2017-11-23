@@ -102,8 +102,8 @@ are  brought online  to  fulfill  service availability  in  the  face of higher
 workloads.  This approach  is used  for  providing services  and allows  for a  lower
 baseline  cost  while  still  being  able  to deal  with  spikes  in  demand  by
 provisioning machines on the fly. Secondly, it is useful for parallelizing jobs
-to achieve a shorter makespan (i.e.\ the time between the submission of the first
-task and the completion of the  last task)  at equal  cost, this  approach being  often used  for
+to achieve a shorter makespan (\textit{i.e.}\ the time between the submission of the first
+job and the completion of the  last job)  at equal  cost, this  approach being  often used  for
 scientific  and  industrial  workloads  when runtime  is  heavily  dependent  on
 computing power.  This  approach is made possible by the  pricing model of cloud
 infrastructures, as  popularized by AWS\footnote{Amazon Web  Services}, in which
@@ -228,7 +228,7 @@ SimGrid~\cite{simgrid}.   The  application  description  consists in  a  set  of
 computing and communicating  jobs, often described as an  amount of computation
 or communication to perform. The simulator  computes their duration based on the
 platform specification, and its CPU and network models.  An alternative approach
-is  to directly  input the  task  durations extrapolated  from actual  execution
+is  to directly  input the  job  durations extrapolated  from actual  execution
 traces.
 
 
@@ -289,7 +289,7 @@ simulation must  be \emph{stochastic}.  In stochastic simulations  inputs become
 \acfp{rv} representing the  distribution of possible values  for the parameters.
 The  result  of one  such  simulation  is  itself  an \ac{rv}  representing  the
 distribution  of the  results.  This  approach has  been used to  compute
-schedules for task graphs (\ac{dag}) with stochastic durations in the context of
+schedules for job graphs (\ac{dag}) with stochastic durations in the context of
 PERT networks~\cite{Slyke63}.
 
 %,  and applied in  the recent  years to
@@ -298,12 +298,12 @@ PERT networks~\cite{Slyke63}.
 %scheduling heuristic HEFT  to compute a schedule yielding  the shortest makespan
 %given randomly variable task durations. 
 
-Similarly in  our context,  an application is modeled  as a  \ac{dag} in
-which the vertices represent the jobs  comprising the application, and the edges
+Similarly in  our context,  an application is modeled  as a  \ac{dag}: 
+the vertices represent the jobs  comprising the application; and the edges represent
 the dependencies between those jobs.  Each vertex can then be assigned its respective
 \ac{rv}  representing   its  possible  runtime.    The  result  is   a  \ac{rv}
 representing  the possible  duration for  the execution  of the  whole \ac{dag},
-called the \emph{makespan}. An \ac{rv} is  defined by its \ac{pdf}  and \ac{cdf},
+\textit{i.e.} the \emph{makespan}. An \ac{rv} is  defined by its \ac{pdf}  and \ac{cdf},
 where  the   \ac{cdf}  is  obtain   by  integrating  the  \ac{pdf}.    Works  on
 heterogeneous  grids~\cite{Li97} and  PERT  networks~\cite{Ludwig01} show  that
 when  jobs' runtimes  are  independent, the  makespan of  successive  jobs is  a
@@ -314,9 +314,9 @@ the jobs \acp{rv}, independence can not be guaranteed in most cases.
 
 Moreover this \ac{dag}-based approach implies fixed scheduling. 
 Since cloud platforms allow additional resources provisioning at anytime,
-users are likely to call on dynamic schedulers that adapt the schedule on the fly
+users are likely to call on dynamic schedulers: they adapt the schedule on the fly
 depending of the already executed jobs runtimes and the availability of
-resources. With a \ac{dag} representation this is akin to adding
+resources. With a \ac{dag} representation, this is akin to adding
 and removing edges depending on the runtime of certain vertices. Edges do not
 only represent the dependencies, the inherent constraint between the application
 jobs, but also the scheduling, the effective constraint imposed on a job queued
@@ -326,8 +326,8 @@ after another.
 Instead  of computing  the resulting  \ac{rv}, a  \ac{mcs} samples  the possible
 results by testing  multiple \emph{realizations} in a  deterministic fashion.  A
 realization is obtained by drawing a runtime that follows their job's respective 
-\ac{rv} for  every job in the  application. Since within a realization each job
-has now a  defined runtime, each realization can be  simulated using traditional
+\ac{rv} for  every job in the  application. 
+This allows to simulate each realization using traditional
 methods like \ac{des}.  Eventually, given enough realizations, the distribution of
 the simulation  results will  tend towards the  distribution of  the equivalent
 stochastic  simulation.  Statistical  fitting  techniques can  then  be used  to
@@ -338,16 +338,16 @@ now clouds,  has led  researchers to use  this approach in  this field.   In the
 context of grids,  where the number of resources is  fixed during one execution,
 Tang et  al.~\cite{Tang11} propose a  modification of the  well-known scheduling
 heuristic  HEFT to  compute  a  schedule yielding  the  shortest makespan  given
-randomly  variable task  durations. Canon and Jeannot~\cite{Canon10} have used  \ac{mcs} to
-evaluate  the robustness  of \ac{dag}  schedules when  task durations  vary, and
+randomly  variable job  durations. Canon and Jeannot~\cite{Canon10} have used  \ac{mcs} to
+evaluate  the robustness  of \ac{dag}  schedules when  job durations  vary, and
 similarly, Zheng et  al.~\cite{Zheng13} evaluate the impact  of this variability
 on the makespan. More  recently, ElasticSim~\cite{Cai17} has been  proposed as a
 simulator extending  Cloudsim to integrate resource  auto-scaling and stochastic
-task  durations. Similarly  to our  work, ElasticSim  computes a  schedule whose
+job  durations. Similarly  to our  work, ElasticSim  computes a  schedule whose
 objective  is  to  minimize  rental  cost while meeting deadline
-constraints.  The  study compares the  simulation results regarding  rental cost
-and makespan,  when varying the variability  of task duration and  deadline with
-arbitrary  values,  for  several  generated workflows.  By  contrast,  our  work
+constraints.  For  several  generated workflows, the  study compares the  simulation results regarding  rental cost
+and makespan,  when varying the variability  of job duration and  deadline with
+arbitrary  values.  By  contrast,  our  work
 focuses on how the \ac{mcs} method, under some given variability assumptions, 
 captures actual observations.
 
@@ -355,50 +355,50 @@ captures actual observations.
 \section{Work Context}
 \label{sec:work-context}
 
-The  study conducted  in this  paper  is built upon an  original comparison  of
+The  study conducted  in this  paper  is built upon an  original comparison  between %JG: Genuine?
 experiments  run in  actual environments  and experimental  results obtained  by
 simulation.   To strengthen  the validity  of the  comparison, the  experimental
 conditions  for  the  real  setup  and  the  simulation  should  share  as  many
 commonalities  as   possible~\cite{PucherGWK15}.   We  describe   hereafter  our
 experimental setup.  It consists of two  test applications which are  run on one
-hand, on a real platform with our scheduler Schlouder and on the other hand, are
+hand, on a real platform with our scheduler Schlouder, and on the other hand are
 simulated  with   our  simulator  SimSchlouder   based  on  SimGrid.    The  two
 environments are sketched side by side on Figure~\ref{fig:rs}.
 
 \subsection{Test Applications}\label{sc:setup}
 
-To  evaluate Schlouder  performance we  carried out  multiple executions  of two
-broadly used scientific  applications. The execution traces for  those runs were
+We  carried out  multiple executions  of two broadly used scientific  applications
+to  evaluate Schlouder  performance. The execution traces for  those runs were
 collected  in an  archive.  This backlog  of real  executions  is the  benchmark
-against which  our simulation  performance will  be evaluated.  The applications
-used are:
+against which  our simulation  performance will  be evaluated.  Those applications
+are:
 
 \begin{itemize}
 \item Montage\cite{montage2009},  the Montage Astronomical Image  Mosaic Engine,
   is designed to  splice astronomical images. The structure  of this application
   is a  fork-join type  workflow. This application  is extremely  data intensive
-  with a \emph{commuication-to-computation} ratio superior to $90\%$.
+  with a \emph{communication-to-computation} ratio greater than $90\%$.
 
 \item OMSSA\cite{Geer2004}, the Open Mass-Spectrometry Search Algorithm, is used
   to analyze  mass-spectrometer results.  The application  is parallelized  as a
   bag-of-tasks, \textit{i.e.}  as a  number of  independent parallel  jobs. This
   application        is        computation        intensive        with        a
-  \emph{communication-to-computation} ratio under $20\%$.
+  \emph{communication-to-computation} ratio lower than $20\%$.
 \end{itemize}
 
-The executions of these applications each composed  of a set of jobs are driven
+The executions of these applications are driven
 by the scheduling policy applied. We detail in the next two sections how these
-executions are managed in the real environment and in simulation.  
+executions are managed in the real environment and in the simulation.  
 
 \subsection{Real Execution Setup}
 
-In the recent years, we have developed  a client-side job broker for IaaS clouds
+In the recent years, we have developed  a client-side cloud resources broker for IaaS
 called  Schlouder~\cite{Michon17}.  This  broker is  able to  submit the  user's
 batch jobs, be  it a set of  independent jobs or a workflow.   The broker's main
 role is  to schedule the set  of jobs onto a  set of cloud resources,  which the
 broker can scale up  or down.
 Technically, the broker  connects to the cloud management  system (for instance,
-OpenStack) to  instruct how  the infrastructure should  be provisioned  and then
+OpenStack) to  instruct how  the infrastructure should  be provisioned; Then it
 assigns the jobs to the resources using the Slurm job management system.
 
 As  in almost  all batch  scheduler systems,  the job  description includes  its
@@ -406,73 +406,75 @@ runtime  estimation by  the  user called  \emph{user estimate}.   In  case of  a
 workflow, the job  dependencies are also provided.   Schlouder uses just-in-time
 scheduling where jobs are assigned to \acp{vm} as soon as all their dependencies
 are satisfied.  We call \emph{strategy} the  heuristic used by Schlouder to make
-provisioning and  scheduling decisions.  A  dozen strategies and  their variants
-are available to  the user (details can be found  in~\cite{GenaudG11}), of which
-we will use two in this  paper.  Strategies provision \acp{vm} and schedule jobs
-based  on  the user  estimates  of  the runtime.   Notice  that  the jobs'  real
-runtimes, called \emph{effective  runtimes}, may differ from  the estimates, but
+provisioning and  scheduling decisions according to the estimates  of  the runtime.  
+A  dozen strategies and  their variants
+are available to  the user (details can be found  in~\cite{GenaudG11}). 
+We will use two of them in this  paper.  We call  the jobs'  real
+runtimes \emph{effective  runtimes}. They usually differ from  the estimates, but
 this does not change the initial scheduling decision.
 
-The provisioning and scheduling strategies of Schlouder are bi-objective, namely
-cost of renting the resources, and makespan of the execution.  In this paper, we
-test the two following strategies which favor one objective or the other:
+The provisioning and scheduling strategies of Schlouder are bi-objective: (1) % bi-objective?
+cost of renting the resources, and (2) makespan of the execution.  In this paper, 
+we used the two following strategies, favoring one objective or the other:
 \begin{itemize}
-\item ASAP (or \textit{as soon as possible}): schedules the job immediately onto
-  an idle VM, or immediately provisions a new  VM to start the job if no idle VM
-  is available.  Hence this strategy tries to minimize the makespan of the batch
-  job execution.
+\item ASAP (or \textit{as soon as possible}) schedules each job onto
+  one idle VM if one is available, or provisions a new VM otherwise.
+  Hence this strategy minimizes the makespan by running the jobs ASAP.
 
-\item AFAP (or \textit{as full as  possible}): schedules each job in priority to
-	an already available resource whenever the remaining time  before a new
-	\ac{btu} begins is greater or equal to the job estimated runtime.
-	By solving this bin-packing problem, this strategy tends to minimize the
-	monetary cost of the batch execution.
+\item AFAP (or \textit{as full as  possible}) schedules each job onto
+  one VM if it does not increase its rental cost (\textit{i.e.} its number
+  of \ac{btu}), or provisions a new VM otherwise. This is a bin-packing problem.
+  Hence this strategy minimizes the monetary cost by minimizing the number of \ac{btu}.
 \end{itemize}
 
-The left part  of Figure~\ref{fig:rs} presents the outline of  a real execution.
-From the  job set description including  user estimates and dependencies,  and a
-strategy   Schlouder  computes   the   scheduling   and  resource   provisioning
-decisions. It  then communicates its  requests to the cloud's  frontend, denoted
-Controller.   Once the  \acp{vm}  are booted  Schlouder sends  each  job to  its
-assigned machine.  Schlouder tracks jobs progression, completing the schedule as
-dependencies are  resolved, provisioning \acp{vm}  as needed, and  shutting down
-unneeded \acp{vm} as their billing cycles close.
+The left part  of Figure~\ref{fig:rs} presents the outline of  a real execution:
+Schlouder inputs are the  job set description (including  user estimates and dependencies),  
+and one strategy. They are used to compute   the   scheduling   and  resource   provisioning
+decisions. Then, Schlouder (1) sends provisioning requests to the cloud controller (or frontend), 
+(2) wait the requested the  \acp{vm} to become available, and (3) sends  each  job to  its
+assigned \acp{vm}. At runtime, Schlouder tracks jobs progression, completes the schedule as
+dependencies are  resolved or new batches are submitted, and provisions and terminates \acp{vm}
+whenever it is needed.
 
 \begin{figure}
 	\resizebox{0.5\textwidth}{!}{%
 		\input{gfx/RS.tex}
 		
 	}%
-	\caption{Comparison of the real life experiment with the
-	simulated one.}\label{fig:rs}
+	\caption{Comparison between real-life and simulated environments.}\label{fig:rs}
 \end{figure}
 \begin{figure*}
 	\centering
 	\includegraphics[width=\textwidth]{gfx/real_plot.pdf}
-	\caption{Makespan and BTU count distribution for real OMSSA and Montage
-	runs\label{fig:realbrs}}
+	\caption{Distrubtions of makespan and BTU count accross the OMSSA and 
+	  Montage real-life executions described in Table~\ref{tab:nbruns}}
+	\label{fig:realbrs}
 \end{figure*}
+%JG: vérifier à l'impression N/B
 
 \subsection{Simulated Execution Setup}
 As a follow-up  to our work on Schlouder we  developed SimSchlouder, a simulator
-mimicking  the  behaviour  of  Schlouder. Its  implements  the  same  scheduling
-strategies  as  Schlouder  using  SimGrid  as its  core  simulation  engine.  In
-practice, SimSchlouder  is included as  a plugin  into Schlouder and  allows the
-user to request an estimate of the makespan and the  cost before choosing a
+mimicking  the  behaviour  of  Schlouder. Its has the same interfaces and implements  the  same  scheduling
+strategies  as  Schlouder. It  uses  SimGrid  as its  core  simulation  engine.  In
+practice, SimSchlouder  is included as  a plugin  into Schlouder. It allows the
+user to request an estimate of the makespan and cost before choosing a
 strategy for a real run.
 
 As  shown on  the right  side of  Figure~\ref{fig:rs}, SimSchlouder  shares with
 Schlouder  a common  subset of  inputs.   Its inputs  include the  same jobs
 description  and  strategy.    Whereas  Schlouder  operates  on   a  real  cloud
 controller,  SimSchlouder   provisions  simulated  \acp{vm}  and   jobs  through
-SimGrid's cloud interface  called SchIaaS. As mentioned  earlier, the simulation
-requires  additional information  regarding  the  execution platform  simulated,
-which is  provided by platform (for  the hardware) and cloud  configuration (for
-the cloud resource management  policies) descriptions.  Most importantly, during
-a real execution the \emph{effective runtime}  is the real observed runtime of a
-job,  which   might  differ  from   the  user  estimate,  used   for  scheduling
-purposes. For a better control of the simulation, SimSchlouder can take observed
-effective runtimes as inputs.
+the SimGrid's cloud interface  called SchIaaS. As mentioned  earlier, the simulation
+requires  additional information: First, a description of the hardware platform 
+(capabilities and topology of compute, storage, and network) and of the cloud configuration
+(\acp{vm} management policies); but most importantly, the \emph{effective runtime}
+of each job, as it has beed observed during a real execution.
+
+As platform description and cloud configuration allows to simulate the environment of 
+execution, the jobs \emph{effective runtime} allows to simulate the execution of 
+applications beyond the estimates. Together, they allow the simulation to be 
+accurately representative of reality.
+
 
 \section{Enriched Simulation Framework}\label{sec:enriched-sim}
 
@@ -482,8 +484,8 @@ effective runtimes as inputs.
 		\input{gfx/mc-process.tex}
 		}
 \caption{Overview of a Monte-Carlo simulation~: $500$ realizations are generated
-by drawing runtimes for each of the $n$ jobs provided RVs, every realization is
-then simulated, the resulting makespan samples make up the final result M.}\label{fig:mc-process}
+by drawing runtimes for each of the $n$ jobs provided RVs; every realization is
+then simulated; the resulting makespan samples make up the final result M.}\label{fig:mc-process}
 \end{figure}
 
 
@@ -491,13 +493,14 @@ then simulated, the resulting makespan samples make up the final result M.}\labe
 As stated in  section~\ref{sc:relwork-stochastic}, trustworthiness of simulation
 is questionnable when its result is only one of the many possible outcomes. This
 work addresses this issue by  proposing a framework implementing the Monte-Carlo
-method  with SimSchlouder  as  simulation engine.   This  solution combines  the
+method using SimSchlouder  as  simulation engine.   This  solution combines  the
 relative  simplicity  of a  \ac{des}  with  the  extensive results  provided  by
-stochastic simulations.   This approach guarantees that  our simulation respects
-the scheduling and provisioning decisions observed in real life, as the \ac{des}
-can easily  be programmed to  reproduce such decisions, whereas  integrating the
-implication  of  such  decisions  in  the already  complex  computation  of  the
-numerical results of a stochastic simulation would be impossible.
+stochastic simulations.   This allows to respect the scheduling and provisioning 
+decisions observed in real life. 
+
+Indeed, modeling the implication of such decisions into the numerical results
+of a stochastic simulation would be very difficult, if not impossible. However,
+the \ac{des} can reproduce such decisions, simply by implementing their heuristics.
 
 In  this  section we  first  discuss  the  particularities  of the  Monte  Carlo
 Simulation applied to our context. Then we present the empirical observations we
@@ -514,25 +517,24 @@ described in section~\ref{sec:im}.
 One MCS-iteration then consists in 
 \end{comment}
 
-The whole extended simulation process,  referred to as \ac{mcs}, applied on an
-application composed of $n$ jobs (as depicted fig.~\ref{fig:mc-process})
-consists in applying successive MCS-iterations. Assuming we can provide a
+The whole extended simulation process is referred to as \ac{mcs}. 
+For an application composed of $n$ jobs (as depicted fig.~\ref{fig:mc-process}),
+\ac{mcs} consists in applying successive MCS-iterations. Assuming we can provide a
 runtime distribution $T_i$ for every job $i$, a MCS-iteration consists in~:
 \begin{itemize}
 \item making one realization of the runtime  for each job $i$, that is randomly
-  drawing a runtime value from the associated $T_i$ to obtain a runtime $t_i$,
-\item and once runtimes have been drawn for all jobs, proceed to a simulation
-  of the execution with these runtime values to obtain a makespan $m$. 
- This simulation is performed by SimSchlouder.
+  drawing a runtime value from the associated $T_i$ to obtain a runtime $t_i$;
+\item proceed to a simulation using all runtimes $t_i$ to obtain a makespan $m$.
 \end{itemize}
 Once we obtain enough makespans $m_k$, we compute  a statistical distribution of
 the makespan  as a final \ac{rv} noted $M$.
+% Ca vaut une meilleure formalisation que ça.
 
-
-Because of the \emph{pay-as-you-go} nature of the cloud we extend our simulation
+Because of the \emph{pay-as-you-go} nature of the cloud, we extend our simulation
 to two output variables: we will not only observe the makespan computed at any
 step but also the cost for each execution in number of \ac{btu}, that is the
 number of VM-hours started during this simulation.
+% pourquoi ne pas l'intégrer direct ? Pour moi, ce passage n'est pas top.
 
 \begin{comment}
 %------------------- le paragraphe précédent remplace le texte suivant utilisé
@@ -588,18 +590,23 @@ to  the mean  $\mu$.
 	level.}\label{fig:fit}
 \end{figure*}
 
+% Il manque une déclaration d'intention
 
-During the development of Schlouder, the cloud broker described in
-Section~\ref{sec:work-context}, we performed multiple executions of the
-application of OMSSA and Montage. These executions were performed on a 96 core
+Using Schlouder (cf. Section~\ref{sec:work-context}),
+we performed multiple executions of the
+application of OMSSA and Montage. These executions were performed on a 96 cores
 Openstack cloud system set up on 4 identical dual $2.67GHz$ Intel Xeon X5650
 servers. We used the KVM hypervisor and Openstack version 2012.1 and 2014.4.
 
-Schlouder  execution  traces obtained  from  these  experiments contain  several
+The traces obtained  from  these  experiments contain  several
 useful metrics  including, but  not limited  to, the  \ac{vm} start  dates, boot
-time, shutdown  times, and assigned  jobs, as well as  the task start  date and
-effective  runtimes. We  previously used  these traces  as a  means to  test the
-validity of Simschlouder.   These metrics will be used to  generate our \ac{mcs}
+time, shutdown  times, and assigned  jobs, as well as  the job start  date and
+effective  runtimes. 
+
+First, we  used  those traces to improve and validate Simschlouder.
+
+
+These metrics will be used to  generate our \ac{mcs}
 input \acp{rv} using the method we will describe in Section~\ref{sec:im}, and we
 will compare  the makespan  and \ac{btu}  distributions of  the \ac{mcs}  to the
 distribution observed in the corresponding traces.
@@ -609,7 +616,7 @@ of a  same application  using the same  strategy on a  same cloud  platform. The
 number of observations in  those groups is uneven due to  the changing nature of
 the    experimental   conditions    in   which    the   runs    were   executed.
 Table~\ref{tab:nbruns}  presents  an  overview   of  the  selected  sets,  while
-Figure~\ref{fig:realbrs} presents the distribution of resulting makespans and
+Figure~\ref{fig:realbrs} presents the distribution of resulting makespans and \ac{btu} count.
 
 
 \subsection{Input Modeling}\label{sec:im}
