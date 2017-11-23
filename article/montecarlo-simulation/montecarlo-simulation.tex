@@ -617,8 +617,8 @@ input \acp{rv} using the method we will describe in Section~\ref{sec:im}.
 Finally, we compared the makespan  and \ac{btu}  distributions of  the \ac{mcs}  to the
 distribution observed in the corresponding traces.
 
-For this purpose we grouped traces  from comparable runs.  For a same platform, 
-a group is defined by a unique couple {application, strategy}. 
+For this purpose we grouped the traces  from comparable runs.  For a same platform, 
+a group is defined by a unique couple <application, strategy>. %J'ai exclu la plateforme vu qu'on a qu'une 
 Table~\ref{tab:nbruns}  presents  an  overview   of  those groups,  while
 Figure~\ref{fig:realbrs} presents the distribution of resulting makespans and \ac{btu} count.
 The number of observations uneven between groups because of  the changing nature of
@@ -630,7 +630,7 @@ the    experimental   conditions    in   which    the   runs    were   executed.
 Figure~\ref{fig:realbrs} shows the distribution of makespans observed in each 
 group. As one can see, the variability of the jobs runtimes induces different
 variabilities in the makespans depending on the group: 
-from 12800 to 13400 s for {OMSAA,ASAP} % mettre les nombres exacts et ajouter les autres.
+from 12800 to 13400 s for <OMSAA, ASAP> % mettre les nombres exacts et ajouter les autres.
 
 In introduction,
 we mentioned existing studies related to IaaS cloud variability. Using the
@@ -642,14 +642,14 @@ CPU instances.
 Using a  \ac{mcs} we can account for this  variability and provide the
 user with  a range of  possible makespans. In this  section we propose  a simple
 method to  represent the variability of  the whole system using  a single factor
-parameter to create  a small range around every estimated  runtime. We test this
+parameter to create  a small range around every estimated  runtime. We test this % ne pas mélanger modele/approche et valdiation
 method against our backlog of real  runs.  The key finding detailed hereafter is
 that this simple method  can be precise enough for the  \ac{mcs} to predict over
 90\% of real runs.
 
 This model for the runtimes \acp{rv} uses a job's estimated runtime and a global
-perturbation  level  for  all  job.   The perturbation  level,  expressed  as  a
-percentage and denoted as $P$, is used  to build a range in which the simulation
+perturbation  level  for  all  job.   The perturbation  level is denoted as $P$
+and is expressed  as  a percentage of estimates. It is used  to build a range in which the simulation
 effective runtimes will be drawn. If we assume $P$ can summarize the variability
 of the whole system, a central question is how should $P$ and the user estimates
 be chosen to assess the validity of the \ac{mcs}.  To this end, we assume a good
@@ -665,9 +665,9 @@ given job. As such $t_j$, the drawn time of job $j$, can be written as~:
 \begin{equation}
 	p = \mathcal{U}(-P,+P)
 	\label{eq:r}
-\end{equation}
+\end{equation} % JG: J'ai rien vérifié
 where $r_j^n$ is the $n$th runtime observation for job $j$, $\bar{R_j}$ is the
-average of all observed runtimes for job $j$, and $\mathcal{U}$ an uniform distribution.
+average of all observed runtimes for job $j$, and $\mathcal{U}$ an uniform distribution. %JG: mettre avant, dans un bloc modèle
 
 Since the global perturbation level $P$ establishes the limit for the worst
 deviations from the estimated runtimes, the relative standard deviation metric
@@ -705,7 +705,7 @@ Amazon EC2 instances with dedicated CPUs.
 \begin{table}
 	\centering
 	\caption{Makespan and BTU capture rate depending on confidence interval
-          (CI) for a 10\% perturbation level}\label{tab:fit}
+          (CI) for a 10\% perturbation level}\label{tab:fit} %JG: uniformiser CI avec la caption d'avant ?
 	\begin{tabular}{llccc}
 		\toprule
 		Application&Strategy&\multicolumn{2}{c}{Makespan (Size of CI)}&BTU\\
@@ -720,31 +720,29 @@ Amazon EC2 instances with dedicated CPUs.
 	\end{tabular}
 \end{table}
 
-We ran a 500 iteration \ac{mcs} for every strategy-application combination using
+We ran a 500 iterations \ac{mcs} for every <strategy, application> group using
 the job  models described in  the previous section. The  resulting distributions
 are  shown  in  Figure~\ref{fig:fit}.   The makespan  density  graphs  show  the
-simulation  result  distribution   as  filled  curves  and   the  real  observed
-executions,  taken from  fig.~\ref{fig:realbrs}, as  non-filled curves.   On the
-\ac{btu} count graphs,  for each tick on  the BTU axis, the  left bar represents
-the empirical data, and the right  bar the prediction from the simulation.  Each
-graph shows  for both  strategies the  distribution of a  specific metric  for a
-given application.
+simulation  result  distribution   as  filled  curves. The  real  observed
+executions, as in  fig.~\ref{fig:realbrs}, are shown as  non-filled curves.   On the %Faire des non-filled curves dans realbrs aussi
+\ac{btu} count graphs, the  left bar represents
+the empirical data, and the right  bar the prediction from the simulation. 
 
 When looking at the resulting OMSSA distributions, presented in the two leftmost
 graphs,  the distribution  of simulated  makespan ranges  covers fairly  well the
 ranges of  observed makespans, notwithstanding a  slight right skew and  shift of
 the empirical  makespan distribution.  The  OMSSA BTU count  distributions shows
-similar results.  The range of BTU  numbers required for an execution is correct
-(for  instance, for  AFAP  both empirical  observation  and simulation  indicate
-between  33 and  36 BTU  are used)  but the  distributions of  these BTU  counts
+similar results.  The range of BTU  numbers required for an execution is correct:
+For instance,  both empirical  observations  and simulations  indicate
+between  33 and  36 BTU  are used with AFAP. However, the  distributions of  these BTU  counts
 differ slightly.
 
 
-After  this  visual inspection  of  the  results  we  now examine  them  through
-statistical confidence intervals.   Since the makespan is in essence  the sum of
-the jobs' runtimes  in that  executions critical path,  and jobs  are all
+In addition to these graphical representation,  we  now examine  them  through
+statistical confidence intervals.   Since the makespan is in essence  the sum of %Since -> Because ?
+the jobs' runtimes  in the  execution critical path,  and jobs  are all
 distributed  using the  uniform distribution  which  has a  finite variance,  we
-consider the Central Limit Theorem applicable.  Fitting to a normal distribution
+consider the Central Limit Theorem applicable.  Fitting to a normal distribution %JG: ``we can consider`` ?
 gives us an average makespan $\mu{}$, and a standard deviation $\sigma{}$. These
 can be used to  build \acp{ci}. For the normal distribution  the 95\% \ac{ci} is
 defined  as   $[\mu{}-2\sigma{},\mu{}+2\sigma{}]$  and   the  99\%   \ac{ci}  as
@@ -756,11 +754,11 @@ Table~\ref{tab:fit} presents the capture rate obtained by each interval computed
 after normal fitting.  Additionally we provide for each interval its size
 relative to the average makespan.
 
-On OMSSA the  \ac{mcs} captures 90\% of real observed  makespans. The divergence
+Regarding OMSSA, the  \ac{mcs} captures 90\% of real observed  makespans. The divergence
 between the  capture rate and  the \ac{ci} expected capture  rate is due  to the
 fact that the  empirical makespan distribution does not follow  a perfect normal
 distribution. Using  a 99\% \ac{ci}  improves the capture  rate up to  98\%,
-hence very close  to the theoretical expectation.   When simulating Montage  the
+hence very close  to the theoretical expectation. Regarding Montage  the
 \ac{mcs} achieves a capture rate of 100\% for any \ac{ci}.
 
 
@@ -782,31 +780,31 @@ encountered in our work with \ac{mcs}.
 
 We have so  far set the perturbation level  to a value that was  relevant to the
 real system observed  (see Section~\ref{sec:im}).  A subsequent  question is how
-does   the  prediction   change   when  increasing   this  perturbation   level.
+does   the  prediction   change   when  increasing   this  perturbation   level. %Ajouter ici ce que ça peut apporter comme information, voir plus bas. Dire aussi que dans toute cette partie, on se concentre uniquement sur ASAP.
 Figure~\ref{fig:int} presents the 95\% \acp{ci} obtained through the normal
 distribution fitting of simulations with both a 10\%
 and a 40\% perturbation  level. Such perturbation level are possible under are
 possible in for shared instance (\cite{LeitnerC16}). On the makespan interval graphs  (first and third
 subfigures  from left  to right)  the boxes  represent the  span of the \ac{ci}
 interval. For reference  the vertical bar inside represents  a single simulation
-using  the average  runtimes without  any random  element added.   Comparing the
-interval of  perturbed simulation  to this unperturbed  simulation allows  us to
+using  the average  runtimes without  any randomization.   Comparing the
+interval of  perturbed simulations  to this unperturbed  simulation allows  us to %C'ets cette phrase qu'il faut remonter, et ajouter des infos: à quoi sert de voir cet effet ?
 better see  the effect of the perturbation on the strategy. In the middle row of
 these subfigures, are presented for  reference the interval spanning the minimum
 and maximum  observed real  makespans over all  runs.  These  \ac{ci} subfigures
 only present ASAP strategy whereas  the BTU distribution subfigures present both
 strategies.
 
-The leftmost subfigure presents the \acp{ci} for OMSSA using the ASAP strategy at
+The leftmost subfigure presents the \acp{ci} for the <OMSSA, ASAP> group at
 40\% and 10\% perturbation levels. With the increase of the perturbation level
-the intervals naturally get wider, but the average makespan, by definition the
-center of the capture interval, also increases. On OMSSA this happens to the
+the intervals naturally get wider, but the average makespan, which is by definition the
+center of the capture interval, also increases. This happens to the 
 extent that the lower bound of our interval at 40\% is higher than the lower
 bound at 10\%. This diminishes the capture rate of the simulation from 90\%
 (table~\ref{tab:fit}) to 83\% even as the relative width of the interval grows
-from 3\% (7 minutes) to 10\% (almost 24 minutes).
+from 3\% (7 minutes) to 10\% (almost 24 minutes). This result is two-fold.
 
-This result is two-fold. First this demonstrates that the perturbation level can
+Firstly, this demonstrates that the perturbation level can
 not be used as a trade-off variable to augment capture rate at the expense of
 \ac{ci} compactness. The lower capture rate at a 40\% perturbation level is a
 strong indication that our real platform exhibits a variability closer to
@@ -814,19 +812,22 @@ strong indication that our real platform exhibits a variability closer to
 interval compactness should use statistical methods to build higher rate \acp{ci},
 like the 99\% normal distribution \ac{ci} used in section~\ref{sec:eval}.
 
-Secondly this result shows how an \ac{mcs} can be used to exhibit strategy
+Secondly, this result shows how an \ac{mcs} can be used to exhibit strategy
 behaviours. This upwards shift of the \ac{ci} shows that ASAP, a strategy
 geared towards reducing the makespan regardless of cost, is not as effective
-when scheduling bag-of-tasks in environments where job runtimes might vary
-widely. By testing Montage in the same way (third subfigure) we see that when
+when scheduling bag-of-tasks with job runtimes that might vary
+widely. However, the same observation on <ASAP,Montage> (third subfigure) shows that when
 scheduling workflows this behaviour does not happen to the same extent. The
-average makespan still rises, but not as fast as the interval grows, the \ac{ci}
+average makespan still rises, but not as fast as the interval grows: the \ac{ci}
 at a 40\% perturbation level is a superset of the one at a 10\% perturbation
-level. In the case of ASAP this behaviour is explained by the
-fact that when using ASAP the last job of every \ac{vm} is synchronized,
-therefore any runtime exceeding it's expected value will extend the makespan.
-But this kind of analysis can be used to gain insight in the strengths and
-weaknesses of complex strategies.
+level. This behaviour is explained by the nature of workflows,
+in which jobs have to wait for their latest dependencies resolution to tun: 
+in workflows, the makespan depends only on the execution critical path, and thus
+only on the runtime of a subset of the jobs; whereas the makespan of bag-of-tasks 
+depends on the runtime of every jobs.
+
+This kind of analysis can be used to gain insight in the strengths and
+weaknesses of any strategy, even the more complex ones.
 
 
 \subsection{Advantages and limitations of the enriched simulation}\label{sec:lim}
