@@ -63,24 +63,19 @@
   application are  of pre-eminent  importance. To  that end,  a number  of cloud
   simulators have been  proposed by researchers. However, the  attempts to reach
   reliable  predictions are  hampered by  the opacity  regarding the  underlying
-  hardware platform, and by the  multi-tenant nature of clouds. Those make job
-  runtimes both  variable and hard to  predict.  In this paper,  we investigate
-  which parameters are the most  influential in the
-  prediction of the actual execution behavior in terms of cost and total runtime,
-  through two real  use-cases.
+  hardware platform,  and by the multi-tenant  nature of clouds. Those  make job
+  runtimes both  variable and  hard to  predict.  In this  paper, we  propose an
+  improved simulation framework  that takes into account  this variability using
+  the Monte-Carlo method.
 
-  We consider the execution  of batch jobs on an  actual platform, one example
+  We consider  the execution of  batch jobs on  an actual platform,  one example
   being a  bag-of-tasks and the other  one a workflow, whose  jobs are scheduled
-  using typical  heuristics based on  the user  estimates of job  runtimes.  We
-  propose an  improved simulation framework  based on the Monte-Carlo  method to
-  study the  relationship between the  precision of  the user estimates  and the
-  accuracy of the simulation results regarding  cost and makespan. Based on this
-  stochastic process,  predictions are expressed as  interval-based makespan and
-  cost.   We show  that, most  of the time, imprecisions  in  user estimates are
-  largely amortized in the final predictions but still can capture real
-  observations. Finally, we identify evidence of the influence of the scheduling 
-  heuristics on the accuracy of the method.
-  % JG : je ne comprends pas le `` but still can capture real observations''
+  using typical  heuristics based  on the  user estimates  of job  runtimes.  We
+  model  the observed  variability through  simple  random variables  to use  as
+  inputs  to the  Monte-Carlo  simulation.  Based  on  this stochastic  process,
+  predictions are expressed as interval-based  makespan and cost.  We show that,
+  our method  can capture over  90\% of  the empirical observations  of makespan
+  while keeping the capture interval size below 5\% of the average makespan.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -246,7 +241,7 @@ packet-level  simulation  for  network  communications  (NS2).   In  the  second
 category  are the  simulators  targeting the  whole  cloud ecosystem,  including
 client activity. In this category, CloudSim~\cite{cloudsim} (originally stemming
 from  GridSim) is  the most  broadly used  simulator in  academic research.   It
-offers simplified models regaring network communications, CPU or disks. However,
+offers simplified models regarding network communications, CPU or disks. However,
 it is  easily extensible  and serves  as the underlying  simulation engine  in a
 number of projects (e.g  \cite{Cai17}, see section \ref{sc:relwork-stochastic}).
 Simgrid~\cite{simgrid} is  the other long-standing  project, which when  used in
@@ -464,6 +459,7 @@ As  shown on  the right  side of  Figure~\ref{fig:rs}, SimSchlouder  shares with
 Schlouder  a common  subset of  inputs.   Its inputs  include the  same jobs
 description  and  strategy.    Whereas  Schlouder  operates  on   a  real  cloud
 controller,  SimSchlouder   provisions  simulated  \acp{vm}  and   jobs  through
+
 the SimGrid's cloud interface  called SchIaaS. As mentioned  earlier, the simulation
 requires  additional information: First, a description of the hardware platform 
 (capabilities and topology of compute, storage, and network) and of the cloud configuration
@@ -474,7 +470,6 @@ As platform description and cloud configuration allows to simulate the environme
 execution, the jobs \emph{effective runtime} allows to simulate the execution of 
 applications beyond the estimates. Together, they allow the simulation to be 
 accurately representative of reality.
-
 
 \section{Enriched Simulation Framework}\label{sec:enriched-sim}
 
@@ -604,7 +599,7 @@ time, shutdown  times, and assigned  jobs, as well as  the job start  date and
 effective  runtimes. 
 
 First, we  used  those traces to improve and validate Simschlouder.
-
+%JG: j'en suis là
 
 These metrics will be used to  generate our \ac{mcs}
 input \acp{rv} using the method we will describe in Section~\ref{sec:im}, and we
@@ -621,10 +616,10 @@ Figure~\ref{fig:realbrs} presents the distribution of resulting makespans and \a
 
 \subsection{Input Modeling}\label{sec:im}
 
-As expected our experiment show variability in runtimes. This is reflected by
+As expected our experiments show variability in runtimes. This is reflected by
 the makespan distribution observed in Figure~\ref{fig:realbrs}. In introduction,
 we mentioned existing studies related to IaaS cloud variability. Using the
-methodology described in the study~\cite{LeitnerC16}, based on relative standard
+metrics described in the study~\cite{LeitnerC16}, based on relative standard
 deviation of jobs runtimes, we find our platform variability to stand between
 3\% and 6\%. This variability is within the range reported in the study for
 platforms like Amazon's EC2 or Google Cloud Engine, with the exception of shared
@@ -639,14 +634,12 @@ that this simple method  can be precise enough for the  \ac{mcs} to predict over
 
 This model for the runtimes \acp{rv} uses a job's estimated runtime and a global
 perturbation  level  for  all  job.   The perturbation  level,  expressed  as  a
-percentage and denoted as  $P$, is used  to build a  range around  the estimated
-runtime in which the simulation effective  runtimes will be drawn. If we assume
-$P$ can summarize the variability of the whole system, a central question is how
-should  $P$  and the  user estimates be  chosen to  assess the  validity of  the
-\ac{mcs}.
-To this end, we assume a  good guess for an estimated  runtime is the
-average of all effective runtimes for a given job. As such $t_j$, the drawn time
-of job $j$, can be written as~:
+percentage and denoted as $P$, is used  to build a range in which the simulation
+effective runtimes will be drawn. If we assume $P$ can summarize the variability
+of the whole system, a central question is how should $P$ and the user estimates
+be chosen to assess the validity of the \ac{mcs}.  To this end, we assume a good
+guess for an  estimated runtime is the  average of all effective  runtimes for a
+given job. As such $t_j$, the drawn time of job $j$, can be written as~:
 \begin{equation}
 	t_j = \bar{R_j} \cdot (1 + p)
 	\label{eq:t}
@@ -679,7 +672,7 @@ P = \textrm{mean}(\delta{}_j)
 For OMSSA, the perturbation level given by this method is $P\approx{}10\%$ for both
 strategies. For Montage  our calculated perturbation level is  $P\approx{}20\%$
 for ASAP and $P\approx{}5\%$ for AFAP. Using a similar metric, \cite{pics} also 
-observed most deviation to be within 10\% of the average runtime when working on
+observed most deviations to be within 10\% of the average runtime when working on
 Amazon EC2 instances with dedicated CPUs.
 
 \section{Evaluation}
@@ -713,17 +706,18 @@ Amazon EC2 instances with dedicated CPUs.
 \end{table}
 
 We ran a 500 iteration \ac{mcs} for every strategy-application combination using
-the job models described in the previous section. The resulting distributions are
-shown in Figure~\ref{fig:fit}.  The makespan density graphs  show the simulation
-result distribution  as filled  curves and the  real observed  executions, taken
-from  fig.~\ref{fig:realbrs},  as  non-filled  curves.  On  the  \ac{btu}  count
-graphs, for  each tick on  the BTU axis, the  left bar represents  the empirical
-data, and  right bar the prediction  from the simulation.  Each  graph shows for
-both strategies the distribution of a specific metric for a given application.
+the job  models described in  the previous section. The  resulting distributions
+are  shown  in  Figure~\ref{fig:fit}.   The makespan  density  graphs  show  the
+simulation  result  distribution   as  filled  curves  and   the  real  observed
+executions,  taken from  fig.~\ref{fig:realbrs}, as  non-filled curves.   On the
+\ac{btu} count graphs,  for each tick on  the BTU axis, the  left bar represents
+the empirical data, and the right  bar the prediction from the simulation.  Each
+graph shows  for both  strategies the  distribution of a  specific metric  for a
+given application.
 
 When looking at the resulting OMSSA distributions, presented in the two leftmost
-graphs,  the distribution  of simulated  makespan range  covers fairly  well the
-range of  observed makespans, notwithstanding a  slight right skew and  shift of
+graphs,  the distribution  of simulated  makespan ranges  covers fairly  well the
+ranges of  observed makespans, notwithstanding a  slight right skew and  shift of
 the empirical  makespan distribution.  The  OMSSA BTU count  distributions shows
 similar results.  The range of BTU  numbers required for an execution is correct
 (for  instance, for  AFAP  both empirical  observation  and simulation  indicate
@@ -751,9 +745,8 @@ On OMSSA the  \ac{mcs} captures 90\% of real observed  makespans. The divergence
 between the  capture rate and  the \ac{ci} expected capture  rate is due  to the
 fact that the  empirical makespan distribution does not follow  a perfect normal
 distribution. Using  a 99\% \ac{ci}  improves the capture  rate up to  98\%,
-hence very close  the theoretical expectation.   When simulating Montage  the
+hence very close  to the theoretical expectation.   When simulating Montage  the
 \ac{mcs} achieves a capture rate of 100\% for any \ac{ci}.
-
 
 
 Our \ac{mcs} and a simple job model can capture 90\% of reality all the while
@@ -870,13 +863,15 @@ The \acl{mcs}  must be parameterized to  draw random values from  relevant value
 spaces. In this work we show that the  variability we seek to account for can be
 modeled  by a  single parameter  called perturbation  level applied  to all  job
 runtimes. Second, we apply our method in  a real setting, on both a bag-of-tasks
-and a workflow application for which we have collected execution traces.  Thanks
-to these empirical observations, our study  shows that the proposed method could
-capture over  90\% of the  observed makespans given an  appropriate perturbation
-level. We now aim to test our simulator on more use cases and platforms. In
-particular as a number of studies on public clouds have reported variability
-levels similar to our platform (\cite{LeitnerC16,pics}), we intend to reproduce
-these results on public clouds.
+and a workflow  application for which we have collected  execution traces, using
+scheduling and provisioning strategies that  aim to optimize either the makespan
+or the  rental cost.  At  the light to  these empirical observations,  our study
+shows that the proposed method could capture over 90\% of the observed makespans
+for  all  combinations  of  application   and  scheduling  strategies  given  an
+appropriate perturbation  level.  We now aim  to test our simulator  on more use
+cases and platforms.  In particular as a number of studies on public clouds have
+reported variability levels similar to our platform (\cite{LeitnerC16,pics}), we
+intend to reproduce these results on public clouds.
 
 
 
