@@ -617,8 +617,8 @@ input \acp{rv} using the method we will describe in Section~\ref{sec:im}.
 Finally, we compared the makespan  and \ac{btu}  distributions of  the \ac{mcs}  to the
 distribution observed in the corresponding traces.
 
-For this purpose we grouped traces  from comparable runs.  A group is defined by
-a unique triplet {application, strategy, platform}. 
+For this purpose we grouped traces  from comparable runs.  For a same platform, 
+a group is defined by a unique couple {application, strategy}. 
 Table~\ref{tab:nbruns}  presents  an  overview   of  those groups,  while
 Figure~\ref{fig:realbrs} presents the distribution of resulting makespans and \ac{btu} count.
 The number of observations uneven between groups because of  the changing nature of
@@ -627,8 +627,12 @@ the    experimental   conditions    in   which    the   runs    were   executed.
 
 \subsection{Input Modeling}\label{sec:im}
 
-As expected our experiments show variability in runtimes. This is reflected by
-the makespan distribution observed in Figure~\ref{fig:realbrs}. In introduction,
+Figure~\ref{fig:realbrs} shows the distribution of makespans observed in each 
+group. As one can see, the variability of the jobs runtimes induces different
+variabilities in the makespans depending on the group: 
+from 12800 to 13400 s for {OMSAA,ASAP} % mettre les nombres exacts et ajouter les autres.
+
+In introduction,
 we mentioned existing studies related to IaaS cloud variability. Using the
 metrics described in the study~\cite{LeitnerC16}, based on relative standard
 deviation of jobs runtimes, we find our platform variability to stand between
