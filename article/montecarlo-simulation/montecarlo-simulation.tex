@@ -563,7 +563,7 @@ effective  runtimes.
 First, we  used  those traces to improve and validate Simschlouder. To do so, we
 compared the backlogs of all of the real executions with the backlogs of the 
 corresponding simulations inputted with effective runtimes.
-We looked at every differences between simulations and reality, 
+We looked at every difference between simulations and reality, 
 identified the source of these differences, fixed them by modifying either 
 SimSchlouder or Schlouder depending on the nature of the differences.
 This iteration was repeated until the remaining differences can be explained by 
@@ -573,6 +573,7 @@ this article, the differences between real and simulated makespans are less than
 1 second, and the count of \ac{btu} are systematically identical.
 This work is under publication process.
 \end{comment}
+
 
 These traces were initially used fix Schlouder to properly 
 tune SimSchlouder. As such, for the execution used in this paper, simulations
@@ -587,8 +588,8 @@ distribution observed in the corresponding traces.
 For this purpose we grouped the traces  from comparable runs.  For a same platform, 
 a group is defined by a unique pair <application, strategy>.  
 Table~\ref{tab:nbruns}  presents  an  overview   of  those groups,  while
-Figure~\ref{fig:realbrs} presents the distribution of resulting makespans and \ac{btu} count.
-The number of observations uneven between groups because of  the changing nature of
+Figure~\ref{fig:realbrs} presents the distribution of resulting makespans and \ac{btu} counts.
+The number of observations is uneven between groups because of  the changing nature of
 the    experimental   conditions    in   which    the   runs    were   executed.
 
 
@@ -601,6 +602,7 @@ from 12811.40s to 13488.98s for <OMSSA, ASAP>,
 from 13564.53s to 14172.34s for <OMSSA, AFAP>,
 from 1478.208s to 1554.407s for <Montage, ASAP>, and
 from 2833.524s to 2837.362s for <Montage, AFAP>.
+
 
 In introduction,
 we mentioned existing studies related to IaaS cloud variability. Using the
@@ -626,7 +628,7 @@ be chosen to assess the validity of the \ac{mcs}.  To this end, we assume a good
 guess for an  estimated runtime is the  average of all effective  runtimes for a
 given job. As such $t_j$, the drawn time of job $j$, can be written as~:
 \begin{equation}
-	t_j = \bar{R_j} \cdot (1 + p)
+	t_j = \bar{R_j} \cdot (1 + P)
 	\label{eq:t}
 \end{equation}
 \begin{equation}
@@ -643,7 +645,7 @@ Since the global perturbation level $P$ establishes the limit for the worst
 deviations from the estimated runtimes, the relative standard deviation metric
 used in~\cite{LeitnerC16} is not well suited. Instead we choose to build $P$
 using the average of the worst observed deviation for every job in the
-application. Formally $P$ is expressed as :
+application. Formally $P$ is set to:
 \begin{equation}
 P = \textrm{mean}(\delta{}_j)
 \label{eq:P}
@@ -707,17 +709,17 @@ When looking at the resulting OMSSA distributions, presented in the two leftmost
 graphs,  the distribution  of simulated  makespan ranges  covers fairly  well the
 ranges of  observed makespans, notwithstanding a  slight right skew and  shift of
 the empirical  makespan distribution.  The  OMSSA BTU count  distributions shows
-similar results.  The range of BTU  numbers required for an execution is correct:
+similar results.  The range of BTU  numbers required for an execution is correct.
 For instance,  both empirical  observations  and simulations  indicate
 between  33 and  36 BTU  are used with AFAP. However, the  distributions of  these BTU  counts
 differ slightly.
 
 
 In addition to these graphical representation,  we  now examine  them  through
-statistical confidence intervals.   Since the makespan is in essence  the sum of %Since -> Because ?
+statistical confidence intervals.   Since the makespan is in essence  the sum of 
 the jobs' runtimes  in the  execution critical path,  and jobs  are all
 distributed  using the  uniform distribution  which  has a  finite variance,  we
-consider the Central Limit Theorem applicable.  Fitting to a normal distribution %JG: ``we can consider`` ?
+consider the Central Limit Theorem applicable.  Fitting to a normal distribution 
 gives us an average makespan $\mu{}$, and a standard deviation $\sigma{}$. These
 can be used to  build \acp{ci}. For the normal distribution  the 95\% \ac{ci} is
 defined  as   $[\mu{}-2\sigma{},\mu{}+2\sigma{}]$  and   the  99\%   \ac{ci}  as
@@ -729,7 +731,7 @@ Table~\ref{tab:fit} presents the capture rate obtained by each interval computed
 after normal fitting.  Additionally we provide for each interval its size
 relative to the average makespan.
 
-Regarding OMSSA, the  \ac{mcs} captures 90\% of real observed  makespans. The divergence
+Regarding OMSSA, the  \ac{mcs} captures at least 90\% of real observed  makespans. The divergence
 between the  capture rate and  the \ac{ci} expected capture  rate is due  to the
 fact that the  empirical makespan distribution does not follow  a perfect normal
 distribution. Using  a 99\% \ac{ci}  improves the capture  rate up to  98\%,
@@ -759,8 +761,9 @@ does the prediction change when increasing this perturbation level. In this
 section we will focus on simulations of makespans using the ASAP strategy.
 Figure~\ref{fig:int} presents the 95\% \acp{ci} obtained through the normal
 distribution fitting of simulations with both a 10\%
-and a 40\% perturbation  level. Such perturbation level are possible under are
-possible in for shared instance (\cite{LeitnerC16}). On the makespan interval graphs  (first and third
+and a 40\% perturbation  level. Notice that a 40\% perturbation level may be experienced in
+current cloud provider offers when renting shared instances
+(\cite{LeitnerC16}). On the makespan interval graphs  (first and third
 subfigures  from left  to right)  the boxes  represent the  span of the \ac{ci}
 interval. The mean simulated makespan ($\mu{}$) represented by the vertical bar
 inside the interval. In the middle row of these subfigures, the interval of 
@@ -798,7 +801,7 @@ scheduling workflows ASAP remains capable of low makespans.
 This behaviour is explained by the nature of workflows,
 in which jobs have to wait for their latest dependencies resolution to run~: 
 in workflows, the makespan depends only on the execution critical path, and thus
-only on the runtime of a subset of the jobs; whereas the makespan of bag-of-tasks 
+only on the runtime of a subset of the jobs, whereas the makespan of bag-of-tasks 
 depends on the runtime of every jobs.
 
 This kind of analysis can be used to gain insight in the strengths and
@@ -858,7 +861,7 @@ modeled  by a  single parameter,  called perturbation  level and applied  to all
 runtimes. Second, we apply our method in  a real setting, on both a bag-of-tasks
 and a workflow  application, for which we have collected  execution traces, using
 scheduling and provisioning strategies that  aim to optimize either the makespan
-or the  rental cost.  At  the light to  these empirical observations,  our study
+or the  rental cost.  At  the light of  these empirical observations,  our study
 shows that the proposed method could capture over 90\% of the observed makespans
 for  all  combinations  of  application   and  scheduling  strategies  given  an
 appropriate perturbation  level.  We now aim  to test our simulator  on more use
