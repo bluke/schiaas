@@ -167,40 +167,6 @@ improvements and the  limits of the approach.
 
 
 \section{Related Work}
-\begin{comment}
-\begin{table*}
-	\centering
-	\caption{Comparison of capabilities and functions of 5 common cloud
-	simulators}
-	\label{tab:simcmp}
-\begin{tabular}{|c||c|c|c||c|c|c|c|}
-	\hline
-	%% line 1
-	& \multicolumn{3}{c||}{Application} &
-	\multicolumn{2}{c|}{CPU}&Network&Disk\\
-	\cline{2-8}
-	%%line 2
-	Simulator &trace%(a) 
-                  &model%(b)
-                  &code%(c)
-                  &timed%(d)
-                  &\#instr%(e)
-		  &type 
-		  &max precision\\
-	\hline
-	%%line 3
-	CloudSim\cite{cloudsim} & & & \bf X &&\bf
-	X&store\&forward&seek+transfert\\ \hline
-	ICanCloud\cite{icancloud} & & & \bf X &&\bf X&packet& bloc \\ \hline
-	GroudSim\cite{groudsim} & & & \bf X &&\bf X&flow& n/a\\\hline
-	GreenCloud\cite{greencloud} & & \bf X &&&\bf X&packet& n/a\\ \hline
-	SimGrid\cite{simgrid}& \bf X & \bf X & \bf X &\bf X&\bf X& flow/packet &
-	seek+transfert \\
-	\hline
-\end{tabular}
-\end{table*}
-\end{comment}
-
 
 \subsection{Simulation}
 
@@ -283,29 +249,22 @@ For  more   comprehensive  predictions  in  such   variable  environments,  the
 simulation must  be \emph{stochastic}.  In stochastic simulations  inputs become
 \acfp{rv} representing the  distribution of possible values  for the parameters.
 The  result  of one  such  simulation  is  itself  an \ac{rv}  representing  the
-distribution  of the  results.  This  approach has  been used to  compute
-schedules for job graphs (\ac{dag}) with stochastic durations in the context of
-PERT networks~\cite{Slyke63}.
+distribution  of the  results. 
 
-%,  and applied in  the recent  years to
-%heterogeneous distributed computing environments.  For example in the context of
-%grids,  Tang  et al.~\cite{Tang11}  propose  a  modification of  the  well-known
-%scheduling heuristic HEFT  to compute a schedule yielding  the shortest makespan
-%given randomly variable task durations. 
-
-Similarly in  our context,  an application is modeled  as a  \ac{dag}: 
-the vertices represent the jobs  comprising the application; and the edges represent
+Works on heterogeneous grids~\cite{Li97} and PERT networks~\cite{Ludwig01} give
+a numerical method to solving stochastic simulations of \ac{dag}. In a \ac{dag} model 
+the vertices represent the jobs  comprising the application, and the edges represent
 the dependencies between those jobs.  Each vertex can then be assigned its respective
-\ac{rv}  representing   its  possible  runtime.    The  result  is   a  \ac{rv}
+\ac{rv}  representing   its  possible  runtime. The simulation result is an \ac{rv}
 representing  the possible  duration for  the execution  of the  whole \ac{dag},
 \textit{i.e.} the \emph{makespan}. An \ac{rv} is  defined by its \ac{pdf}  and \ac{cdf},
-where  the   \ac{cdf}  is  obtain   by  integrating  the  \ac{pdf}.    Works  on
-heterogeneous  grids~\cite{Li97} and  PERT  networks~\cite{Ludwig01} show  that
+where  the   \ac{cdf}  is  obtain   by  integrating  the  \ac{pdf}.
+The numerical approach presented in~\cite{Li97, Ludwig01} show  that
 when  jobs' runtimes  are  independent, the  makespan of  successive  jobs is  a
 convolution product  of the individual  jobs' \acp{rv}, while the  makespan of
-parallel jobs joining is the  product of  the jobs respective  \acp{cdf}. However, this
-mathematical approach is computationally intensive, and its core constraint,
-the jobs \acp{rv}, independence can not be guaranteed in most cases.
+parallel jobs joining is the  product of  the jobs respective  \acp{cdf}. This
+numerical approach is computationally intensive, and its core constraint,
+the jobs \acp{rv}, independence can not be guaranteed in all cases.
 
 Moreover this \ac{dag}-based approach implies fixed scheduling. 
 Since cloud platforms allow additional resources provisioning at anytime,
@@ -318,7 +277,7 @@ jobs, but also the scheduling, the effective constraint imposed on a job queued
 after another.
 
 
-Instead  of computing  the resulting  \ac{rv}, a  \ac{mcs} samples  the possible
+Instead  of numerically computing  the resulting  \ac{rv}, an \ac{mcs} samples the possible
 results by testing  multiple \emph{realizations} in a  deterministic fashion.  A
 realization is obtained by drawing a runtime that follows their job's respective 
 \ac{rv} for  every job in the  application. 
@@ -326,7 +285,9 @@ This allows to simulate each realization using traditional
 methods like \ac{des}.  Eventually, given enough realizations, the distribution of
 the simulation  results will  tend towards the  distribution of  the equivalent
 stochastic  simulation.  Statistical  fitting  techniques can  then  be used  to
-characterize this makespan \ac{rv}.
+characterize this makespan \ac{rv}. Whereas when the numerical approach can not 
+account for dynamic scheduling, the Monte-Carlo Methods allows us to do so 
+trivially by simply implementing the scheduling heuristics in the core \ac{des}.
 
 The development  of heterogeneous distributed computing  environments, grids and
 now clouds,  has led  researchers to use  this approach in  this field.   In the
@@ -448,7 +409,6 @@ whenever it is needed.
 	  }
 	\label{fig:realbrs}
 \end{figure*}
-%JG: vérifier à l'impression N/B
 
 \subsection{Simulated Execution Setup}
 As a follow-up  to our work on Schlouder we  developed SimSchlouder, a simulator
@@ -483,11 +443,6 @@ method using SimSchlouder  as  simulation engine.   This  solution combines  the
 relative  simplicity  of a  \ac{des}  with  the  extensive results  provided  by
 stochastic simulations.   This allows to respect the scheduling and provisioning 
 decisions observed in real life. 
-
-%%TODO : misplaced ?
-Indeed, modeling the implication of such decisions into the numerical results
-of a stochastic simulation would be very difficult, if not impossible. However,
-the \ac{des} can reproduce such decisions, simply by implementing their heuristics.
 
 In  this  section we  first  discuss  the  particularities  of the  Monte  Carlo
 Simulation applied to our context. Then we present the empirical observations we
@@ -681,7 +636,7 @@ given job. As such $t_j$, the drawn time of job $j$, can be written as~:
 	\label{eq:r}
 \end{equation}
 where $r_j^n$ is the $n$th runtime observation for job $j$, $\bar{R_j}$ is the
-average of all observed runtimes for job $j$, and $\mathcal{U}$ an uniform distribution. %JG: mettre avant, dans un bloc modèle
+average of all observed runtimes for job $j$, and $\mathcal{U}$ an uniform distribution.
 
 Since the global perturbation level $P$ establishes the limit for the worst
 deviations from the estimated runtimes, the relative standard deviation metric
