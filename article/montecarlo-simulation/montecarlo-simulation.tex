@@ -441,8 +441,11 @@ whenever it is needed.
 \begin{figure*}
 	\centering
 	\includegraphics[width=\textwidth]{gfx/real_plot.pdf}
-	\caption{Distributions of makespan and BTU count across the OMSSA and 
-	  Montage real-life executions described in Table~\ref{tab:nbruns}}
+	\caption[caption]{Distributions of makespan and BTU count across the OMSSA and 
+	  Montage real-life executions described in Table~\ref{tab:nbruns}.\\ 
+	  \textit{Reading example: Using AFAP with OMSSA leads to makespans 
+	  roughly ranging from 12800 s to 13600 s and BTU counts ranging from 33 to 36.}
+	  }
 	\label{fig:realbrs}
 \end{figure*}
 %JG: vérifier à l'impression N/B
@@ -580,9 +583,12 @@ to  the mean  $\mu$.
 %% Free floating graphs mus be declared a page in advance
 \begin{figure*}
 	\includegraphics[width=\textwidth]{gfx/fit_plot.pdf}
-	\caption{Makespan and BTU count distribution for OMSSA and Montage Monte
-	Carlo Simulation compared to reality at 10\% perturbation
-	level.}\label{fig:fit}
+	\caption[caption]{Makespan and BTU count distribution for OMSSA and Montage Monte
+	  Carlo Simulation compared to reality at 10\% perturbation level.\\ 
+	  \textit{Reading example: Simulating AFAP with OMSSA leads to makespans 
+	  roughly ranging from 12800 s to 13400 s and BTU counts ranging from 33 to 36.}
+	}
+	\label{fig:fit}
 \end{figure*}
 
 % Il manque une déclaration d'intention
@@ -695,11 +701,16 @@ Amazon EC2 instances with dedicated CPUs.
 %%Free floating figure must be declare one page ahead.
 \begin{figure*}
 	\includegraphics[width=\textwidth]{gfx/int_plot.pdf}
-	\caption{Makespan intervals and BTU count distribution for OMSSA and 
+	\caption[caption]{Makespan intervals and BTU count distribution for OMSSA and 
 	Montage at different perturbation levels. In the makespan interval graph 
 	the boxes represent the 95\% \ac{ci} resulting from the normal fit of the
 	\acs{mcs}'s results, and the bar the results of a single unperturbed 
-	simulation.}\label{fig:int}
+	simulation.\\
+	\textit{Reading example: Simulating ASAP with OMSSA and a perturbation 
+	level of 10\% leads to makespans roughly ranging from 12800 s to 13250 s,
+	centered on 13000 s, while the real makespans range from 12800 s to 13500s.}
+	}
+	\label{fig:int}
 \end{figure*}
 %
 \begin{table}
