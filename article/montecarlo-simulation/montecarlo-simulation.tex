@@ -838,11 +838,11 @@ influence the \ac{mcs} or its result but are looking to evaluate them in
 future work.
 
 In this article the only variable parameter is the jobs' runtimes. As such these
-runtimes coalesce all sources of variability, change in available CPU time,
-network or memory contention and the application's inherent variability. We did so
-because this approach is closer to a cloud broker user scenario and  the
-execution traces we had did not allow for us to separate in a convincing way these
-different variability sources. In circumstances where one is able to measure variability
+runtimes coalesce all sources of variability, including the platform variability,
+for instance: change in available CPU time, network or memory contention due to other users workloads
+We did so because this approach is closer to a cloud usage scenario, where users
+resources are roughly isolated.
+In circumstances where one is able to measure variability
 on CPU power or network speed it is possible to add those variables as input of
 the \ac{mcs}. In this case a realization would draw not only each jobs' size 
  but also a platform with different CPU powers and network speeds.
@@ -862,6 +862,7 @@ perturbation level the input variable distribution was compact. At a 40\%
 perturbation level there was a significant drop in the confidence of our fitting
 method. We are currently studying the relationship between perturbation level
 and the number of required MCS-iterations.
+%JG : on pourrait y caler les temps de simulation ici
 
 \section{Conclusion}
 Predicting  the execution  behavior  of complex  workloads in  the  cloud is  an
