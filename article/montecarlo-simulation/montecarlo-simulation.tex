@@ -252,7 +252,7 @@ Java) for the simulation of large use-cases. Most recently, PICS~\cite{pics} has
 been  proposed  to  specifically  evaluate simulation  of  public  clouds.   The
 configuration of the simulator uses only  parameters that can be measured by the
 cloud client, namely inbound and  outbound network bandwidths, average CPU power,
-\ac{vm} boot times, and scaling/scaleout  policies. The data center is therefore % scaleout ?
+\ac{vm} boot times, and scale-in/scale-out  policies. The data center is therefore % scaleout ?
 seen as a black  box, for which no detailed description  of the hardware setting
 is required.  The validation  study of  PICS under  a variety  of use  cases has
 nonetheless shown accurate predictions.
@@ -309,7 +309,7 @@ the jobs \acp{rv}, independence can not be guaranteed in most cases.
 
 Moreover this \ac{dag}-based approach implies fixed scheduling. 
 Since cloud platforms allow additional resources provisioning at anytime,
-users are likely to call on dynamic schedulers: they adapt the schedule on the fly
+users are likely to call on dynamic schedulers which adapt the schedule on the fly
 depending of the already executed jobs runtimes and the availability of
 resources. With a \ac{dag} representation, this is akin to adding
 and removing edges depending on the runtime of certain vertices. Edges do not
@@ -350,7 +350,7 @@ captures actual observations.
 \section{Work Context}
 \label{sec:work-context}
 
-The  study conducted  in this  paper  is built upon an  original comparison  between %JG: Genuine?
+The  study conducted  in this  paper  is built upon an genuine comparison  between
 experiments  run in  actual environments  and experimental  results obtained  by
 simulation.   To strengthen  the validity  of the  comparison, the  experimental
 conditions  for  the  real  setup  and  the  simulation  should  share  as  many
@@ -387,13 +387,13 @@ executions are managed in the real environment and in the simulation.
 
 \subsection{Real Execution Setup}
 
-In the recent years, we have developed  a client-side cloud resources broker for IaaS
+In the recent years, we developed  a client-side cloud resources broker for IaaS
 called  Schlouder~\cite{Michon17}.  This  broker is  able to  submit the  user's
 batch jobs, be  it a set of  independent jobs or a workflow.   The broker's main
 role is  to schedule the set  of jobs onto a  set of cloud resources,  which the
 broker can scale up  or down.
 Technically, the broker  connects to the cloud management  system (for instance,
-OpenStack) to  instruct how  the infrastructure should  be provisioned; Then it
+OpenStack) to  instruct how  the infrastructure should  be provisioned. It then
 assigns the jobs to the resources using the Slurm job management system.
 
 As  in almost  all batch  scheduler systems,  the job  description includes  its
@@ -401,19 +401,19 @@ runtime  estimation by  the  user called  \emph{user estimate}.   In  case of  a
 workflow, the job  dependencies are also provided.   Schlouder uses just-in-time
 scheduling where jobs are assigned to \acp{vm} as soon as all their dependencies
 are satisfied.  We call \emph{strategy} the  heuristic used by Schlouder to make
-provisioning and  scheduling decisions according to the estimates  of  the runtime.  
-A  dozen strategies and  their variants
+provisioning and  scheduling decisions according to the estimates of the runtime.  
+In this paper we use two of the dozen strategies and  their variants
 are available to  the user (details can be found  in~\cite{GenaudG11}). 
-We will use two of them in this  paper.  We call  the jobs'  real
-runtimes \emph{effective  runtimes}. They usually differ from  the estimates, but
-this does not change the initial scheduling decision.
+We call  the jobs'  real
+runtimes \emph{effective  runtimes}. The effective runtimes usually differ from
+the estimated ones, but this does not change previous scheduling decisions.
 
 The provisioning and scheduling strategies of Schlouder are bi-objective: (1) % bi-objective?
 cost of renting the resources, and (2) makespan of the execution.  In this paper, 
 we used the two following strategies, favoring one objective or the other:
 \begin{itemize}
 \item ASAP (or \textit{as soon as possible}) schedules each job onto
-  one idle VM if one is available, or provisions a new VM otherwise.
+  an idle VM if one is available, or provisions a new VM otherwise.
   Hence this strategy minimizes the makespan by running the jobs ASAP.
 
 \item AFAP (or \textit{as full as  possible}) schedules each job onto
@@ -434,10 +434,10 @@ whenever it is needed.
 \begin{figure}
 	\resizebox{0.5\textwidth}{!}{%
 		\input{gfx/RS.tex}
-		
 	}%
 	\caption{Comparison between real-life and simulated environments.}\label{fig:rs}
 \end{figure}
+%%floating figures are declared one page ahead of their position.
 \begin{figure*}
 	\centering
 	\includegraphics[width=\textwidth]{gfx/real_plot.pdf}
@@ -449,21 +449,20 @@ whenever it is needed.
 
 \subsection{Simulated Execution Setup}
 As a follow-up  to our work on Schlouder we  developed SimSchlouder, a simulator
-mimicking  the  behaviour  of  Schlouder. Its has the same interfaces and implements  the  same  scheduling
+mimicking  the  behaviour  of  Schlouder. It has the same interfaces and implements  the  same  scheduling
 strategies  as  Schlouder. It  uses  SimGrid  as its  core  simulation  engine.  In
-practice, SimSchlouder  is included as  a plugin  into Schlouder. It allows the
+practice, SimSchlouder  is included as  a plugin  into Schlouder to allow the
 user to request an estimate of the makespan and cost before choosing a
 strategy for a real run.
 
 As  shown on  the right  side of  Figure~\ref{fig:rs}, SimSchlouder  shares with
 Schlouder  a common  subset of  inputs.   Its inputs  include the  same jobs
 description  and  strategy.    Whereas  Schlouder  operates  on   a  real  cloud
-controller,  SimSchlouder   provisions  simulated  \acp{vm}  and   jobs  through
-
-the SimGrid's cloud interface  called SchIaaS. As mentioned  earlier, the simulation
-requires  additional information: First, a description of the hardware platform 
+controller,  SimSchlouder   provisions  simulated  \acp{vm} through
+SimGrid's cloud interface  called SchIaaS. As mentioned  earlier, the simulation
+requires  additional information. First, a description of the hardware platform 
 (capabilities and topology of compute, storage, and network) and of the cloud configuration
-(\acp{vm} management policies); but most importantly, the \emph{effective runtime}
+(\acp{vm} management policies). Second,  the \emph{effective runtime}
 of each job, as it has been observed during a real execution.
 
 As platform description and cloud configuration allows to simulate the environment of 
@@ -472,17 +471,6 @@ applications beyond the estimates. Together, they allow the simulation to be
 accurately representative of reality.
 
 \section{Enriched Simulation Framework}\label{sec:enriched-sim}
-
-\begin{figure}
-	\centering
-	\resizebox{0.5\textwidth}{!}{%
-		\input{gfx/mc-process.tex}
-		}
-\caption{Overview of a Monte-Carlo simulation~: $500$ realizations are generated
-by drawing runtimes for each of the $n$ jobs provided RVs; every realization is
-then simulated; the resulting makespan samples make up the final result M.}\label{fig:mc-process}
-\end{figure}
-
 
 
 As stated in  section~\ref{sc:relwork-stochastic}, trustworthiness of simulation
@@ -493,6 +481,7 @@ relative  simplicity  of a  \ac{des}  with  the  extensive results  provided  by
 stochastic simulations.   This allows to respect the scheduling and provisioning 
 decisions observed in real life. 
 
+%%TODO : misplaced ?
 Indeed, modeling the implication of such decisions into the numerical results
 of a stochastic simulation would be very difficult, if not impossible. However,
 the \ac{des} can reproduce such decisions, simply by implementing their heuristics.
@@ -501,6 +490,16 @@ In  this  section we  first  discuss  the  particularities  of the  Monte  Carlo
 Simulation applied to our context. Then we present the empirical observations we
 used as a reference point for this experiment. Last, we will explore the steps
 taken to model the input \acp{rv} representing the jobs' runtimes.
+
+\begin{figure}
+	\centering
+	\resizebox{0.5\textwidth}{!}{%
+		\input{gfx/mc-process.tex}
+		}
+\caption{Overview of a Monte-Carlo simulation~: $500$ realizations are generated
+by drawing runtimes for each of the $n$ jobs provided RVs; every realization is
+then simulated; the resulting makespan samples make up the final result M.}\label{fig:mc-process}
+\end{figure}
 
 \subsection{Simulation Process}
 \begin{comment}
@@ -515,19 +514,19 @@ One MCS-iteration then consists in
 The whole extended simulation process is referred to as \ac{mcs}. 
 For an application composed of $n$ jobs (as depicted fig.~\ref{fig:mc-process}),
 \ac{mcs} consists in applying successive MCS-iterations. Assuming we can provide a
-runtime distribution $T_i$ for every job $i$, a MCS-iteration consists in~:
+runtime distribution $T_j$ for every job $j$, a MCS-iteration $k$ consists in~:
 \begin{itemize}
-\item making one realization of the runtime  for each job $i$, that is randomly
-  drawing a runtime value from the associated $T_i$ to obtain a runtime $t_i$;
-\item proceed to a simulation using all runtimes $t_i$ to obtain a makespan $m$.
+\item making one realization of the runtime  for each job $j$, that is randomly
+  drawing a runtime value from the associated $T_j$ to obtain a runtime $t_j$;
+\item proceed to a simulation using all runtimes $t_j$ to obtain a makespan $m_k$.
 \end{itemize}
 Once we obtain enough makespans $m_k$, we compute  a statistical distribution of
 the makespan  as a final \ac{rv} noted $M$.
 % Ca vaut une meilleure formalisation que ça.
 
 Because of the \emph{pay-as-you-go} nature of the cloud, we extend our simulation
-to two output variables: we will not only observe the makespan computed at any
-step but also the cost for each execution in number of \ac{btu}, that is the
+to two output variables: we will not only observe the makespan computed at every
+iteration but also the cost for each execution in number of \ac{btu}, that is the
 number of VM-hours started during this simulation.
 % pourquoi ne pas l'intégrer direct ? Pour moi, ce passage n'est pas top.
 
@@ -596,8 +595,9 @@ servers. We used the KVM hypervisor and Openstack version 2012.1 and 2014.4.
 The traces obtained  from  these  experiments contain  several
 useful metrics  including, but  not limited  to, the  \ac{vm} start  dates, boot
 time, shutdown  times, and assigned  jobs, as well as  the job start  date and
-effective  runtimes. 
+effective  runtimes.
 
+\begin{comment}
 First, we  used  those traces to improve and validate Simschlouder. To do so, we
 compared the backlogs of all of the real executions with the backlogs of the 
 corresponding simulations inputted with \emph{effective runtime} from reality. 
@@ -610,15 +610,20 @@ platform failures. In the end, for the executions presented in
 this article, the differences between real and simulated makespans are less than 
 1 second, and the count of \ac{btu} are systematically identical.
 This work is under publication process.
+\end{comment}
 
-Then, we used those traces to  generate our \ac{mcs}
-input \acp{rv} using the method we will describe in Section~\ref{sec:im}.
+These traces were initially used fix Schlouder to properly 
+tune SimSchlouder. As such, for the execution used in this paper, simulations
+done with SimSchlouder are precise to the second on the makespan and
+systematically exact on the \ac{btu} count. 
 
-Finally, we compared the makespan  and \ac{btu}  distributions of  the \ac{mcs}  to the
+In this paper these execution traces are used to  generate our \ac{mcs} input
+\acp{rv} using the method we will describe in Section~\ref{sec:im}. And we
+compare the makespan  and \ac{btu}  distributions of the \ac{mcs} to the
 distribution observed in the corresponding traces.
 
 For this purpose we grouped the traces  from comparable runs.  For a same platform, 
-a group is defined by a unique couple <application, strategy>. %J'ai exclu la plateforme vu qu'on a qu'une 
+a group is defined by a unique pair <application, strategy>.  
 Table~\ref{tab:nbruns}  presents  an  overview   of  those groups,  while
 Figure~\ref{fig:realbrs} presents the distribution of resulting makespans and \ac{btu} count.
 The number of observations uneven between groups because of  the changing nature of
@@ -629,8 +634,11 @@ the    experimental   conditions    in   which    the   runs    were   executed.
 
 Figure~\ref{fig:realbrs} shows the distribution of makespans observed in each 
 group. As one can see, the variability of the jobs runtimes induces different
-variabilities in the makespans depending on the group: 
-from 12800 to 13400 s for <OMSAA, ASAP> % mettre les nombres exacts et ajouter les autres.
+variabilities in the makespans depending on the group:
+from 12811.40s to 13488.98s for <OMSSA, ASAP>,
+from 13564.53s to 14172.34s for <OMSSA, AFAP>,
+from 1478.208s to 1554.407s for <Montage, ASAP>, and
+from 2833.524s to 2837.362s for <Montage, AFAP>.
 
 In introduction,
 we mentioned existing studies related to IaaS cloud variability. Using the
@@ -648,7 +656,7 @@ that this simple method  can be precise enough for the  \ac{mcs} to predict over
 90\% of real runs.
 
 This model for the runtimes \acp{rv} uses a job's estimated runtime and a global
-perturbation  level  for  all  job.   The perturbation  level is denoted as $P$
+perturbation  level  for  all  jobs.  The perturbation  level is denoted as $P$
 and is expressed  as  a percentage of estimates. It is used  to build a range in which the simulation
 effective runtimes will be drawn. If we assume $P$ can summarize the variability
 of the whole system, a central question is how should $P$ and the user estimates
@@ -665,7 +673,7 @@ given job. As such $t_j$, the drawn time of job $j$, can be written as~:
 \begin{equation}
 	p = \mathcal{U}(-P,+P)
 	\label{eq:r}
-\end{equation} % JG: J'ai rien vérifié
+\end{equation}
 where $r_j^n$ is the $n$th runtime observation for job $j$, $\bar{R_j}$ is the
 average of all observed runtimes for job $j$, and $\mathcal{U}$ an uniform distribution. %JG: mettre avant, dans un bloc modèle
 
@@ -697,15 +705,15 @@ Amazon EC2 instances with dedicated CPUs.
 	\includegraphics[width=\textwidth]{gfx/int_plot.pdf}
 	\caption{Makespan intervals and BTU count distribution for OMSSA and 
 	Montage at different perturbation levels. In the makespan interval graph 
-	the boxes represent the 95\% \ac{ci} resulting from the normal fit of the
+	the boxes represent the 95\% CI resulting from the normal fit of the
 	\acs{mcs}'s results, and the bar the results of a single unperturbed 
 	simulation.}\label{fig:int}
 \end{figure*}
 %
 \begin{table}
 	\centering
-	\caption{Makespan and BTU capture rate depending on confidence interval
-          (CI) for a 10\% perturbation level}\label{tab:fit} %JG: uniformiser CI avec la caption d'avant ?
+	\caption{Makespan and BTU capture rate depending on CI
+          for a 10\% perturbation level}\label{tab:fit} 
 	\begin{tabular}{llccc}
 		\toprule
 		Application&Strategy&\multicolumn{2}{c}{Makespan (Size of CI)}&BTU\\
@@ -724,8 +732,8 @@ We ran a 500 iterations \ac{mcs} for every <strategy, application> group using
 the job  models described in  the previous section. The  resulting distributions
 are  shown  in  Figure~\ref{fig:fit}.   The makespan  density  graphs  show  the
 simulation  result  distribution   as  filled  curves. The  real  observed
-executions, as in  fig.~\ref{fig:realbrs}, are shown as  non-filled curves.   On the %Faire des non-filled curves dans realbrs aussi
-\ac{btu} count graphs, the  left bar represents
+executions, as in  fig.~\ref{fig:realbrs}, are shown as  non-filled curves. On 
+the \ac{btu} count graphs, the  left bar represents
 the empirical data, and the right  bar the prediction from the simulation. 
 
 When looking at the resulting OMSSA distributions, presented in the two leftmost
@@ -776,52 +784,52 @@ can have other more research oriented applications. In this section we will
 exemplify one such application. Then we will discuss limitations we have
 encountered in our work with \ac{mcs}.
 
-\subsection{Strategy Analysis}\label{sec:sa}
+\subsection{High perturbation simulations}\label{sec:sa}
 
 We have so  far set the perturbation level  to a value that was  relevant to the
 real system observed  (see Section~\ref{sec:im}).  A subsequent  question is how
-does   the  prediction   change   when  increasing   this  perturbation   level. %Ajouter ici ce que ça peut apporter comme information, voir plus bas. Dire aussi que dans toute cette partie, on se concentre uniquement sur ASAP.
+does the prediction change when increasing this perturbation level. In this
+section we will focus on simulations of makespans using the ASAP strategy.
 Figure~\ref{fig:int} presents the 95\% \acp{ci} obtained through the normal
 distribution fitting of simulations with both a 10\%
 and a 40\% perturbation  level. Such perturbation level are possible under are
 possible in for shared instance (\cite{LeitnerC16}). On the makespan interval graphs  (first and third
 subfigures  from left  to right)  the boxes  represent the  span of the \ac{ci}
-interval. For reference  the vertical bar inside represents  a single simulation
-using  the average  runtimes without  any randomization.   Comparing the
-interval of  perturbed simulations  to this unperturbed  simulation allows  us to %C'ets cette phrase qu'il faut remonter, et ajouter des infos: à quoi sert de voir cet effet ?
-better see  the effect of the perturbation on the strategy. In the middle row of
-these subfigures, are presented for  reference the interval spanning the minimum
-and maximum  observed real  makespans over all  runs.  These  \ac{ci} subfigures
-only present ASAP strategy whereas  the BTU distribution subfigures present both
-strategies.
+interval. The mean simulated makespan ($\mu{}$) represented by the vertical bar
+inside the interval. In the middle row of these subfigures, the interval of 
+real observed  makespans over all runs.
 
 The leftmost subfigure presents the \acp{ci} for the <OMSSA, ASAP> group at
 40\% and 10\% perturbation levels. With the increase of the perturbation level
-the intervals naturally get wider, but the average makespan, which is by definition the
-center of the capture interval, also increases. This happens to the 
+the intervals naturally get wider, but the average makespan also increases. 
+This happens to the 
 extent that the lower bound of our interval at 40\% is higher than the lower
 bound at 10\%. This diminishes the capture rate of the simulation from 90\%
 (table~\ref{tab:fit}) to 83\% even as the relative width of the interval grows
-from 3\% (7 minutes) to 10\% (almost 24 minutes). This result is two-fold.
+from 3\% (7 minutes) to 10\% (almost 24 minutes). For <Montage, ASAP> we observe
+again an increase of the average makespan, but not as fast as the increase in
+the \ac{ci}'s width. Therefore the \ac{ci} resulting from the \ac{mcs} at a
+40\% perturbation level is a superset of the one at 10\% perturbation level.
+These results have two interesting implications.
 
-Firstly, this demonstrates that the perturbation level can
+Firstly, the perturbation level can
 not be used as a trade-off variable to augment capture rate at the expense of
 \ac{ci} compactness. The lower capture rate at a 40\% perturbation level is a
 strong indication that our real platform exhibits a variability closer to
-10\% than to 40\%. People for whom higher capture rates are more important than
+10\% than to 40\%. Misestimation of the perturbation level will have the same
+implication for the \ac{mcs} as a wrong effective runtime given to \ac{des}. 
+Users for whom higher capture rates are more important than
 interval compactness should use statistical methods to build higher rate \acp{ci},
 like the 99\% normal distribution \ac{ci} used in section~\ref{sec:eval}.
 
-Secondly, this result shows how an \ac{mcs} can be used to exhibit strategy
+Secondly, this result shows that \ac{mcs}s can be used to exhibit strategy
 behaviours. This upwards shift of the \ac{ci} shows that ASAP, a strategy
 geared towards reducing the makespan regardless of cost, is not as effective
 when scheduling bag-of-tasks with job runtimes that might vary
-widely. However, the same observation on <ASAP,Montage> (third subfigure) shows that when
-scheduling workflows this behaviour does not happen to the same extent. The
-average makespan still rises, but not as fast as the interval grows: the \ac{ci}
-at a 40\% perturbation level is a superset of the one at a 10\% perturbation
-level. This behaviour is explained by the nature of workflows,
-in which jobs have to wait for their latest dependencies resolution to tun: 
+widely. However, the same observation on Montage shows that when
+scheduling workflows ASAP remains capable of low makespans. 
+This behaviour is explained by the nature of workflows,
+in which jobs have to wait for their latest dependencies resolution to run~: 
 in workflows, the makespan depends only on the execution critical path, and thus
 only on the runtime of a subset of the jobs; whereas the makespan of bag-of-tasks 
 depends on the runtime of every jobs.

@@ -22,11 +22,11 @@ fw/.style={fill=white},
 \node[rb,fw](vm2)at(2,1.75){VM};
 \node[lb,fw](cc)at(-2.4,2.1){Controller};
 \draw[-{latex},dashed](cc)--(vm1);
-\draw[-{latex},dashed](cc)--(vm2);
+\draw[-{latex},dashed](cc)--(vm2)node[pos=0.5,below]{(2)};
 %%Sclouder
 \node[b,fg,minimum width=3.5cm,minimum height=1.5cm](schlouder)at(0,5.5){Schlouder};
-\draw[-{latex},thick,](schlouder.south-|cc.north)--(cc.north)node[pos=0.5,left]{provisioning};
-\draw[-{latex},thick,](schlouder.south-|vm2.north)--(vm2)node[pos=0.5,right]{jobs};
+\draw[-{latex},thick,](schlouder.south-|cc.north)--(cc.north)node[pos=0.5,left,align=center]{provisioning\\(1)};
+\draw[-{latex},thick,](schlouder.south-|vm2.north)--(vm2)node[pos=0.5,right,align=center]{jobs\\(3)};
 %% Inputs
 \node[rb,align=left](jobs)at(-0.25,8){Jobs : \\ - estimates\\ - dependencies};
 \node[lb,align=left](conf)at(0.25,8.25){Scheduling\\Strategies};
