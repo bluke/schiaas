@@ -408,8 +408,8 @@ We will use two of them in this  paper.  We call  the jobs'  real
 runtimes \emph{effective  runtimes}. They usually differ from  the estimates, but
 this does not change the initial scheduling decision.
 
-The provisioning and scheduling strategies of Schlouder are bi-objective: (1) % bi-objective?
-cost of renting the resources, and (2) makespan of the execution.  In this paper, 
+The provisioning and scheduling strategies of Schlouder are bi-objective, namely  
+cost of renting the resources, and makespan of the execution.  In this paper, 
 we used the two following strategies, favoring one objective or the other:
 \begin{itemize}
 \item ASAP (or \textit{as soon as possible}) schedules each job onto
@@ -426,9 +426,9 @@ The left part  of Figure~\ref{fig:rs} presents the outline of  a real execution:
 Schlouder inputs are the  job set description (including  user estimates and dependencies),  
 and one strategy. They are used to compute   the   scheduling   and  resource   provisioning
 decisions. Then, Schlouder (1) sends provisioning requests to the cloud controller (or frontend), 
-(2) wait the requested the  \acp{vm} to become available, and (3) sends  each  job to  its
+(2) waits for the requested \acp{vm} to become available, and (3) sends  each  job to  its
 assigned \acp{vm}. At runtime, Schlouder tracks jobs progression, completes the schedule as
-dependencies are  resolved or new batches are submitted, and provisions and terminates \acp{vm}
+dependencies are  resolved or new batches are submitted, and provisions or terminates \acp{vm}
 whenever it is needed.
 
 \begin{figure}
@@ -462,15 +462,17 @@ As  shown on  the right  side of  Figure~\ref{fig:rs}, SimSchlouder  shares with
 Schlouder  a common  subset of  inputs.   Its inputs  include the  same jobs
 description  and  strategy.    Whereas  Schlouder  operates  on   a  real  cloud
 controller,  SimSchlouder   provisions  simulated  \acp{vm}  and   jobs  through
-
 the SimGrid's cloud interface  called SchIaaS. As mentioned  earlier, the simulation
-requires  additional information: First, a description of the hardware platform 
+requires  additional information. First, a description of the hardware platform 
 (capabilities and topology of compute, storage, and network) and of the cloud configuration
 (\acp{vm} management policies); but most importantly, the \emph{effective runtime}
 of each job, as it has been observed during a real execution.
+\textbf{FIXME: effective runtimes : pas ``required additional information'' +
+  pas en italiques + répétition que effective runtimes = observed real execution}
 
-As platform description and cloud configuration allows to simulate the environment of 
-execution, the jobs \emph{effective runtime} allows to simulate the execution of 
+
+As platform description and cloud configuration allow to simulate the environment of 
+execution, the job effective runtimes allows to simulate the execution of 
 applications beyond the estimates. Together, they allow the simulation to be 
 accurately representative of reality.
 
@@ -606,7 +608,7 @@ effective  runtimes.
 
 First, we  used  those traces to improve and validate Simschlouder. To do so, we
 compared the backlogs of all of the real executions with the backlogs of the 
-corresponding simulations inputted with \emph{effective runtime} from reality. 
+corresponding simulations inputted with effective runtimes.
 We looked at every differences between simulations and reality, 
 identified the source of these differences, fixed them by modifying either 
 SimSchlouder or Schlouder depending on the nature of the differences.
@@ -636,7 +638,7 @@ the    experimental   conditions    in   which    the   runs    were   executed.
 Figure~\ref{fig:realbrs} shows the distribution of makespans observed in each 
 group. As one can see, the variability of the jobs runtimes induces different
 variabilities in the makespans depending on the group: 
-from 12800 to 13400 s for <OMSAA, ASAP> % mettre les nombres exacts et ajouter les autres.
+from 12800 to 13400 s for <OMSSA, ASAP> % mettre les nombres exacts et ajouter les autres.
 
 In introduction,
 we mentioned existing studies related to IaaS cloud variability. Using the
