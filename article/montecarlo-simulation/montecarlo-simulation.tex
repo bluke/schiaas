@@ -425,10 +425,9 @@ controller,  SimSchlouder   provisions  simulated  \acp{vm} through
 SimGrid's cloud interface  called SchIaaS. As mentioned  earlier, the simulation
 requires  additional information. First, a description of the hardware platform 
 (capabilities and topology of compute, storage, and network) and of the cloud configuration
-(\acp{vm} management policies). Second,  the \emph{effective runtime}
-of each job, as it has been observed during a real execution.
-\textbf{FIXME: effective runtimes : pas ``required additional information'' +
-  pas en italiques + répétition que effective runtimes = observed real execution}
+(\acp{vm} management policies). Second, the effective runtime of each job, that
+used by the simulator to compute the jobs end date without relying on the
+estimated runtimes. 
 
 As platform description and cloud configuration allow to simulate the environment of 
 execution, the job effective runtimes allows to simulate the execution of 
