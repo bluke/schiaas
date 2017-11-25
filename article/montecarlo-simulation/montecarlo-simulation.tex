@@ -312,7 +312,7 @@ captures actual observations.
 \section{Work Context}
 \label{sec:work-context}
 
-The  study conducted  in this  paper  is built upon an genuine comparison  between
+The  study conducted  in this  paper  is built upon a genuine comparison  between
 experiments  run in  actual environments  and experimental  results obtained  by
 simulation.   To strengthen  the validity  of the  comparison, the  experimental
 conditions  for  the  real  setup  and  the  simulation  should  share  as  many
@@ -559,7 +559,7 @@ The traces obtained  from  these  experiments contain  several
 useful metrics  including, but  not limited  to, the  \ac{vm} start  dates, boot
 time, shutdown  times, and assigned  jobs, as well as  the job start  date and
 effective  runtimes.
-
+%
 \begin{comment}
 First, we  used  those traces to improve and validate Simschlouder. To do so, we
 compared the backlogs of all of the real executions with the backlogs of the 
@@ -574,18 +574,18 @@ this article, the differences between real and simulated makespans are less than
 1 second, and the count of \ac{btu} are systematically identical.
 This work is under publication process.
 \end{comment}
-
-
-These traces were initially used fix Schlouder to properly 
-tune SimSchlouder. As such, for the execution used in this paper, simulations
-done with SimSchlouder are precise to the second on the makespan and
-systematically exact on the \ac{btu} count. 
+%
+They were  initially used  all along  the development of  Schlouder and  then to
+properly  tune SimSchlouder  in  order to  make the  simulation  as accurate  as
+possible.  As a result, for the execution  used in this paper, simulations done with
+SimSchlouder are precise to the second  on the makespan and systematically exact
+on the \ac{btu} count.
 
 In this paper these execution traces are used to  generate our \ac{mcs} input
 \acp{rv} using the method we will describe in Section~\ref{sec:im}. And we
 compare the makespan  and \ac{btu}  distributions of the \ac{mcs} to the
 distribution observed in the corresponding traces.
-
+%
 For this purpose we grouped the traces  from comparable runs.  For a same platform, 
 a group is defined by a unique pair <application, strategy>.  
 Table~\ref{tab:nbruns}  presents  an  overview   of  those groups,  while
@@ -640,8 +640,9 @@ given job. As such $t_j$, the drawn time of job $j$, can be written as~:
 	\label{eq:r}
 \end{equation}
 where $r_j^n$ is the $n$th runtime observation for job $j$, $\bar{R_j}$ is the
-average of all observed runtimes for job $j$, and $\mathcal{U}$ an uniform distribution.
-
+average of all observed runtimes for job $j$, and $p$ a value drawn from the 
+uniform distribution $\mathcal{U}$.
+ 
 Since the global perturbation level $P$ establishes the limit for the worst
 deviations from the estimated runtimes, the relative standard deviation metric
 used in~\cite{LeitnerC16} is not well suited. Instead we choose to build $P$
