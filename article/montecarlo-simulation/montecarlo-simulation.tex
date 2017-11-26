@@ -35,6 +35,14 @@
 \newcommand{\etal}[1]{\emph{#1 et al.}}
 \newcommand{\pc}[1]{$#1\%$}
 
+
+\let\OLDthebibliography\thebibliography
+\renewcommand\thebibliography[1]{
+  \OLDthebibliography{#1}
+  \setlength{\parskip}{0pt}
+  \setlength{\itemsep}{5pt plus 0.5ex}
+}
+
 %\IEEEtriggeratref{15}
 
 %\title{Modeling the accuracy of Monte-Carlo approach for Cloud based workflow
@@ -92,8 +100,8 @@ the emergence of new economic  and exploitation approaches of computer resources
 in  \ac{iaas},  one form  of cloud  computing. In  this model,  all
 computing resources  are made available  on demand by third-party  operators and
 paid based  on usage.  The  ability to provision  resources on demand  is mainly
-used in two ways.  Firstly, it can serve for scaling purposes where new machines
-are  brought online  to  fulfill  service availability  in  the  face of higher 
+used in two ways.  First, it can serve for scaling purposes where new machines
+are  brought online  to  face higher 
 workloads.  This approach  is used  for  providing services  and allows  for a  lower
 baseline  cost  while  still  being  able  to deal  with  spikes  in  demand  by
 provisioning machines on the fly. Secondly, it is useful for parallelizing jobs
@@ -108,8 +116,8 @@ side by side for one \acp{btu} actually costs the same as running one \ac{vm} fo
 \acp{btu}, but every \ac{btu} started is owed in full.
 
 This model  offers the client  an almost complete freedom  to start or  stop new
-servers as long as the price can be afforded. However, for parallel applications composed
-of a set of jobs, it  quickly  becomes  difficult  to manually  provision  the
+servers as long as it can be afforded. However, for distributed applications, it  
+quickly  becomes  difficult  to manually  provision  the
 resources in an  efficient way.  The use of a  scheduler becomes unavoidable for
 such workloads.   In this paper, we  are interested in predicting  the execution
 time  and cost  of such  workloads, in  which the  scheduling plays  an
@@ -380,8 +388,8 @@ we used the two following strategies, favoring one objective or the other:
 
 \item AFAP (or \textit{as full as  possible}) schedules each job onto
   one VM if it does not increase its rental cost (\textit{i.e.} its number
-  of \ac{btu}), or provisions a new VM otherwise. This is a bin-packing problem.
-  Hence this strategy minimizes the monetary cost by minimizing the number of \ac{btu}.
+  of \ac{btu}), or provisions a new VM otherwise. This is a bin-packing approach
+  minimizes the monetary cost by minimizing the number of \ac{btu}.
 \end{itemize}
 
 The left part  of Figure~\ref{fig:rs} presents the outline of  a real execution:
@@ -444,12 +452,12 @@ work addresses this issue by  proposing a framework implementing the Monte-Carlo
 method using SimSchlouder  as  simulation engine.   This  solution combines  the
 relative  simplicity  of a  \ac{des}  with  the  extensive results  provided  by
 stochastic simulations.   This allows to respect the scheduling and provisioning 
-decisions observed in real life. 
+decisions observed in reality. 
 
 In  this  section we  first  discuss  the  particularities  of the  Monte  Carlo
 Simulation applied to our context. Then we present the empirical observations we
-used as a reference point for this experiment. Last, we will explore the steps
-taken to model the input \acp{rv} representing the jobs' runtimes.
+used as a reference point for this experiment. Last, we will discuss how to
+model the input \acp{rv} representing the jobs' runtimes.
 
 \begin{figure}
 	\centering
@@ -480,7 +488,7 @@ runtime distribution $T_j$ for every job $j$, a MCS-iteration $k$ consists in~:
   drawing a runtime value from the associated $T_j$ to obtain a runtime $t_j$;
 \item proceed to a simulation using all runtimes $t_j$ to obtain a makespan $m_k$.
 \end{itemize}
-Once we obtain enough makespans $m_k$, we compute  a statistical distribution of
+With enough makespans $m_k$, we can compute  a statistical distribution of
 the makespan  as a final \ac{rv} noted $M$.
 % Ca vaut une meilleure formalisation que ça.
 
@@ -599,10 +607,10 @@ the    experimental   conditions    in   which    the   runs    were   executed.
 Figure~\ref{fig:realbrs} shows the distribution of makespans observed in each 
 group. As one can see, the variability of the jobs runtimes induces different
 variabilities in the makespans depending on the group:
-from 12811.40s to 13488.98s for <OMSSA, ASAP>,
-from 13564.53s to 14172.34s for <OMSSA, AFAP>,
-from 1478.208s to 1554.407s for <Montage, ASAP>, and
-from 2833.524s to 2837.362s for <Montage, AFAP>.
+from 12811 s to 13488 s for <OMSSA, ASAP>,
+from 13564 s to 14172 s for <OMSSA, AFAP>,
+from 1478 s to 1554 s for <Montage, ASAP>, and
+from 2833 s to 2837 s for <Montage, AFAP>.
 
 
 In introduction,
@@ -674,9 +682,10 @@ Amazon EC2 instances with dedicated CPUs.
 	the boxes represent the 95\% CI resulting from the normal fit of the
 	\acs{mcs}'s results, and the bar the results of a single unperturbed 
 	simulation.\\
-	\textit{Reading example: Simulating ASAP with OMSSA and a perturbation 
-	level of 10\% leads to makespans roughly ranging from 12800 s to 13250 s,
-	centered on 13000 s, while the real makespans range from 12800 s to 13500s.}
+	\textit{Reading example: Using ASAP and the runtimes from one real OMSSA
+	run having a makespan of 13000 s, the simulations with a perturbation 
+	level of 10\% leads to makespans roughly ranging from 12800 s to 13250 s, 
+	while the makespans from the complete set of real runs range from 12800 s to 13500s.}
 	}
 	\label{fig:int}
 \end{figure*}
@@ -779,7 +788,7 @@ extent that the lower bound of our interval at 40\% is higher than the lower
 bound at 10\%. This diminishes the capture rate of the simulation from 90\%
 (table~\ref{tab:fit}) to 83\% even as the relative width of the interval grows
 from 3\% (7 minutes) to 10\% (almost 24 minutes). For <Montage, ASAP> we observe
-again an increase of the average makespan, but not as fast as the increase in
+again an increase of the average makespan, but not as much as the increase in
 the \ac{ci}'s width. Therefore the \ac{ci} resulting from the \ac{mcs} at a
 40\% perturbation level is a superset of the one at 10\% perturbation level.
 These results have two interesting implications.
