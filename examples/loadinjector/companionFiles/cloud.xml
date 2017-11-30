@@ -18,7 +18,7 @@
 					   controller="controller"/>
 					   			
 			<reconfigurator name="org.simgrid.schiaas.engine.compute.reconfigurator.CentralizedReconfigurator"
-					   		heuristic="org.simgrid.schiaas.engine.compute.reconfigurator.simpleheuristic.SimpleHeuristic"
+					   		heuristic="org.simgrid.schiaas.engine.compute.reconfigurator.simpleheuristic.SimpleConsolidatorHeuristic"
 					   		type="consolidator"
 					   		delay="1"
 					   		controller="controller"/>

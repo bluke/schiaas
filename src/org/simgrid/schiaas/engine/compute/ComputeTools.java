@@ -54,15 +54,19 @@ public class ComputeTools {
 		 */
 		@Override
 		public void main(String[] arg0) throws MsgException {
-			if (destination != null) {
-				computeEngine.liveMigration(instance, destination);
-			}
-			else {
-				try {
-					computeEngine.liveMigration(instance);
-				} catch (VMSchedulingException e) {
-					this.vmSchedulingException = e;
+			try {
+				if (destination != null) {
+					computeEngine.liveMigration(instance, destination);
 				}
+				else {
+					try {
+						computeEngine.liveMigration(instance);
+					} catch (VMSchedulingException e) {
+						this.vmSchedulingException = e;
+					}
+				}
+			} catch (HostFailureException e){
+				Msg.info("Live migration failed because the instance was not migrable.");
 			}
 		}
 		

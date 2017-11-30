@@ -17,6 +17,7 @@ import org.simgrid.msg.Msg;
 import org.simgrid.msg.MsgException;
 import org.simgrid.msg.Mutex;
 import org.simgrid.msg.Process;
+import org.simgrid.msg.VM;
 import org.simgrid.schiaas.SchIaaS;
 import org.simgrid.schiaas.loadinjector.AbstractInjector;
 import org.simgrid.schiaas.loadinjector.Injector;
@@ -70,7 +71,7 @@ public class InjectionScheduler extends Process {
 	/**
 	 * Start the injectors and wait for their ends.
 	 */
-	public void main(String[] args) throws MsgException {
+	public void main(String[] args) throws MsgException {		
 		
 		for (InjectionProcess ip : injectionProcesses) {
 			Msg.info("Starting the injection process of "+ip.injector.getId());

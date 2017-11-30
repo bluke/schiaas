@@ -41,7 +41,7 @@ public interface ComputeHost {
 	/**
 	 * @return the amount of free cores to host new VMs
 	 */
-	public abstract double getFreeCores();
+	public abstract int getFreeCores();
 
 	/**
 	 * @return the amount of RAM in B to host new VMs

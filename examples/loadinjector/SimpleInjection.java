@@ -36,7 +36,7 @@ public class SimpleInjection {
 		Msg.deployApplication(args[1]);
 		
 		/* execute the simulation */
-        Msg.run();        
+        Msg.run(); 
         
         /* end the simulation */
         Trace.close();

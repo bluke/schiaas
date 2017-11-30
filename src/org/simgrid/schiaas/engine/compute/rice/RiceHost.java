@@ -30,7 +30,7 @@ public class RiceHost implements ComputeHost {
 	public Host host;
 		
 	/** The current amount of free cores to be used by live VM. */
-	protected double freeCores;
+	protected int freeCores;
 
 	/** The current amount of RAM to be used by live VM. */
 	protected int RAM;
@@ -71,7 +71,7 @@ public class RiceHost implements ComputeHost {
 		this.lastBootDate = -1e9;
 		this.imagesCache = new HashMap<>();
 		
-		this.freeCores = host.getCoreNumber();
+		this.freeCores = (int) host.getCoreNumber();
 		this.RAM = ramSize;
 		this.freeRAM = ramSize;
 		this.freeDisk = diskSize;
@@ -145,7 +145,7 @@ public class RiceHost implements ComputeHost {
 	}
 
 	@Override
-	public double getFreeCores() {
+	public int getFreeCores() {
 		return freeCores;
 	}
 
