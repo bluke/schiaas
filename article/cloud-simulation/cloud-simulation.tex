@@ -8,13 +8,28 @@
 
 
 \usetikzlibrary{fit,arrows}
-
+\usepackage{acronym}
+\acrodef{iaas}[IaaS]{Infrastructure as a Service}
+\acrodef{SaaS}{Software as a Service}
+\acrodef{PaaS}{Platform as a Service}
+\acrodef{dag}[DAG]{directed acyclic graph}
+\acrodef{vm}[VM]{Virtual Machine}
+\acrodef{pm}[PM]{Physical Machine}
+\acrodef{btu}[BTU]{billing time unit}
+\acrodef{EC2CU}{EC2 Compute Unit}
+\acrodef{HPC}{High Performance Computing}
+\acrodef{unistra}{University of Strasbourg}
+\acrodef{rv}[RV]{random variable}
+\acrodef{pdf}[PDF]{probability density function}
+\acrodef{cdf}[CDF]{cumulative distribution function}
+\acrodef{mcs}[MCS]{Monte-Carlo simulation}
+\acrodefplural{mcs}[MCS's]{Monte-Carlo simulations}
+\acrodef{des}[DES]{discrete event simulation}
+\acrodef{ci}[CI]{confidence interval}
 
 \acrodef{nfs}[NFS]{Network File-System}
 \acrodef{bot}[BoT]{Bag of Tasks}
 \acrodef{omssa}[OMSSA]{Open Mass-Spectrometry Search Algorithm}
-\acrodef{vm}[VM]{virtual machine}
-\acrodef{btu}[BTU]{\emph{billing time unit}}
 \acrodef{asap}[ASAP]{\emph{as soon as possible}}
 \acrodef{afap}[AFAP]{\emph{as full as possible}}
 
@@ -45,9 +60,156 @@ WARNING: figures in text might not be up to date.
 
 \section{Introduction}
 
-\input{intro.tex}
+The  problem   of  allocating   cloud  resources   in  performant,   robust  and
+energy-efficient ways is  of paramount importance in today's  usage of computing
+infrastructures. Cloud resources  proposed to clients as \ac{iaas}  open a large
+field of  investigation regarding how automatic  tools can hepl users  to better
+provision the  resources and  schedule their computation  or storage  tasks with
+regard to the trade-off between rental  cost and performance.  Indeed it rapidly
+becomes  very difficult  for  users  to manually  handle  the provisionning  and
+scheduling  decisions  when the  workloads  involve  numerous tasks,  which  are
+potentially dependent on  others -- and such complex workloads  are the focus in
+this paper. In the last decade a  number of research papers have contributed new
+allocation techniques to address this issue.  A pitfall of research on \ac{iaas}
+lies in the  validation of the models and algorithms  proposed, as validation on
+actual  clouds  requires  infrastructures  that  are difficult  to  set  up  for
+individual researchers.  As a consequence,  many researchers evaluate their work
+through simulation. A number of simulators  have been developed for that purpose
+as reviewed in the related work  section hereafter.  They are typically based on
+discrete-event simulation,  using models  for each  elementary component  of the
+infrastructure,  which  are then  composed  to  simulate  the whole  system  and
+applications running on it.
+
+%This approach is  attractive from the infrastructure  provider perspective since
+%the  simulated system  can be  finely customized.  
+
+However, such  an \textit{ab  initio} construction  poses a  significant problem
+regarding  the  calibration  and  validation   of  the  composed  model  against
+real-world measurements. We  show in this paper that a  precise modeling of each
+component  may not  be sufficient  to yield  accurate predictions  of the  whole
+system's  behavior.   Yet,  from  the client-side  (or  equivalently,  from  the
+application perspective),  the validaty of  the simulation is  evaluated against
+macros-metrics, such  as the  makespan and  the rental  cost of  the application
+executions. It means that the interactions betweens all components must be taken
+into account in the simulation, including the lower level components such as the
+network  sharing or  the higher  level components  such as  the scheduler.   For
+instance, a decision which starts simultaneously  a large number of \acp{vm} may
+result in trashing~\cite{MarshallKF10} affecting the expected performance.
+
+This work's  objective is  to study how  an actual cloud  setup behavior  can be
+predicted through simulation on practical use-cases. Our approach is original in
+that    we   have    co-developed   a    client-side   cloud    broker,   called
+Schlouder~\cite{Michon17}, and a simulation  software called SimSchlouder, whose
+aim is to predict Schlouder's behavior.  Schlouder implements here the automated
+process making the  provisioning and scheduling decisions on behalf  the user on
+the  real infrastructure.  The  comparison between  the  observations of  actual
+executions and  the simulation  results has  allowed us  to tune  the simulator,
+especially for  higher level  components such  as the  modeling of  \ac{vm} boot
+times and the scheduling  policies. At the lower level, we  rely on the discrete
+event simulation  toolkit SimGrid~\cite{simgrid08} for which  validation results
+regarding        accuracy         have        been         published        (e.g
+\cite{StanisicTLVM15,VelhoSCL13}).  To  build  SimSchlouder, we  have  added  to
+SimGrid a  new interface  which enables to  express \ac{iaas}  operations. Thus,
+this work is not  restricted to the simulation of Schlouder  but can be extended
+to the simulation of any application making use of \ac{iaas} clouds.
+
+This  paper's  contributions  is  therefor  twofold. First,  we  propose  a  new
+simulation  tool extending  SimGrid with  an  interface capable  of modeling  of
+\ac{iaas} clouds by providing a new  interface for that field. This interface is
+publicly  available as  open-source  software.  Above  this  interface, we  also
+developed  SimSchlouder to  demonstrate how  a client-side  cloud broker  can be
+modeled using this interface.
+%
+Secondly,  as we  advocate that  a precise  assessment of  simulation should  be
+carried out  against real execution figures  to better understand the  limits of
+simulation  applicability, we  make an  in-depth  analysis of  the factors  that
+impact the simulation  accuracy, and in this regard go  further than the related
+works. We analyze the sensitivity of  several parameters, among which the impact
+of the  job submission management overheads,  the effect of inaccuracies  in the
+job execution times specified  by the user, or the boot time  of VMs.  The study
+is  carried out  on several  use  cases which  comprise two  different types  of
+applications (workflow and  bag-of-tasks), with several size  instances for each
+of them, and each application operated  on two different types of infrastructure
+(private and public).
 
 
+The paper is organized as follows : ....
+
+
+\section{Related Work}
+
+\subsection{Simulation}
+
+Because they allow for experiments without having to build or even use a real 
+platform, simulations are a cornerstone of the study of distributed
+systems and clouds.  
+
+Most cloud simulators  are based on \ac{des}. In \aclp{des}  the simulation is a
+serie  of events  changing the  state of  the simulated  system.  For  instance,
+events can  be the  start (or  end) of computations  or of  communications.  The
+simulator will jump from  one event to the next, updating  the times of upcoming
+events  to reflect  the state  change  in the  simulation.  Such  \ac{des}-based
+simulators  require  at  least  a  platform  specification  and  an  application
+description.  The platform  specification describes both the  physical nature of
+the cloud,  e.g.~machines and networks,  and the management  rules, e.g.~\ac{vm}
+placement  and   availability.   Depending   on  the  simulator,   the  platform
+specification can be done through  user code, as in CloudSim~\cite{cloudsim} for
+example,  or through  platform  description  files, as  is  mostly  the case  in
+SimGrid~\cite{simgrid}.   The  application  description  consists in  a  set  of
+computing and communicating  jobs, often described as an  amount of computation
+or communication to perform. The simulator  computes their duration based on the
+platform specification, and its CPU and network models.  An alternative approach
+is  to directly  input the  job  durations extrapolated  from actual  execution
+traces.
+
+
+The available  cloud \acp{des} can  be divided in  two categories. In  the first
+category are  the simulators  dedicated to  study the  clouds from  the provider
+point-of-view, whose purpose  is to help evaluating the design  decisions of the
+datacenter. Examples  of such simulators are  MDCSim~\cite{MDCSim}, which offers
+specific  and precise  models for  low-level components  including network  (e.g
+InfiniBand or  Gigabit ethernet),  operating system kernel  and disks.   It also
+offers a model  for energy consumption. However, the cloud  client activity that
+can be  modeled is restricted  to web-servers, application-servers  or data-base
+applications.   GreenCloud~\cite{greencloud} follows  the  same  purpose with  a
+string  focus  on  energy  consumption  of cloud's  network  apparatus  using  a
+packet-level  simulation  for  network  communications  (NS2).   In  the  second
+category  are the  simulators  targeting the  whole  cloud ecosystem,  including
+client activity. In this category, CloudSim~\cite{cloudsim} (originally stemming
+from  GridSim) is  the most  broadly used  simulator in  academic research.   It
+offers simplified models regarding network communications, CPU or disks. However,
+it is  easily extensible  and serves  as the underlying  simulation engine  in a
+number of projects (e.g  \cite{Cai17}, see section \ref{sc:relwork-stochastic}).
+Simgrid~\cite{simgrid} is  the other long-standing  project, which when  used in
+conjunction with  the SchIaaS cloud interface  provides similar functionnalities
+as CloudSim.   Among the other related  projects, are iCanCloud~\cite{iCanCloud}
+proposed to  address scalability  issues encountered  with CloudSim  (written in
+Java) for the simulation of large use-cases. Most recently, PICS~\cite{pics} has
+been  proposed  to  specifically  evaluate simulation  of  public  clouds.   The
+configuration of the simulator uses only  parameters that can be measured by the
+cloud client, namely inbound and  outbound network bandwidths, average CPU power,
+\ac{vm} boot times, and scale-in/scale-out  policies. The data center is therefore % scaleout ?
+seen as a black  box, for which no detailed description  of the hardware setting
+is required.  The validation  study of  PICS under  a variety  of use  cases has
+nonetheless shown accurate predictions.
+
+At the core of DES is the solver.  The solver considers the states of the system
+generated  by the  platform and  previous events  to compute  the timing  of the
+future events. % Therefore  it defines which is the next  event of the simulation. - SG: redondant
+In  most  cases, simulators  have  a  \emph{bottom-up} approach~:  the  modeling
+concerns low-level  components (machines,  networks, storage devices),  and from
+their interactions  emerge the high-level  behaviours. Working on  disjoint low
+level components make it easier to tune the precision of the model to the wanted
+accuracy or speed trade-off.
+
+However, when the simulated system is subject to variability, it is difficult to
+establish  the  validity of  simulation  results  formally. Indeed,  given  some
+defined inputs, a DES outputs a single deterministic result, while a real system
+will output  slightly different results  at each repeated execution.   Hence, in
+practice  the simulation  is informally  regarded as  valid if  its results  are
+``close'' to one or  some of the real observations.  Notice  however that in the
+field  of grid  or cloud  computing, published  results in  terms of  validation
+against real settings are scarce relatively to the number of projects.
 
 \section{Setup / Context}
 
@@ -62,7 +224,7 @@ experimental executions on two wildly differing environment.
 \subsubsection{Schlouder}
 
 Every experiment log in the archive was generated by running a scientific
-workflow through a client-side cloud resource broker named\emph{Schlouder}
+workflow through a client-side cloud resource broker named \emph{Schlouder}
 \cite{Michon17}. \emph{Schlouder} automates the provisioning of resources needed
 to execute a workflow, the scheduling of tasks to the provisioned resources and,
 monitors the proper execution of tasks. 
@@ -75,15 +237,15 @@ monitors the proper execution of tasks.
 \end{figure}
 
 
-Provisioning is done thought a cloud kit interface that allows for Schlouder to
-communicate with different clouds in order to start and stops the necessary
-\acp{vm} to execute the workload.  To match account for the pricing of
-commercial IaaS, Schlouder views provisioning in fixed increments of time,
-referred to as \ac{btu}, machines idle when arriving at the end of their time
-will be automatically shut off. 
+Provisioning is done thought a cloud  kit interface that allows for Schlouder to
+communicate with  different clouds  in order  to start  and stops  the necessary
+\acp{vm}  to  execute  the  workload.   To match  account  for  the  pricing  of
+commercial  IaaS, Schlouder  views  provisioning in  fixed  increments of  time,
+referred to as  \ac{btu}, machines idle when  arriving at the end  of their time
+will be automatically shut off.
 
-Tasks execution is monitored using SLURM\cite{YooJG03} which connects to the
-available \acp{vm}, send the jobs, and monitors their executions. 
+Tasks execution  is monitored using  SLURM~\cite{YooJG03} which connects  to the
+available \acp{vm}, send the jobs, and monitors their executions.
 
 A strategy controls provisioning and scheduling decisions, it determines when
 \ac{vm} provisioned and to which \ac{vm} each task is assigned. Schlouder
