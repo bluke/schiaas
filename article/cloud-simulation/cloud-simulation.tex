@@ -80,9 +80,6 @@ discrete-event simulation,  using models  for each  elementary component  of the
 infrastructure,  which  are then  composed  to  simulate  the whole  system  and
 applications running on it.
 
-%This approach is  attractive from the infrastructure  provider perspective since
-%the  simulated system  can be  finely customized.  
-
 However, such  an \textit{ab  initio} construction  poses a  significant problem
 regarding  the  calibration  and  validation   of  the  composed  model  against
 real-world measurements. We  show in this paper that a  precise modeling of each
@@ -133,34 +130,39 @@ of them, and each application operated  on two different types of infrastructure
 (private and public).
 
 
-The paper is organized as follows : ....
+The paper is  organized as follows. We first present  the related work regarding
+simulation in  Section~\ref{sc:relwork}. The next  part describes the  system we
+seek to simulate (Section~\ref{sc:context}), which includes the cloud management
+system, the  real platforms on which  experiments are run, and  the applications
+that serve  as test-cases. The following  part presents our contribution  to the
+simulation of clouds,  with our extension of SimGrid to  model \ac{iaas} clouds,
+and  its  application to  the  simulation  of Schlouder.  The  last  part is  an
+evaluation of the accuracy of the simulation against real observations.
 
 
+%-------------------------- R E L .  W O R K -----------------------------------
 \section{Related Work}
+\label{sc:relwork}
 
-\subsection{Simulation}
-
-Because they allow for experiments without having to build or even use a real 
-platform, simulations are a cornerstone of the study of distributed
-systems and clouds.  
-
-Most cloud simulators  are based on \ac{des}. In \aclp{des}  the simulation is a
-serie  of events  changing the  state of  the simulated  system.  For  instance,
-events can  be the  start (or  end) of computations  or of  communications.  The
-simulator will jump from  one event to the next, updating  the times of upcoming
-events  to reflect  the state  change  in the  simulation.  Such  \ac{des}-based
-simulators  require  at  least  a  platform  specification  and  an  application
-description.  The platform  specification describes both the  physical nature of
-the cloud,  e.g.~machines and networks,  and the management  rules, e.g.~\ac{vm}
-placement  and   availability.   Depending   on  the  simulator,   the  platform
-specification can be done through  user code, as in CloudSim~\cite{cloudsim} for
-example,  or through  platform  description  files, as  is  mostly  the case  in
-SimGrid~\cite{simgrid}.   The  application  description  consists in  a  set  of
-computing and communicating  jobs, often described as an  amount of computation
-or communication to perform. The simulator  computes their duration based on the
-platform specification, and its CPU and network models.  An alternative approach
-is  to directly  input the  job  durations extrapolated  from actual  execution
-traces.
+In the  past decade, a number  of research works have  proposed simulation tools
+for clouds. Some of them have a longer history as they build upon the experience
+of researchers in  the simulation of computing grids. Most  cloud simulators are
+based on \ac{des}.   In \aclp{des} the simulation is a  serie of events changing
+the state of  the simulated system.  For  instance, events can be  the start (or
+end) of  computations or of  communications.  The  simulator will jump  from one
+event to the  next, updating the times  of upcoming events to  reflect the state
+change in  the simulation.   Such \ac{des}-based simulators  require at  least a
+platform   specification  and   an   application   description.   The   platform
+specification describes both the physical nature of the cloud, e.g.~machines and
+networks,  and the  management rules,  e.g.~\ac{vm} placement  and availability.
+Depending on the simulator, the platform  specification can be done through user
+code,  as   in  CloudSim~\cite{cloudsim}   for  example,  or   through  platform
+description  files,  as  is  mostly the  case  in  SimGrid~\cite{simgrid}.   The
+application description consists  in a set of computing  and communicating jobs,
+often described  as an amount  of computation  or communication to  perform. The
+simulator computes their  duration based on the platform  specification, and its
+CPU and  network models.  An alternative  approach is to directly  input the job
+durations extrapolated from actual execution traces.
 
 
 The available  cloud \acp{des} can  be divided in  two categories. In  the first
@@ -177,31 +179,34 @@ packet-level  simulation  for  network  communications  (NS2).   In  the  second
 category  are the  simulators  targeting the  whole  cloud ecosystem,  including
 client activity. In this category, CloudSim~\cite{cloudsim} (originally stemming
 from  GridSim) is  the most  broadly used  simulator in  academic research.   It
-offers simplified models regarding network communications, CPU or disks. However,
-it is  easily extensible  and serves  as the underlying  simulation engine  in a
-number of projects (e.g  \cite{Cai17}, see section \ref{sc:relwork-stochastic}).
-Simgrid~\cite{simgrid} is  the other long-standing  project, which when  used in
-conjunction with  the SchIaaS cloud interface  provides similar functionnalities
-as CloudSim.   Among the other related  projects, are iCanCloud~\cite{iCanCloud}
-proposed to  address scalability  issues encountered  with CloudSim  (written in
-Java) for the simulation of large use-cases. Most recently, PICS~\cite{pics} has
-been  proposed  to  specifically  evaluate simulation  of  public  clouds.   The
-configuration of the simulator uses only  parameters that can be measured by the
-cloud client, namely inbound and  outbound network bandwidths, average CPU power,
-\ac{vm} boot times, and scale-in/scale-out  policies. The data center is therefore % scaleout ?
-seen as a black  box, for which no detailed description  of the hardware setting
-is required.  The validation  study of  PICS under  a variety  of use  cases has
-nonetheless shown accurate predictions.
+offers   simplified   models   regarding    network   communications,   CPU   or
+disks. However, it is easily extensible  and serves as the underlying simulation
+engine   in   a   number   of    projects   (e.g   \cite{Cai17},   see   section
+\ref{sc:relwork-stochastic}).  Simgrid~\cite{simgrid} is the other long-standing
+project,  which  when used  in  conjunction  with  the SchIaaS  cloud  interface
+provides  similar  functionnalities  as   CloudSim.   Among  the  other  related
+projects, are iCanCloud~\cite{iCanCloud} proposed  to address scalability issues
+encountered  with  CloudSim  (written  in  Java) for  the  simulation  of  large
+use-cases.  Most recently,  PICS~\cite{pics} has  been proposed  to specifically
+evaluate simulation of  public clouds.  The configuration of  the simulator uses
+only parameters  that can be  measured by the  cloud client, namely  inbound and
+outbound  network  bandwidths,  average  CPU  power,  \ac{vm}  boot  times,  and
+scale-in/scale-out policies. The  data center is therefore seen as  a black box,
+for which  no detailed  description of  the hardware  setting is  required.  The
+validation study  of PICS  under a  variety of use  cases has  nonetheless shown
+accurate predictions.
 
 At the core of DES is the solver.  The solver considers the states of the system
 generated  by the  platform and  previous events  to compute  the timing  of the
-future events. % Therefore  it defines which is the next  event of the simulation. - SG: redondant
-In  most  cases, simulators  have  a  \emph{bottom-up} approach~:  the  modeling
-concerns low-level  components (machines,  networks, storage devices),  and from
-their interactions  emerge the high-level  behaviours. Working on  disjoint low
-level components make it easier to tune the precision of the model to the wanted
-accuracy or speed trade-off.
+future events. In most cases,  simulators have a \emph{bottom-up} approach~: the
+modeling concerns  low-level components  (machines, networks,  storage devices),
+and  from  their  interactions  emerge the  high-level  behaviours.  Working  on
+disjoint low level components make it easier  to tune the precision of the model
+to the wanted accuracy or speed trade-off.
 
+%------- modifier : c'était pour introduire le stochastique
+\textbf{FIXME: next paragraph to be adapted depending on wether stochastic
+  simulation is mentioned.}
 However, when the simulated system is subject to variability, it is difficult to
 establish  the  validity of  simulation  results  formally. Indeed,  given  some
 defined inputs, a DES outputs a single deterministic result, while a real system
@@ -211,39 +216,38 @@ practice  the simulation  is informally  regarded as  valid if  its results  are
 field  of grid  or cloud  computing, published  results in  terms of  validation
 against real settings are scarce relatively to the number of projects.
 
-\section{Setup / Context}
 
+\section{Context and Setup}
+\label{sc:context}
 
-\subsection{Real Environment}
+In the first part of this article
 
-Evaluation of simulation is done by comparing simulation logs, against logs
-generated by running actual scientific workflows on multiple platforms. Though
-our work on cloud scheduling and cloud simulation we acquired archive of 274
-experimental executions on two wildly differing environment.
+As  mentioned   in  introduction,  complex  workloads   require  scheduling  and
+provisionning tools, and we present in  this section the cloud management system
+together with the actual hardware setup we run to handle these experiments.
 
-\subsubsection{Schlouder}
+\subsection{Schlouder}
 
-Every experiment log in the archive was generated by running a scientific
-workflow through a client-side cloud resource broker named \emph{Schlouder}
+Every  experiment log  in  the archive  was generated  by  running a  scientific
+workflow  through a  client-side  cloud resource  broker named  \emph{Schlouder}
 \cite{Michon17}. \emph{Schlouder} automates the provisioning of resources needed
 to execute a workflow, the scheduling of tasks to the provisioned resources and,
-monitors the proper execution of tasks. 
-
+monitors the proper execution of tasks.
+%
 \begin{figure}
 	\centering
 	\input{schlouder.tex}
 	\caption{The Schlouder cloud broker and its components relating to an
 	Openstack cloud.}
 \end{figure}
-
-
-Provisioning is done thought a cloud  kit interface that allows for Schlouder to
+%
+Provisioning is  done through  a cloud  kit interface  that allows  Schlouder to
 communicate with  different clouds  in order  to start  and stops  the necessary
-\acp{vm}  to  execute  the  workload.   To match  account  for  the  pricing  of
-commercial  IaaS, Schlouder  views  provisioning in  fixed  increments of  time,
-referred to as  \ac{btu}, machines idle when  arriving at the end  of their time
-will be automatically shut off.
-
+\acp{vm} to  execute the  workload.  To  account for  the pricing  of commercial
+IaaS, Schlouder views  provisioning in fixed increments of time,  referred to as
+\ac{btu},  machines  idle  when arriving  at  the  end  of  their time  will  be
+automatically shut off.
+%
 Tasks execution  is monitored using  SLURM~\cite{YooJG03} which connects  to the
 available \acp{vm}, send the jobs, and monitors their executions.
 
@@ -251,7 +255,7 @@ A strategy controls provisioning and scheduling decisions, it determines when
 \ac{vm} provisioned and to which \ac{vm} each task is assigned. Schlouder
 provides a few basic strategies and new ones can be added trivially. Strategies
 can affect the workload's \emph{makespan}, the \acp{vm} usage rate, and the
-number of opened \acp{btu}(i.e.\ the price of the experiment on a commercial
+number of opened \acp{btu} (i.e.\ the price of the experiment on a commercial
 cloud). The experiments in our archive mainly use two strategies, \ac{asap} and
 \ac{afap}
 
@@ -264,46 +268,105 @@ cloud). The experiments in our archive mainly use two strategies, \ac{asap} and
 		additional \ac{btu}, in which case it will boot a new \ac{vm}.
 \end{description}
 
-Predicted tasks runtimes, as well as tasks dependencies, are user-provided.
-Scheduling is done dynamically, as soon as tasks are submitted and all their
+Predicted  tasks runtimes,  as well  as tasks  dependencies, are  user-provided.
+Scheduling is  done dynamically, as  soon as tasks  are submitted and  all their
 dependencies have been completed. Once assigned to a designated \ac{vm} jobs are
-not rescheduled. However, if a \ac{vm} fails to boot Schlouder will provision a
+not rescheduled. However, if a \ac{vm}  fails to boot Schlouder will provision a
 new one to replace it.
 
-\subsubsection{Use cases: Applications characteristics}
+%---------------------------- H A R D W A R E-----------------------------------
+\subsection{Hardware Setup}
 
-Two test-case applications where submitted to Schlouder in order to cover a
-variety of application profiles in terms of computation intensity, data load,
-and task dependency.
+Evaluation  of simulation  is done  by comparing  simulation logs,  against logs
+generated by running  actual scientific workflows on  multiple platforms. During
+this  study  we   gathered  traces  for  274  experimental   executions  on  two
+significantly different environments that are described hereafter.
+
+
+\paragraph{Private Cloud}
+
+Our private cloud is based on two local nodes sporting dual $2.64GHz$ Intel Xeon
+processors (X5650),  for a  total of  96 cores. Nodes  operated on  Ubuntu 12.04
+distributions and virtualisation  is achieved using KVM.  Openstack 2012.1.3 was
+used as a  cloud interface. This cloud was build  on perfectly homogeneous nodes
+and  devoid  of other  users.  For  data storage  these  experiments  rely on  a
+\ac{nfs}. Special  attention was taken  to not  overbook \acp{vm} by  caping the
+number of  single core \acp{vm}  to 25. Due to  the experimental nature  of this
+cloud configurations  have change  overtime. Table  \ref{tab:platforms} regroups
+configurations  of  all cloud  versions.  We  will  referrer  to this  cloud  as
+\texttt{openstack-icps.}\emph{version}.
+
+
+\paragraph{Public Cloud}
+
+BonFire~\cite{Kavoussanakis2013} is  a public  multi-cloud distributed  all over
+Europe. Our experiments  were run over three sites of  BonFire: de-hlrs based in
+Stuttgart, uk-epcc  in Edinburgh,  and fr-inria in  Rennes. BonFIRE  clouds were
+accessed  through an  OCCI based  API and  the clouds  were controlled  throught
+software derived from OpenNebula 3.6.  Each site provided different hardware%
+\footnote{Comprehensive            information           available            at
+  \texttt{http://www.bonfire-project.eu/infrastructure/testbeds}}.%
+Resource quotas  limited most experiment  20 \acp{vm},  not far from  the limits
+generally imposed on  public clouds. Centralized storage was  provided through a
+\ac{nfs} based on  the be-ibbt site in Ghent.  Due  to network acces restriction
+the Schlouder server was  brought in the BonFIRE WAN through a  VPN.  Due to the
+experimental nature  of this  cloud configurations  have change  overtime. Table
+\ref{tab:platforms}  regroups  configurations of  all  cloud  versions. In  this
+article we  refer to experiment  run on  the BonFire clouds  by the name  of the
+cloud site followed by the version number.
+
+\begin{table}
+	\begin{tabular}{|l|c|c|c|c|c|c|}
+		\hline
+		Cloud&\#cores&Hypervisor&Network&version&\#VM&Storage\\ \hline
+		\multirow{2}{*}{openstack-icps}&\multirow{2}{*}{48}&
+                \multirow{2}{*}{KVM}&100mb&1-3&25&NFS\\\cline{4-7}
+		&&&1Gb&4-5&10&NFS\\\hline
+		de-hlrs&344&Xen 3.1.2&n/a&v1-3&20&NFS\\\hline
+		fr-inria&96&Xen 3.2&n/a&v1-3&20&NFS\\\hline
+		uk-epcc&176&Xen 3.0.3&n/a&v1-2&20&NFS\\\hline
+
+	\end{tabular}
+	\caption{Characteristics of our cloud testbeds, version numbers also
+	account for changes in measured boot times not presented in this table.}
+	\label{tab:platforms}
+\end{table}
+
+
+\subsection{Use cases: Applications characteristics}
+\label{sc:app}
+
+Our study is  based on the experimentation with two  test-case applications that
+cover a variety of application profiles  in terms of computation intensity, data
+load, and task dependency.
 
 \subsubsection{OMSSA}
 
-The \ac{omssa}\cite{Geer2004} comes from the field of biology, it is used in tandem mass
-spectrometry analysis (also known as MS/MS analysis) to identify peptides from
-the mass and fragment ions obtained by a mass spectrometer. \ac{omssa} matches
-measurements from the mass spectrometer, called spectra, to a protein database.
+The \ac{omssa}~\cite{Geer2004}  comes from the  field of  biology, it is  used in
+tandem mass  spectrometry analysis  (also known as  MS/MS analysis)  to identify
+peptides   from   the   mass   and    fragment   ions   obtained   by   a   mass
+spectrometer. \ac{omssa} matches measurements from the mass spectrometer, called
+spectra, to a protein database.
 
-The \ac{omssa} workload features fully independent tasks, making it \ac{bot},
-since every spectra within a set can be submitted independently to \ac{omssa}.
-With a \emph{communication-to-computation} ratio comprised between 20\% and \%
+The \ac{omssa}  workload features fully  independent tasks, making  it \ac{bot},
+since every spectra  within a set can be submitted  independently to \ac{omssa}.
+With a  \emph{communication-to-computation} ratio comprised between  20\% and \%
 \ac{omssa} is considered an CPU-intensive workload.
 
 This application was run with 4 different workload covering 2 different
 mass~spectrometer resolutions of two different protein solutions, denoted
-\emph{brs,hrs,brt,hrt}.
+\emph{brs},\emph{hrs},\emph{brt} and \emph{hrt}.
 
 \subsubsection{Montage}
 
-The Montage Astronomical Image Mosaic Engine\cite{montage2009} is designed to
-gather astronomical images into a mosaic. This application is a workflow
+The Montage  Astronomical Image Mosaic Engine~\cite{montage2009}  is designed to
+gather  astronomical images  into  a  mosaic.  This  application  is a  workflow
 designed to reproject, normalize, and collate source images into a single output
-image. The montage workflow is presented figure~\ref{fig:montagewf}.
-
-Working on images Montage is an extremely data intensive workflow with a
-\emph{communication-to-computation} ratio superior to 90\%.
-
-This application was run on images of the \emph{Pleiade} star cluster at 3
-different output size, 1X1, 2X2,~and 3X3.
+image. The montage workflow  is presented figure~\ref{fig:montagewf}. Working on
+images   Montage   is   an   extremely    data   intensive   workflow   with   a
+\emph{communication-to-computation} ratio superior to 90\%. This application was
+run on  images of the \emph{Pleiade}  star cluster at 3  different output sizes,
+1X1, 2X2 and 3X3.
 
 \begin{figure}[ht]
 	\input{montage.tex}
@@ -314,61 +377,36 @@ different output size, 1X1, 2X2,~and 3X3.
 	\label{fig:montagewf}
 \end{figure}
 
-\subsubsection{Test beds}
+%-------------------------- S I M U L A T E D --------------------------------
+\section{Simulation}
 
-The application where executed on two different clouds~: a private OpenStack
-based cloud, and BonFIRE\cite{Kavoussanakis2013}, a public European cloud
-testbed.
-
-\subsubsection{Private Cloud}
-
-Our private cloud is based on two local nodes sporting dual $2.64GHz$ Intel Xeon
-processors (X5650), for a total of 96 cores. Nodes operated on Ubuntu 12.04
-distributions and virtualisation is achieved using KVM. Openstack 2012.1.3 was
-used as a cloud interface. This cloud was build on perfectly homogeneous nodes
-and devoid of other users. For data storage these experiments rely on a
-\ac{nfs}. Special attention was taken to not overbook \acp{vm} by caping the
-number of single core \acp{vm} to 25. Due to the experimental nature of this
-cloud configurations have change overtime. Table \ref{tab:platforms} regroups
-configurations of all cloud versions. We will referrer to this cloud as
-\texttt{openstack-icps.}\emph{version}.
-
-
-\subsubsection{Public Cloud}
-
-BonFire\cite{Kavoussanakis2013} is a public multi-cloud distributed all over
-Europe. Our experiments were run over three sites, de-hlrs based in Stuttgart,
-uk-epcc in Edinburgh, and fr-inria in Rennes. BonFIRE clouds were accessed
-through an OCCI based API and the clouds were controlled throught software
-derived from OpenNebula 3.6~. Each site provided different
-hardware\footnote{Comprehensive information available at
-\texttt{http://www.bonfire-project.eu/infrastructure/testbeds}}. Resource quotas
-limited most experiment 20 \acp{vm}, not far from the limits generally
-imposed on public clouds. Centralized storage was provided through a \ac{nfs}
-based on the be-ibbt site in Ghent. Due to network acces restriction the
-Schlouder server was brought in the BonFIRE WAN through a VPN. Due to the
-experimental nature of this cloud configurations have change overtime. Table
-\ref{tab:platforms} regroups configurations of all cloud versions. In this article
-we refer to experiment run on the BonFire clouds by the name of the cloud site
-followed by the version number.
-
-\begin{table}
-	\begin{tabular}{|l|c|c|c|c|c|c|}
-		\hline
-		Cloud&\#cores&Hypervisor&Network&version&\#VM&Storage\\ \hline
-		\multirow{2}{*}{openstack-icps}&\multirow{2}{*}{48}&\multirow{2}{*}{KVM}&100mb&1-3&25&NFS\\\cline{4-7}
-		&&&1Gb&4-5&10&NFS\\\hline
-		de-hlrs&344&Xen 3.1.2&n/a&v1-3&20&NFS\\\hline
-		fr-inria&96&Xen 3.2&n/a&v1-3&20&NFS\\\hline
-		uk-epcc&176&Xen 3.0.3&n/a&v1-2&20&NFS\\\hline
-
-	\end{tabular}
-	\caption{Characteristics of our cloud testbeds, version numbers also
-	account for changes in measured boottimes not presented in this table.}
-	\label{tab:platforms}
-\end{table}
-
-\subsection{Simulations}
+SimGrid was originally developped 20 years ago to evaluate scheduling algorithms
+in distributed  computing environments such as  grids.  Since then, it  has been
+largely extended  to tackle  new fields of  distributed computing.   Its layered
+design%
+\textbf{FIXME:SimGrid Layers depicted referenced here} %
+aims to offer  specialized interfaces to properly model applications  in a given
+field, e.g peer-to-peer systems~\cite{QuinsonRT12} or high-performance computing
+with SMPI~\cite{DegommeLMQSS17}.  All interfaces rely on the \ac{des} simulation
+core engine.  
+%
+For our study, we developped a new interface upon MSG %
+\textbf{FIXME: dire ce qu'est MSG en un mot et faire référence à une figure.}~%
+dedicated to model \ac{iaas} operations and called SchIaaS.
+%
+While SimGrid  implements hypervisor level  functionalities such as  starting or
+stoping a \ac{vm}, SchIaaS implements  cloud level functionalities (e.g. run and
+terminate instances%
+\textbf{FIXME: définir instance.}~%
+It offers the following instance management fuctions:
+\begin{itemize}
+\item run, terminate, suspend, resume and describe instances
+\item description of available resources
+\item image and instance types management
+\item VM placement on the clusters
+\item boot and other VM life-cycle processes
+\item cloud storage management.
+\end{itemize}
 
 \subsubsection{Simulator}
 
@@ -376,7 +414,19 @@ SimSchlouder/SCHIaaS/Simgrid
 
 SimSchlouder reproducing Schlouder runs. Same input/output file.
 
+
+
+
+
+
+%-------------------------- E V A L U A T I O N -------------------------------  
+\section{Evaluation}
+
+
+\subsection{Simulations}
+
 \subsubsection{Lab}
+
 
 \subsubsection{Procedural Analysis}
 
