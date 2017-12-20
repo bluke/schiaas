@@ -1,0 +1,98 @@
+\documentclass[AMA,LATO1COL]{WileyNJD-v2}
+\usepackage{moreverb}
+\usepackage{rotating}
+\usepackage{comment}
+\usepackage{acronym}
+\usepackage{tikz}
+\usepackage{multirow}
+\usetikzlibrary{fit,arrows}
+\usepackage{graphicx}
+\newcommand\vrpath{../../lab/setup/simschlouder/validation-results/}
+\graphicspath{{\vrpath}}
+
+\usepackage{acronym}
+\acrodef{iaas}[IaaS]{Infrastructure as a Service}
+\acrodef{SaaS}{Software as a Service}
+\acrodef{PaaS}{Platform as a Service}
+\acrodef{dag}[DAG]{directed acyclic graph}
+\acrodef{vm}[VM]{Virtual Machine}
+\acrodef{pm}[PM]{Physical Machine}
+\acrodef{btu}[BTU]{billing time unit}
+\acrodef{EC2CU}{EC2 Compute Unit}
+\acrodef{HPC}{High Performance Computing}
+\acrodef{unistra}{University of Strasbourg}
+\acrodef{rv}[RV]{random variable}
+\acrodef{pdf}[PDF]{probability density function}
+\acrodef{cdf}[CDF]{cumulative distribution function}
+\acrodef{mcs}[MCS]{Monte-Carlo simulation}
+\acrodefplural{mcs}[MCS's]{Monte-Carlo simulations}
+\acrodef{des}[DES]{discrete event simulation}
+\acrodef{ci}[CI]{confidence interval}
+
+\acrodef{nfs}[NFS]{Network File-System}
+\acrodef{bot}[BoT]{Bag of Tasks}
+\acrodef{omssa}[OMSSA]{Open Mass-Spectrometry Search Algorithm}
+\acrodef{asap}[ASAP]{\emph{as soon as possible}}
+\acrodef{afap}[AFAP]{\emph{as full as possible}}
+
+
+
+\newcommand\BibTeX{{\rmfamily B\kern-.05em \textsc{i\kern-.025em b}\kern-.08em
+T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+\articletype{Article Type}%
+
+%\received{<day> <Month>, <year>}
+%\revised{<day> <Month>, <year>}
+%\accepted{<day> <Month>, <year>}
+
+%\raggedbottom
+
+\begin{document}
+
+\title{Cloud Simulation}
+
+\author[1]{Julien Gossa*}
+
+\author[2,3]{Author Two}
+
+\author[3]{Author Three}
+
+\authormark{Gossa \textsc{et al}}
+
+
+\address[1]{\orgdiv{Org Division}, \orgname{Org name}, \orgaddress{\state{State name}, \country{Country name}}}
+
+\address[2]{\orgdiv{Org Division}, \orgname{Org name}, \orgaddress{\state{State name}, \country{Country name}}}
+
+\address[3]{\orgdiv{Org Division}, \orgname{Org name}, \orgaddress{\state{State name}, \country{Country name}}}
+
+\corres{*Corresponding author name, Corresponding address. \email{authorone@Email.com}}
+
+\presentaddress{Present address}
+
+\abstract[Abstract]{This paper describes the use of the \LaTeXe\ \textsf{WileyNJD-v2.cls}
+class file for setting papers for \emph{Mathematical Methods in the Applied Sciences}.}
+
+\keywords{Cloud - Simulation}
+
+\jnlcitation{\cname{%
+\author{Williams K.}, 
+\author{B. Hoskins}, 
+\author{R. Lee}, 
+\author{G. Masato}, and 
+\author{T. Woollings}} (\cyear{2016}), 
+\ctitle{A regime analysis of Atlantic winter jet variability applied to evaluate HadGEM3-GC2}, \cjournal{Q.J.R. Meteorol. Soc.}, \cvol{2017;00:1--6}.}
+
+\maketitle
+
+\footnotetext{\textbf{Abbreviations:} ANA, anti-nuclear antibodies; APC, antigen-presenting cells; IRF, interferon regulatory factor}
+
+\input{contents.tex}
+
+
+\bibliographystyle{WileyNJD-AMA}
+\bibliography{biblio}
+
+\end{document}
+
