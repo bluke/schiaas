@@ -56,7 +56,7 @@ the  real infrastructure.  The  comparison between  the  observations of  actual
 executions and  the simulation  results has  allowed us  to tune  the simulator,
 especially for  higher level  components such  as the  modeling of  \ac{vm} boot
 times and the scheduling  policies. At the lower level, we  rely on the discrete
-event simulation  toolkit SimGrid~\cite{simgrid08} for which  validation results
+event simulation  toolkit SimGrid~\cite{CasanovaLQ08} for which  validation results
 regarding        accuracy         have        been         published        (e.g
 \cite{StanisicTLVM15,VelhoSCL13}).  To  build  SimSchlouder, we  have  added  to
 SimGrid a  new interface  which enables to  express \ac{iaas}  operations. Thus,
@@ -151,7 +151,7 @@ accurate predictions.
 
 At the core of DES is the solver.  The solver considers the states of the system
 generated  by the  platform and  previous events  to compute  the timing  of the
-future events. In most cases,  simulators have a \emph{bottom-up} approach~: the
+future events. In most cases,  simulators have a \emph{bottom-up} approach: the
 modeling concerns  low-level components  (machines, networks,  storage devices),
 and  from  their  interactions  emerge the  high-level  behaviours.  Working  on
 disjoint low level components make it easier  to tune the precision of the model
@@ -335,33 +335,42 @@ run on  images of the \emph{Pleiade}  star cluster at 3  different output sizes,
 
 SimGrid was originally developped 20 years ago to evaluate scheduling algorithms
 in distributed  computing environments such as  grids.  Since then, it  has been
-largely extended  to tackle  new fields of  distributed computing.   Its layered
-design%
-\textbf{FIXME:SimGrid Layers depicted referenced here} %
-aims to offer  specialized interfaces to properly model applications  in a given
-field, e.g peer-to-peer systems~\cite{QuinsonRT12} or high-performance computing
-with SMPI~\cite{DegommeLMQSS17}.  All interfaces rely on the \ac{des} simulation
-core engine.  
+largely  extended and  has  become a  framework  able to  tackle  new fields  of
+distributed     computing.      Its      layered     design,     depicted     on
+Figure~\ref{fg:sg-archi}, offers three interfaces to access the simulation layer
+(SIMIX on  figure) which in  turn relies on  the simulation core  engine (SURF).
+Each interface implements a different concurrent programming model: MSG offers a
+CSP~\ref{Hoare78}-like programming model, SMPI  enables MPI programs, and SimDag
+is best  suited to  represent graphs  of dependent tasks.   User code  may built
+directly  upon  one of  these  interfaces  to model  a  field  of interest,  e.g
+peer-to-peer     systems~\cite{QuinsonRT12}     or    MapReduce     applications
+\cite{KolbergMAMGA13}.
+\begin{figure}[hbt]
+\input{gfx-SG}
+\caption{The  layered  architecture of  SimGrid,  with  the additionnal  SchIaaS
+  interface}
+\label{fg:sg-archi}
+\end{figure}
 %
-For our study, we developped a new interface upon MSG %
-\textbf{FIXME: dire ce qu'est MSG en un mot et faire référence à une figure.}~%
-dedicated to model \ac{iaas} operations and called SchIaaS.
-%
-While SimGrid  implements hypervisor level  functionalities such as  starting or
-stoping a \ac{vm}, SchIaaS implements  cloud level functionalities (e.g. run and
-terminate instances%
-\textbf{FIXME: définir instance.}~%
-It offers the following instance management fuctions:
-\begin{itemize}
-\item run, terminate, suspend, resume and describe instances
-\item description of available resources
-\item image and instance types management
-\item VM placement on the clusters
-\item boot and other VM life-cycle processes
-\item cloud storage management.
-\end{itemize}
+For  our study,  we developped  a  new interface  upon MSG,  called SchIaaS  and
+dedicated to  model \ac{iaas}  operations.  While SimGrid  implements hypervisor
+level functionalities such as starting  or stoping a \ac{vm}, SchIaaS implements
+cloud level functionalities.   We call \emph{instance} the  virtual machine when
+seen from  the client side --this  terminology has been popularized  by AWS. The
+main operations  provided by  SchIaaS are  the one  ususally provided  by public
+cloud  providers: run,  terminate, suspend,  resume and  describe instances  and
+operations regarding cloud  storage. For sake of modeling a  cloud, SchIaaS also
+allows the  user to  describe the  available resources,  the image  and instance
+types management, the  VM placement policy on the  clusters and operating-system
+levels parameters such as boot and other VM life-cycle processes.
 
-\subsubsection{Simulator}
+
+
+\subsection{Simulator}
+
+% TODO @Julien :
+\textbf{Architecture de SchIaaS} les moteurs à instancier etc. Intérêts.
+
 
 SimSchlouder/SCHIaaS/Simgrid
 
@@ -380,22 +389,53 @@ SimSchlouder reproducing Schlouder runs. Same input/output file.
 
 \subsubsection{Lab}
 
+% TODO @Julien
+éléments concrets pour le lab (c.f Renpar).
+
+Le  lab est  un ensemble  de  scripts permettant  d'automatiser l'exécution  des
+simulations, la  collecte des  observations, ainsi que  leur analyse.  Il permet
+donc d'exécuter  de bout-en-bout  l'étude par simulation,  de la  définition des
+différentes simulations, à la production des graphiques.
+
+Au delà de l'aspect pratique et du gain de temps de mise en œuvre de l'étude, le
+lab a pour vocation de ``standardiser'' l'étude. Cette standardisation assure sa
+reproductibilité, ainsi qu'une  comparaison équitable entre solutions  à un même
+problème.
+
+Mais  le   lab  permet   également  une   approche  systématique   permettant  à
+l'expérimentateur de  ne pas rater  de phénomène. En  effet, il est  fréquent de
+faire un  grand lot  de simulations,  puis d'observer  plus finement  celles qui
+présentent des  particularités. Ce  faisant, l'expérimentateur exclu  les autres
+simulation  de  ces   observations  plus  précises,  à  moins   de  les  refaire
+entièrement. En rendant plus pratique la définition des observations directement
+au niveau  du \textit{workflow} de simulations,  le lab assure que  tous les cas
+seront observés de  la même manière, ce  qui évite de rater un  phénomène, ou de
+différencier le traitement des simulations au risque d'arriver à des conclusions
+abusives.
+
 
 \subsubsection{Procedural Analysis}
+
+Démarche expérimentale de validation du simulateur.
+
+Process de simulation : choisir l'application, définir les métriques, executer 
+
+Voici la procédure expérimentale que nous avons employé:
+Sur ce type d'application nous avons besoin des informations 
 
 \begin{enumerate}
  \item Real executions (xp) to test Schlouder and provisioning/scheduling 
 strategies.
   Schlouder/SimSchlouder input:
   \begin{itemize}
-   \item Nodes: boottime prediction, amount limit, standard power
+   \item Nodes: boottime prediction, amount of instances limit, standard power
    \item Tasks: walltime prediction
   \end{itemize}
  
  \item Normalization of xp traces (4 versions of schlouder, missing data)
  \item Extraction of information about each xp:
   \begin{itemize}
-   \item Nodes: provisioning date, start date, end date, boottimes, instance 
+   \item Instance: provisioning date, start date, end date, boottimes, instance 
 type
    \item Tasks: submission date, scheduling date, start date, end date, 
 	  walltime, input time and size, runtime, output time and size, 
@@ -403,9 +443,14 @@ management time
   \end{itemize}
  \item Simulation of each xp, injecting different information from real xps
  \item Comparison of Schlouder and SimSchlouder outputs (python)
- \item Statistical analysis of all traces (R)
+ \item Statistical analysis of all traces (R) : distribution de l'erreur
+            
  \item Close analysis of each outlier to understand the differences. 
 \end{enumerate}
+
+
+
+
 
 \subsubsection{life-cycles and observed times}
 
@@ -421,6 +466,18 @@ management time
 \end{itemize}
 
 During the execution, the node are in the following states:
+
+\begin{figure}
+%\resizebox{\textwidth}{!}{
+%\minibox[c]{
+\input{gfx-node-state.tex}
+%}
+%}
+\caption{Nodes' states}
+\end{figure}
+
+
+\begin{comment}
 \begin{enumerate}
  \item Future: Once the decision to start the node is made;
  \item Pending: Once the node is requested to the cloud-kit;
@@ -430,6 +487,8 @@ During the execution, the node are in the following states:
  \item ShuttingDown: Once the termination of the node is aked to the cloud-kit;
  \item Terminated: Once the node is terminated.
 \end{enumerate}
+\end{comment}
+
 
 The observed times are:
 \begin{itemize}
@@ -462,7 +521,7 @@ The observed times are:
 
 
 
-\section{Results}
+\subsection{Discussion of Results}
 
 \subsection{Definitions}
 4 metrics $m \in M$ for each execution $e \in E$:
@@ -830,11 +889,9 @@ Assess the efficiency of using a simulator as a predictor of a cloud.
 \begin{figure}
   \centering
   \includegraphics[width=\textwidth]{sim_predictions-4metrics-cmp.pdf}
-  
+ 
   \input{\vrpath sim_predictions-4metrics-mmmm.latex}
-
   \input{\vrpath sim_predictions-4metrics-mmmm-cmp.latex}
-
   \input{\vrpath sim_communications-4metrics-mmmm-twobytwo.latex}
 
   
@@ -857,9 +914,5 @@ ls
 
 
 
-\bibliographystyle{plain}
-\bibliography{biblio}
-
-\end{document}
 
 
