@@ -1,0 +1,43 @@
+\usetikzlibrary{arrows,shapes,positioning}
+\usetikzlibrary{decorations.markings}
+\tikzstyle arrowstyle=[scale=1]
+\tikzstyle directed=[postaction={decorate,decoration={markings,
+    mark=at position 1 with {\arrow[arrowstyle]{stealth}}}}]
+	
+
+\begin{tikzpicture}[x=1cm,
+					y=1cm,
+					every node/.style={anchor=south,minimum height=1.5cm,text depth=0cm}]
+	
+\draw[directed](1,0.2)->(18,0.2); % all line
+\node at(1.8,0){Future};
+\draw(3,0)->(3,.5);      % tick
+\node at(4,0){Pending};
+
+\draw(5,0)->(5,.5);      % tick
+
+\node at(6,0){Booting};
+
+\draw(7,0)->(7,.5);       %tick
+\node at(7.7,0){Idle};
+
+\draw(8.4,0)->(8.4,.5);   % tick
+\node at(10,0){Busy};
+
+\draw(12,0)->(12,.5);     % tick
+\node at(13.2,0){Shut down};
+\draw(14.5,0)->(14.5,.5); % tick
+
+\draw[directed](14.5,-.4)->(14.5,0);
+
+\node at(16,0){Terminated};
+
+\node at(10,-1.0){\emph{uptime}};
+\node at(6,-1.5){\emph{boot time}};
+\draw(5,-.4)->(14.5,-.4); % line uptime
+\draw(5,-.6)->(7,-.6); % line boot time
+\draw[directed](5,-.4)->(5,0); % start uptime
+\draw[directed](5,-.6)->(5,-.1); % start boot
+\draw[directed](7,-.6)->(7,-.1); % start boot
+
+\end{tikzpicture}
