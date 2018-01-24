@@ -1,0 +1,58 @@
+\begin{tikzpicture}[
+legend/.style={anchor=east,align=right},
+event/.style={align=center,outer sep=1},
+status/.style={anchor=north,align=center,font=\sc},
+metric/.style={<->,thick},
+]
+%legend
+\node[legend]at(-1,0.75){$events$};
+\node[legend]at(-1,0){$time$};
+\node[legend]at(-1,-0.75){$state$};
+\node[legend]at(-1,-1.5){$metrics$};
+%axis
+\draw[-{latex},thick](1,0)--(18.5,0);
+%marker - event - following status
+%provisioning decision
+\draw[{latex reversed}-](1,0.5)->(1,-0.5);
+\node[event]at(1,1){provisioning\\decision};
+\node[status]at(2.25,-0.25){Future};
+%provisioning
+\draw[{latex reversed}-](3.5,0.5)->(3.5,-0.5);
+\node[event]at(3.5,1){provisioning\\request};
+\node[status]at(4.75,-0.25){Pending};
+%booting
+\draw[{latex reversed}-](6,0.5)--(6,-0.5);
+\draw[dotted](6,-0.5)--(6,-2);
+\node[event]at(6,1){VM\\start};
+\node[status]at(7,-0.25){Booting};
+%idle
+\draw (8,0.5)--(8,-0.5);
+\draw[dotted](8,-0.5)--(8,-1.5);
+%\node[event]at(8.5,1){};
+\node[status]at(8.5,-0.25){Idle};
+%Assign jobs
+\draw[{latex reversed}-](9,0.5)--(9,-0.5);
+\draw[dotted](9,-0.5)--(9,-1.5);
+\node[event]at(9,1){jobs\\assigned};
+\node[status]at(11,-0.25){Busy};
+%Shutdown
+\draw[{latex reversed}-](13,0.5)--(13,-0.5);
+\draw[dotted](13,-0.5)--(13,-1.5);
+\node[event]at(13,1){shut-down\\request};
+\node[status]at(14.25,-0.25){Shut-down};
+%terminated
+\draw(15.5,0.5)--(15.5,-0.5);
+\draw[dotted](15.5,-0.5)--(15.5,-2);
+\node[status]at(17,-0.25){Terminated};
+
+%Metrics
+\draw[metric](6,-1.85)--(15.5,-1.85) node[midway,below]{uptime};
+\draw[metric](6,-1.25)--(8,-1.25) node[midway,below]{boot time};
+\draw[metric](9,-1.25)--(9.75,-1.25);
+\draw[metric](9.75,-1.25)--(10.25,-1.25);
+\draw[metric](10.25,-1.25)--(11,-1.25) node[below]{jobs walltimes};
+\draw[metric](11,-1.25)--(11.75,-1.25);
+\draw[metric](11.75,-1.25)--(12.5,-1.25);
+\draw[metric](12.5,-1.25)--(13,-1.25);
+
+\end{tikzpicture}
