@@ -47,21 +47,37 @@ instance, a decision which starts simultaneously  a large number of \acp{vm} may
 result in trashing~\cite{MarshallKF10} affecting the expected performance.
 
 This work's  objective is  to study how  an actual cloud  setup behavior  can be
-predicted through simulation on practical use-cases. Our approach is original in
-that    we   have    co-developed   a    client-side   cloud    broker,   called
-Schlouder~\cite{Michon17}, and a simulation  software called SimSchlouder, whose
-aim is to predict Schlouder's behavior.  Schlouder implements here the automated
-process making the  provisioning and scheduling decisions on behalf  the user on
-the  real infrastructure.  The  comparison between  the  observations of  actual
-executions and  the simulation  results has  allowed us  to tune  the simulator,
-especially for  higher level  components such  as the  modeling of  \ac{vm} boot
-times and the scheduling  policies. At the lower level, we  rely on the discrete
-event simulation  toolkit SimGrid~\cite{CasanovaLQ08} for which  validation results
-regarding        accuracy         have        been         published        (e.g
-\cite{StanisicTLVM15,VelhoSCL13}).  To  build  SimSchlouder, we  have  added  to
-SimGrid a  new interface  which enables to  express \ac{iaas}  operations. Thus,
-this work is not  restricted to the simulation of Schlouder  but can be extended
-to the simulation of any application making use of \ac{iaas} clouds.
+predicted through simulation on practical use-cases.   To that end, we propose a
+simulation framework called SCHiaaS\footnote{SCHiaaS stands for \emph{Simulation
+    of Cloud, Hypervisor and IaaS}.}  which specializes in IaaS clouds modeling.
+This  is an  extension  to the  SimGrid simulation  toolkit~\cite{CasanovaLQ08},
+which  provides  in particular  the  discrete  event  simulator engine  and  the
+operating-system level operations (e.g  messaging, virtual machines management).
+Using SCHiaaS,  we focus in  this article on  the modeling of  a cloud-brokering
+system.   We  have used  this  brokering  system  to  experiment the  impact  of
+scheduling and  provisioning policies  when running two  scientific applications
+using  cloud computing  resources.  The  exact  setting for  this experiment  is
+described in Section~\ref{sc:context}. The  question that this article addresses
+is:  can this  brokering  system  be modeled  and  predicted accurately  through
+simulation? We have collected numerous  execution logs traces when running these
+scientific applications through the broker, and these provide us with a valuable
+basis to validate our candidate simulation model.
+
+\textbf{Adapter le  texte dans la suite.}   Our approach is original  in that we
+have co-developed a client-side  cloud broker, called Schlouder~\cite{Michon17},
+and  a  simulation  software  called  SimSchlouder,  whose  aim  is  to  predict
+Schlouder's behavior.   Schlouder implements  here the automated  process making
+the  provisioning and  scheduling  decisions  on behalf  the  user  on the  real
+infrastructure.  The  comparison between  the observations of  actual executions
+and the simulation results has allowed  us to tune the simulator, especially for
+higher  level components  such as  the modeling  of \ac{vm}  boot times  and the
+scheduling  policies.  At  the  lower  level, we  rely  on  the  discrete  event
+simulation  toolkit  SimGrid~\cite{CasanovaLQ08}  for which  validation  results
+regarding accuracy  have been published  (e.g \cite{StanisicTLVM15,VelhoSCL13}).
+To build SimSchlouder, we have added to SimGrid a new interface which enables to
+express  \ac{iaas}  operations.  Thus,  this  work  is  not  restricted  to  the
+simulation of Schlouder but can be extended to the simulation of any application
+making use of \ac{iaas} clouds.
 
 This  paper's  contributions  is  therefor  twofold. First,  we  propose  a  new
 simulation  tool extending  SimGrid with  an  interface capable  of modeling  of
@@ -170,6 +186,53 @@ field  of grid  or cloud  computing, published  results in  terms of  validation
 against real settings are scarce relatively to the number of projects.
 
 
+
+\section{SCHiaaS}
+
+The first contribution of this paper is the simulation framework called SCHiaaS,
+that we propose  to model IaaS clouds,  as an extension to  SimGrid. SimGrid was
+originally  developped  20  years  ago  to  evaluate  scheduling  algorithms  in
+distributed  computing environments  such as  grids.   Since then,  it has  been
+largely  extended and  has  become a  framework  able to  tackle  new fields  of
+distributed     computing.      Its      layered     design,     depicted     on
+Figure~\ref{fg:sg-archi}, offers three interfaces to access the simulation layer
+(SIMIX on  figure) which in  turn relies on  the simulation core  engine (SURF).
+Each interface implements a different concurrent programming model: MSG offers a
+CSP~\ref{Hoare78}-like programming model, SMPI  enables MPI programs, and SimDag
+is best  suited to  represent graphs  of dependent tasks.   User code  may built
+directly  upon  one of  these  interfaces  to model  a  field  of interest,  e.g
+peer-to-peer     systems~\cite{QuinsonRT12}     or    MapReduce     applications
+\cite{KolbergMAMGA13}.
+\begin{figure}[hbt]
+\input{gfx-SG}
+\caption{The  layered  architecture of  SimGrid,  with  the additionnal  SchIaaS
+  interface}
+\label{fg:sg-archi}
+\end{figure}
+%
+In this general  picture, SCHiaaS is a new interface  upon MSG. SCHiaaS entities
+use MSG  to communicate with  the core functions  of SimGrid, which  handles the
+operating  system  level  objects,   such  as  network  communications,  running
+processes, and  virtual machines. SCHiaaS entities  are mainly \emph{instances}.
+We use the term \emph{instance}, as popularized by AWS, to designate the virtual
+machine when  seen from  the client  side. Accordingly,  the SchIaaS  API offers
+cloud level functionalities,  that is the operations usually  provided by public
+cloud  providers: run,  terminate, suspend,  resume and  describe instances  and
+operations regarding cloud  storage. For sake of modeling a  cloud, SchIaaS also
+allows the  user to  describe the  available resources,  the image  and instance
+types management, the  VM placement policy on the  clusters and operating-system
+levels parameters such as boot and other VM life-cycle processes.  By constrast,
+SimGrid implements hypervisor level functionalities  such as starting or stoping
+a \ac{vm}.
+
+
+
+
+
+
+
+
+%------ This is the actual system we model through simulation -------------------
 \section{Context and Setup}
 \label{sc:context}
 
@@ -333,36 +396,6 @@ run on  images of the \emph{Pleiade}  star cluster at 3  different output sizes,
 %-------------------------- S I M U L A T E D --------------------------------
 \section{Simulation}
 
-SimGrid was originally developped 20 years ago to evaluate scheduling algorithms
-in distributed  computing environments such as  grids.  Since then, it  has been
-largely  extended and  has  become a  framework  able to  tackle  new fields  of
-distributed     computing.      Its      layered     design,     depicted     on
-Figure~\ref{fg:sg-archi}, offers three interfaces to access the simulation layer
-(SIMIX on  figure) which in  turn relies on  the simulation core  engine (SURF).
-Each interface implements a different concurrent programming model: MSG offers a
-CSP~\ref{Hoare78}-like programming model, SMPI  enables MPI programs, and SimDag
-is best  suited to  represent graphs  of dependent tasks.   User code  may built
-directly  upon  one of  these  interfaces  to model  a  field  of interest,  e.g
-peer-to-peer     systems~\cite{QuinsonRT12}     or    MapReduce     applications
-\cite{KolbergMAMGA13}.
-\begin{figure}[hbt]
-\input{gfx-SG}
-\caption{The  layered  architecture of  SimGrid,  with  the additionnal  SchIaaS
-  interface}
-\label{fg:sg-archi}
-\end{figure}
-%
-For  our study,  we developped  a  new interface  upon MSG,  called SchIaaS  and
-dedicated to  model \ac{iaas}  operations.  While SimGrid  implements hypervisor
-level functionalities such as starting  or stoping a \ac{vm}, SchIaaS implements
-cloud level functionalities.   We call \emph{instance} the  virtual machine when
-seen from  the client side --this  terminology has been popularized  by AWS. The
-main operations  provided by  SchIaaS are  the one  ususally provided  by public
-cloud  providers: run,  terminate, suspend,  resume and  describe instances  and
-operations regarding cloud  storage. For sake of modeling a  cloud, SchIaaS also
-allows the  user to  describe the  available resources,  the image  and instance
-types management, the  VM placement policy on the  clusters and operating-system
-levels parameters such as boot and other VM life-cycle processes.
 
 
 
@@ -486,6 +519,14 @@ During the execution, the node are in the following states:
 \caption{Nodes' states}
 \end{figure}
 
+\begin{figure}
+\resizebox{\textwidth}{!}{%
+%\minibox[c]{
+\input{gfx-task-state.tex}
+%}
+}
+\caption{Tasks' states}
+\end{figure}
 
 \begin{comment}
 \begin{enumerate}
