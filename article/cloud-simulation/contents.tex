@@ -54,7 +54,9 @@ This  is an  extension  to the  SimGrid simulation  toolkit~\cite{CasanovaLQ08},
 which  provides  in particular  the  discrete  event  simulator engine  and  the
 operating-system level operations (e.g  messaging, virtual machines management).
 Using SCHIaaS,  we focus in  this article on  the modeling of  a cloud-brokering
-system.   We  have used  this  brokering  system  to  experiment the  impact  of
+system. This  client-side broker, on behalf  on its users, makes  scheduling and
+provisioning   decisions,   and   automates   jobs'  execution   on   the   real
+infrastructure. We have  used this brokering system to experiment  the impact of
 scheduling and  provisioning policies  when running two  scientific applications
 using  cloud computing  resources.  The  exact  setting for  this experiment  is
 described in Section~\ref{sc:context}. The  question that this article addresses
@@ -63,21 +65,23 @@ simulation? We have collected numerous  execution logs traces when running these
 scientific applications through the broker, and these provide us with a valuable
 basis to validate our candidate simulation model.
 
-\textbf{Adapter le  texte dans la suite.}   Our approach is original  in that we
-have co-developed a client-side  cloud broker, called Schlouder~\cite{Michon17},
-and  a  simulation  software  called  SimSchlouder,  whose  aim  is  to  predict
-Schlouder's behavior.   Schlouder implements  here the automated  process making
-the  provisioning and  scheduling  decisions  on behalf  the  user  on the  real
-infrastructure.  The  comparison between  the observations of  actual executions
-and the simulation results has allowed  us to tune the simulator, especially for
+The broker,  called \textit{Schlouder}~\cite{Michon17},  has been  developped by
+our   team,  and   our  effort   to   build  a   simulator  of   it  is   called
+\textit{SimSchlouder}.  This  co-development approach makes this  study original
+as allmost all the previous cloud  simulation software proposed have put forward
+first the  design of their software  library, leaving the precise  validation to
+fure  experiments.  By  contrast, we  have been  able to  add all  the necessary
+instrumentation in  the broker and  in the simulator  to help us  understand how
+accurate were the predictions for  indivual simulated components, especially for
 higher  level components  such as  the modeling  of \ac{vm}  boot times  and the
-scheduling  policies.  At  the  lower  level, we  rely  on  the  discrete  event
-simulation  toolkit  SimGrid~\cite{CasanovaLQ08}  for which  validation  results
-regarding accuracy  have been published  (e.g \cite{StanisicTLVM15,VelhoSCL13}).
-To build SimSchlouder, we have added to SimGrid a new interface which enables to
-express  \ac{iaas}  operations.  Thus,  this  work  is  not  restricted  to  the
-simulation of Schlouder but can be extended to the simulation of any application
-making use of \ac{iaas} clouds.
+scheduling policies. This continuous analysis has allowed us to fine tune the
+simulation software. 
+
+% ------- à recaser -----
+%At the lower level,
+% we rely on the discrete event simulation toolkit SimGrid~\cite{CasanovaLQ08} for
+% which   validation  results   regarding  accuracy   have  been   published  (e.g
+%\cite{StanisicTLVM15,VelhoSCL13}). 
 
 This  paper's  contributions  is  therefor  twofold. First,  we  propose  a  new
 simulation  tool extending  SimGrid with  an  interface capable  of modeling  of
@@ -100,13 +104,14 @@ of them, and each application operated  on two different types of infrastructure
 
 
 The paper is  organized as follows. We first present  the related work regarding
-simulation in  Section~\ref{sc:relwork}. The next  part describes the  system we
-seek to simulate (Section~\ref{sc:context}), which includes the cloud management
-system, the  real platforms on which  experiments are run, and  the applications
-that serve  as test-cases. The following  part presents our contribution  to the
-simulation of clouds,  with our extension of SimGrid to  model \ac{iaas} clouds,
-and  its  application to  the  simulation  of Schlouder.  The  last  part is  an
-evaluation of the accuracy of the simulation against real observations.
+simulation in  Section~\ref{sc:relwork}.  Section \ref{sc:schiaas}  presents the
+design of  SCHIaaS.  Section~\ref{sc:context}  describes the  system we  seek to
+simulate),  which  includes the  cloud  management  system Schlouder,  the  real
+platforms  on which  experiments are  run, and  the applications  that serve  as
+test-cases. The last section presents the simulation. It first sketches the main
+design issues for  modeling Schlouder. The second part is  a thorough evaluation
+of  the  simulation  accuracy  against real  observations  on  the  applications
+test-cases  presented  earlier.
 
 
 %-------------------------- R E L .  W O R K -----------------------------------
@@ -188,6 +193,7 @@ against real settings are scarce relatively to the number of projects.
 
 
 \section{SCHIaaS}
+\label{sc:schiaas}
 
 \subsection{Overview}
 The first contribution of this paper is the simulation framework called SCHIaaS,
@@ -204,8 +210,12 @@ is best  suited to  represent graphs  of dependent tasks.   User code  may built
 directly  upon  one of  these  interfaces  to model  a  field  of interest,  e.g
 peer-to-peer     systems~\cite{QuinsonRT12}     or    MapReduce     applications
 \cite{KolbergMAMGA13}.
+%
 \begin{figure}[hbt]
+\centering
+\resizebox{.7\textwidth}{!}{%
 \input{gfx-SG}
+}
 \caption{The  layered  architecture of  SimGrid,  with  the additionnal  SchIaaS
   interface}
 \label{fg:sg-archi}
@@ -232,18 +242,29 @@ Developped  in Java,  SCHIaaS  has been  designed as  a  modular and  extensible
 framework, allowing modelers to plugin their  own code in all the key components
 which model  the cloud  or application behavior  under study.   Figure \ref{fg:}
 zooms in  the SCHIaaS box  of Figure~\ref{fg:sg-archi}. It shows  the components
-making up SCHIaaS:
+making up SCHIaaS (in  the red box). The boxes with  dashed frames indicate that
+these can replaceable with user-provided code.
+%
+\begin{figure}[hbt]
+\centering
+\resizebox{.7\textwidth}{!}{%
+\input{gfx-Schiaas}
+}
+\caption{Zoom on the SCHIaaS framework}
+\label{fg:}
+\end{figure}
+%
 \begin{itemize}
-\item The Core contains all the management code necessary to set up the data
+\item SCHIaaS Core contains all the management code necessary to set up the data
   structures corresponding of the cloud described in the configuration file, and
-  to reflect on the data structure the effects of all the operations triggered
-  though the Compute and Storage engines.   
-\item The Compute Engine provides an interface for the management of VMs. It
-  expects an implementation of the way the cloud controller controls the
-  instances, through the definition of start, shutdown, suspend, resume and
-  reboot commands. It also expects an implementation of the scheduling policies
+  to reflect the effects on the  data structures of all the operations triggered
+  though the Compute and Storage engines.
+\item The  Compute Engine provides  an interface for  the management of  VMs. It
+  expects  an  implementation of  the  way  the  cloud controller  controls  the
+  instances,  through the  definition of  start, shutdown,  suspend, resume  and
+  reboot commands. It also expects  an implementation of the scheduling policies
   used to map instances onto physical machines.
-\item The Storage Engine offers an interface for the management of block
+\item  The Storage  Engine  offers  an interface  for  the  management of  block
   storage, through the definition of put, get, delete, and list operations.
 \end{itemize}
 
@@ -251,8 +272,10 @@ making up SCHIaaS:
 
 
 
+
+
 %------ This is the actual system we model through simulation -------------------
-\section{Context and Setup}
+\section{Case Study}
 \label{sc:context}
 
 In the first part of this article
@@ -414,27 +437,17 @@ run on  images of the \emph{Pleiade}  star cluster at 3  different output sizes,
 
 %-------------------------- S I M U L A T E D --------------------------------
 \section{Simulation}
+\label{sc:simulation}
+
+\subsection{Using SCHIaaS to simulate Schlouder}
 
 
-
-
-\subsection{Simulator}
-
-% TODO @Julien :
-\textbf{Architecture de SchIaaS} les moteurs à instancier etc. Intérêts.
-
-
-SimSchlouder/SCHIaaS/Simgrid
-
-SimSchlouder reproducing Schlouder runs. Same input/output file.
-
-
-
+\center{\textbf{Ici, raconter comment SimSchlouder a été écrit}.
 
 
 
 %-------------------------- E V A L U A T I O N -------------------------------  
-\section{Evaluation}
+\subsection{Evaluation}
 
 The evaluation of the simulation accuracy of such a system is both a complex and
 tedious task.  It  is complex because the simple comparison  of the observed and
@@ -445,9 +458,6 @@ often  has  to add  extra  watch  points into  the  application  and re-run  the
 experiment to  eventually obtain the  relevant measurements.  This is  a tedious
 back  and forward  process  which  generally increases  the  number of  observed
 parameters and makes execution log traces heterogeneous over time.
-
-
-\subsection{Simulations}
 
 \subsubsection{Lab}
 
@@ -474,6 +484,8 @@ au niveau  du \textit{workflow} de simulations,  le lab assure que  tous les cas
 seront observés de  la même manière, ce  qui évite de rater un  phénomène, ou de
 différencier le traitement des simulations au risque d'arriver à des conclusions
 abusives.
+
+
 
 
 \subsubsection{Procedural Analysis}
