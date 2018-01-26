@@ -48,12 +48,12 @@ result in trashing~\cite{MarshallKF10} affecting the expected performance.
 
 This work's  objective is  to study how  an actual cloud  setup behavior  can be
 predicted through simulation on practical use-cases.   To that end, we propose a
-simulation framework called SCHiaaS\footnote{SCHiaaS stands for \emph{Simulation
+simulation framework called SCHiaaS\footnote{SCHIaaS stands for \emph{Simulation
     of Cloud, Hypervisor and IaaS}.}  which specializes in IaaS clouds modeling.
 This  is an  extension  to the  SimGrid simulation  toolkit~\cite{CasanovaLQ08},
 which  provides  in particular  the  discrete  event  simulator engine  and  the
 operating-system level operations (e.g  messaging, virtual machines management).
-Using SCHiaaS,  we focus in  this article on  the modeling of  a cloud-brokering
+Using SCHIaaS,  we focus in  this article on  the modeling of  a cloud-brokering
 system.   We  have used  this  brokering  system  to  experiment the  impact  of
 scheduling and  provisioning policies  when running two  scientific applications
 using  cloud computing  resources.  The  exact  setting for  this experiment  is
@@ -187,9 +187,10 @@ against real settings are scarce relatively to the number of projects.
 
 
 
-\section{SCHiaaS}
+\section{SCHIaaS}
 
-The first contribution of this paper is the simulation framework called SCHiaaS,
+\subsection{Overview}
+The first contribution of this paper is the simulation framework called SCHIaaS,
 that we propose  to model IaaS clouds,  as an extension to  SimGrid. SimGrid was
 originally  developped  20  years  ago  to  evaluate  scheduling  algorithms  in
 distributed  computing environments  such as  grids.   Since then,  it has  been
@@ -210,10 +211,10 @@ peer-to-peer     systems~\cite{QuinsonRT12}     or    MapReduce     applications
 \label{fg:sg-archi}
 \end{figure}
 %
-In this general  picture, SCHiaaS is a new interface  upon MSG. SCHiaaS entities
+In this general  picture, SCHIaaS is a new interface  upon MSG. SCHIaaS entities
 use MSG  to communicate with  the core functions  of SimGrid, which  handles the
 operating  system  level  objects,   such  as  network  communications,  running
-processes, and  virtual machines. SCHiaaS entities  are mainly \emph{instances}.
+processes, and  virtual machines. SCHIaaS entities  are mainly \emph{instances}.
 We use the term \emph{instance}, as popularized by AWS, to designate the virtual
 machine when  seen from  the client  side. Accordingly,  the SchIaaS  API offers
 cloud level functionalities,  that is the operations usually  provided by public
@@ -225,8 +226,26 @@ levels parameters such as boot and other VM life-cycle processes.  By constrast,
 SimGrid implements hypervisor level functionalities  such as starting or stoping
 a \ac{vm}.
 
+\subsection{SCHIaaS's design}
 
-
+Developped  in Java,  SCHIaaS  has been  designed as  a  modular and  extensible
+framework, allowing modelers to plugin their  own code in all the key components
+which model  the cloud  or application behavior  under study.   Figure \ref{fg:}
+zooms in  the SCHIaaS box  of Figure~\ref{fg:sg-archi}. It shows  the components
+making up SCHIaaS:
+\begin{itemize}
+\item The Core contains all the management code necessary to set up the data
+  structures corresponding of the cloud described in the configuration file, and
+  to reflect on the data structure the effects of all the operations triggered
+  though the Compute and Storage engines.   
+\item The Compute Engine provides an interface for the management of VMs. It
+  expects an implementation of the way the cloud controller controls the
+  instances, through the definition of start, shutdown, suspend, resume and
+  reboot commands. It also expects an implementation of the scheduling policies
+  used to map instances onto physical machines.
+\item The Storage Engine offers an interface for the management of block
+  storage, through the definition of put, get, delete, and list operations.
+\end{itemize}
 
 
 
