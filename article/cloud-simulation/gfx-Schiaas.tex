@@ -1,0 +1,32 @@
+\begin{tikzpicture}[
+every node/.style={anchor = south west,},
+legend/.style={anchor=north west,dashed,thick,outer sep=2mm,minimum height=0.6cm},
+plug/.style={dashed,thick,text=black},
+sub/.style={draw,outer sep=2mm},
+tag/.style={anchor=center,align=center},
+engine/.style={minimum height=3.6cm,minimum width=5.6cm,plug},
+sched/.style={minimum height=1.5cm,minimum width=2cm,plug},
+app/.style={minimum height=3.7cm,,minimum width=4.7cm},
+]
+%\draw[help lines](0,0)grid(15,15);
+\node[fill=green!50,minimum height=6.9cm,minimum width=2.9cm]at(0,0.9){};
+\node[fill=green!50,minimum height=1.9cm,minimum width=15cm]at(0,0){\Huge \textbf MSG};
+
+\node[draw,fill=red!50,minimum height=5.8cm,minimum width=12cm]at(3,2){};
+\node[tag]at(9,7){\Huge SCHIaaS Core};
+\node[sub,engine]at(3,2){};
+\node[tag]at(6,5){\Large{}Compute Engine};
+\node[sub,sched]at(4.75,2.5){\large{}Scheduler};
+\node[sub,engine]at(9,2){};
+\node[tag]at(12,4){\Large Storage Engine};
+
+\node[plug,fill=yellow!50,draw,minimum height=4cm,minimum width=15cm]at(0,8){};
+\node[sub,app]at(0,8){\large{}Load Injector};
+\node[sub,app]at(5,8){\large{}SimSchlouder};
+\node[sub,app,plug]at(10,8){\large{}User Made App};
+
+%Legend
+\node[legend,draw,minimum width=1.6cm]at(0,0){};
+\node[legend]at(1.7,0){: Replaceable modular elements};
+
+\end{tikzpicture}
