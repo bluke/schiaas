@@ -270,6 +270,7 @@ these can be replaced with user-provided code.
 \paragraph{The Storage  Engine}  offers  an interface  for  the  management of  block
   storage, through the definition of put, get, delete, and list operations.\\
 
+\noindent %
 In order to model a system SimGrid requires two configuration files: 
 \begin{itemize}
 \item a \emph{plaform}  file describing the available  hardware, including hosts
@@ -286,11 +287,11 @@ used.  The \emph{storage} and \emph{compute}  sections correspond to the storage
 and compute  engines listed  above.  Each  of these component  are handled  by a
 \emph{controller}   bound  to   some  host   in  the   SimGrid  platform   file.
 Implementations of  the controller's behavior,  that is the storage  and compute
-engines  instanciations, appear  line  2 and  6.  For  the  compute engine,  the
-specific  policy it  uses  to select  the  PM on  which  to start  a  new VM  is
+engine  instanciations, appear  line  2  and 6.   For  the  compute engine,  the
+specific  scheduling  policy  which  computes  how VMs  are  mapped  to  PMs  is
 implemented in  the attached scheduler module  line 10.  Note that  each request
 that the controller sends to the cluster nodes, be it a simple command or a data
-transfer generates network communications that are simulated by SimGrid.
+transfer, generates network communications that are simulated by SimGrid.
 
 \begin{figure}[hbt] 
  \lstset{language=xml,label= ,caption= ,numbers=left}
@@ -318,10 +319,10 @@ transfer generates network communications that are simulated by SimGrid.
     </compute>
 </cloud>
 \end{lstlisting}
-\label{fg:cloud.xml}
 \caption{An example \texttt{cloud.xml} file describing the environment of a
   given cloud, including the custom java classes used to implement the
   cloud controller behavior.}
+\label{fg:cloud.xml}
 \end{figure}
 
 

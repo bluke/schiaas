@@ -13,6 +13,19 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 \newcommand\vrpath{../../lab/setup/simschlouder/validation-results/}
 \graphicspath{{\vrpath}}
 
+\usepackage{listingsutf8}
+\usepackage{listings}
+\lstset{
+inputencoding=latin1,    % très bizarrement, mettre utf8 ne marche pas
+keywordstyle=\color{blue},
+commentstyle=\color{red},
+stringstyle=\color{green},
+basicstyle=\ttfamily\footnotesize,
+columns=fullflexible,
+frame=single,
+basewidth={0.4em,0.4em},
+}
+
 \usepackage{acronym}
 \acrodef{iaas}[IaaS]{Infrastructure as a Service}
 \acrodef{SaaS}{Software as a Service}
