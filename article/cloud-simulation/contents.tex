@@ -205,7 +205,7 @@ distributed     computing.      Its      layered     design,     depicted     on
 Figure~\ref{fg:sg-archi}, offers three interfaces to access the simulation layer
 (SIMIX on  figure) which in  turn relies on  the simulation core  engine (SURF).
 Each interface implements a different concurrent programming model: MSG offers a
-CSP~\ref{Hoare78}-like programming model, SMPI  enables MPI programs, and SimDag
+CSP-like programming model~\cite{Hoare78}, SMPI  enables MPI programs, and SimDag
 is best  suited to  represent graphs  of dependent tasks.   User code  may built
 directly  upon  one of  these  interfaces  to model  a  field  of interest,  e.g
 peer-to-peer     systems~\cite{QuinsonRT12}     or    MapReduce     applications
@@ -220,7 +220,8 @@ peer-to-peer     systems~\cite{QuinsonRT12}     or    MapReduce     applications
   interface}
 \label{fg:sg-archi}
 \end{figure}
-%
+
+
 In this general  picture, SCHIaaS is a new interface  upon MSG. SCHIaaS entities
 use MSG  to communicate with  the core functions  of SimGrid, which  handles the
 operating  system  level  objects,   such  as  network  communications,  running
@@ -236,6 +237,7 @@ levels parameters such as boot and other VM life-cycle processes.  By constrast,
 SimGrid implements hypervisor level functionalities  such as starting or stoping
 a \ac{vm}.
 
+
 \subsection{SCHIaaS's design}
 
 Developped  in Java,  SCHIaaS  has been  designed as  a  modular and  extensible
@@ -243,7 +245,7 @@ framework, allowing modelers to plugin their  own code in all the key components
 which model  the cloud  or application behavior  under study.   Figure \ref{fg:}
 zooms in  the SCHIaaS box  of Figure~\ref{fg:sg-archi}. It shows  the components
 making up SCHIaaS (in  the red box). The boxes with  dashed frames indicate that
-these can replaceable with user-provided code.
+these can be replaced with user-provided code.
 %
 \begin{figure}[hbt]
 \centering
@@ -254,24 +256,73 @@ these can replaceable with user-provided code.
 \label{fg:}
 \end{figure}
 %
-\begin{itemize}
-\item SCHIaaS Core contains all the management code necessary to set up the data
+\paragraph{SCHIaaS Core} contains all the management code necessary to set up the data
   structures corresponding of the cloud described in the configuration file, and
   to reflect the effects on the  data structures of all the operations triggered
   though the Compute and Storage engines.
-\item The  Compute Engine provides  an interface for  the management of  VMs. It
+
+\paragraph{The  Compute Engine} provides  an interface for  the management of  VMs. It
   expects  an  implementation of  the  way  the  cloud controller  controls  the
   instances,  through the  definition of  start, shutdown,  suspend, resume  and
   reboot commands. It also expects  an implementation of the scheduling policies
   used to map instances onto physical machines.
-\item  The Storage  Engine  offers  an interface  for  the  management of  block
-  storage, through the definition of put, get, delete, and list operations.
+
+\paragraph{The Storage  Engine}  offers  an interface  for  the  management of  block
+  storage, through the definition of put, get, delete, and list operations.\\
+
+In order to model a system SimGrid requires two configuration files: 
+\begin{itemize}
+\item a \emph{plaform}  file describing the available  hardware, including hosts
+  capabilities (e.g number of cores, CPU power) and a description of the network
+  (e.g interconnection topology and network link performances),
+\item a \emph{deployment} file which maps the applicative processes to some of
+  the hosts described in the platform.
 \end{itemize}
 
+SCHIaaS adds  to these  a third  configuration file to  describe one  or several
+clouds.   An example  configuration  is shown  in Figure~\ref{fg:cloud.xml},  in
+which the  default implementations that  come with the SCHIaaS  distribution are
+used.  The \emph{storage} and \emph{compute}  sections correspond to the storage
+and compute  engines listed  above.  Each  of these component  are handled  by a
+\emph{controller}   bound  to   some  host   in  the   SimGrid  platform   file.
+Implementations of  the controller's behavior,  that is the storage  and compute
+engines  instanciations, appear  line  2 and  6.  For  the  compute engine,  the
+specific  policy it  uses  to select  the  PM on  which  to start  a  new VM  is
+implemented in  the attached scheduler module  line 10.  Note that  each request
+that the controller sends to the cluster nodes, be it a simple command or a data
+transfer generates network communications that are simulated by SimGrid.
 
+\begin{figure}[hbt] 
+ \lstset{language=xml,label= ,caption= ,numbers=left}
+\begin{lstlisting}
+<cloud  id="myCloud">
+   <storage id="myStorage" engine="org.simgrid.schiaas.engine.storage.rise.Rise">
+      <config controller="controller"/>
+   </storage>
 
-
-
+   <compute engine="org.simgrid.schiaas.engine.compute.rice.Rice"> 		
+      <config controller="controller" image_storage="myStorage"
+              image_caching="PRE" inter_boot_delay="10"/>
+  
+      <scheduler name="org.simgrid.schiaas.engine.compute.scheduler.SimpleScheduler"
+                 type="consolidator"
+                 controller="controller"
+                 delay="1"/>
+  
+      <instance_type id="small" core="1" memory="1000" disk="1690" />				
+      <instance_type id="medium" core="2" memory="1000" disk="1690"/>
+      <instance_type id="large" core="4" memory="1000" disk="1690"/>
+  
+      <image id="myImage" size="1073741824"/>
+      <cluster id="my_cluster" prefix="node-" suffix=".me" radical="1-"/>  
+    </compute>
+</cloud>
+\end{lstlisting}
+\label{fg:cloud.xml}
+\caption{An example \texttt{cloud.xml} file describing the environment of a
+  given cloud, including the custom java classes used to implement the
+  cloud controller behavior.}
+\end{figure}
 
 
 %------ This is the actual system we model through simulation -------------------
