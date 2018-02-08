@@ -197,7 +197,7 @@ against real settings are scarce relatively to the number of projects.
 
 \subsection{Overview}
 The first contribution of this paper is the simulation framework called SCHIaaS,
-that we propose  to model IaaS clouds,  as an extension to  SimGrid. SimGrid was
+that we  propose as an  extension to SimGrid to  model IaaS clouds.  SimGrid was
 originally  developped  20  years  ago  to  evaluate  scheduling  algorithms  in
 distributed  computing environments  such as  grids.   Since then,  it has  been
 largely  extended and  has  become a  framework  able to  tackle  new fields  of
@@ -205,7 +205,7 @@ distributed     computing.      Its      layered     design,     depicted     on
 Figure~\ref{fg:sg-archi}, offers three interfaces to access the simulation layer
 (SIMIX on  figure) which in  turn relies on  the simulation core  engine (SURF).
 Each interface implements a different concurrent programming model: MSG offers a
-CSP-like programming model~\cite{Hoare78}, SMPI  enables MPI programs, and SimDag
+CSP-like programming model~\cite{Hoare78}, SMPI enables MPI programs, and SimDag
 is best  suited to  represent graphs  of dependent tasks.   User code  may built
 directly  upon  one of  these  interfaces  to model  a  field  of interest,  e.g
 peer-to-peer     systems~\cite{QuinsonRT12}     or    MapReduce     applications
@@ -213,7 +213,7 @@ peer-to-peer     systems~\cite{QuinsonRT12}     or    MapReduce     applications
 %
 \begin{figure}[hbt]
 \centering
-\resizebox{.7\textwidth}{!}{%
+\resizebox{.6\textwidth}{!}{%
 \input{gfx-SG}
 }
 \caption{The  layered  architecture of  SimGrid,  with  the additionnal  SchIaaS
@@ -249,7 +249,7 @@ these can be replaced with user-provided code.
 %
 \begin{figure}[hbt]
 \centering
-\resizebox{.7\textwidth}{!}{%
+\resizebox{.6\textwidth}{!}{%
 \input{gfx-Schiaas}
 }
 \caption{Zoom on the SCHIaaS framework}
@@ -330,19 +330,34 @@ transfer, generates network communications that are simulated by SimGrid.
 \section{Case Study}
 \label{sc:context}
 
-In the first part of this article
+As  mentioned  in introduction,  handling  complex  workloads on  a  distributed
+computing infrastructure  requires scheduling and provisionning  tools.  In this
+section, we present the following use  case: two scientific applications (one is
+a bag-of-tasks and  the other a workflow)  are run on different  clouds, and the
+executions is controlled  by a resource management system in  charge of resource
+provisionning and  scheduling. This  section details this  experimental setting,
+which we have used to collect real execution traces. The paper's goal is to show
+that we can model this experimental setting and produce accurate simulations of
+the observed behavior. The way the simulator is build and the evaluation of the 
+simulation is thr object of the next section (Section~\ref{sc:simulation}).
 
-As  mentioned   in  introduction,  complex  workloads   require  scheduling  and
-provisionning tools, and we present in  this section the cloud management system
-together with the actual hardware setup we run to handle these experiments.
 
 \subsection{Schlouder}
 
-Every  experiment log  in  the archive  was generated  by  running a  scientific
-workflow  through a  client-side  cloud resource  broker named  \emph{Schlouder}
-\cite{Michon17}. \emph{Schlouder} automates the provisioning of resources needed
-to execute a workflow, the scheduling of tasks to the provisioned resources and,
-monitors the proper execution of tasks.
+The  resource  management  system  used,   developed  by  our  team,  is  called
+\emph{Schlouder}~\cite{Michon17}.   It is  a client-side  cloud resource  broker
+which automates the provisioning of resources  needed to execute a workflow, the
+scheduling  of  tasks to  the  provisioned  resources  and monitors  the  proper
+execution of tasks. Schlouder was chosen because we have a deep knowledge of its
+internals,  and hence  the capability  to finely  monitor the  execution events,
+which is  a key issue when  tracking down the discrepancies  between reality and
+simulation.
+
+Schlouder is actually a frontend which orchestrates the real resource management
+of  the targeted  cloud, sometimes  referred to  as \emph{cloud  kit}, including
+OpenStack  or  Eucalyptus. Schlouder  can  be  interfaced  with all  cloud  kits
+accepting the EC2 API.
+
 %
 \begin{figure}
 	\centering
@@ -807,7 +822,7 @@ ommssa, without scheduling error cases (91 xps)}
       Filtering the xps showing clocks-related issues (16 xps), the results are perfect:
       all metrics present a mean ae of at most $0.001$.
       
-      %Worst-case: v3.standard.hrt.asap.regular.openstack-icps.2
+      %Worst-case: v3.standard.hrt.asap.regular.openstac-icps.2
       The less accurate simulation shows a makespan absolute error of $0.010$. 
       Actually, the makespan of the simulation is $94s$, whereas it is $95s$ in reality.
       This small difference is due to one lag between two consecutive tasks 
