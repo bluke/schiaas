@@ -197,7 +197,7 @@ against real settings are scarce relatively to the number of projects.
 
 \subsection{Overview}
 The first contribution of this paper is the simulation framework called SCHIaaS,
-that we propose  to model IaaS clouds,  as an extension to  SimGrid. SimGrid was
+that we  propose as an  extension to SimGrid to  model IaaS clouds.  SimGrid was
 originally  developped  20  years  ago  to  evaluate  scheduling  algorithms  in
 distributed  computing environments  such as  grids.   Since then,  it has  been
 largely  extended and  has  become a  framework  able to  tackle  new fields  of
@@ -205,7 +205,7 @@ distributed     computing.      Its      layered     design,     depicted     on
 Figure~\ref{fg:sg-archi}, offers three interfaces to access the simulation layer
 (SIMIX on  figure) which in  turn relies on  the simulation core  engine (SURF).
 Each interface implements a different concurrent programming model: MSG offers a
-CSP~\ref{Hoare78}-like programming model, SMPI  enables MPI programs, and SimDag
+CSP-like programming model~\cite{Hoare78}, SMPI enables MPI programs, and SimDag
 is best  suited to  represent graphs  of dependent tasks.   User code  may built
 directly  upon  one of  these  interfaces  to model  a  field  of interest,  e.g
 peer-to-peer     systems~\cite{QuinsonRT12}     or    MapReduce     applications
@@ -213,14 +213,15 @@ peer-to-peer     systems~\cite{QuinsonRT12}     or    MapReduce     applications
 %
 \begin{figure}[hbt]
 \centering
-\resizebox{.7\textwidth}{!}{%
+\resizebox{.6\textwidth}{!}{%
 \input{gfx-SG}
 }
 \caption{The  layered  architecture of  SimGrid,  with  the additionnal  SchIaaS
   interface}
 \label{fg:sg-archi}
 \end{figure}
-%
+
+
 In this general  picture, SCHIaaS is a new interface  upon MSG. SCHIaaS entities
 use MSG  to communicate with  the core functions  of SimGrid, which  handles the
 operating  system  level  objects,   such  as  network  communications,  running
@@ -236,6 +237,7 @@ levels parameters such as boot and other VM life-cycle processes.  By constrast,
 SimGrid implements hypervisor level functionalities  such as starting or stoping
 a \ac{vm}.
 
+
 \subsection{SCHIaaS's design}
 
 Developped  in Java,  SCHIaaS  has been  designed as  a  modular and  extensible
@@ -243,79 +245,139 @@ framework, allowing modelers to plugin their  own code in all the key components
 which model  the cloud  or application behavior  under study.   Figure \ref{fg:}
 zooms in  the SCHIaaS box  of Figure~\ref{fg:sg-archi}. It shows  the components
 making up SCHIaaS (in  the red box). The boxes with  dashed frames indicate that
-these can replaceable with user-provided code.
+these can be replaced with user-provided code.
 %
 \begin{figure}[hbt]
 \centering
-\resizebox{.7\textwidth}{!}{%
+\resizebox{.6\textwidth}{!}{%
 \input{gfx-Schiaas}
 }
 \caption{Zoom on the SCHIaaS framework}
 \label{fg:}
 \end{figure}
 %
-\begin{itemize}
-\item SCHIaaS Core contains all the management code necessary to set up the data
+\paragraph{SCHIaaS Core} contains all the management code necessary to set up the data
   structures corresponding of the cloud described in the configuration file, and
   to reflect the effects on the  data structures of all the operations triggered
   though the Compute and Storage engines.
-\item The  Compute Engine provides  an interface for  the management of  VMs. It
+
+\paragraph{The  Compute Engine} provides  an interface for  the management of  VMs. It
   expects  an  implementation of  the  way  the  cloud controller  controls  the
   instances,  through the  definition of  start, shutdown,  suspend, resume  and
   reboot commands. It also expects  an implementation of the scheduling policies
   used to map instances onto physical machines.
-\item  The Storage  Engine  offers  an interface  for  the  management of  block
-  storage, through the definition of put, get, delete, and list operations.
+
+\paragraph{The Storage  Engine}  offers  an interface  for  the  management of  block
+  storage, through the definition of put, get, delete, and list operations.\\
+
+\noindent %
+In order to model a system SimGrid requires two configuration files: 
+\begin{itemize}
+\item a \emph{plaform}  file describing the available  hardware, including hosts
+  capabilities (e.g number of cores, CPU power) and a description of the network
+  (e.g interconnection topology and network link performances),
+\item a \emph{deployment} file which maps the applicative processes to some of
+  the hosts described in the platform.
 \end{itemize}
 
+SCHIaaS adds  to these  a third  configuration file to  describe one  or several
+clouds.   An example  configuration  is shown  in Figure~\ref{fg:cloud.xml},  in
+which the  default implementations that  come with the SCHIaaS  distribution are
+used.  The \emph{storage} and \emph{compute}  sections correspond to the storage
+and compute  engines listed  above.  Each  of these component  are handled  by a
+\emph{controller}   bound  to   some  host   in  the   SimGrid  platform   file.
+Implementations of  the controller's behavior,  that is the storage  and compute
+engine  instanciations, appear  line  2  and 6.   For  the  compute engine,  the
+specific  scheduling  policy  which  computes  how VMs  are  mapped  to  PMs  is
+implemented in  the attached scheduler module  line 10.  Note that  each request
+that the controller sends to the cluster nodes, be it a simple command or a data
+transfer, generates network communications that are simulated by SimGrid.
 
+\begin{figure}[hbt] 
+ \lstset{language=xml,label= ,caption= ,numbers=left}
+\begin{lstlisting}
+<cloud  id="myCloud">
+   <storage id="myStorage" engine="org.simgrid.schiaas.engine.storage.rise.Rise">
+      <config controller="controller"/>
+   </storage>
 
-
-
+   <compute engine="org.simgrid.schiaas.engine.compute.rice.Rice"> 		
+      <config controller="controller" image_storage="myStorage"
+              image_caching="PRE" inter_boot_delay="10"/>
+  
+      <scheduler name="org.simgrid.schiaas.engine.compute.scheduler.SimpleScheduler"
+                 type="consolidator"
+                 controller="controller"
+                 delay="1"/>
+  
+      <instance_type id="small" core="1" memory="1000" disk="1690" />				
+      <instance_type id="medium" core="2" memory="1000" disk="1690"/>
+      <instance_type id="large" core="4" memory="1000" disk="1690"/>
+  
+      <image id="myImage" size="1073741824"/>
+      <cluster id="my_cluster" prefix="node-" suffix=".me" radical="1-"/>  
+    </compute>
+</cloud>
+\end{lstlisting}
+\caption{An example \texttt{cloud.xml} file describing the environment of a
+  given cloud, including the custom java classes used to implement the
+  cloud controller behavior.}
+\label{fg:cloud.xml}
+\end{figure}
 
 
 %------ This is the actual system we model through simulation -------------------
 \section{Case Study}
 \label{sc:context}
 
-In the first part of this article
+As  mentioned  in introduction,  handling  complex  workloads on  a  distributed
+computing infrastructure  requires scheduling and provisionning  tools.  In this
+section, we present the following use  case: two scientific applications (one is
+a bag-of-tasks and  the other a workflow)  are run on different  clouds, and the
+executions is controlled  by a resource management system in  charge of resource
+provisionning and  scheduling. This  section details this  experimental setting,
+which we have used to collect real execution traces. The paper's goal is to show
+that we can model this experimental setting and produce accurate simulations of
+the observed behavior. The way the simulator is build and the evaluation of the 
+simulation is the object of the next section (Section~\ref{sc:simulation}).
 
-As  mentioned   in  introduction,  complex  workloads   require  scheduling  and
-provisionning tools, and we present in  this section the cloud management system
-together with the actual hardware setup we run to handle these experiments.
 
 \subsection{Schlouder}
 
-Every  experiment log  in  the archive  was generated  by  running a  scientific
-workflow  through a  client-side  cloud resource  broker named  \emph{Schlouder}
-\cite{Michon17}. \emph{Schlouder} automates the provisioning of resources needed
-to execute a workflow, the scheduling of tasks to the provisioned resources and,
-monitors the proper execution of tasks.
-%
-\begin{figure}
-	\centering
-	\input{schlouder.tex}
-	\caption{The Schlouder cloud broker and its components relating to an
-	Openstack cloud.}
-\end{figure}
-%
-Provisioning is  done through  a cloud  kit interface  that allows  Schlouder to
-communicate with  different clouds  in order  to start  and stops  the necessary
-\acp{vm} to  execute the  workload.  To  account for  the pricing  of commercial
-IaaS, Schlouder views  provisioning in fixed increments of time,  referred to as
-\ac{btu},  machines  idle  when arriving  at  the  end  of  their time  will  be
+The  resource  management  system  used,   developed  by  our  team,  is  called
+\emph{Schlouder} \cite{Michon17}.   It is  a client-side  cloud resource  broker
+which automates the provisioning of resources  needed to execute a workflow, the
+scheduling  of  tasks to  the  provisioned  resources  and monitors  the  proper
+execution of tasks. Schlouder was chosen because we have a deep knowledge of its
+internals,  and hence  the capability  to finely  monitor the  execution events,
+which is  a key issue when  tracking down the discrepancies  between reality and
+simulation.
+
+Schlouder is actually a frontend which orchestrates the real resource management
+system  of  the targeted  cloud,  sometimes  referred  to as  \emph{cloud  kit},
+including      OpenStack      or       Eucalyptus,      as      depicted      on
+Figure~\ref{fg:schlouder}.  Schlouder  can be  interfaced  with  all cloud  kits
+accepting the EC2 API.  While the cloud kit is in charge of starting or stopping
+the  \acp{vm} on  the  physical  machines, tasks  execution  is monitored  using
+SLURM~\cite{YooJG03} which  connects to the  available \acp{vm}, sends the jobs,
+and  monitors job's  states.  To  account for  the pricing  of commercial  IaaS,
+Schlouder  views  provisioning in  fixed  increments  of  time, referred  to  as
+\ac{btu},  machines idle  when arriving  at the  end of  a time  increment being
 automatically shut off.
 %
-Tasks execution  is monitored using  SLURM~\cite{YooJG03} which connects  to the
-available \acp{vm}, send the jobs, and monitors their executions.
-
-A strategy controls provisioning and scheduling decisions, it determines when
-\ac{vm} provisioned and to which \ac{vm} each task is assigned. Schlouder
-provides a few basic strategies and new ones can be added trivially. Strategies
-can affect the workload's \emph{makespan}, the \acp{vm} usage rate, and the
-number of opened \acp{btu} (i.e.\ the price of the experiment on a commercial
-cloud). The experiments in our archive mainly use two strategies, \ac{asap} and
-\ac{afap}
+While   classical  scheduling   algorithm  have   long  mainly   considered  the
+\emph{makespan}  minimization as  sole objective,  Cloud computing  adds to  the
+client-side problem statement the economic  \emph{cost} of renting the resources
+as another  objective.  Hence,  provisionning and  scheduling is  a bi-objective
+optimization  problem.  Schlouder makes  its  decisions  based on  the  workload
+submitted and some \emph{strategy} specified by  the user. A strategy is defined
+by a provisioning (how much instances to start or stop) and scheduling (when and
+where assign the  tasks) algorithm, and a goal reagarding  the cost and makespan
+objectives.   Schlouder provides  a few  basic strategies  and new  ones can  be
+trivially  added.  Strategies can  affect  the  workload's \emph{makespan},  the
+\acp{vm} usage rate, and the number of  opened \acp{btu} (i.e.\ the price of the
+experiment on a commercial cloud). The experiments in our archive mainly use two
+strategies, \ac{asap} and \ac{afap}
 
 \begin{description}
 	\item[\ac{asap}] will attempt to execute tasks as early as possible by
@@ -326,32 +388,41 @@ cloud). The experiments in our archive mainly use two strategies, \ac{asap} and
 		additional \ac{btu}, in which case it will boot a new \ac{vm}.
 \end{description}
 
-Predicted  tasks runtimes,  as well  as tasks  dependencies, are  user-provided.
-Scheduling is  done dynamically, as  soon as tasks  are submitted and  all their
-dependencies have been completed. Once assigned to a designated \ac{vm} jobs are
-not rescheduled. However, if a \ac{vm}  fails to boot Schlouder will provision a
-new one to replace it.
+To  compute   the  schedule,  predicted   tasks  runtimes,  as  well   as  tasks
+dependencies, are  user-provided.  Scheduling  is done  dynamically, as  soon as
+tasks  are  submitted and  all  their  dependencies  have been  completed.  Once
+assigned to a designated \ac{vm} jobs are not rescheduled. However, if a \ac{vm}
+fails to boot Schlouder will provision a new one to replace it.
+%
+\begin{figure}
+	\centering
+        \scalebox{.8}{
+	\input{schlouder.tex}
+        }
+	\caption{The Schlouder cloud broker and its components relating to an
+	Openstack cloud.}
+      \label{fg:schlouder}
+\end{figure}
+%
+
 
 %---------------------------- H A R D W A R E-----------------------------------
 \subsection{Hardware Setup}
 
-Evaluation  of simulation  is done  by comparing  simulation logs,  against logs
-generated by running  actual scientific workflows on  multiple platforms. During
-this  study  we   gathered  traces  for  274  experimental   executions  on  two
-significantly different environments that are described hereafter.
-
+Our case study encompasses both a private cloud with no perturbation from other
+users and a public cloud which is multi-tenant. 
 
 \paragraph{Private Cloud}
 
 Our private cloud is based on two local nodes sporting dual $2.64GHz$ Intel Xeon
 processors (X5650),  for a  total of  96 cores. Nodes  operated on  Ubuntu 12.04
-distributions and virtualisation  is achieved using KVM.  Openstack 2012.1.3 was
+distributions and virtualisation is achieved  using KVM.  Openstack 2012.1.3 was
 used as a  cloud interface. This cloud was build  on perfectly homogeneous nodes
-and  devoid  of other  users.  For  data storage  these  experiments  rely on  a
+and  devoid of  other  users.  For  data  storage these  experiments  rely on  a
 \ac{nfs}. Special  attention was taken  to not  overbook \acp{vm} by  caping the
 number of  single core \acp{vm}  to 25. Due to  the experimental nature  of this
-cloud configurations  have change  overtime. Table  \ref{tab:platforms} regroups
-configurations  of  all cloud  versions.  We  will  referrer  to this  cloud  as
+cloud, two configurations were used overtime. Table \ref{tab:platforms} regroups
+configurations  of all  cloud  versions.   We will  referrer  to  this cloud  as
 \texttt{openstack-icps.}\emph{version}.
 
 
@@ -391,7 +462,7 @@ cloud site followed by the version number.
 \end{table}
 
 
-\subsection{Use cases: Applications characteristics}
+\subsection{The Applications}
 \label{sc:app}
 
 Our study is  based on the experimentation with two  test-case applications that
@@ -400,20 +471,18 @@ load, and task dependency.
 
 \subsubsection{OMSSA}
 
-The \ac{omssa}~\cite{Geer2004}  comes from the  field of  biology, it is  used in
+The \ac{omssa}~\cite{Geer2004}  comes from the field  of biology, it is  used in
 tandem mass  spectrometry analysis  (also known as  MS/MS analysis)  to identify
 peptides   from   the   mass   and    fragment   ions   obtained   by   a   mass
 spectrometer. \ac{omssa} matches measurements from the mass spectrometer, called
-spectra, to a protein database.
-
-The \ac{omssa}  workload features fully  independent tasks, making  it \ac{bot},
-since every spectra  within a set can be submitted  independently to \ac{omssa}.
-With a  \emph{communication-to-computation} ratio comprised between  20\% and \%
-\ac{omssa} is considered an CPU-intensive workload.
-
-This application was run with 4 different workload covering 2 different
-mass~spectrometer resolutions of two different protein solutions, denoted
-\emph{brs},\emph{hrs},\emph{brt} and \emph{hrt}.
+spectra,  to  a  protein  database.   The  \ac{omssa}  workload  features  fully
+independent tasks, making it a \ac{bot}, since every spectra within a set can be
+submitted        independently        to       \ac{omssa}.         With        a
+\emph{communication-to-computation}   ratio  comprised   between  20\%   and  \%
+\ac{omssa} is  considered an  CPU-intensive workload.  This application  was run
+with 4 different workload covering  2 different mass~spectrometer resolutions of
+two  different protein  solutions, denoted  \emph{brs},\emph{hrs},\emph{brt} and
+\emph{hrt}.
 
 \subsubsection{Montage}
 
@@ -448,6 +517,12 @@ run on  images of the \emph{Pleiade}  star cluster at 3  different output sizes,
 
 %-------------------------- E V A L U A T I O N -------------------------------  
 \subsection{Evaluation}
+
+Evaluation  of simulation  is done  by comparing  simulation logs,  against logs
+generated by running  actual scientific workflows on  multiple platforms. During
+this  study  we   gathered  traces  for  274  experimental   executions  on  two
+significantly different environments that are described hereafter.
+
 
 The evaluation of the simulation accuracy of such a system is both a complex and
 tedious task.  It  is complex because the simple comparison  of the observed and
@@ -755,7 +830,7 @@ ommssa, without scheduling error cases (91 xps)}
       Filtering the xps showing clocks-related issues (16 xps), the results are perfect:
       all metrics present a mean ae of at most $0.001$.
       
-      %Worst-case: v3.standard.hrt.asap.regular.openstack-icps.2
+      %Worst-case: v3.standard.hrt.asap.regular.openstac-icps.2
       The less accurate simulation shows a makespan absolute error of $0.010$. 
       Actually, the makespan of the simulation is $94s$, whereas it is $95s$ in reality.
       This small difference is due to one lag between two consecutive tasks 
