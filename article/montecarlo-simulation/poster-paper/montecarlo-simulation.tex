@@ -1,0 +1,235 @@
+\documentclass[10pt,conference,compsocconf]{IEEEtran}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{url}
+\usepackage{comment}
+\usepackage{graphicx}
+\usepackage{multirow}
+\usepackage{booktabs}
+\usepackage{amsmath}
+
+\usepackage{tikz}
+\usetikzlibrary{fit}
+
+\usepackage{acronym}
+\acrodef{iaas}[IaaS]{Infrastructure as a Service}
+\acrodef{SaaS}{Software as a Service}
+\acrodef{PaaS}{Platform as a Service}
+\acrodef{dag}[DAG]{directed acyclic graph}
+\acrodef{vm}[VM]{Virtual Machine}
+\acrodef{pm}[PM]{Physical Machine}
+\acrodef{btu}[BTU]{billing time unit}
+\acrodef{EC2CU}{EC2 Compute Unit}
+\acrodef{HPC}{High Performance Computing}
+\acrodef{unistra}{University of Strasbourg}
+\acrodef{rv}[RV]{random variable}
+\acrodef{pdf}[PDF]{probability density function}
+\acrodef{cdf}[CDF]{cumulative distribution function}
+\acrodef{mcs}[MCS]{Monte-Carlo simulation}
+\acrodefplural{mcs}[MCS's]{Monte-Carlo simulations}
+\acrodef{des}[DES]{discrete event simulation}
+\acrodef{ci}[CI]{confidence interval}
+
+\newcommand*\rot{\rotatebox{90}}
+\newcommand{\pmpc}[1]{$\pm#1\%$}
+\newcommand{\etal}[1]{\emph{#1 et al.}}
+\newcommand{\pc}[1]{$#1\%$}
+
+
+\let\OLDthebibliography\thebibliography
+\renewcommand\thebibliography[1]{
+  \OLDthebibliography{#1}
+  \setlength{\parskip}{0pt}
+  \setlength{\itemsep}{5pt plus 0.5ex}
+}
+
+%\IEEEtriggeratref{15}
+
+%\title{Modeling the accuracy of Monte-Carlo approach for Cloud based workflow
+%  simulations.}
+%\title{Executing Batch Jobs on Clouds: How to Predict Reality Accurately?}
+\title{Improving Cloud Simulation using the Monte-Carlo Method}
+
+
+\author{\IEEEauthorblockN{Luke~Bertot 
+			and Stéphane~Genaud 
+			and Julien~Gossa}
+	\IEEEauthorblockA{Icube-ICPS --- UMR 7357, Univeristé de Strasbourg, CNRS\\
+		P\^ole API Blvd S. Bant, 67400 Illkirch-Graffenstaden\\
+		email: \url{lbertot@unistra.fr}, \url{genaud@unistra.fr}, \url{gossa@unistra.fr}}
+	}
+
+
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+  In the  cloud computing  model, cloud providers  invoice clients  for resource
+  consumption. Hence, tools helping the client to budget the cost of running his
+  application are  of pre-eminent  importance. However, the opaque and 
+  multi-tenant nature of clouds, make job runtimes both variable and hard to 
+  predict.  In this  paper, we  propose an improved simulation framework that 
+  takes into account  this variability using the Monte-Carlo method.
+
+  We consider  the execution of  batch jobs on  an actual platform, scheduled
+  using typical  heuristics based  on the  user estimates  of job  runtimes.  We
+  model  the observed  variability through  simple  distributions to use  as
+  inputs  to the  Monte-Carlo  simulation. We show that, our method can capture 
+  over  90\% of the empirical observations of makespans.
+\end{abstract}
+
+\begin{IEEEkeywords}
+cloud computing, computer simulation, monte carlo methods.
+\end{IEEEkeywords}
+
+%\tableofcontents
+
+\section{Introduction.}
+
+\subsection{Simulation}
+
+Because they allow for experiments without having to build or even use a real 
+platform, simulations are a cornerstone of the study of distributed
+systems and clouds.  
+
+Most cloud simulators  are based on \ac{des}. In \aclp{des}  the simulation is a
+series  of events  changing the  state of  the simulated  system.
+
+However, when the simulated system is subject to variability, it is difficult to
+establish  the  validity of  simulation  results  formally. Indeed,  given  some
+defined inputs, a DES outputs a single deterministic result, while a real system
+will output  slightly different results  at each repeated execution
+
+\subsection{Stochastic Simulation and Monte-Carlo Method}
+
+\label{sc:relwork-stochastic}
+For  more   comprehensive  predictions  in  such   variable  environments,  the
+simulation must  be \emph{stochastic}.  In stochastic simulations  inputs become
+the distribution of possible values for the parameters.
+The  result  of one  such  simulation  is  itself  a distribution of the
+possible results.
+
+Works on heterogeneous grids~\cite{Li97} and PERT networks~\cite{Ludwig01} give
+a numerical method to solving stochastic simulations of \ac{dag}. This numerical
+approach is computationally intensive, and its core constraint, the jobs
+\acp{rv} independence can not be guaranteed in all cases.
+
+Instead  of numerically computing  the result, an \ac{mcs} samples the possible
+outcomes by testing  multiple \emph{realizations} in a  deterministic fashion.  A
+realization is obtained by drawing a runtime that follows their job's respective 
+distribution for every job in the  application. 
+This allows to simulate each realization using traditional
+methods like \ac{des}.  Eventually, given enough realizations, the distribution of
+the simulation  results will  tend towards the  distribution of the equivalent
+stochastic  simulation. 
+
+\section{Work Context}
+\label{sec:work-context}
+
+The  study conducted  in this  paper  is built upon a genuine comparison  between
+experiments  run in  actual environments  and experimental  results obtained  by
+simulation.  
+
+\subsection{Real Execution Setup}
+Using the Schlouder~\cite{Michon17} cloud batch-scheduler, we carried out
+multiple executions of a scientific application, OMSSA~\cite{Geer2004} on a
+private cloud.
+The application was scheduled 200 times favoring alternatively low runtimes (ASAP) or 
+low cost (AFAP). These executions were performed on an Openstack 96-core cloud. 
+
+\subsection{Simulated Execution Setup}
+Using the SimGrid~\cite{simgrid} simulation framework  be build a simulator
+capable of simulating our cloud platform, scheduling, and executions. This
+simulator has been fine tuned against the real execution traces, and is precise
+to the second for executions performed by Schlouder. This \ac{des} outputs the
+total runtime of the simulated application, called \emph{makespan}, and the cost
+of running the application, called \emph{BTU} (\emph{billing time unit}).
+
+\section{Enriched Simulation Framework}\label{sec:enriched-sim}
+
+\subsection{Simulation process}
+\begin{figure}
+	\centering
+	\resizebox{0.9\linewidth}{!}{%
+		\input{gfx/mc-process-pp.tex}
+		}
+\caption{Overview of a Monte-Carlo simulation~: $500$ realizations are generated
+by drawing runtimes for each of the $n$ jobs provided distributions; every realization is
+then simulated; the resulting makespan samples make up the final result M.}\label{fig:mc-process}
+\end{figure}
+
+As depicted in Figure~\ref{fig:mc-process} the \ac{mcs} consists in repeatedly
+drawing runtimes for each jobs, to form realizations. Each realizations is the
+simulated independently and the resulting makespans, the total runtime of of the
+application, are aggregated in a distribution. 
+
+\subsection{Input Modeling}\label{sec:im}
+The \ac{mcs} requires a distribution for every input variables (in our case job
+runtimes). Although more precise input distributions will always yield more
+precise results we aim to show that even simple models will provide actionable
+simulation results. In our model, the jobs runtimes follow a uniform
+distribution centered on the average expected runtime for a given job (
+$\bar{R_j}$). The relative spread of each distribution represents the expected
+platform variability as  and is called perturbation level ($P$). As such the
+distribution of possible values for a job $j$ $D_j$ is expressed as :
+\begin{equation}
+	D_j=\mathcal{U}(\bar{R_j}\cdot{}(1-P), \bar{R_j}\cdot{}(1+P))
+\end{equation}
+\begin{equation}
+	\bar{R_j} = \underset{n}{\textrm{mean}}\{r_j^n\}
+\end{equation}
+We computed the expected variability of our platform as being the average across
+all jobs of the worst deviations from the expected value for each job. 
+The perturbation level given by this method is $P\approx{}10\%$ for both
+strategies.% Using a similar metric, \cite{pics} also 
+%observed most deviations to be within 10\% of the average runtime when working on
+%Amazon EC2 instances with dedicated CPUs.
+
+\section{Evaluation}
+\label{sec:eval}
+\begin{figure}
+	\center
+	\includegraphics[width=0.9\linewidth]{gfx/PP_fit.pdf}
+	\caption[caption]{Makespan and BTU count distribution for OMSSA Monte
+	  Carlo Simulation compared to reality at 10\% perturbation level.\\ 
+	  \textit{Reading example: Simulating AFAP with OMSSA leads to makespans 
+	  roughly ranging from 12800 s to 13400 s and BTU counts ranging from 33 to 36.}
+	}
+	\label{fig:fit}
+\end{figure}
+Using this model,  we ran a 500 iterations \ac{mcs} for every strategy.
+The  resulting distributions are  shown  in  Figure~\ref{fig:fit}. 
+The makespan  density  graph  show  the simulation  result  distribution as
+filled  curves and the  real  observed executions are shown as  non-filled 
+curves. On the \ac{btu} count graph, the left bar represents
+the empirical data, and the right  bar the prediction from the simulation. 
+
+The distribution  of simulated makespan covers fairly  well the
+ranges of  observed makespans, notwithstanding a  slight right skew and shift of
+the empirical makespan distribution. Likewise the range of BTU numbers required 
+for an execution is correct but the simulated distribution differs slightly. The
+divergence between the simulated and observed distribution is do to our
+simplified model described in section~\ref{sec:im}. We quantify this divergence
+by fitting the simulated distribution to a Normal distribution, and producing
+\ac{ci}. The 95\%\ac{ci} capture 90\% of real execution in ASAP and 92\% in
+AFAP. Using the 99\%\ac{ci} yields capture rates of 98\% and 100\% respectively.
+
+\section{Conclusion}
+In this paper, we propose a \acl{mcs} extension  to a  discrete  event  simulator based  on
+SimGrid.  This  extension provides stochastic predictions which are more
+informative than single values produced by
+traditional discrete  event simulators. In this work we show that the
+variability we seek to account for can be modeled  by a  single parameter,
+called perturbation  level and applied  to all  job runtimes. We apply
+our method in  a real setting, for which we have collected  execution traces.  
+At  the light of  these empirical observations, our study shows that the
+proposed method could capture over 90\% of the observed makespans given  an
+appropriate perturbation  level.
+
+\bibliographystyle{IEEEtran}
+\bibliography{montecarlo-simulation}
+
+\end{document}
+% vim:spell spelllang=en:
