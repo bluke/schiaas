@@ -5,13 +5,13 @@ rounded corners
 }
 ]
 %% Origin node
-\node[align=center]at(0,2){Job\\distributions};
-\node at(0,0)(orig){$\{T_1,\ldots,T_n\}$};
+\node[align=center]at(0,2){Task\\distributions};
+\node at(0,0)(orig){$\{R_1,\ldots,R_n\}$};
 %% Realisations
 \node at(3.5,2){Realizations};
-\node[]at(3.5,1)(pert1){$\{t_1,\ldots,t_n\}_1$};
+\node[]at(3.5,1)(pert1){$\{r_1,\ldots,r_n\}_1$};
 \node at(3.5,0){\vdots};
-\node at(3.5,-1)(pert5){$\{t_1,\ldots,t_n\}_{500}$};
+\node at(3.5,-1)(pert5){$\{r_1,\ldots,r_n\}_{500}$};
 \draw[-{latex}](orig)--(pert1);
 \draw[-{latex}](orig)--(pert5);
 %%
