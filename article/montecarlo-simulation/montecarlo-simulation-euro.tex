@@ -462,7 +462,7 @@ user with  a range of  possible makespans. In this  section we propose  a simple
 model to  represent the variability of  the whole system using a single factor
 parameter to create  a small range around every estimated  runtime. We test this % ne pas mélanger modele/approche et valdiation
 model against our backlog of real runs. The key finding detailed hereafter is
-that this simple method  can be precise enough for the  \ac{mcs} to predict over
+that this simple model can be precise enough for the  \ac{mcs} to predict over
 90\% of real runs.
 
 This model for the runtimes \acp{rv} uses uniform distributions ($\mathcal{U}$). 
@@ -508,8 +508,8 @@ Amazon EC2 instances with dedicated CPUs.
 	}
 	\label{fig:fit}
 \end{figure}
-We ran a 500 iterations \ac{mcs} for every strategy application group using
-the task models described in  the previous section. The  resulting distributions
+We ran a 500-iteration \ac{mcs} for every strategy application group using
+the task model described in  the previous section. The  resulting distributions
 are  shown  in  Fig.~\ref{fig:fit}.   The makespan  density  graphs  show  the
 simulation  result  distribution   as  filled  curves. The  real  observed
 executions, as in  Fig.~\ref{fig:realbrs}, are shown as  non-filled curves. On 
@@ -660,7 +660,7 @@ weaknesses of any strategy, regardless of complexity.
 
 \paragraph{Limitations of the enriched simulation.}\label{sec:lim}
 %
-In this paper all the \ac{mcs} presented used 500 iterations. Such an \ac{mcs}
+In this paper all the \ac{mcs} presented used 500-iteration. Such an \ac{mcs}
 requires in average 15 minutes of CPU time, and iterations can be parallelized.
 We determined that this was enough in the context of our simulation as
 additional simulations did not change the results and only marginally increased
@@ -672,7 +672,7 @@ more samples are required. In our case not only the number of tasks was low, 223
 tasks for OMSSA and 184 tasks for Montage, but with $P\!=\!10\%$ the input variable
 distribution was compact. At $P=40\%$ there was a significant drop in the
 confidence of our fitting method. We are currently studying the relationship
-between perturbation level and the number of required MCS-iterations.
+between perturbation level and the number of required MCS-iteration.
 
 \section{Conclusion}
 Predicting  the execution  behavior  of complex  workloads in  the  cloud is  an
@@ -689,11 +689,11 @@ billing cost  and makespan  produced by  traditional discrete  event simulators.
 The \acl{mcs}  must be parameterized to  draw random values from  relevant value
 spaces. In this work we show that the  variability we seek to account for can be
 modeled  by a  single parameter,  called perturbation  level and applied  to all
-task runtimes. Second, we apply our method in  a real setting, on both a
+task runtimes. Second, we apply our model in  a real setting, on both a
 bag-of-tasks and a workflow  application, for which we have collected  execution
 traces, using scheduling and provisioning strategies that  aim to optimize
 either the makespan or the  rental cost.  At  the light of  these empirical
-observations,  our study shows that the proposed method could capture over 90\%
+observations,  our study shows that the proposed model could capture over 90\%
 of the observed makespans for  all  combinations  of  application   and
 scheduling  strategies  given  an appropriate perturbation  level. We now aim
 to test our simulator  on more use cases and platforms.  In particular as a
