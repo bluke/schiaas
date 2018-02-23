@@ -81,37 +81,32 @@
 
 \section{Introduction}
 
-
 Over the  last decade, the advancement  of virtualization techniques has  led to
 the emergence of new economic  and exploitation approaches of computer resources
-in  \ac{iaas},  one form  of cloud  computing. In  this model,  all
-computing resources  are made available  on demand by third-party  operators and
-paid based  on usage.  The  ability to provision  resources on demand  is mainly
-used in two ways.  First, it can serve for scaling purposes where new machines
-are  brought online  to  face higher 
-workloads.  This approach  is used  for  providing services  and allows  for a  lower
-baseline  cost  while  still  being  able  to deal  with  spikes  in  demand  by
-provisioning machines on the fly. Secondly, it is useful for parallelizing tasks
-to achieve a shorter makespan (\textit{i.e.}\ the time between the submission of the first
-task and the completion of the  last task)  at equal  cost, this  approach being  often used  for
+in  \ac{iaas}, one  form  of  cloud computing.   In  this  model, all  computing
+resources are made  available on demand by third-party operators  and paid based
+on usage.  The  ability to provision resources  on demand is mainly  used in two
+ways.  First, it  can serve for scaling purposes where  new machines are brought
+online to face higher workloads and allows for a lower baseline cost.
+Secondly, it  is useful  for parallelizing  jobs to  achieve a  shorter makespan
+(\textit{i.e.}\  the time  between  the  submission of  the  first  job and  the
+completion of the  last job) at equal  cost, this approach being  often used for
 scientific  and  industrial  workloads  when runtime  is  heavily  dependent  on
 computing power.  This  approach is made possible by the  pricing model of cloud
-infrastructures, as  popularized by AWS\footnote{Amazon Web  Services}, in which
-payment  for computing  power, provided  as \acp{vm},  happens in  increments of
-arbitrary lengths  of time, \ac{btu}, usually  of one hour. Running  two \acp{vm}
-side by side for one \acp{btu} actually costs the same as running one \ac{vm} for two
-\acp{btu}, but every \ac{btu} started is owed in full.
-
+infrastructures, as  popularized by Amazon Web Services, in which
+payment  for computing  power provided  as \acp{vm},  happens in  increments of
+arbitrary lengths of  time, \ac{btu}, usually of one hour. % Running two \acp{vm}
+%side by side  for one \acp{btu} actually  costs the same as  running one \ac{vm}
+%for two \acp{btu}, but every \ac{btu} started is owed in full.
+%
 This model  offers the client  an almost complete freedom  to start or  stop new
-servers as long as it can be afforded. However, for distributed applications, it  
-quickly  becomes  difficult  to manually  provision  the
-resources in an  efficient way.  The use of a  scheduler becomes unavoidable for
-such workloads.   In this paper, we  are interested in predicting  the execution
-time  and cost  of such  workloads, in  which the  scheduling plays  an
-important role.  In  this study, we consider two  opposite scheduling strategies
-to put forward their impact on execution behaviour.
-%--[We will review in the related work section several other scheduling approaches.]
-
+servers as long as it can be afforded. However, for distributed applications, it
+quickly becomes  difficult to manually  provision the resources in  an efficient
+way.  The  use of a scheduler  becomes unavoidable for such  workloads.  In this
+paper,  we are  interested in  predicting the  execution time  and cost  of such
+workloads, in which  the scheduling plays an important role.   In this study, we
+consider  two opposite  scheduling strategies  to  put forward  their impact  on
+execution behaviour.
 
 %----------------------- prediction tools --------------------------------------
 Independently of scheduling decisions, the accurate prediction of the runtime of
@@ -128,11 +123,11 @@ cluster   compute  instances),   has  also   been  measured   by  a   number  of
 benchmarks. One of the most comprehensive  and recent survey of such reports and
 further benchmarks has been published in~\cite{LeitnerC16}. We will see in this 
 article that our observations fit with the figures presented in this survey. 
-
-This  variability increases  the difficulty  of modeling task execution  times,
-which is  already difficult  enough, as  shown in~\cite{Lastovetsky05}.  In this
-regard, the  prediction is highly dependent  on the underlying simulator  of the
-system  and on  the phenomena  it can  capture.  In this  work, we  rely on  the
+%
+This  variability increases  the difficulty  of modeling task execution  times.
+%which is  already difficult  enough, as  shown in~\cite{Lastovetsky05}.  
+In this regard,  the prediction is highly dependent on  the underlying simulator
+of the system and on the phenomena it can capture.  In this work, we rely on the
 SimGrid~\cite{simgrid} simulation  toolkit, enabling us to  build discrete event
 simulators of distributed systems such as Grids, Clouds, or HPC systems. SimGrid
 has   been    chosen   for    its   well-studied   accuracy    against   reality
@@ -141,34 +136,32 @@ description  of the  hardware platform,  its  network model  takes into  account
 network contention in presence of multiple communication flows.
 
 However, we may not be able to provide a fully accurate platform description, or
-be unable  to estimate  the network  cross-traffic, yielding  a distortion  between
-simulation and reality.  To deal with this problem, the  standard approach is to
-consider task runtimes to be stochastic. Every task can be  modeled by a \ac{rv}
-that models the whole spectrum of possible runtimes. These \acp{rv} are the basis
-required for a stochastic simulation.  Such simulations output \acp{rv}
-of the  observed phenomenon (\emph{makespan}  or \emph{\ac{btu}}) which  in turn
-can  be  used to  create  intervals  of  possible  results with  their  assorted
-confidence.
-
+be unable to  estimate the network cross-traffic, yielding  a distortion between
+simulation and reality.  To deal with  this problem, the standard approach is to
+consider task runtimes to be stochastic. Every  task can be modeled by a \ac{rv}
+that models  the whole  spectrum of  possible runtimes.  These \acp{rv}  are the
+basis required for a stochastic simulation.  Such simulations output \acp{rv} of
+the observed phenomenon  (\emph{makespan} or \emph{\ac{btu}}) which  in turn can
+be used to create intervals of possible results with their assorted confidence.
+%
 In this paper, we propose a stochastic method to enrich the classical prediction
 based  on the  discrete-event simulator  SimGrid,  and we  study the  conditions
 needed for  this approach to be  relevant. This study  is carried out in  a real
 setting,  described in  section~\ref{sec:work-context},  where the  applications
 use-cases, the scheduler, and the  experimental observations are presented.  The
 stochastic     framework     we     propose     is     then     presented     in
-section~\ref{sec:enriched-sim}  and is  evaluated in  section~\ref{sec:eval}. We
-finally conclude by  discussing in section~\ref{sec:disc} the possible
-improvements and the  limits of the approach.
+section~\ref{sec:enriched-sim}  and is  evaluated in  section~\ref{sec:eval}. %We
+%finally conclude by  discussing in section~\ref{sec:disc} the possible
+%improvements and the  limits of the approach.
 
 
 \section{Related Work}
 
 \subsection{Simulation}
 
-Because they allow for experiments without having to build or even use a real 
-platform, simulations are a cornerstone of the study of distributed
-systems and clouds.  
-
+%Because they allow  for experiments without having  to build or even  use a real
+%platform, simulations are a cornerstone of  the study of distributed systems and
+%clouds.
 Most cloud simulators  are based on \ac{des}. In \aclp{des}  the simulation is a
 serie  of events  changing the  state of  the simulated  system.  For  instance,
 events can  be the  start (or  end) of computations  or of  communications.  The
@@ -183,10 +176,9 @@ example,  or through  platform  description  files, as  is  mostly  the case  in
 SimGrid~\cite{simgrid}.   The  application  description  consists in  a  set  of
 computing and communicating tasks, often described as an  amount of computation
 or communication to perform. The simulator  computes their duration based on the
-platform specification, and its CPU and network models.  An alternative approach
-is  to directly  input the task  durations extrapolated  from actual  execution
-traces.
-
+platform specification, and its CPU and network models.  %An alternative approach
+%is  to directly  input the task  durations extrapolated  from actual  execution
+%traces.
 
 The available  cloud \acp{des} can  be divided in  two categories. In  the first
 category are  the simulators  dedicated to  study the  clouds from  the provider
@@ -254,7 +246,7 @@ the dependencies between those tasks.  Each vertex can then be assigned its resp
 representing  the possible  duration for  the execution  of the  whole \ac{dag},
 \textit{i.e.} the \emph{makespan}. An \ac{rv} is  defined by its \ac{pdf}  and \ac{cdf},
 where  the   \ac{cdf}  is  obtain   by  integrating  the  \ac{pdf}.
-The numerical approach presented in~\cite{Li97, Ludwig01} show  that
+The numerical approach presented in~\cite{Li97,Ludwig01} show  that
 when  tasks' runtimes  are  independent, the  makespan of  successive tasks is a
 convolution product  of the individual  tasks' \acp{rv}, while the  makespan of
 parallel tasks joining is the  product of  the tasks' respective \acp{cdf}. This
