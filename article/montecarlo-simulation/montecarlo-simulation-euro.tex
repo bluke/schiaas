@@ -464,7 +464,7 @@ In this  paper these execution  traces are used  to generate our  \ac{mcs} input
 compare  the  makespan  and  \ac{btu}  distributions  of  the  \ac{mcs}  to  the
 distribution observed in the corresponding traces. For this purpose, traces from
 comparable    runs     are    grouped     by    application     and    strategy.
-Figure~\ref{fig:realbrs} presents  the distribution  of resulting  makespans and
+Fig.~\ref{fig:realbrs} presents  the distribution  of resulting  makespans and
 \ac{btu}  counts.  For  OMSSA, ASAP  yields a  makespan variation  in the  range
 [12811s;13488s] (variability  ~5\%) with a  constant BTU  count of 40,  and AFAP
 yields [13564s;14172s] (4\%) with a BTU  count ranging [33;36]. For Montage, the
@@ -527,7 +527,7 @@ Amazon EC2 instances with dedicated CPUs.
 \end{figure}
 We ran a 500 iterations \ac{mcs} for every \{strategy, application\} group using
 the task models described in  the previous section. The  resulting distributions
-are  shown  in  Figure~\ref{fig:fit}.   The makespan  density  graphs  show  the
+are  shown  in  Fig.~\ref{fig:fit}.   The makespan  density  graphs  show  the
 simulation  result  distribution   as  filled  curves. The  real  observed
 executions, as in  fig.~\ref{fig:realbrs}, are shown as  non-filled curves. On 
 the \ac{btu} count graphs, the  left bar represents
@@ -614,19 +614,18 @@ encountered in our work with \ac{mcs}.
 	}
 	\label{fig:int}
 \end{figure}
-We have so  far set the perturbation level  to a value that was relevant to the
-real system observed  (see Section~\ref{sec:im}).  A subsequent question is how
-does the prediction change when increasing this perturbation level. In this
-section we will focus on simulations of makespans using the ASAP strategy.
-Figure~\ref{fig:int} presents the 95\% \acp{ci} obtained through the normal
-distribution fitting of simulations with both a 10\%
-and a 40\% perturbation  level. Notice that a 40\% perturbation level may be 
-experienced in current cloud provider offers when renting shared instances
-(\cite{LeitnerC16}). On the makespan interval graphs  (first and third
-subfigures  from left  to right)  the boxes  represent the  span of the \ac{ci}
-interval. The mean simulated makespan ($\mu{}$) represented by the vertical bar
-inside the interval. In the middle row of these subfigures, the interval of 
-real observed  makespans over all runs.
+We have so  far set the perturbation level  to a value that was  relevant to the
+real system observed  (see Section~\ref{sec:im}).  A subsequent  question is how
+does the  prediction change  when increasing this  perturbation level.   In this
+section  we will  focus  on simulation  of makespans  using  the ASAP  strategy.
+Fig.~\ref{fig:int}  presents  the  95\%  \acp{ci} obtained  through  the  normal
+distribution fitting of  simulations with both P=10\% and P=40\%.  Notice that a
+40\% perturbation level may be experienced in current cloud provider offers when
+renting shared  instances (\cite{LeitnerC16}).  On the  makespan interval graphs
+(first and third subfigures from left to  right) the boxes represent the span of
+the \ac{ci}  interval. The mean  simulated makespan ($\mu{}$) is  represented by
+the vertical bar inside the interval. In the middle row of these subfigures, the
+interval of real observed makespans over all runs.
 
 The leftmost subfigure presents the \acp{ci} for the \{OMSSA, ASAP\} group at
 40\% and 10\% perturbation levels. With the increase of the perturbation level
