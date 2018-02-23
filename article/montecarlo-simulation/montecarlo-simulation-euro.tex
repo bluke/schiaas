@@ -223,9 +223,10 @@ establish  the  validity of  simulation  results  formally. Indeed,  given  some
 defined inputs, a DES outputs a single deterministic result, while a real system
 will output  slightly different results  at each repeated execution.   Hence, in
 practice  the simulation  is informally  regarded as  valid if  its results  are
-``close'' to one or  some of the real observations.  Notice  however that in the
-field  of grid  or cloud  computing, published  results in  terms of  validation
-against real settings are scarce relatively to the number of projects.
+``close'' to one or  some of the real observations. 
+%Notice  however that in the
+%field  of grid  or cloud  computing, published  results in  terms of  validation
+%against real settings are scarce relatively to the number of projects.
 
 \paragraph{Stochastic Simulation and Monte-Carlo Method.}
 For  more   comprehensive  predictions  in  such   variable  environments,  the
@@ -389,7 +390,7 @@ model the input \acp{rv} representing the tasks' runtimes.
 	\resizebox{0.6\textwidth}{!}{%
 		\input{gfx/mc-process.tex}
 		}
-\caption{Overview of a Monte-Carlo simulation~: $500$ realizations are generated
+\caption{Overview of a Monte-Carlo simulation: $500$ realizations are generated
 by drawing runtimes for each of the $n$ tasks provided RVs; every realization is
 then simulated; the resulting makespan samples make up the final result M.}\label{fig:mc-process}
 \end{figure}
@@ -415,8 +416,7 @@ also the cost for each execution in number of \ac{btu}.
 \begin{figure}
 	\centering
 	\includegraphics[width=\textwidth]{gfx/real_plot.pdf}
-	\caption[caption]{Distributions of makespan and BTU count across the OMSSA and 
-	  Montage observed executions.%\\ 
+	\caption[caption]{Empirical observations for makespan distributions and \#BTU.%\\ 
 	  %\textit{Reading example: Using AFAP with OMSSA leads to makespans 
 	  %roughly ranging from 12800 s to 13600 s and BTU counts ranging from 33 to 36.}
 	  }
@@ -465,11 +465,11 @@ compare  the  makespan  and  \ac{btu}  distributions  of  the  \ac{mcs}  to  the
 distribution observed in the corresponding traces. For this purpose, traces from
 comparable    runs     are    grouped     by    application     and    strategy.
 Figure~\ref{fig:realbrs} presents  the distribution  of resulting  makespans and
-\ac{btu} counts.   For OMSSA, the  makespan varies in the  range [12811s;13488s]
-(variability ~5\%)  with a BTU count  of 40 for ASAP,  and [13564s;14172s] (4\%)
-with a BTU count ranging [33;36] for AFAP. For Montage, the makespans are in the
-range [1478s;1554s] (~4\%) with a BTU  of 10 with ASAP and [2833s;2837s] (0.1\%)
-with a BTU count of 1 (AFAP).
+\ac{btu}  counts.  For  OMSSA, ASAP  yields a  makespan variation  in the  range
+[12811s;13488s] (variability  ~5\%) with a  constant BTU  count of 40,  and AFAP
+yields [13564s;14172s] (4\%) with a BTU  count ranging [33;36]. For Montage, the
+makespans are in the range [1478s;1554s] (~4\%) with 10 BTUs of 10 with ASAP and
+[2833s;2837s] (0.1\%) with 1 BTU for AFAP.
 
 
 \subsection{Input Modeling}\label{sec:im}
@@ -519,8 +519,7 @@ Amazon EC2 instances with dedicated CPUs.
 \label{sec:eval}
 \begin{figure}
 	\includegraphics[width=\textwidth]{gfx/fit_plot.pdf}
-	\caption[caption]{Makespan and BTU count distribution for OMSSA and Montage Monte
-	  Carlo Simulation compared to reality at 10\% perturbation level.%\\ 
+	\caption[caption]{Makespan and \#BTU distributions for MCS compared to reality for P=10\%.%\\ 
 	  %\textit{Reading example: Simulating AFAP with OMSSA leads to makespans 
 	  %roughly ranging from 12800 s to 13400 s and BTU counts ranging from 33 to 36.}
 	}
@@ -555,7 +554,8 @@ $[\mu{}-3\sigma{},\mu{}+3\sigma{}]$.
 \begin{table}
 	\centering
 	\caption{Makespan and BTU capture rate depending on CI
-          for a 10\% perturbation level}\label{tab:fit} 
+          for P=10\%.}
+       \label{tab:fit} 
 	\begin{tabular}{llccc}
 		\toprule
 		Application&Strategy&\multicolumn{2}{c}{Makespan (Size of CI)}&BTU\\
@@ -602,7 +602,7 @@ encountered in our work with \ac{mcs}.
 \subsection{High perturbation simulations}\label{sec:sa}
 \begin{figure}
 	\includegraphics[width=\textwidth]{gfx/int_plot.pdf}
-	\caption[caption]{Makespan intervals and BTU count distribution for OMSSA and 
+	\caption[caption]{Makespan intervals and \#BTU distributions for OMSSA and 
 	Montage at different perturbation levels. In the makespan interval graph 
 	the boxes represent the 95\% CI resulting from the normal fit of the
 	\acs{mcs}'s results, and the bar the results of a single unperturbed 
