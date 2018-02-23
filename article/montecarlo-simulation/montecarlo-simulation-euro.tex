@@ -526,39 +526,44 @@ Amazon EC2 instances with dedicated CPUs.
 	}
 	\label{fig:fit}
 \end{figure}
-We ran a 500 iterations \ac{mcs} for every \{strategy, application\} group using
+We ran a 500 iterations \ac{mcs} for every strategy application group using
 the task models described in  the previous section. The  resulting distributions
 are  shown  in  Figure~\ref{fig:fit}.   The makespan  density  graphs  show  the
 simulation  result  distribution   as  filled  curves. The  real  observed
 executions, as in  fig.~\ref{fig:realbrs}, are shown as  non-filled curves. On 
 the \ac{btu} count graphs, the  left bar represents
-the empirical data, and the right  bar the prediction from the simulation. 
-
-When looking at the resulting OMSSA distributions, presented in the two leftmost
-graphs,  the distribution  of simulated  makespan ranges  covers fairly  well the
-ranges of  observed makespans, notwithstanding a  slight right skew and  shift of
-the empirical  makespan distribution.  The  OMSSA BTU count  distributions shows
-similar results.  The range of BTU  numbers required for an execution is correct.
-For instance,  both empirical  observations  and simulations  indicate
-between  33 and  36 BTU  are used with AFAP. However, the  distributions of  these BTU  counts
-differ slightly.
-
-In addition to these graphical representation, we now examine the results through
-statistical confidence intervals.   Since the makespan is in essence  the sum of 
-the tasks' runtimes  in the  execution critical path,  and tasks  are all
-distributed  using the  uniform distribution  which  has a  finite variance,  we
-consider the Central Limit Theorem applicable.  Fitting to a normal distribution 
-gives us an average makespan $\mu{}$, and a standard deviation $\sigma{}$. These
-can be used to  build \acp{ci}. For the normal distribution  the 95\% \ac{ci} is
-defined  as   $[\mu{}-2\sigma{},\mu{}+2\sigma{}]$  and   the  99\%   \ac{ci}  as
+the empirical data, and the right  bar the results from the simulation.
+%
+These graph show the simulation results cover the same ranges as the real
+observation, but do not present the same distribution within those ranges. 
+%
+%When looking at the resulting OMSSA distributions, presented in the two leftmost
+%graphs,  the distribution  of simulated  makespan ranges  covers fairly  well the
+%ranges of  observed makespans, notwithstanding a  slight right skew and  shift of
+%the empirical  makespan distribution.  The  OMSSA BTU count  distributions shows
+%similar results.  The range of BTU  numbers required for an execution is correct.
+%For instance,  both empirical  observations  and simulations  indicate
+%between  33 and  36 BTU  are used with AFAP. However, the  distributions of  these BTU  counts
+%differ slightly.
+%
+We quantify our simulation results correctness using statistical confidence
+intervals.   Since the makespan is in essence  the sum of the tasks' runtimes
+in the  execution critical path,  and tasks  are all distributed  using the
+uniform distribution  which  has a  finite variance,  we consider the Central
+Limit Theorem applicable.  Fitting to a normal distribution gives us an average
+makespan $\mu{}$, and a standard deviation $\sigma{}$. These can be used to
+build \acp{ci}. For the normal distribution  the 95\% \ac{ci}, defined  as
+$[\mu{}-2\sigma{},\mu{}+2\sigma{}]$  and   the  99\%   \ac{ci},
 $[\mu{}-3\sigma{},\mu{}+3\sigma{}]$.
-\begin{table}
+%
+\begin{table}[b]
 	\centering
 	\caption{Makespan and BTU capture rate depending on CI
           for a 10\% perturbation level}\label{tab:fit} 
 	\begin{tabular}{llccc}
 		\toprule
-		Application&Strategy&\multicolumn{2}{c}{Makespan (Size of CI)}&BTU\\
+		Application&Strategy~&\multicolumn{2}{c}{~Makespan (Size of
+		CI)~}&~BTU\\
                            &         & CI 95\% & CI 99\% &\\
 		\midrule
 		\multirow{2}{*}{OMSSA}&ASAP&  90\% (3\%)&  98\% (5\%)& 100\%\\
@@ -569,20 +574,20 @@ $[\mu{}-3\sigma{},\mu{}+3\sigma{}]$.
 		\bottomrule
 	\end{tabular}
 \end{table}
-
-
+%
 The capture rate expresses the number of observed real makespans that fall
 within a given \ac{ci} relative to the total number of real observations.
 Table~\ref{tab:fit} presents the capture rate obtained by each interval computed
 after normal fitting.  Additionally we provide for each interval its size
 relative to the average makespan.
-
-Regarding OMSSA, the  \ac{mcs} captures at least 90\% of real observed  makespans. The divergence
-between the  capture rate and  the \ac{ci} expected capture  rate is due  to the
-fact that the  empirical makespan distribution does not follow a perfect normal
-distribution. Using  a 99\% \ac{ci}  improves the capture  rate up to  98\%,
-hence very close  to the theoretical expectation. Regarding Montage  the
-\ac{mcs} achieves a capture rate of 100\% for any \ac{ci}.
+%
+Regarding OMSSA, the  \ac{mcs} captures at least 90\% of real observed
+makespans. The divergence between the capture rate and the \ac{ci} expected
+capture  rate is due  to the fact that the  empirical makespan distribution does
+not follow a perfect normal distribution. Using  a 99\% \ac{ci} improves the
+capture  rate up to  98\%, hence very close to the theoretical expectation.
+Regarding Montage the \ac{mcs} achieves a capture rate of 100\% for any
+\ac{ci}.
 
 
 Our \ac{mcs} and a simple task model can capture 90\% of reality all the while
@@ -615,7 +620,7 @@ encountered in our work with \ac{mcs}.
 	\label{fig:int}
 \end{figure}
 We have so  far set the perturbation level  to a value that was relevant to the
-real system observed  (see Section~\ref{sec:im}).  A subsequent question is how
+real system observed  (see Section~\ref{sec:im}). A subsequent question is how
 does the prediction change when increasing this perturbation level. In this
 section we will focus on simulations of makespans using the ASAP strategy.
 Figure~\ref{fig:int} presents the 95\% \acp{ci} obtained through the normal
@@ -627,20 +632,26 @@ subfigures  from left  to right)  the boxes  represent the  span of the \ac{ci}
 interval. The mean simulated makespan ($\mu{}$) represented by the vertical bar
 inside the interval. In the middle row of these subfigures, the interval of 
 real observed  makespans over all runs.
-
-The leftmost subfigure presents the \acp{ci} for the \{OMSSA, ASAP\} group at
-40\% and 10\% perturbation levels. With the increase of the perturbation level
-the intervals naturally get wider, but the average makespan also increases. 
-This happens to the 
-extent that the lower bound of our interval at 40\% is higher than the lower
-bound at 10\%. This diminishes the capture rate of the simulation from 90\%
-(table~\ref{tab:fit}) to 83\% even as the relative width of the interval grows
-from 3\% (7 minutes) to 10\% (almost 24 minutes). For \{Montage, ASAP\} we observe
-again an increase of the average makespan, but not as much as the increase in
-the \ac{ci}'s width. Therefore the \ac{ci} resulting from the \ac{mcs} at a
-40\% perturbation level is a superset of the one at 10\% perturbation level.
-These results have two interesting implications.
-
+%
+Simulation of OMSSA using $P=40\%$ exhibit a clear drift upward of
+the ranges of simulated makespans and BTU. This drift is significant compared to
+the grow of the capture interval to the point that the capture rate of the
+simulation with $P=40\%$ is of only 83\% when the P=10\% simulation had a 90\% 
+capture rate. The Montage simulations show the lower upwards drift.TODO
+%
+%The leftmost subfigure presents the \acp{ci} for the \{OMSSA, ASAP\} group at
+%40\% and 10\% perturbation levels. With the increase of the perturbation level
+%the intervals naturally get wider, but the average makespan also increases. 
+%This happens to the 
+%extent that the lower bound of our interval at 40\% is higher than the lower
+%bound at 10\%. This diminishes the capture rate of the simulation from 90\%
+%(table~\ref{tab:fit}) to 83\% even as the relative width of the interval grows
+%from 3\% (7 minutes) to 10\% (almost 24 minutes). For \{Montage, ASAP\} we observe
+%again an increase of the average makespan, but not as much as the increase in
+%the \ac{ci}'s width. Therefore the \ac{ci} resulting from the \ac{mcs} at a
+%40\% perturbation level is a superset of the one at 10\% perturbation level.
+%These results have two interesting implications.
+%
 Firstly, the perturbation level can
 not be used as a trade-off variable to augment capture rate at the expense of
 \ac{ci} compactness. The lower capture rate at a 40\% perturbation level is a
@@ -650,7 +661,7 @@ implication for the \ac{mcs} as a wrong effective runtime given to \ac{des}.
 Users for whom higher capture rates are more important than
 interval compactness should use statistical methods to build higher rate \acp{ci},
 like the 99\% normal distribution \ac{ci} used in section~\ref{sec:eval}.
-
+%
 Secondly, this result shows that \ac{mcs}s can be used to exhibit strategy
 behaviours. This upwards shift of the \ac{ci} shows that ASAP, a strategy
 geared towards reducing the makespan regardless of cost, is not as effective
@@ -665,41 +676,39 @@ bag-of-tasks depends on the runtime of every tasks. This kind of analysis can be
 used to gain insight in the strengths and weaknesses of any strategy, even the
 more complex ones.
 
-
 \subsection{Advantages and limitations of the enriched simulation}\label{sec:lim}
 
 In this section we discuss parameters that one might want to account for when
 using an \ac{mcs}. At this point in time we have not yet studied how they
 influence the \ac{mcs} or its result but are looking to evaluate them in
 future work.
-
-In this article the only variable parameter is the tasks' runtimes. As such these
-runtimes coalesce all sources of variability, including the platform variability,
-for instance: change in available CPU time, network or memory contention due to other users workloads
-We did so because this approach is closer to a cloud usage scenario, where users
-resources are roughly isolated.
-In circumstances where one is able to measure variability
-on CPU power or network speed it is possible to add those variables as input of
-the \ac{mcs}. In this case a realization would draw not only each tasks' size 
- but also a platform with different CPU powers and network speeds.
-\ac{mcs} enables to fuse these different variability sources effortlessly, but it will
-require more iterations. 
-
+%
+In this article the only variable parameter is the tasks' runtimes. As such
+these runtimes coalesce all sources of variability, including the platform
+variability, for instance: change in available CPU time, network or memory
+contention due to other users workloads We did so because this approach is
+closer to a cloud usage scenario, where users resources are roughly isolated.
+In circumstances where one is able to measure variability on CPU power or
+network speed it is possible to add those variables as input of the \ac{mcs}. In
+this case a realization would draw not only each tasks' size but also a platform
+with different CPU powers and network speeds.  \ac{mcs} enables to fuse these
+different variability sources effortlessly, but it will require more iterations. 
+%
 In this paper all the \ac{mcs} presented used 500 iterations, that is 500
-different runs of our \ac{des}. A 500 iteration \ac{mcs} requires in average 15 minutes of
-CPU time, and iterations can be run in  parallel. We determined that this was enough in the
-context of our simulation as additional simulations did not change the results
-and only marginally increased the confidence of the fitting process. The number
-of simulations necessary in an \ac{mcs} depends on the number of input variables
-and the distribution of these variables. \aclp{mcs} work by sampling the possible
-scenarios to get a distribution of possible outcomes. As such when more scenarios are
-possible then more samples are required. In our case not only the number of
-tasks
-was low, 223 tasks for OMSSA and 184 tasks for Montage, but with a 10\%
-perturbation level the input variable distribution was compact. At a 40\%
-perturbation level there was a significant drop in the confidence of our fitting
-method. We are currently studying the relationship between perturbation level
-and the number of required MCS-iterations.
+different runs of our \ac{des}. A 500 iteration \ac{mcs} requires in average 15
+minutes of CPU time, and iterations can be run in  parallel. We determined that
+this was enough in the context of our simulation as additional simulations did
+not change the results and only marginally increased the confidence of the
+fitting process. The number of simulations necessary in an \ac{mcs} depends on
+the number of input variables and the distribution of these variables.
+\aclp{mcs} work by sampling the possible scenarios to get a distribution of
+possible outcomes. As such when more scenarios are possible then more samples
+are required. In our case not only the number of tasks was low, 223 tasks for
+OMSSA and 184 tasks for Montage, but with a 10\% perturbation level the input
+variable distribution was compact. At a 40\% perturbation level there was a
+significant drop in the confidence of our fitting method. We are currently
+studying the relationship between perturbation level and the number of required
+MCS-iterations.
 
 \section{Conclusion}
 Predicting  the execution  behavior  of complex  workloads in  the  cloud is  an
@@ -708,7 +717,7 @@ simulators, much remains to be done for their adoption in production-grade cloud
 settings. As  advocated by Puchert  et al.~\cite{PucherGWK15}, the trust  we can
 put in  the prediction  demands certainty  and precision  that only  comes from
 validating simulation against empirical observation.
-
+%
 This paper contributes to this effort in two ways. First, we propose a \acl{mcs}
 extension  to a  discrete  event  simulator based  on  SimGrid.  This  extension
 provides stochastic predictions which are more informative than single values of
