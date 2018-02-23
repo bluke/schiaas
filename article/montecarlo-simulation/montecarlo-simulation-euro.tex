@@ -422,6 +422,7 @@ also the cost for each execution in number of \ac{btu}.
 	  }
 	\label{fig:realbrs}
 \end{figure}
+\begin{comment}
 \begin{table} \centering \caption{Overview of archived
 	executions}\label{tab:nbruns} 
 	\begin{tabular}{llrcc} \toprule
@@ -435,53 +436,35 @@ also the cost for each execution in number of \ac{btu}.
 		\bottomrule 
 	\end{tabular} 
 \end{table}
+\end{comment}
 
-%% Free floating graphs mus be declared a page in advance
-
-
-% Il manque une déclaration d'intention
-
-Using Schlouder (cf. Section~\ref{sec:work-context}), we performed multiple
+Using Schlouder (cf. Section~\ref{sec:work-context}), we performed numerous
 executions of the application of OMSSA and Montage. These executions were
 performed on a 96 cores Openstack cloud system set up on 4 identical dual
 $2.67GHz$ Intel Xeon X5650 servers. We used the KVM hypervisor and Openstack
-version 2012.1 and 2014.4.
+version 2012.1 and 2014.4. The traces obtained from these experiments contain 
+several useful metrics including, but  not limited to, the \ac{vm} start dates, 
+boot time, shutdown times, and assigned tasks, as well as the task start date 
+and effective runtimes. They were initially used all along the development of 
+Schlouder and then to properly tune SimSchlouder in order to make the simulation
+as accurate as possible. As a result, for the execution used in this paper, 
+simulations done with SimSchlouder are precise to the second on the makespan and
+systematically exact on the \ac{btu} count.
 
-The traces obtained  from these experiments contain  several useful metrics
-including, but  not limited  to, the  \ac{vm} start  dates, boot time, shutdown
-times, and assigned  tasks, as well as  the task start  date and effective
-runtimes.
-
-They were  initially used  all along  the development of  Schlouder and  then to
-properly  tune SimSchlouder  in  order to  make the  simulation  as accurate  as
-possible.  As a result, for the execution  used in this paper, simulations done
-with SimSchlouder are precise to the second  on the makespan and systematically
-exact on the \ac{btu} count.
-
-In this paper these execution traces are used to  generate our \ac{mcs} input
+In this paper these execution traces are used to generate our \ac{mcs} input
 \acp{rv} using the method we will describe in Section~\ref{sec:im}. And we
-compare the makespan  and \ac{btu}  distributions of the \ac{mcs} to the
-distribution observed in the corresponding traces.
-%
-For this purpose we grouped the traces  from comparable runs.  For a same
-platform, a group is defined by a unique pair <application, strategy>.
-Table~\ref{tab:nbruns}  presents  an  overview   of  those groups,  while
+compare the makespan and \ac{btu} distributions of the \ac{mcs} to the
+distribution observed in the corresponding traces. For this purpose, traces from
+comparable runs are grouped in \{application, strategy\} groups.
 Figure~\ref{fig:realbrs} presents the distribution of resulting makespans and
-\ac{btu} counts. The number of observations is uneven between groups because of
-the changing nature of the experimental conditions in  which the runs were 
-executed.
+\ac{btu} counts. For OMSSA, the makespan varies from 12811s to 13488s with a BTU
+count of 40 when using ASAP, whereas when using AFAP the makespan varies from
+13564s to 14172s with a BTU count varying from 33 to 36. For Montage, makespan
+goes from 1478s to 1554s with a BTU of 10 for ASAP and from 2833s to 2837s with
+a BTU count of 1 for AFAP.
 
 
 \subsection{Input Modeling}\label{sec:im}
-
-Figure~\ref{fig:realbrs} shows the distribution of makespans observed in each 
-group. As one can see, the variability of the tasks runtimes induces different
-variabilities in the makespans depending on the group:
-from 12811s to 13488s for <OMSSA, ASAP>,
-from 13564s to 14172s for <OMSSA, AFAP>,
-from 1478s to 1554s for <Montage, ASAP>, and
-from 2833s to 2837s for <Montage, AFAP>.
-
 
 In introduction,
 we mentioned existing studies related to IaaS cloud variability. Using the
@@ -541,7 +524,7 @@ Amazon EC2 instances with dedicated CPUs.
 	}
 	\label{fig:fit}
 \end{figure}
-We ran a 500 iterations \ac{mcs} for every <strategy, application> group using
+We ran a 500 iterations \ac{mcs} for every \{strategy, application\} group using
 the task models described in  the previous section. The  resulting distributions
 are  shown  in  Figure~\ref{fig:fit}.   The makespan  density  graphs  show  the
 simulation  result  distribution   as  filled  curves. The  real  observed
@@ -643,14 +626,14 @@ interval. The mean simulated makespan ($\mu{}$) represented by the vertical bar
 inside the interval. In the middle row of these subfigures, the interval of 
 real observed  makespans over all runs.
 
-The leftmost subfigure presents the \acp{ci} for the <OMSSA, ASAP> group at
+The leftmost subfigure presents the \acp{ci} for the \{OMSSA, ASAP\} group at
 40\% and 10\% perturbation levels. With the increase of the perturbation level
 the intervals naturally get wider, but the average makespan also increases. 
 This happens to the 
 extent that the lower bound of our interval at 40\% is higher than the lower
 bound at 10\%. This diminishes the capture rate of the simulation from 90\%
 (table~\ref{tab:fit}) to 83\% even as the relative width of the interval grows
-from 3\% (7 minutes) to 10\% (almost 24 minutes). For <Montage, ASAP> we observe
+from 3\% (7 minutes) to 10\% (almost 24 minutes). For \{Montage, ASAP\} we observe
 again an increase of the average makespan, but not as much as the increase in
 the \ac{ci}'s width. Therefore the \ac{ci} resulting from the \ac{mcs} at a
 40\% perturbation level is a superset of the one at 10\% perturbation level.
