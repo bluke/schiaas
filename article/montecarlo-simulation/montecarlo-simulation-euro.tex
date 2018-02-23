@@ -223,9 +223,10 @@ establish  the  validity of  simulation  results  formally. Indeed,  given  some
 defined inputs, a DES outputs a single deterministic result, while a real system
 will output  slightly different results  at each repeated execution.   Hence, in
 practice  the simulation  is informally  regarded as  valid if  its results  are
-``close'' to one or  some of the real observations.  Notice  however that in the
-field  of grid  or cloud  computing, published  results in  terms of  validation
-against real settings are scarce relatively to the number of projects.
+``close'' to one or  some of the real observations. 
+%Notice  however that in the
+%field  of grid  or cloud  computing, published  results in  terms of  validation
+%against real settings are scarce relatively to the number of projects.
 
 \paragraph{Stochastic Simulation and Monte-Carlo Method.}
 For  more   comprehensive  predictions  in  such   variable  environments,  the
@@ -256,18 +257,18 @@ simulate each realization using  traditional methods like \ac{des}.  Eventually,
 given enough realizations, the distribution  of the simulation results will tend
 towards the  distribution of the equivalent  stochastic simulation.  Statistical
 fitting   techniques  can   then   be  used   to   characterize  this   makespan
-\ac{rv}. Whereas the numerical approach  can not account for dynamic scheduling,
-the Monte-Carlo Methods allows us to  do so trivially by simply implementing the
-scheduling heuristics in the core \ac{des}.  This approach is first suggested in
+\ac{rv}. \acp{mcs} allows for non-independent \ac{rv} and dynamic
+scheduling.
+This approach is first suggested in
 \cite{Slyke63}  for stochastic  PERT graphs.   
 %The development  of heterogeneous
 %distributed computing environments, grids and now clouds, has led researchers to
 %se this approach in  this field.  
 Later, in the  context of grids, where  the number of resources  is fixed during
-one  execution,  Tang  et  al.~\cite{Tang11}   propose  a  modification  of  the
-well-known scheduling heuristic HEFT to compute a schedule yielding the shortest
-makespan    given    randomly    variable     task    durations.    Canon    and
-Jeannot~\cite{Canon10} have used \ac{mcs} to evaluate the robustness of \ac{dag}
+one execution, Tang et al.~\cite{Tang11} propose, a modification of the well-known
+scheduling heuristic HEFT to compute a schedule yielding the shortest makespan
+given randomly variable task durations. Canon and Jeannot~\cite{Canon10} have
+used \ac{mcs} to evaluate the robustness of \ac{dag}
 schedules when task  durations vary, and similarly,  Zheng et al.~\cite{Zheng13}
 evaluate  the  impact of  this  variability  on  the makespan.   More  recently,
 ElasticSim~\cite{Cai17} has been  proposed as a simulator  extending Cloudsim to
@@ -292,7 +293,7 @@ setup described hereafter consists of two test applications which are run on one
 hand, on a real platform with our scheduler Schlouder, and on the other hand are
 simulated with our simulator SimSchlouder based on SimGrid.
 
-\subsection{Test Applications}\label{sc:setup}
+\paragraph{Test Applications}\label{sc:setup}
 
 We  carried out  multiple executions  of two broadly used scientific  applications
 to  evaluate Schlouder  performance. The execution traces for  those runs were
@@ -302,28 +303,21 @@ are:
 
 \begin{itemize}
 \item Montage\cite{montage2009},  the Montage Astronomical Image  Mosaic Engine,
-  is designed to  splice astronomical images. The structure  of this application
-  is a  fork-join type  workflow. This application  is extremely  data intensive
-  with a \emph{communication-to-computation} ratio greater than $90\%$.
+  is designed to  splice astronomical images. This application is a data
+  intensive fork-join type workflow with a \emph{communication-to-computation} 
+  ratio greater than $90\%$.
 
 \item OMSSA\cite{Geer2004}, the Open Mass-Spectrometry Search Algorithm, is used
-  to analyze  mass-spectrometer results.  The application  is parallelized  as a
-  bag-of-tasks, \textit{i.e.}  as a  number of  independent parallel tasks. This
-  application        is        computation        intensive        with        a
+  to analyze  mass-spectrometer results.  The application  is a computation
+  intensive set of independent parallel tasks  with a 
   \emph{communication-to-computation} ratio lower than $20\%$.
 \end{itemize}
 
-The executions of these applications are driven
-by the scheduling policy applied. We detail in the next two sections how these
-executions are managed in the real environment and in the simulation.  
-
-\subsection{Real Execution Setup}
-
-In the recent years, we developed  a client-side cloud resources broker for IaaS
-called  Schlouder~\cite{Michon17}.  This  broker is  able to  submit the  user's
-batch jobs, be  it a set of  independent tasks or a workflow.   The broker's main
-role is  to schedule the set  of tasks onto a  set of cloud resources,  which the
-broker can scale up  or down.
+\paragraph{Real Execution Setup}
+Schlouder~\cite{Michon17} is a client-side cloud broker for IaaS capable of
+executing the  user's batch jobs, sets of independent tasks and workflows alike.
+The broker's main role is  to schedule the tasks onto a set of cloud resources, 
+which the broker can scale up  or down.
 Technically, the broker  connects to the cloud management  system (for instance,
 OpenStack) to  instruct how  the infrastructure should  be provisioned. It then
 assigns the tasks to the resources using the Slurm job management system.
@@ -339,26 +333,24 @@ decisions. Schlouder's scheduling and provisioning  decision are controlled by a
 rental cost of resources and the execution  makespan. In this paper, we used the
 two following strategies :
 \begin{itemize}
-\item ASAP (or \textit{as soon as possible}) schedules each task onto
+\item ASAP (\textit{as soon as possible}) schedules each task onto
   an idle VM if one is available, or provisions a new VM otherwise.
-  Hence this strategy minimizes the makespan by running the tasks as early as
-  possible.
+  This strategy minimizes the makespan.
 
-\item AFAP (or \textit{as full as  possible}) schedules each task onto
+\item AFAP (\textit{as full as  possible}) schedules each task onto
   one VM if it does not increase its rental cost (\textit{i.e.} its number
-  of \ac{btu}), or provisions a new VM otherwise. This is a bin-packing approach
-  minimizes the monetary cost by minimizing the number of \ac{btu}.
+  of \ac{btu}), or provisions a new VM otherwise. This strategy minimizes cost
+  by minimizing the \ac{btu} count.
 \end{itemize}
 
-\subsection{Simulated Execution Setup}
-
+\paragraph{Simulated Execution Setup.}
 As a follow-up to our work on Schlouder we developed SimSchlouder, a simulator
 mimicking the behaviour of Schlouder. It has the same interfaces and implements
 the same scheduling strategies as Schlouder. It uses SimGrid as its core
 simulation engine. In practice, SimSchlouder is included as a plugin into
 Schlouder to allow the user to request an estimate of the makespan and cost
-before choosing a strategy for a real run.
-
+before choosing a strategy for a real run.i
+%
 SimSchlouder  shares with Schlouder a common subset of inputs. Its inputs
 include the same tasks description and strategy. Whereas Schlouder operates on a
 real cloud controller, SimSchlouder provisions simulated \acp{vm} through
@@ -371,38 +363,27 @@ simulation to be accurately representative of reality.
 \section{Enriched Simulation Framework}\label{sec:enriched-sim}
 
 
-As stated in  section~\ref{sec:relworks}, trustworthiness of simulation
-is questionable when its result is only one of the many possible outcomes. This
-work addresses this issue by  proposing a framework implementing the Monte-Carlo
-method using SimSchlouder  as  simulation engine.   This  solution combines  the
-relative  simplicity  of a  \ac{des}  with  the  extensive results  provided  by
-stochastic simulations.   This allows to respect the scheduling and provisioning 
-decisions observed in reality. 
+To address the limited trustworthiness of \ac{des} in variable environment such
+as clouds, we propose a framework implementing the Monte-Carlo method using 
+SimSchlouder as simulation engine. This  solution combines the extensive results
+provided  by stochastic simulations with correctness of scheduling and 
+provisioning provided by SimSchlouder.
 
-In  this  section we  first  discuss  the  particularities  of the  Monte  Carlo
-Simulation applied to our context. Then we present the empirical observations we
-used as a reference point for this experiment. Last, we will discuss how to
-model the input \acp{rv} representing the tasks' runtimes.
-
+\subsection{Simulation Process.}
 \begin{figure}
 	\centering
 	\resizebox{0.6\textwidth}{!}{%
 		\input{gfx/mc-process.tex}
 		}
-\caption{Overview of a Monte-Carlo simulation~: $500$ realizations are generated
-by drawing runtimes for each of the $n$ tasks provided RVs; every realization is
-then simulated; the resulting makespan samples make up the final result M.}\label{fig:mc-process}
+\caption{Overview of a $500$ iterations Monte-Carlo simulation}\label{fig:mc-process}
 \end{figure}
-
-\subsection{Simulation Process}
-
 The whole extended simulation process is referred to as \ac{mcs}. 
 For an application composed of $n$ tasks (as depicted fig.~\ref{fig:mc-process}),
 \ac{mcs} consists in applying successive MCS-iterations. Assuming we can provide a
 runtime distribution $T_j$ for every task $j$, a MCS-iteration $k$ consists in~:
 \begin{itemize}
-\item making one realization of the runtime  for each task $j$, that is randomly
-  drawing a runtime value from the associated $T_j$ to obtain a runtime $t_j$;
+\item drawing a runtime value, $t_j$, for each task from the associated
+	\acs{rv}, $T_j$;
 \item proceed to a simulation using all runtimes $t_j$ to obtain a makespan $m_k$.
 \end{itemize}
 With enough  makespans $m_k$, we can  compute a statistical distribution  of the
@@ -415,8 +396,7 @@ also the cost for each execution in number of \ac{btu}.
 \begin{figure}
 	\centering
 	\includegraphics[width=\textwidth]{gfx/real_plot.pdf}
-	\caption[caption]{Distributions of makespan and BTU count across the OMSSA and 
-	  Montage observed executions.%\\ 
+	\caption[caption]{Empirical observations for makespan distributions and \#BTU.%\\ 
 	  %\textit{Reading example: Using AFAP with OMSSA leads to makespans 
 	  %roughly ranging from 12800 s to 13600 s and BTU counts ranging from 33 to 36.}
 	  }
@@ -464,12 +444,12 @@ In this  paper these execution  traces are used  to generate our  \ac{mcs} input
 compare  the  makespan  and  \ac{btu}  distributions  of  the  \ac{mcs}  to  the
 distribution observed in the corresponding traces. For this purpose, traces from
 comparable    runs     are    grouped     by    application     and    strategy.
-Figure~\ref{fig:realbrs} presents  the distribution  of resulting  makespans and
-\ac{btu} counts.   For OMSSA, the  makespan varies in the  range [12811s;13488s]
-(variability ~5\%)  with a BTU count  of 40 for ASAP,  and [13564s;14172s] (4\%)
-with a BTU count ranging [33;36] for AFAP. For Montage, the makespans are in the
-range [1478s;1554s] (~4\%) with a BTU  of 10 with ASAP and [2833s;2837s] (0.1\%)
-with a BTU count of 1 (AFAP).
+Fig.~\ref{fig:realbrs} presents  the distribution  of resulting  makespans and
+\ac{btu}  counts.  For  OMSSA, ASAP  yields a  makespan variation  in the  range
+[12811s;13488s] (variability  ~5\%) with a  constant BTU  count of 40,  and AFAP
+yields [13564s;14172s] (4\%) with a BTU  count ranging [33;36]. For Montage, the
+makespans are in the range [1478s;1554s] (~4\%) with 10 BTUs of 10 with ASAP and
+[2833s;2837s] (0.1\%) with 1 BTU for AFAP.
 
 
 \subsection{Input Modeling}\label{sec:im}
@@ -519,8 +499,7 @@ Amazon EC2 instances with dedicated CPUs.
 \label{sec:eval}
 \begin{figure}
 	\includegraphics[width=\textwidth]{gfx/fit_plot.pdf}
-	\caption[caption]{Makespan and BTU count distribution for OMSSA and Montage Monte
-	  Carlo Simulation compared to reality at 10\% perturbation level.%\\ 
+	\caption[caption]{Makespan and \#BTU distributions for MCS compared to reality for P=10\%.%\\ 
 	  %\textit{Reading example: Simulating AFAP with OMSSA leads to makespans 
 	  %roughly ranging from 12800 s to 13400 s and BTU counts ranging from 33 to 36.}
 	}
@@ -528,7 +507,7 @@ Amazon EC2 instances with dedicated CPUs.
 \end{figure}
 We ran a 500 iterations \ac{mcs} for every strategy application group using
 the task models described in  the previous section. The  resulting distributions
-are  shown  in  Figure~\ref{fig:fit}.   The makespan  density  graphs  show  the
+are  shown  in  Fig.~\ref{fig:fit}.   The makespan  density  graphs  show  the
 simulation  result  distribution   as  filled  curves. The  real  observed
 executions, as in  fig.~\ref{fig:realbrs}, are shown as  non-filled curves. On 
 the \ac{btu} count graphs, the  left bar represents
@@ -559,7 +538,8 @@ $[\mu{}-3\sigma{},\mu{}+3\sigma{}]$.
 \begin{table}[b]
 	\centering
 	\caption{Makespan and BTU capture rate depending on CI
-          for a 10\% perturbation level}\label{tab:fit} 
+          for P=10\%.}
+       \label{tab:fit} 
 	\begin{tabular}{llccc}
 		\toprule
 		Application&Strategy~&\multicolumn{2}{c}{~Makespan (Size of
@@ -604,10 +584,10 @@ can have other more research oriented applications. In this section we will
 exemplify one such application. Then we will discuss limitations we have
 encountered in our work with \ac{mcs}.
 
-\subsection{High perturbation simulations}\label{sec:sa}
+\paragraph{High perturbation simulations.}\label{sec:sa}
 \begin{figure}
 	\includegraphics[width=\textwidth]{gfx/int_plot.pdf}
-	\caption[caption]{Makespan intervals and BTU count distribution for OMSSA and 
+	\caption[caption]{Makespan intervals and \#BTU distributions for OMSSA and 
 	Montage at different perturbation levels. In the makespan interval graph 
 	the boxes represent the 95\% CI resulting from the normal fit of the
 	\acs{mcs}'s results, and the bar the results of a single unperturbed 
@@ -619,25 +599,26 @@ encountered in our work with \ac{mcs}.
 	}
 	\label{fig:int}
 \end{figure}
-We have so  far set the perturbation level  to a value that was relevant to the
-real system observed  (see Section~\ref{sec:im}). A subsequent question is how
-does the prediction change when increasing this perturbation level. In this
-section we will focus on simulations of makespans using the ASAP strategy.
-Figure~\ref{fig:int} presents the 95\% \acp{ci} obtained through the normal
-distribution fitting of simulations with both a 10\%
-and a 40\% perturbation  level. Notice that a 40\% perturbation level may be 
-experienced in current cloud provider offers when renting shared instances
-(\cite{LeitnerC16}). On the makespan interval graphs  (first and third
-subfigures  from left  to right)  the boxes  represent the  span of the \ac{ci}
-interval. The mean simulated makespan ($\mu{}$) represented by the vertical bar
-inside the interval. In the middle row of these subfigures, the interval of 
-real observed  makespans over all runs.
+We have so  far set the perturbation level  to a value that was  relevant to the
+real system observed  (see Section~\ref{sec:im}).  A subsequent  question is how
+does the  prediction change  when increasing this  perturbation level.   In this
+section  we will  focus  on simulation  of makespans  using  the ASAP  strategy.
+Fig.~\ref{fig:int}  presents  the  95\%  \acp{ci} obtained  through  the  normal
+distribution fitting of  simulations with both P=10\% and P=40\%.  Notice that a
+40\% perturbation level may be experienced in current cloud provider offers when
+renting shared  instances (\cite{LeitnerC16}).  On the  makespan interval graphs
+(first and third subfigures from left to  right) the boxes represent the span of
+the \ac{ci}  interval. The mean  simulated makespan ($\mu{}$) is  represented by
+the vertical bar inside the interval. The middle row show the interval of real 
+observed makespans.
 %
 Simulation of OMSSA using $P=40\%$ exhibit a clear drift upward of
 the ranges of simulated makespans and BTU. This drift is significant compared to
 the grow of the capture interval to the point that the capture rate of the
 simulation with $P=40\%$ is of only 83\% when the P=10\% simulation had a 90\% 
-capture rate. The Montage simulations show the lower upwards drift.TODO
+capture rate. Montage simulations exhibit the upwards drift but not to the
+extent that it affects the simulation's capture rate. These results have two 
+interesting implications.
 %
 %The leftmost subfigure presents the \acp{ci} for the \{OMSSA, ASAP\} group at
 %40\% and 10\% perturbation levels. With the increase of the perturbation level
@@ -676,7 +657,7 @@ bag-of-tasks depends on the runtime of every tasks. This kind of analysis can be
 used to gain insight in the strengths and weaknesses of any strategy, even the
 more complex ones.
 
-\subsection{Advantages and limitations of the enriched simulation}\label{sec:lim}
+\paragraph{Advantages and limitations of the enriched simulation.}\label{sec:lim}
 
 In this section we discuss parameters that one might want to account for when
 using an \ac{mcs}. At this point in time we have not yet studied how they
