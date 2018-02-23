@@ -168,56 +168,59 @@ events can  be the  start (or  end) of computations  or of  communications.  The
 simulator will jump from  one event to the next, updating  the times of upcoming
 events  to reflect  the state  change  in the  simulation.  Such  \ac{des}-based
 simulators  require  at  least  a  platform  specification  and  an  application
-description.  The platform  specification describes both the  physical nature of
-the cloud,  e.g.~machines and networks,  and the management  rules, e.g.~\ac{vm}
-placement  and   availability.   Depending   on  the  simulator,   the  platform
-specification can be done through  user code, as in CloudSim~\cite{cloudsim} for
-example,  or through  platform  description  files, as  is  mostly  the case  in
-SimGrid~\cite{simgrid}.   The  application  description  consists in  a  set  of
-computing and communicating tasks, often described as an  amount of computation
-or communication to perform. The simulator  computes their duration based on the
-platform specification, and its CPU and network models.  %An alternative approach
+description.  %The platform  specification describes both the  physical nature of
+%the cloud,  e.g.~machines and networks,  and the management  rules, e.g.~\ac{vm}
+%placement  and   availability.   
+Depending on the simulator, the platform  specification can be done through user
+code,  as   in  CloudSim~\cite{cloudsim}   for  example,  or   through  platform
+description  files,  as  is  mostly the  case  in  SimGrid~\cite{simgrid}.   The
+application description consists in a  set of computing and communicating tasks,
+often described  as an amount  of computation  or communication to  perform. The
+simulator computes their  duration based on the platform  specification, and its
+CPU and network models.  %An alternative approach
 %is  to directly  input the task  durations extrapolated  from actual  execution
 %traces.
 
 The available  cloud \acp{des} can  be divided in  two categories. In  the first
 category are  the simulators  dedicated to  study the  clouds from  the provider
 point-of-view, whose purpose  is to help evaluating the design  decisions of the
-datacenter. Examples  of such simulators are  MDCSim~\cite{MDCSim}, which offers
-specific  and precise  models for  low-level components  including network  (e.g
-InfiniBand or  Gigabit ethernet),  operating system kernel  and disks.   It also
-offers a model  for energy consumption. However, the cloud  client activity that
-can be  modeled is restricted  to web-servers, application-servers  or data-base
-applications.   GreenCloud~\cite{greencloud} follows  the  same  purpose with  a
-string  focus  on  energy  consumption  of cloud's  network  apparatus  using  a
-packet-level  simulation  for  network  communications  (NS2).   In  the  second
-category  are the  simulators  targeting the  whole  cloud ecosystem,  including
-client activity. In this category, CloudSim~\cite{cloudsim} (originally stemming
-from  GridSim) is  the most  broadly used  simulator in  academic research.   It
-offers simplified models regarding network communications, CPU or disks. However,
-it is  easily extensible  and serves  as the underlying  simulation engine  in a
-number of projects (e.g  \cite{Cai17}, see section \ref{sc:relwork-stochastic}).
-Simgrid~\cite{simgrid} is  the other long-standing  project, which when  used in
-conjunction with  the SchIaaS cloud interface  provides similar functionnalities
-as CloudSim.   Among the other related  projects, are iCanCloud~\cite{iCanCloud}
-proposed to  address scalability  issues encountered  with CloudSim  (written in
-Java) for the simulation of large use-cases. Most recently, PICS~\cite{pics} has
-been  proposed  to  specifically  evaluate simulation  of  public  clouds.   The
-configuration of the simulator uses only  parameters that can be measured by the
-cloud client, namely inbound and  outbound network bandwidths, average CPU power,
-\ac{vm} boot times, and scale-in/scale-out  policies. The data center is therefore % scaleout ?
-seen as a black  box, for which no detailed description  of the hardware setting
-is required.  The validation  study of  PICS under  a variety  of use  cases has
-nonetheless shown accurate predictions.
+datacenter. 
+%Examples  of such simulators are  MDCSim~\cite{MDCSim}, which offers
+%specific  and precise  models for  low-level components  including network  (e.g
+%InfiniBand or  Gigabit ethernet),  operating system kernel  and disks.   It also
+%offers a model  for energy consumption. However, the cloud  client activity that
+%can be  modeled is restricted  to web-servers, application-servers  or data-base
+%applications.   GreenCloud~\cite{greencloud} follows  the  same  purpose with  a
+%string  focus  on  energy  consumption  of cloud's  network  apparatus  using  a
+%packet-level  simulation  for  network  communications  (NS2).   
+In the  second category  (which we  focus on) are  the simulators  targeting the
+whole   cloud  ecosystem   including  client   activity.   In   this  category,
+CloudSim~\cite{cloudsim}  is  the  most   broadly  used  simulator  in  academic
+research.  It offers simplified models  regarding network communications, CPU or
+disks. However, it is easily extensible  and serves as the underlying simulation
+engine   in   a   number   of    projects   (e.g   \cite{Cai17},   see   section
+\ref{sc:relwork-stochastic}).  Simgrid~\cite{simgrid} is the other long-standing
+project,  which  when used  in  conjunction  with  the SchIaaS  cloud  interface
+provides  similar  functionnalities  as   CloudSim.   Among  the  other  related
+projects, are iCanCloud~\cite{iCanCloud} proposed  to address scalability issues
+encountered  with  CloudSim  (written  in  Java) for  the  simulation  of  large
+use-cases.  Most recently,  PICS~\cite{pics} has  been proposed  to specifically
+evaluate simulation of  public clouds.  The configuration of  the simulator uses
+only parameters  that can be  measured by the  cloud client, namely  inbound and
+outbound  network  bandwidths,  average  CPU  power,  \ac{vm}  boot  times,  and
+scale-in/scale-out policies. The  data center is therefore seen as  a black box,
+for which  no detailed  description of  the hardware  setting is  required.  The
+validation study  of PICS  under a  variety of use  cases has  nonetheless shown
+accurate predictions.
 
-At the core of DES is the solver.  The solver considers the states of the system
-generated  by the  platform and  previous events  to compute  the timing  of the
-future events. % Therefore  it defines which is the next  event of the simulation. - SG: redondant
-In  most  cases, simulators  have  a  \emph{bottom-up} approach~:  the  modeling
-concerns low-level  components (machines,  networks, storage devices),  and from
-their interactions  emerge the high-level  behaviours. Working on  disjoint low
-level components make it easier to tune the precision of the model to the wanted
-accuracy or speed trade-off.
+%At the core of DES is the solver.  The solver considers the states of the system
+%generated  by the  platform and  previous events  to compute  the timing  of the
+%future events. 
+%In  most  cases, simulators  have  a  \emph{bottom-up} approach~:  the  modeling
+%concerns low-level  components (machines,  networks, storage devices),  and from
+%their interactions  emerge the high-level  behaviours. Working on  disjoint low
+%level components make it easier to tune the precision of the model to the wanted
+%accuracy or speed trade-off.
 
 However, when the simulated system is subject to variability, it is difficult to
 establish  the  validity of  simulation  results  formally. Indeed,  given  some
