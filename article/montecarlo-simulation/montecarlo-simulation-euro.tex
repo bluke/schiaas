@@ -499,7 +499,8 @@ Amazon EC2 instances with dedicated CPUs.
 \label{sec:eval}
 \begin{figure}
 	\includegraphics[width=\textwidth]{gfx/fit_plot.pdf}
-	\caption[caption]{Makespan and \#BTU distributions for MCS compared to reality for P=10\%.%\\ 
+	\caption[caption]{Makespan and \#BTU distributions for MCS compared to
+		reality for $P=10\%$.%\\ 
 	  %\textit{Reading example: Simulating AFAP with OMSSA leads to makespans 
 	  %roughly ranging from 12800 s to 13400 s and BTU counts ranging from 33 to 36.}
 	}
@@ -604,7 +605,7 @@ real system observed  (see Section~\ref{sec:im}).  A subsequent  question is how
 does the  prediction change  when increasing this  perturbation level.   In this
 section  we will  focus  on simulation  of makespans  using  the ASAP  strategy.
 Fig.~\ref{fig:int}  presents  the  95\%  \acp{ci} obtained  through  the  normal
-distribution fitting of  simulations with both P=10\% and P=40\%.  Notice that a
+distribution fitting of  simulations with both $P=10\%$ and $P=40\%$.  Notice that a
 40\% perturbation level may be experienced in current cloud provider offers when
 renting shared  instances (\cite{LeitnerC16}).  On the  makespan interval graphs
 (first and third subfigures from left to  right) the boxes represent the span of
@@ -615,7 +616,7 @@ observed makespans.
 Simulation of OMSSA using $P=40\%$ exhibit a clear drift upward of
 the ranges of simulated makespans and BTU. This drift is significant compared to
 the grow of the capture interval to the point that the capture rate of the
-simulation with $P=40\%$ is of only 83\% when the P=10\% simulation had a 90\% 
+simulation with $P=40\%$ is of only 83\% when the $P=10\%$ simulation had a 90\% 
 capture rate. Montage simulations exhibit the upwards drift but not to the
 extent that it affects the simulation's capture rate. These results have two 
 interesting implications.
@@ -635,7 +636,7 @@ interesting implications.
 %
 Firstly, the perturbation level can
 not be used as a trade-off variable to augment capture rate at the expense of
-\ac{ci} compactness. The lower capture rate at a 40\% perturbation level is a
+\ac{ci} compactness. The lower capture rate at P$=40\%$ is a
 strong indication that our real platform exhibits a variability closer to
 10\% than to 40\%. Misestimation of the perturbation level will have the same
 implication for the \ac{mcs} as a wrong effective runtime given to \ac{des}. 
@@ -646,50 +647,30 @@ like the 99\% normal distribution \ac{ci} used in section~\ref{sec:eval}.
 Secondly, this result shows that \ac{mcs}s can be used to exhibit strategy
 behaviours. This upwards shift of the \ac{ci} shows that ASAP, a strategy
 geared towards reducing the makespan regardless of cost, is not as effective
-when scheduling bag-of-tasks with task runtimes that might vary
-widely. However, the same observation on Montage shows that when
-scheduling workflows ASAP remains capable of low makespans. 
-This behaviour is explained by the nature of workflows,
-in which tasks have to wait for their latest dependencies resolution to run~: in
-workflows, the makespan depends only on the execution critical path, and thus
-only on the runtime of a subset of the tasks, whereas the makespan of
-bag-of-tasks depends on the runtime of every tasks. This kind of analysis can be
-used to gain insight in the strengths and weaknesses of any strategy, even the
-more complex ones.
+when scheduling bag-of-tasks with task runtimes that might vary widely. However,
+the same observation on Montage shows that when scheduling workflows ASAP 
+remains capable of low makespans. This behaviour is explained by the nature of 
+workflows, in which tasks have to wait for their latest dependencies resolution 
+to run. In workflows the makespan depends only on the execution critical path, 
+and are therefore unaffected by the variability of tasks outside the path. 
+This kind of analysis can be used to gain insight in the strengths and 
+weaknesses of any strategy, regardless of complexity.
 
-\paragraph{Advantages and limitations of the enriched simulation.}\label{sec:lim}
-
-In this section we discuss parameters that one might want to account for when
-using an \ac{mcs}. At this point in time we have not yet studied how they
-influence the \ac{mcs} or its result but are looking to evaluate them in
-future work.
+\paragraph{Limitations of the enriched simulation.}\label{sec:lim}
 %
-In this article the only variable parameter is the tasks' runtimes. As such
-these runtimes coalesce all sources of variability, including the platform
-variability, for instance: change in available CPU time, network or memory
-contention due to other users workloads We did so because this approach is
-closer to a cloud usage scenario, where users resources are roughly isolated.
-In circumstances where one is able to measure variability on CPU power or
-network speed it is possible to add those variables as input of the \ac{mcs}. In
-this case a realization would draw not only each tasks' size but also a platform
-with different CPU powers and network speeds.  \ac{mcs} enables to fuse these
-different variability sources effortlessly, but it will require more iterations. 
-%
-In this paper all the \ac{mcs} presented used 500 iterations, that is 500
-different runs of our \ac{des}. A 500 iteration \ac{mcs} requires in average 15
-minutes of CPU time, and iterations can be run in  parallel. We determined that
-this was enough in the context of our simulation as additional simulations did
-not change the results and only marginally increased the confidence of the
-fitting process. The number of simulations necessary in an \ac{mcs} depends on
-the number of input variables and the distribution of these variables.
-\aclp{mcs} work by sampling the possible scenarios to get a distribution of
-possible outcomes. As such when more scenarios are possible then more samples
-are required. In our case not only the number of tasks was low, 223 tasks for
-OMSSA and 184 tasks for Montage, but with a 10\% perturbation level the input
-variable distribution was compact. At a 40\% perturbation level there was a
-significant drop in the confidence of our fitting method. We are currently
-studying the relationship between perturbation level and the number of required
-MCS-iterations.
+In this paper all the \ac{mcs} presented used 500 iterations. Such an \ac{mcs}
+requires in average 15 minutes of CPU time, and iterations can be parallelized.
+We determined that this was enough in the context of our simulation as
+additional simulations did not change the results and only marginally increased
+the confidence of the fitting process. The number of simulations necessary in an
+\ac{mcs} depends on the number of input variables and the distribution of these
+variables.  \aclp{mcs} work by sampling the possible scenarios to get a
+distribution of possible outcomes. As such when more scenarios are possible then
+more samples are required. In our case not only the number of tasks was low, 223
+tasks for OMSSA and 184 tasks for Montage, but with $P=10\%$ the input variable
+distribution was compact. At $P=40\%$ there was a significant drop in the
+confidence of our fitting method. We are currently studying the relationship
+between perturbation level and the number of required MCS-iterations.
 
 \section{Conclusion}
 Predicting  the execution  behavior  of complex  workloads in  the  cloud is  an
@@ -706,17 +687,17 @@ billing cost  and makespan  produced by  traditional discrete  event simulators.
 The \acl{mcs}  must be parameterized to  draw random values from  relevant value
 spaces. In this work we show that the  variability we seek to account for can be
 modeled  by a  single parameter,  called perturbation  level and applied  to all
-task
-runtimes. Second, we apply our method in  a real setting, on both a bag-of-tasks
-and a workflow  application, for which we have collected  execution traces, using
-scheduling and provisioning strategies that  aim to optimize either the makespan
-or the  rental cost.  At  the light of  these empirical observations,  our study
-shows that the proposed method could capture over 90\% of the observed makespans
-for  all  combinations  of  application   and  scheduling  strategies  given  an
-appropriate perturbation  level.  We now aim  to test our simulator  on more use
-cases and platforms.  In particular as a number of studies on public clouds have
-reported variability levels similar to our platform (\cite{LeitnerC16,pics}), we
-intend to reproduce these results on public clouds.
+task runtimes. Second, we apply our method in  a real setting, on both a
+bag-of-tasks and a workflow  application, for which we have collected  execution
+traces, using scheduling and provisioning strategies that  aim to optimize
+either the makespan or the  rental cost.  At  the light of  these empirical
+observations,  our study shows that the proposed method could capture over 90\%
+of the observed makespans for  all  combinations  of  application   and
+scheduling  strategies  given  an appropriate perturbation  level. We now aim
+to test our simulator  on more use cases and platforms.  In particular as a
+number of studies on public clouds have reported variability levels similar to
+our platform (\cite{LeitnerC16,pics}), we intend to reproduce these results on
+public clouds.
 
 \bibliographystyle{splncs_srt}
 \bibliography{montecarlo-simulation}
