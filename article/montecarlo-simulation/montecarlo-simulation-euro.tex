@@ -62,13 +62,13 @@
   In the  cloud computing  model, cloud providers  invoice clients  for resource
   consumption. Hence, tools helping the client to budget the cost of running his
   application are  of pre-eminent  importance. However, the opaque and 
-  multi-tenant nature of clouds make task runtimes variable and had to predict
+  multi-tenant nature of clouds make task runtimes variable and hard to predict,
   and hamper the creation of reliable simulation tools. In this  paper, we 
   propose an improved simulation framework that takes into account this 
   variability using the Monte-Carlo method.
 
   We consider  the execution of  batch jobs on an actual platform, scheduled
-  using typical  heuristics based on the user estimates  of job  runtimes.  We
+  using typical  heuristics based on the user estimates  of task  runtimes.  We
   model  the observed  variability through  simple  random variables  to use  as
   inputs  to the  Monte-Carlo  simulation.  Based  on  this stochastic  process,
   predictions are expressed as interval-based  makespan and cost.  We show that,
@@ -88,9 +88,9 @@ resources are made  available on demand by third-party operators  and paid based
 on usage.  The  ability to provision resources  on demand is mainly  used in two
 ways.  First, it  can serve for scaling purposes where  new machines are brought
 online to face higher workloads and allows for a lower baseline cost.
-Secondly, it  is useful  for parallelizing  jobs to  achieve a  shorter makespan
-(\textit{i.e.}\  the time  between  the  submission of  the  first  job and  the
-completion of the  last job) at equal  cost, this approach being  often used for
+Secondly, it  is useful  for parallelizing tasks to  achieve a  shorter makespan
+(\textit{i.e.}\  the time  between  the  submission of  the  first task and  the
+completion of the  last task) at equal  cost, this approach being  often used for
 scientific  and  industrial  workloads  when runtime  is  heavily  dependent  on
 computing power.  This  approach is made possible by the  pricing model of cloud
 infrastructures, as  popularized by Amazon Web Services, in which
@@ -349,7 +349,7 @@ mimicking the behaviour of Schlouder. It has the same interfaces and implements
 the same scheduling strategies as Schlouder. It uses SimGrid as its core
 simulation engine. In practice, SimSchlouder is included as a plugin into
 Schlouder to allow the user to request an estimate of the makespan and cost
-before choosing a strategy for a real run.i
+before choosing a strategy for a real run.
 %
 SimSchlouder  shares with Schlouder a common subset of inputs. Its inputs
 include the same tasks description and strategy. Whereas Schlouder operates on a
@@ -370,7 +370,7 @@ provided  by stochastic simulations with correctness of scheduling and
 provisioning provided by SimSchlouder.
 
 \subsection{Simulation Process.}
-\begin{figure}
+\begin{figure}[bt]
 	\centering
 	\resizebox{0.6\textwidth}{!}{%
 		\input{gfx/mc-process.tex}
@@ -393,7 +393,7 @@ also the cost for each execution in number of \ac{btu}.
 
 
 \subsection{Real Observations}
-\begin{figure}
+\begin{figure}[bt]
 	\centering
 	\includegraphics[width=\textwidth]{gfx/real_plot.pdf}
 	\caption[caption]{Empirical observations for makespan distributions and \#BTU.%\\ 
@@ -464,7 +464,7 @@ that this simple method  can be precise enough for the  \ac{mcs} to predict over
 90\% of real runs.
 
 This model for the runtimes \acp{rv} uses uniform distributions ($\mathcal{U}$). 
-These \acp{rv} are centered on the expected runtime of the task they represent.
+These \acp{rv} are centered on the estimated runtime of the task they represent.
 The relative spread of these distribution is defined by the \emph{perturbation
 level} $P$, which is the same for every task.  If we assume $P$ can summarize
 the variability of the whole system, a central question is how should $P$ and
@@ -481,7 +481,7 @@ deviations from the estimated runtimes, the relative standard deviation metric
 used in~\cite{LeitnerC16} is not well suited. Instead we choose to build $P$
 using the average of the worst observed deviation for every task in the
 application. With $r_j^n$ the $n$th runtime observation for task $j$, $P$ is set
-to:
+to~:
 
 \begin{equation}
 	P =
@@ -489,7 +489,7 @@ to:
 	{\bar{r_j}}\right)\right)
 \end{equation}
 
-For OMSSA, the perturbation level given by this method is $P\approx{}10\%$ for both
+For OMSSA, the perturbation level given by this model is $P\approx{}10\%$ for both
 strategies. For Montage  our calculated perturbation level is  $P\approx{}20\%$
 for ASAP and $P\approx{}5\%$ for AFAP. Using a similar metric, \cite{pics} also 
 observed most deviations to be within 10\% of the average runtime when working on
@@ -497,7 +497,7 @@ Amazon EC2 instances with dedicated CPUs.
 
 \section{Evaluation}
 \label{sec:eval}
-\begin{figure}
+\begin{figure}[bt]
 	\includegraphics[width=\textwidth]{gfx/fit_plot.pdf}
 	\caption[caption]{Makespan and \#BTU distributions for MCS compared to
 		reality for $P=10\%$.%\\ 
@@ -510,7 +510,7 @@ We ran a 500 iterations \ac{mcs} for every strategy application group using
 the task models described in  the previous section. The  resulting distributions
 are  shown  in  Fig.~\ref{fig:fit}.   The makespan  density  graphs  show  the
 simulation  result  distribution   as  filled  curves. The  real  observed
-executions, as in  fig.~\ref{fig:realbrs}, are shown as  non-filled curves. On 
+executions, as in  Fig.~\ref{fig:realbrs}, are shown as  non-filled curves. On 
 the \ac{btu} count graphs, the  left bar represents
 the empirical data, and the right  bar the results from the simulation.
 %
@@ -586,7 +586,7 @@ exemplify one such application. Then we will discuss limitations we have
 encountered in our work with \ac{mcs}.
 
 \paragraph{High perturbation simulations.}\label{sec:sa}
-\begin{figure}
+\begin{figure}[bt]
 	\includegraphics[width=\textwidth]{gfx/int_plot.pdf}
 	\caption[caption]{Makespan intervals and \#BTU distributions for OMSSA and 
 	Montage at different perturbation levels. In the makespan interval graph 
