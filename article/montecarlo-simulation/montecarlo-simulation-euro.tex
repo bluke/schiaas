@@ -235,11 +235,11 @@ simulation must  be \emph{stochastic}.  In stochastic simulations  inputs become
 The  result  of one  such  simulation  is  itself  an \ac{rv}  representing  the
 distribution  of the  results. 
 
-Extensive  work  has  been  done  on numerical  methods  to  solving  stochastic
+Extensive  work  has  been  done  on numerical  methods  for  solving  stochastic
 simulations of  \ac{dag}~\cite{Li97,Ludwig01}. In a \ac{dag}  model the vertices
 represent  the tasks  comprising the  application, and  the edges  represent the
 dependencies   between   those   tasks.   The   numerical   approach   presented
-in~\cite{Li97,Ludwig01}  show that,  when tasks'  runtimes are  independent, the
+in~\cite{Li97,Ludwig01}  shows that,  when tasks'  runtimes are  independent, the
 makespan distribution of two successive tasks  is the convolution product of the
 tasks'  \aclp{pdf}, while  the makespan  of two  parallel tasks  joining is  the
 product  of   the  tasks'   \aclp{cdf}.  This   makes  the   numerical  approach
@@ -249,7 +249,7 @@ approach  implies  fixed  scheduling,  since  the  scheduling  creates  implicit
 dependencies between tasks scheduled one after another. In a cloud context where
 resources can be provisioned on the fly, dynamic scheduling is much more common.
 
-Instead of numerically computing the  resulting \ac{rv}, an \ac{mcs} samples the
+Instead of numerically computing the  resulting \ac{rv}, a \ac{mcs} samples the
 possible  results by  testing  multiple \emph{realizations}  in a  deterministic
 fashion.  A  realization is  obtained by  drawing a  runtime that  follows their
 task's respective  \ac{rv} for every  task in  the application.  This  allows to
@@ -289,8 +289,8 @@ experiments  run in  actual environments  and experimental  results obtained  by
 simulation.   To strengthen  the validity  of the  comparison, the  experimental
 conditions  for  the  real  setup  and  the  simulation  should  share  as  many
 commonalities as possible, as advocated in~\cite{PucherGWK15}.  Our experimental
-setup described hereafter consists of two test applications which are run on one
-hand, on a real platform with our scheduler Schlouder, and on the other hand are
+setup described hereafter consists of two test applications which are on one
+hand, run on a real platform with our scheduler Schlouder, and on the other hand are
 simulated with our simulator SimSchlouder based on SimGrid.
 
 \paragraph{Test Applications}\label{sc:setup}
@@ -328,7 +328,7 @@ task  dependencies are  also provided.   Schlouder uses  just-in-time scheduling
 where  tasks are  assigned to  \acp{vm} as  soon as  all their  dependencies are
 satisfied.  A  task's real  runtime,  called  \emph{effective runtime},  usually
 differs from  estimated runtimes, but  this does not change  previous scheduling
-decisions. Schlouder's scheduling and provisioning  decision are controlled by a
+decisions. Schlouder's scheduling and provisioning  decisions are controlled by a
 \emph{strategy}.  These strategies  are  bi-objective, taking  into account  the
 rental cost of resources and the execution  makespan. In this paper, we used the
 two following strategies :
@@ -338,7 +338,7 @@ two following strategies :
   This strategy minimizes the makespan.
 
 \item AFAP (\textit{as full as  possible}) schedules each task onto
-  one VM if it does not increase its rental cost (\textit{i.e.} its number
+  one VM if it does not increase the rental cost (\textit{i.e.} the number
   of \ac{btu}), or provisions a new VM otherwise. This strategy minimizes cost
   by minimizing the \ac{btu} count.
 \end{itemize}
@@ -351,8 +351,8 @@ simulation engine. In practice, SimSchlouder is included as a plugin into
 Schlouder to allow the user to request an estimate of the makespan and cost
 before choosing a strategy for a real run.i
 %
-SimSchlouder  shares with Schlouder a common subset of inputs. Its inputs
-include the same tasks description and strategy. Whereas Schlouder operates on a
+SimSchlouder  shares with Schlouder a common subset of inputs, including
+the same tasks description and strategy. Whereas Schlouder operates on a
 real cloud controller, SimSchlouder provisions simulated \acp{vm} through
 SimGrid's cloud interface called SchIaaS. Additionally SimSchlouder requires a
 platform specification, which describe the physical nature of the cloud as well
@@ -363,7 +363,7 @@ simulation to be accurately representative of reality.
 \section{Enriched Simulation Framework}\label{sec:enriched-sim}
 
 
-To address the limited trustworthiness of \ac{des} in variable environment such
+To address the limited trustworthiness of \ac{des} in variable environments such
 as clouds, we propose a framework implementing the Monte-Carlo method using 
 SimSchlouder as simulation engine. This  solution combines the extensive results
 provided  by stochastic simulations with correctness of scheduling and 
@@ -446,9 +446,9 @@ distribution observed in the corresponding traces. For this purpose, traces from
 comparable    runs     are    grouped     by    application     and    strategy.
 Fig.~\ref{fig:realbrs} presents  the distribution  of resulting  makespans and
 \ac{btu}  counts.  For  OMSSA, ASAP  yields a  makespan variation  in the  range
-[12811s;13488s] (variability  ~5\%) with a  constant BTU  count of 40,  and AFAP
+[12811s;13488s] (variability $\approx$5\%) with a  constant BTU  count of 40,  and AFAP
 yields [13564s;14172s] (4\%) with a BTU  count ranging [33;36]. For Montage, the
-makespans are in the range [1478s;1554s] (~4\%) with 10 BTUs of 10 with ASAP and
+makespans are in the range [1478s;1554s] ($\approx$ 4\%) with 10 BTUs of 10 with ASAP and
 [2833s;2837s] (0.1\%) with 1 BTU for AFAP.
 
 
@@ -465,13 +465,13 @@ that this simple method  can be precise enough for the  \ac{mcs} to predict over
 
 This model for the runtimes \acp{rv} uses uniform distributions ($\mathcal{U}$). 
 These \acp{rv} are centered on the expected runtime of the task they represent.
-The relative spread of these distribution is defined by the \emph{perturbation
+The relative spread of these distributions is defined by the \emph{perturbation
 level} $P$, which is the same for every task.  If we assume $P$ can summarize
 the variability of the whole system, a central question is how should $P$ and
 the user estimates be chosen to assess the validity of the \ac{mcs}. To this
 end, we assume a good guess for an  estimated runtime is the  average of all
-effective runtimes, $\bar{r_j}$ for a given tasks $j$. As such the runtime
-distribution's \ac{rv} $T_j$ for tasks $j$ is : 
+effective runtimes, $\bar{r_j}$ for a given task $j$. As such the runtime
+distribution's \ac{rv} $T_j$ for task $j$ is: 
 \begin{equation} 
 	T_j = \mathcal{U}(\bar{r_j}\times(1-P), \bar{r_j}\times(1+P))
 \end{equation}
@@ -562,7 +562,7 @@ Table~\ref{tab:fit} presents the capture rate obtained by each interval computed
 after normal fitting.  Additionally we provide for each interval its size
 relative to the average makespan.
 %
-Regarding OMSSA, the  \ac{mcs} captures at least 90\% of real observed
+Regarding OMSSA, the \ac{mcs} captures at least 90\% of real observed
 makespans. The divergence between the capture rate and the \ac{ci} expected
 capture  rate is due  to the fact that the  empirical makespan distribution does
 not follow a perfect normal distribution. Using  a 99\% \ac{ci} improves the
@@ -610,12 +610,12 @@ distribution fitting of  simulations with both $P=10\%$ and $P=40\%$.  Notice th
 renting shared  instances (\cite{LeitnerC16}).  On the  makespan interval graphs
 (first and third subfigures from left to  right) the boxes represent the span of
 the \ac{ci}  interval. The mean  simulated makespan ($\mu{}$) is  represented by
-the vertical bar inside the interval. The middle row show the interval of real 
+the vertical bar inside the interval. The middle row shows the interval of real 
 observed makespans.
 %
-Simulation of OMSSA using $P=40\%$ exhibit a clear drift upward of
+Simulation of OMSSA using $P=40\%$ exhibits a clear drift upward of
 the ranges of simulated makespans and BTU. This drift is significant compared to
-the grow of the capture interval to the point that the capture rate of the
+the growth of the capture interval to the point that the capture rate of the
 simulation with $P=40\%$ is of only 83\% when the $P=10\%$ simulation had a 90\% 
 capture rate. Montage simulations exhibit the upwards drift but not to the
 extent that it affects the simulation's capture rate. These results have two 
