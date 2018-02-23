@@ -156,8 +156,7 @@ section~\ref{sec:enriched-sim}  and is  evaluated in  section~\ref{sec:eval}. %W
 
 
 \section{Related Work}
-
-\subsection{Simulation}
+\label{sec:relworks}
 
 %Because they allow  for experiments without having  to build or even  use a real
 %platform, simulations are a cornerstone of  the study of distributed systems and
@@ -171,13 +170,13 @@ simulators  require  at  least  a  platform  specification  and  an  application
 description.  %The platform  specification describes both the  physical nature of
 %the cloud,  e.g.~machines and networks,  and the management  rules, e.g.~\ac{vm}
 %placement  and   availability.   
-Depending on the simulator, the platform  specification can be done through user
-code,  as   in  CloudSim~\cite{cloudsim}   for  example,  or   through  platform
-description  files,  as  is  mostly the  case  in  SimGrid~\cite{simgrid}.   The
-application description consists in a  set of computing and communicating tasks,
-often described  as an amount  of computation  or communication to  perform. The
-simulator computes their  duration based on the platform  specification, and its
-CPU and network models.  %An alternative approach
+%Depending on the simulator, the platform  specification can be done through user
+%code,  as   in  CloudSim~\cite{cloudsim}   for  example,  or   through  platform
+%description  files,  as  is  mostly the  case  in  SimGrid~\cite{simgrid}.   The
+%application description consists in a  set of computing and communicating tasks,
+%often described  as an amount  of computation  or communication to  perform. The
+%simulator computes their  duration based on the platform  specification, and its
+%CPU and network models.  %An alternative approach
 %is  to directly  input the task  durations extrapolated  from actual  execution
 %traces.
 
@@ -198,8 +197,7 @@ whole   cloud  ecosystem   including  client   activity.   In   this  category,
 CloudSim~\cite{cloudsim}  is  the  most   broadly  used  simulator  in  academic
 research.  It offers simplified models  regarding network communications, CPU or
 disks. However, it is easily extensible  and serves as the underlying simulation
-engine   in   a   number   of    projects   (e.g   \cite{Cai17},   see   section
-\ref{sc:relwork-stochastic}).  Simgrid~\cite{simgrid} is the other long-standing
+engine in a number of projects. Simgrid~\cite{simgrid} is the other long-standing
 project,  which  when used  in  conjunction  with  the SchIaaS  cloud  interface
 provides  similar  functionnalities  as   CloudSim.   Among  the  other  related
 projects, are iCanCloud~\cite{iCanCloud} proposed  to address scalability issues
@@ -231,54 +229,37 @@ practice  the simulation  is informally  regarded as  valid if  its results  are
 field  of grid  or cloud  computing, published  results in  terms of  validation
 against real settings are scarce relatively to the number of projects.
 
-
-\subsection{Stochastic Simulation and Monte-Carlo Method}
-
-\label{sc:relwork-stochastic}
 For  more   comprehensive  predictions  in  such   variable  environments,  the
 simulation must  be \emph{stochastic}.  In stochastic simulations  inputs become
 \acfp{rv} representing the  distribution of possible values  for the parameters.
 The  result  of one  such  simulation  is  itself  an \ac{rv}  representing  the
 distribution  of the  results. 
 
-Works on heterogeneous grids~\cite{Li97} and PERT networks~\cite{Ludwig01} give
-a numerical method to solving stochastic simulations of \ac{dag}. In a \ac{dag} model 
-the vertices represent the tasks  comprising the application, and the edges represent
-the dependencies between those tasks.  Each vertex can then be assigned its respective
-\ac{rv}  representing   its  possible  runtime. The simulation result is an \ac{rv}
-representing  the possible  duration for  the execution  of the  whole \ac{dag},
-\textit{i.e.} the \emph{makespan}. An \ac{rv} is  defined by its \ac{pdf}  and \ac{cdf},
-where  the   \ac{cdf}  is  obtain   by  integrating  the  \ac{pdf}.
-The numerical approach presented in~\cite{Li97,Ludwig01} show  that
-when  tasks' runtimes  are  independent, the  makespan of  successive tasks is a
-convolution product  of the individual  tasks' \acp{rv}, while the  makespan of
-parallel tasks joining is the  product of  the tasks' respective \acp{cdf}. This
-numerical approach is computationally intensive, and its core constraint,
-the tasks \acp{rv}, independence can not be guaranteed in all cases.
+Extensive work has been done on numerical methods to solving stochastic 
+simulations of \ac{dag}~\cite{Li97,Ludwig01}. In a \ac{dag} model the vertices
+represent the tasks comprising the application, and the edges represent the
+dependencies between those tasks. The numerical approach presented
+in~\cite{Li97,Ludwig01} show  that, when  tasks' runtimes  are  independent, the
+makespan distribution  of two successive tasks is the convolution product of the
+tasks' \aclp{pdf}, while the  makespan of two parallel tasks joining is the product
+of  the tasks' \aclp{cdf}. This makes the numerical approach is computationally
+intensive, and its core constraint, the tasks \acp{rv}, independence can not be
+guaranteed in all cases. Moreover this \ac{dag}-based approach implies fixed 
+scheduling, since the scheduling creates implicit dependencies between tasks
+scheduled one after another. In a cloud context where resources can be
+provisioned on the fly, dynamic scheduling is much more common. 
 
-Moreover this \ac{dag}-based approach implies fixed scheduling. 
-Since cloud platforms allow additional resources provisioning at anytime,
-users are likely to call on dynamic schedulers which adapt the schedule on the fly
-depending of the already executed tasks runtimes and the availability of
-resources. With a \ac{dag} representation, this is akin to adding
-and removing edges depending on the runtime of certain vertices. Edges do not
-only represent the dependencies, the inherent constraint between the application
-tasks, but also the scheduling, the effective constraint imposed on a task queued
-after another.
-
-
-Instead  of numerically computing  the resulting  \ac{rv}, an \ac{mcs} samples the possible
-results by testing  multiple \emph{realizations} in a  deterministic fashion.  A
-realization is obtained by drawing a runtime that follows their task's respective 
-\ac{rv} for  every task in the  application. 
-This allows to simulate each realization using traditional
-methods like \ac{des}.  Eventually, given enough realizations, the distribution of
-the simulation  results will  tend towards the  distribution of  the equivalent
+Instead  of numerically computing  the resulting  \ac{rv}, an \ac{mcs} samples
+the possible results by testing  multiple \emph{realizations} in a
+deterministic fashion.  A realization is obtained by drawing a runtime that
+follows their task's respective \ac{rv} for  every task in the  application.
+This allows to simulate each realization using traditional methods like
+\ac{des}.  Eventually, given enough realizations, the distribution of the
+simulation  results will  tend towards the  distribution of  the equivalent
 stochastic  simulation.  Statistical  fitting  techniques can  then  be used  to
-characterize this makespan \ac{rv}. Whereas when the numerical approach can not 
-account for dynamic scheduling, the Monte-Carlo Methods allows us to do so 
+characterize this makespan \ac{rv}. Whereas when the numerical approach can not
+account for dynamic scheduling, the Monte-Carlo Methods allows us to do so
 trivially by simply implementing the scheduling heuristics in the core \ac{des}.
-
 This approach is first suggested in \cite{Slyke63} for stochastic PERT graphs.
 The development  of heterogeneous distributed computing  environments, grids and
 now clouds,  has led  researchers to use  this approach in  this field.   In the
@@ -286,15 +267,15 @@ context of grids,  where the number of resources is  fixed during one execution,
 Tang et  al.~\cite{Tang11} propose a  modification of the  well-known scheduling
 heuristic  HEFT to  compute  a  schedule yielding  the  shortest makespan  given
 randomly  variable task durations. Canon and Jeannot~\cite{Canon10} have used  \ac{mcs} to
-evaluate  the robustness  of \ac{dag}  schedules when task durations  vary, and
+evaluate  the robustness  of \ac{dag}  schedules when task durations vary, and
 similarly, Zheng et  al.~\cite{Zheng13} evaluate the impact  of this variability
-on the makespan. More  recently, ElasticSim~\cite{Cai17} has been  proposed as a
+on the makespan. More recently, ElasticSim~\cite{Cai17} has been  proposed as a
 simulator extending  Cloudsim to integrate resource  auto-scaling and stochastic
 task durations. Similarly  to our  work, ElasticSim  computes a  schedule whose
-objective  is  to  minimize  rental  cost while meeting deadline
-constraints.  For  several  generated workflows, the  study compares the  simulation results regarding  rental cost
-and makespan,  when varying the variability  of task duration and  deadline with
-arbitrary  values.  By  contrast,  our  work
+objective  is  to  minimize  rental  cost while meeting deadline constraints. 
+For  several  generated workflows, the  study compares the  simulation results 
+regarding  rental cost and makespan,  when varying the variability  of task 
+duration and  deadline with arbitrary  values.  By  contrast,  our  work
 focuses on how the \ac{mcs} method, under some given variability assumptions, 
 captures actual observations.
 
@@ -369,53 +350,28 @@ we used the two following strategies :
   minimizes the monetary cost by minimizing the number of \ac{btu}.
 \end{itemize}
 
-\begin{comment}
-The left part  of Figure~\ref{fig:rs} presents the outline of  a real execution:
-Schlouder inputs are the task set description (including  user estimates and dependencies),  
-and one strategy. They are used to compute   the   scheduling   and  resource   provisioning
-decisions. Then, Schlouder (1) sends provisioning requests to the cloud controller (or frontend), 
-(2) waits for the requested \acp{vm} to become available, and (3) sends  each
-task to  its
-assigned \acp{vm}. At runtime, Schlouder tracks tasks progression, completes the schedule as
-dependencies are  resolved or new batches are submitted, and provisions or terminates \acp{vm}
-whenever it is needed.
-
-\begin{figure}
-	\resizebox{\textwidth}{!}{%
-		\input{gfx/RS.tex}
-	}%
-	\caption{Comparison between real-life and simulated environments.}\label{fig:rs}
-\end{figure}
-\end{comment}
-
 \subsection{Simulated Execution Setup}
-As a follow-up  to our work on Schlouder we  developed SimSchlouder, a simulator
-mimicking  the  behaviour  of  Schlouder. It has the same interfaces and implements  the  same  scheduling
-strategies  as  Schlouder. It  uses  SimGrid  as its  core  simulation  engine.  In
-practice, SimSchlouder  is included as  a plugin  into Schlouder to allow the
-user to request an estimate of the makespan and cost before choosing a
-strategy for a real run.
 
-SimSchlouder  shares with Schlouder  a common  subset of  inputs.   Its inputs  
-include the  same tasks description  and  strategy. 
-Whereas  Schlouder  operates  on   a  real  cloud controller, SimSchlouder 
-provisions simulated \acp{vm} through SimGrid's cloud interface  called SchIaaS.
-As mentioned  earlier, the simulation requires  additional information. First, a
-description of the hardware platform (capabilities and topology of compute, 
-storage, and network) and of the cloud configuration (\acp{vm} management 
-policies). Second, the effective runtime of each task, that used by the 
-simulator to compute the tasks end date without relying solely on the estimated 
-runtimes. 
+As a follow-up to our work on Schlouder we developed SimSchlouder, a simulator
+mimicking the behaviour of Schlouder. It has the same interfaces and implements
+the same scheduling strategies as Schlouder. It uses SimGrid as its core
+simulation engine. In practice, SimSchlouder is included as a plugin into
+Schlouder to allow the user to request an estimate of the makespan and cost
+before choosing a strategy for a real run.
 
-As platform description and cloud configuration allow to simulate the environment of 
-execution, the task effective runtimes allows to simulate the execution of 
-applications beyond the estimates. Together, they allow the simulation to be 
-accurately representative of reality.
+SimSchlouder  shares with Schlouder a common subset of inputs. Its inputs
+include the same tasks description and strategy. Whereas Schlouder operates on a
+real cloud controller, SimSchlouder provisions simulated \acp{vm} through
+SimGrid's cloud interface called SchIaaS. Additionally SimSchlouder requires a
+platform specification, which describe the physical nature of the cloud as well
+as the management rules, and the effective runtime of each task, that are used
+by the simulator to compute the tasks' end dates. Together, they allow the
+simulation to be accurately representative of reality.
 
 \section{Enriched Simulation Framework}\label{sec:enriched-sim}
 
 
-As stated in  section~\ref{sc:relwork-stochastic}, trustworthiness of simulation
+As stated in  section~\ref{sec:relworks}, trustworthiness of simulation
 is questionable when its result is only one of the many possible outcomes. This
 work addresses this issue by  proposing a framework implementing the Monte-Carlo
 method using SimSchlouder  as  simulation engine.   This  solution combines  the
