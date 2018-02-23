@@ -416,7 +416,7 @@ also the cost for each execution in number of \ac{btu}.
 	\centering
 	\includegraphics[width=\textwidth]{gfx/real_plot.pdf}
 	\caption[caption]{Distributions of makespan and BTU count across the OMSSA and 
-	  Montage real-life executions described in Table~\ref{tab:nbruns}.%\\ 
+	  Montage observed executions.%\\ 
 	  %\textit{Reading example: Using AFAP with OMSSA leads to makespans 
 	  %roughly ranging from 12800 s to 13600 s and BTU counts ranging from 33 to 36.}
 	  }
@@ -438,41 +438,43 @@ also the cost for each execution in number of \ac{btu}.
 \end{table}
 \end{comment}
 
-Using Schlouder (cf. Section~\ref{sec:work-context}), we performed numerous
-executions of the application of OMSSA and Montage. These executions were
-performed on a 96 cores Openstack cloud system set up on 4 identical dual
-$2.67GHz$ Intel Xeon X5650 servers. We used the KVM hypervisor and Openstack
-version 2012.1 and 2014.4. The traces obtained from these experiments contain 
-several useful metrics including, but  not limited to, the \ac{vm} start dates, 
-boot time, shutdown times, and assigned tasks, as well as the task start date 
-and effective runtimes. They were initially used all along the development of 
-Schlouder and then to properly tune SimSchlouder in order to make the simulation
-as accurate as possible. As a result, for the execution used in this paper, 
-simulations done with SimSchlouder are precise to the second on the makespan and
-systematically exact on the \ac{btu} count.
+Using  Schlouder  (cf.  Section~\ref{sec:work-context}), we  performed  numerous
+executions  of the  application  of  OMSSA and  Montage.  These executions  were
+performed  on a  96 cores  Openstack cloud  system set  up on  4 identical  dual
+$2.67GHz$ Intel  Xeon X5650 servers.  We used  the KVM hypervisor  and Openstack
+version 2012.1  and 2014.4. The  traces obtained from these  experiments contain
+several useful metrics  including, but not limited to, the  \ac{vm} start dates,
+boot time, shutdown  times, and assigned tasks,  as well as the  task start date
+and effective runtimes.
+%
+They were  initially used  all along  the development of  Schlouder and  then to
+properly  tune SimSchlouder  in  order to  make the  simulation  as accurate  as
+possible. As  a result, for the  execution used in this  paper, simulations done
+with SimSchlouder are  precise to the second on the  makespan and systematically
+exact on the \ac{btu} count.
+%
+Regarding variability, we find our platform variability to stand between 3\% and
+6\% using the metrics described in the study~\cite{LeitnerC16} based on relative
+standard  deviation of  tasks runtimes.   This variability  is within  the range
+reported in  the study for platforms  like Amazon's EC2 or  Google Cloud Engine,
+with the exception of shared CPU instances.
 
-In this paper these execution traces are used to generate our \ac{mcs} input
-\acp{rv} using the method we will describe in Section~\ref{sec:im}. And we
-compare the makespan and \ac{btu} distributions of the \ac{mcs} to the
+In this  paper these execution  traces are used  to generate our  \ac{mcs} input
+\acp{rv}  using the  method  we  will describe  in  Section~\ref{sec:im} and  we
+compare  the  makespan  and  \ac{btu}  distributions  of  the  \ac{mcs}  to  the
 distribution observed in the corresponding traces. For this purpose, traces from
-comparable runs are grouped in \{application, strategy\} groups.
-Figure~\ref{fig:realbrs} presents the distribution of resulting makespans and
-\ac{btu} counts. For OMSSA, the makespan varies from 12811s to 13488s with a BTU
-count of 40 when using ASAP, whereas when using AFAP the makespan varies from
-13564s to 14172s with a BTU count varying from 33 to 36. For Montage, makespan
-goes from 1478s to 1554s with a BTU of 10 for ASAP and from 2833s to 2837s with
-a BTU count of 1 for AFAP.
+comparable    runs     are    grouped     by    application     and    strategy.
+Figure~\ref{fig:realbrs} presents  the distribution  of resulting  makespans and
+\ac{btu} counts.   For OMSSA, the  makespan varies in the  range [12811s;13488s]
+(variability ~5\%)  with a BTU count  of 40 for ASAP,  and [13564s;14172s] (4\%)
+with a BTU count ranging [33;36] for AFAP. For Montage, the makespans are in the
+range [1478s;1554s] (~4\%) with a BTU  of 10 with ASAP and [2833s;2837s] (0.1\%)
+with a BTU count of 1 (AFAP).
 
 
 \subsection{Input Modeling}\label{sec:im}
 
-In introduction,
-we mentioned existing studies related to IaaS cloud variability. Using the
-metrics described in the study~\cite{LeitnerC16}, based on relative standard
-deviation of tasks runtimes, we find our platform variability to stand between
-3\% and 6\%. This variability is within the range reported in the study for
-platforms like Amazon's EC2 or Google Cloud Engine, with the exception of shared
-CPU instances.
+
 Using a  \ac{mcs} we can account for this  variability and provide the
 user with  a range of  possible makespans. In this  section we propose  a simple
 model to  represent the variability of  the whole system using a single factor
