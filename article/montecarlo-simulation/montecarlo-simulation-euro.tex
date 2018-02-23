@@ -314,8 +314,7 @@ conditions  for  the  real  setup  and  the  simulation  should  share  as  many
 commonalities  as   possible~\cite{PucherGWK15}.   We  describe   hereafter  our
 experimental setup.  It consists of two  test applications which are  run on one
 hand, on a real platform with our scheduler Schlouder, and on the other hand are
-simulated  with   our  simulator  SimSchlouder   based  on  SimGrid.    The  two
-environments are sketched side by side on Figure~\ref{fig:rs}.
+simulated  with   our  simulator  SimSchlouder   based  on  SimGrid.
 
 \subsection{Test Applications}\label{sc:setup}
 
@@ -379,6 +378,7 @@ we used the two following strategies, favoring one objective or the other:
   minimizes the monetary cost by minimizing the number of \ac{btu}.
 \end{itemize}
 
+\begin{comment}
 The left part  of Figure~\ref{fig:rs} presents the outline of  a real execution:
 Schlouder inputs are the task set description (including  user estimates and dependencies),  
 and one strategy. They are used to compute   the   scheduling   and  resource   provisioning
@@ -395,7 +395,7 @@ whenever it is needed.
 	}%
 	\caption{Comparison between real-life and simulated environments.}\label{fig:rs}
 \end{figure}
-
+\end{comment}
 
 \subsection{Simulated Execution Setup}
 As a follow-up  to our work on Schlouder we  developed SimSchlouder, a simulator
@@ -405,16 +405,16 @@ practice, SimSchlouder  is included as  a plugin  into Schlouder to allow the
 user to request an estimate of the makespan and cost before choosing a
 strategy for a real run.
 
-As  shown on  the right  side of  Figure~\ref{fig:rs}, SimSchlouder  shares with
-Schlouder  a common  subset of  inputs.   Its inputs  include the  same tasks
-description  and  strategy.    Whereas  Schlouder  operates  on   a  real  cloud
-controller,  SimSchlouder   provisions  simulated  \acp{vm} through
-SimGrid's cloud interface  called SchIaaS. As mentioned  earlier, the simulation
-requires  additional information. First, a description of the hardware platform 
-(capabilities and topology of compute, storage, and network) and of the cloud configuration
-(\acp{vm} management policies). Second, the effective runtime of each task, that
-used by the simulator to compute the tasks end date without relying solely on the
-estimated runtimes. 
+SimSchlouder  shares with Schlouder  a common  subset of  inputs.   Its inputs  
+include the  same tasks description  and  strategy. 
+Whereas  Schlouder  operates  on   a  real  cloud controller, SimSchlouder 
+provisions simulated \acp{vm} through SimGrid's cloud interface  called SchIaaS.
+As mentioned  earlier, the simulation requires  additional information. First, a
+description of the hardware platform (capabilities and topology of compute, 
+storage, and network) and of the cloud configuration (\acp{vm} management 
+policies). Second, the effective runtime of each task, that used by the 
+simulator to compute the tasks end date without relying solely on the estimated 
+runtimes. 
 
 As platform description and cloud configuration allow to simulate the environment of 
 execution, the task effective runtimes allows to simulate the execution of 
@@ -497,34 +497,35 @@ number of VM-hours started during this simulation.
 
 % Il manque une déclaration d'intention
 
-Using Schlouder (cf. Section~\ref{sec:work-context}),
-we performed multiple executions of the
-application of OMSSA and Montage. These executions were performed on a 96 cores
-Openstack cloud system set up on 4 identical dual $2.67GHz$ Intel Xeon X5650
-servers. We used the KVM hypervisor and Openstack version 2012.1 and 2014.4.
+Using Schlouder (cf. Section~\ref{sec:work-context}), we performed multiple
+executions of the application of OMSSA and Montage. These executions were
+performed on a 96 cores Openstack cloud system set up on 4 identical dual
+$2.67GHz$ Intel Xeon X5650 servers. We used the KVM hypervisor and Openstack
+version 2012.1 and 2014.4.
 
-The traces obtained  from  these  experiments contain  several
-useful metrics  including, but  not limited  to, the  \ac{vm} start  dates, boot
-time, shutdown  times, and assigned  tasks, as well as  the task start  date and
-effective  runtimes.
+The traces obtained  from these experiments contain  several useful metrics
+including, but  not limited  to, the  \ac{vm} start  dates, boot time, shutdown
+times, and assigned  tasks, as well as  the task start  date and effective
+runtimes.
 
 They were  initially used  all along  the development of  Schlouder and  then to
 properly  tune SimSchlouder  in  order to  make the  simulation  as accurate  as
-possible.  As a result, for the execution  used in this paper, simulations done with
-SimSchlouder are precise to the second  on the makespan and systematically exact
-on the \ac{btu} count.
+possible.  As a result, for the execution  used in this paper, simulations done
+with SimSchlouder are precise to the second  on the makespan and systematically
+exact on the \ac{btu} count.
 
 In this paper these execution traces are used to  generate our \ac{mcs} input
 \acp{rv} using the method we will describe in Section~\ref{sec:im}. And we
 compare the makespan  and \ac{btu}  distributions of the \ac{mcs} to the
 distribution observed in the corresponding traces.
 %
-For this purpose we grouped the traces  from comparable runs.  For a same platform, 
-a group is defined by a unique pair <application, strategy>.  
+For this purpose we grouped the traces  from comparable runs.  For a same
+platform, a group is defined by a unique pair <application, strategy>.
 Table~\ref{tab:nbruns}  presents  an  overview   of  those groups,  while
-Figure~\ref{fig:realbrs} presents the distribution of resulting makespans and \ac{btu} counts.
-The number of observations is uneven between groups because of  the changing nature of
-the    experimental   conditions    in   which    the   runs    were   executed.
+Figure~\ref{fig:realbrs} presents the distribution of resulting makespans and
+\ac{btu} counts. The number of observations is uneven between groups because of
+the changing nature of the experimental conditions in  which the runs were 
+executed.
 
 
 \subsection{Input Modeling}\label{sec:im}
@@ -532,10 +533,10 @@ the    experimental   conditions    in   which    the   runs    were   executed.
 Figure~\ref{fig:realbrs} shows the distribution of makespans observed in each 
 group. As one can see, the variability of the tasks runtimes induces different
 variabilities in the makespans depending on the group:
-from 12811 s to 13488 s for <OMSSA, ASAP>,
-from 13564 s to 14172 s for <OMSSA, AFAP>,
-from 1478 s to 1554 s for <Montage, ASAP>, and
-from 2833 s to 2837 s for <Montage, AFAP>.
+from 12811s to 13488s for <OMSSA, ASAP>,
+from 13564s to 14172s for <OMSSA, AFAP>,
+from 1478s to 1554s for <Montage, ASAP>, and
+from 2833s to 2837s for <Montage, AFAP>.
 
 
 In introduction,
@@ -547,51 +548,24 @@ platforms like Amazon's EC2 or Google Cloud Engine, with the exception of shared
 CPU instances.
 Using a  \ac{mcs} we can account for this  variability and provide the
 user with  a range of  possible makespans. In this  section we propose  a simple
-model to  represent the variability of  the whole system using  a single factor
+model to  represent the variability of  the whole system using a single factor
 parameter to create  a small range around every estimated  runtime. We test this % ne pas mélanger modele/approche et valdiation
-model against our backlog of real  runs.  The key finding detailed hereafter is
+model against our backlog of real runs. The key finding detailed hereafter is
 that this simple method  can be precise enough for the  \ac{mcs} to predict over
 90\% of real runs.
 
 This model for the runtimes \acp{rv} uses uniform distributions ($\mathcal{U}$). 
-These \acp{rv} are centered on the expected runtime of the task they represent. 
-The relative spread of these distribution is defined by the 
-\emph{perturbation level}. The perturbation level $P$ is a estimate percentage
-and is the same for every task. If we assume $P$ can summarize the variability 
-of the whole system, a central question is how should $P$ and the user estimates
-be chosen to assess the validity of the \ac{mcs}. To this end, we assume a good
-guess for an  estimated runtime is the  average of all effective runtimes,
-$\bar{r_j}$ for a given tasks $j$. As such the runtime distribution's \ac{rv} 
-$T_j$ for tasks $j$ is :
-\begin{equation}
+These \acp{rv} are centered on the expected runtime of the task they represent.
+The relative spread of these distribution is defined by the \emph{perturbation
+level} $P$, which is the same for every task.  If we assume $P$ can summarize
+the variability of the whole system, a central question is how should $P$ and
+the user estimates be chosen to assess the validity of the \ac{mcs}. To this
+end, we assume a good guess for an  estimated runtime is the  average of all
+effective runtimes, $\bar{r_j}$ for a given tasks $j$. As such the runtime
+distribution's \ac{rv} $T_j$ for tasks $j$ is : 
+\begin{equation} 
 	T_j = \mathcal{U}(\bar{r_j}\times(1-P), \bar{r_j}\times(1+P))
 \end{equation}
-
-\begin{comment}
-This model for the runtimes \acp{rv} uses a task's estimated runtime and a global
-perturbation  level  for  all  tasks.  The perturbation  level is denoted as $P$
-and is expressed as a percentage of estimates. It is used  to build a range in 
-which the simulation
-effective runtimes will be drawn. If we assume $P$ can summarize the variability
-of the whole system, a central question is how should $P$ and the user estimates
-be chosen to assess the validity of the \ac{mcs}.  To this end, we assume a good
-guess for an  estimated runtime is the  average of all effective  runtimes for a
-given task. As such $t_j$, the drawn time of task $j$, can be written as~:
-\begin{equation}
-	t_j = \bar{R_j} \cdot (1 + p)
-	\label{eq:t}
-\end{equation}
-\begin{equation}
-	\bar{R_j} = \underset{n}{\textrm{mean}}\{r_j^n\}
-\end{equation}
-\begin{equation}
-	p = \mathcal{U}(-P,+P)
-	\label{eq:r}
-\end{equation}
-where $r_j^n$ is the $n$th runtime observation for task $j$, $\bar{R_j}$ is the
-average of all observed runtimes for task $j$, and $p$ a value drawn from the 
-uniform distribution $\mathcal{U}$.
-\end{comment}
 
 Since the global perturbation level $P$ establishes the limit for the worst
 deviations from the estimated runtimes, the relative standard deviation metric
@@ -599,14 +573,11 @@ used in~\cite{LeitnerC16} is not well suited. Instead we choose to build $P$
 using the average of the worst observed deviation for every task in the
 application. With $r_j^n$ the $n$th runtime observation for task $j$, $P$ is set
 to:
+
 \begin{equation}
-P = \textrm{mean}(\delta{}_j)
-\label{eq:P}
-\end{equation}
-\begin{equation}
-\delta{}_j =
-\max_n\left(\frac{|r_j^n-\bar{r_j}|}{\bar{r_j}}\right)
-\label{eq:d}
+	P =
+	\underset{j}{\textrm{mean}}\left(\max_n\left(\frac{|r_j^n-\bar{r_j}|}
+	{\bar{r_j}}\right)\right)
 \end{equation}
 
 For OMSSA, the perturbation level given by this method is $P\approx{}10\%$ for both
@@ -626,24 +597,6 @@ Amazon EC2 instances with dedicated CPUs.
 	}
 	\label{fig:fit}
 \end{figure}
-\begin{table}
-	\centering
-	\caption{Makespan and BTU capture rate depending on CI
-          for a 10\% perturbation level}\label{tab:fit} 
-	\begin{tabular}{llccc}
-		\toprule
-		Application&Strategy&\multicolumn{2}{c}{Makespan (Size of CI)}&BTU\\
-                           &         & CI 95\% & CI 99\% &\\
-		\midrule
-		\multirow{2}{*}{OMSSA}&ASAP&  90\% (3\%)&  98\% (5\%)& 100\%\\
-				      &AFAP&  92\% (4\%)& 100\% (6\%)& 100\%\\
-		\midrule
-		\multirow{2}{*}{Montage}&ASAP& 100\% (2\%)& 100\% (4\%)& 100\%\\
-					&AFAP& 100\% (1\%)& 100\% (2\%)& 100\%\\
-		\bottomrule
-	\end{tabular}
-\end{table}
-
 We ran a 500 iterations \ac{mcs} for every <strategy, application> group using
 the task models described in  the previous section. The  resulting distributions
 are  shown  in  Figure~\ref{fig:fit}.   The makespan  density  graphs  show  the
@@ -670,6 +623,24 @@ gives us an average makespan $\mu{}$, and a standard deviation $\sigma{}$. These
 can be used to  build \acp{ci}. For the normal distribution  the 95\% \ac{ci} is
 defined  as   $[\mu{}-2\sigma{},\mu{}+2\sigma{}]$  and   the  99\%   \ac{ci}  as
 $[\mu{}-3\sigma{},\mu{}+3\sigma{}]$.
+\begin{table}
+	\centering
+	\caption{Makespan and BTU capture rate depending on CI
+          for a 10\% perturbation level}\label{tab:fit} 
+	\begin{tabular}{llccc}
+		\toprule
+		Application&Strategy&\multicolumn{2}{c}{Makespan (Size of CI)}&BTU\\
+                           &         & CI 95\% & CI 99\% &\\
+		\midrule
+		\multirow{2}{*}{OMSSA}&ASAP&  90\% (3\%)&  98\% (5\%)& 100\%\\
+				      &AFAP&  92\% (4\%)& 100\% (6\%)& 100\%\\
+		\midrule
+		\multirow{2}{*}{Montage}&ASAP& 100\% (2\%)& 100\% (4\%)& 100\%\\
+					&AFAP& 100\% (1\%)& 100\% (2\%)& 100\%\\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
 
 The capture rate expresses the number of observed real makespans that fall
 within a given \ac{ci} relative to the total number of real observations.
@@ -720,8 +691,8 @@ does the prediction change when increasing this perturbation level. In this
 section we will focus on simulations of makespans using the ASAP strategy.
 Figure~\ref{fig:int} presents the 95\% \acp{ci} obtained through the normal
 distribution fitting of simulations with both a 10\%
-and a 40\% perturbation  level. Notice that a 40\% perturbation level may be experienced in
-current cloud provider offers when renting shared instances
+and a 40\% perturbation  level. Notice that a 40\% perturbation level may be 
+experienced in current cloud provider offers when renting shared instances
 (\cite{LeitnerC16}). On the makespan interval graphs  (first and third
 subfigures  from left  to right)  the boxes  represent the  span of the \ac{ci}
 interval. The mean simulated makespan ($\mu{}$) represented by the vertical bar
@@ -758,13 +729,12 @@ when scheduling bag-of-tasks with task runtimes that might vary
 widely. However, the same observation on Montage shows that when
 scheduling workflows ASAP remains capable of low makespans. 
 This behaviour is explained by the nature of workflows,
-in which tasks have to wait for their latest dependencies resolution to run~: 
-in workflows, the makespan depends only on the execution critical path, and thus
-only on the runtime of a subset of the tasks, whereas the makespan of bag-of-tasks 
-depends on the runtime of every tasks.
-
-This kind of analysis can be used to gain insight in the strengths and
-weaknesses of any strategy, even the more complex ones.
+in which tasks have to wait for their latest dependencies resolution to run~: in
+workflows, the makespan depends only on the execution critical path, and thus
+only on the runtime of a subset of the tasks, whereas the makespan of
+bag-of-tasks depends on the runtime of every tasks. This kind of analysis can be
+used to gain insight in the strengths and weaknesses of any strategy, even the
+more complex ones.
 
 
 \subsection{Advantages and limitations of the enriched simulation}\label{sec:lim}
