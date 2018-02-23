@@ -7,6 +7,7 @@
 \usepackage{multirow}
 \usepackage{booktabs}
 \usepackage{amsmath}
+\usepackage{scalefnt}
 
 \usepackage{tikz}
 \usetikzlibrary{fit}
@@ -372,13 +373,14 @@ provisioning provided by SimSchlouder.
 \subsection{Simulation Process.}
 \begin{figure}[bt]
 	\centering
+
 	\resizebox{0.9\textwidth}{!}{%
 		\input{gfx/mc-process.tex}
 		}
-\caption{Overview of a $500$-iteration Monte-Carlo simulation}\label{fig:mc-process}
+\caption{Overview of a $500$-iteration Monte-Carlo simulation.}\label{fig:mc-process}
 \end{figure}
 The whole extended simulation process is referred to as \ac{mcs}. 
-For an application composed of $n$ tasks (as depicted fig.~\ref{fig:mc-process}),
+For an application composed of $n$ tasks (as depicted Fig.~\ref{fig:mc-process}),
 \ac{mcs} consists in applying successive MCS-iterations. Assuming we can provide a
 runtime distribution $T_j$ for every task $j$, a MCS-iteration $k$ consists in~:
 \begin{itemize}
@@ -605,7 +607,7 @@ real system observed  (see Section~\ref{sec:im}).  A subsequent  question is how
 does the  prediction change  when increasing this  perturbation level.   In this
 section  we will  focus  on simulation  of makespans  using  the ASAP  strategy.
 Fig.~\ref{fig:int}  presents  the  95\%  \acp{ci} obtained  through  the  normal
-distribution fitting of  simulations with both $P=10\%$ and $P=40\%$.  Notice that a
+distribution fitting of  simulations with both $P\!=\!10\%$ and $P\!=\!40\%$.  Notice that a
 40\% perturbation level may be experienced in current cloud provider offers when
 renting shared  instances (\cite{LeitnerC16}).  On the  makespan interval graphs
 (first and third subfigures from left to  right) the boxes represent the span of
@@ -613,10 +615,10 @@ the \ac{ci}  interval. The mean  simulated makespan ($\mu{}$) is  represented by
 the vertical bar inside the interval. The middle row shows the interval of real 
 observed makespans.
 %
-Simulation of OMSSA using $P=40\%$ exhibits a clear drift upward of
+Simulation of OMSSA using $P\!=\!40\%$ exhibits a clear drift upward of
 the ranges of simulated makespans and BTU. This drift is significant compared to
 the growth of the capture interval to the point that the capture rate of the
-simulation with $P=40\%$ is of only 83\% when the $P=10\%$ simulation had a 90\% 
+simulation with $P\!=\!40\%$ is of only 83\% when the $P\!=\!10\%$ simulation had a 90\% 
 capture rate. Montage simulations exhibit the upwards drift but not to the
 extent that it affects the simulation's capture rate. These results have two 
 interesting implications.
@@ -636,7 +638,7 @@ interesting implications.
 %
 Firstly, the perturbation level can
 not be used as a trade-off variable to augment capture rate at the expense of
-\ac{ci} compactness. The lower capture rate at P$=40\%$ is a
+\ac{ci} compactness. The lower capture rate at $P\!=\!40\%$ is a
 strong indication that our real platform exhibits a variability closer to
 10\% than to 40\%. Misestimation of the perturbation level will have the same
 implication for the \ac{mcs} as a wrong effective runtime given to \ac{des}. 
@@ -667,7 +669,7 @@ the confidence of the fitting process. The number of simulations necessary in an
 variables.  \aclp{mcs} work by sampling the possible scenarios to get a
 distribution of possible outcomes. As such when more scenarios are possible then
 more samples are required. In our case not only the number of tasks was low, 223
-tasks for OMSSA and 184 tasks for Montage, but with $P=10\%$ the input variable
+tasks for OMSSA and 184 tasks for Montage, but with $P\!=\!10\%$ the input variable
 distribution was compact. At $P=40\%$ there was a significant drop in the
 confidence of our fitting method. We are currently studying the relationship
 between perturbation level and the number of required MCS-iterations.
