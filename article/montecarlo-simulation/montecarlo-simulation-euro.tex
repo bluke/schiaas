@@ -344,25 +344,21 @@ Technically, the broker  connects to the cloud management  system (for instance,
 OpenStack) to  instruct how  the infrastructure should  be provisioned. It then
 assigns the tasks to the resources using the Slurm job management system.
 
-As  in almost  all batch  scheduler systems,  the task description includes  its
-runtime  estimation by  the  user called  \emph{user estimate}.   In  case of  a
+As in most batch scheduler systems, the task description includes its runtime
+estimation by  the  user called  \emph{user estimate}.   In  case of  a
 workflow, the task dependencies are also provided.   Schlouder uses just-in-time
 scheduling where tasks are assigned to \acp{vm} as soon as all their dependencies
-are satisfied.  We call \emph{strategy} the  heuristic used by Schlouder to make
-provisioning and  scheduling decisions according to the estimates of the runtime.  
-In this paper we use two of the dozen strategies and  their variants
-are available to  the user (details can be found  in~\cite{GenaudG11}). 
-We call  the tasks'  real
-runtimes \emph{effective  runtimes}. The effective runtimes usually differ from
-the estimated ones, but this does not change previous scheduling decisions.
-
-The provisioning and scheduling strategies of Schlouder are bi-objective, namely  
-cost of renting the resources, and makespan of the execution.  In this paper, 
-we used the two following strategies, favoring one objective or the other:
+are satisfied. A task's real runtime, called \emph{effective runtime}, usually
+differs from estimated runtimes, but this doesn't affect previous scheduling
+decision. Schlouder's scheduling and provisioning decision are controlled by a
+\emph{strategy}. These strategies are bi-objective, taking into account the
+rental cost of resources and the execution makespan. In this paper, 
+we used the two following strategies :
 \begin{itemize}
 \item ASAP (or \textit{as soon as possible}) schedules each task onto
   an idle VM if one is available, or provisions a new VM otherwise.
-  Hence this strategy minimizes the makespan by running the tasks ASAP.
+  Hence this strategy minimizes the makespan by running the tasks as early as
+  possible.
 
 \item AFAP (or \textit{as full as  possible}) schedules each task onto
   one VM if it does not increase its rental cost (\textit{i.e.} its number
