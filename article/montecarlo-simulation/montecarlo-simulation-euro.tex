@@ -660,19 +660,20 @@ weaknesses of any strategy, regardless of complexity.
 
 \paragraph{Limitations of the enriched simulation.}\label{sec:lim}
 %
-In this paper all the \ac{mcs} presented used 500 iterations. Such an \ac{mcs}
-requires in average 15 minutes of CPU time, and iterations can be parallelized.
-We determined that this was enough in the context of our simulation as
-additional simulations did not change the results and only marginally increased
+In this paper  all the \ac{mcs} presented used 500  iterations. Such an \ac{mcs}
+requires in average 15 minutes of  CPU time, and iterations can be parallelized.
+We  determined  that  this was  enough  in  the  context  of our  simulation  as
+additional simulations did not change  the results and only marginally increased
 the confidence of the fitting process. The number of simulations necessary in an
-\ac{mcs} depends on the number of input variables and the distribution of these
-variables.  \aclp{mcs} work by sampling the possible scenarios to get a
-distribution of possible outcomes. As such when more scenarios are possible then
-more samples are required. In our case not only the number of tasks was low, 223
-tasks for OMSSA and 184 tasks for Montage, but with $P\!=\!10\%$ the input variable
-distribution was compact. At $P=40\%$ there was a significant drop in the
-confidence of our fitting method. We are currently studying the relationship
-between perturbation level and the number of required MCS-iterations.
+\ac{mcs} depends on the number of  input variables and the distribution of these
+variables.   A \ac{mcs}  works  by  sampling the  possible  scenarios  to get  a
+distribution of possible  outcomes, hence when more scenarios  are possible then
+more samples are required.  The relative quick convergence (as compared to other
+scientific fields  where \ac{MCS} is  used) is  explained by the  relatively low
+number of input variables found in batch job scheduling.  In our case, there are
+respectively 223 and 184 tasks for  OMSSA and Montage. As the perturbation level
+influences the  input variable distribution,  we are currently studying  how its
+realtionship with the number of required MCS-iterations.
 
 \section{Conclusion}
 Predicting  the execution  behavior  of complex  workloads in  the  cloud is  an
