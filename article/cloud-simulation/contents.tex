@@ -242,7 +242,7 @@ a \ac{vm}.
 
 Developped  in Java,  SCHIaaS  has been  designed as  a  modular and  extensible
 framework, allowing modelers to plugin their  own code in all the key components
-which model  the cloud  or application behavior  under study.   Figure \ref{fg:}
+which model  the cloud  or application behavior  under study.   Figure \ref{fg:schiaas-box}
 zooms in  the SCHIaaS box  of Figure~\ref{fg:sg-archi}. It shows  the components
 making up SCHIaaS (in  the red box). The boxes with  dashed frames indicate that
 these can be replaced with user-provided code.
@@ -253,7 +253,7 @@ these can be replaced with user-provided code.
 \input{gfx-Schiaas}
 }
 \caption{Zoom on the SCHIaaS framework}
-\label{fg:}
+\label{fg:schiaas-box}
 \end{figure}
 %
 \paragraph{SCHIaaS Core} contains all the management code necessary to set up the data
@@ -343,6 +343,7 @@ simulation is the object of the next section (Section~\ref{sc:simulation}).
 
 
 \subsection{Schlouder}
+\label{sc:schlouder}
 
 The  resource  management  system  used,   developed  by  our  team,  is  called
 \emph{Schlouder} \cite{Michon17}.   It is  a client-side  cloud resource  broker
@@ -511,8 +512,53 @@ run on  images of the \emph{Pleiade}  star cluster at 3  different output sizes,
 \subsection{Using SCHIaaS to simulate Schlouder}
 
 
-\center{\textbf{Ici, raconter comment SimSchlouder a été écrit}.
+\textbf{Ici, raconter comment SimSchlouder a été écrit}.
 
+
+\begin{figure}[hbt]
+\resizebox{\textwidth}{!}{%
+%\minibox[c]{
+\input{gfx-node-state2.tex}
+%}
+}
+\caption{Nodes' states}
+\label{fg:node-states}
+\end{figure}
+
+The  actual  behavior  of  a   ressource  management  system  in  a  distributed
+environment   is  much   more   complex  than   the   description  sketched   in
+Section~\ref{sc:schlouder} and on Figure~\ref{fg:schlouder}.  In a real setting,
+a  number of  idle  periods  appear, which  can  be  communications between  the
+controler and  the nodes or system  delays due to incoming  requests processing.
+Figures~\ref{fg:node-states}  and~\ref{fg:task-states} below  show the  possible
+states of nodes and tasks respectively.
+
+
+For instance regarding the nodes' state, we can evidence from the observations a
+\textsc{Future} state  which is  the time between  the provisioning  decision is
+computed and the time the controler actually sends the request to the node, this
+last action being managed in a separate execution thread. Another example is the
+\textsc{Pending} state, which is the time between the controler request the node
+to  start  a   VM  and  the  time   the  VM  actually  starts   booting  on  the
+node.  Similarly, a  submitted  task goes  through several  steps  until it  can
+actually  be  run   on  a  node:  once  received  by   the  controler  it  stays
+\textsc{Pending}  until  it  is  \textsc{Scheduled}  on  a  node,  to  which  is
+\textsc{Submitted}  (involving  communication)  and  evenutally  starts  on  the
+compute node.
+
+A  key question  is then:  which of  those details  can be  abstracted from  our
+modeling,  reflected by  the simulator  we  build, while  keeping an  acceptable
+accuracy of the simulation?
+
+\begin{figure} [hbt]
+\resizebox{\textwidth}{!}{%
+%\minibox[c]{
+\input{gfx-task-state.tex}
+%}
+}
+\caption{Tasks' states}
+\label{fg:task-states}
+\end{figure}
 
 
 %-------------------------- E V A L U A T I O N -------------------------------  
@@ -614,25 +660,6 @@ management time
  \item 
 \end{itemize}
 
-During the execution, the node are in the following states:
-
-\begin{figure}
-\resizebox{\textwidth}{!}{%
-%\minibox[c]{
-\input{gfx-node-state2.tex}
-%}
-}
-\caption{Nodes' states}
-\end{figure}
-
-\begin{figure}
-\resizebox{\textwidth}{!}{%
-%\minibox[c]{
-\input{gfx-task-state.tex}
-%}
-}
-\caption{Tasks' states}
-\end{figure}
 
 \begin{comment}
 \begin{enumerate}
@@ -644,7 +671,7 @@ During the execution, the node are in the following states:
  \item ShuttingDown: Once the termination of the node is aked to the cloud-kit;
  \item Terminated: Once the node is terminated.
 \end{enumerate}
-\end{comment}
+
 
 
 The observed times are:
@@ -675,7 +702,7 @@ The observed times are:
  \item $managementtime(t) = walltime_t - (inputtime_t+runtime_t+outputtime_t)$
  \item or $managementtime(t) = (inputting_t - submitted_t) + (complete_t - finished_t)$
 \end{itemize}
-
+\end{comment}
 
 
 \subsection{Discussion of Results}
