@@ -105,9 +105,7 @@ servers as long as it can be afforded. However, for distributed applications, it
 quickly becomes  difficult to manually  provision the resources in  an efficient
 way.  The  use of a scheduler  becomes unavoidable for such  workloads.  In this
 paper,  we are  interested in  predicting the  execution time  and cost  of such
-workloads, in which  the scheduling plays an important role.   In this study, we
-consider  two opposite  scheduling strategies  to  put forward  their impact  on
-execution behaviour.
+workloads, in which  the scheduling plays an important role. 
 
 %----------------------- prediction tools --------------------------------------
 Independently  of  scheduling  decisions,  the accurate  prediction  of  complex
@@ -183,14 +181,16 @@ The available  cloud \acp{des} can  be divided in  two categories. In  the first
 category are  the simulators  dedicated to  study the  clouds from  the provider
 point-of-view, whose purpose  is to help evaluating the design  decisions of the
 datacenter. 
-%Examples  of such simulators are  MDCSim~\cite{MDCSim}, which offers
-%specific  and precise  models for  low-level components  including network  (e.g
-%InfiniBand or  Gigabit ethernet),  operating system kernel  and disks.   It also
-%offers a model  for energy consumption. However, the cloud  client activity that
-%can be  modeled is restricted  to web-servers, application-servers  or data-base
-%applications.   GreenCloud~\cite{greencloud} follows  the  same  purpose with  a
-%string  focus  on  energy  consumption  of cloud's  network  apparatus  using  a
-%packet-level  simulation  for  network  communications  (NS2).   
+% ---
+Examples  of such simulators are  MDCSim~\cite{MDCSim}, which offers
+specific  and precise  models for  low-level components  including network  (e.g
+InfiniBand or  Gigabit ethernet),  operating system kernel  and disks.   It also
+offers a model  for energy consumption. However, the cloud  client activity that
+can be  modeled is restricted  to web-servers, application-servers  or data-base
+applications.   GreenCloud~\cite{greencloud} follows  the  same  purpose with  a
+string  focus  on  energy  consumption  of cloud's  network  apparatus  using  a
+packet-level  simulation  for  network  communications  (NS2).   
+% ---
 In the  second category  (which we  focus on) are  the simulators  targeting the
 whole   cloud  ecosystem   including  client   activity.   In   this  category,
 CloudSim~\cite{cloudsim}  is  the  most   broadly  used  simulator  in  academic
@@ -361,7 +361,7 @@ as the management rules, and the effective runtime of each task, that are used
 by the simulator to compute the tasks' end dates. Together, they allow the
 simulation to be accurately representative of reality.
 
-\section{Enriched Simulation Framework}\label{sec:enriched-sim}
+\section{Proposal: an Enriched Simulation Framework}\label{sec:enriched-sim}
 
 
 To address the limited trustworthiness of \ac{des} in variable environments such
@@ -445,13 +445,13 @@ In this  paper these execution  traces are used  to generate our  \ac{mcs} input
 \acp{rv}  using the  method  we  will describe  in  Section~\ref{sec:im} and  we
 compare  the  makespan  and  \ac{btu}  distributions  of  the  \ac{mcs}  to  the
 distribution observed in the corresponding traces. For this purpose, traces from
-comparable    runs     are    grouped     by    application     and    strategy.
-Fig.~\ref{fig:realbrs} presents  the distribution  of resulting  makespans and
-\ac{btu}  counts.  For  OMSSA, ASAP  yields a  makespan variation  in the  range
-[12811s;13488s] (variability $\approx$5\%) with a  constant BTU  count of 40,  and AFAP
-yields [13564s;14172s] (4\%) with a BTU  count ranging [33;36]. For Montage, the
-makespans are in the range [1478s;1554s] ($\approx$ 4\%) with 10 BTUs of 10 with ASAP and
-[2833s;2837s] (0.1\%) with 1 BTU for AFAP.
+comparable runs are grouped by application and strategy.  Fig.~\ref{fig:realbrs}
+presents  the distribution  of  resulting makespans  and  \ac{btu} counts.   For
+OMSSA,  ASAP   yields  a  makespan   variation  in  the   range  [12811s;13488s]
+(variability $\approx$5\%)  with a  constant BTU  count of  40, and  AFAP yields
+[13564s;14172s]  (4\%)  with a  BTU  count  ranging  [33;36]. For  Montage,  the
+makespans are in  the range [1478s;1554s] ($\approx$ 4\%) with  10 BTUs for ASAP
+and [2833s;2837s] (0.1\%) with 1 BTU for AFAP.
 
 
 \subsection{Input Modeling}\label{sec:im}
@@ -702,7 +702,7 @@ number of studies on public clouds have reported variability levels similar to
 our platform (\cite{LeitnerC16,pics}), we intend to reproduce these results on
 public clouds.
 
-\bibliographystyle{splncs_srt}
+\bibliographystyle{splncs}
 \bibliography{montecarlo-simulation}
 
 \end{document}
