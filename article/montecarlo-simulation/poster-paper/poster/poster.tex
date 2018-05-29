@@ -27,7 +27,7 @@
 \begin{columns}
   \column{0.65} \block{1. Running Scientific Workflows in the Cloud}{%See Section 4.2
 	 The Cloud gives access to instantaneous on-demand computing power, with
-	 a rental cost directly proportional to resource's use-time, counted
+	 a rental cost directly proportional to resources' use-time, counted
 	 in \ac{btu}. Like all shared-tenancy platforms, IaaS platforms
 	 present a significant variability~\cite{LeitnerC16}.\\
 
@@ -38,9 +38,9 @@
 	 \emph{Strategy}, which can be used to favor shorter makespans (total 
 	 runtime) as in ASAP, or lower cost (less BTU) as in AFAP.\\  
 
-	 Strategies are not uniformly efficient and some heuristic fail to
+	 Strategies are not uniformly efficient and some heuristics fail to
 	 perform well with certain workflows. Because of the 
-	 \emph{pay-as-you-go} model of IaaS clouds, the simulation of job is 
+	 \emph{pay-as-you-go} model of IaaS clouds, the job simulation is a
 	 critical tool to select the appropriate strategy. However the 
 	 variability of cloud platforms is not taken into account by the 
 	 discrete event simulations usually used.\\
@@ -74,26 +74,26 @@
 
 	In stochastic simulations the task runtimes are replaced by runtime
 	distributions, representing all possible runtimes and their relative
-	likelihood. A numerical solution to these simulations is exists in cases
+	likelihood. A numerical solution to these simulations exists in cases
 	where the distribution of every task is independent and scheduling is
 	static.
 
 	\ac{mcs} can be used to perform stochastic simulations, without the
 	constraints of the numerical solutions and using a deterministic 
-	simulator. A \ac{mcs} work by sampling possible simulation results, by
+	simulator. A \ac{mcs} works by sampling possible simulation results, by
 	simulating \emph{realizations}. A realization is a possible scenario of
-	a job execution, and is obtained by drawing a value from each input 
+	a job execution and is obtained by drawing a value from each input 
 	distribution. The simulation of a realization is entirely deterministic
 	and can be done using any classic cloud simulator.
 
-	In this case our input distributions are the tasks runtimes.\\
+	In this case our input distributions are the tasks' runtimes.\\
 \begin{tikzfigure}[A 500 iteration Monte-Carlo simulation.]
 	\input{gfx/mc-process.tex}
 \end{tikzfigure}
 }
 \block{4. Results}{%
 	Figure 3.\ presents the distribution of makespans and costs obtained
-	with 500 \ac{mcs} iterations using our task model, and compares them to
+	with 500 \ac{mcs} iterations using our task model and compares them to
 	the distributions observed in real executions.
 
 	We can quantify our capture rate on the makespan using statistical 
@@ -107,7 +107,7 @@
 	error as the distribution of real execution makespans slightly differs
 	from a Normal distribution. The simple task model is also a limiting factor. 
 	Figure 3.\ shows that even when the capture rate is 100\% as is the case
-	with BTU cost, the distribution is not the same. This is the results of
+	with BTU cost, the distribution is not the same. This is the result of
 	simplification caused by the task model.  
 }
 \block{5. In Short}{%
@@ -115,7 +115,7 @@
 	necessary to run a job. This variability is a serious impediment to the
 	use of simulators as prediction tools.\\
 
-	Using a simple task model Monte-Carlo simulations allows us to account 
+	Using a simple task model Monte-Carlo simulations allow us to account 
 	for the variability of a job executed on the cloud with sufficient 
 	precision to capture 90\% of real runs.
 }

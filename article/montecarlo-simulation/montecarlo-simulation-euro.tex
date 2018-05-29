@@ -458,24 +458,32 @@ and [2833s;2837s] (0.1\%) with 1 BTU for AFAP.
 
 
 Using a  \ac{mcs} we can account for this  variability and provide the
-user with  a range of  possible makespans. In this  section we propose  a simple
+user with  a range of  possible makespans. 
+%----
+The \ac{mcs} requires a runtime \ac{rv} for every task in the application. These
+\acp{rv} form the input model. Although precise models will yield more exact
+results. But creating such model would not be possible in more common use cases
+where a backlog of real observations is not available.
+%----
+In this  section we propose  a simple
 model to  represent the variability of  the whole system using a single factor
 parameter to create  a small range around every estimated  runtime. We test this % ne pas mélanger modele/approche et valdiation
 model against our backlog of real runs. The key finding detailed hereafter is
 that this simple model can be precise enough for the  \ac{mcs} to predict over
 90\% of real runs.
 
-This model for the runtimes \acp{rv} uses uniform distributions ($\mathcal{U}$). 
-These \acp{rv} are centered on the estimated runtime of the task they represent.
-The relative spread of these distributions is defined by the \emph{perturbation
-level} $P$, which is the same for every task.  If we assume $P$ can summarize
-the variability of the whole system, a central question is how should $P$ and
-the user estimates be chosen to assess the validity of the \ac{mcs}. To this
-end, we assume a good guess for an  estimated runtime is the  average of all
-effective runtimes, $\bar{r_j}$ for a given task $j$. As such the runtime
-distribution's \ac{rv} $T_j$ for task $j$ is: 
+This model for the runtimes \ac{rv} uses a single expected runtime per task and
+a global perturbation level for all tasks. This model uses uniform distributions 
+($\mathcal{U}$). These \acp{rv} are centered on the expected runtime of the task 
+they represent. The relative spread of these distributions is defined by the 
+\emph{perturbation level} $P$, which is the same for every task.  If we assume 
+$P$ can summarize the variability of the whole system, a central question is how
+should $P$ and the expected runtimes be chosen to assess the validity of the 
+\ac{mcs}. To this end, we assume a good guess for an expected runtime is the
+average of all effective runtimes, $\bar{r_j}$ for a given task $j$. 
+As such the runtime distribution's \ac{rv} $T_j$ for task $j$ is: 
 \begin{equation} 
-	T_j = \mathcal{U}(\bar{r_j}\times(1-P), \bar{r_j}\times(1+P))
+	T_j = \mathcal{U}[\bar{r_j}\times(1-P), \bar{r_j}\times(1+P)]
 \end{equation}
 
 Since the global perturbation level $P$ establishes the limit for the worst
