@@ -329,18 +329,22 @@ task  dependencies are  also provided.   Schlouder uses  just-in-time scheduling
 where  tasks are  assigned to  \acp{vm} as  soon as  all their  dependencies are
 satisfied.  A  task's real  runtime,  called  \emph{effective runtime},  usually
 differs from  estimated runtimes, but  this does not change  previous scheduling
-decisions. Schlouder's scheduling and provisioning  decisions are controlled by a
-\emph{strategy}.  These strategies  are  bi-objective, taking  into account  the
-rental cost of resources and the execution  makespan. In this paper, we used the
-two following strategies :
+decisions. 
+%
+The  schedulig problem  in IaaS  clouds is  a bi-ojective  optimization problem,
+taking  into   account  the   rental  cost  of   resources  and   the  execution
+makespan.  Schlouder's requests  users  to  choose a  strategy  that favors  one
+objective  or the  other. The  scheduling  and provisioning  decisions are  then
+controlled accordingly by specific \emph{heuristics}. In this paper, we used the
+two following heuristics:
 \begin{itemize}
 \item ASAP (\textit{as soon as possible}) schedules each task onto
   an idle VM if one is available, or provisions a new VM otherwise.
-  This strategy minimizes the makespan.
+  This heuristic minimizes the makespan.
 
 \item AFAP (\textit{as full as  possible}) schedules each task onto
   one VM if it does not increase the rental cost (\textit{i.e.} the number
-  of \ac{btu}), or provisions a new VM otherwise. This strategy minimizes cost
+  of \ac{btu}), or provisions a new VM otherwise. This heuristic minimizes cost
   by minimizing the \ac{btu} count.
 \end{itemize}
 
@@ -350,10 +354,10 @@ mimicking the behaviour of Schlouder. It has the same interfaces and implements
 the same scheduling strategies as Schlouder. It uses SimGrid as its core
 simulation engine. In practice, SimSchlouder is included as a plugin into
 Schlouder to allow the user to request an estimate of the makespan and cost
-before choosing a strategy for a real run.
+before choosing an heuristic for a real run.
 %
 SimSchlouder  shares with Schlouder a common subset of inputs, including
-the same tasks description and strategy. Whereas Schlouder operates on a
+the same tasks description and heuristic. Whereas Schlouder operates on a
 real cloud controller, SimSchlouder provisions simulated \acp{vm} through
 SimGrid's cloud interface called SchIaaS. Additionally SimSchlouder requires a
 platform specification, which describe the physical nature of the cloud as well
@@ -408,7 +412,7 @@ also the cost for each execution in number of \ac{btu}.
 \begin{table} \centering \caption{Overview of archived
 	executions}\label{tab:nbruns} 
 	\begin{tabular}{llrcc} \toprule
-		Application&Strategy&\#runs&BTU count&Makespan ($s$)\\
+		Application&Heuristic&\#runs&BTU count&Makespan ($s$)\\
 		\midrule 
 		\multirow{2}{*}{OMSSA}&ASAP&106&40&12811 -- 13488\\
 				      &AFAP&98&33 -- 36&13564 -- 14172\\ 
