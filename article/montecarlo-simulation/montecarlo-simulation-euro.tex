@@ -509,6 +509,18 @@ for ASAP and $P\approx{}5\%$ for AFAP. Using a similar metric, \cite{pics} also
 observed most deviations to be within 10\% of the average runtime when working on
 Amazon EC2 instances with dedicated CPUs.
 
+\paragraph{Simulation execution.} The execution of an \ac{mcs} is implemented
+thought a series of script created to automate large numbers of simulations. The
+simulation driver first passes an application template, including dependencies
+and task expected runtimes, to a generator script. The generator creates the
+necessary number of simulation input file, with task runtimes randomised
+following the input model. The driver script can then execute an instance of
+SimSchlouder for every input file, sequentially or concurrently. Once all the
+instances of SimSchlouder have been executed, the result are aggregated in the
+\ac{mcs} output file. This process is supple enough accommodate other simulator
+and models as long as the user can provide a command to generate input files,
+and one to parse simulation outputs. 
+
 \section{Evaluation}
 \label{sec:eval}
 \begin{figure}[bt]
