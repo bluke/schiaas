@@ -110,7 +110,7 @@ workloads, in which  the scheduling plays an important role.
 %----------------------- prediction tools --------------------------------------
 Independently  of  scheduling  decisions,  the accurate  prediction  of  complex
 workload execution is hampered by  the inherent variability of clouds, explained
-by multiple factors.  First \ac{iaas} operates  in an opaque fashion~: the exact
+by multiple factors.  First \ac{iaas} operates  in an opaque fashion: the exact
 nature of the underlying platforms is unknown, and their hardware are subject to
 evolution.   Secondly  cloud systems  are  multi-tenant  by nature.   This  adds
 uncertainty due to contention on network and memory accesses.  This variability,
@@ -351,7 +351,7 @@ two following heuristics:
 \paragraph{Simulated Execution Setup.}
 As a follow-up to our work on Schlouder we developed SimSchlouder, a simulator
 mimicking the behaviour of Schlouder. It has the same interfaces and implements
-the same scheduling strategies as Schlouder. It uses SimGrid as its core
+the same scheduling heuristics as Schlouder. It uses SimGrid as its core
 simulation engine. In practice, SimSchlouder is included as a plugin into
 Schlouder to allow the user to request an estimate of the makespan and cost
 before choosing an heuristic for a real run.
@@ -449,7 +449,7 @@ In this  paper these execution  traces are used  to generate our  \ac{mcs} input
 \acp{rv}  using the  method  we  will describe  in  Section~\ref{sec:im} and  we
 compare  the  makespan  and  \ac{btu}  distributions  of  the  \ac{mcs}  to  the
 distribution observed in the corresponding traces. For this purpose, traces from
-comparable runs are grouped by application and strategy.  Fig.~\ref{fig:realbrs}
+comparable runs are grouped by application and heuristic.  Fig.~\ref{fig:realbrs}
 presents  the distribution  of  resulting makespans  and  \ac{btu} counts.   For
 OMSSA,  ASAP   yields  a  makespan   variation  in  the   range  [12811s;13488s]
 (variability $\approx$5\%)  with a  constant BTU  count of  40, and  AFAP yields
@@ -504,7 +504,7 @@ to~:
 \end{equation}
 
 For OMSSA, the perturbation level given by this model is $P\approx{}10\%$ for both
-strategies. For Montage  our calculated perturbation level is  $P\approx{}20\%$
+heuristics. For Montage  our calculated perturbation level is  $P\approx{}20\%$
 for ASAP and $P\approx{}5\%$ for AFAP. Using a similar metric, \cite{pics} also 
 observed most deviations to be within 10\% of the average runtime when working on
 Amazon EC2 instances with dedicated CPUs.
@@ -520,7 +520,7 @@ Amazon EC2 instances with dedicated CPUs.
 	}
 	\label{fig:fit}
 \end{figure}
-We ran a 500-iteration \ac{mcs} for every strategy application group using
+We ran a 500-iteration \ac{mcs} for every heuristic $\times$ application group using
 the task model described in  the previous section. The  resulting distributions
 are  shown  in  Fig.~\ref{fig:fit}.   The makespan  density  graphs  show  the
 simulation  result  distribution   as  filled  curves. The  real  observed
@@ -557,7 +557,7 @@ $[\mu{}-3\sigma{},\mu{}+3\sigma{}]$.
        \label{tab:fit} 
 	\begin{tabular}{llccc}
 		\toprule
-		Application&Strategy~&\multicolumn{2}{c}{~Makespan (Size of
+		Application&Heuristic~&\multicolumn{2}{c}{~Makespan (Size of
 		CI)~}&~BTU\\
                            &         & CI 95\% & CI 99\% &\\
 		\midrule
@@ -617,7 +617,7 @@ encountered in our work with \ac{mcs}.
 We have so  far set the perturbation level  to a value that was  relevant to the
 real system observed  (see Section~\ref{sec:im}).  A subsequent  question is how
 does the  prediction change  when increasing this  perturbation level.   In this
-section  we will  focus  on simulation  of makespans  using  the ASAP  strategy.
+section  we will  focus  on simulation  of makespans  using  the ASAP heuristic.
 Fig.~\ref{fig:int}  presents  the  95\%  \acp{ci} obtained  through  the  normal
 distribution fitting of  simulations with both $P\!=\!10\%$ and $P\!=\!40\%$.  Notice that a
 40\% perturbation level may be experienced in current cloud provider offers when
@@ -658,8 +658,8 @@ Users for whom higher capture rates are more important than
 interval compactness should use statistical methods to build higher rate \acp{ci},
 like the 99\% normal distribution \ac{ci} used in section~\ref{sec:eval}.
 %
-Secondly, this result shows that \ac{mcs}s can be used to exhibit strategy
-behaviours. This upwards shift of the \ac{ci} shows that ASAP, a strategy
+Secondly, this result shows that \ac{mcs}s can be used to exhibit heuristic
+behaviours. This upwards shift of the \ac{ci} shows that ASAP, an heuristic
 geared towards reducing the makespan regardless of cost, is not as effective
 when scheduling bag-of-tasks with task runtimes that might vary widely. However,
 the same observation on Montage shows that when scheduling workflows ASAP 
@@ -668,7 +668,7 @@ workflows, in which tasks have to wait for their latest dependencies resolution
 to run. In workflows the makespan depends only on the execution critical path, 
 and are therefore unaffected by the variability of tasks outside the path. 
 This kind of analysis can be used to gain insight in the strengths and 
-weaknesses of any strategy, regardless of complexity.
+weaknesses of any heuristic, regardless of complexity.
 
 \paragraph{Limitations of the enriched simulation.}\label{sec:lim}
 %
@@ -704,11 +704,11 @@ spaces. In this work we show that the  variability we seek to account for can be
 modeled  by a  single parameter,  called perturbation  level and applied  to all
 task runtimes. Second, we apply our model in  a real setting, on both a
 bag-of-tasks and a workflow  application, for which we have collected  execution
-traces, using scheduling and provisioning strategies that  aim to optimize
+traces, using scheduling and provisioning heuristics that  aim to optimize
 either the makespan or the  rental cost.  At  the light of  these empirical
 observations,  our study shows that the proposed model could capture over 90\%
 of the observed makespans for  all  combinations  of  application   and
-scheduling  strategies  given  an appropriate perturbation  level. We now aim
+scheduling heuristics  given  an appropriate perturbation  level. We now aim
 to test our simulator  on more use cases and platforms.  In particular as a
 number of studies on public clouds have reported variability levels similar to
 our platform (\cite{LeitnerC16,pics}), we intend to reproduce these results on
