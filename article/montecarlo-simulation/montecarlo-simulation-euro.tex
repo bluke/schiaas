@@ -49,8 +49,8 @@
 	\and Stéphane~Genaud 
 	\and Julien~Gossa}
 \institute{Icube-ICPS --- UMR 7357, Univeristé de Strasbourg, CNRS\\
-		P\^ole API Blvd S. Bant, 67400 Illkirch%\\
-	%	email: \url{lbertot@unistra.fr}, \url{genaud@unistra.fr}, \url{gossa@unistra.fr}
+		P\^ole API, 300 Blvd S. Brant, 67400 Illkirch\\
+		\url{lbertot@unistra.fr}, \url{genaud@unistra.fr}, \url{gossa@unistra.fr}
 	}
 
 
@@ -89,7 +89,7 @@ resources are made  available on demand by third-party operators  and paid based
 on usage.  The  ability to provision resources  on demand is mainly  used in two
 ways.  First, it  can serve for scaling purposes where  new machines are brought
 online to face higher workloads and allows for a lower baseline cost.
-Secondly, it  is useful  for parallelizing tasks to  achieve a  shorter makespan
+Second, it  is useful  for parallelizing tasks to  achieve a  shorter makespan
 (\textit{i.e.}\  the time  between  the  submission of  the  first task and  the
 completion of the  last task) at equal  cost, this approach being  often used for
 scientific  and  industrial  workloads  when runtime  is  heavily  dependent  on
@@ -110,21 +110,21 @@ workloads, in which  the scheduling plays an important role.
 %----------------------- prediction tools --------------------------------------
 Independently  of  scheduling  decisions,  the accurate  prediction  of  complex
 workload execution is hampered by  the inherent variability of clouds, explained
-by multiple factors.  First \ac{iaas} operates  in an opaque fashion: the exact
+by multiple factors.  Firstly \ac{iaas} operates  in an opaque fashion: the exact
 nature of the underlying platforms is unknown, and their hardware are subject to
 evolution.   Secondly  cloud systems  are  multi-tenant  by nature.   This  adds
 uncertainty due to contention on network and memory accesses.  This variability,
 reported  by  a  number  of practitionners  who  evaluate  parallel  application
-performance  on  clouds  (e.g~\cite{MehrotraDHHJLSB16}, who  report  an  average
+performance  on  clouds  (e.g.~\cite{MehrotraDHHJLSB16}, who  report  an  average
 5\%-6\% variability on AWS cluster compute instances), has also been measured by
-one   of   the   most   comprehensive   and  recent   survey   by   Leitner   et
+one   of   the   most   comprehensive   and  recent   surveys  by   Leitner   et
 al.~\cite{LeitnerC16}.  We will see in this paper that our observations fit with
 the figures presented in this survey.
 %
 This  variability increases  the difficulty  of modeling task execution  times.
 %which is  already difficult  enough, as  shown in~\cite{Lastovetsky05}.  
 In this regard,  the prediction is highly dependent on  the underlying simulator
-of the system and on the phenomena it can capture.  In this work, we rely on the
+of the system and on the phenomena it can capture.  In our work, we rely on the
 SimGrid~\cite{simgrid} simulation  toolkit, enabling us to  build discrete event
 simulators of distributed systems such as Grids, Clouds, or HPC systems. SimGrid
 has   been    chosen   for    its   well-studied   accuracy    against   reality
@@ -145,10 +145,10 @@ In this paper, we propose a stochastic method to enrich the classical prediction
 based  on the  discrete-event simulator  SimGrid,  and we  study the  conditions
 needed for  this approach to be  relevant. This study  is carried out in  a real
 setting,  described in  section~\ref{sec:work-context},  where the  applications
-use-cases, the scheduler, and the  experimental observations are presented.  The
-stochastic     framework     we     propose     is     then     presented     in
-section~\ref{sec:enriched-sim}  and is  evaluated in  section~\ref{sec:eval}. %We
-%finally conclude by  discussing in section~\ref{sec:disc} the possible
+, and the scheduler are presented.  The stochastic  framework we propose is then
+presented in section~\ref{sec:enriched-sim} and is evaluated in 
+section~\ref{sec:eval}. We discuss the limits of this approach in 
+section~\ref{sec:disc}. %the possible
 %improvements and the  limits of the approach.
 
 
@@ -160,7 +160,7 @@ section~\ref{sec:enriched-sim}  and is  evaluated in  section~\ref{sec:eval}. %W
 %clouds.
 \paragraph{Simulation.} Most cloud simulators  are based on \ac{des}. In \aclp{des}  the simulation is a
 serie  of events  changing the  state of  the simulated  system.  For  instance,
-events can  be the  start (or  end) of computations  or of  communications.  The
+events can  be the  start (or  end) of computations  or communications.  The
 simulator will jump from  one event to the next, updating  the times of upcoming
 events  to reflect  the state  change  in the  simulation.  Such  \ac{des}-based
 simulators  require  at  least  a  platform  specification  and  an  application
@@ -186,28 +186,28 @@ Examples  of such simulators are  MDCSim~\cite{MDCSim}, which offers
 specific  and precise  models for  low-level components  including network  (e.g
 InfiniBand or  Gigabit ethernet),  operating system kernel  and disks.   It also
 offers a model  for energy consumption. However, the cloud  client activity that
-can be  modeled is restricted  to web-servers, application-servers  or data-base
+can be  modeled is restricted  to web-servers, application-servers, or data-base
 applications.   GreenCloud~\cite{greencloud} follows  the  same  purpose with  a
-string  focus  on  energy  consumption  of cloud's  network  apparatus  using  a
+strong  focus  on  energy  consumption  of cloud's  network  apparatus  using  a
 packet-level  simulation  for  network  communications  (NS2).   
 % ---
 In the  second category  (which we  focus on) are  the simulators  targeting the
 whole   cloud  ecosystem   including  client   activity.   In   this  category,
 CloudSim~\cite{cloudsim}  is  the  most   broadly  used  simulator  in  academic
-research.  It offers simplified models  regarding network communications, CPU or
+research.  It offers simplified models regarding network communications, CPU, or
 disks. However, it is easily extensible  and serves as the underlying simulation
 engine in a number of projects. Simgrid~\cite{simgrid} is the other long-standing
 project,  which  when used  in  conjunction  with  the SchIaaS  cloud  interface
 provides  similar  functionnalities  as   CloudSim.   Among  the  other  related
-projects, are iCanCloud~\cite{iCanCloud} proposed  to address scalability issues
+projects is iCanCloud~\cite{iCanCloud} proposed  to address scalability issues
 encountered  with  CloudSim  (written  in  Java) for  the  simulation  of  large
-use-cases.  Most recently,  PICS~\cite{pics} has  been proposed  to specifically
-evaluate simulation of  public clouds.  The configuration of  the simulator uses
-only parameters  that can be  measured by the  cloud client, namely  inbound and
+use-cases.  Most recently,  PICS~\cite{pics} has  been proposed to evaluate 
+specifically the simulation of public clouds. The configuration of the simulator uses
+only parameters  that can be  measured by the  cloud client, namely inbound and
 outbound  network  bandwidths,  average  CPU  power,  \ac{vm}  boot  times,  and
 scale-in/scale-out policies. The  data center is therefore seen as  a black box,
 for which  no detailed  description of  the hardware  setting is  required.  The
-validation study  of PICS  under a  variety of use  cases has  nonetheless shown
+validation study  of PICS  under a  variety of use-cases has  nonetheless shown
 accurate predictions.
 
 %At the core of DES is the solver.  The solver considers the states of the system
@@ -253,25 +253,23 @@ resources can be provisioned on the fly, dynamic scheduling is much more common.
 Instead of numerically computing the  resulting \ac{rv}, a \ac{mcs} samples the
 possible  results by  testing  multiple \emph{realizations}  in a  deterministic
 fashion.  A  realization is  obtained by  drawing a  runtime that  follows their
-task's respective  \ac{rv} for every  task in  the application.  This  allows to
+task's respective \ac{rv} for every  task in the application. This allows one to
 simulate each realization using  traditional methods like \ac{des}.  Eventually,
 given enough realizations, the distribution  of the simulation results will tend
 towards the  distribution of the equivalent  stochastic simulation.  Statistical
 fitting   techniques  can   then   be  used   to   characterize  this   makespan
-\ac{rv}. \acp{mcs} allows for non-independent \ac{rv} and dynamic
-scheduling.
-This approach is first suggested in
-\cite{Slyke63}  for stochastic  PERT graphs.   
+\ac{rv}. \acp{mcs} permits non-independent \ac{rv} and dynamic scheduling.
+This approach was first suggested in \cite{Slyke63}  for stochastic  PERT graphs.   
 %The development  of heterogeneous
 %distributed computing environments, grids and now clouds, has led researchers to
 %se this approach in  this field.  
 Later, in the  context of grids, where  the number of resources  is fixed during
-one execution, Tang et al.~\cite{Tang11} propose, a modification of the well-known
+one execution, Tang et al.~\cite{Tang11} proposed, a modification of the well-known
 scheduling heuristic HEFT to compute a schedule yielding the shortest makespan
 given randomly variable task durations. Canon and Jeannot~\cite{Canon10} have
 used \ac{mcs} to evaluate the robustness of \ac{dag}
 schedules when task  durations vary, and similarly,  Zheng et al.~\cite{Zheng13}
-evaluate  the  impact of  this  variability  on  the makespan.   More  recently,
+evaluated the  impact of  this  variability  on  the makespan.   More  recently,
 ElasticSim~\cite{Cai17} has been  proposed as a simulator  extending Cloudsim to
 integrate resource auto-scaling and stochastic  task durations. Similarly to our
 work, ElasticSim computes a schedule whose  objective is to minimize rental cost
@@ -285,14 +283,14 @@ variability assumptions, captures actual observations.
 \section{Work Context}
 \label{sec:work-context}
 
-The study  conducted in this  paper is built  upon a genuine  comparison between
+The study  conducted in this  paper is built  upon a real comparison between
 experiments  run in  actual environments  and experimental  results obtained  by
 simulation.   To strengthen  the validity  of the  comparison, the  experimental
 conditions  for  the  real  setup  and  the  simulation  should  share  as  many
 commonalities as possible, as advocated in~\cite{PucherGWK15}.  Our experimental
-setup described hereafter consists of two test applications which are on one
-hand, run on a real platform with our scheduler Schlouder, and on the other hand are
-simulated with our simulator SimSchlouder based on SimGrid.
+setup described hereafter consists of two test applications which, on one hand,
+are run on a real platform with our scheduler Schlouder, and on the other hand 
+are simulated with our simulator SimSchlouder based on SimGrid.
 
 \paragraph{Test Applications}\label{sc:setup}
 
@@ -466,7 +464,7 @@ user with  a range of  possible makespans.
 %----
 The \ac{mcs} requires a runtime \ac{rv} for every task in the application. These
 \acp{rv} form the input model. Although precise models will yield more exact
-results. But creating such model would not be possible in more common use cases
+results, creating such models would not be possible in more common use-cases
 where a backlog of real observations is not available.
 %----
 In this  section we propose  a simple
@@ -510,16 +508,16 @@ observed most deviations to be within 10\% of the average runtime when working o
 Amazon EC2 instances with dedicated CPUs.
 
 \paragraph{Simulation execution.} The execution of an \ac{mcs} is implemented
-thought a series of script created to automate large numbers of simulations. The
+through a series of scripts created to automate large numbers of simulations. The
 simulation driver first passes an application template, including dependencies
 and task expected runtimes, to a generator script. The generator creates the
-necessary number of simulation input file, with task runtimes randomised
+necessary number of simulation input files, with task runtimes randomised
 following the input model. The driver script can then execute an instance of
 SimSchlouder for every input file, sequentially or concurrently. Once all the
 instances of SimSchlouder have been executed, the result are aggregated in the
-\ac{mcs} output file. This process is supple enough accommodate other simulator
-and models as long as the user can provide a command to generate input files,
-and one to parse simulation outputs. 
+\ac{mcs} output file. This process is supple enough to accommodate other 
+simulator and models as long as the user can provide a command to generate input
+files and another to parse simulation outputs. 
 
 \section{Evaluation}
 \label{sec:eval}
@@ -540,7 +538,7 @@ executions, as in  Fig.~\ref{fig:realbrs}, are shown as  non-filled curves. On
 the \ac{btu} count graphs, the  left bar represents
 the empirical data, and the right  bar the results from the simulation.
 %
-These graph show the simulation results cover the same ranges as the real
+These graphs show the simulation results cover the same ranges as the real
 observation, but do not present the same distribution within those ranges. 
 %
 %When looking at the resulting OMSSA distributions, presented in the two leftmost
@@ -554,7 +552,7 @@ observation, but do not present the same distribution within those ranges.
 %
 We quantify our simulation results correctness using statistical confidence
 intervals.   Since the makespan is in essence  the sum of the tasks' runtimes
-in the  execution critical path,  and tasks  are all distributed  using the
+in the  execution critical path and tasks  are all distributed  using the
 uniform distribution  which  has a  finite variance,  we consider the Central
 Limit Theorem applicable.  Fitting to a normal distribution gives us an average
 makespan $\mu{}$, and a standard deviation $\sigma{}$. These can be used to
@@ -608,7 +606,7 @@ regards to the theoretical \ac{ci}.
 \label{sec:disc}
 Outside of the realm of reproduction or predictions, we believe that \ac{mcs}
 can have other more research oriented applications. In this section we will
-exemplify one such application. Then we will discuss limitations we have
+illustrate one such application. Then we will discuss limitations we have
 encountered in our work with \ac{mcs}.
 
 \paragraph{High perturbation simulations.}\label{sec:sa}
@@ -676,7 +674,7 @@ geared towards reducing the makespan regardless of cost, is not as effective
 when scheduling bag-of-tasks with task runtimes that might vary widely. However,
 the same observation on Montage shows that when scheduling workflows ASAP 
 remains capable of low makespans. This behaviour is explained by the nature of 
-workflows, in which tasks have to wait for their latest dependencies resolution 
+workflows, in which tasks have to wait for their last dependencies resolution 
 to run. In workflows the makespan depends only on the execution critical path, 
 and are therefore unaffected by the variability of tasks outside the path. 
 This kind of analysis can be used to gain insight in the strengths and 
@@ -693,15 +691,15 @@ the confidence of the fitting process. The number of simulations necessary in an
 variables.   A \ac{mcs}  works  by  sampling the  possible  scenarios  to get  a
 distribution of possible  outcomes, hence when more scenarios  are possible then
 more samples are required.  The relative quick convergence (as compared to other
-scientific fields  where \ac{MCS} is  used) is  explained by the  relatively low
+scientific fields  where \ac{mcs} is  used) is  explained by the  relatively low
 number of input variables found in batch job scheduling.  In our case, there are
 respectively 223 and 184 tasks for  OMSSA and Montage. As the perturbation level
-influences the  input variable distribution,  we are currently studying  how its
-relationship with the number of required MCS-iteration.
+influences the  input variable distribution,  we are currently studying its
+relationship with the number of required MCS-iterations.
 
 \section{Conclusion}
 Predicting  the execution  behaviour of complex  workloads in  the  cloud is  an
-important challenge. While a number of research works have proposed model-driven
+important challenge. While a number of works have proposed model-driven
 simulators, much remains to be done for their adoption in production-grade cloud
 settings. As  advocated by Puchert  et al.~\cite{PucherGWK15}, the trust  we can
 put in  the prediction  demands certainty  and precision  that only  comes from
@@ -714,17 +712,15 @@ billing cost  and makespan  produced by  traditional discrete  event simulators.
 The \acl{mcs}  must be parameterized to  draw random values from  relevant value
 spaces. In this work we show that the  variability we seek to account for can be
 modeled  by a  single parameter,  called perturbation  level and applied  to all
-task runtimes. Second, we apply our model in  a real setting, on both a
-bag-of-tasks and a workflow  application, for which we have collected  execution
-traces, using scheduling and provisioning heuristics that  aim to optimize
-either the makespan or the  rental cost.  At  the light of  these empirical
-observations,  our study shows that the proposed model could capture over 90\%
-of the observed makespans for  all  combinations  of  application   and
-scheduling heuristics  given  an appropriate perturbation  level. We now aim
-to test our simulator  on more use cases and platforms.  In particular as a
-number of studies on public clouds have reported variability levels similar to
-our platform (\cite{LeitnerC16,pics}), we intend to reproduce these results on
-public clouds.
+task runtimes. Second, we apply our model in  a real setting, on two different
+applications, for which we have collected  execution traces.  At  the light of
+these empirical observations,  our study shows that the proposed model could
+capture over 90\% of the observed makespans for  all  combinations  of
+application   and scheduling heuristics  given  an appropriate perturbation
+level. We now aim to test our simulator  on more use-cases and platforms.  In
+particular as a number of studies on public clouds have reported variability
+levels similar to our platform (\cite{LeitnerC16,pics}), we intend to reproduce
+these results on public clouds.
 
 \bibliographystyle{splncs}
 \bibliography{montecarlo-simulation}
