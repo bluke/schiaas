@@ -673,10 +673,19 @@ behaviours. This upwards shift of the \ac{ci} shows that ASAP, an heuristic
 geared towards reducing the makespan regardless of cost, is not as effective
 when scheduling bag-of-tasks with task runtimes that might vary widely. However,
 the same observation on Montage shows that when scheduling workflows ASAP 
-remains capable of low makespans. This behaviour is explained by the nature of 
-workflows, in which tasks have to wait for their last dependencies resolution 
-to run. In workflows the makespan depends only on the execution critical path, 
-and are therefore unaffected by the variability of tasks outside the path. 
+remains capable of low makespans. 
+%--
+This can be explained by the scheduler's 
+behaviour and the workflow's nature. In workflows the makespan depends only on 
+execution of tasks in the critical path, and remains unaffected by variability 
+of tasks outside the path. This is compounded by the just-in-time scheduling
+used in Schlouder, later scheduling decisions take into account the tasks'
+deviation from their expected runtimes. 
+%--
+%This behaviour is explained by the nature of 
+%workflows, in which tasks have to wait for their last dependencies resolution 
+%to run. In workflows the makespan depends only on the execution critical path, 
+%and are therefore unaffected by the variability of tasks outside the path. 
 This kind of analysis can be used to gain insight in the strengths and 
 weaknesses of any heuristic, regardless of complexity.
 
