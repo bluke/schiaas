@@ -1,0 +1,44 @@
+\begin{tikzpicture}[x=5mm,y=-10mm,
+task/.style={%
+fill=blue!25,
+draw,circle},
+level/.style={%
+  font={\sffamily\bfseries\color{black} \fontsize{9pt}{12}\selectfont},
+  align=right,
+  text width=20mm}]
+\node[level] at (0,0)(Lproj){project};
+\node[level] at (0,1)(Loverlap){overlap};
+\node[level] at (0,2)(Ldiff){diff};
+\node[level] at (0,3)(Lbgm){bgmodel};
+\node[level] at (0,4)(Lbg){background};
+\node[level] at (0,5)(Ladd){add};
+\node[level] at(0,7)(Lgather){gather};
+\node[task]at(11,7)(gather){};
+\foreach \n [count=\i from 0] in {h,j,k}{%
+	\begin{scope}[shift={(3+6*\i,0)}]
+		\node[task]at(2,1)(\i_overlap){};
+		\node[task]at(2,3)(\i_bgm){};
+		\node[task]at(2,4)(\i_bg){};
+		\node[task]at(2,5)(\i_add){};
+		\foreach \y in {0,1,...,4}{%
+			\node[task]at(\y,0)(\i_p_\y){};
+			\node[task]at(\y,2)(\i_d_\y){};
+			\draw[-{latex}](\i_p_\y)--(\i_overlap);
+			\draw[-{latex}](\i_overlap)--(\i_d_\y);
+			\draw[-{latex}](\i_d_\y)--(\i_bgm);
+		}
+		\draw[-{latex}](\i_bgm)--(\i_bg);
+		\draw[-{latex}](\i_bg)--(\i_add);
+		\node[rounded corners,draw,fit=(\i_add)(\i_p_0)(\i_p_4),label={[font={\sffamily\bfseries\color{black}\fontsize{9pt}{12}\selectfont}]110:\n}]{};
+		\end{scope}
+	\draw[-{latex}](\i_add)--(gather);
+}
+\node[draw,anchor=north west,minimum height=8.5cm,minimum width=11cm,label={[font=\sffamily\bfseries]north:Montage}]at(-2,-1){};
+
+\node[draw,anchor=north west,minimum height=8.5cm,minimum width=3cm,label={[font=\sffamily\bfseries]north:OMSSA}]at(20.5,-1){};
+\foreach \x in {21.25,22.75,...,25.75}{%
+	\foreach \y in {0,0.75,...,8}{%
+		\node[task]at(\x-rand*0.25,\y-0.5+rand*0.2){};
+	}
+}
+\end{tikzpicture}
