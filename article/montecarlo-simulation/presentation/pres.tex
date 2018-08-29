@@ -116,7 +116,22 @@
 
 \begin{frame}
 	\frametitle{Stochastic Simulations}
-	??? bulletpoints
+	\begin{itemize}
+		\item{} All inputs (task runtimes) are now random variables (RVs)
+		\item{} All outputs are are also random variables
+	\end{itemize}
+	\pause
+	Numerical solutions exists for stochastic DAGs, but :
+	\begin{itemize}
+		\item{} Require RVs to be independent,
+		\item{} Involves both the PDF and the CDF,
+		\item{} Requires a static DAG.
+	\end{itemize}
+	\pause
+	\begin{block}{}
+		Numerical resolution is not adapted to stochastic cloud
+		simulations.
+	\end{block}
 \end{frame}
 
 \section{Monte-Carlo Simulations}
@@ -127,11 +142,59 @@
 \end{frame}
 
 \begin{frame}
-	Experimental rational	(+modele simple)
+	\frametitle{Experiment Rationale}
+\begin{overlayarea}{\textwidth}{\textheight}
+	\only<1>{%
+	\begin{block}{Validating deterministic simulator}
+		\begin{itemize}
+			\item{} Execute a workload in a real environment
+			\item{} Run the simulation based on the observed
+				execution.
+			\item{} Compare the observed execution to the simulated
+				one
+		\end{itemize}
+	\end{block}
+}
+\only<2->{%
+	\begin{block}{Validating \textbf{stochastic} simulator}
+		\begin{itemize}
+			\item{} Execute \textbf{many} workloads in a real 
+				environment
+			\item{} Run the \textbf{MCS} base on the observed tasks
+				distributions
+			\item{} Compare the observed \textbf{distribution} to the simulated
+				one
+		\end{itemize}
+	\end{block}\\[1cm]
+}
+\only<3->{
+	\begin{itemize}
+		\item{} The task model must remain simple enough that it could
+			be build in real life conditions.
+	\end{itemize}
+}
+\end{overlayarea}
 \end{frame}
 
 \begin{frame}
-	our experimental setup (in vivo/in silico)
+	\frametitle{Experimental Setup : In vivo}
+	\begin{block}{Cloud}
+	\begin{itemize}
+		\item{} Private testbed
+		\item{} 4 Nodes
+		\item{} 2 $\times$ Intel Xeon X5650 (2.67 GHz)
+		\item{} Openstack 2014.4 with KVM on Ubuntu
+		\item{} Network not isolated
+	\end{itemize}
+	\end{block}
+	\begin{block}{Applications}
+	\begin{itemize}
+		\item{} Montage (Workflow, 184 tasks)
+		\item{} OMSSA (BoT, 223 tasks)
+		\item{} Data accessible over NFS
+		\item{} Scheduled using ASAP and AFAP
+	\end{itemize}
+	\end{block}
 \end{frame}
 
 \begin{frame}
@@ -140,8 +203,45 @@
 \end{frame}
 
 \begin{frame}
- 	input model +(Leitner)
+	\frametitle{Cloud Variability}
+ 	(Leitner)
 \end{frame}
+
+\begin{frame}
+	\frametitle{Input model}
+\end{frame}
+
+\begin{frame}[fragile]
+	\frametitle{Experimental setup: In silico}
+\begin{lstlisting}[language=bash,basicstyle=\tt\footnotesize,backgroundcolor=\color{gray!10},
+morekeywords={SETUP_DIR,TU_ARG,PRE_COMMAND_SETUP,POST_COMMAND_DATA,SIM_ARG,INCLUDE},
+keywordstyle=\color{red!90},commentstyle=\color{blue!70}]
+#### MCsim.cfg ####
+# setup
+SETUP_DIR ./setup/xp-dir
+PRE_COMMAND_SETUP ./generate_sims.py -t taskmodel.task \
+> /tmp/sim-list.cfg
+POST_COMMAND_DATA ./result_aggregation.sh > metric.dat
+# simulations
+SIM_ARG 1 simschlouder.SimSchlouder
+SIM_ARG 2 platform.xml 
+SIM_ARG 3 icps-cloud-config.xml
+INCLUDE /tmp/sim-list.cfg
+SIM_ARG 6 real_walltimes
+\end{lstlisting}
+\begin{lstlisting}[language=bash,basicstyle=\tt\footnotesize,backgroundcolor=\color{gray!10},
+morekeywords={SETUP_DIR,TU_ARG,PRE_COMMAND_SETUP,POST_COMMAND_DATA,SIM_ARG,INCLUDE},
+keywordstyle=\color{red!90},commentstyle=\color{blue!70}]
+#### sim-list.cfg ####
+SIM_ARG 4:1 /tmp/sims/xp1.tasks
+SIM_ARG 4:2 /tmp/sims/xp2.tasks
+	[...]
+SIM_ARG 4:500 /tmp/sims/xp500.tasks
+SIM_ARG 5:ASAP asap
+SIM_ARG 5:AFAP afap
+\end{lstlisting}
+\end{frame}
+
 
 \section{Results}
 
@@ -165,7 +265,8 @@
 \end{frame}
 
 \begin{frame}
-	\frametitle{???}
+	\frametitle{When the speaker pretends to ask a question the answer is
+	always no.}
 	\includegraphics[width=\textwidth]{gfx/int.pdf}
 \end{frame}
 
