@@ -1,92 +1,31 @@
-\begin{tikzpicture}[
-font=\small,
-plate/.style={anchor=south west},
-b/.style={
+\begin{tikzpicture}[x=25mm+5pt,y=15mm+5pt,
+every node/.style={%
+line width=1pt,
 draw,
-anchor=south,
-rounded corners},
-lb/.style={b,anchor=south west},
-rb/.style={b,anchor=south east},
-fg/.style={fill=gray!10},
-fw/.style={fill=white},
-dtask/.style={circle,thick,draw,font=\tiny},
-arw/.style={-{latex},thick},
-job/.style={%
-font=\tiny,
-anchor=west,
-fill=orange!10,
-minimum height=3mm,
-draw
+rounded corners,
+anchor=center,
 },
-btu/.style={%
-anchor=west,
-draw,
-minimum height=5mm,
-minimum width=20mm,
-},
+input/.style={draw=none,align=center},
+arrw/.style={latex-latex,line width=2pt},
+arw/.style={-latex,line width=2pt}
 ]
-
-%\draw[help lines](-6,-4)grid(6,4);
-
-\begin{scope}[shift={(-3,-3)}]
-%%Cloud
-\node[b,fg,minimum width=3.5cm,minimum height=2cm]at(0,0){};
-\node[plate]at(-1.5,0){Cloud};
-\node[rb,fw](vm1)at(1.6,0.2){VM};
-\node[rb,fw](vm2)at(1.6,1.2){VM};
-\node[lb,fw](cc)at(-1.7,1.2){Controller};
-\draw[-{latex},dashed](cc)--(vm1);
-\draw[-{latex},dashed](cc)--(vm2);
-%%Sclouder
-\node[b,fg,minimum width=2cm,minimum height=1cm](schlouder)at(0.25,3){Schlouder};
-\draw[-{latex},thick,](schlouder.south-|cc.45)--(cc.45)node[pos=0.5,left]{provisioning};
-\draw[-{latex},thick,](schlouder.south-|vm2.135)--(vm2.135)node[pos=0.5,right]{jobs};
-%% Inputs
-\node[rb,align=left](jobs)at(-0.25,5){Jobs : \\ - estimates\\ - dependencies};
-\node[lb,align=left](conf)at(0.25,5.25){Scheduling\\Strategies};
-\draw[-{latex},thick](jobs.south-|schlouder.145)--(schlouder.145);
-\draw[-{latex},thick](conf.south-|schlouder.35)--(schlouder.35);
-\end{scope}
-%\draw(0,-4)--(0,4);
-\begin{scope}[shift={(3,2)}]
-\node[dtask](1)at(-2.5,0){1};
-\node[dtask](2)at(-1,-1.4){2};
-\node[dtask](3)at(-1,-0.7){3};
-\node[dtask](4)at(-1,-0){4};
-\node[dtask](5)at(-1,1){5};
-\node[dtask](6)at(1,-0.7){6};
-\node[dtask](7)at(1,1){7};
-\node[dtask](8)at(2.5,0){8};
-\draw[arw](1)--(2);
-\draw[arw](1)--(3);
-\draw[arw](1)--(4);
-\draw[arw](1)--(5);
-\draw[arw](2)--(6);
-\draw[arw](3)--(6);
-\draw[arw](4)--(6);
-\draw[arw](5)--(7);
-\draw[arw](6)--(8);
-\draw[arw](7)--(8);
-\end{scope}
-%\draw(0,0)--(6,0);
-\begin{scope}[shift={(0.5,-3.5)}]
-\draw[arw](0,0)--(5,0)node[pos=0,left]{time};
-\node[btu,label={[]west:VM1}]at(0,0.5){};
-\node[btu]at(2,0.5){};
-\node[job,minimum width=8mm]at(0.1,0.5){1};
-\node[job,minimum width=7mm]at(1,0.5){2};
-\node[job,minimum width=16mm]at(1.9,0.5){7};
-\node[job,minimum width=4mm]at(3.5,0.5){8};
-
-
-\node[btu,label={[]west:VM2}]at(0.9,1.25){};
-\node[job,minimum width=7mm]at(1,1.25){3};
-\node[job,minimum width=7mm]at(1.7,1.25){4};
-\node[job,minimum width=4mm]at(2.4,1.25){6};
-
-\node[btu,label={[]west:VM3}]at(0.9,2){};
-\node[job,minimum width=9mm]at(1,2){5};
-
-
-\end{scope}
+\node[minimum height=15mm,minimum width=25mm,align=center]at(-1.5,1)(sc){Schlouder\\Client};
+\node[input]at(-2.5,2)(JD){Job\\Description};
+\node[input]at(-2.5,0)(SH){Scheduling\\Heuristic};
+\node[minimum height=45mm+15pt,minimum width=50mm+10pt,label={[]south:User},dotted]at(-2,1){};
+\node[minimum height=45mm+10pt,minimum width=25mm]at(0,1){Core};
+\node[minimum height=15mm,minimum width=25mm]at(1,0)(ck){CloudKit};
+\node[minimum height=15mm,minimum width=25mm]at(1,1)(schd){Scheduler};
+\node[minimum height=15mm,minimum width=25mm]at(1,2)(slrm){Slurm};
+\node[minimum height=45mm+15pt,minimum width=50mm+10pt,label={[]south:Schlouder Server}]at(0.5,1)(ss){};
+\node[minimum height=15mm,minimum width=25mm,align=center]at(3,0)(cc){Cloud\\Frontend};
+\node[minimum height=15mm,minimum width=25mm]at(3,1)(vm1){VM};
+\node[minimum height=15mm,minimum width=25mm]at(3,2)(vm2){VM};
+\node[minimum height=45mm+15pt,minimum width=25mm+5pt,label={[]south:IaaS cloud}]at(3,1){};
+\draw[arrw](ck)--(cc);
+\draw[arrw](slrm)--(vm1);
+\draw[arrw](slrm)--(vm2);
+\draw[arw](JD.270)--(sc);
+\draw[arw](SH.90)--(sc);
+\draw[arw](sc)--(ss);
 \end{tikzpicture}

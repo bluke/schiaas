@@ -6,6 +6,12 @@ fill=orange!10,
 minimum height=7mm,
 draw
 },
+over/.style={%
+anchor=west,
+fill=red!50,
+minimum height=7mm,
+draw
+},
 btu/.style={%
 anchor=west,
 draw,
@@ -27,6 +33,7 @@ align=right,
 }
 %% Jobs
 \node[job,minimum width=32mm]at(0,-0.5){$j_1$};
+\node[over,minimum width=12mm]at(16,-0.5){};
 \node[job,minimum width=80mm]at(0,-1.3){$j_2$};
 \node[job,minimum width=30mm]at(30,-2.1){$j_3$};
 \node[job,minimum width=20mm]at(30,-0.5){$j_4$};
@@ -56,16 +63,19 @@ align=right,
 %% Afap
 \node[strat]at(-5,-.5)(f1){Afap};
 \node[job,minimum width=32mm]at(0,0){$j_1$};
-\node[job,minimum width=80mm]at(16,0){$j_2$};
-\node[job,minimum width=30mm]at(30,-1){$j_3$};
-\node[job,minimum width=20mm]at(45,-1){$j_4$};
-\node[btu,label={east:BTU 1}]at(-0.5,-0)(f2){};
-\node[btu,label={west:BTU 2}]at(29.5,-1)(f3){};
+\node[over,minimum width=12mm]at(16,0){};
+\node[job,minimum width=80mm]at(22,0){$j_2$};
+\node[job,minimum width=30mm]at(62,0){$j_3$};
+\node[job,minimum width=20mm]at(77,0){$j_4$};
+\node[btu,label={south:BTU 1}]at(-0.5,0)(f2){};
+\node[btu,minimum width=60mm,label={south:BTU 2}]at(59.5,0)(f3){};
+\node[anchor=west,minimum height=10mm,minimum width=4mm,fill=white]at(88,0){};
 \end{scope}
 \begin{scope}[shift={(0,-7)}]
 %% Asap
 \node[strat]at(-5,-1){Asap};
 \node[job,minimum width=32mm]at(0,0){$j_1$};
+\node[over,minimum width=12mm]at(16,0){};
 \node[job,minimum width=80mm]at(0,-1){$j_2$};
 \node[job,minimum width=30mm]at(30,0){$j_3$};
 \node[job,minimum width=20mm]at(30,-2){$j_4$};
