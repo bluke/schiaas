@@ -23,6 +23,9 @@
 
 \usetheme{Madrid}
 
+%\setbeamertemplate{itemize items}[default]
+\setbeamertemplate{enumerate items}[default]
+
 \title[Cloud MCS]{Improving Cloud Simulation Using the Monte-Carlo Method}
 \author[Luke Bertot]{\underline{Luke Bertot} \and Stéphane Genaud \and Julien Gossa\\}
 \institute[ICPS]{%
@@ -67,6 +70,25 @@
 \section{Cloud Brokering}
 
 \begin{frame}
+	\frametitle{Context}
+	\begin{itemize}
+		\item Brokering IaaS cloud resources on behalf of the user.
+		\item In order to execute users workloads (bag-of-tasks or
+			workflows)
+		\item The broker \alert{provisions} resources and
+			\alert{schedules} tasks.
+		\item With two objectives~:
+		\begin{enumerate}
+			\item cost : incurred by provisioning VMs, invoiced by
+				discrete units of time (BTU)
+			\item makespan : mostly dependent on scheduling, i.e.\
+				the algorithm that maps jobs to the provisioned 
+				VMs
+		\end{enumerate}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
 	\frametitle{Scientific Workloads}
 	\resizebox{\textwidth}{!}{\input{gfx/montage.tex}}
 %	preesent workflows we are working with.
@@ -76,18 +98,20 @@
 	\frametitle{Cloud Scheduling}
 	\resizebox{\textwidth}{!}{\input{gfx/s1.tex}} \\[1cm]
 	\begin{overlayarea}{\textwidth}{.5\textheight}
-		\only<2>{
+		\only<2>{%
 			  \begin{itemize}
-				\item bla blah 1
-				\item bla blah 2
-				\item bla blah 3
+				\item The user provides tasks' expected runtimes
+					and dependencies
+				\item We want online scheduling: tasks are
+					scheduled one at a time.
+				\item We rely on bin-packing heuristics.
 			  \end{itemize}
 		}
-		\only<3>{
+		\only<3>{%
 		%\resizebox{!}{.5\textheight}{\input{img/gossiping.pdftex_t}}
 		\resizebox{\textwidth}{!}{\input{gfx/s2.tex}}
 		}
-		\only<4>{
+		\only<4>{%
 		%\resizebox{!}{.5\textheight}{\input{img/gossiping.pdftex_t}}
 		\resizebox{\textwidth}{!}{\input{gfx/s3.tex}}
 		}
@@ -109,6 +133,23 @@
 %\section{Cloud Simulations}
 
 \begin{frame}
+	\frametitle{Need for simulation, SimSchlouder}
+	Simulation is needed because:
+	\begin{itemize}
+		\item With a high number of tasks, scheduling is not trivial.
+		\item Simulation allows users to compare heuristics in terms of
+			cost and makespan.
+	\end{itemize}
+	We provide such a tool:
+	\begin{itemize}
+		\item SimSchlouder mimics Schlouder's operation.
+		\item It includes the same heuristics.
+		\item It uses an IaaS api we wrote for SimGrid.
+	\end{itemize}
+	%present simschlouder limits to that approach
+\end{frame}
+	
+\begin{frame}
 	\frametitle{SimSchlouder}
 	\resizebox{\textwidth}{!}{\input{gfx/simschlouder.tex}}
 	%present simschlouder limits to that approach
@@ -117,15 +158,27 @@
 \begin{frame}
 	\frametitle{Stochastic Simulations}
 	\begin{itemize}
-		\item{} All inputs (task runtimes) are now random variables (RVs)
-		\item{} All outputs are are also random variables
+		\item Clouds performance is inherently variable. Leitner[9] (2016) has found a
+	variability between 3\%-10\% on Amazon EC2.\\
+	\pause
+	 	\item Deterministic simulators like SimSchlouder can not account
+			for this variability.
 	\end{itemize}
 	\pause
-	Numerical solutions exists for stochastic DAGs, but :
+	\begin{block}{Stochastic simulations}
+	\begin{itemize}
+		\item{} All inputs are distribution of task runtimes,
+			represented by random variables (RVs)
+		\item{} The outputs (makespan and cost) are also
+			distributions, represented by RVs
+	\end{itemize}
+	\end{block}
+	\pause
+	Numerical solutions exist for stochastic DAGs, but :
 	\begin{itemize}
 		\item{} Require RVs to be independent,
 		\item{} Involves both the PDF and the CDF,
-		\item{} Requires a static DAG.
+		\item{} Requires a static DAG ($\neq$ online scheduling).
 	\end{itemize}
 	\pause
 	\begin{block}{}
@@ -155,7 +208,7 @@
 		\end{itemize}
 	\end{block}
 }
-\only<2->{%
+\only<2-4>{%
 	\begin{block}{Validating \textbf{stochastic} simulator}
 		\begin{itemize}
 			\item{} Execute \textbf{many} workloads in a real 
@@ -165,13 +218,20 @@
 			\item{} Compare the observed \textbf{distribution} to the simulated
 				one
 		\end{itemize}
-	\end{block}\\[1cm]
+	\end{block}
 }
-\only<3->{
+\only<3-4>{%
 	\begin{itemize}
 		\item{} The task model must remain simple enough that it could
 			be build in real life conditions.
 	\end{itemize}
+}
+\only<4>{%
+	\begin{block}{Evaluation}
+		The MCS's distribution must approach the observed
+		distribution.\\
+		This is quantified by the capture rate of the simulation. 
+	\end{block}
 }
 \end{overlayarea}
 \end{frame}
@@ -200,15 +260,34 @@
 \begin{frame}
 	\frametitle{In-Vivo observations}
 	\includegraphics[width=\textwidth]{gfx/real.pdf}
-\end{frame}
-
-\begin{frame}
-	\frametitle{Cloud Variability}
- 	(Leitner)
+	\pause
+	\begin{center}
+	Variability similar to those observed by Leitner[9].
+	\end{center}
 \end{frame}
 
 \begin{frame}
 	\frametitle{Input model}
+	We want a simple representation of variability, that users can
+	easily specify.
+	\begin{itemize}
+		\item Users are already used to providing tasks' expected
+			runtimes.
+		\item Variability is modeled as an uniform distribution around
+			the runtime.
+	\end{itemize}
+	\bigskip
+	\pause
+	The relative width of the uniform distribution is the same for all tasks
+	and is called the \alert{perturbation level} $P$ of the system.
+	\begin{block}{}
+		This model provides a good balance between complexity and the
+		simulation's capture rate. 
+	\end{block}
+	\pause
+	\begin{center}
+	In our setup $P = 10\%$.
+\end{center}
 \end{frame}
 
 \begin{frame}[fragile]
@@ -265,14 +344,29 @@ SIM_ARG 5:AFAP afap
 \end{frame}
 
 \begin{frame}
-	\frametitle{When the speaker pretends to ask a question the answer is
-	always no.}
+	\frametitle{Can we capture more observations by increasing $P$?}
 	\includegraphics[width=\textwidth]{gfx/int.pdf}
 \end{frame}
 
 \begin{frame}
-	number iter
+	\frametitle{Conclusion}
+	\begin{center}
+		Our proposal for stochastic simulations.
+	\end{center}
+	\begin{exampleblock}{Pros}
+	\begin{itemize}
+		\item Simple model yielded accurate results.
+		\item Extensible to more input variables.
+		\item Parallelizable.
+		\item Quick convergence.
+	\end{itemize}
+	\end{exampleblock}
+	\begin{alertblock}{Cons}
+	\begin{itemize}
+		\item Some workflow do not meet the requirement for the central
+			limit theorem to apply.
+	\end{itemize}
+	\end{alertblock}
 \end{frame}
-\section{conclusion}
 \end{document}
 % vim: spell spelllang=en
