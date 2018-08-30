@@ -11,11 +11,33 @@
 \usepackage{subcaption}
 \usepackage{tikz}
 \usepackage{ulem}
+\usepackage{calc}
+\usepackage{fp} %floating point
 
 \fontseries{bx}
 \selectfont
 
 \setlength{\tabcolsep}{18pt}
+
+\newcommand{\hzoom}[2]{%
+      \FPeval{zoom}{1/#1}
+      \resizebox{#1\textwidth}{!}{%
+      \begin{minipage}[t]{\zoom\textwidth}%
+      %\the\textwidth\\
+      %\rule{\textwidth}{1mm}
+      #2 %
+      \end{minipage}
+      }
+}
+%--\publis{zoom:float}{\bibitem az azeaze \bibitem sdfsdfdfs}
+\newcommand{\publis}[2]{%
+\vfill
+\hzoom{#1}{
+\bibliographystyle{plain}
+\begin{thebibliography}{99}
+#2
+\end{thebibliography}
+}}
 
 \graphicspath{{./gfx/}}
 
@@ -158,13 +180,18 @@
 \begin{frame}
 	\frametitle{Stochastic Simulations}
 	\begin{itemize}
-		\item Clouds performance is inherently variable. Leitner[9] (2016) has found a
+		  \item Clouds performance is inherently variable. \\
+			  Leitner \textit{et al.} found a
 	variability between 3\%-10\% on Amazon EC2.\\
-	\pause
+%
 	 	\item Deterministic simulators like SimSchlouder can not account
 			for this variability.
 	\end{itemize}
-	\pause
+
+ 	%\begin{overlayarea}{\textwidth}{.6\textheight}
+	%----- pub Leitner displayed
+	
+      \visible<2->{
 	\begin{block}{Stochastic simulations}
 	\begin{itemize}
 		\item{} All inputs are distribution of task runtimes,
@@ -173,19 +200,41 @@
 			distributions, represented by RVs
 	\end{itemize}
 	\end{block}
-	\pause
-	Numerical solutions exist for stochastic DAGs, but :
-	\begin{itemize}
-		\item{} Require RVs to be independent,
-		\item{} Involves both the PDF and the CDF,
-		\item{} Requires a static DAG ($\neq$ online scheduling).
-	\end{itemize}
-	\pause
-	\begin{block}{}
-		Numerical resolution is not adapted to stochastic cloud
-		simulations.
-	\end{block}
+	}
+
+		\vfill
+  		\publis{.8}{%
+      	\bibitem{Leitner16} 
+			  Philipp Leitner  and J\"{u}rgen Cito,
+       	\newblock {Patterns in the Chaos - {A} Study of Performance Variation and Predictability
+               in Public IaaS Clouds}, 
+	  	{\em {ACM} Trans. Internet Techn.}, 16(3),15:1--15:23, 2016}
+
+ %\end{overlayarea}
 \end{frame}
+
+
+
+\begin{frame}
+	\frametitle{ Numerical Resolution of Stochastic Simulations}
+
+
+      Numerical solutions exist for stochastic DAGs, but :
+      \begin{itemize}
+      	\item{} Require RVs to be independent,
+      	\item{} Involves both the PDF and the CDF,
+      	\item{} Requires a static DAG ($\neq$ online scheduling).
+      \end{itemize}
+
+	\pause
+      \begin{block}{}
+      	Numerical resolution is not adapted to stochastic cloud
+      	simulations.
+      \end{block}
+
+\end{frame}
+
+
 
 \section{Monte-Carlo Simulations}
 
