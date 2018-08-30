@@ -257,7 +257,7 @@
 		\end{itemize}
 	\end{block}
 }
-\only<2-4>{%
+\only<2-3>{%
 	\begin{block}{Validating \textbf{stochastic} simulator}
 		\begin{itemize}
 			\item{} Execute \textbf{many} workloads in a real 
@@ -269,13 +269,7 @@
 		\end{itemize}
 	\end{block}
 }
-\only<3-4>{%
-	\begin{itemize}
-		\item{} The task model must remain simple enough that it could
-			be build in real life conditions.
-	\end{itemize}
-}
-\only<4>{%
+\only<3>{%
 	\begin{block}{Evaluation}
 		The MCS's distribution must approach the observed
 		distribution.\\
@@ -290,8 +284,7 @@
 	\begin{block}{Cloud}
 	\begin{itemize}
 		\item{} Private testbed
-		\item{} 4 Nodes
-		\item{} 2 $\times$ Intel Xeon X5650 (2.67 GHz)
+		\item{} 40 Cores --- Intel Xeon X5650 (2.67 GHz)
 		\item{} Openstack 2014.4 with KVM on Ubuntu
 		\item{} Network not isolated
 	\end{itemize}
@@ -311,12 +304,12 @@
 	\includegraphics[width=\textwidth]{gfx/real.pdf}
 	\pause
 	\begin{center}
-	Variability similar to those observed by Leitner[9].
+	Variability similar to those observed by Leitner.
 	\end{center}
 \end{frame}
 
 \begin{frame}
-	\frametitle{Input model}
+	\frametitle{Input distribution}
 	We want a simple representation of variability, that users can
 	easily specify.
 	\begin{itemize}
@@ -394,7 +387,11 @@ SIM_ARG 5:AFAP afap
 
 \begin{frame}
 	\frametitle{Can we capture more observations by increasing $P$?}
-	\includegraphics[width=\textwidth]{gfx/int.pdf}
+	\includegraphics[width=\textwidth]{gfx/int.pdf}\\
+	\pause
+	\begin{center}
+		$P{=}40\% \Rightarrow$ capture rate $84\%$ ($90\%$ for $P{=}10\%$)
+\end{center}
 \end{frame}
 
 \begin{frame}
