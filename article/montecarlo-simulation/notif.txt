@@ -1,0 +1,148 @@
+----------------------- REVIEW 1 ---------------------
+PAPER: 82
+TITLE: Executing Batch Jobs on Clouds: How to Predict Reality Accurately ?
+AUTHORS: Luke Bertot, Stéphane Genaud and Julien Gossa
+
+Overall evaluation: 0 (borderline paper)
+
+----------- Overall evaluation -----------
+Summary
+
+The authors propose a simulation framework called SimSchlouder, which is based on the Monte-Carlo methods. The proposed simulation framework enables the study of the relationship between the precision of the user estimates and the accuracy of the simulation results regarding cost and makespan. SimSchlouder is integrated into a client side job broker for Infrastructure as a service (IaaS) clouds called Schlouder. SimSchoulder allows the user to request an estimate of the makespan and the cost before choosing a strategy for a real run.
+
+Strengths
+
+1. The accurate prediction of the makespan and the cost of executing applications on cloud platforms via simulation has a significant importance for users and cloud operators as well.
+2. The authors use different types of input workloads (test applications) to evaluate the proposed simulator.
+
+Weaknesses 
+
+1. The paper is not well structured and it needs certain improvements, especially in the Introduction section. 
+2. Certain details of the designed SimSchlouder are not mentioned at all.
+
+>> That's a problem
+
+Detailed comments and suggestions
+
+1. The paper has a quite large number of typos and punctuation issues. The following items are certain instances that can be found in the first section
+a. In Section 1, there is a typo in the following sentence “In this model, all computing resources are made available on demand by third-party operators and payed based on usage.” It should be "paid" instead of "payed"
+b. In Section 1, there is a typo in the following sentence “the advancement of virtualization techniques has lead to the emergence of new economic and exploitation approaches”, it should be “has led”.
+c. In Section 1, there is a typo in the following sentence “An abundance of heuristics have been developed to adapt to the cloud context” it should be "has" instead of "have"
+d. In Section 1, there is a missing comma in the following sentence “Secondly for parallelizing tasks to achieve shorter”. It should be “Secondly,”.
+e. In Section 1, there is a missing comma in the following sentence “Over the last decade the advancement ...”. It should be “Over the last decade, the advancement ....”
+
+>> Done
+
+2. It is strongly recommended to number the equations included in the work and to have a table of notation.
+
+>> Half done
+
+3. The paper structure needs improvements; The related work and the background information are embedded within the introduction section in a way that does not allow readers to follow and distinguish the current work and its strength.
+
+4. The authors do not mention certain important information regarding the developed simulator. For instance, its internal design, the format of the input, the way to guarantee the correct representation of the cloud infrastructure, and which of the SimGrid interfaces are used to develop the proposed simulator.
+
+>> We need to decied if we want to put the simschlouder info in this paper
+
+5. In Section 3.b, the reason of fitting the output makespan values particularly to a normal distribution is unclear. 
+
+>> TODO reference theorem limite centrale
+
+6. The basis of selecting the perturbation level P to be the average of the worst relative deviations for all jobs in the workload is unclear.
+
+>> TODO
+
+7. The idea of using the perturbation level to capture all the different sources of uncertainty within the application execution has to be evaluated and verified for different cloud environments and setups.
+
+>> watch
+
+----------------------- REVIEW 2 ---------------------
+PAPER: 82
+TITLE: Executing Batch Jobs on Clouds: How to Predict Reality Accurately ?
+AUTHORS: Luke Bertot, Stéphane Genaud and Julien Gossa
+
+Overall evaluation: -1 (weak reject)
+
+----------- Overall evaluation -----------
+Comments
+
+1) The actual experiments, the variability is due to individual job effective runtime, however in the simulations, this is  imitated  by giving a different perturbations of user estimate of runtimes whose purpose is scheduling. How is this representative of the variability seen in the experiments?.
+
+>>> unclear text
+
+2) Moreover, If there are n jobs in the application each with mean run time m_i and variance sigma_i^2 (with the assumption that the runtime are a normal distribution as in the paper), the sum of the run times of all the jobs can be given by another normal distribution with mean as sum of m_i {i=1 to n} and variance sum of sigma_i^2 {i=1 to n} which will be similar to the behavior of the makespan. Why do you need simulations with perturbed times to show this variability? 
+
+>>> Unclear text
+>> The normal distributuion is not applied on the run time, (précise que la distribution exacte de job n'est pas observée et pa nécéssaire pour le theoreme de la limite centrale)
+
+3) How many Monte Carlo samples are used your estimates of makespan?  The Monte Carlo estimate are a function of the number of samples used. Have you evaluated the convergence of the estimates? 
+
+
+
+4) Define makespan before using it the first time
+
+>> TODO
+
+5) Mention exact number of runs instead of "over more than 200"
+
+>> TODO
+
+6) The perturbation heuristic is arbitrary, It feels intuitive that a desired capture rate can be achieved by choosing a larger confidence interval (more number of samples are needed for convergence of the monte Carlo estimate in this case). In the OMSSA/ASAP makespan interval in figure 4, how many samples were used and is the convergence of this interval checked?
+
+>>Convergence
+
+7) How would this results be carried over to a job run under different circumstances (with different sources of underlying variability)?
+
+>> TODO
+
+----------------------- REVIEW 3 ---------------------
+PAPER: 82
+TITLE: Executing Batch Jobs on Clouds: How to Predict Reality Accurately ?
+AUTHORS: Luke Bertot, Stéphane Genaud and Julien Gossa
+
+Overall evaluation: 1 (weak accept)
+
+----------- Overall evaluation -----------
+This paper presents a monte-carlo framework to evaluate the precision of user-provided execution time estimates and the accuracy of simulations based on those estimates with respect to cost and makespan.
+
+Inaccurate user estimates are a relevant and common problem that exists not only in tradition HPC systems, and can arguably be exacerbated in a cloud environment. On the surface, clouds present virtual machines with an expected level of performance, but due to their nature the underlying physical systems tend to be heterogeneous. It is common for the same VM type to fluctuate in actual performance depending on the physical server it lands on, the number of concurrent VM’s ect.
+
+The authors examine two batches of tasks, A bag of (independent) tasks and a workflow.
+The batches are scheduled using two different strategies, “as soon as possible (asap)” (minimize makespan) and “as full as possible (afap)” (minimize cost).
+
+Both batches of tasks (using both scheduling strategies) were executed using a private 96 core 4 node cloud. Traces from these runs were collected to evaluate against simulated results.
+
+A monte carlo framework is then used to simulate multiple runs of these batches. Tasks execution times in this framework are represented as random variables are represent the uncertainty resulting from both user prediction and underlying system variability.
+
+Simulation results show that the simulated results can accurately predict the experimental results. Additionally, depending on the tasks being executed, inaccuracies can be amortized in the final makespan/cost predictions.
+
+In general this paper was well written an easy to read. I do however have some additional comments, questions, and concerns. 
+
+The simulated tasks are designed such that their expected values should be equal to the average execution time from the actual experiments. Thus it is unsurprising that the simulated results closely predict the experimental results, the task distributions are directly based on previously seen data. The authors argue that these can represent the guess of a knowledgeable user. While this is probably a fair assumption, it would be interesting to see an experiment that more closely approximates actual user behavior.
+
+>>> TODO insist that Average is not sufficient for  accurate prediction the perturbation level is key.
+
+
+I’m concerned that you only performed 3 runs of the montage batch, is this really sufficient enough to draw meaningful conclusions about the density of the batch?
+
+In future work It could interesting to look at asymmetrical perturbations.
+
+
+----------------------- REVIEW 4 ---------------------
+PAPER: 82
+TITLE: Executing Batch Jobs on Clouds: How to Predict Reality Accurately ?
+AUTHORS: Luke Bertot, Stéphane Genaud and Julien Gossa
+
+Overall evaluation: -1 (weak reject)
+
+----------- Overall evaluation -----------
+In this paper, the authors suggested a simulator called SimSchlouder to estimate the makespan and BTU of batch jobs running on Schlouder with ASAP and AFAP scheduling algorithms.
+
+SimSchlouder provides distribution of makespan and BTU based on estimates provided by users. However, it is not clear the purpose of having such distribution information. In general, the worst case makespan and BTU are more important than distribution because it gives hints for provisioning. Please explain the use of the distribution information. 
+
+Since SimSchlouder only uses estimates without considering characteristics of applications (e.g., resource requirements), it is hard to understand how the simulator can provide accurate distributions of makespan and BTU. The experimental results seem that the simulator simply generates normal distributions based on estimates. If this is the case, what if the estimates are not accurate?
+
+Cloud systems are multi-tenant and thus several cloud applications can run simultaneously. Does SimSchlouder consider such interference (i.e., resource contention) between batch jobs? If it does, please explain how.
+
+>>> Explain SimSchlouder/SImgrid can do network contention and other extrernal perturbation.
+>>> Expliquer que la MCS pourrai faire varoer ces sources de perturbation indépendament.
+>>> Expliqué la difficulté de séparé le differente source de perturbation.

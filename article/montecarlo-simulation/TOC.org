@@ -1,0 +1,99 @@
+* New flow for article [1/6]
+      - [-] Introduction [3/4]
+            - [ ] General Intro
+                  * Intitutional clouds ?
+            - [X] Strategies
+            - [X] Prediction tools
+            - [X] Plan
+                  * redo when finished
+      - [ ] Work context [0/3]
+            - [ ] ((Simulations))
+                  * Maybe expand here on available detminist simulator and their
+                  capabilities 
+                  * introduce 
+            - [ ] ((Stochastic sim))
+                  * Introduce the notion of RV and why this is hard.
+            - [ ] ((Montecarlo methods))
+                  * This is a bit the best of both world, allows us to use our easy
+                  to test determinist sim to make stochastic simulations.
+      - [ ] Enriched simulation. [0/4]
+            - [ ] Experimental setup
+                  * broad storkes description of what we are doing here
+            - [ ] ((In vivo system))
+                  * Here a description of
+                        - schlouder
+                        - programs
+                        - platform
+                        - logs
+            - [ ] ((In silico setup))
+                  * Here a explaination of
+                        - simschlouder
+                        - runtime injections
+                        - MC workflow
+            - [ ] Input Modeling OR Testing Parameters
+                  * I see two way to bring this subject up
+                        - What we did last time, but downplaying the arbritrary
+                        nature of what we where doing
+                        - When testing a DETERMINIST simulator we inject the data
+                        of a run and test that simulator gives matching results.
+                        SO to test a STOCHASTIC simulator we inject the data
+                        modeling a group of runs and test that our sim gives
+                        matching distribution.
+                  * In any case we might want to explain here what we consider our
+                  win conditions/Barème.
+      - [X] Evaluation
+            * If we do well elsewhere I don't expect to need a lot of changes here
+      - [ ] Related Works [0/2]
+            - [ ] Strategies
+            - [ ] Simulators.
+      - [ ] Conclusion
+
+
+* New flow for article [1/6]
+      - [-] Introduction [2/4]
+            - [ ] General Intro
+                  * Intitutional clouds ?
+            - [X] Strategies
+            - [X] Prediction tools
+            - [ ] Plan
+                  * redo when finished
+      - [ ] Work context [0/3]
+            - [ ] ((Scheduling))
+                  * introduce schlouder and the scheduling problem
+            - [ ] ((Simulations))
+                  * Maybe expand here on available detminist simulator and their
+                  limitations and how scheduling interferes
+            - [ ] ((Stochastic sim / montecarlo ))
+                  * Introduce the notion of RV and why this is hard.
+                  * MC allows us to use our easy to test determinist sim to
+                    make stochastic simulations.
+      - [ ] Enriched simulation. [0/4]
+            - [ ] Experimental setup
+                  * broad storkes description of what we are doing here
+            - [ ] ((In vivo experiments))
+                  * Here a description of
+                        - programs
+                        - platform
+                        - logs
+            - [ ] ((In silico setup))
+                  * Here a explaination of
+                        - simschlouder
+                        - runtime injections
+                        - MC workflow
+            - [ ] Input Modeling OR Testing Parameters
+                  * I see two way to bring this subject up
+                        - What we did last time, but downplaying the arbritrary
+                        nature of what we where doing
+                        - When testing a DETERMINIST simulator we inject the data
+                        of a run and test that simulator gives matching results.
+                        SO to test a STOCHASTIC simulator we inject the data
+                        modeling a group of runs and test that our sim gives
+                        matching distribution.
+                  * In any case we might want to explain here what we consider our
+                  win conditions/Barème.
+      - [X] Evaluation
+            * If we do well elsewhere I don't expect to need a lot of changes here
+      - [ ] Related Works [0/2]
+            - [ ] Strategies
+            - [ ] Simulators.
+      - [ ] Conclusion

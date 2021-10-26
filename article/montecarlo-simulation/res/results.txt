@@ -1,0 +1,88 @@
+
+
+
+> BTU predictions
+	) historgrams
+	BTU predictions are always solid though larger than réalisty in some cases.
+	good to compare stategies robstness in the BTU dimention.
+	Higer variation might show larger space than reality
+	Blow worst case scenario out of the water in terms of precision. especialy with high perturbations
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+On a pas besoin d'untroduire les strategie a priori, quand on observe un phénomème  on peut regardé comment il decoule de la strat.
+insisté que sur le fait que même si le user ne comprend pas ça strat le simu lui dira qu'elle est dangeureuse 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+> Makespan predictions 
+ 	) intevals vs reality and capture rate
+	Capture is not good a low perdurbation rates,
+	Simulation show drifting behaviour of strategies, can be used to infer a from of makespan robustness.  
+	Result much more compact than worst case scenario but capture rate for worst case is always 100%, worst case unusable.
+
+> MonteCarlo convergence 
+	combiens de sim sont relement necessaire,
+		) graphe confidence
+		) valeur centrale determiné tt de suite 
+	diminishing return after 100sim
+	comparaisson avec worst case scenario %%NON
+
+
+
+=======================================================================
+
+
+
+Confidence convergence:
+	As we add more simulations in our MCS the the fitting confidence gets
+better
+	shown : graph of our fitting SD
+	conclusion : 
+		-we where right to fit via Normal law, 
+		-some level of impression remains at 500 sims but convergence is
+extremly slow.
+
+
+General Prediction
+	The success of prediction is strategy dependent.
+	show : interval plot including non perturbed sim, table with % of
+reality fitted.
+	conclusion : mitigated results.
+
+
+Strategy comparison 
+	BTU stability
+		SIM show that the stability of the cost is extremely.
+		shown : historgrams
+		explain : AFAP leave most VM full
+
+	Makespan Stability
+		SIM perturbation doesn't affect all strategies symmetrically
+		shown : interval plot including non perturbed sim.
+		explain : ASAP gives every job a chance to be in the critical
+			path if they extend enough.
+Conclusion : SIM allows us to show interaction between strategies and
+perturbations. Ties in with notion of robustness and how each strategy is strong
+following one metrics and week following the other. 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+>BTU
+>Makespan
+OR
+>Stable
+>Instable
+
+======BoT====
+I) la réalité
+II) methode
+III) resultats
+IV) limites
+=======WFl====
+Faire le 4 part sur BoT,
+faire une section pour le Workflow
+	just ca marche tout pareil, sauf marche pas (broken sim)
+V) Workflow
+======CONV=====
+VI) temps d'executions
